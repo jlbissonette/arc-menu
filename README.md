@@ -68,11 +68,9 @@ following [dependencies installed](https://gitlab.com/LinxGem33/Arc-Menu/wikis/A
 
 ### Bugs
 
-Bugs should be reported [here](https://gitlab.com/LinxGem33/Arc-Menu/issues) on the GitLab issues page.
+Bugs should be reported [here](https://gitlab.com/arcmenu/ArcMenu/issues) on the GitLab issues page.
 
 -----
-
-Please refer to the Wiki section for a guide on: [Reporting Bugs](https://gitlab.com/LinxGem33/Arc-Menu/wikis/Bug-Reporting)
 
 Please note that without any information about your system, the Arc Menu Team can only speculate what the problem is.
 So, please provide us information about your GNU/Linux distribution and the GNOME Shell version. Otherwise, we are not able to try and solve your problem.
@@ -95,13 +93,58 @@ There are basic rules of conduct that should be followed at all times by everyon
 [![GNU GPL Image](https://www.gnu.org/graphics/slickgnu.tiny.png)](http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)  
 ### License & Terms ![](https://gitlab.com/LinxGem33/IP-Finder/raw/master/screens/Copyleft-16.png)
 
-Arc Menu is available under the terms of the GPL-2.0 license See [`COPYING`](https://gitlab.com/LinxGem33/Arc-Menu/blob/master/COPYING) for details.
+Arc Menu is available under the terms of the GPL-2.0 license See [`COPYING`](https://gitlab.com/arcmenu/ArcMenu/blob/master/COPYING) for details.
 
 Arc-Menu is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the [GNU General Public License](https://www.gnu.org/licenses/gpl.html) as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version. 
 
-All ArcMenu's Image assets including wiki images, Icons and application Image assets are created by [LinxGem33](https://gitlab.com/LinxGem33) and licensed under; [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+All ArcMenu's Image assets including wiki images, icons and application image assets are created by [LinxGem33](https://gitlab.com/LinxGem33) and licensed under; [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
-[Exceptions]() Trademarked icons (logo) (name) please see `Legal disclaimer for brand icons and trademarks` below regarding Distro icons section for more details.
+Exceptions - Trademarked icons (logo) (name) please see `Legal disclaimer for brand icons and trademarks` below regarding Distro icons section for more details.
+
+<details>
+<summary><b>Legal disclaimer for brand icons and trademarks..</b></summary>
+
+<p>
+
+*" All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by Arc Menu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer. "*
+
+* **UBUNTU ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** - Ubuntu name and Ubuntu logo is a trademark of Canonical ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg) Ltd.
+
+* **FEDORA ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** - Fedora and the Infinity design logo are trademarks of Red Hat, Inc.
+
+* **DEBIAN ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** - is a registered trademark owned by Software in the Public Interest, Inc. Debian trademark is a registered United States trademark of Software in the Public Interest, Inc., managed by the Debian project.
+
+* **MANJARO ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** - (logo) and name is a trademark of Manjaro GmbH & Co. KG
+
+* **POP_OS! ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** - Name and (logo) is a trademark of system 76 ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg) Inc.
+
+* **ARCH LINUX ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** - The stylized Arch Linux logo are recognised trademarks of Arch Linux, copyright 2002-2017 Judd Vinet and Aaron Griffin
+
+* **SOLUS** - name and logo is Copyright ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg) 2014-2018 by Solus Project
+
+* **KALI LINUX** - logo and name is part of ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg) OffSec Services Limited 2020
+
+* **PUREOS** - name and logo is developed by members of the Purism community
+
+* **RASPBERRY PI** ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg) - Logo and name is part of Raspberry Pi Foundation
+UK Registered Charity 1129409
+
+* **Gentoo Authors![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** 2001–2020
+Gentoo is a trademark of the Gentoo Foundation, Inc.
+
+* **Voyager ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg) Linux**
+(name) and (logo)
+
+* **MXLinux![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** 2020 -
+Linux - is the registered trademark of Linus Torvalds in the U.S. and other countries.
+
+* **Red Hat, Inc.![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** Copyright 2020 
+(name) and (logo)
+
+</p>
+</details>
+
+-----
 
 ### Credits
 
