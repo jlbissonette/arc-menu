@@ -114,7 +114,7 @@ All ArcMenu's Image assets including wiki images, Icons and application Image as
 
 <p>
 
-**Additional credits:** 
+-----
 
 * This extension leverages the work from [Giovanni Campagna ](https://git.gnome.org//browse/gnome-shell-extensions) gnome Application Menu to allow the menu to be embedded in the Gnome main panel.
 * This extension also leverages some of the design elements for the default menu layout (ArcMenu) from Zorin OS.
@@ -122,8 +122,12 @@ All ArcMenu's Image assets including wiki images, Icons and application Image as
 * This extension also uses adapted code from Dash to Panel's Utils.js.
 * This extension also uses some code from gnome-shell-extensions package for use with external file sources adapted to be used for ArcMenu.
 
+-----
+
 </p>
 </details>
+
+
 
 <details>
 <summary><b>List of Contributors</b></summary>
@@ -149,23 +153,9 @@ All ArcMenu's Image assets including wiki images, Icons and application Image as
 </details>
 
 <details>
-<summary><b>Technical Advisors</b></summary>
+<summary><b>Other Project Contributors</b></summary>
 
 <p>
-
------
-
-### Technical Advisors
-
-</p>
-</details>
-
-<details>
-<summary><b>Thanks to the following people for contributing via pull requests</b></summary>
-
-<p>
-
------
 
 ### Pull Requests
 
@@ -186,7 +176,9 @@ All ArcMenu's Image assets including wiki images, Icons and application Image as
 </p>
 </details>
 
------
+<details>
+<summary><b>Translators</b></summary>
+<p>
 
 #### Please refer to the Wiki section for a [Translation Guide](https://gitlab.com/LinxGem33/Arc-Menu/wikis/Translation-Guide)
 
@@ -211,3 +203,8 @@ All ArcMenu's Image assets including wiki images, Icons and application Image as
 -----
 
  **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** |
+
+</p>
+</details>
+
+-----
