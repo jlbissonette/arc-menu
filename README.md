@@ -8,17 +8,7 @@
 
 ### Introduction
 
-Arc Menu is a Gnome shell extension designed to replace the standard menu found in Gnome 3 this application menu extension has  some added benefits over the standard menu found in Gnome 3, these include the long awaited search functionality as well as quick access to files on your system and also the current logged in user along with quick access to the software centre and system settings and other features which can be accessed from the settings menu.
-
------
-
-### Volunteers needed!
-
-This extension could be even better with your help! Any items in the issue tracker labelled **Help Needed** or **Good First Issue** are open for contribution. For more info, see the [Contributing Feature List](https://gitlab.com/LinxGem33/Arc-Menu/issues/54) for more details on current issues or features which need your help.
-
-![image](/uploads/85b3cf3baea40163ffc5c115b7d7306e/image.png)  ![image](/uploads/d5b2fb82db8d2955923d327caef8e4aa/image.png)
-
-* For more information about contributing and code requirements please visit the [How to Contribute](https://gitlab.com/arcmenu/ArcMenu/-/wikis/How-to-Contribute) wiki section.
+Arc Menu is an application menu for GNOME shell, designed to provide a more traditional user experience and workflow. This extension has many features, including multiple menu layout styles, GNOME search, quick access to system shorctus, and more! If you are a new user to GNOME and are looking for a Windows style start menu, this extension will be perfect for you!
 
 -----
 
@@ -76,28 +66,6 @@ following [dependencies installed](https://gitlab.com/LinxGem33/Arc-Menu/wikis/A
 
 -----
 
-### Wiki Guide
-
-
-If you have any issues with regard to Arc menu and your unsure of a certain feature or just want to know more about Arc menu, then the Arc menu wiki guide is a good place to start.
-
-Please refer to the Arc menu [Wiki Guide](https://gitlab.com/LinxGem33/Arc-Menu/wikis/Introduction) 
-
-
-**Click on the link to: View the [ArcMenu User Manual](https://gitlab.com/LinxGem33/Neon/-/raw/master/arc-menu-manual/arcmenu-user-manual.pdf) Online.**
-
-- **To Download the ArcMenu user manual: Please click on the PDF Icon below.**
-
------
-
-<p align="left">
-       <a href="https://gitlab.com/LinxGem33/Neon/-/raw/master/arc-menu-manual/arcmenu-user-manual.pdf?inline=false" >
-    <img src="https://gitlab.com/LinxGem33/Arc-Menu/uploads/1f75574db9da0a1d02e2db719869fffe/arcmenu-manual-icon.svg" width="140" style="margin-left: 4px"/>
-    </a>
-</p>
-
------
-
 ### Bugs
 
 Bugs should be reported [here](https://gitlab.com/LinxGem33/Arc-Menu/issues) on the GitLab issues page.
@@ -135,56 +103,11 @@ All ArcMenu's Image assets including wiki images, Icons and application Image as
 
 [Exceptions]() Trademarked icons (logo) (name) please see `Legal disclaimer for brand icons and trademarks` below regarding Distro icons section for more details.
 
-<details>
-<summary><b>Legal disclaimer for brand icons and trademarks..</b></summary>
-
-<p>
-
-**Legal disclaimer for brand icons and trademarks..**
-
-*" All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by Arc Menu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer. "*
-
-* **UBUNTU ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** - Ubuntu name and Ubuntu logo is a trademark of Canonical ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg) Ltd.
-
-* **FEDORA ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** - Fedora and the Infinity design logo are trademarks of Red Hat, Inc.
-
-* **DEBIAN ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** - is a registered trademark owned by Software in the Public Interest, Inc. Debian trademark is a registered United States trademark of Software in the Public Interest, Inc., managed by the Debian project.
-
-* **MANJARO ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** - (logo) and name is a trademark of Manjaro GmbH & Co. KG
-
-* **POP_OS! ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** - Name and (logo) is a trademark of system 76 ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg) Inc.
-
-* **ARCH LINUX ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** - The stylized Arch Linux logo are recognised trademarks of Arch Linux, copyright 2002-2017 Judd Vinet and Aaron Griffin
-
-* **SOLUS** - name and logo is Copyright ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg) 2014-2018 by Solus Project
-
-* **KALI LINUX** - logo and name is part of ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg) OffSec Services Limited 2020
-
-* **PUREOS** - name and logo is developed by members of the Purism community
-
-* **RASPBERRY PI** ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg) - Logo and name is part of Raspberry Pi Foundation
-UK Registered Charity 1129409
-
-* **Gentoo Authors![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** 2001–2020
-Gentoo is a trademark of the Gentoo Foundation, Inc.
-
-* **Voyager ![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg) Linux**
-(name) and (logo)
-
-* **MXLinux![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** 2020 -
-Linux - is the registered trademark of Linus Torvalds in the U.S. and other countries.
-
-* **Red Hat, Inc.![copyright2.svg](/uploads/c5f15274ae7fffddf1f2e3dcda5971d8/copyright2.svg)** Copyright 2020 
-(name) and (logo)
-
-</p>
-</details>
-
------
-
 ### Credits
 
-**ArcMenu is developed and maintained by @AndrewZaech and @LinxGem33**
+**ArcMenu is currently developed and maintained by @AndrewZaech**
+
+**A big thank you to @[LinxGem33](https://gitlab.com/LinxGem33) - The founder of ArcMenu and previous project maintainer**
 
 <details>
 <summary><b>Additional credits:</b></summary>
@@ -203,28 +126,11 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 </details>
 
 <details>
-<summary><b>Current Active Developers</b></summary>
+<summary><b>List of Contributors</b></summary>
 
 <p>
 
 -----
-
-### Current Active Developers
-
------
-
-### @[LinxGem33](https://gitlab.com/LinxGem33) | Founder - Maintainer -  Digital Art Designer |
-
-Hi I'm LinxGem33 aka Andy and the founder of Arc menu, my role on the project is to manage and plan the technical and digital production and distribution of the Arc menu software, as you can imagine I’m a open source and Linux software enthusiast as well as a digital art designer and amateur GTK3 theme developer,I also like to contribute to other projects where i can.
-
------
-
-### @[Andrew  Zaech](https://gitlab.com/AndrewZaech) | Lead Project JS Developer - UX/Backend Developer |
-
-Hi, I’m Andrew. My role on the project is to design, create, and implement features for the ArcMenu extension. I’m also involved in the code review process and front-end work, as well as improving the UX of ArcMenu. I also work on performance improvements and bug fixes, and provide help to our users with any issues related to ArcMenu.
-
-</p>
-</details>
 
 <details>
 <summary><b>Top Project Contributors</b></summary>
@@ -276,26 +182,6 @@ Hi, I’m Andrew. My role on the project is to design, create, and implement fea
 -----
 
 **@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee/Arc-Menu)**
-
-</p>
-</details>
-
------
-
-### Translations
-
------
-
-<details>
-<summary><b>Disclaimer..</b></summary>
-
-<p>
-
-**Disclaimer..**
-
-*" Translations are not provided by the ArcMenu team members and may contain incorrect or inaccurate translations. The ArcMenu team relies on user contributions for translations. Therefore if you wish to correct or modify a translation that you feel is inaccurate please send a Merge Request with a brief description with the reason for any corrections. "*
-
-Kind regards - **ArcMenu Team**
 
 </p>
 </details>
