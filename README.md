@@ -1,8 +1,8 @@
-![](https://gitlab.com/LinxGem33/Neon/raw/master/new-arcmenu-wide-banner.png)
+![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/new-arcmenu-wide-banner.png)
 
 -----
 
-![](https://gitlab.com/LinxGem33/Neon/raw/master/arcmenu-browser.png)
+![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/arcmenu-browser.png)
 
 -----
 
@@ -26,7 +26,7 @@ Arc Menu is an application menu for GNOME shell, designed to provide a more trad
 
 ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make a donation, feel free to use the link below!
 
-[![Donate via Paypal](https://gitlab.com/LinxGem33/Neon/-/raw/master/wiki%20screens/donate-button-alt.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Donate+to+support+my+work&currency_code=USD&source=url)
+[![Donate via Paypal](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/donate-button-alt.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Donate+to+support+my+work&currency_code=USD&source=url)
 
 -----
 
@@ -34,7 +34,7 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 
 -----
 
-![](https://gitlab.com/LinxGem33/Neon/raw/master/comp-screen-arcmenu-wide.png)
+![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/comp-screen-arcmenu-wide.png)
 
 -----
 
@@ -42,7 +42,7 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 
 -----
 
-![](https://gitlab.com/LinxGem33/Neon/-/raw/master/dash-to-dock-inter-screen.png)
+![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/dash-to-dock-inter-screen.png)
 
 -----
 
