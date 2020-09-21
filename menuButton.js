@@ -723,12 +723,6 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
             Util.spawnCommandLine('xdg-open ' + Me.metadata.url);
         });
         this.addMenuItem(item);
-
-        item = new PopupMenu.PopupMenuItem(_("Arc Menu User Manual")); 
-        item.connect('activate', ()=>{
-            Util.spawnCommandLine('xdg-open ' + Constants.ARCMENU_MANUAL_URL);
-        });
-        this.addMenuItem(item);
     }
     open(animation){
         if(global.dashToPanel && !this._menuButton.dtpNeedsRelease && this._menuButton.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){

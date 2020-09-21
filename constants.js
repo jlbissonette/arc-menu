@@ -333,8 +333,6 @@ var MENU_STYLES = {
     ]
 };
 
-var ARCMENU_MANUAL_URL = "https://gitlab.com/LinxGem33/Neon/-/raw/master/arc-menu-manual/arcmenu-user-manual.pdf"
-
 var ArcMenu_SettingsCommand = 'gnome-extensions prefs arcmenu@arcmenu.com';
 
 //Path to some files
@@ -362,11 +360,6 @@ var KEYBOARD_LOGO = {
     Size: [256, 72] 
 };
 
-var ARC_MENU_MANUAL_ICON = {
-    Path: '/media/misc/arcmenu-manual-icon.svg',
-    Size: [35, 35]
-};
-
 var GITLAB_ICON = {
     Path: '/media/misc/gitlab-icon.svg',
     Size: [35, 35]
@@ -389,15 +382,13 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
                                 '\n\n•   <b>MXLinux©</b> - 2020 - Linux - is the registered trademark of Linus Torvalds in the U.S. and other countries.'+
                                 '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo';
 
-var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer - UX/Backend Developer\t' +
-                '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a>\nFounder - Maintainer - Digital Art Designer';
+var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer\t' +
+                '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a> - <b>(Inactive)</b>\nArcMenu Founder - Former Maintainer - Former Digital Art Designer';
 var TRANSLATORS = '<b>Thank you to all translators!</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#please-refer-to-the-wiki-section-for-a-translation-guide">Full List of Translators</a>';
 var CONTRIBUTORS = '<b>Thank you to the following Top Contributors:</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#top-project-contributors">Top Contributors</a>' +
                     '\n\n<b>A thank you to those who submited Pull Requests</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#pull-requests">Pull Request Contributors</a>';
 var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, Arc Menu Assets' +
                 '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
-var DOCUMENTATION = '<b>LinxGem33</b> aka <b>Andy C</b>\nMaintainer - Contributor' +
-                    '\n\n<b>Andrew Zaech</b>\nContributor';
         
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +

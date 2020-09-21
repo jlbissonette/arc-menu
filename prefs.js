@@ -5835,12 +5835,6 @@ var AboutPage = GObject.registerClass(
                 margin: 0,
                 spacing: 0,
             });
-            let manualBox = new Gtk.Box({
-                margin: 0,
-                expand: false,
-                halign: Gtk.Align.CENTER,
-                spacing: 0,
-            });
             let gitLabBox = new Gtk.Box({
                 margin: 0,
                 vexpand: false,
@@ -5848,24 +5842,7 @@ var AboutPage = GObject.registerClass(
                 spacing: 0,
             });
 
-            let imagePath = Me.path + Constants.ARC_MENU_MANUAL_ICON.Path;
-            [imageWidth, imageHeight] = Constants.ARC_MENU_MANUAL_ICON.Size;
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, imageWidth, imageHeight);
-            let manualImage = new Gtk.Image({ 
-                pixbuf: pixbuf,
-                expand: false,
-                halign: Gtk.Align.CENTER,
-                tooltip_text: _("Arc Menu User Manual")
-            });
-            let projectManualLinkButton = new Gtk.LinkButton({
-                image: manualImage,
-                always_show_image: true,
-                uri: Constants.ARCMENU_MANUAL_URL,
-                expand: false,
-                halign: Gtk.Align.CENTER
-            });
-
-            imagePath = Me.path + "/media/misc/donate-button.png";
+            let imagePath = Me.path + "/media/misc/donate-button.png";
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(imagePath, 150, 50);
             let donateImage = new Gtk.Image({ 
                 pixbuf: pixbuf,
@@ -5876,7 +5853,7 @@ var AboutPage = GObject.registerClass(
             let donateLinkButton = new Gtk.LinkButton({
                 image: donateImage,
                 always_show_image: true,
-                uri: 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TV2Z7G9YZ745E&source=url',
+                uri: 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Donate+to+support+my+work&currency_code=USD&source=url',
                 vexpand: false,
                 valign: Gtk.Align.START,
                 halign: Gtk.Align.CENTER
@@ -5901,11 +5878,8 @@ var AboutPage = GObject.registerClass(
             });
             
             gitLabBox.add(projectLinkButton);
-            
-            manualBox.add(projectManualLinkButton);
             linksBox.add(gitLabBox);
             linksBox.add(donateLinkButton);
-            linksBox.add(manualBox);
             
             this.creditsScrollWindow = new Gtk.ScrolledWindow({
                 margin_top: 10,
@@ -5923,8 +5897,6 @@ var AboutPage = GObject.registerClass(
             this.creditsFrame.append_page(contributorsPage );
             let artworkPage = new PW.NotebookPage(_("Artwork"));
             this.creditsFrame.append_page(artworkPage);
-            let documentationPage = new PW.NotebookPage(_("Documentation"));
-            this.creditsFrame.append_page(documentationPage);
             this.creditsScrollWindow.add_with_viewport(this.creditsFrame);
   	        let creditsLabel = new Gtk.Label({
 		        label: _(Constants.DEVELOPERS),
@@ -5954,13 +5926,6 @@ var AboutPage = GObject.registerClass(
 		        expand: false
             });
             artworkPage.add(creditsLabel);
-            creditsLabel = new Gtk.Label({
-		        label: _(Constants.DOCUMENTATION),
-		        use_markup: true,
-		        halign: Gtk.Align.START,
-		        expand: false
-            });
-            documentationPage.add(creditsLabel);
             arcMenuImageBox.add(arcMenuLabel);
             arcMenuImageBox.add(projectDescriptionLabel);
             arcMenuInfoBox.add(linksBox);
