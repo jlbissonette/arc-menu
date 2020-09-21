@@ -36,7 +36,7 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 
 #### To install the most recent official release: Visit ArcMenu on the [Official GNOME Extensions](https://extensions.gnome.org/extension/3628/arcmenu/) website.
 
-- **To install a Development version from source**: Please see the: [Install From Source wiki Guide](https://gitlab.com/LinxGem33/Arc-Menu/-/wikis/Install%20From%20Source%20Guide).
+- **To install a Development version from source**: Please see the: [Install From Source wiki Guide](https://gitlab.com/arcmenu/ArcMenu/-/wikis/Install-From-Source-Guide).
 
 <p align="left">
        <a href="https://extensions.gnome.org/extension/3628/arcmenu/" >
@@ -47,7 +47,7 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 
 ### Dependencies
 
-For ArcMenu to work properly, your GNOME Desktop may need [these dependencies](https://gitlab.com/LinxGem33/Arc-Menu/wikis/Arc-Menu-Dependencies).
+For ArcMenu to work properly, your GNOME Desktop may need [these dependencies](https://gitlab.com/arcmenu/ArcMenu/-/wikis/ArcMenu-Dependencies).
 
 -----
 
@@ -204,8 +204,6 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 <details>
 <summary><b>Translators</b></summary>
 <p>
-
-#### Please refer to the Wiki section for a [Translation Guide](https://gitlab.com/LinxGem33/Arc-Menu/wikis/Translation-Guide)
 
 - **Current translated languages and translators..**
 
