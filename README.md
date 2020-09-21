@@ -8,7 +8,7 @@
 
 ### Introduction
 
-Arc Menu is an application menu for GNOME shell, designed to provide a more traditional user experience and workflow. This extension has many features, including multiple menu layout styles, GNOME search, quick access to system shorctus, and more! If you are a new user to GNOME and are looking for a Windows style start menu, this extension will be perfect for you!
+ArcMenu is an application menu for GNOME shell, designed to provide a more traditional user experience and workflow. This extension has many features, including multiple menu layout styles, GNOME search, quick access to system shorctus, and more! If you are a new user to GNOME and are looking for a Windows style start menu, this extension will be perfect for you!
 
 -----
 
@@ -20,13 +20,13 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 
 -----
 
-#### Arc Menu integrated with [Dash-to-Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)
+#### ArcMenu integrated with [Dash-to-Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)
 
 ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/comp-screen-arcmenu-wide.png)
 
 -----
 
-#### Arc Menu integrated with [Dash-to-Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)
+#### ArcMenu integrated with [Dash-to-Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)
 
 ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/dash-to-dock-inter-screen.png)
 
@@ -55,7 +55,7 @@ For ArcMenu to work properly, your GNOME Desktop may need [these dependencies](h
 
 Bugs should be reported [here](https://gitlab.com/arcmenu/ArcMenu/issues) on the GitLab issues page.
 
-Please note that without any information about your system, the Arc Menu Team can only speculate what the problem is.
+Please note that without any information about your system, the ArcMenu team can only speculate what the problem is.
 So, please provide us information about your GNU/Linux distribution and the GNOME Shell version. Otherwise, we are not able to try and solve your problem.
 
 -----
@@ -69,16 +69,16 @@ There are basic rules of conduct that should be followed at all times by everyon
 - Do not use ALL CAPS when creating an issue report.
 - Do not repeatedly update an open issue remarking that the issue persists.
 
-**Remember**: Just because the issue you reported was reported here does not mean that it is an issue with Arc menu. As well, should your issue not be resolved immediately, it does not mean that a resolution is not being researched or tested. Patience is always appreciated.
+**Remember**: Just because the issue you reported was reported here does not mean that it is an issue with ArcMenu. As well, should your issue not be resolved immediately, it does not mean that a resolution is not being researched or tested. Patience is always appreciated.
 
 -----
 
 [![GNU GPL Image](https://www.gnu.org/graphics/slickgnu.tiny.png)](http://www.gnu.org/licenses/old-licenses/lgpl-2.0.html)  
 ### License & Terms ![](https://gitlab.com/LinxGem33/IP-Finder/raw/master/screens/Copyleft-16.png)
 
-Arc Menu is available under the terms of the GPL-2.0 license See [`COPYING`](https://gitlab.com/arcmenu/ArcMenu/blob/master/COPYING) for details.
+ArcMenu is available under the terms of the GPL-2.0 license See [`COPYING`](https://gitlab.com/arcmenu/ArcMenu/blob/master/COPYING) for details.
 
-Arc-Menu is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the [GNU General Public License](https://www.gnu.org/licenses/gpl.html) as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version. 
+ArcMenu is Free Software: You can use, study share and improve it at your will. Specifically you can redistribute and/or modify it under the terms of the [GNU General Public License](https://www.gnu.org/licenses/gpl.html) as published by the Free Software Foundation, either version 2 of the License, or (at your option) any later version. 
 
 All ArcMenu's Image assets including wiki images, icons and application image assets are created by [LinxGem33](https://gitlab.com/LinxGem33) and licensed under; [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
