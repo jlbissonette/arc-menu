@@ -14,16 +14,6 @@ Arc Menu is an application menu for GNOME shell, designed to provide a more trad
 
 ### Donation
 
-<details>
-<summary><b>Disclaimer..</b></summary>
-
-<p>
-
-*Disclaimer: all donations are non refundable so please take care at the time of donation that you donate the intended correct amount, thank you Arc Menu Team.*
-
-</p>
-</details>
-
 ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make a donation, feel free to use the link below!
 
 [![Donate via Paypal](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/donate-button-alt.png)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Donate+to+support+my+work&currency_code=USD&source=url)
@@ -32,15 +22,11 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 
 #### Arc Menu integrated with [Dash-to-Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)
 
------
-
 ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/comp-screen-arcmenu-wide.png)
 
 -----
 
 #### Arc Menu integrated with [Dash-to-Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)
-
------
 
 ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/dash-to-dock-inter-screen.png)
 
@@ -53,7 +39,7 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 - **To install a Development version from source**: Please see the: [Install From Source wiki Guide](https://gitlab.com/LinxGem33/Arc-Menu/-/wikis/Install%20From%20Source%20Guide).
 
 <p align="left">
-       <a href="https://extensions.gnome.org/extension/1228/arc-menu/" >
+       <a href="https://extensions.gnome.org/extension/3628/arcmenu/" >
     <img src="https://gitlab.com/LinxGem33/Neon/raw/master/artwork/get-it-ego.png" width="240" style="margin-left: 4px"/>
     </a>
 
@@ -61,16 +47,13 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 
 ### Dependencies
 
-__Please note:__ For Arc-Menu to work properly, your GNOME Desktop must have the
-following [dependencies installed](https://gitlab.com/LinxGem33/Arc-Menu/wikis/Arc-Menu-Dependencies).
+For ArcMenu to work properly, your GNOME Desktop may need [these dependencies](https://gitlab.com/LinxGem33/Arc-Menu/wikis/Arc-Menu-Dependencies).
 
 -----
 
 ### Bugs
 
 Bugs should be reported [here](https://gitlab.com/arcmenu/ArcMenu/issues) on the GitLab issues page.
-
------
 
 Please note that without any information about your system, the Arc Menu Team can only speculate what the problem is.
 So, please provide us information about your GNU/Linux distribution and the GNOME Shell version. Otherwise, we are not able to try and solve your problem.
