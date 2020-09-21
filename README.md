@@ -48,7 +48,7 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to make 
 
 ### Installation
 
-#### To install the most recent official release: Visit ArcMenu on the [Official GNOME Extensions](https://extensions.gnome.org/extension/1228/arc-menu/) website.
+#### To install the most recent official release: Visit ArcMenu on the [Official GNOME Extensions](https://extensions.gnome.org/extension/3628/arcmenu/) website.
 
 - **To install a Development version from source**: Please see the: [Install From Source wiki Guide](https://gitlab.com/LinxGem33/Arc-Menu/-/wikis/Install%20From%20Source%20Guide).
 
@@ -159,8 +159,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 -----
 
-* This extension leverages the work from [Giovanni Campagna ](https://git.gnome.org//browse/gnome-shell-extensions) gnome Application Menu to allow the menu to be embedded in the Gnome main panel.
-* This extension also leverages some of the design elements for the default menu layout (ArcMenu) from Zorin OS.
+* This extension leverages some of the design elements for the default menu layout (ArcMenu) from Zorin OS.
 * This extension also uses some code from gnome-shell adapted to be used for ArcMenu.
 * This extension also uses adapted code from Dash to Panel's Utils.js.
 * This extension also uses some code from gnome-shell-extensions package for use with external file sources adapted to be used for ArcMenu.
