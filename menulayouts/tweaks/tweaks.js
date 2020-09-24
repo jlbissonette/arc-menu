@@ -37,7 +37,7 @@ const SCHEMA_PATH = '/org/gnome/shell/extensions/arc-menu/';
 const GSET = 'gnome-shell-extension-tool';
 
 var TweaksDialog = GObject.registerClass(
-    class ArcMenu_TweaksDialog extends PW.DialogWindow {
+    class Arc_Menu_TweaksDialog extends PW.DialogWindow {
 
         _init(settings, parent, label) {
             this._settings = settings;

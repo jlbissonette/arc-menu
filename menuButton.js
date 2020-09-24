@@ -41,7 +41,7 @@ var DASH_TO_PANEL_UUID = 'dash-to-panel@jderose9.github.com';
 var DASH_TO_DOCK_UUID = 'dash-to-dock@micxgx.gmail.com';
 var UBUNTU_DOCK_UUID = 'ubuntu-dock@ubuntu.com';
 
-var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMenu.Button{
+var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMenu.Button{
     _init(settings, arcMenuPlacement, panel, dashIndex) {
         super._init(0.5, null, true);
         this._settings = settings;
@@ -643,7 +643,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 });
 
-var ArcMenu = class ArcMenu_ArcMenu extends PopupMenu.PopupMenu{
+var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
     constructor(sourceActor, arrowAlignment, arrowSide) {
         super(sourceActor, arrowAlignment, arrowSide);
         this._settings = sourceActor._settings;
@@ -697,7 +697,7 @@ var ArcMenu = class ArcMenu_ArcMenu extends PopupMenu.PopupMenu{
     }
 };
 
-var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.PopupMenu {
+var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.PopupMenu {
     constructor(sourceActor, arrowAlignment, arrowSide) {
         super(sourceActor, arrowAlignment, arrowSide);
         this._settings = sourceActor._settings;

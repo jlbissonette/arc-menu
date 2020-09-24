@@ -37,7 +37,7 @@ const GSET = 'gnome-shell-extension-tool';
 
 //Pinned Apps Page
 var MenuSettingsPinnedAppsPage = GObject.registerClass(
-    class ArcMenu_MenuSettingsPinnedAppsPage extends PW.NotebookPage {
+    class Arc_Menu_MenuSettingsPinnedAppsPage extends PW.NotebookPage {
         _init(settings) {
             super._init(_('Pinned Apps'));
             this._settings = settings;
@@ -281,7 +281,7 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
 });
 //Dialog Window for Adding Apps to Pinned Apps List   
 var AddAppsToPinnedListWindow = GObject.registerClass(
-    class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
+    class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         _init(settings, parent, dialogType) {
             this._settings = settings;
             this._dialogType = dialogType;
@@ -683,7 +683,7 @@ var AddAppsToPinnedListWindow = GObject.registerClass(
     
 //Dialog Window for Adding Custom Links to Pinned Apps List    
 var AddCustomLinkDialogWindow = GObject.registerClass(
-    class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
+    class Arc_Menu_AddCustomLinkDialogWindow extends PW.DialogWindow {
         _init(settings, parent, dialogType, isAppEdit=false, appArray=null) {
             this._settings = settings;
             this.newPinnedAppsArray=[];
@@ -807,7 +807,7 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
 
 // General Settings Page
 var GeneralPage = GObject.registerClass(
-    class ArcMenu_GeneralPage extends PW.NotebookPage {
+    class Arc_Menu_GeneralPage extends PW.NotebookPage {
         _init(settings) {
             super._init(_('General'));
             this._settings = settings;
@@ -1335,7 +1335,7 @@ var GeneralPage = GObject.registerClass(
 });
 //Dialog Window for Custom Activities Hot Corner
 var ModifyHotCornerDialogWindow = GObject.registerClass(
-    class ArcMenu_ModifyHotCornerDialogWindow extends PW.DialogWindow {
+    class Arc_Menu_ModifyHotCornerDialogWindow extends PW.DialogWindow {
         _init(settings, parent) {
             this._settings = settings;
             this.addResponse = false;
@@ -1512,7 +1512,7 @@ var ModifyHotCornerDialogWindow = GObject.registerClass(
 });
 //Dialog Window for Custom Hotkey
 var CustomHotkeyDialogWindow = GObject.registerClass(
-    class ArcMenu_CustomHotkeyDialogWindow extends PW.DialogWindow {
+    class Arc_Menu_CustomHotkeyDialogWindow extends PW.DialogWindow {
         _init(settings, parent) {
             this._settings = settings;
             this.addResponse = false;
@@ -1671,7 +1671,7 @@ function getIconPixbuf(filePath){
 }
 
 var ButtonAppearancePage = GObject.registerClass(
-    class ArcMenu_ButtonAppearancePage extends Gtk.ScrolledWindow {
+    class Arc_Menu_ButtonAppearancePage extends Gtk.ScrolledWindow {
         _init(settings) {
             super._init();
             this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -2119,7 +2119,7 @@ var ButtonAppearancePage = GObject.registerClass(
 
 //Dialog Window for ArcMenu Icons
 var ArcMenuIconsDialogWindow = GObject.registerClass(
-    class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
+    class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         _init(settings, parent) {
             this._settings = settings;
             this.customIconPath = this._settings.get_string('custom-menu-button-icon');
@@ -2284,7 +2284,7 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
 });
 
 var DistroIconsDisclaimerWindow = GObject.registerClass(
-    class ArcMenu_DistroIconsDisclaimerWindow extends Gtk.MessageDialog {
+    class Arc_Menu_DistroIconsDisclaimerWindow extends Gtk.MessageDialog {
         _init(settings, parent) {
             this._settings = settings;
             super._init({
@@ -2340,7 +2340,7 @@ var DistroIconsDisclaimerWindow = GObject.registerClass(
 });
 
 var MenuLayoutPage = GObject.registerClass(
-    class ArcMenu_MenuLayoutPage extends Gtk.Box {
+    class Arc_Menu_MenuLayoutPage extends Gtk.Box {
         _init(settings) {
             super._init({
                 orientation: Gtk.Orientation.VERTICAL,
@@ -2494,7 +2494,7 @@ var MenuLayoutPage = GObject.registerClass(
 });
 
 var MenuThemePage = GObject.registerClass(
-    class ArcMenu_MenuThemePage extends Gtk.ScrolledWindow {
+    class Arc_Menu_MenuThemePage extends Gtk.ScrolledWindow {
         _init(settings) {
             super._init();
             this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -2626,7 +2626,7 @@ var MenuThemePage = GObject.registerClass(
 });
 //Dialog Window for Arc Menu Customization    
 var MenuLayoutsWindow = GObject.registerClass(
-    class ArcMenu_MenuLayoutsWindow extends Gtk.Box {
+    class Arc_Menu_MenuLayoutsWindow extends Gtk.Box {
         _init(settings, stack) {
             super._init({
                 orientation: Gtk.Orientation.VERTICAL,
@@ -2672,7 +2672,7 @@ var MenuLayoutsDialog = GObject.registerClass({
     Signals: {
         'menu-layout-response': { param_types: [GObject.TYPE_INT] },
     },
-},  class ArcMenu_MenuLayoutsDialog extends Gtk.Box {
+},  class Arc_Menu_MenuLayoutsDialog extends Gtk.Box {
         _init(settings, parent, tile, title) {
             super._init({
                 orientation: Gtk.Orientation.VERTICAL,
@@ -2771,7 +2771,7 @@ var MenuLayoutsDialog = GObject.registerClass({
 });
 
 var MenuSettingsGeneralPage = GObject.registerClass(
-    class ArcMenu_MenuSettingsGeneralPage extends Gtk.ScrolledWindow {
+    class Arc_Menu_MenuSettingsGeneralPage extends Gtk.ScrolledWindow {
     _init(settings) {
         super._init();
         this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -3202,7 +3202,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 });
 
 var MenuSettingsFineTunePage = GObject.registerClass(
-    class ArcMenu_MenuSettingsFineTunePage extends Gtk.ScrolledWindow {
+    class Arc_Menu_MenuSettingsFineTunePage extends Gtk.ScrolledWindow {
     _init(settings) {
         super._init();
         this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -3526,7 +3526,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
 });
 
 var MenuSettingsCategoriesPage = GObject.registerClass(
-    class ArcMenu_MenuSettingsCategoriesPage extends Gtk.ScrolledWindow {
+    class Arc_Menu_MenuSettingsCategoriesPage extends Gtk.ScrolledWindow {
     _init(settings) {
         super._init();
         this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -3690,7 +3690,7 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
 
 //Dialog Window for Arc Menu Customization    
 var ColorThemeDialogWindow = GObject.registerClass(
-    class ArcMenu_ColorThemeDialogWindow extends PW.DialogWindow {
+    class Arc_Menu_ColorThemeDialogWindow extends PW.DialogWindow {
         _init(settings, parent, themeName="") {
             this._settings = settings;
             this.addResponse = false;
@@ -3745,7 +3745,7 @@ var ColorThemeDialogWindow = GObject.registerClass(
 
 //Dialog Window for Arc Menu Customization    
 var ExportColorThemeDialogWindow = GObject.registerClass(
-    class ArcMenu_ExportColorThemeDialogWindow extends PW.DialogWindow {
+    class Arc_Menu_ExportColorThemeDialogWindow extends PW.DialogWindow {
 
         _init(settings, parent, themes=null) {
             this._settings = settings;
@@ -3863,7 +3863,7 @@ var ExportColorThemeDialogWindow = GObject.registerClass(
 });
 //Dialog Window for Arc Menu Customization    
 var ManageColorThemeDialogWindow = GObject.registerClass(
-    class ArcMenu_ManageColorThemeDialogWindow extends PW.DialogWindow {
+    class Arc_Menu_ManageColorThemeDialogWindow extends PW.DialogWindow {
 
         _init(settings, parent) {
             this._settings = settings;
@@ -4021,7 +4021,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
         'menu-theme-response': { param_types: [GObject.TYPE_INT] },
     },
 },
-    class ArcMenu_OverrideArcMenuThemeWindow extends Gtk.Box {
+    class Arc_Menu_OverrideArcMenuThemeWindow extends Gtk.Box {
         _init(settings, parentBox) {
             super._init({
                 orientation: Gtk.Orientation.VERTICAL,
@@ -4666,7 +4666,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
 });
 
 var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
-    class ArcMenu_MenuSettingsShortcutDirectoriesPage extends Gtk.ScrolledWindow {
+    class Arc_Menu_MenuSettingsShortcutDirectoriesPage extends Gtk.ScrolledWindow {
     _init(settings) {
         super._init();
         this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -4949,7 +4949,7 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
     }
 });
 var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
-    class ArcMenu_MenuSettingsShortcutApplicationsPage extends Gtk.ScrolledWindow {
+    class Arc_Menu_MenuSettingsShortcutApplicationsPage extends Gtk.ScrolledWindow {
     _init(settings) {
         super._init();
         this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -5230,7 +5230,7 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
     }
 });
 var MenuSettingsShortcutSessionButtonsPage = GObject.registerClass(
-    class ArcMenu_MenuSettingsShortcutSessionButtonsPage extends Gtk.ScrolledWindow {
+    class Arc_Menu_MenuSettingsShortcutSessionButtonsPage extends Gtk.ScrolledWindow {
     _init(settings) {
         super._init();
         this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -5324,7 +5324,7 @@ var MenuSettingsShortcutSessionButtonsPage = GObject.registerClass(
 });
 
 var MenuSettingsShortcutExtrasPage = GObject.registerClass(
-    class ArcMenu_MenuSettingsShortcutExtrasPage extends Gtk.ScrolledWindow {
+    class Arc_Menu_MenuSettingsShortcutExtrasPage extends Gtk.ScrolledWindow {
     _init(settings) {
         super._init();
         this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -5385,7 +5385,7 @@ var MenuSettingsShortcutExtrasPage = GObject.registerClass(
 
 // Misc Page
 var MiscPage = GObject.registerClass(
-    class ArcMenu_MiscPage extends PW.NotebookPage {
+    class Arc_Menu_MiscPage extends PW.NotebookPage {
         _init(settings) {
             super._init(_('Misc'));
             this._settings = settings;
@@ -5653,7 +5653,7 @@ var MiscPage = GObject.registerClass(
 
 // About Page
 var AboutPage = GObject.registerClass(
-    class ArcMenu_AboutPage extends Gtk.ScrolledWindow {
+    class Arc_Menu_AboutPage extends Gtk.ScrolledWindow {
         _init(settings) {
             super._init();
             this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
@@ -5965,7 +5965,7 @@ function createSeparator(){
 
 // Arc Menu Preferences Widget
 var ArcMenuPreferencesWidget = GObject.registerClass(
-class ArcMenu_ArcMenuPreferencesWidget extends Gtk.Box{
+class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
     _init() {
         super._init({
             orientation: Gtk.Orientation.HORIZONTAL,

@@ -44,7 +44,7 @@ var LARGE_ICON_SIZE = 36;
 var MEDIUM_ICON_SIZE = 25;
 var SMALL_ICON_SIZE = 16;
 
-var ListSearchResult = class ArcMenu_ListSearchResult {
+var ListSearchResult = class Arc_Menu_ListSearchResult {
     constructor(provider, metaInfo, resultsView) {
         this._menuLayout = resultsView._menuLayout;
         this.searchType = this._menuLayout.layoutProperties.SearchType;
@@ -162,7 +162,7 @@ var ListSearchResult = class ArcMenu_ListSearchResult {
     }
 };Signals.addSignalMethods(ListSearchResult.prototype);
 
-var AppSearchResult = class ArcMenu_AppSearchResult {
+var AppSearchResult = class Arc_Menu_AppSearchResult {
     constructor(provider, metaInfo, resultsView) {
         this._menuLayout = resultsView._menuLayout;
         this.searchType = this._menuLayout.layoutProperties.SearchType;
@@ -292,7 +292,7 @@ var AppSearchResult = class ArcMenu_AppSearchResult {
     }
 
 };Signals.addSignalMethods(AppSearchResult.prototype);
-var SearchResultsBase = class ArcMenu_SearchResultsBase{
+var SearchResultsBase = class Arc_Menu_SearchResultsBase{
     constructor(provider, resultsView) {
         this.provider = provider;
         this._resultsView = resultsView;
@@ -440,7 +440,7 @@ var SearchResultsBase = class ArcMenu_SearchResultsBase{
     }
 };
 
-var ListSearchResults = class ArcMenu_ListSearchResults extends SearchResultsBase {
+var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBase {
     constructor(provider, resultsView) {
         super(provider, resultsView);
         this._menuLayout = resultsView._menuLayout;
@@ -526,7 +526,7 @@ var ListSearchResults = class ArcMenu_ListSearchResults extends SearchResultsBas
     }
 };
 Signals.addSignalMethods(ListSearchResults.prototype);
-var AppSearchResults = class ArcMenu_AppSearchResults extends SearchResultsBase {
+var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase {
       constructor(provider, resultsView) {
         super(provider, resultsView);
         this._parentContainer = resultsView.actor;
@@ -583,7 +583,7 @@ var AppSearchResults = class ArcMenu_AppSearchResults extends SearchResultsBase 
 };
 Signals.addSignalMethods(AppSearchResults.prototype);
 
-var SearchResults = class ArcMenu_SearchResults {
+var SearchResults = class Arc_Menu_SearchResults {
     constructor(menuLayout) {
         this._menuLayout = menuLayout;
         this.searchType = this._menuLayout.layoutProperties.SearchType;
@@ -939,7 +939,7 @@ var SearchResults = class ArcMenu_SearchResults {
 };
 Signals.addSignalMethods(SearchResults.prototype);
 
-var ArcSearchProviderInfo = GObject.registerClass(class ArcMenu_ArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem{
+var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem{
     _init(provider, menuLayout) {
         super._init(menuLayout);
         this.provider = provider;
