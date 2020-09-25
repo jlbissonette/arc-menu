@@ -1,10 +1,10 @@
 /*
- * Arc Menu - A traditional application menu for GNOME 3
+ * ArcMenu - A traditional application menu for GNOME 3
  *
- * Arc Menu Lead Developer and Maintainer
+ * ArcMenu Lead Developer and Maintainer
  * Andrew Zaech https://gitlab.com/AndrewZaech
  * 
- * Arc Menu Founder, Former Maintainer, and Former Graphic Designer
+ * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
  * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH)
             menuManagerParent = this;
         
-        //Create Main Menus - Arc Menu and arcMenu's context menu
+        //Create Main Menus - ArcMenu and arcMenu's context menu
         this.arcMenu = new ArcMenu(this, 0.5, St.Side.TOP);
         this.arcMenu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
 
@@ -708,7 +708,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         Main.uiGroup.add_actor(this.actor);
         this.actor.hide();
 
-        let item = new PopupMenu.PopupMenuItem(_("Arc Menu Settings"));
+        let item = new PopupMenu.PopupMenuItem(_("ArcMenu Settings"));
         item.connect('activate', ()=>{
             Util.spawnCommandLine(Constants.ArcMenu_SettingsCommand);
         });
@@ -718,7 +718,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         item._separator.style_class='arc-menu-sep';
         this.addMenuItem(item);
 
-        item = new PopupMenu.PopupMenuItem(_("Arc Menu GitLab Page"));    
+        item = new PopupMenu.PopupMenuItem(_("ArcMenu GitLab Page"));    
         item.connect('activate', ()=>{
             Util.spawnCommandLine('xdg-open ' + Me.metadata.url);
         });

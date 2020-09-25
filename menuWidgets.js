@@ -1,10 +1,10 @@
 /*
- * Arc Menu - A traditional application menu for GNOME 3
+ * ArcMenu - A traditional application menu for GNOME 3
  *
- * Arc Menu Lead Developer and Maintainer
+ * ArcMenu Lead Developer and Maintainer
  * Andrew Zaech https://gitlab.com/AndrewZaech
  * 
- * Arc Menu Founder, Former Maintainer, and Former Graphic Designer
+ * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
  * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -296,7 +296,7 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
                         return element == this._app.get_id();
                     });
                     if(match){ //if app is pinned add Unpin
-                        let item = new PopupMenu.PopupMenuItem(_("Unpin from Arc Menu"));  
+                        let item = new PopupMenu.PopupMenuItem(_("Unpin from ArcMenu"));  
                         item.connect('activate', ()=>{
                             this.close();
                             for(let i = 0;i<pinnedApps.length;i+=3){
@@ -310,7 +310,7 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
                         this.addMenuItem(item);
                     }
                     else{ //if app is not pinned add pin
-                        let item = new PopupMenu.PopupMenuItem(_("Pin to Arc Menu"));   
+                        let item = new PopupMenu.PopupMenuItem(_("Pin to ArcMenu"));   
                         item.connect('activate', ()=>{
                             this.close();
                             pinnedApps.push(this.appInfo.get_display_name());
@@ -345,7 +345,7 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
         }  
         else{  //if pinned custom shortcut add unpin option to menu    
             this._appendSeparator();
-            let item = new PopupMenu.PopupMenuItem(_("Unpin from Arc Menu"));   
+            let item = new PopupMenu.PopupMenuItem(_("Unpin from ArcMenu"));   
             item.connect('activate', ()=>{
                 this.close();
                 let pinnedApps = this._settings.get_strv('pinned-app-list');
@@ -1251,10 +1251,10 @@ var SettingsButton = GObject.registerClass(class Arc_Menu_SettingsButton extends
     }
 });
 
-// Arc Menu Settings Button
+// ArcMenu Settings Button
 var ArcMenuSettingsButton = GObject.registerClass(class Arc_Menu_ArcMenuSettingsButton extends SessionButton {
     _init(menuLayout) {
-        super._init(menuLayout, _("Arc Menu Settings"), Me.path + '/media/icons/arc-menu-symbolic.svg');
+        super._init(menuLayout, _("ArcMenu Settings"), Me.path + '/media/icons/arc-menu-symbolic.svg');
         this.tooltip.flipY = true;
     }
     activate() {
@@ -1340,7 +1340,6 @@ var CurrentUserButton = GObject.registerClass(class Arc_Menu_CurrentUserButton e
     }
 });
 
-// Power Button
 var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends SessionButton {
     _init(menuLayout) {
         super._init(menuLayout, _("Power Off"), 'system-shutdown-symbolic');
@@ -1350,7 +1349,15 @@ var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends Sessi
     }
 });
 
-// Logout Button
+var RestartButton = GObject.registerClass(class Arc_Menu_RestartButton extends SessionButton {
+    _init(menuLayout) {
+        super._init(menuLayout, _("Restart"), Me.path + Constants.RESTART_ICON.Path);
+    }
+    activate() {
+        this._menuLayout._session.RebootRemote();
+    }
+});
+
 var LogoutButton = GObject.registerClass(class Arc_Menu_LogoutButton extends SessionButton {
     _init(menuLayout) {
         super._init(menuLayout, _("Log Out"), 'application-exit-symbolic');
@@ -1360,7 +1367,6 @@ var LogoutButton = GObject.registerClass(class Arc_Menu_LogoutButton extends Ses
     }
 });
 
-// Suspend Button
 var SuspendButton = GObject.registerClass(class Arc_Menu_SuspendButton extends SessionButton {
     _init(menuLayout) {
         super._init(menuLayout, _("Suspend"), 'media-playback-pause-symbolic');
@@ -1375,7 +1381,6 @@ var SuspendButton = GObject.registerClass(class Arc_Menu_SuspendButton extends S
     }
 });
 
-// Lock Screen Button
 var LockButton = GObject.registerClass(class Arc_Menu_LockButton extends SessionButton {
     _init(menuLayout) {
         super._init(menuLayout, _("Lock"), 'changes-prevent-symbolic');
@@ -1413,6 +1418,8 @@ var PlasmaPowerItem = GObject.registerClass(class Arc_Menu_PlasmaPowerItem exten
     activate(event){
         if(this.type === Constants.PowerType.POWEROFF)
             this._menuLayout._session.ShutdownRemote(0);
+        if(this.type === Constants.PowerType.RESTART)
+            this._menuLayout._session.RebootRemote();
         if(this.type === Constants.PowerType.LOCK){
             this._menuLayout.isRunning = false;
             Main.screenShield.lock(true);
@@ -1904,8 +1911,8 @@ var FavoritesMenuItem = GObject.registerClass({
         this.hasContextMenu = true;
 
         //Modifiy the Default Pinned Apps---------------------
-        if(this._name == "Arc Menu Settings"){
-            this._name = _("Arc Menu Settings");
+        if(this._name == "ArcMenu Settings"){
+            this._name = _("ArcMenu Settings");
         }
         else if(this._name == "Terminal"){
             this._name = _("Terminal");
@@ -3199,7 +3206,7 @@ var DashMenuButtonWidget = class Arc_Menu_DashMenuButtonWidget{
             reactive: true
         });
 
-        this._labelText = _("Arc Menu");
+        this._labelText = _("ArcMenu");
         this.label = new St.Label({ style_class: 'dash-label' });
         this.label.hide();
         Main.layoutManager.addChrome(this.label);

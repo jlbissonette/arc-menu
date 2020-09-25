@@ -1,10 +1,10 @@
 /*
- * Arc Menu - A traditional application menu for GNOME 3
+ * ArcMenu - A traditional application menu for GNOME 3
  *
- * Arc Menu Lead Developer and Maintainer
+ * ArcMenu Lead Developer and Maintainer
  * Andrew Zaech https://gitlab.com/AndrewZaech
  * 
- * Arc Menu Founder, Former Maintainer, and Former Graphic Designer
+ * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
  * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -179,7 +179,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         //Add Application Shortcuts to menu (Software, Settings, Tweaks, Terminal)
-        let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("Arc Menu Settings")];
+        let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
@@ -216,6 +216,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let suspend = new MW.SuspendButton(this);
             this.actionsBox.add(suspend.actor);
         }
+        if(this._settings.get_boolean('show-restart-button')){
+            let restart = new MW.RestartButton(this);
+            this.actionsBox.add(restart.actor);
+        }      
         if(this._settings.get_boolean('show-power-button')){
             let power = new MW.PowerButton(this);
             this.actionsBox.add(power.actor);

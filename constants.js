@@ -1,10 +1,10 @@
 /*
- * Arc Menu - A traditional application menu for GNOME 3
+ * ArcMenu - A traditional application menu for GNOME 3
  *
- * Arc Menu Lead Developer and Maintainer
+ * ArcMenu Lead Developer and Maintainer
  * Andrew Zaech https://gitlab.com/AndrewZaech
  * 
- * Arc Menu Founder, Former Maintainer, and Former Graphic Designer
+ * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
  * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -163,7 +163,8 @@ var PowerType = {
     POWEROFF: 1,
     LOCK: 2,
     LOGOUT: 3,
-    SUSPEND: 4
+    SUSPEND: 4,
+    RESTART: 5
 };
 
 var MENU_ICONS = [
@@ -282,7 +283,7 @@ var MENU_LAYOUT = {
 };
 
 var TRADITIONAL_MENU_STYLE = [   
-    { thumbnail: '/media/layouts/arc-menu.svg', name: _('Arc Menu'), layout: MENU_LAYOUT.Default},
+    { thumbnail: '/media/layouts/arc-menu.svg', name: _('ArcMenu'), layout: MENU_LAYOUT.Default},
     { thumbnail: '/media/layouts/brisk-menu.svg', name: _('Brisk Menu Style'), layout: MENU_LAYOUT.Brisk},
     { thumbnail: '/media/layouts/whisker-menu.svg', name: _('Whisker Menu Style'), layout: MENU_LAYOUT.Whisker},
     { thumbnail: '/media/layouts/gnome-menu.svg', name: _('GNOME Menu Style'), layout: MENU_LAYOUT.GnomeMenu},
@@ -346,6 +347,10 @@ var COLOR_PRESET = {
     Size: [200, 35]
 };
 
+var RESTART_ICON = {
+    Path: '/media/misc/restart-symbolic.svg'
+};
+
 var WARNING_ICON = {
     Path: '/media/misc/warning-symbolic.svg',
     Size: [30, 30] 
@@ -365,7 +370,7 @@ var GITLAB_ICON = {
     Size: [35, 35]
 };
 
-var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by Arc Menu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."</i>'+
+var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."</i>'+
                                 '\n\n•   <b>UBUNTU©</b> - Ubuntu name and Ubuntu logo are trademarks of Canonical© Ltd.'+
                                 '\n\n•   <b>FEDORA©</b> - Fedora and the Infinity design logo are trademarks of Red Hat, Inc.'+
                                 '\n\n•   <b>DEBIAN©</b> - is a registered trademark owned by Software in the Public Interest, Inc. Debian trademark is a registered United States trademark of Software in the Public Interest, Inc., managed by the Debian project.'+
@@ -387,7 +392,7 @@ var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@
 var TRANSLATORS = '<b>Thank you to all translators!</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#please-refer-to-the-wiki-section-for-a-translation-guide">Full List of Translators</a>';
 var CONTRIBUTORS = '<b>Thank you to the following Top Contributors:</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#top-project-contributors">Top Contributors</a>' +
                     '\n\n<b>A thank you to those who submited Pull Requests</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#pull-requests">Pull Request Contributors</a>';
-var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, Arc Menu Assets' +
+var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
                 '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
         
 var GNU_SOFTWARE = '<span size="small">' +

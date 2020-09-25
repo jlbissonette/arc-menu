@@ -1,10 +1,10 @@
 /*
- * Arc Menu - A traditional application menu for GNOME 3
+ * ArcMenu - A traditional application menu for GNOME 3
  *
- * Arc Menu Lead Developer and Maintainer
+ * ArcMenu Lead Developer and Maintainer
  * Andrew Zaech https://gitlab.com/AndrewZaech
  * 
- * Arc Menu Founder, Former Maintainer, and Former Graphic Designer
+ * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
  * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
  * 
  * This program is free software: you can redistribute it and/or modify
@@ -927,7 +927,7 @@ var TweaksDialog = GObject.registerClass(
             });
             let defaultLeftBoxCombo = new Gtk.ComboBoxText({ 
                 halign: Gtk.Align.END,
-                tooltip_text: _("Choose the default screen for Arc Menu") 
+                tooltip_text: _("Choose the default screen for ArcMenu") 
             });
             defaultLeftBoxCombo.append_text(_("Pinned Apps"));
             defaultLeftBoxCombo.append_text(_("Categories List"));
