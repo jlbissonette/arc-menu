@@ -18,9 +18,7 @@
         <value value='14' nick='Chromebook'/>
         <value value='15' nick='Raven'/>
         <value value='16' nick='Tognee'/>
-        <value value='17' nick='RavenExtended'/>
-        <value value='18' nick='Dashboard'/>
-        <value value='19' nick='Plasma'/>
+        <value value='17' nick='Plasma'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>

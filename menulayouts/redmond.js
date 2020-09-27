@@ -185,7 +185,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END,
             x_align: Clutter.ActorAlign.CENTER,
         });
-        this.actionsScrollBox.set_policy(Gtk.PolicyType.EXTERNAL, Gtk.PolicyType.NEVER);
+        this.actionsScrollBox.set_policy(St.PolicyType.EXTERNAL, St.PolicyType.NEVER);
         this.actionsScrollBox.clip_to_allocation = true;
 
         //create new section for Power, Lock, Logout, Suspend Buttons

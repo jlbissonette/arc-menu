@@ -191,14 +191,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.END,
-            x_align: Clutter.ActorAlign.CENTER
+            hscrollbar_policy: St.PolicyType.EXTERNAL,
+            vscrollbar_policy: St.PolicyType.NEVER,
+            clip_to_allocation: true
         });
-        this.actionsScrollBox.set_policy(Gtk.PolicyType.EXTERNAL, Gtk.PolicyType.NEVER);
-        this.actionsScrollBox.clip_to_allocation = true;
 
         //create new section for Power, Lock, Logout, Suspend Buttons
         this.actionsBox = new St.BoxLayout({
             vertical: false,
+            x_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
         });	
         this.actionsBox.style = "spacing: 16px;";

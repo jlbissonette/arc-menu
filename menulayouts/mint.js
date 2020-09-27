@@ -52,7 +52,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true,
             style_class: 'small-vfade'
         });   
-        this.actionsScrollBox.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.EXTERNAL);
+        this.actionsScrollBox.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
         this.actionsBox = new St.BoxLayout({ 
             vertical: true
         });

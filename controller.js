@@ -239,7 +239,7 @@ var MenuSettingsController = class {
             this._menuButton._loadFavorites();
         //If the active category is Pinned Apps, redisplay the new Pinned Apps
         if(this._menuButton.MenuLayout && (this._menuButton.MenuLayout.activeCategoryType === Constants.CategoryType.PINNED_APPS || 
-                this._menuButton.MenuLayout.activeCategoryType === Constants.CategoryType.HOME_SCREEN || layout === Constants.MENU_LAYOUT.Dashboard))
+                this._menuButton.MenuLayout.activeCategoryType === Constants.CategoryType.HOME_SCREEN))
             this._menuButton._displayFavorites();  
     }
 

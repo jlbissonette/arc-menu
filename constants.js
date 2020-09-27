@@ -277,9 +277,7 @@ var MENU_LAYOUT = {
     Chromebook: 14,
     Raven: 15,
     Tognee: 16,
-    RavenExtended: 17,
-    Dashboard: 18,
-    Plasma: 19
+    Plasma: 17
 };
 
 var TRADITIONAL_MENU_STYLE = [   
@@ -303,8 +301,6 @@ var TOUCH_MENU_STYLE = [
 
 var LAUNCHER_MENU_STYLE = [   
     { thumbnail: '/media/layouts/krunner-menu.svg', name: _('KRunner Style'), layout: MENU_LAYOUT.Runner},
-    { thumbnail: '/media/layouts/raven-extended.svg', name: _('Raven Extended'), layout: MENU_LAYOUT.RavenExtended},
-    { thumbnail: '/media/layouts/dashboard.svg', name: _('Dashboard'), layout: MENU_LAYOUT.Dashboard},
     { thumbnail: '/media/layouts/gnome-dash-menu.svg', name: _('GNOME Dash Style'), layout: MENU_LAYOUT.GnomeDash}];
 
 var SIMPLE_MENU_STYLE = [   

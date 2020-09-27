@@ -376,10 +376,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         let layout = this._settings.get_enum('menu-layout');
         if(layout == Constants.MENU_LAYOUT.GnomeDash)
             Main.overview.toggle();
-        else if(this.MenuLayout && this.MenuLayout.layoutProperties.isDashboard){
-            this.MenuLayout.updateLocation();
-            this.MenuLayout.dashboard.toggle();
-        }
         else{
             if(layout == Constants.MENU_LAYOUT.Runner || layout == Constants.MENU_LAYOUT.Raven)
                 this.MenuLayout.updateLocation();

@@ -87,7 +87,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.style = "width: " + rightPanelWidth + "px;";
 
         // Disable horizontal scrolling, hide vertical scrollbar, but allow vertical scrolling.
-        this.applicationsScrollBox.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.EXTERNAL);
+        this.applicationsScrollBox.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.rightBox.add(this.applicationsScrollBox);
