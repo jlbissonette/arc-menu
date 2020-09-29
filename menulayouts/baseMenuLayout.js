@@ -429,7 +429,7 @@ var BaseLayout = class {
                 placeMenuItem = new MW.ShortcutButtonItem(this, _("Trash"), '', "ArcMenu_Trash");
             }
             else if(pinnedApps[i+2] === Constants.ArcMenu_SettingsCommand || pinnedApps[i+2] === "ArcMenu_Suspend" || pinnedApps[i+2] === "ArcMenu_LogOut" || pinnedApps[i+2] === "ArcMenu_PowerOff"
-                    || pinnedApps[i+2] === "ArcMenu_Lock" || app){
+                    || pinnedApps[i+2] === "ArcMenu_Lock" || pinnedApps[i+2] === "ArcMenu_Restart" || app){
                 placeMenuItem = new MW.ShortcutButtonItem(this, pinnedApps[i], pinnedApps[i+1], pinnedApps[i+2]);
             }
             else if(pinnedApps[i+2].startsWith("ArcMenu_")){

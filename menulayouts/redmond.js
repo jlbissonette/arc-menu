@@ -182,18 +182,23 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox = new St.ScrollView({
             x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.END,
             x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.END,
+            hscrollbar_policy: St.PolicyType.AUTOMATIC,
+            vscrollbar_policy: St.PolicyType.AUTOMATIC,
+            clip_to_allocation: true,
+            overlay_scrollbars: true,
+            style_class: 'hfade'
         });
-        this.actionsScrollBox.set_policy(St.PolicyType.EXTERNAL, St.PolicyType.NEVER);
-        this.actionsScrollBox.clip_to_allocation = true;
 
         //create new section for Power, Lock, Logout, Suspend Buttons
         this.actionsBox = new St.BoxLayout({
             vertical: false,
+            x_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
+            style: "spacing: 6px;"
         });	
-        this.actionsBox.style = "spacing: 16px;";
+
         this.actionsScrollBox.add_actor(this.actionsBox);  
 
         if(this._settings.get_boolean('show-logout-button')){

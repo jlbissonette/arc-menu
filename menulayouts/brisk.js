@@ -125,7 +125,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END,
             x_align: Clutter.ActorAlign.CENTER
         });	
-        this.sessionBox.style = "spacing: 16px;";
+        this.sessionBox.style = "spacing: 6px;";
 
         if(this._settings.get_boolean('show-logout-button')){
             let logout = new MW.LogoutButton( this);
@@ -205,7 +205,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                     placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', software);
             }
             else if(pinnedApps[i+2] == Constants.ArcMenu_SettingsCommand || pinnedApps[i+2] == "ArcMenu_Suspend" || pinnedApps[i+2] == "ArcMenu_LogOut" || pinnedApps[i+2] == "ArcMenu_PowerOff"
-                    || pinnedApps[i+2] == "ArcMenu_Lock" || app){
+                    || pinnedApps[i+2] == "ArcMenu_Lock" || pinnedApps[i+2] === "ArcMenu_Restart" || app){
                 placeMenuItem = new MW.ShortcutMenuItem(this, pinnedApps[i], pinnedApps[i+1], pinnedApps[i+2]);
             }
             else if(pinnedApps[i+2] === "ArcMenu_Trash"){

@@ -1194,7 +1194,7 @@ var ShortcutButtonItem = GObject.registerClass(class Arc_Menu_ShortcutButtonItem
         else if(this._command === "ArcMenu_PowerOff")
             this._menuLayout.systemActions.activatePowerOff();
         else if(this._command === "ArcMenu_Restart")
-            this._menuLayout.systemActions.activateRestart();
+            this._menuLayout.systemActions.activateRestart ? this._menuLayout.systemActions.activateRestart() : this._menuLayout.systemActions.activatePowerOff();
         else if(this._command === "ArcMenu_Suspend")
             this._menuLayout.systemActions.activateSuspend();
         else if(this._command === "ArcMenu_ActivitiesOverview")
@@ -1320,7 +1320,7 @@ var RestartButton = GObject.registerClass(class Arc_Menu_RestartButton extends S
         super._init(menuLayout, _("Restart"), Me.path + Constants.RESTART_ICON.Path);
     }
     activate() {
-        this._menuLayout.systemActions.activateRestart();
+        this._menuLayout.systemActions.activateRestart ? this._menuLayout.systemActions.activateRestart() : this._menuLayout.systemActions.activatePowerOff();
     }
 });
 
@@ -1379,7 +1379,7 @@ var PlasmaPowerItem = GObject.registerClass(class Arc_Menu_PlasmaPowerItem exten
         if(this.type === Constants.PowerType.POWEROFF)
             this._menuLayout.systemActions.activatePowerOff();
         if(this.type === Constants.PowerType.RESTART)
-            this._menuLayout.systemActions.activateRestart();
+            this._menuLayout.systemActions.activateRestart ? this._menuLayout.systemActions.activateRestart() : this._menuLayout.systemActions.activatePowerOff();
         if(this.type === Constants.PowerType.LOCK){
             this._menuLayout.isRunning = false;
             this._menuLayout.systemActions.activateLockScreen();
@@ -1703,9 +1703,21 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
     }
     activate(event) {
         this._menuLayout.arcMenu.toggle();
-        if(this._command == "ArcMenu_ActivitiesOverview")
+        if(this._command === "ArcMenu_LogOut")
+            this._menuLayout.systemActions.activateLogout();
+        else if(this._command === "ArcMenu_Lock"){
+            this._menuLayout.isRunning = false;
+            this._menuLayout.systemActions.activateLockScreen();
+        }
+        else if(this._command === "ArcMenu_PowerOff")
+            this._menuLayout.systemActions.activatePowerOff();
+        else if(this._command === "ArcMenu_Restart")
+            this._menuLayout.systemActions.activateRestart ? this._menuLayout.systemActions.activateRestart() : this._menuLayout.systemActions.activatePowerOff();
+        else if(this._command === "ArcMenu_Suspend")
+            this._menuLayout.systemActions.activateSuspend();
+        else if(this._command === "ArcMenu_ActivitiesOverview")
             Main.overview.show();
-        else if(this._command == "ArcMenu_RunCommand")
+        else if(this._command === "ArcMenu_RunCommand")
             Main.openRunDialog();
         else if(this._command === "ArcMenu_ShowAllApplications")
             Main.overview.viewSelector._toggleAppsPage();
