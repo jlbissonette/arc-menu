@@ -89,7 +89,7 @@ Exceptions - Trademarked icons (logo) (name) please see `Legal disclaimer for br
 
 <p>
 
-*" All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by Arc Menu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer. "*
+*" All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer. "*
 
 * **UBUNTU ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** - Ubuntu name and Ubuntu logo is a trademark of Canonical ![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg) Ltd.
 
