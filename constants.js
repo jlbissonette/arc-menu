@@ -92,6 +92,12 @@ var DIRECTION = {
     DOWN: 1
 };
 
+var TooltipLocation = {
+    TOP_CENTERED: 0,
+    BOTTOM_CENTERED: 1,
+    BOTTOM: 2,
+};
+
 var SEPARATOR_ALIGNMENT = {
     VERTICAL: 0,
     HORIZONTAL: 1

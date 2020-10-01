@@ -777,9 +777,8 @@ var Tooltip = class Arc_Menu_Tooltip{
         this._menuButton = menuLayout.menuButton;
         this._settings = this._menuButton._settings;
         this.sourceActor = sourceActor;
-        this.isSourceActorButton = false;
+        this.location = Constants.TooltipLocation.BOTTOM;
         let titleLabel, descriptionLabel;
-        this.flipY = false;
         this.actor = new St.BoxLayout({ 
             vertical: true,
             style_class: 'dash-label tooltip-menu-item',
@@ -879,18 +878,46 @@ var Tooltip = class Arc_Menu_Tooltip{
 
     show() {
         if(this._useTooltips){
-            let [stageX, stageY] = this.sourceActor.get_transformed_position();
-            let [width, height] = this.sourceActor.get_transformed_size();
-            let [menuX, menuY] = this._menuButton.arcMenu.actor.get_transformed_position();
-            
-            let x = this.isSourceActorButton ? stageX - Math.round((this.actor.get_width() - width) / 2) : stageX;
-            let y = this.isSourceActorButton ? stageY - this.actor.get_height() - 5 : stageY + height;
-            if(this.flipY) 
-                y = stageY + height + 5;
-            if((x <= 0) || (x - menuX) < 10)
-                x = menuX + 10;
             this.actor.opacity = 0;
             this.actor.show();
+
+            let [stageX, stageY] = this.sourceActor.get_transformed_position();
+    
+            let itemWidth  = this.sourceActor.allocation.x2 - this.sourceActor.allocation.x1;
+            let itemHeight = this.sourceActor.allocation.y2 - this.sourceActor.allocation.y1;
+    
+            let labelWidth = this.actor.get_width();
+            let labelHeight = this.actor.get_height();
+    
+            let x, y;
+            let gap = 5;
+
+            switch (this.location) {
+                case Constants.TooltipLocation.BOTTOM_CENTERED:
+                    y = stageY + height + gap;
+                    x = stageX + Math.floor((itemWidth - labelWidth) / 2);
+                    break;
+                case Constants.TooltipLocation.TOP_CENTERED:
+                    y = stageY - labelHeight - gap;
+                    x = stageX + Math.floor((itemWidth - labelWidth) / 2);
+                    break;
+                case Constants.TooltipLocation.BOTTOM:
+                    y = stageY + itemHeight;
+                    x = stageX + gap * 2;
+                    break;
+            }
+
+            // keep the label inside the screen          
+            let monitor = Main.layoutManager.findMonitorForActor(this.sourceActor);
+            if (x - monitor.x < gap)
+                x += monitor.x - x + gap;
+            else if (x + labelWidth > monitor.x + monitor.width - gap)
+                x -= x + labelWidth - (monitor.x + monitor.width) + gap;
+            else if (y - monitor.y < gap)
+                y += monitor.y - y + gap;
+            else if (y + labelHeight > monitor.y + monitor.height - gap)
+                y -= y + labelHeight - (monitor.y + monitor.height) + gap;
+            
             this.actor.set_position(x, y);
             this.actor.ease({
                 opacity: 255,
@@ -954,7 +981,7 @@ var SessionButton = GObject.registerClass(
         this._settings = this._menuLayout._settings;
         this.toggleMenuOnClick = true;
         this.tooltip = new Tooltip(this._menuLayout, this.actor, accessible_name);
-        this.tooltip.isSourceActorButton = true;
+        this.tooltip.location = Constants.TooltipLocation.TOP_CENTERED;
         this.tooltip.hide();
         let layout = this._settings.get_enum('menu-layout');
         let iconSize;
@@ -1221,7 +1248,7 @@ var SettingsButton = GObject.registerClass(class Arc_Menu_SettingsButton extends
 var ArcMenuSettingsButton = GObject.registerClass(class Arc_Menu_ArcMenuSettingsButton extends SessionButton {
     _init(menuLayout) {
         super._init(menuLayout, _("ArcMenu Settings"), Me.path + '/media/icons/arc-menu-symbolic.svg');
-        this.tooltip.flipY = true;
+        this.tooltip.location = Constants.TooltipLocation.BOTTOM_CENTERED;
     }
     activate() {
         Util.spawnCommandLine(Constants.ArcMenu_SettingsCommand);
@@ -1820,8 +1847,7 @@ var UserMenuIcon = class Arc_Menu_UserMenuIcon{
     _onHover() {
         if(this.tooltip==undefined && this.actor.hover){
             this.tooltip = new Tooltip(this._menuLayout, this.actor, GLib.get_real_name());
-            this.tooltip.isSourceActorButton = true;
-            this.tooltip.flipY = true;
+            this.tooltip.location = Constants.TooltipLocation.BOTTOM_CENTERED;
             this.tooltip._onHover();
         }
     }
@@ -3628,4 +3654,3 @@ function _isToday(date) {
            now.getMonth() == date.getMonth() &&
            now.getDate() == date.getDate();
 }
-
