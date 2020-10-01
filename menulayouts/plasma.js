@@ -392,7 +392,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.suspend = new MW.PlasmaPowerItem(this, Constants.PowerType.SUSPEND, _("Suspend"), 'media-playback-pause-symbolic');
         this.applicationsBox.add(this.suspend);
 
-        if(!this.powerOff)
+        if(!this.restart)
             this.restart = new MW.PlasmaPowerItem(this, Constants.PowerType.RESTART, _("Restart..."), Me.path + Constants.RESTART_ICON.Path);
         this.applicationsBox.add(this.restart);
 
