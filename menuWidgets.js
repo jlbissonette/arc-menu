@@ -894,7 +894,7 @@ var Tooltip = class Arc_Menu_Tooltip{
 
             switch (this.location) {
                 case Constants.TooltipLocation.BOTTOM_CENTERED:
-                    y = stageY + height + gap;
+                    y = stageY + itemHeight + gap;
                     x = stageX + Math.floor((itemWidth - labelWidth) / 2);
                     break;
                 case Constants.TooltipLocation.TOP_CENTERED:
