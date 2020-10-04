@@ -166,13 +166,13 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 <p>
 
------
-
 ### Top Project Contributors
 
 #### @[lexruee](https://github.com/lexruee) - **Project Contributor** - UI/UX Designer | - @[Thomas Ingvarsson](https://gitlab.com/tingvarsson) - **Project Contributor** - Developer
 
 #### @[charlesg99](https://github.com/charlesg99) - **Project Contributor** - Developer 
+
+-----
 
 </p>
 </details>
@@ -183,27 +183,27 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 <p>
 
 ### Pull Requests
+<p> <a name="pullrequests"></a>
 
-#### Thanks to the following people for contributing via pull requests:
-
------
+### Thanks to the following people for contributing via pull requests:
 
 **@[fishears](https://github.com/fishears/Arc-Menu)** | **@[JasonLG1979](https://github.com/JasonLG1979)** | **@[itmitica](https://github.com/itmitica)** | **@[vikaig](https://gitlab.com/vikaig)** | **@[MagneFire](https://gitlab.com/MagneFire)** | **@[tognee](https://gitlab.com/tognee)** | **@[hlechner](https://gitlab.com/hlechner)**
 
 -----
 
-#### Bug Fixes:
-
------
+### Bug Fixes:
+<p> <a name="bugfixes"></a>
 
 **@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee/Arc-Menu)**
+
+-----
 
 </p>
 </details>
 
 <details>
 <summary><b>Translators</b></summary>
-<p>
+<p> <a name="translators"></a>
 
 - **Current translated languages and translators..**
 
