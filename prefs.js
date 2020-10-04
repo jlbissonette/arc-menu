@@ -2038,7 +2038,6 @@ var ButtonAppearancePage = GObject.registerClass(
             menuButtonHoverBackgroundcolorRow.add(menuButtonHoverBackgroundcolorLabel);
             menuButtonHoverBackgroundcolorRow.add(menuButtonHoverBackgroundcolorChooser);
             menuButtonIconColorFrame.add(menuButtonHoverBackgroundcolorRow);
-            vbox.add(menuButtonIconColorFrame);
 
             let menuButtonActiveBackgroundcolorRow = new PW.FrameBoxRow();
             let menuButtonActiveBackgroundcolorLabel = new Gtk.Label({
@@ -6140,9 +6139,9 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
         });
 
         this.settingsFrameStack.add_named(new MenuSettingsShortcutDirectoriesPage(this._settings), "MenuSettingsShortcutDirectories");
-        this.settingsFrameStack.add_named(new MenuSettingsShortcutApplicationsPage(this._settings), "MenuSettingsShortcutApplications"); 
-        this.settingsFrameStack.add_named(new MenuSettingsShortcutSessionButtonsPage(this._settings), "MenuSettingsShortcutSessionButtons"); 
-        this.settingsFrameStack.add_named(new MenuSettingsShortcutExtrasPage(this._settings), "MenuSettingsShortcutExtras"); 
+        this.settingsFrameStack.add_named(new MenuSettingsShortcutApplicationsPage(this._settings), "MenuSettingsShortcutApplications");
+        this.settingsFrameStack.add_named(new MenuSettingsShortcutSessionButtonsPage(this._settings), "MenuSettingsShortcutSessionButtons");
+        this.settingsFrameStack.add_named(new MenuSettingsShortcutExtrasPage(this._settings), "MenuSettingsShortcutExtras");
 
         this.settingsFrameStack.add_named(new MenuSettingsCategoriesPage(this._settings), "MenuSettingsCategories");
         this.settingsFrameStack.add_named(new MenuSettingsFineTunePage(this._settings), "MenuSettingsFineTune");
