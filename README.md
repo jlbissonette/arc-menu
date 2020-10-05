@@ -213,7 +213,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 -----
 
- **- @[AlexWayfer](https://gitlab.com/AlexWayfer) - Russian** | **- @[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **- @[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **- @[jordim](https://gitlab.com/jordim) - Catalan** | **- @[aylinux](https://gitlab.com/aylinux) - Turkish** |
+ **- @[Ivan](https://gitlab.com/vantu5z) - Russian** | **- @[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **- @[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **- @[jordim](https://gitlab.com/jordim) - Catalan** | **- @[aylinux](https://gitlab.com/aylinux) - Turkish** |
  
 -----
 
