@@ -344,11 +344,6 @@ var ARC_MENU_LOGO = {
     Size: [150, 150]
 };
 
-var COLOR_PRESET = {
-    Path: '/media/misc/color-preset.svg',
-    Size: [200, 35]
-};
-
 var RESTART_ICON = {
     Path: '/media/misc/restart-symbolic.svg'
 };

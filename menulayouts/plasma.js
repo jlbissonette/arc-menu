@@ -205,6 +205,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             });	
             this.placeManagerUpdatedID = this.placesManager.connect(`${id}-updated`, () => {
                 this._redisplayPlaces(id);
+                this.updateIcons();
             });
 
             this._createPlaces(id);
