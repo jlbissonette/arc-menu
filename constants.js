@@ -278,12 +278,13 @@ var MENU_LAYOUT = {
     Redmond: 9,
     UbuntuDash: 10,
     Budgie: 11,
-    Windows: 12,
+    Insider: 12,
     Runner: 13,
     Chromebook: 14,
     Raven: 15,
     Tognee: 16,
-    Plasma: 17
+    Plasma: 17,
+    Windows: 18
 };
 
 var TRADITIONAL_MENU_STYLE = [   
@@ -298,8 +299,9 @@ var MODERN_MENU_STYLE = [
     { thumbnail: '/media/layouts/ubuntu-dash-menu.svg', name: _('Ubuntu Dash Style'), layout: MENU_LAYOUT.UbuntuDash},
     { thumbnail: '/media/layouts/plasma-menu.svg', name: _('Plasma Style'), layout: MENU_LAYOUT.Plasma},
     { thumbnail: '/media/layouts/tognee-menu.svg', name: _('tognee Menu'), layout: MENU_LAYOUT.Tognee},
-    { thumbnail: '/media/layouts/windows-10.svg', name: _('Windows 10 Style'), layout: MENU_LAYOUT.Windows},
-    { thumbnail: '/media/layouts/redmond-style-menu.svg', name: _('Redmond Menu Style'), layout: MENU_LAYOUT.Redmond}];
+    { thumbnail: '/media/layouts/insider.svg', name: _('Insider Menu'), layout: MENU_LAYOUT.Insider},
+    { thumbnail: '/media/layouts/redmond-style-menu.svg', name: _('Redmond Menu Style'), layout: MENU_LAYOUT.Redmond},
+    { thumbnail: '/media/layouts/windows.svg', name: _('Windows 10 Style'), layout: MENU_LAYOUT.Windows}];
 
 var TOUCH_MENU_STYLE = [   
     { thumbnail: '/media/layouts/elementary-menu.svg', name: _('Elementary Menu Style'), layout: MENU_LAYOUT.Elementary},
