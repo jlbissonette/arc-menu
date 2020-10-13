@@ -112,7 +112,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
         this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         
-
         this.applicationsBox = new St.BoxLayout({
             vertical: true
         });
@@ -415,10 +414,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let appsScrollBoxAdj = this.favoritesScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
     }
+
     loadFavorites(){
         let isIconGrid = true;
         super.loadFavorites(isIconGrid);
     }
+
     _reload() {
         super.reload();
         let themeContext = St.ThemeContext.get_for_stage(global.stage);
@@ -445,7 +446,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayFavorites() {
         super._clearActorsFromBox(this.favoritesBox);
         this.grid.remove_all_children();
-        this.favoritesBox.add_actor(this.createLabelRow(_("Pinned Apps")));
+        let label = this.createLabelRow(_("Pinned Apps"));
+        label.remove_actor(label._ornamentLabel);
+        this.favoritesBox.add_actor(label);
         super._displayAppGridList(this.favoritesArray, COLUMN_COUNT, true, this.grid);
         if(!this.favoritesBox.contains(this.grid))
             this.favoritesBox.add(this.grid);
