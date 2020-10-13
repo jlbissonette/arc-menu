@@ -1654,6 +1654,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
         this._command = command;
+        this.isGridIcon = false;
         //Check for default commands--------
         if(this._command == "ArcMenu_Software"){
             let softwareManager = Utils.findSoftwareManager();
@@ -1713,7 +1714,8 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
     popupContextMenu(){
         if(this._app && this.contextMenu == undefined){
             this.contextMenu = new ApplicationContextMenu(this.actor, this._app, this._menuLayout);
-            this.contextMenu.centerBoxPointerPosition();
+            if(this.isGridIcon)
+                this.contextMenu.centerBoxPointerPosition();
             if(this._path) 
                 this.contextMenu.path = this._path;
         }
@@ -1726,7 +1728,8 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
             this.contextMenu.toggle(); 
         }
     }
-    setAsIcon(){
+    setAsGridIcon(){
+        this.isGridIcon = true;
         this.box.vertical = true;
         this.label.x_align = Clutter.ActorAlign.CENTER;
         this._icon.y_align = Clutter.ActorAlign.CENTER;
@@ -2736,6 +2739,13 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
             });
             this.icon.icon_size = largeIcons ? MEDIUM_ICON_SIZE : SMALL_ICON_SIZE;
         } 
+    }
+
+    forceLargeIcon(size){
+        this.applicationsMap.forEach((value,key,map)=>{
+            map.get(key).forceLargeIcon(size);
+        });
+        this.icon.icon_size = size ? size : MEDIUM_ICON_SIZE;
     }
 
     _needsScrollbar() {
