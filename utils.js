@@ -51,8 +51,8 @@ function getMenuLayout(button, layout){
             return new MenuLayout.ubuntudash.createMenu(button); 
         case Constants.MENU_LAYOUT.Budgie:
             return new MenuLayout.budgie.createMenu(button);
-        case Constants.MENU_LAYOUT.Windows:
-            return new MenuLayout.windows.createMenu(button);
+        case Constants.MENU_LAYOUT.Insider:
+            return new MenuLayout.insider.createMenu(button);
         case Constants.MENU_LAYOUT.Runner:
             return new MenuLayout.runner.createMenu(button);
         case Constants.MENU_LAYOUT.Chromebook:
@@ -63,6 +63,8 @@ function getMenuLayout(button, layout){
             return new MenuLayout.tognee.createMenu(button);
         case Constants.MENU_LAYOUT.Plasma:
             return new MenuLayout.plasma.createMenu(button);
+        case Constants.MENU_LAYOUT.Windows:
+            return new MenuLayout.windows.createMenu(button);
         default:
             return new MenuLayout.arcmenu.createMenu(button);    
     }

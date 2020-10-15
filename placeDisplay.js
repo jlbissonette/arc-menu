@@ -46,7 +46,7 @@ const MEDIUM_ICON_SIZE = 25;
 const SMALL_ICON_SIZE = 16;
 
 var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends MW.ArcMenuPopupBaseMenuItem{
-    _init(info, menuLayout) {
+    _init(menuLayout, info) {
         super._init(menuLayout);
         this._info = info;
         this._menuLayout = menuLayout;

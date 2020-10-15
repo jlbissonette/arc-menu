@@ -103,6 +103,11 @@ var SEPARATOR_ALIGNMENT = {
     HORIZONTAL: 1
 };
 
+var MenuItemType = {
+    BUTTON: 0,
+    MENU_ITEM: 1
+};
+
 var SEPARATOR_STYLE = {
     NORMAL: 0,
     LONG: 1,
@@ -278,12 +283,13 @@ var MENU_LAYOUT = {
     Redmond: 9,
     UbuntuDash: 10,
     Budgie: 11,
-    Windows: 12,
+    Insider: 12,
     Runner: 13,
     Chromebook: 14,
     Raven: 15,
     Tognee: 16,
-    Plasma: 17
+    Plasma: 17,
+    Windows: 18
 };
 
 var TRADITIONAL_MENU_STYLE = [   
@@ -298,8 +304,9 @@ var MODERN_MENU_STYLE = [
     { thumbnail: '/media/layouts/ubuntu-dash-menu.svg', name: _('Ubuntu Dash Style'), layout: MENU_LAYOUT.UbuntuDash},
     { thumbnail: '/media/layouts/plasma-menu.svg', name: _('Plasma Style'), layout: MENU_LAYOUT.Plasma},
     { thumbnail: '/media/layouts/tognee-menu.svg', name: _('tognee Menu'), layout: MENU_LAYOUT.Tognee},
-    { thumbnail: '/media/layouts/windows-10.svg', name: _('Windows 10 Style'), layout: MENU_LAYOUT.Windows},
-    { thumbnail: '/media/layouts/redmond-style-menu.svg', name: _('Redmond Menu Style'), layout: MENU_LAYOUT.Redmond}];
+    { thumbnail: '/media/layouts/insider.svg', name: _('Insider Menu'), layout: MENU_LAYOUT.Insider},
+    { thumbnail: '/media/layouts/redmond-style-menu.svg', name: _('Redmond Menu Style'), layout: MENU_LAYOUT.Redmond},
+    { thumbnail: '/media/layouts/windows.svg', name: _('Windows 10 Style'), layout: MENU_LAYOUT.Windows}];
 
 var TOUCH_MENU_STYLE = [   
     { thumbnail: '/media/layouts/elementary-menu.svg', name: _('Elementary Menu Style'), layout: MENU_LAYOUT.Elementary},
@@ -383,6 +390,7 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
                                 '\n\n•   <b>Voyager© Linux</b> - name and logo'+
                                 '\n\n•   <b>MX Linux©</b> - 2020 - Linux - is the registered trademark of Linus Torvalds in the U.S. and other countries.'+
                                 '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo';
+
 
 var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer\t' +
                 '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a> - <b>(Inactive)</b>\nArcMenu Founder - Former Maintainer - Former Digital Art Designer';
