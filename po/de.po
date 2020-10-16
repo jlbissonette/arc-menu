@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-07 09:57-0400\n"
-"PO-Revision-Date: 2020-10-09 20:35+0200\n"
+"POT-Creation-Date: 2020-10-15 08:45-0400\n"
+"PO-Revision-Date: 2020-10-16 14:57+0200\n"
 "Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
 "Language-Team: German <>\n"
 "Language: de\n"
@@ -19,670 +19,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: menuWidgets.js:163
-msgid "Open Folder Location"
-msgstr "Ordnerpfad öffnen"
-
-#: menuWidgets.js:179
-msgid "Current Windows:"
-msgstr "Aktuelle Fenster:"
-
-#: menuWidgets.js:197
-msgid "New Window"
-msgstr "Neues Fenster"
-
-#: menuWidgets.js:207
-msgid "Launch using Dedicated Graphics Card"
-msgstr "Starten mit dedizierter Grafikkarte"
-
-#: menuWidgets.js:252
-msgid "Delete Desktop Shortcut"
-msgstr "Schreibtischverknüpfung löschen"
-
-#: menuWidgets.js:260
-msgid "Create Desktop Shortcut"
-msgstr "Schreibtischverknüpfung erstellen"
-
-#: menuWidgets.js:274
-msgid "Remove from Favorites"
-msgstr "Aus Favoriten entfernen"
-
-#: menuWidgets.js:280
-msgid "Add to Favorites"
-msgstr "Zu Favoriten hinzufügen"
-
-#: menuWidgets.js:297 menuWidgets.js:346
-msgid "Unpin from ArcMenu"
-msgstr "Nicht mehr in Arc Menü anheften"
-
-#: menuWidgets.js:311
-msgid "Pin to ArcMenu"
-msgstr "In Arc Menü anheften"
-
-#: menuWidgets.js:324
-msgid "Show Details"
-msgstr "Details anzeigen"
-
-#: menuWidgets.js:762 menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
-#: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155
-msgid "Activities Overview"
-msgstr "Aktivitätenübersicht"
-
-#: menuWidgets.js:1094 menuWidgets.js:2311 menuWidgets.js:2434
-#: menuWidgets.js:2625 constants.js:66 menulayouts/tweaks/tweaks.js:934
-msgid "Frequent Apps"
-msgstr "Häufige Anwendungen"
-
-#: menuWidgets.js:1098 menuWidgets.js:2315 menuWidgets.js:2438
-#: menuWidgets.js:2629 menulayouts/tweaks/tweaks.js:445
-#: menulayouts/tweaks/tweaks.js:574
-msgid "Home Screen"
-msgstr "Startbild"
-
-#: menuWidgets.js:1103 menuWidgets.js:1513 menuWidgets.js:1607
-#: menuWidgets.js:2319 menuWidgets.js:2442 menuWidgets.js:2633 constants.js:67
-#: menulayouts/ubuntudash.js:54 menulayouts/ubuntudash.js:335
-#: menulayouts/raven.js:53 menulayouts/raven.js:219
-#: menulayouts/tweaks/tweaks.js:446 menulayouts/tweaks/tweaks.js:575
-#: menulayouts/tweaks/tweaks.js:903
-msgid "All Programs"
-msgstr "Alle Programme"
-
-#: menuWidgets.js:1107 menuWidgets.js:1260 menuWidgets.js:2323
-#: menuWidgets.js:2446 menuWidgets.js:2637 constants.js:65
-msgid "Favorites"
-msgstr "Favoriten"
-
-#: menuWidgets.js:1111 menuWidgets.js:1149 menuWidgets.js:2327
-#: menuWidgets.js:2386 menuWidgets.js:2450 menuWidgets.js:2641 constants.js:68
-#: menulayouts/plasma.js:136 menulayouts/ubuntudash.js:52
-#: menulayouts/ubuntudash.js:330 menulayouts/raven.js:51
-#: menulayouts/raven.js:214 menulayouts/tweaks/tweaks.js:932 prefs.js:42
-#: prefs.js:6041
-msgid "Pinned Apps"
-msgstr "Angeheftete Anwendungen"
-
-#: menuWidgets.js:1240 menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
-#: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155
-#: menulayouts/windows.js:218 menulayouts/mint.js:222
-msgid "Settings"
-msgstr "Einstellungen"
-
-#: menuWidgets.js:1250 menuWidgets.js:1899 menulayouts/redmond.js:174
-#: menulayouts/plasma.js:180 menulayouts/ubuntudash.js:196
-#: menulayouts/raven.js:178 menulayouts/arcmenu.js:182
-#: menulayouts/tognee.js:155 prefs.js:334 prefs.js:440 prefs.js:612
-#: prefs.js:5979 menuButton.js:707
-msgid "ArcMenu Settings"
-msgstr "Arc-Menü-Einstellungen"
-
-#: menuWidgets.js:1270 prefs.js:6043
-msgid "Categories"
-msgstr "Kategorien"
-
-#: menuWidgets.js:1280
-msgid "Users"
-msgstr "Benutzer"
-
-#: menuWidgets.js:1338 menulayouts/ubuntudash.js:247 menulayouts/mint.js:233
-#: prefs.js:5321
-msgid "Power Off"
-msgstr "Ausschalten"
-
-#: menuWidgets.js:1347 prefs.js:5304
-msgid "Restart"
-msgstr "Neu starten"
-
-#: menuWidgets.js:1356 menulayouts/plasma.js:387 menulayouts/ubuntudash.js:245
-#: menulayouts/mint.js:231 prefs.js:5287
-msgid "Log Out"
-msgstr "Abmelden"
-
-#: menuWidgets.js:1365 menulayouts/plasma.js:393 prefs.js:5253
-msgid "Suspend"
-msgstr "Bereitschaft"
-
-#: menuWidgets.js:1374 menulayouts/plasma.js:383 menulayouts/ubuntudash.js:246
-#: menulayouts/mint.js:232 prefs.js:5270
-msgid "Lock"
-msgstr "Sperren"
-
-#: menuWidgets.js:1557 prefs.js:2744
-msgid "Back"
-msgstr "Zurück"
-
-#: menuWidgets.js:1902 menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
-#: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155 menulayouts/mint.js:221
-msgid "Terminal"
-msgstr "Terminal"
-
-#: menuWidgets.js:2158
-msgid "New"
-msgstr "Neu"
-
-#: menuWidgets.js:2879 prefs.js:303
-msgid "Type to search…"
-msgstr "Suchbegriff eingeben…"
-
-#: menuWidgets.js:3055 menulayouts/plasma.js:141 prefs.js:6050
-msgid "Applications"
-msgstr "Anwendungen"
-
-#: menuWidgets.js:3155
-msgid "Show Applications"
-msgstr "Anwendungen anzeigen"
-
-#: menuWidgets.js:3167 constants.js:290 prefs.js:5819
-msgid "ArcMenu"
-msgstr "Arc Menü"
-
-#: menuWidgets.js:3382
-msgid "Add world clocks…"
-msgstr "Weltuhren hinzufügen…"
-
-#: menuWidgets.js:3383
-msgid "World Clocks"
-msgstr "Weltuhren"
-
-#: menuWidgets.js:3491
-msgid "Weather"
-msgstr "Wetter"
-
-#: menuWidgets.js:3611
-msgid "Select a location…"
-msgstr "Einen Ort wählen…"
-
-#: menuWidgets.js:3624
-msgid "Loading…"
-msgstr "Laden…"
-
-#: menuWidgets.js:3634
-msgid "Go online for weather information"
-msgstr "Ins Internet gehen, um Wetterinformationen zu erhalten"
-
-#: menuWidgets.js:3636
-msgid "Weather information is currently unavailable"
-msgstr "Wetterinformationen sind momentan nicht verfügbar"
-
-#: placeDisplay.js:135
+#: placeDisplay.js:133
 #, javascript-format
 msgid "Failed to launch “%s”"
 msgstr "Starten von “%s” fehlgeschlagen"
 
-#: placeDisplay.js:150
+#: placeDisplay.js:148
 #, javascript-format
 msgid "Failed to mount volume for “%s”"
 msgstr "Einhängen von Speicher “%s” fehlgeschlagen"
 
-#: placeDisplay.js:234 placeDisplay.js:258 menulayouts/plasma.js:145
-#: menulayouts/plasma.js:190 menulayouts/ubuntudash.js:242
-#: menulayouts/baseMenuLayout.js:348 menulayouts/tognee.js:247
+#: placeDisplay.js:232 placeDisplay.js:256 menulayouts/baseMenuLayout.js:348
+#: menulayouts/plasma.js:145 menulayouts/ubuntudash.js:242
 msgid "Computer"
 msgstr "Rechner"
 
-#: placeDisplay.js:323
+#: placeDisplay.js:321
 #, javascript-format
 msgid "Ejecting drive “%s” failed:"
 msgstr "Auswerfen von Laufwerk “%s” fehlgeschlagen:"
 
-#: placeDisplay.js:449 menulayouts/plasma.js:190 menulayouts/plasma.js:338
-#: menulayouts/ubuntudash.js:234 menulayouts/baseMenuLayout.js:348
-#: menulayouts/baseMenuLayout.js:355 menulayouts/baseMenuLayout.js:415
-#: menulayouts/brisk.js:189 menulayouts/tognee.js:247 menulayouts/tognee.js:254
+#: placeDisplay.js:447 menulayouts/baseMenuLayout.js:348
+#: menulayouts/baseMenuLayout.js:388 menulayouts/ubuntudash.js:234
 msgid "Home"
 msgstr "Persönlicher Ordner"
 
-#: placeDisplay.js:719 menulayouts/baseMenuLayout.js:367
-#: menulayouts/baseMenuLayout.js:429 menulayouts/brisk.js:212
+#: placeDisplay.js:717 menulayouts/baseMenuLayout.js:424
+#: menulayouts/baseMenuLayout.js:426
 msgid "Trash"
 msgstr "Papierkorb"
 
-#: placeDisplay.js:729 placeDisplay.js:735
+#: placeDisplay.js:727 placeDisplay.js:733
 msgid "Empty Trash"
 msgstr "Papierkorb leeren"
 
-#: constants.js:291
-msgid "Brisk Menu Style"
-msgstr "Brisk-Menüstil"
-
-#: constants.js:292
-msgid "Whisker Menu Style"
-msgstr "Whisker-Menüstil"
-
-#: constants.js:293
-msgid "GNOME Menu Style"
-msgstr "GNOME-Menüstil"
-
-#: constants.js:294
-msgid "Mint Menu Style"
-msgstr "Mint-Menüstil"
-
-#: constants.js:295
-msgid "Budgie Style"
-msgstr "Budgie-Stil"
-
-#: constants.js:298
-msgid "Ubuntu Dash Style"
-msgstr "Ubuntu-Dash-Stil"
-
-#: constants.js:299
-msgid "Plasma Style"
-msgstr "Plasma-Stil"
-
-#: constants.js:300
-msgid "tognee Menu"
-msgstr "Tognee-Menü"
-
-#: constants.js:301
-msgid "Windows 10 Style"
-msgstr "Windows-10-Stil"
-
-#: constants.js:302
-msgid "Redmond Menu Style"
-msgstr "Redmond-Menüstil"
-
-#: constants.js:305
-msgid "Elementary Menu Style"
-msgstr "Elementary-Menüstil"
-
-#: constants.js:306
-msgid "Chromebook Style"
-msgstr "Chromebook-Stil"
-
-#: constants.js:309
-msgid "KRunner Style"
-msgstr "KRunner-Stil"
-
-#: constants.js:310
-msgid "GNOME Dash Style"
-msgstr "GNOME-Dash-Stil"
-
-#: constants.js:313
-msgid "Simple Menu Style"
-msgstr "Einfaches Menüstil"
-
-#: constants.js:314
-msgid "Simple Menu 2 Style"
-msgstr "Einfaches Menüstil 2"
-
-#: constants.js:317
-msgid "Raven Menu Style"
-msgstr "Raven-Menüstil"
-
-#: constants.js:324
-msgid "Traditional"
-msgstr "Traditionell"
-
-#: constants.js:325
-msgid ""
-"Traditional layouts use a familiar style and have a traditional user "
-"experience."
-msgstr ""
-"Traditionelle Layouts haben ein ähnlichen Aufbau und bieten ein bekanntes "
-"Nutzungserlebnis."
-
-#: constants.js:326
-msgid "Modern"
-msgstr "Modern"
-
-#: constants.js:327
-msgid ""
-"Modern layouts use a style and UX based approach with a focus on design and "
-"functionality."
-msgstr ""
-"Moderne Layouts vereinen Benutzererfahrung und Stil mit Fokus auf Design und "
-"Funktionalität."
-
-#: constants.js:328
-msgid "Touch"
-msgstr "Touch"
-
-#: constants.js:329
-msgid ""
-"Touch layouts contain large menu elements that are well suited for touch "
-"based devices."
-msgstr ""
-"Touch-Layouts haben große Menüelemente, die auch bei Geräten mit Touch-"
-"Eingabe gut zu bedienen sind."
-
-#: constants.js:330
-msgid "Simple"
-msgstr "Einfach"
-
-#: constants.js:331
-msgid ""
-"Simple layouts are designed for mouse based devices and contain simplistic "
-"menu elements."
-msgstr ""
-"Die einfachen Layouts wurden entworfen für Geräte mit Mauseingabe und "
-"beinhalten simple Menüelemente."
-
-#: constants.js:332
-msgid "Launcher"
-msgstr "Starter"
-
-#: constants.js:333
-msgid ""
-"Launcher layouts are well suited for keyboard driven devices and provide the "
-"user with quick and simple menu elements."
-msgstr ""
-"Starter-Layouts sind besonders gut geeignet für Geräte mit Tastatureingabe. "
-"Sie bieten dem Nutzer schnelle und einfache Menüs."
-
-#: constants.js:334
-msgid "Alternative"
-msgstr "Alternativ"
-
-#: constants.js:335
-msgid ""
-"Alternative layouts have an unconventional style that provide a unique user "
-"experience."
-msgstr ""
-"Alternative Layouts haben einen unkonventionellen Stil, der eine "
-"einzigartige Benutzererfahrung bietet."
-
-#: prefsWidgets.js:321
-msgid "Included Layouts"
-msgstr "Enthaltene Layouts"
-
-#: prefsWidgets.js:342 prefs.js:2704
-msgid "Menu Layouts"
-msgstr "Menü-Layouts"
-
-#: prefsWidgets.js:368
-msgid "Browse all"
-msgstr "Ansehen aller"
-
-#: prefsWidgets.js:374
-msgid "Information"
-msgstr "Information"
-
-#: search.js:870
-msgid "Searching..."
-msgstr "Suche läuft..."
-
-#: search.js:872
-msgid "No results."
-msgstr "Keine Ergebnisse."
-
-#: search.js:1052
-#, javascript-format
-msgid "%d more"
-msgid_plural "%d more"
-msgstr[0] "%d mehr"
-msgstr[1] "%d mehr"
-
-#: menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/ubuntudash.js:240
-#: menulayouts/brisk.js:205 menulayouts/raven.js:178 menulayouts/arcmenu.js:182
-#: menulayouts/tognee.js:155 menulayouts/mint.js:226
-msgid "Software"
-msgstr "Software"
-
-#: menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
-#: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155 prefs.js:2406
-#: prefs.js:2424 prefs.js:2454
-msgid "Tweaks"
-msgstr "Optimierungen"
-
-#: menulayouts/plasma.js:149
-msgid "Leave"
-msgstr "Beenden"
-
-#: menulayouts/plasma.js:190 menulayouts/ubuntudash.js:235
-#: menulayouts/baseMenuLayout.js:348 menulayouts/tognee.js:247
-#: menulayouts/windows.js:70 menulayouts/windows.js:213 menulayouts/mint.js:228
-msgid "Documents"
-msgstr "Dokumente"
-
-#: menulayouts/plasma.js:190 menulayouts/ubuntudash.js:236
-#: menulayouts/baseMenuLayout.js:348 menulayouts/tognee.js:247
-msgid "Downloads"
-msgstr "Downloads"
-
-#: menulayouts/plasma.js:190 menulayouts/baseMenuLayout.js:348
-#: menulayouts/tognee.js:247
-msgid "Music"
-msgstr "Musik"
-
-#: menulayouts/plasma.js:190 menulayouts/baseMenuLayout.js:348
-#: menulayouts/tognee.js:247
-msgid "Pictures"
-msgstr "Bilder"
-
-#: menulayouts/plasma.js:190 menulayouts/baseMenuLayout.js:348
-#: menulayouts/tognee.js:247
-msgid "Videos"
-msgstr "Videos"
-
-#: menulayouts/plasma.js:190 menulayouts/plasma.js:308
-#: menulayouts/plasma.js:346 menulayouts/baseMenuLayout.js:348
-#: menulayouts/baseMenuLayout.js:363 menulayouts/baseMenuLayout.js:424
-#: menulayouts/brisk.js:198 menulayouts/tognee.js:247 menulayouts/tognee.js:263
-msgid "Network"
-msgstr "Netzwerk"
-
-#: menulayouts/plasma.js:277
-msgid "Application Shortcuts"
-msgstr "Anwendungsverknüpfungen"
-
-#: menulayouts/plasma.js:281
-msgid "Places"
-msgstr "Orte"
-
-#: menulayouts/plasma.js:292 prefs.js:5383
-msgid "Bookmarks"
-msgstr "Lesezeichen"
-
-#: menulayouts/plasma.js:300
-msgid "Devices"
-msgstr "Laufwerke"
-
-#: menulayouts/plasma.js:381
-msgid "Session"
-msgstr "Sitzung"
-
-#: menulayouts/plasma.js:390
-msgid "System"
-msgstr "System"
-
-#: menulayouts/plasma.js:397
-msgid "Restart..."
-msgstr "Neu starten…"
-
-#: menulayouts/plasma.js:401
-msgid "Power Off..."
-msgstr "Ausschalten…"
-
-#: menulayouts/ubuntudash.js:244 menulayouts/mint.js:230
-msgid "Files"
-msgstr "Dateien"
-
-#: menulayouts/ubuntudash.js:439 menulayouts/raven.js:314 prefs.js:6042
-msgid "Shortcuts"
-msgstr "Verknüpfungen"
-
-#: menulayouts/tweaks/tweaks.js:93
-msgid "Category Activation"
-msgstr "Kategorien öffnen bei"
-
-#: menulayouts/tweaks/tweaks.js:99
-msgid "Mouse Click"
-msgstr "Mausklick"
-
-#: menulayouts/tweaks/tweaks.js:100
-msgid "Mouse Hover"
-msgstr "Mausberührung"
-
-#: menulayouts/tweaks/tweaks.js:119
-msgid "Avatar Icon Shape"
-msgstr "Form des Avatarsymbols"
-
-#: menulayouts/tweaks/tweaks.js:124
-msgid "Circular"
-msgstr "Kreisförmig"
-
-#: menulayouts/tweaks/tweaks.js:125
-msgid "Square"
-msgstr "Rechteckig"
-
-#: menulayouts/tweaks/tweaks.js:140 menulayouts/tweaks/tweaks.js:197
-msgid "Searchbar Location"
-msgstr "Position der Suchleiste"
-
-#: menulayouts/tweaks/tweaks.js:146 menulayouts/tweaks/tweaks.js:203
-msgid "Bottom"
-msgstr "Unten"
-
-#: menulayouts/tweaks/tweaks.js:147 menulayouts/tweaks/tweaks.js:204
-#: menulayouts/tweaks/tweaks.js:396
-msgid "Top"
-msgstr "Oben"
-
-#: menulayouts/tweaks/tweaks.js:160
-msgid "Flip Layout Horizontally"
-msgstr "Ansicht horizontal vertauschen"
-
-#: menulayouts/tweaks/tweaks.js:177
-msgid "Disable User Avatar"
-msgstr "Benutzerbild nicht anzeigen"
-
-#: menulayouts/tweaks/tweaks.js:216
-msgid "Activate on Hover"
-msgstr "Beim Berühren aktivieren"
-
-#: menulayouts/tweaks/tweaks.js:232
-msgid "Show Application Descriptions"
-msgstr "Anwendungsbeschreibungen anzeigen"
-
-#: menulayouts/tweaks/tweaks.js:248
-msgid "Selected Button Border Color"
-msgstr "Rahmenfarbe bei Auswahl anzeigen"
-
-#: menulayouts/tweaks/tweaks.js:266
-msgid "Selected Button Background Color"
-msgstr "Hintergrundfarbe bei Auswahl anzeigen"
-
-#: menulayouts/tweaks/tweaks.js:285 prefs.js:2065 prefs.js:3135 prefs.js:3461
-#: prefs.js:3553 prefs.js:4556 prefs.js:4774 prefs.js:5056
-msgid "Restore Defaults"
-msgstr "Standardwerte laden"
-
-#: menulayouts/tweaks/tweaks.js:323 menulayouts/tweaks/tweaks.js:490
-#: menulayouts/tweaks/tweaks.js:631
-msgid "Save"
-msgstr "Speichern"
-
-#: menulayouts/tweaks/tweaks.js:344
-msgid "Brisk Menu Shortcuts"
-msgstr "Brisk-Menü-Verknüpfungen"
-
-#: menulayouts/tweaks/tweaks.js:372
-msgid "Enable Activities Overview Shortcut"
-msgstr "Kürzel für Aktivitätenübersicht aktivieren"
-
-#: menulayouts/tweaks/tweaks.js:391
-msgid "KRunner Position"
-msgstr "KRunner-Position"
-
-#: menulayouts/tweaks/tweaks.js:397
-msgid "Centered"
-msgstr "Mittig"
-
-#: menulayouts/tweaks/tweaks.js:408 menulayouts/tweaks/tweaks.js:590
-msgid "Show Extra Large Icons with App Descriptions"
-msgstr "Zeige besonders große Symbole mit Anwendungsbeschreibungen"
-
-#: menulayouts/tweaks/tweaks.js:429 prefs.js:813 prefs.js:6026
-msgid "General"
-msgstr "Allgemein"
-
-#: menulayouts/tweaks/tweaks.js:432
-msgid "Buttons"
-msgstr "Schaltflächen"
-
-#: menulayouts/tweaks/tweaks.js:440 menulayouts/tweaks/tweaks.js:569
-#: menulayouts/tweaks/tweaks.js:893 menulayouts/tweaks/tweaks.js:923
-msgid "Default Screen"
-msgstr "Standardansicht"
-
-#: menulayouts/tweaks/tweaks.js:461 prefs.js:3280
-msgid "Disable Menu Arrow"
-msgstr "Menüpfeil deaktivieren"
-
-#: menulayouts/tweaks/tweaks.js:469 prefs.js:3288
-msgid "Disable current theme menu arrow pointer"
-msgstr "Pfeil am Menürahmen für aktuelles Thema ausblenden"
-
-#: menulayouts/tweaks/tweaks.js:511
-msgid "Ubuntu Dash Buttons"
-msgstr "Ubuntu-Dash-Schaltflächen"
-
-#: menulayouts/tweaks/tweaks.js:520
-msgid "Button Separator Position"
-msgstr "Anzeigeposition der Trennlinie"
-
-#: menulayouts/tweaks/tweaks.js:529 menulayouts/tweaks/tweaks.js:664
-msgid "Separator Position"
-msgstr "Position der Trennlinie"
-
-#: menulayouts/tweaks/tweaks.js:548 menulayouts/tweaks/tweaks.js:683
-msgid "Adjust the position of the separator in the button panel"
-msgstr "Anpassen der Trennstrich-Position in der Schaltflächenleiste"
-
-#: menulayouts/tweaks/tweaks.js:619
-msgid "Mint Menu Shortcuts"
-msgstr "Mint-Menü-Verknüpfungen"
-
-#: menulayouts/tweaks/tweaks.js:655
-msgid "Shortcut Separator Position"
-msgstr "Position der Trennlinie für Verknüpfungen"
-
-#: menulayouts/tweaks/tweaks.js:746
-msgid "Change"
-msgstr "Ändern"
-
-#: menulayouts/tweaks/tweaks.js:777 prefs.js:202 prefs.js:4862 prefs.js:5145
-msgid "Modify"
-msgstr "Ändern"
-
-#: menulayouts/tweaks/tweaks.js:782 prefs.js:207 prefs.js:3633 prefs.js:4869
-#: prefs.js:5150
-msgid "Move Up"
-msgstr "Nach oben"
-
-#: menulayouts/tweaks/tweaks.js:787 prefs.js:212 prefs.js:3638 prefs.js:4874
-#: prefs.js:5155
-msgid "Move Down"
-msgstr "Nach unten"
-
-#: menulayouts/tweaks/tweaks.js:879
-msgid "Nothing Yet!"
-msgstr "Noch nichts!"
-
-#: menulayouts/tweaks/tweaks.js:900
-msgid "Choose the default screen for tognee Layout"
-msgstr "Standardansicht für das Tognee-Menü auswählen"
-
-#: menulayouts/tweaks/tweaks.js:902 menulayouts/tweaks/tweaks.js:933
-msgid "Categories List"
-msgstr "Kategorieliste"
-
-#: menulayouts/tweaks/tweaks.js:930
-msgid "Choose the default screen for ArcMenu"
-msgstr "Standardansicht für das Arc Menü auswählen"
-
-#: menulayouts/tweaks/tweaks.js:966
-msgid "Enable Weather Widget"
-msgstr "Wetter-Widget aktivieren"
-
-#: menulayouts/tweaks/tweaks.js:984
-msgid "Enable Clock Widget"
-msgstr "Uhren-Widget aktivieren"
+#: prefs.js:42 prefs.js:6041 constants.js:68 menulayouts/tweaks/tweaks.js:932
+#: menulayouts/plasma.js:136 menulayouts/ubuntudash.js:52
+#: menulayouts/ubuntudash.js:330 menulayouts/windows.js:449
+#: menulayouts/raven.js:51 menulayouts/raven.js:214 menuWidgets.js:1111
+#: menuWidgets.js:1149 menuWidgets.js:2354 menuWidgets.js:2413
+#: menuWidgets.js:2477 menuWidgets.js:2668
+msgid "Pinned Apps"
+msgstr "Angeheftete Anwendungen"
 
 #: prefs.js:60 prefs.js:4985
 msgid "Add More Apps"
@@ -710,6 +88,20 @@ msgstr ""
 msgid "Apply"
 msgstr "Anwenden"
 
+#: prefs.js:202 prefs.js:4862 prefs.js:5145 menulayouts/tweaks/tweaks.js:777
+msgid "Modify"
+msgstr "Ändern"
+
+#: prefs.js:207 prefs.js:3633 prefs.js:4869 prefs.js:5150
+#: menulayouts/tweaks/tweaks.js:782
+msgid "Move Up"
+msgstr "Nach oben"
+
+#: prefs.js:212 prefs.js:3638 prefs.js:4874 prefs.js:5155
+#: menulayouts/tweaks/tweaks.js:787
+msgid "Move Down"
+msgstr "Nach unten"
+
 #: prefs.js:217 prefs.js:4879 prefs.js:5160
 msgid "Delete"
 msgstr "Löschen"
@@ -729,6 +121,18 @@ msgstr "Anwendungsverknüpfungen auswählen"
 #: prefs.js:295
 msgid "Select Directory Shortcuts"
 msgstr "Verzeichnisverknüpfungen auswählen"
+
+#: prefs.js:303 menuWidgets.js:2913
+msgid "Type to search…"
+msgstr "Suchbegriff eingeben…"
+
+#: prefs.js:334 prefs.js:440 prefs.js:612 prefs.js:5979 menuButton.js:707
+#: menulayouts/tognee.js:155 menulayouts/redmond.js:174
+#: menulayouts/arcmenu.js:182 menulayouts/plasma.js:180
+#: menulayouts/ubuntudash.js:196 menulayouts/windows.js:146
+#: menulayouts/raven.js:178 menuWidgets.js:1250 menuWidgets.js:1926
+msgid "ArcMenu Settings"
+msgstr "Arc-Menü-Einstellungen"
 
 #: prefs.js:363 prefs.js:774
 msgid "Add"
@@ -789,6 +193,10 @@ msgstr "Terminalbefehl:"
 #: prefs.js:765
 msgid "Shortcut Path:"
 msgstr "Pfad der Verknüpfung:"
+
+#: prefs.js:813 prefs.js:6026 menulayouts/tweaks/tweaks.js:429
+msgid "General"
+msgstr "Allgemein"
 
 #: prefs.js:817
 msgid "Panel and Dock Options"
@@ -1214,6 +622,11 @@ msgstr "Hintergrundfarbe beim Berühren"
 msgid "Active Background Color"
 msgstr "Hintergrundfarbe beim Aktivieren"
 
+#: prefs.js:2065 prefs.js:3135 prefs.js:3461 prefs.js:3553 prefs.js:4556
+#: prefs.js:4774 prefs.js:5056 menulayouts/tweaks/tweaks.js:285
+msgid "Restore Defaults"
+msgstr "Standardwerte laden"
+
 #: prefs.js:2126 prefs.js:2232
 msgid "ArcMenu Icons"
 msgstr "Arc-Menü-Symbole"
@@ -1250,6 +663,13 @@ msgstr "Neues Layout auswählen"
 msgid "Tweaks for the current menu layout"
 msgstr "Optimierungen für die aktuelle Menüansicht"
 
+#: prefs.js:2406 prefs.js:2424 prefs.js:2454 menulayouts/tognee.js:155
+#: menulayouts/redmond.js:174 menulayouts/arcmenu.js:182
+#: menulayouts/plasma.js:180 menulayouts/ubuntudash.js:196
+#: menulayouts/windows.js:146 menulayouts/raven.js:178
+msgid "Tweaks"
+msgstr "Optimierungen"
+
 #: prefs.js:2528
 msgid "Enable Custom Menu Theme"
 msgstr "Benutzerdefiniertes Menü-Thema aktivieren"
@@ -1261,6 +681,14 @@ msgstr "Menü-Thema überschreiben"
 #: prefs.js:2546
 msgid "Override the ArcMenu extension theme"
 msgstr "Menü-Thema der Erweiterung Arc Menü überschreiben"
+
+#: prefs.js:2704 prefsWidgets.js:342
+msgid "Menu Layouts"
+msgstr "Menü-Layouts"
+
+#: prefs.js:2744 menuWidgets.js:1581
+msgid "Back"
+msgstr "Zurück"
 
 #: prefs.js:2819
 msgid "Menu Height"
@@ -1366,6 +794,14 @@ msgstr "Rahmen um Suchleiste entfernen"
 #: prefs.js:3264
 msgid "Disable the border on the searchbox"
 msgstr "Deaktiviert den Rahmen der Suchleiste"
+
+#: prefs.js:3280 menulayouts/tweaks/tweaks.js:461
+msgid "Disable Menu Arrow"
+msgstr "Menüpfeil deaktivieren"
+
+#: prefs.js:3288 menulayouts/tweaks/tweaks.js:469
+msgid "Disable current theme menu arrow pointer"
+msgstr "Pfeil am Menürahmen für aktuelles Thema ausblenden"
 
 #: prefs.js:3304
 msgid "Alphabetize 'All Programs' Category"
@@ -1560,6 +996,30 @@ msgstr ""
 msgid "Restore the default Application Shortcuts"
 msgstr "Anwendungsverknüpfungen wieder auf Standardwerte zurücksetzen"
 
+#: prefs.js:5253 menulayouts/plasma.js:353 menulayouts/windows.js:258
+#: menuWidgets.js:1389
+msgid "Suspend"
+msgstr "Bereitschaft"
+
+#: prefs.js:5270 menulayouts/plasma.js:343 menulayouts/ubuntudash.js:246
+#: menulayouts/windows.js:249 menulayouts/mint.js:232 menuWidgets.js:1398
+msgid "Lock"
+msgstr "Sperren"
+
+#: prefs.js:5287 menulayouts/plasma.js:347 menulayouts/ubuntudash.js:245
+#: menulayouts/windows.js:252 menulayouts/mint.js:231 menuWidgets.js:1380
+msgid "Log Out"
+msgstr "Abmelden"
+
+#: prefs.js:5304 menuWidgets.js:1371
+msgid "Restart"
+msgstr "Neu starten"
+
+#: prefs.js:5321 menulayouts/ubuntudash.js:247 menulayouts/mint.js:233
+#: menuWidgets.js:1362
+msgid "Power Off"
+msgstr "Ausschalten"
+
 #: prefs.js:5363
 msgid "External Devices"
 msgstr "Externe Laufwerke"
@@ -1567,6 +1027,10 @@ msgstr "Externe Laufwerke"
 #: prefs.js:5369
 msgid "Show all connected external devices in ArcMenu"
 msgstr "Alle verbundenen externe Laufwerke in Arc Menü anzeigen"
+
+#: prefs.js:5383 menulayouts/plasma.js:291 menulayouts/windows.js:192
+msgid "Bookmarks"
+msgstr "Lesezeichen"
 
 #: prefs.js:5389
 msgid "Show all Nautilus bookmarks in ArcMenu"
@@ -1665,6 +1129,10 @@ msgstr "Betriebssystem"
 msgid "Session Type"
 msgstr "Sitzungsart"
 
+#: prefs.js:5819 constants.js:296 menuWidgets.js:3201
+msgid "ArcMenu"
+msgstr "Arc Menü"
+
 #: prefs.js:5826
 msgid "A Dynamic, Traditional, Modern Menu for GNOME"
 msgstr "Ein dynamisches, traditionelles, modernes Menü für GNOME"
@@ -1713,6 +1181,14 @@ msgstr "Erscheinungsbild Schaltfläche"
 msgid "About"
 msgstr "Info"
 
+#: prefs.js:6042 menulayouts/ubuntudash.js:439 menulayouts/raven.js:314
+msgid "Shortcuts"
+msgstr "Verknüpfungen"
+
+#: prefs.js:6043 menuWidgets.js:1294
+msgid "Categories"
+msgstr "Kategorien"
+
 #: prefs.js:6045
 msgid "Fine-Tune"
 msgstr "Feineinstellung"
@@ -1720,6 +1196,10 @@ msgstr "Feineinstellung"
 #: prefs.js:6049
 msgid "Directories"
 msgstr "Verzeichnisse"
+
+#: prefs.js:6050 menulayouts/plasma.js:141 menuWidgets.js:3089
+msgid "Applications"
+msgstr "Anwendungen"
 
 #: prefs.js:6051
 msgid "Session Buttons"
@@ -1754,6 +1234,169 @@ msgstr "Fehler - Ungültige Verknüpfung"
 msgid "Invalid Shortcut"
 msgstr "Ungültige Verknüpfung"
 
+#: constants.js:65 menuWidgets.js:1107 menuWidgets.js:1261 menuWidgets.js:2350
+#: menuWidgets.js:2473 menuWidgets.js:2664
+msgid "Favorites"
+msgstr "Favoriten"
+
+#: constants.js:66 menulayouts/tweaks/tweaks.js:934 menuWidgets.js:1094
+#: menuWidgets.js:2338 menuWidgets.js:2461 menuWidgets.js:2652
+msgid "Frequent Apps"
+msgstr "Häufige Anwendungen"
+
+#: constants.js:67 menulayouts/tweaks/tweaks.js:446
+#: menulayouts/tweaks/tweaks.js:575 menulayouts/tweaks/tweaks.js:903
+#: menulayouts/ubuntudash.js:54 menulayouts/ubuntudash.js:335
+#: menulayouts/raven.js:53 menulayouts/raven.js:219 menuWidgets.js:1103
+#: menuWidgets.js:1537 menuWidgets.js:1631 menuWidgets.js:2346
+#: menuWidgets.js:2469 menuWidgets.js:2660
+msgid "All Programs"
+msgstr "Alle Programme"
+
+#: constants.js:297
+msgid "Brisk Menu Style"
+msgstr "Brisk-Menüstil"
+
+#: constants.js:298
+msgid "Whisker Menu Style"
+msgstr "Whisker-Menüstil"
+
+#: constants.js:299
+msgid "GNOME Menu Style"
+msgstr "GNOME-Menüstil"
+
+#: constants.js:300
+msgid "Mint Menu Style"
+msgstr "Mint-Menüstil"
+
+#: constants.js:301
+msgid "Budgie Style"
+msgstr "Budgie-Stil"
+
+#: constants.js:304
+msgid "Ubuntu Dash Style"
+msgstr "Ubuntu-Dash-Stil"
+
+#: constants.js:305
+msgid "Plasma Style"
+msgstr "Plasma-Stil"
+
+#: constants.js:306
+msgid "tognee Menu"
+msgstr "Tognee-Menü"
+
+#: constants.js:307
+msgid "Insider Menu"
+msgstr "Insider-Menü"
+
+#: constants.js:308
+msgid "Redmond Menu Style"
+msgstr "Redmond-Menüstil"
+
+#: constants.js:309
+msgid "Windows 10 Style"
+msgstr "Windows-10-Stil"
+
+#: constants.js:312
+msgid "Elementary Menu Style"
+msgstr "Elementary-Menüstil"
+
+#: constants.js:313
+msgid "Chromebook Style"
+msgstr "Chromebook-Stil"
+
+#: constants.js:316
+msgid "KRunner Style"
+msgstr "KRunner-Stil"
+
+#: constants.js:317
+msgid "GNOME Dash Style"
+msgstr "GNOME-Dash-Stil"
+
+#: constants.js:320
+msgid "Simple Menu Style"
+msgstr "Einfaches Menüstil"
+
+#: constants.js:321
+msgid "Simple Menu 2 Style"
+msgstr "Einfaches Menüstil 2"
+
+#: constants.js:324
+msgid "Raven Menu Style"
+msgstr "Raven-Menüstil"
+
+#: constants.js:331
+msgid "Traditional"
+msgstr "Traditionell"
+
+#: constants.js:332
+msgid ""
+"Traditional layouts use a familiar style and have a traditional user "
+"experience."
+msgstr ""
+"Traditionelle Layouts haben ein ähnlichen Aufbau und bieten ein bekanntes "
+"Nutzungserlebnis."
+
+#: constants.js:333
+msgid "Modern"
+msgstr "Modern"
+
+#: constants.js:334
+msgid ""
+"Modern layouts use a style and UX based approach with a focus on design and "
+"functionality."
+msgstr ""
+"Moderne Layouts vereinen Benutzererfahrung und Stil mit Fokus auf Design und "
+"Funktionalität."
+
+#: constants.js:335
+msgid "Touch"
+msgstr "Touch"
+
+#: constants.js:336
+msgid ""
+"Touch layouts contain large menu elements that are well suited for touch "
+"based devices."
+msgstr ""
+"Touch-Layouts haben große Menüelemente, die auch bei Geräten mit Touch-"
+"Eingabe gut zu bedienen sind."
+
+#: constants.js:337
+msgid "Simple"
+msgstr "Einfach"
+
+#: constants.js:338
+msgid ""
+"Simple layouts are designed for mouse based devices and contain simplistic "
+"menu elements."
+msgstr ""
+"Die einfachen Layouts wurden entworfen für Geräte mit Mauseingabe und "
+"beinhalten simple Menüelemente."
+
+#: constants.js:339
+msgid "Launcher"
+msgstr "Starter"
+
+#: constants.js:340
+msgid ""
+"Launcher layouts are well suited for keyboard driven devices and provide the "
+"user with quick and simple menu elements."
+msgstr ""
+"Starter-Layouts sind besonders gut geeignet für Geräte mit Tastatureingabe. "
+"Sie bieten dem Nutzer schnelle und einfache Menüs."
+
+#: constants.js:341
+msgid "Alternative"
+msgstr "Alternativ"
+
+#: constants.js:342
+msgid ""
+"Alternative layouts have an unconventional style that provide a unique user "
+"experience."
+msgstr ""
+"Alternative Layouts haben einen unkonventionellen Stil, der eine "
+"einzigartige Benutzererfahrung bietet."
+
 #: menuButton.js:734
 msgid "Dash to Panel Settings"
 msgstr "Dash to Panel-Einstellungen"
@@ -1765,6 +1408,367 @@ msgstr "Dash to Dock-Einstellungen"
 #: menuButton.js:745
 msgid "Ubuntu Dock Settings"
 msgstr "Einstellungen für Ubuntu Dock"
+
+#: search.js:870
+msgid "Searching..."
+msgstr "Suche läuft..."
+
+#: search.js:872
+msgid "No results."
+msgstr "Keine Ergebnisse."
+
+#: search.js:1052
+#, javascript-format
+msgid "%d more"
+msgid_plural "%d more"
+msgstr[0] "%d mehr"
+msgstr[1] "%d mehr"
+
+#: menulayouts/tognee.js:155 menulayouts/redmond.js:174
+#: menulayouts/baseMenuLayout.js:416 menulayouts/baseMenuLayout.js:418
+#: menulayouts/arcmenu.js:182 menulayouts/plasma.js:180
+#: menulayouts/ubuntudash.js:196 menulayouts/ubuntudash.js:240
+#: menulayouts/windows.js:146 menulayouts/mint.js:226 menulayouts/raven.js:178
+msgid "Software"
+msgstr "Software"
+
+#: menulayouts/tognee.js:155 menulayouts/redmond.js:174
+#: menulayouts/insider.js:218 menulayouts/arcmenu.js:182
+#: menulayouts/plasma.js:180 menulayouts/ubuntudash.js:196
+#: menulayouts/windows.js:146 menulayouts/mint.js:222 menulayouts/raven.js:178
+#: menuWidgets.js:1240
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: menulayouts/tognee.js:155 menulayouts/redmond.js:174
+#: menulayouts/arcmenu.js:182 menulayouts/plasma.js:180
+#: menulayouts/ubuntudash.js:196 menulayouts/windows.js:146
+#: menulayouts/mint.js:221 menulayouts/raven.js:178 menuWidgets.js:1929
+msgid "Terminal"
+msgstr "Terminal"
+
+#: menulayouts/tognee.js:155 menulayouts/redmond.js:174
+#: menulayouts/arcmenu.js:182 menulayouts/plasma.js:180
+#: menulayouts/ubuntudash.js:196 menulayouts/windows.js:146
+#: menulayouts/raven.js:178 menuWidgets.js:762
+msgid "Activities Overview"
+msgstr "Aktivitätenübersicht"
+
+#: menulayouts/tweaks/tweaks.js:93
+msgid "Category Activation"
+msgstr "Kategorien öffnen bei"
+
+#: menulayouts/tweaks/tweaks.js:99
+msgid "Mouse Click"
+msgstr "Mausklick"
+
+#: menulayouts/tweaks/tweaks.js:100
+msgid "Mouse Hover"
+msgstr "Mausberührung"
+
+#: menulayouts/tweaks/tweaks.js:119
+msgid "Avatar Icon Shape"
+msgstr "Form des Avatarsymbols"
+
+#: menulayouts/tweaks/tweaks.js:124
+msgid "Circular"
+msgstr "Kreisförmig"
+
+#: menulayouts/tweaks/tweaks.js:125
+msgid "Square"
+msgstr "Rechteckig"
+
+#: menulayouts/tweaks/tweaks.js:140 menulayouts/tweaks/tweaks.js:197
+msgid "Searchbar Location"
+msgstr "Position der Suchleiste"
+
+#: menulayouts/tweaks/tweaks.js:146 menulayouts/tweaks/tweaks.js:203
+msgid "Bottom"
+msgstr "Unten"
+
+#: menulayouts/tweaks/tweaks.js:147 menulayouts/tweaks/tweaks.js:204
+#: menulayouts/tweaks/tweaks.js:396
+msgid "Top"
+msgstr "Oben"
+
+#: menulayouts/tweaks/tweaks.js:160
+msgid "Flip Layout Horizontally"
+msgstr "Ansicht horizontal vertauschen"
+
+#: menulayouts/tweaks/tweaks.js:177
+msgid "Disable User Avatar"
+msgstr "Benutzerbild nicht anzeigen"
+
+#: menulayouts/tweaks/tweaks.js:216
+msgid "Activate on Hover"
+msgstr "Beim Berühren aktivieren"
+
+#: menulayouts/tweaks/tweaks.js:232
+msgid "Show Application Descriptions"
+msgstr "Anwendungsbeschreibungen anzeigen"
+
+#: menulayouts/tweaks/tweaks.js:248
+msgid "Selected Button Border Color"
+msgstr "Rahmenfarbe bei Auswahl anzeigen"
+
+#: menulayouts/tweaks/tweaks.js:266
+msgid "Selected Button Background Color"
+msgstr "Hintergrundfarbe bei Auswahl anzeigen"
+
+#: menulayouts/tweaks/tweaks.js:323 menulayouts/tweaks/tweaks.js:490
+#: menulayouts/tweaks/tweaks.js:631
+msgid "Save"
+msgstr "Speichern"
+
+#: menulayouts/tweaks/tweaks.js:344
+msgid "Brisk Menu Shortcuts"
+msgstr "Brisk-Menü-Verknüpfungen"
+
+#: menulayouts/tweaks/tweaks.js:372
+msgid "Enable Activities Overview Shortcut"
+msgstr "Kürzel für Aktivitätenübersicht aktivieren"
+
+#: menulayouts/tweaks/tweaks.js:391
+msgid "KRunner Position"
+msgstr "KRunner-Position"
+
+#: menulayouts/tweaks/tweaks.js:397
+msgid "Centered"
+msgstr "Mittig"
+
+#: menulayouts/tweaks/tweaks.js:408 menulayouts/tweaks/tweaks.js:590
+msgid "Show Extra Large Icons with App Descriptions"
+msgstr "Zeige besonders große Symbole mit Anwendungsbeschreibungen"
+
+#: menulayouts/tweaks/tweaks.js:432
+msgid "Buttons"
+msgstr "Schaltflächen"
+
+#: menulayouts/tweaks/tweaks.js:440 menulayouts/tweaks/tweaks.js:569
+#: menulayouts/tweaks/tweaks.js:893 menulayouts/tweaks/tweaks.js:923
+msgid "Default Screen"
+msgstr "Standardansicht"
+
+#: menulayouts/tweaks/tweaks.js:445 menulayouts/tweaks/tweaks.js:574
+#: menuWidgets.js:1098 menuWidgets.js:2342 menuWidgets.js:2465
+#: menuWidgets.js:2656
+msgid "Home Screen"
+msgstr "Startbild"
+
+#: menulayouts/tweaks/tweaks.js:511
+msgid "Ubuntu Dash Buttons"
+msgstr "Ubuntu-Dash-Schaltflächen"
+
+#: menulayouts/tweaks/tweaks.js:520
+msgid "Button Separator Position"
+msgstr "Anzeigeposition der Trennlinie"
+
+#: menulayouts/tweaks/tweaks.js:529 menulayouts/tweaks/tweaks.js:664
+msgid "Separator Position"
+msgstr "Position der Trennlinie"
+
+#: menulayouts/tweaks/tweaks.js:548 menulayouts/tweaks/tweaks.js:683
+msgid "Adjust the position of the separator in the button panel"
+msgstr "Anpassen der Trennstrich-Position in der Schaltflächenleiste"
+
+#: menulayouts/tweaks/tweaks.js:619
+msgid "Mint Menu Shortcuts"
+msgstr "Mint-Menü-Verknüpfungen"
+
+#: menulayouts/tweaks/tweaks.js:655
+msgid "Shortcut Separator Position"
+msgstr "Position der Trennlinie für Verknüpfungen"
+
+#: menulayouts/tweaks/tweaks.js:746
+msgid "Change"
+msgstr "Ändern"
+
+#: menulayouts/tweaks/tweaks.js:879
+msgid "Nothing Yet!"
+msgstr "Noch nichts!"
+
+#: menulayouts/tweaks/tweaks.js:900
+msgid "Choose the default screen for tognee Layout"
+msgstr "Standardansicht für das Tognee-Menü auswählen"
+
+#: menulayouts/tweaks/tweaks.js:902 menulayouts/tweaks/tweaks.js:933
+msgid "Categories List"
+msgstr "Kategorieliste"
+
+#: menulayouts/tweaks/tweaks.js:930
+msgid "Choose the default screen for ArcMenu"
+msgstr "Standardansicht für das Arc Menü auswählen"
+
+#: menulayouts/tweaks/tweaks.js:966
+msgid "Enable Weather Widget"
+msgstr "Wetter-Widget aktivieren"
+
+#: menulayouts/tweaks/tweaks.js:984
+msgid "Enable Clock Widget"
+msgstr "Uhren-Widget aktivieren"
+
+#: menulayouts/insider.js:70 menulayouts/insider.js:213
+#: menulayouts/baseMenuLayout.js:348 menulayouts/ubuntudash.js:235
+#: menulayouts/windows.js:71 menulayouts/mint.js:228
+msgid "Documents"
+msgstr "Dokumente"
+
+#: menulayouts/baseMenuLayout.js:348 menulayouts/ubuntudash.js:236
+msgid "Downloads"
+msgstr "Downloads"
+
+#: menulayouts/baseMenuLayout.js:348
+msgid "Music"
+msgstr "Musik"
+
+#: menulayouts/baseMenuLayout.js:348
+msgid "Pictures"
+msgstr "Bilder"
+
+#: menulayouts/baseMenuLayout.js:348
+msgid "Videos"
+msgstr "Videos"
+
+#: menulayouts/baseMenuLayout.js:348 menulayouts/baseMenuLayout.js:404
+#: menulayouts/plasma.js:307 menulayouts/windows.js:208
+msgid "Network"
+msgstr "Netzwerk"
+
+#: menulayouts/plasma.js:149 menuWidgets.js:1283
+msgid "Leave"
+msgstr "Beenden"
+
+#: menulayouts/plasma.js:276 menulayouts/windows.js:331
+msgid "Application Shortcuts"
+msgstr "Anwendungsverknüpfungen"
+
+#: menulayouts/plasma.js:280 menulayouts/windows.js:335
+msgid "Places"
+msgstr "Orte"
+
+#: menulayouts/plasma.js:299 menulayouts/windows.js:200
+msgid "Devices"
+msgstr "Laufwerke"
+
+#: menulayouts/plasma.js:341 menulayouts/windows.js:247
+msgid "Session"
+msgstr "Sitzung"
+
+#: menulayouts/plasma.js:350 menulayouts/windows.js:256
+msgid "System"
+msgstr "System"
+
+#: menulayouts/plasma.js:357 menulayouts/windows.js:262
+msgid "Restart..."
+msgstr "Neu starten…"
+
+#: menulayouts/plasma.js:361 menulayouts/windows.js:266
+msgid "Power Off..."
+msgstr "Ausschalten…"
+
+#: menulayouts/ubuntudash.js:244 menulayouts/mint.js:230
+msgid "Files"
+msgstr "Dateien"
+
+#: prefsWidgets.js:321
+msgid "Included Layouts"
+msgstr "Enthaltene Layouts"
+
+#: prefsWidgets.js:368
+msgid "Browse all"
+msgstr "Ansehen aller"
+
+#: prefsWidgets.js:374
+msgid "Information"
+msgstr "Information"
+
+#: menuWidgets.js:163
+msgid "Open Folder Location"
+msgstr "Ordnerpfad öffnen"
+
+#: menuWidgets.js:179
+msgid "Current Windows:"
+msgstr "Aktuelle Fenster:"
+
+#: menuWidgets.js:197
+msgid "New Window"
+msgstr "Neues Fenster"
+
+#: menuWidgets.js:207
+msgid "Launch using Dedicated Graphics Card"
+msgstr "Starten mit dedizierter Grafikkarte"
+
+#: menuWidgets.js:252
+msgid "Delete Desktop Shortcut"
+msgstr "Schreibtischverknüpfung löschen"
+
+#: menuWidgets.js:260
+msgid "Create Desktop Shortcut"
+msgstr "Schreibtischverknüpfung erstellen"
+
+#: menuWidgets.js:274
+msgid "Remove from Favorites"
+msgstr "Aus Favoriten entfernen"
+
+#: menuWidgets.js:280
+msgid "Add to Favorites"
+msgstr "Zu Favoriten hinzufügen"
+
+#: menuWidgets.js:297 menuWidgets.js:346
+msgid "Unpin from ArcMenu"
+msgstr "Nicht mehr in Arc Menü anheften"
+
+#: menuWidgets.js:311
+msgid "Pin to ArcMenu"
+msgstr "In Arc Menü anheften"
+
+#: menuWidgets.js:324
+msgid "Show Details"
+msgstr "Details anzeigen"
+
+#: menuWidgets.js:1272
+msgid "Extras"
+msgstr "Extras"
+
+#: menuWidgets.js:1304
+msgid "Users"
+msgstr "Benutzer"
+
+#: menuWidgets.js:2185
+msgid "New"
+msgstr "Neu"
+
+#: menuWidgets.js:3189
+msgid "Show Applications"
+msgstr "Anwendungen anzeigen"
+
+#: menuWidgets.js:3416
+msgid "Add world clocks…"
+msgstr "Weltuhren hinzufügen…"
+
+#: menuWidgets.js:3417
+msgid "World Clocks"
+msgstr "Weltuhren"
+
+#: menuWidgets.js:3525
+msgid "Weather"
+msgstr "Wetter"
+
+#: menuWidgets.js:3645
+msgid "Select a location…"
+msgstr "Einen Ort wählen…"
+
+#: menuWidgets.js:3658
+msgid "Loading…"
+msgstr "Laden…"
+
+#: menuWidgets.js:3668
+msgid "Go online for weather information"
+msgstr "Ins Internet gehen, um Wetterinformationen zu erhalten"
+
+#: menuWidgets.js:3670
+msgid "Weather information is currently unavailable"
+msgstr "Wetterinformationen sind momentan nicht verfügbar"
 
 #~ msgid "Arc Menu User Manual"
 #~ msgstr "Handbuch zu Arc Menü"
@@ -1807,9 +1811,6 @@ msgstr "Einstellungen für Ubuntu Dock"
 
 #~ msgid "Choose from a variety of menu layouts"
 #~ msgstr "Verschiedene Menü-Layouts ansehen"
-
-#~ msgid "Extras"
-#~ msgstr "Extras"
 
 #~ msgid "Import/Export ALL Arc Menu Settings"
 #~ msgstr "Importieren/Exportieren ALLER Arc-Menü-Einstellungen"
