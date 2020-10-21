@@ -217,7 +217,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
  
 -----
 
- **- @[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **- @[jiri.doubravsky](https://gitlab.com/jiri.doubravsky) - czech** | **- @[juanlucer](https://gitlab.com/juanlucer) - Spanish** | **- @[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** |
+ **- @[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **- @[jiri.doubravsky](https://gitlab.com/jiri.doubravsky) - Czech** | **- @[juanlucer](https://gitlab.com/juanlucer) - Spanish** | **- @[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** |
 
 -----
 
@@ -225,7 +225,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
  
 -----
 
- **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** |
+ **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** | **- @[prescott66](https://gitlab.com/prescott66) - Slovak** |
 
 </p>
 </details>
