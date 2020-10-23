@@ -212,6 +212,11 @@
       <summary>Flip menu horizontally</summary>
       <description>Flip menu horizontally</description>
     </key>
+    <key type="b" name="gnome-dash-show-applications">
+      <default>false</default>
+      <summary>GNOME Dash Layout - Show Applications</summary>
+      <description>GNOME Dash Layout - Show Applications</description>
+    </key>
     <key type="b" name="plasma-show-descriptions">
       <default>false</default>
       <summary>Plasma Menu Show Descriptions</summary>

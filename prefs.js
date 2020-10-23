@@ -3336,7 +3336,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         let multiLinedLabelInfoButton = new PW.InfoButton();
         multiLinedLabelInfoButton.connect('clicked', ()=> {
             let dialog = new Gtk.MessageDialog({
-                text: "<b>" + _("Multi-Lined Labels") + '</b>\n\n' + _('Enable/Disable mutli-lined labels on large application icon layouts.'),
+                text: "<b>" + _("Multi-Lined Labels") + '</b>\n\n' + _('Enable/Disable multi-lined labels on large application icon layouts.'),
                 use_markup: true,
                 buttons: Gtk.ButtonsType.OK,
                 message_type: Gtk.MessageType.OTHER,
