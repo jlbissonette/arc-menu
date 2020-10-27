@@ -184,7 +184,6 @@ var MENU_ICONS = [
     { path: '/media/icons/menu_icons/arc-menu-symbolic.svg'},
     { path: '/media/icons/menu_icons/arc-menu-alt-symbolic.svg'},
     { path: '/media/icons/menu_icons/arc-menu-old-symbolic.svg'},
-    { path: 'start-here-symbolic'},
     { path: '/media/icons/menu_icons/curved-a-symbolic.svg'},
     { path: '/media/icons/menu_icons/focus-symbolic.svg'},
     { path: '/media/icons/menu_icons/triple-dash-symbolic.svg'},
@@ -252,6 +251,7 @@ var MENU_ICONS = [
 ]
 
 var DISTRO_ICONS = [
+    { path: 'start-here-symbolic'},
     { path: '/media/icons/menu_icons_distros/debian-logo-symbolic.svg'},
     { path: '/media/icons/menu_icons_distros/fedora-logo-symbolic.svg'},
     { path: '/media/icons/menu_icons_distros/manjaro-logo-symbolic.svg'},

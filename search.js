@@ -119,7 +119,7 @@ var ListSearchResult = class Arc_Menu_ListSearchResult {
                     this.menuItem.actor.style = "height:40px";
                 descriptionLabel.style = "font-weight: lighter;";
     
-                let icon = this.metaInfo['createIcon'](this.layout == Constants.MENU_LAYOUT.Plasma ? MEDIUM_ICON_SIZE : LARGE_ICON_SIZE);
+                let icon = this.metaInfo['createIcon'](this.layout === Constants.MENU_LAYOUT.Plasma ? MEDIUM_ICON_SIZE : LARGE_ICON_SIZE);
                 if (icon)
                     this.menuItem.box.add_child(icon);   
                 
@@ -184,16 +184,10 @@ var AppSearchResult = class Arc_Menu_AppSearchResult {
             if(gridView){
                 this.menuItem.box.vertical = true;
                 this.menuItem.remove_child(this.menuItem._ornamentLabel);
-                if(this.layout == Constants.MENU_LAYOUT.Elementary || this.layout == Constants.MENU_LAYOUT.UbuntuDash){
-                    this.menuItem.actor.style ='text-align: center; border-radius:4px; padding: 5px; spacing: 0px; width:95px; height:95px;';
-                    this.menuItem.box.style = 'padding: 0px; margin: 0px; spacing:0px;';
-                    iconSize = 52;
-                }
-                else {
-                    this.menuItem.actor.style ='text-align: center; border-radius:4px; padding: 5px; spacing: 0px; width:80px;height:80px;';
-                    this.menuItem.box.style = 'padding: 0px; margin: 0px; spacing:0px;';
-                    iconSize = 36;
-                } 
+                
+                Utils.setGridLayoutStyle(this.layout, this.menuItem.actor, this.menuItem.box);
+                iconSize = Utils.getGridIconSize(this.layout);
+
                 this.icon = this.metaInfo['createIcon'](iconSize);         
                 if(this.icon){
                     if(this._settings.get_boolean('multi-lined-labels')){

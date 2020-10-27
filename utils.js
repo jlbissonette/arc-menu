@@ -70,6 +70,26 @@ function getMenuLayout(button, layout){
     }
 }
 
+function setGridLayoutStyle(layout, actor, box){
+    if(layout === Constants.MENU_LAYOUT.Elementary || layout === Constants.MENU_LAYOUT.UbuntuDash){
+        actor.add_style_class_name('large-grid-actor');
+        box.add_style_class_name('large-grid-box');
+    }
+    else{
+        actor.add_style_class_name('medium-grid-actor');
+        box.add_style_class_name('medium-grid-box');
+    }
+}
+
+function getGridIconSize(layout){
+    if(layout === Constants.MENU_LAYOUT.Elementary || layout === Constants.MENU_LAYOUT.UbuntuDash){
+        return 52;
+    }
+    else{
+        return 36;
+    }
+}
+
 function findSoftwareManager(){
     let softwareManager = null;
     let appSys = imports.gi.Shell.AppSystem.get_default();
@@ -408,6 +428,11 @@ function createStylesheet(settings){
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"
 
         +tooltipStyle
+
+        +".large-grid-actor{\ntext-align: center;\nborder-radius:4px;\npadding: 5px;\nspacing: 0px;\nwidth:95px;\nheight:95px;\n}\n\n"
+        +".large-grid-box{\npadding: 0px;\nmargin: 0px;\nspacing:0px;\n}\n\n"
+        +".medium-grid-actor{\ntext-align: center;\nborder-radius:4px;\npadding: 5px;\nspacing: 0px;\nwidth:80px;\nheight:80px;\n}\n\n"
+        +".medium-grid-box{\npadding: 0px;\nmargin: 0px;\nspacing:0px;\n}\n\n"
 
         +".arc-menu{\n-boxpointer-gap: " + gapAdjustment + "px;\nmin-width: 15em;\ncolor: #D3DAE3;\nborder-image: none;\n"
                         +"box-shadow: none;\nfont-size:" + fontSize + "pt;\n}\n\n"

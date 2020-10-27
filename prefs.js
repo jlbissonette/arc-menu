@@ -2145,6 +2145,21 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
             });
             arcMenuIconsBox.add_with_viewport(arcMenuIconsFlowBox);
             Constants.MENU_ICONS.forEach((icon)=>{
+                let iconImage = new Gtk.Image({
+                    gicon: Gio.icon_new_for_string(Me.path + icon.path),
+                    pixel_size: 36
+                });
+                arcMenuIconsFlowBox.add(iconImage);
+            });
+
+            let distroIconsBox = new PW.IconGrid();
+            distroIconsBox.connect('child-activated', ()=> {
+                let selectedChild = distroIconsBox.get_selected_children();
+                let selectedChildIndex = selectedChild[0].get_index();
+                this._settings.set_enum('menu-button-icon', Constants.MENU_BUTTON_ICON.Distro_Icon);
+                this._settings.set_int('distro-icon', selectedChildIndex);
+            });
+            Constants.DISTRO_ICONS.forEach((icon)=>{
                 let iconImage;
                 if(icon.path === 'start-here-symbolic'){
                     let info = Gtk.IconTheme.get_default().lookup_icon("start-here-symbolic", 36, 0);
@@ -2159,21 +2174,6 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
                         pixel_size: 36
                     });
                 }
-                arcMenuIconsFlowBox.add(iconImage);
-            });
-
-            let distroIconsBox = new PW.IconGrid();
-            distroIconsBox.connect('child-activated', ()=> {
-                let selectedChild = distroIconsBox.get_selected_children();
-                let selectedChildIndex = selectedChild[0].get_index();
-                this._settings.set_enum('menu-button-icon', Constants.MENU_BUTTON_ICON.Distro_Icon);
-                this._settings.set_int('distro-icon', selectedChildIndex);
-            });
-            Constants.DISTRO_ICONS.forEach((icon)=>{
-                let iconImage = new Gtk.Image({
-                    gicon: Gio.icon_new_for_string(Me.path + icon.path),
-                    pixel_size: 36
-                });
                 distroIconsBox.add(iconImage);
             });
 

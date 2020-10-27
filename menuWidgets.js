@@ -1742,17 +1742,9 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
             this.label.y_expand = false;
         }
         this.remove_child(this._ornamentLabel);
-        let layout = this._settings.get_enum('menu-layout');        
-        if(layout == Constants.MENU_LAYOUT.Elementary || layout == Constants.MENU_LAYOUT.UbuntuDash){
-            this._iconSize = 52;
-            this.actor.style ='text-align: center; border-radius:4px; padding: 5px; spacing: 0px; width:95px; height:95px;';
-            this.box.style = 'padding: 0px; margin: 0px; spacing:0px;';
-        } 
-        else{
-            this._iconSize = 36;  
-            this.actor.style ='text-align: center; border-radius:4px; padding: 5px; spacing: 0px; width:80px;height:80px;';
-            this.box.style = 'padding: 0px; margin: 0px; spacing:0px;';
-        }
+        let layout = this._settings.get_enum('menu-layout');    
+        Utils.setGridLayoutStyle(layout, this.actor, this.box);
+        this._iconSize = Utils.getGridIconSize(layout);    
         this._icon.icon_size = this._iconSize;
     }
     activate(event) {
@@ -1994,16 +1986,8 @@ var FavoritesMenuItem = GObject.registerClass({
             this.box.vertical = true;
             this.remove_child(this._ornamentLabel);
             let layout = this._settings.get_enum('menu-layout');
-            if(layout == Constants.MENU_LAYOUT.Elementary || layout == Constants.MENU_LAYOUT.UbuntuDash){
-                this._icon.icon_size = 52;
-                this.box.style = 'padding: 0px; margin: 0px; spacing:0px;';
-                this.actor.style ='text-align: center; border-radius:4px; padding: 5px; spacing: 0px; width:95px; height:95px;';
-            }
-            else{
-                this.box.style = 'padding: 0px; margin: 0px; spacing:0px;';
-                this.actor.style ='text-align: center; border-radius:4px; padding: 5px; spacing: 0px; width:80px;height:80px;';
-                this._icon.icon_size = 36;  
-            }
+            Utils.setGridLayoutStyle(layout, this.actor, this.box);
+            this._icon.icon_size = Utils.getGridIconSize(layout);
         }
         this.setShouldShow();
     }
@@ -2214,14 +2198,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
                 this._indicator.y_expand = false;
             }
             let layout = this._settings.get_enum('menu-layout');
-            if(layout == Constants.MENU_LAYOUT.Elementary || layout == Constants.MENU_LAYOUT.UbuntuDash){
-                this.actor.style ='text-align: center; border-radius:4px; padding: 5px; spacing: 0px; width:95px; height:95px;';
-                this.box.style = 'padding: 0px; margin: 0px; spacing:0px;';
-            }
-            else{
-                this.actor.style ='text-align: center; border-radius:4px; padding: 5px; spacing: 0px; width:80px;height:80px;';
-                this.box.style = 'padding: 0px; margin: 0px; spacing:0px;';
-            }
+            Utils.setGridLayoutStyle(layout, this.actor, this.box);
         }
         this._updateIcon();
     }
