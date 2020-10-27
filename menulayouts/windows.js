@@ -430,7 +430,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayAllApps(isGridLayout = false){
         this._clearActorsFromBox();
-        let frequentAppsLabel = new PopupMenu.PopupMenuItem(_("Frequent Apps"), {
+        let frequentAppsLabel = new PopupMenu.PopupMenuItem(_("Frequent"), {
             hover: false,
             can_focus: false
         });  
