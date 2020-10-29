@@ -2403,7 +2403,7 @@ var MenuLayoutPage = GObject.registerClass(
             menuTweaksButton.vexpand = false;
             menuTweaksButton.valign = Gtk.Align.CENTER;
             menuTweaksButton.connect('clicked', () => {
-                let dialog = new LayoutTweaks.tweaks.TweaksDialog(this._settings, this, this.getMenuLayoutName(this._settings.get_enum('menu-layout')) +" " + _("Tweaks"));
+                let dialog = new LayoutTweaks.tweaks.TweaksDialog(this._settings, this, this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')));
                 dialog.show_all();
                 dialog.connect('response', (response) => { 
                     if(dialog.get_response()){
@@ -2421,7 +2421,7 @@ var MenuLayoutPage = GObject.registerClass(
                 halign: Gtk.Align.START
             });
             let tweaksLabel = new Gtk.Label({
-                label: this.getMenuLayoutName(this._settings.get_enum('menu-layout')) +" " + _("Tweaks"),
+                label: this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')),
                 use_markup: true,
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
@@ -2451,7 +2451,7 @@ var MenuLayoutPage = GObject.registerClass(
                         this._settings.set_enum('menu-layout', dialog.index);
                         this._settings.set_boolean('reload-theme', true);
                         currentLayoutBoxLabel.label = this.getMenuLayoutName(dialog.index);
-                        tweaksLabel.label = currentLayoutBoxLabel.label +" " + _("Tweaks");
+                        tweaksLabel.label = this.getMenuLayoutTweaksName(dialog.index);
                         currentLayoutImage.gicon = Gio.icon_new_for_string(Me.path + this.getMenuLayoutThumbnailPath(dialog.index));
                         this.stack.set_visible_child_name("LayoutsBox");
                         this.scrollBox.vadjustment.set_value(this.scrollBox.vadjustment.get_lower());
@@ -2476,6 +2476,16 @@ var MenuLayoutPage = GObject.registerClass(
             for(let style of styles.layoutStyle){
                 if(style.layout == index){
                     return style.name;
+                }
+            }
+        }
+    }
+
+    getMenuLayoutTweaksName(index){
+        for(let styles of Constants.MENU_STYLES.Styles){
+            for(let style of styles.layoutStyle){
+                if(style.layout == index){
+                    return style.tweaksName;
                 }
             }
         }

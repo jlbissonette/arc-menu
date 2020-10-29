@@ -293,52 +293,52 @@ var MENU_LAYOUT = {
 };
 
 var TRADITIONAL_MENU_STYLE = [   
-    { thumbnail: '/media/layouts/arc-menu.svg', name: _('ArcMenu'), layout: MENU_LAYOUT.Default},
-    { thumbnail: '/media/layouts/brisk-menu.svg', name: _('Brisk Menu Style'), layout: MENU_LAYOUT.Brisk},
-    { thumbnail: '/media/layouts/whisker-menu.svg', name: _('Whisker Menu Style'), layout: MENU_LAYOUT.Whisker},
-    { thumbnail: '/media/layouts/gnome-menu.svg', name: _('GNOME Menu Style'), layout: MENU_LAYOUT.GnomeMenu},
-    { thumbnail: '/media/layouts/mint-menu.svg', name: _('Mint Menu Style'), layout: MENU_LAYOUT.Mint},
-    { thumbnail: '/media/layouts/budgie-menu.svg', name: _('Budgie Style'), layout: MENU_LAYOUT.Budgie}];
+    { thumbnail: '/media/layouts/arc-menu.svg', name: _('ArcMenu'), tweaksName: _('ArcMenu Tweaks'), layout: MENU_LAYOUT.Default},
+    { thumbnail: '/media/layouts/brisk-menu.svg', name: _('Brisk Menu Style'), tweaksName: _('Brisk Menu Style Tweaks'), layout: MENU_LAYOUT.Brisk},
+    { thumbnail: '/media/layouts/whisker-menu.svg', name: _('Whisker Menu Style'), tweaksName: _('Whisker Menu Style Tweaks'), layout: MENU_LAYOUT.Whisker},
+    { thumbnail: '/media/layouts/gnome-menu.svg', name: _('GNOME Menu Style'), tweaksName: _('GNOME Menu Style Tweaks'), layout: MENU_LAYOUT.GnomeMenu},
+    { thumbnail: '/media/layouts/mint-menu.svg', name: _('Mint Menu Style'), tweaksName: _('Mint Menu Style Tweaks'), layout: MENU_LAYOUT.Mint},
+    { thumbnail: '/media/layouts/budgie-menu.svg', name: _('Budgie Style'), tweaksName: _('Budgie Style Tweaks'), layout: MENU_LAYOUT.Budgie}];
 
 var MODERN_MENU_STYLE = [
-    { thumbnail: '/media/layouts/ubuntu-dash-menu.svg', name: _('Ubuntu Dash Style'), layout: MENU_LAYOUT.UbuntuDash},
-    { thumbnail: '/media/layouts/plasma-menu.svg', name: _('Plasma Style'), layout: MENU_LAYOUT.Plasma},
-    { thumbnail: '/media/layouts/tognee-menu.svg', name: _('tognee Menu'), layout: MENU_LAYOUT.Tognee},
-    { thumbnail: '/media/layouts/insider.svg', name: _('Insider Menu'), layout: MENU_LAYOUT.Insider},
-    { thumbnail: '/media/layouts/redmond-style-menu.svg', name: _('Redmond Menu Style'), layout: MENU_LAYOUT.Redmond},
-    { thumbnail: '/media/layouts/windows.svg', name: _('Windows 10 Style'), layout: MENU_LAYOUT.Windows}];
+    { thumbnail: '/media/layouts/ubuntu-dash-menu.svg', name: _('Ubuntu Dash Style'), tweaksName: _('Ubuntu Dash Style Tweaks'), layout: MENU_LAYOUT.UbuntuDash},
+    { thumbnail: '/media/layouts/plasma-menu.svg', name: _('Plasma Style'), tweaksName: _('Plasma Style Tweaks'), layout: MENU_LAYOUT.Plasma},
+    { thumbnail: '/media/layouts/tognee-menu.svg', name: _('tognee Menu'), tweaksName: _('tognee Menu Tweaks'), layout: MENU_LAYOUT.Tognee},
+    { thumbnail: '/media/layouts/insider.svg', name: _('Insider Menu'), tweaksName: _('Insider Menu Tweaks'), layout: MENU_LAYOUT.Insider},
+    { thumbnail: '/media/layouts/redmond-style-menu.svg', name: _('Redmond Menu Style'), tweaksName: _('Redmond Menu Style Tweaks'), layout: MENU_LAYOUT.Redmond},
+    { thumbnail: '/media/layouts/windows.svg', name: _('Windows 10 Style'), tweaksName: _('Windows 10 Style Tweaks'), layout: MENU_LAYOUT.Windows}];
 
 var TOUCH_MENU_STYLE = [   
-    { thumbnail: '/media/layouts/elementary-menu.svg', name: _('Elementary Menu Style'), layout: MENU_LAYOUT.Elementary},
-    { thumbnail: '/media/layouts/chromebook-menu.svg', name: _('Chromebook Style'), layout: MENU_LAYOUT.Chromebook}];
+    { thumbnail: '/media/layouts/elementary-menu.svg', name: _('Elementary Menu Style'), tweaksName: _('Elementary Menu Style Tweaks'), layout: MENU_LAYOUT.Elementary},
+    { thumbnail: '/media/layouts/chromebook-menu.svg', name: _('Chromebook Style'), tweaksName: _('Chromebook Style Tweaks'), layout: MENU_LAYOUT.Chromebook}];
 
 var LAUNCHER_MENU_STYLE = [   
-    { thumbnail: '/media/layouts/krunner-menu.svg', name: _('KRunner Style'), layout: MENU_LAYOUT.Runner},
-    { thumbnail: '/media/layouts/gnome-dash-menu.svg', name: _('GNOME Dash Style'), layout: MENU_LAYOUT.GnomeDash}];
+    { thumbnail: '/media/layouts/krunner-menu.svg', name: _('KRunner Style'), tweaksName: _('KRunner Style Tweaks'), layout: MENU_LAYOUT.Runner},
+    { thumbnail: '/media/layouts/gnome-dash-menu.svg', name: _('GNOME Dash Style'), tweaksName: _('GNOME Dash Style Tweaks'), layout: MENU_LAYOUT.GnomeDash}];
 
 var SIMPLE_MENU_STYLE = [   
-    { thumbnail: '/media/layouts/simple-menu.svg', name: _('Simple Menu Style'), layout: MENU_LAYOUT.Simple},
-    { thumbnail: '/media/layouts/simple-menu-2.svg', name: _('Simple Menu 2 Style'), layout: MENU_LAYOUT.Simple2}];
+    { thumbnail: '/media/layouts/simple-menu.svg', name: _('Simple Menu Style'), tweaksName: _('Simple Menu Style Tweaks'), layout: MENU_LAYOUT.Simple},
+    { thumbnail: '/media/layouts/simple-menu-2.svg', name: _('Simple Menu 2 Style'), tweaksName: _('Simple Menu 2 Style Tweaks'), layout: MENU_LAYOUT.Simple2}];
 
 var ALTERNATIVE_MENU_STYLE = [   
-    { thumbnail: '/media/layouts/raven-menu.svg', name: _('Raven Menu Style'), layout: MENU_LAYOUT.Raven}];
+    { thumbnail: '/media/layouts/raven-menu.svg', name: _('Raven Menu Style'), tweaksName: _('Raven Menu Style Tweaks'), layout: MENU_LAYOUT.Raven}];
 
 var MENU_STYLES = {
     ThumbnailHeight: 150,
     ThumbnailWidth: 150,
     MaxColumns: 6,
     Styles: [ 
-        { thumbnail: '/media/layouts/categories/traditional-symbolic.svg', name: _('Traditional'), layoutStyle: TRADITIONAL_MENU_STYLE, 
+        { thumbnail: '/media/layouts/categories/traditional-symbolic.svg', name: _('Traditional'), descriptionTitle: _("Traditional Menu Style"), layoutStyle: TRADITIONAL_MENU_STYLE, 
                 description: _("Traditional layouts use a familiar style and have a traditional user experience.")},
-        { thumbnail: '/media/layouts/categories/modern-symbolic.svg', name: _('Modern'), layoutStyle: MODERN_MENU_STYLE, 
+        { thumbnail: '/media/layouts/categories/modern-symbolic.svg', name: _('Modern'), descriptionTitle: _("Modern Menu Style"), layoutStyle: MODERN_MENU_STYLE, 
                 description: _("Modern layouts use a style and UX based approach with a focus on design and functionality.")},
-        { thumbnail: '/media/layouts/categories/touch-symbolic.svg', name: _('Touch'), layoutStyle: TOUCH_MENU_STYLE, 
+        { thumbnail: '/media/layouts/categories/touch-symbolic.svg', name: _('Touch'), descriptionTitle: _("Touch Menu Style"), layoutStyle: TOUCH_MENU_STYLE, 
                 description: _("Touch layouts contain large menu elements that are well suited for touch based devices.")},
-        { thumbnail: '/media/layouts/categories/simple-symbolic.svg', name: _('Simple'), layoutStyle: SIMPLE_MENU_STYLE, 
+        { thumbnail: '/media/layouts/categories/simple-symbolic.svg', name: _('Simple'), descriptionTitle: _("Simple Menu Style"), layoutStyle: SIMPLE_MENU_STYLE, 
                 description: _("Simple layouts are designed for mouse based devices and contain simplistic menu elements.")},
-        { thumbnail: '/media/layouts/categories/launcher-symbolic.svg', name: _('Launcher'), layoutStyle: LAUNCHER_MENU_STYLE, 
+        { thumbnail: '/media/layouts/categories/launcher-symbolic.svg', name: _('Launcher'), descriptionTitle: _("Launcher Menu Style"), layoutStyle: LAUNCHER_MENU_STYLE, 
                 description: _("Launcher layouts are well suited for keyboard driven devices and provide the user with quick and simple menu elements.")},
-        { thumbnail: '/media/layouts/categories/alternative-symbolic.svg', name: _('Alternative'), layoutStyle: ALTERNATIVE_MENU_STYLE, 
+        { thumbnail: '/media/layouts/categories/alternative-symbolic.svg', name: _('Alternative'), descriptionTitle: _("Alternative Menu Style"), layoutStyle: ALTERNATIVE_MENU_STYLE, 
                 description: _("Alternative layouts have an unconventional style that provide a unique user experience.")}
     ]
 };

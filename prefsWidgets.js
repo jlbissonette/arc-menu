@@ -339,7 +339,7 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
         });
         this.box._grid.attach(this._image, 0, 0, 1, 1);
         let styleLabel = new Gtk.Label({
-            label: "<b>" + _(this.name) + " " + _("Menu Layouts") + "</b>",
+            label: "<b>" + _(layout.descriptionTitle) + "</b>",
             use_markup: true,
             hexpand: false,
             halign: Gtk.Align.START,
