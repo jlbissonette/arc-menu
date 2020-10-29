@@ -2361,6 +2361,7 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
             this._arrowIcon = new St.Icon({
                 icon_name: 'go-next-symbolic',
                 style_class: 'popup-menu-icon',
+                x_expand: true,
                 x_align: Clutter.ActorAlign.END,
                 icon_size: 12,
             });
@@ -2384,10 +2385,15 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
             });
             if(this._settings.get_boolean("disable-category-arrows"))
                 this.box.add_child(this._indicator);
-            else
+            else{
                 this.box.insert_child_at_index(this._indicator, this.box.get_n_children() - 1);
+                if(this._arrowIcon)
+                    this._arrowIcon.x_expand = false;
+            }
         }
         else if(this._indicator && this.box.contains(this._indicator)){
+            if(this._arrowIcon)
+                this._arrowIcon.x_expand = true;
             this.box.remove_child(this._indicator);
         }
     }
