@@ -65,7 +65,6 @@ var ListSearchResult = class Arc_Menu_ListSearchResult {
         
         this.label = new St.Label({ 
             text: this.metaInfo['name'],
-            x_expand: true,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER 
         });
@@ -81,7 +80,6 @@ var ListSearchResult = class Arc_Menu_ListSearchResult {
 
         let descriptionLabel = new St.Label({ 
             text: descriptionText,
-            x_expand: true,
             y_expand: false,
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER 
@@ -170,7 +168,6 @@ var AppSearchResult = class Arc_Menu_AppSearchResult {
         this.label = new St.Label({
             text: this._app ? this._app.get_name() : this.metaInfo['name'],
             y_expand: true,
-            x_expand: true,
             y_align: gridView ? Clutter.ActorAlign.CENTER : Clutter.ActorAlign.CENTER, 
             x_align: gridView ? Clutter.ActorAlign.CENTER : Clutter.ActorAlign.FILL
         });
@@ -235,7 +232,6 @@ var AppSearchResult = class Arc_Menu_AppSearchResult {
                 let descriptionLabel = new St.Label({ 
                     text: descriptionText,
                     x_align: Clutter.ActorAlign.START,
-                    x_expand: true,
                     style: "font-weight: lighter;"
                 });
                 if(descriptionText){
@@ -972,7 +968,6 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
                     text: this.description,
                     x_align: Clutter.ActorAlign.START,
                     y_align: Clutter.ActorAlign.CENTER,
-                    x_expand: true
                 });
 
                 if(this.description){
@@ -1001,7 +996,6 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
         }
         else{
             this.label.style = 'font-weight: bold;';
-            this.label.x_expand = true;
             this.actor.x_fill = true;
             this.actor.y_fill = false;
             this.actor.x_align = Clutter.ActorAlign.FILL;
@@ -1016,7 +1010,6 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
                 let descriptionLabel = new St.Label({ 
                     text: this.description,
                     x_align: Clutter.ActorAlign.START,
-                    x_expand: true
                 });
 
                 if(this.description){

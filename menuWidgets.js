@@ -1800,8 +1800,6 @@ var UserMenuItem = GObject.registerClass(class Arc_Menu_UserMenuItem extends Arc
         this.box.add_actor(this.iconBin);
         this._userLabel = new St.Label({
             text: GLib.get_real_name(),
-            x_expand: true,
-            x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.CENTER
         });
         this.box.add_actor(this._userLabel);
@@ -1905,6 +1903,7 @@ var FavoritesMenuItem = GObject.registerClass({
     _init(menuLayout, name, icon, command, isIconGrid = false) {
         super._init(menuLayout);
         this._menuLayout = menuLayout;
+        this._menuButton = menuLayout.menuButton;
         this._settings = this._menuLayout._settings;
         this._command = command;
         this._iconString = this._iconPath = icon;
@@ -1942,8 +1941,8 @@ var FavoritesMenuItem = GObject.registerClass({
         this.box.add_child(this._icon);
  
         this.label = new St.Label({
-            text: _(this._name), y_expand: true, x_expand: true,
-            x_align: Clutter.ActorAlign.START,
+            text: _(this._name), 
+            y_expand: true,
             y_align: Clutter.ActorAlign.CENTER
         });
         let layout = this._settings.get_enum('menu-layout'); 
@@ -2022,6 +2021,16 @@ var FavoritesMenuItem = GObject.registerClass({
     }
 
    _onDragBegin() {   
+        if(this._menuButton.tooltipShowingID){
+            GLib.source_remove(this._menuButton.tooltipShowingID);
+            this._menuButton.tooltipShowingID = null;
+            this._menuButton.tooltipShowing = false;
+        }
+        if(this.tooltip){
+            this.tooltip.hide();
+            this._menuButton.tooltipShowing = false;
+        }
+        
         if(this.contextMenu && this.contextMenu.isOpen)
             this.contextMenu.toggle();
 
@@ -2341,7 +2350,6 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
         this.label = new St.Label({
             text: this._name,
             y_expand: true,
-            x_expand: true,
             y_align: Clutter.ActorAlign.CENTER
         });
         this.box.add_child(this.label);
@@ -2464,7 +2472,6 @@ var SimpleMenuItem = GObject.registerClass(class Arc_Menu_SimpleMenuItem extends
         let categoryLabel = new St.Label({
             text: _(this._name),
             y_expand: true,
-            x_expand:true,
             y_align: Clutter.ActorAlign.CENTER
         });
         this.actor.add_child(categoryLabel);

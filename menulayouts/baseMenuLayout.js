@@ -690,6 +690,7 @@ var BaseLayout = class {
         let left = 0;
         let grid = differentGrid ? differentGrid : this.grid;
         let activeMenuItemSet = false;
+        let rtl = this.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
         for (let i = 0; i < apps.length; i++) {
             let app = apps[i];
             let item;
@@ -710,12 +711,21 @@ var BaseLayout = class {
             }
 
             if(shouldShow){
-                if(count % columns == 0){
+                if(!rtl && (count % columns == 0)){
                     top++;
                     left = 0;
                 }
+                else if(rtl && (left === 0)){
+                    top++;
+                    left = columns;
+                }
                 grid.layout_manager.attach(item, left, top, 1, 1);
-                left++;
+                if(!rtl){
+                    left++;
+                }
+                else if(rtl){
+                    left--;
+                }
                 count++;
     
                 if(!activeMenuItemSet && !differentGrid){
