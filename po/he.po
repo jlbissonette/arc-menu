@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-07 09:57-0400\n"
-"PO-Revision-Date: 2020-10-16 03:20+0300\n"
+"POT-Creation-Date: 2020-10-29 17:59-0400\n"
+"PO-Revision-Date: 2020-10-30 09:56+0200\n"
 "Last-Translator: Omer I.S.\n"
 "Language-Team: he\n"
 "Language: he\n"
@@ -19,386 +19,15 @@ msgstr ""
 "2 : 3);\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: menuWidgets.js:163
-msgid "Open Folder Location"
-msgstr "פתיחת מיקום תיקיה"
-
-#: menuWidgets.js:179
-msgid "Current Windows:"
-msgstr "החלונות הנוכחיים:"
-
-#: menuWidgets.js:197
-msgid "New Window"
-msgstr "חלון חדש"
-
-#: menuWidgets.js:207
-msgid "Launch using Dedicated Graphics Card"
-msgstr ""
-
-#: menuWidgets.js:252
-msgid "Delete Desktop Shortcut"
-msgstr "מחיקת קיצור בשולחן העבודה"
-
-#: menuWidgets.js:260
-msgid "Create Desktop Shortcut"
-msgstr "יצירת קיצור בשולחן העבודה"
-
-#: menuWidgets.js:274
-msgid "Remove from Favorites"
-msgstr "הסרה מהמועדפים"
-
-#: menuWidgets.js:280
-msgid "Add to Favorites"
-msgstr "הוספה למועדפים"
-
-#: menuWidgets.js:297 menuWidgets.js:346
-msgid "Unpin from ArcMenu"
-msgstr "הסרה מ־ArcMenu"
-
-#: menuWidgets.js:311
-msgid "Pin to ArcMenu"
-msgstr "הצמדה ל־ArcMenu"
-
-#: menuWidgets.js:324
-msgid "Show Details"
-msgstr "הצגת פרטים"
-
-#: menuWidgets.js:762 menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
-#: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155
-msgid "Activities Overview"
-msgstr "סקירת הפעילויות"
-
-#: menuWidgets.js:1094 menuWidgets.js:2311 menuWidgets.js:2434
-#: menuWidgets.js:2625 constants.js:66 menulayouts/tweaks/tweaks.js:934
-msgid "Frequent Apps"
-msgstr "יישומים תדירים"
-
-#: menuWidgets.js:1098 menuWidgets.js:2315 menuWidgets.js:2438
-#: menuWidgets.js:2629 menulayouts/tweaks/tweaks.js:445
-#: menulayouts/tweaks/tweaks.js:574
-msgid "Home Screen"
-msgstr "מסך הבית"
-
-#: menuWidgets.js:1103 menuWidgets.js:1513 menuWidgets.js:1607
-#: menuWidgets.js:2319 menuWidgets.js:2442 menuWidgets.js:2633 constants.js:67
-#: menulayouts/ubuntudash.js:54 menulayouts/ubuntudash.js:335
-#: menulayouts/raven.js:53 menulayouts/raven.js:219
-#: menulayouts/tweaks/tweaks.js:446 menulayouts/tweaks/tweaks.js:575
-#: menulayouts/tweaks/tweaks.js:903
-msgid "All Programs"
-msgstr "כל התכניות"
-
-#: menuWidgets.js:1107 menuWidgets.js:1260 menuWidgets.js:2323
-#: menuWidgets.js:2446 menuWidgets.js:2637 constants.js:65
-msgid "Favorites"
-msgstr "מועדפים"
-
-#: menuWidgets.js:1111 menuWidgets.js:1149 menuWidgets.js:2327
-#: menuWidgets.js:2386 menuWidgets.js:2450 menuWidgets.js:2641 constants.js:68
-#: menulayouts/plasma.js:136 menulayouts/ubuntudash.js:52
-#: menulayouts/ubuntudash.js:330 menulayouts/raven.js:51
-#: menulayouts/raven.js:214 menulayouts/tweaks/tweaks.js:932 prefs.js:42
-#: prefs.js:6041
-msgid "Pinned Apps"
-msgstr "יישומים מוצמדים"
-
-#: menuWidgets.js:1240 menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
-#: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155
-#: menulayouts/windows.js:218 menulayouts/mint.js:222
-msgid "Settings"
-msgstr "הגדרות"
-
-#: menuWidgets.js:1250 menuWidgets.js:1899 menulayouts/redmond.js:174
-#: menulayouts/plasma.js:180 menulayouts/ubuntudash.js:196
-#: menulayouts/raven.js:178 menulayouts/arcmenu.js:182
-#: menulayouts/tognee.js:155 prefs.js:334 prefs.js:440 prefs.js:612
-#: prefs.js:5979 menuButton.js:707
-msgid "ArcMenu Settings"
-msgstr "הגדרות ArcMenu"
-
-#: menuWidgets.js:1270 prefs.js:6043
-msgid "Categories"
-msgstr "קטגוריות"
-
-#: menuWidgets.js:1280
-msgid "Users"
-msgstr "משתמשים"
-
-#: menuWidgets.js:1338 menulayouts/ubuntudash.js:247 menulayouts/mint.js:233
-#: prefs.js:5321
-msgid "Power Off"
-msgstr "כיבוי"
-
-#: menuWidgets.js:1347 prefs.js:5304
-msgid "Restart"
-msgstr "הפעלה מחדש"
-
-#: menuWidgets.js:1356 menulayouts/plasma.js:387 menulayouts/ubuntudash.js:245
-#: menulayouts/mint.js:231 prefs.js:5287
-msgid "Log Out"
-msgstr "יציאה"
-
-#: menuWidgets.js:1365 menulayouts/plasma.js:393 prefs.js:5253
-msgid "Suspend"
-msgstr "השהיה"
-
-#: menuWidgets.js:1374 menulayouts/plasma.js:383 menulayouts/ubuntudash.js:246
-#: menulayouts/mint.js:232 prefs.js:5270
-msgid "Lock"
-msgstr "נעילה"
-
-#: menuWidgets.js:1557 prefs.js:2744
-msgid "Back"
-msgstr "חזרה"
-
-#: menuWidgets.js:1902 menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
-#: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155 menulayouts/mint.js:221
-msgid "Terminal"
-msgstr "מסוף"
-
-#: menuWidgets.js:2158
-msgid "New"
-msgstr "חדש"
-
-#: menuWidgets.js:2879 prefs.js:303
-msgid "Type to search…"
-msgstr "יש להקליד כדי לחפש…"
-
-#: menuWidgets.js:3055 menulayouts/plasma.js:141 prefs.js:6050
-msgid "Applications"
-msgstr "יישומים"
-
-#: menuWidgets.js:3155
-msgid "Show Applications"
-msgstr "הצגת יישומים"
-
-#: menuWidgets.js:3167 constants.js:290 prefs.js:5819
-msgid "ArcMenu"
-msgstr "ArcMenu"
-
-#: menuWidgets.js:3382
-msgid "Add world clocks…"
-msgstr "הוספת שעונים עולמיים…"
-
-#: menuWidgets.js:3383
-msgid "World Clocks"
-msgstr "שעונים עולמיים"
-
-#: menuWidgets.js:3491
-msgid "Weather"
-msgstr "מזג האוויר"
-
-#: menuWidgets.js:3611
-msgid "Select a location…"
-msgstr "בחירת מיקום…"
-
-#: menuWidgets.js:3624
-msgid "Loading…"
-msgstr "בטעינה…"
-
-#: menuWidgets.js:3634
-#, fuzzy
-msgid "Go online for weather information"
-msgstr "מידע על מזג האוויר אינו זמין כרגע"
-
-#: menuWidgets.js:3636
-msgid "Weather information is currently unavailable"
-msgstr "מידע על מזג האוויר אינו זמין כרגע"
-
-#: placeDisplay.js:135
-#, javascript-format
-msgid "Failed to launch “%s”"
-msgstr "הפעלת \"%s\" נכשלה"
-
-#: placeDisplay.js:150
-#, fuzzy, javascript-format
-msgid "Failed to mount volume for “%s”"
-msgstr "שליפת הכונן \"%s\" נכשלה:"
-
-#: placeDisplay.js:234 placeDisplay.js:258 menulayouts/plasma.js:145
-#: menulayouts/plasma.js:190 menulayouts/ubuntudash.js:242
-#: menulayouts/baseMenuLayout.js:348 menulayouts/tognee.js:247
-msgid "Computer"
-msgstr "מחשב"
-
-#: placeDisplay.js:323
-#, javascript-format
-msgid "Ejecting drive “%s” failed:"
-msgstr "שליפת הכונן \"%s\" נכשלה:"
-
-#: placeDisplay.js:449 menulayouts/plasma.js:190 menulayouts/plasma.js:338
-#: menulayouts/ubuntudash.js:234 menulayouts/baseMenuLayout.js:348
-#: menulayouts/baseMenuLayout.js:355 menulayouts/baseMenuLayout.js:415
-#: menulayouts/brisk.js:189 menulayouts/tognee.js:247 menulayouts/tognee.js:254
-msgid "Home"
-msgstr "בית"
-
-#: placeDisplay.js:719 menulayouts/baseMenuLayout.js:367
-#: menulayouts/baseMenuLayout.js:429 menulayouts/brisk.js:212
-msgid "Trash"
-msgstr "אשפה"
-
-#: placeDisplay.js:729 placeDisplay.js:735
-msgid "Empty Trash"
-msgstr "פינוי האשפה"
-
-#: constants.js:291
-msgid "Brisk Menu Style"
-msgstr "סגנון תפריט Brisk"
-
-#: constants.js:292
-msgid "Whisker Menu Style"
-msgstr "סגנון תפריט Whisker"
-
-#: constants.js:293
-msgid "GNOME Menu Style"
-msgstr "סגנון תפריט GNOME"
-
-#: constants.js:294
-msgid "Mint Menu Style"
-msgstr "סגנון תפריט Mint"
-
-#: constants.js:295
-msgid "Budgie Style"
-msgstr "סגנון Budgie"
-
-#: constants.js:298
-msgid "Ubuntu Dash Style"
-msgstr "סגנון מעגן Ubuntu"
-
-#: constants.js:299
-msgid "Plasma Style"
-msgstr "סגנון Plasma"
-
-#: constants.js:300
-#, fuzzy
-msgid "tognee Menu"
-msgstr "גובה התפריט"
-
-#: constants.js:301
-msgid "Windows 10 Style"
-msgstr "סגנון Windows 10"
-
-#: constants.js:302
-msgid "Redmond Menu Style"
-msgstr "סגנון תפריט Redmond"
-
-#: constants.js:305
-msgid "Elementary Menu Style"
-msgstr "סגנון תפריט Elementary"
-
-#: constants.js:306
-msgid "Chromebook Style"
-msgstr "סגנון Chromebook"
-
-#: constants.js:309
-msgid "KRunner Style"
-msgstr "סגנון KRunner"
-
-#: constants.js:310
-msgid "GNOME Dash Style"
-msgstr "סגנון מעגן GNOME"
-
-#: constants.js:313
-msgid "Simple Menu Style"
-msgstr "סגנון תפריט פשוט"
-
-#: constants.js:314
-msgid "Simple Menu 2 Style"
-msgstr "סגנון תפריט פשוט 2"
-
-#: constants.js:317
-msgid "Raven Menu Style"
-msgstr "סגנון תפריט Raven"
-
-#: constants.js:324
-msgid "Traditional"
-msgstr "מסורתיות"
-
-#: constants.js:325
-msgid ""
-"Traditional layouts use a familiar style and have a traditional user "
-"experience."
-msgstr ""
-
-#: constants.js:326
-msgid "Modern"
-msgstr "מודרניות"
-
-#: constants.js:327
-msgid ""
-"Modern layouts use a style and UX based approach with a focus on design and "
-"functionality."
-msgstr ""
-
-#: constants.js:328
-msgid "Touch"
-msgstr "למסכי מגע"
-
-#: constants.js:329
-msgid ""
-"Touch layouts contain large menu elements that are well suited for touch "
-"based devices."
-msgstr ""
-
-#: constants.js:330
-msgid "Simple"
-msgstr "פשוטות"
-
-#: constants.js:331
-msgid ""
-"Simple layouts are designed for mouse based devices and contain simplistic "
-"menu elements."
-msgstr ""
-
-#: constants.js:332
-msgid "Launcher"
-msgstr "מפעיל"
-
-#: constants.js:333
-msgid ""
-"Launcher layouts are well suited for keyboard driven devices and provide the "
-"user with quick and simple menu elements."
-msgstr ""
-
-#: constants.js:334
-msgid "Alternative"
-msgstr "חלופיות"
-
-#: constants.js:335
-msgid ""
-"Alternative layouts have an unconventional style that provide a unique user "
-"experience."
-msgstr ""
-
-#: prefsWidgets.js:321
-msgid "Included Layouts"
-msgstr "פריסות כלולות"
-
-#: prefsWidgets.js:342 prefs.js:2704
-msgid "Menu Layouts"
-msgstr "פריסות תפריט"
-
-#: prefsWidgets.js:368
-msgid "Browse all"
-msgstr "עיון בכולן"
-
-#: prefsWidgets.js:374
-msgid "Information"
-msgstr "מידע"
-
-#: search.js:870
+#: search.js:860
 msgid "Searching..."
 msgstr "בחיפוש…"
 
-#: search.js:872
+#: search.js:862
 msgid "No results."
 msgstr "אין תוצאות."
 
-#: search.js:1052
+#: search.js:1039
 #, javascript-format
 msgid "%d more"
 msgid_plural "%d more"
@@ -407,287 +36,16 @@ msgstr[1] "עוד %d"
 msgstr[2] "עוד %d"
 msgstr[3] "עוד %d"
 
-#: menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/ubuntudash.js:240
-#: menulayouts/brisk.js:205 menulayouts/raven.js:178 menulayouts/arcmenu.js:182
-#: menulayouts/tognee.js:155 menulayouts/mint.js:226
-msgid "Software"
-msgstr "תכנה"
+#: prefs.js:42 prefs.js:6051 menuWidgets.js:1111 menuWidgets.js:1149
+#: menuWidgets.js:2340 menuWidgets.js:2398 menuWidgets.js:2462
+#: menuWidgets.js:2652 menulayouts/raven.js:51 menulayouts/raven.js:214
+#: menulayouts/ubuntudash.js:52 menulayouts/ubuntudash.js:330
+#: menulayouts/windows.js:504 menulayouts/tweaks/tweaks.js:953
+#: menulayouts/plasma.js:136 constants.js:68
+msgid "Pinned Apps"
+msgstr "יישומים מוצמדים"
 
-#: menulayouts/redmond.js:174 menulayouts/plasma.js:180
-#: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
-#: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155 prefs.js:2406
-#: prefs.js:2424 prefs.js:2454
-msgid "Tweaks"
-msgstr "התאמות"
-
-#: menulayouts/plasma.js:149
-msgid "Leave"
-msgstr "יציאה"
-
-#: menulayouts/plasma.js:190 menulayouts/ubuntudash.js:235
-#: menulayouts/baseMenuLayout.js:348 menulayouts/tognee.js:247
-#: menulayouts/windows.js:70 menulayouts/windows.js:213 menulayouts/mint.js:228
-msgid "Documents"
-msgstr "מסמכים"
-
-#: menulayouts/plasma.js:190 menulayouts/ubuntudash.js:236
-#: menulayouts/baseMenuLayout.js:348 menulayouts/tognee.js:247
-msgid "Downloads"
-msgstr "הורדות"
-
-#: menulayouts/plasma.js:190 menulayouts/baseMenuLayout.js:348
-#: menulayouts/tognee.js:247
-msgid "Music"
-msgstr "מוזיקה"
-
-#: menulayouts/plasma.js:190 menulayouts/baseMenuLayout.js:348
-#: menulayouts/tognee.js:247
-msgid "Pictures"
-msgstr "תמונות"
-
-#: menulayouts/plasma.js:190 menulayouts/baseMenuLayout.js:348
-#: menulayouts/tognee.js:247
-msgid "Videos"
-msgstr "וידאו"
-
-#: menulayouts/plasma.js:190 menulayouts/plasma.js:308
-#: menulayouts/plasma.js:346 menulayouts/baseMenuLayout.js:348
-#: menulayouts/baseMenuLayout.js:363 menulayouts/baseMenuLayout.js:424
-#: menulayouts/brisk.js:198 menulayouts/tognee.js:247 menulayouts/tognee.js:263
-msgid "Network"
-msgstr "רשת"
-
-#: menulayouts/plasma.js:277
-msgid "Application Shortcuts"
-msgstr "קיצורים ליישומים"
-
-#: menulayouts/plasma.js:281
-msgid "Places"
-msgstr "מקומות"
-
-#: menulayouts/plasma.js:292 prefs.js:5383
-msgid "Bookmarks"
-msgstr "סימניות"
-
-#: menulayouts/plasma.js:300
-msgid "Devices"
-msgstr "התקנים"
-
-#: menulayouts/plasma.js:381
-msgid "Session"
-msgstr "הפעלה"
-
-#: menulayouts/plasma.js:390
-msgid "System"
-msgstr "מערכת"
-
-#: menulayouts/plasma.js:397
-msgid "Restart..."
-msgstr "הפעלה מחדש..."
-
-#: menulayouts/plasma.js:401
-msgid "Power Off..."
-msgstr "כיבוי..."
-
-#: menulayouts/ubuntudash.js:244 menulayouts/mint.js:230
-msgid "Files"
-msgstr "קבצים"
-
-#: menulayouts/ubuntudash.js:439 menulayouts/raven.js:314 prefs.js:6042
-msgid "Shortcuts"
-msgstr "קיצורים"
-
-#: menulayouts/tweaks/tweaks.js:93
-msgid "Category Activation"
-msgstr "הפעלת קטגוריות"
-
-#: menulayouts/tweaks/tweaks.js:99
-msgid "Mouse Click"
-msgstr "לחיצה עם העכבר"
-
-#: menulayouts/tweaks/tweaks.js:100
-#, fuzzy
-msgid "Mouse Hover"
-msgstr "לחיצה עם העכבר"
-
-#: menulayouts/tweaks/tweaks.js:119
-msgid "Avatar Icon Shape"
-msgstr "צורת סמל תמונת המשתמש"
-
-#: menulayouts/tweaks/tweaks.js:124
-msgid "Circular"
-msgstr "בצורת עיגול"
-
-#: menulayouts/tweaks/tweaks.js:125
-msgid "Square"
-msgstr "בצורת ריבוע"
-
-#: menulayouts/tweaks/tweaks.js:140 menulayouts/tweaks/tweaks.js:197
-msgid "Searchbar Location"
-msgstr "מיקום סרגל החיפוש"
-
-#: menulayouts/tweaks/tweaks.js:146 menulayouts/tweaks/tweaks.js:203
-msgid "Bottom"
-msgstr "תחתית"
-
-#: menulayouts/tweaks/tweaks.js:147 menulayouts/tweaks/tweaks.js:204
-#: menulayouts/tweaks/tweaks.js:396
-msgid "Top"
-msgstr "חלק עליון"
-
-#: menulayouts/tweaks/tweaks.js:160
-#, fuzzy
-msgid "Flip Layout Horizontally"
-msgstr "פריסת התפריט הנוכחית"
-
-#: menulayouts/tweaks/tweaks.js:177
-msgid "Disable User Avatar"
-msgstr "השבתת תמונת המשתמש"
-
-#: menulayouts/tweaks/tweaks.js:216
-msgid "Activate on Hover"
-msgstr ""
-
-#: menulayouts/tweaks/tweaks.js:232
-msgid "Show Application Descriptions"
-msgstr "הצגת תיאורי יישומים"
-
-#: menulayouts/tweaks/tweaks.js:248
-#, fuzzy
-msgid "Selected Button Border Color"
-msgstr "צבע גבול"
-
-#: menulayouts/tweaks/tweaks.js:266
-#, fuzzy
-msgid "Selected Button Background Color"
-msgstr "צבע הרקע לתפריט"
-
-#: menulayouts/tweaks/tweaks.js:285 prefs.js:2065 prefs.js:3135 prefs.js:3461
-#: prefs.js:3553 prefs.js:4556 prefs.js:4774 prefs.js:5056
-msgid "Restore Defaults"
-msgstr "שחזור לברירת המחדל"
-
-#: menulayouts/tweaks/tweaks.js:323 menulayouts/tweaks/tweaks.js:490
-#: menulayouts/tweaks/tweaks.js:631
-msgid "Save"
-msgstr "שמירה"
-
-#: menulayouts/tweaks/tweaks.js:344
-msgid "Brisk Menu Shortcuts"
-msgstr "קיצורי תפריט Brisk"
-
-#: menulayouts/tweaks/tweaks.js:372
-#, fuzzy
-msgid "Enable Activities Overview Shortcut"
-msgstr "סקירת הפעילויות"
-
-#: menulayouts/tweaks/tweaks.js:391
-#, fuzzy
-msgid "KRunner Position"
-msgstr "מיקום \\ גודל"
-
-#: menulayouts/tweaks/tweaks.js:397
-msgid "Centered"
-msgstr "במרכז"
-
-#: menulayouts/tweaks/tweaks.js:408 menulayouts/tweaks/tweaks.js:590
-msgid "Show Extra Large Icons with App Descriptions"
-msgstr ""
-
-#: menulayouts/tweaks/tweaks.js:429 prefs.js:813 prefs.js:6026
-msgid "General"
-msgstr "כללי"
-
-#: menulayouts/tweaks/tweaks.js:432
-msgid "Buttons"
-msgstr "כפתורים"
-
-#: menulayouts/tweaks/tweaks.js:440 menulayouts/tweaks/tweaks.js:569
-#: menulayouts/tweaks/tweaks.js:893 menulayouts/tweaks/tweaks.js:923
-msgid "Default Screen"
-msgstr "מסך ברירת המחדל"
-
-#: menulayouts/tweaks/tweaks.js:461 prefs.js:3280
-msgid "Disable Menu Arrow"
-msgstr "השבתת חיצי התפריט"
-
-#: menulayouts/tweaks/tweaks.js:469 prefs.js:3288
-msgid "Disable current theme menu arrow pointer"
-msgstr ""
-
-#: menulayouts/tweaks/tweaks.js:511
-#, fuzzy
-msgid "Ubuntu Dash Buttons"
-msgstr "סגנון מעגן Ubuntu"
-
-#: menulayouts/tweaks/tweaks.js:520
-#, fuzzy
-msgid "Button Separator Position"
-msgstr "מיקום \\ גודל"
-
-#: menulayouts/tweaks/tweaks.js:529 menulayouts/tweaks/tweaks.js:664
-#, fuzzy
-msgid "Separator Position"
-msgstr "מיקום \\ גודל"
-
-#: menulayouts/tweaks/tweaks.js:548 menulayouts/tweaks/tweaks.js:683
-msgid "Adjust the position of the separator in the button panel"
-msgstr ""
-
-#: menulayouts/tweaks/tweaks.js:619
-msgid "Mint Menu Shortcuts"
-msgstr "קיצורי תפריט Mint"
-
-#: menulayouts/tweaks/tweaks.js:655
-#, fuzzy
-msgid "Shortcut Separator Position"
-msgstr "מיקום \\ גודל"
-
-#: menulayouts/tweaks/tweaks.js:746
-msgid "Change"
-msgstr "שינוי"
-
-#: menulayouts/tweaks/tweaks.js:777 prefs.js:202 prefs.js:4862 prefs.js:5145
-msgid "Modify"
-msgstr "שינוי"
-
-#: menulayouts/tweaks/tweaks.js:782 prefs.js:207 prefs.js:3633 prefs.js:4869
-#: prefs.js:5150
-msgid "Move Up"
-msgstr "העברה למעלה"
-
-#: menulayouts/tweaks/tweaks.js:787 prefs.js:212 prefs.js:3638 prefs.js:4874
-#: prefs.js:5155
-msgid "Move Down"
-msgstr "העברה למטה"
-
-#: menulayouts/tweaks/tweaks.js:879
-msgid "Nothing Yet!"
-msgstr "כלום עדיין!"
-
-#: menulayouts/tweaks/tweaks.js:900
-msgid "Choose the default screen for tognee Layout"
-msgstr ""
-
-#: menulayouts/tweaks/tweaks.js:902 menulayouts/tweaks/tweaks.js:933
-msgid "Categories List"
-msgstr "רשימת קטגוריות"
-
-#: menulayouts/tweaks/tweaks.js:930
-#, fuzzy
-msgid "Choose the default screen for ArcMenu"
-msgstr "נא לבחור היכן למקם את ArcMenu"
-
-#: menulayouts/tweaks/tweaks.js:966
-msgid "Enable Weather Widget"
-msgstr "הפעלת יישומון מזג האוויר"
-
-#: menulayouts/tweaks/tweaks.js:984
-msgid "Enable Clock Widget"
-msgstr "הפעלת יישומון השעון"
-
-#: prefs.js:60 prefs.js:4985
+#: prefs.js:60 prefs.js:4995
 msgid "Add More Apps"
 msgstr "הוספת יישומים נוספים"
 
@@ -695,7 +53,7 @@ msgstr "הוספת יישומים נוספים"
 msgid "Browse a list of all applications to add to your Pinned Apps list."
 msgstr ""
 
-#: prefs.js:101 prefs.js:4741 prefs.js:5024
+#: prefs.js:101 prefs.js:4751 prefs.js:5034
 msgid "Add Custom Shortcut"
 msgstr "הוספת קיצור מותאם אישית"
 
@@ -703,13 +61,27 @@ msgstr "הוספת קיצור מותאם אישית"
 msgid "Create a custom shortcut to add to your Pinned Apps list."
 msgstr ""
 
-#: prefs.js:133 prefs.js:774 prefs.js:1455 prefs.js:1637 prefs.js:2729
-#: prefs.js:3166 prefs.js:3491 prefs.js:3569 prefs.js:3887 prefs.js:4605
-#: prefs.js:4790 prefs.js:5072
+#: prefs.js:133 prefs.js:774 prefs.js:1455 prefs.js:1637 prefs.js:2739
+#: prefs.js:3176 prefs.js:3501 prefs.js:3579 prefs.js:3897 prefs.js:4615
+#: prefs.js:4800 prefs.js:5082
 msgid "Apply"
 msgstr "החלה"
 
-#: prefs.js:217 prefs.js:4879 prefs.js:5160
+#: prefs.js:202 prefs.js:4872 prefs.js:5155 menulayouts/tweaks/tweaks.js:798
+msgid "Modify"
+msgstr "שינוי"
+
+#: prefs.js:207 prefs.js:3643 prefs.js:4879 prefs.js:5160
+#: menulayouts/tweaks/tweaks.js:803
+msgid "Move Up"
+msgstr "העברה למעלה"
+
+#: prefs.js:212 prefs.js:3648 prefs.js:4884 prefs.js:5165
+#: menulayouts/tweaks/tweaks.js:808
+msgid "Move Down"
+msgstr "העברה למטה"
+
+#: prefs.js:217 prefs.js:4889 prefs.js:5170
 msgid "Delete"
 msgstr "מחיקה"
 
@@ -718,18 +90,28 @@ msgid "Add to your Pinned Apps"
 msgstr "הוספה ליישומים המוצמדים שלך"
 
 #: prefs.js:291
-#, fuzzy
 msgid "Change Selected Pinned App"
-msgstr "עריכת יישום מוצמד"
+msgstr "שינוי היישום המוצמד שנבחר"
 
 #: prefs.js:293
 msgid "Select Application Shortcuts"
 msgstr "בחירת קיצורים ליישומים"
 
 #: prefs.js:295
-#, fuzzy
 msgid "Select Directory Shortcuts"
-msgstr "בחירת קיצורים ליישומים"
+msgstr "בחירת קיצורים לתיקיות"
+
+#: prefs.js:303 menuWidgets.js:2897
+msgid "Type to search…"
+msgstr "יש להקליד כדי לחפש…"
+
+#: prefs.js:334 prefs.js:440 prefs.js:612 prefs.js:5989 menuButton.js:710
+#: menuWidgets.js:1250 menuWidgets.js:1917 menulayouts/tognee.js:155
+#: menulayouts/raven.js:178 menulayouts/ubuntudash.js:196
+#: menulayouts/windows.js:146 menulayouts/redmond.js:174
+#: menulayouts/arcmenu.js:182 menulayouts/plasma.js:180
+msgid "ArcMenu Settings"
+msgstr "הגדרות ArcMenu"
 
 #: prefs.js:363 prefs.js:774
 msgid "Add"
@@ -791,10 +173,13 @@ msgstr "פקודת מסוף:"
 msgid "Shortcut Path:"
 msgstr "נתיב הקיצור:"
 
+#: prefs.js:813 prefs.js:6036 menulayouts/tweaks/tweaks.js:450
+msgid "General"
+msgstr "כללי"
+
 #: prefs.js:817
-#, fuzzy
 msgid "Panel and Dock Options"
-msgstr "אפשרויות מקש חם"
+msgstr "אפשרויות לוח ומעגן"
 
 #: prefs.js:833
 msgid "Activities Hot Corner Options"
@@ -813,9 +198,8 @@ msgid "Override the default behavoir of the Activities Hot Corner"
 msgstr ""
 
 #: prefs.js:883
-#, fuzzy
 msgid "Hotkey activation"
-msgstr "הפעלת קטגוריות"
+msgstr "הפעלת מקש חם"
 
 #: prefs.js:890
 msgid "Choose a method for the hotkey activation"
@@ -834,9 +218,8 @@ msgid "Hotkey Options"
 msgstr "אפשרויות מקש חם"
 
 #: prefs.js:919
-#, fuzzy
 msgid "Choose a Hotkey for ArcMenu"
-msgstr "נא לבחור היכן למקם את ArcMenu"
+msgstr "נא לבחור מקש חם מותאם אישית ל־ArcMenu"
 
 #: prefs.js:928
 msgid "Left Super Key"
@@ -859,9 +242,8 @@ msgid "Custom Hotkey"
 msgstr "מקש חם מותאם אישית"
 
 #: prefs.js:948
-#, fuzzy
 msgid "Set a custom hotkey for ArcMenu"
-msgstr "מקש חם מותאם אישית"
+msgstr "הגדרת מקש חם בהתאמה אישית עבור ArcMenu"
 
 #: prefs.js:951
 msgid "None"
@@ -869,29 +251,27 @@ msgstr "כלום"
 
 #: prefs.js:956
 msgid "Clear ArcMenu hotkey, use GNOME default"
-msgstr ""
+msgstr "ניקוי המקש החם של ArcMenu, שימוש בברירת המחדל של GNOME"
 
 #: prefs.js:1018
 msgid "Current Hotkey"
 msgstr "המקש החם הנוכחי"
 
 #: prefs.js:1027
-#, fuzzy
 msgid "Current custom hotkey"
-msgstr "מקש חם מותאם אישית"
+msgstr "המקש החם הנוכחי בהתאמה אישית"
 
 #: prefs.js:1032
-#, fuzzy
 msgid "Modify Hotkey"
-msgstr "שינוי"
+msgstr "שינוי המקש החם"
 
 #: prefs.js:1035
 msgid "Create your own hotkey combination for ArcMenu"
-msgstr ""
+msgstr "יצירת צירוף מקשים חמים משלך ל־ArcMenu"
 
 #: prefs.js:1069
 msgid "Display ArcMenu On"
-msgstr "הצגת ArcMenu מופעלת"
+msgstr "הצגת ArcMenu בתוך"
 
 #: prefs.js:1076
 msgid "Choose where to place ArcMenu"
@@ -919,41 +299,36 @@ msgid "Disable Activities Button"
 msgstr "השבתת כפתור הפעילויות"
 
 #: prefs.js:1143
-#, fuzzy
 msgid "Dash to Dock extension not running!"
-msgstr "הגדרות Dash to Dock"
+msgstr "הרחבת Dash to Dock לא מופעלת!"
 
 #: prefs.js:1143
 msgid "Enable Dash to Dock for this feature to work."
-msgstr ""
+msgstr "יש להפעיל את Dash to Dock כדי שתכונה זו תעבוד."
 
 #: prefs.js:1151
-#, fuzzy
 msgid "Disable Activities Button in panel"
-msgstr "השבתת כפתור הפעילויות"
+msgstr "השבתת כפתור הפעילויות בלוח"
 
 #: prefs.js:1180
-#, fuzzy
 msgid "Dash to Panel currently enabled!"
-msgstr "הגדרות Dash to Panel"
+msgstr "הרחבת Dash to Panel מופעלת כעת!"
 
 #: prefs.js:1180
 msgid "Disable Dash to Panel for this feature to work."
-msgstr ""
+msgstr "יש להשבית את Dash to Panel כדי שתכונה זו תעבוד."
 
 #: prefs.js:1181
-#, fuzzy
 msgid "Dash to Panel extension not running!"
-msgstr "הגדרות Dash to Panel"
+msgstr "הרחבת Dash to Panel לא מופעלת!"
 
 #: prefs.js:1181
 msgid "Enable Dash to Panel for this feature to work."
-msgstr ""
+msgstr "יש להפעיל את Dash to Panel כדי שתכונה זו תעבוד."
 
 #: prefs.js:1202
-#, fuzzy
 msgid "Position in Dash to Panel"
-msgstr "הגדרות Dash to Panel"
+msgstr "מיקום ב־Dash to Panel"
 
 #: prefs.js:1202
 msgid "Position in Main Panel"
@@ -1006,7 +381,7 @@ msgstr ""
 
 #: prefs.js:1288 prefs.js:1296
 msgid "Display ArcMenu on all monitors"
-msgstr "הצגת ArcMenu בכול הצגים"
+msgstr "הצגת ArcMenu בכל הצגים"
 
 #: prefs.js:1352
 msgid "Activities Hot Corner Action"
@@ -1025,9 +400,8 @@ msgid "Disabled"
 msgstr "מושבת"
 
 #: prefs.js:1363
-#, fuzzy
 msgid "Toggle ArcMenu"
-msgstr "ArcMenu"
+msgstr "הפעלת\\כיבוי Toggle"
 
 #: prefs.js:1364
 msgid "Custom"
@@ -1042,9 +416,8 @@ msgid "Choose from a list of preset commands or use your own terminal command"
 msgstr ""
 
 #: prefs.js:1380
-#, fuzzy
 msgid "Preset commands"
-msgstr "שמירה בתור מערך"
+msgstr "פקודות מערכים"
 
 #: prefs.js:1386
 msgid "Choose from a list of preset Activities Hot Corner commands"
@@ -1091,9 +464,8 @@ msgid "Apply changes and set new hot corner action"
 msgstr ""
 
 #: prefs.js:1520
-#, fuzzy
 msgid "Set Custom Hotkey"
-msgstr "מקש חם מותאם אישית"
+msgstr "הגדרת מקש חם בהתאמה אישית"
 
 #: prefs.js:1529
 msgid "Press a key"
@@ -1148,19 +520,16 @@ msgid "Hidden"
 msgstr "מוסתר"
 
 #: prefs.js:1744
-#, fuzzy
 msgid "Show Arrow"
-msgstr "השבתת חיצי התפריט"
+msgstr "הצגת חץ"
 
 #: prefs.js:1784
-#, fuzzy
 msgid "Restore Activities Button"
-msgstr "השבתת כפתור הפעילויות"
+msgstr "שחזור כפתור הפעילויות"
 
 #: prefs.js:1792
-#, fuzzy
 msgid "Restore Activities Button in panel"
-msgstr "השבתת כפתור הפעילויות"
+msgstr ""
 
 #: prefs.js:1804
 msgid "Icon Appearance"
@@ -1179,9 +548,8 @@ msgid "Icon Size"
 msgstr "גודל סמל"
 
 #: prefs.js:1881
-#, fuzzy
 msgid "Icon Padding"
-msgstr "סמל:"
+msgstr ""
 
 #: prefs.js:1912
 #, fuzzy
@@ -1203,18 +571,16 @@ msgid ""
 msgstr ""
 
 #: prefs.js:1956
-#, fuzzy
 msgid "Hover Color"
-msgstr "צבע"
+msgstr ""
 
 #: prefs.js:1973
 msgid "Change the hover color of the Menu Button"
 msgstr ""
 
 #: prefs.js:1990
-#, fuzzy
 msgid "Active Color"
-msgstr "צבע"
+msgstr "צבע פעיל"
 
 #: prefs.js:2007
 msgid "Change the active color of the Menu Button"
@@ -1223,21 +589,25 @@ msgstr ""
 #: prefs.js:2024
 #, fuzzy
 msgid "Hover Background Color"
-msgstr "צבע רקע"
+msgstr "צבע הרקע לתפריט"
 
 #: prefs.js:2044
 #, fuzzy
 msgid "Active Background Color"
-msgstr "צבע רקע"
+msgstr "צבע הרקע לתפריט"
+
+#: prefs.js:2065 prefs.js:3145 prefs.js:3471 prefs.js:3563 prefs.js:4566
+#: prefs.js:4784 prefs.js:5066 menulayouts/tweaks/tweaks.js:306
+msgid "Restore Defaults"
+msgstr "שחזור לברירת המחדל"
 
 #: prefs.js:2126 prefs.js:2232
 msgid "ArcMenu Icons"
 msgstr "סמלי ArcMenu"
 
 #: prefs.js:2202
-#, fuzzy
 msgid "Browse for a Custom Icon"
-msgstr "סמל מותאם אישית"
+msgstr "טעינת סמל מותאם אישית"
 
 #: prefs.js:2211
 msgid "Select an Icon"
@@ -1252,9 +622,8 @@ msgid "Custom Icon"
 msgstr "סמל מותאם אישית"
 
 #: prefs.js:2291
-#, fuzzy
 msgid "Legal disclaimer for Distro Icons..."
-msgstr "סמלי הפצות"
+msgstr ""
 
 #: prefs.js:2369
 msgid "Current Menu Layout"
@@ -1269,353 +638,380 @@ msgstr "בחירת פריסה חדשה"
 msgid "Tweaks for the current menu layout"
 msgstr "פריסת התפריט הנוכחית"
 
-#: prefs.js:2528
-#, fuzzy
-msgid "Enable Custom Menu Theme"
-msgstr "מערכי ערכות נושא לתפריט"
-
 #: prefs.js:2538
-#, fuzzy
+msgid "Enable Custom Menu Theme"
+msgstr "לאפשר ערכות נושא מותאמות אישית"
+
+#: prefs.js:2548
 msgid "Override Menu Theme"
-msgstr "מערכי ערכות נושא לתפריט"
+msgstr "להתעלות מעל ערכת הנושא של התפריט"
 
-#: prefs.js:2546
+#: prefs.js:2556
 msgid "Override the ArcMenu extension theme"
-msgstr ""
+msgstr "להתעלות מעל ערכת הנושא של הרחבה"
 
-#: prefs.js:2819
+#: prefs.js:2714
+msgid "Menu Layouts"
+msgstr "פריסות תפריט"
+
+#: prefs.js:2754 menuWidgets.js:1581
+msgid "Back"
+msgstr "חזרה"
+
+#: prefs.js:2829
 msgid "Menu Height"
 msgstr "גובה התפריט"
 
-#: prefs.js:2833
+#: prefs.js:2843
 msgid "Adjust the menu height"
 msgstr "התאמת גובה התפריט"
 
-#: prefs.js:2833 prefs.js:2881 prefs.js:2927 prefs.js:2975 prefs.js:2997
-#: prefs.js:3046 prefs.js:3240
+#: prefs.js:2843 prefs.js:2891 prefs.js:2937 prefs.js:2985 prefs.js:3007
+#: prefs.js:3056 prefs.js:3250
 #, fuzzy
 msgid "Certain menu layouts only"
 msgstr "פריסות תפריט"
 
-#: prefs.js:2873
+#: prefs.js:2883
 #, fuzzy
 msgid "Left-Panel Width"
 msgstr "ימין"
 
-#: prefs.js:2881
+#: prefs.js:2891
 msgid "Adjust the left-panel width"
 msgstr ""
 
-#: prefs.js:2919
-#, fuzzy
+#: prefs.js:2929
 msgid "Right-Panel Width"
-msgstr "שמאל"
+msgstr "רוחב הלוח הימני"
 
-#: prefs.js:2927
+#: prefs.js:2937
 msgid "Adjust the right-panel width"
 msgstr ""
 
-#: prefs.js:2967
-#, fuzzy
+#: prefs.js:2977
 msgid "Large Application Icons"
-msgstr "קיצורים ליישומים"
+msgstr "סמלי יישומים גדולים"
 
-#: prefs.js:2975
+#: prefs.js:2985
 msgid "Enable large application icons"
-msgstr ""
+msgstr "הפעלת סמלי יישומים גדולים"
 
-#: prefs.js:2989
-#, fuzzy
+#: prefs.js:2999
 msgid "Category Sub Menus"
-msgstr "הפעלת קטגוריות"
+msgstr "תפריטי תת־קטגוריות"
 
-#: prefs.js:2997
+#: prefs.js:3007
 msgid "Show nested menus in categories"
 msgstr ""
 
-#: prefs.js:3013
-#, fuzzy
+#: prefs.js:3023
 msgid "Disable Tooltips"
-msgstr "השבתת חיצי התפריט"
+msgstr ""
 
-#: prefs.js:3021
-#, fuzzy
+#: prefs.js:3031
 msgid "Disable all tooltips in ArcMenu"
-msgstr "הצגת ArcMenu בכול הצגים"
+msgstr ""
 
-#: prefs.js:3038 prefs.js:4512
-#, fuzzy
+#: prefs.js:3048 prefs.js:4522
 msgid "Enable Vertical Separator"
-msgstr "הפעלת יישומון מזג האוויר"
+msgstr ""
 
-#: prefs.js:3046
-#, fuzzy
+#: prefs.js:3056
 msgid "Enable a Vertical Separator"
-msgstr "הפעלת יישומון מזג האוויר"
+msgstr ""
 
-#: prefs.js:3060 prefs.js:4533
+#: prefs.js:3070 prefs.js:4543
 #, fuzzy
 msgid "Separator Color"
 msgstr "צבע"
 
-#: prefs.js:3068
+#: prefs.js:3078
 msgid "Change the color of all separators"
 msgstr ""
 
-#: prefs.js:3086 prefs.js:3094
+#: prefs.js:3096 prefs.js:3104
 msgid "Disable Recently Installed Apps Indicator"
 msgstr ""
 
-#: prefs.js:3109
+#: prefs.js:3119
 msgid "Clear all Applications Marked \"New\""
-msgstr ""
+msgstr "ניקוי כל היישומים עם הסימון \"חדש\""
 
-#: prefs.js:3117
+#: prefs.js:3127
 msgid "Clear All"
 msgstr "לנקות הכול"
 
-#: prefs.js:3118
+#: prefs.js:3128
 msgid "Clear all applications marked \"New\""
+msgstr "ניקוי כל היישומים עם הסימון \"חדש\""
+
+#: prefs.js:3146 prefs.js:3472 prefs.js:3564
+msgid "Restore the default Extra Categories"
+msgstr "שחזור לברירת המחדל של הקטגוריות הנוספות"
+
+#: prefs.js:3242
+msgid "Disable Category Arrows"
+msgstr "השבתת חיצי קטגוריות"
+
+#: prefs.js:3250
+msgid "Disable the arrow on category menu items"
 msgstr ""
 
-#: prefs.js:3136 prefs.js:3462 prefs.js:3554
-#, fuzzy
-msgid "Restore the default Extra Categories"
-msgstr "לאפס להגדרות ברירת המחדל?"
+#: prefs.js:3266
+msgid "Disable Searchbox Border"
+msgstr ""
 
-#: prefs.js:3232
-#, fuzzy
-msgid "Disable Category Arrows"
-msgstr "הפעלת קטגוריות"
+#: prefs.js:3274
+msgid "Disable the border on the searchbox"
+msgstr ""
 
-#: prefs.js:3240
-#, fuzzy
-msgid "Disable the arrow on category menu items"
+#: prefs.js:3290 menulayouts/tweaks/tweaks.js:482
+msgid "Disable Menu Arrow"
 msgstr "השבתת חיצי התפריט"
 
-#: prefs.js:3256
-#, fuzzy
-msgid "Disable Searchbox Border"
-msgstr "השבתת תמונת המשתמש"
+#: prefs.js:3298 menulayouts/tweaks/tweaks.js:490
+msgid "Disable current theme menu arrow pointer"
+msgstr ""
 
-#: prefs.js:3264
-#, fuzzy
-msgid "Disable the border on the searchbox"
-msgstr "השבתת תמונת המשתמש"
-
-#: prefs.js:3304
+#: prefs.js:3314
 msgid "Alphabetize 'All Programs' Category"
 msgstr "סידור \"כל התכניות\" לפי האל״ף־בי״ת"
 
-#: prefs.js:3324 prefs.js:3339
+#: prefs.js:3334 prefs.js:3349
 msgid "Multi-Lined Labels"
 msgstr ""
 
-#: prefs.js:3339
-msgid "Enable/Disable mutli-lined labels on large application icon layouts."
+#: prefs.js:3349
+msgid "Enable/Disable multi-lined labels on large application icon layouts."
 msgstr ""
 
-#: prefs.js:3358
+#: prefs.js:3368
 msgid "Recently Installed Application Indicators"
 msgstr ""
 
-#: prefs.js:3369
-#, fuzzy
+#: prefs.js:3379
 msgid "Category Indicator Color"
-msgstr "קפיצה לקטגוריה"
+msgstr ""
 
-#: prefs.js:3377
+#: prefs.js:3387
 msgid ""
 "Change the color of the 'recently installed application' category indicator"
 msgstr ""
 
-#: prefs.js:3393
+#: prefs.js:3403
 msgid "Application Indicator Label Color"
 msgstr ""
 
-#: prefs.js:3401
+#: prefs.js:3411
 msgid ""
 "Change the background color of the 'recently installed application' "
 "indicator label"
 msgstr ""
 
-#: prefs.js:3419
+#: prefs.js:3429
 msgid "Gap Adjustment"
 msgstr ""
 
-#: prefs.js:3429 prefs.js:3442
-#, fuzzy
+#: prefs.js:3439 prefs.js:3452
 msgid "Offset ArcMenu by 1px"
-msgstr "הצמדה ל־ArcMenu"
+msgstr ""
 
-#: prefs.js:3429 prefs.js:3442
+#: prefs.js:3439 prefs.js:3452
 msgid "Useful if you notice a 1px gap or overlap between ArcMenu and the panel"
 msgstr ""
 
-#: prefs.js:3643
+#: prefs.js:3653
 msgid "Enable/Disble"
 msgstr "הפעלה/השבתה"
 
-#: prefs.js:3698
+#: prefs.js:3708
 msgid "Color Theme Name"
 msgstr "שם ערכת הצבע"
 
-#: prefs.js:3705
+#: prefs.js:3715
 msgid "Name:"
 msgstr "שם:"
 
-#: prefs.js:3730
+#: prefs.js:3740
 msgid "Save Theme"
 msgstr "שמירת ערכת הנושא"
 
-#: prefs.js:3755
+#: prefs.js:3765
 msgid "Select Themes to Import"
 msgstr "נא לבחור ערכות נושא לייבוא"
 
-#: prefs.js:3755
+#: prefs.js:3765
 msgid "Select Themes to Export"
 msgstr "נא לבחור ערכות נושא לייצוא"
 
-#: prefs.js:3773
+#: prefs.js:3783
 msgid "Import"
 msgstr "ייבוא"
 
-#: prefs.js:3773
+#: prefs.js:3783
 msgid "Export"
 msgstr "ייצוא"
 
-#: prefs.js:3804
+#: prefs.js:3814
 msgid "Select All"
 msgstr "לבחור הכול"
 
-#: prefs.js:3872 prefs.js:4196
+#: prefs.js:3882 prefs.js:4206
 msgid "Manage Presets"
 msgstr "ניהול מערכים"
 
-#: prefs.js:4074 prefs.js:5516
+#: prefs.js:4084 prefs.js:5526
 msgid "Menu Theme Presets"
 msgstr "מערכי ערכות נושא לתפריט"
 
-#: prefs.js:4084
+#: prefs.js:4094
 msgid "Current Menu Theme Preset"
 msgstr "מערך ערכת הנושא הנוכחי לתפריט"
 
-#: prefs.js:4105
+#: prefs.js:4115
 msgid "Save as Preset"
 msgstr "שמירה בתור מערך"
 
-#: prefs.js:4221
+#: prefs.js:4231
 msgid "Browse Presets"
 msgstr "עיון במערכים"
 
-#: prefs.js:4268
+#: prefs.js:4278
 msgid "Theme Settings"
 msgstr "הגדרות ערכת נושא"
 
-#: prefs.js:4278
+#: prefs.js:4288
 msgid "Menu Background Color"
 msgstr "צבע הרקע לתפריט"
 
-#: prefs.js:4300
+#: prefs.js:4310
 msgid "Menu Foreground Color"
 msgstr "צבע הקדמה לתפריט"
 
-#: prefs.js:4320
+#: prefs.js:4330
 msgid "Font Size"
 msgstr "גודל גופן"
 
-#: prefs.js:4346
+#: prefs.js:4356
 msgid "Border Color"
 msgstr "צבע גבול"
 
-#: prefs.js:4367
+#: prefs.js:4377
 msgid "Border Size"
 msgstr "גודל גבול"
 
-#: prefs.js:4393
+#: prefs.js:4403
 #, fuzzy
 msgid "Active Item Background Color"
 msgstr "צבע הרקע לתפריט"
 
-#: prefs.js:4414
+#: prefs.js:4424
 #, fuzzy
 msgid "Active Item Foreground Color"
 msgstr "צבע הקדמה לתפריט"
 
-#: prefs.js:4435
+#: prefs.js:4445
 msgid "Corner Radius"
 msgstr ""
 
-#: prefs.js:4461
+#: prefs.js:4471
 msgid "Menu Arrow Size"
 msgstr "גודל חץ תפריט"
 
-#: prefs.js:4487
-#, fuzzy
+#: prefs.js:4497
 msgid "Menu Displacement"
-msgstr "הגדרות התפריט"
+msgstr "תזוזת התפריט"
 
-#: prefs.js:4702
+#: prefs.js:4712
 msgid "Add Default User Directories"
-msgstr ""
+msgstr "הוספת תיקיות משתמש המוגדרות כברירת המחדל"
 
-#: prefs.js:4710
+#: prefs.js:4720
 msgid ""
 "Browse a list of all default User Directories to add to your Directories "
 "Shortcuts"
 msgstr ""
 
-#: prefs.js:4749
+#: prefs.js:4759
 msgid "Create a custom shortcut to add to your Directories Shortcuts"
 msgstr ""
 
-#: prefs.js:4775
-#, fuzzy
+#: prefs.js:4785
 msgid "Restore the default Directory Shortcuts"
-msgstr "לאפס להגדרות ברירת המחדל?"
+msgstr "שחזור לברירת המחדל של הקיצורים לתיקיות"
 
-#: prefs.js:4993
+#: prefs.js:5003
 msgid "Browse a list of all applications to add to your Application Shortcuts"
 msgstr ""
 
-#: prefs.js:5032
+#: prefs.js:5042
 msgid "Create a custom shortcut to add to your Application Shortcuts"
 msgstr ""
 
-#: prefs.js:5057
-#, fuzzy
+#: prefs.js:5067
 msgid "Restore the default Application Shortcuts"
-msgstr "לאפס להגדרות ברירת המחדל?"
+msgstr "שחזור לברירת המחדל של הקיצורים ליישומים"
 
-#: prefs.js:5363
+#: prefs.js:5263 menuWidgets.js:1389 menulayouts/windows.js:258
+#: menulayouts/plasma.js:353
+msgid "Suspend"
+msgstr "השהיה"
+
+#: prefs.js:5280 menuWidgets.js:1398 menulayouts/mint.js:232
+#: menulayouts/ubuntudash.js:246 menulayouts/windows.js:249
+#: menulayouts/plasma.js:343
+msgid "Lock"
+msgstr "נעילה"
+
+#: prefs.js:5297 menuWidgets.js:1380 menulayouts/mint.js:231
+#: menulayouts/ubuntudash.js:245 menulayouts/windows.js:252
+#: menulayouts/plasma.js:347
+msgid "Log Out"
+msgstr "יציאה"
+
+#: prefs.js:5314 menuWidgets.js:1371
+msgid "Restart"
+msgstr "הפעלה מחדש"
+
+#: prefs.js:5331 menuWidgets.js:1362 menulayouts/mint.js:233
+#: menulayouts/ubuntudash.js:247
+msgid "Power Off"
+msgstr "כיבוי"
+
+#: prefs.js:5373
 msgid "External Devices"
 msgstr "התקנים חיצוניים"
 
-#: prefs.js:5369
+#: prefs.js:5379
 msgid "Show all connected external devices in ArcMenu"
 msgstr ""
 
-#: prefs.js:5389
+#: prefs.js:5393 menulayouts/windows.js:192 menulayouts/plasma.js:291
+msgid "Bookmarks"
+msgstr "סימניות"
+
+#: prefs.js:5399
 msgid "Show all Nautilus bookmarks in ArcMenu"
 msgstr ""
 
-#: prefs.js:5408 prefs.js:6034
+#: prefs.js:5418 prefs.js:6044
 msgid "Misc"
 msgstr "שונות"
 
-#: prefs.js:5412
+#: prefs.js:5422
 msgid "Export or Import Settings"
 msgstr "ייבוא או ייצוא הגדרות"
 
-#: prefs.js:5422
+#: prefs.js:5432
 msgid "All ArcMenu Settings"
 msgstr "כל הגדרות ArcMenu"
 
-#: prefs.js:5431
+#: prefs.js:5441
 msgid "Export or Import All ArcMenu Settings"
 msgstr "ייבוא או ייצוא כל הגדרות ArcMenu"
 
-#: prefs.js:5431
+#: prefs.js:5441
 msgid ""
 "Importing settings from file may replace ALL saved settings.\n"
 "This includes all saved pinned apps."
@@ -1623,177 +1019,842 @@ msgstr ""
 "ייבוא הגדרות מקובץ יחליפו את כל ההגדרות השמורות.\n"
 "כולל את היישומים המוצמדים השמורים."
 
-#: prefs.js:5444
+#: prefs.js:5454
 msgid "Import from File"
 msgstr "ייבוא מקובץ"
 
-#: prefs.js:5447
+#: prefs.js:5457
 msgid "Import ArcMenu settings from a file"
 msgstr "ייבוא הגדרות ArcMenu מקובץ"
 
-#: prefs.js:5451
+#: prefs.js:5461
 msgid "Import settings"
 msgstr "הגדרות ייבוא"
 
-#: prefs.js:5480
+#: prefs.js:5490
 msgid "Export to File"
 msgstr "ייצוא לקובץ"
 
-#: prefs.js:5483
+#: prefs.js:5493
 msgid "Export and save all your ArcMenu settings to a file"
 msgstr ""
 
-#: prefs.js:5488
+#: prefs.js:5498
 msgid "Export settings"
 msgstr "הגדרות ייצוא"
 
-#: prefs.js:5525
+#: prefs.js:5535
 msgid "Export or Import Menu Theme Presets"
 msgstr "ייבוא או ייצוא מערכי ערכות נושא לתפריט"
 
-#: prefs.js:5525
-#, fuzzy
+#: prefs.js:5535
 msgid "Menu theme presets are located in the \"Menu Theme\" section"
-msgstr "ייבוא או ייצוא מערכי ערכות נושא לתפריט"
+msgstr "מערכי ערכות הנושא לתפריט ממוקמות בקטע \"ערכת הנושא לתפריט\""
 
-#: prefs.js:5538 prefs.js:5545
+#: prefs.js:5548 prefs.js:5555
 msgid "Import Theme Preset"
 msgstr "ייבוא מערך ערכת נושא"
 
-#: prefs.js:5541
-#, fuzzy
+#: prefs.js:5551
 msgid "Import ArcMenu Theme Presets from a file"
-msgstr "ייבוא הגדרות ArcMenu מקובץ"
+msgstr "ייבוא מערכי ערכות נושא ל־ArcMenu מקובץ"
 
-#: prefs.js:5581 prefs.js:5593
+#: prefs.js:5591 prefs.js:5603
 msgid "Export Theme Preset"
 msgstr "ייצוא מערך ערכת נושא"
 
-#: prefs.js:5584
+#: prefs.js:5594
 msgid "Export and save your ArcMenu Theme Presets to a file"
 msgstr ""
 
-#: prefs.js:5708
+#: prefs.js:5718
 msgid "ArcMenu Version"
 msgstr "גרסת ArcMenu"
 
-#: prefs.js:5725
+#: prefs.js:5735
 msgid "Git Commit"
 msgstr "פעולה ב־Git"
 
-#: prefs.js:5745
+#: prefs.js:5755
 msgid "GNOME Version"
 msgstr "גרסת GNOME"
 
-#: prefs.js:5763
+#: prefs.js:5773
 msgid "OS"
 msgstr "מערכת הפעלה"
 
-#: prefs.js:5795
+#: prefs.js:5805
 msgid "Session Type"
 msgstr "סוג הפעלה"
 
-#: prefs.js:5826
+#: prefs.js:5829 menuWidgets.js:3185 constants.js:296
+msgid "ArcMenu"
+msgstr "ArcMenu"
+
+#: prefs.js:5836
 msgid "A Dynamic, Traditional, Modern Menu for GNOME"
 msgstr "תפריט דינאמי, מסורתי ומודרני עבור GNOME"
 
-#: prefs.js:5850
+#: prefs.js:5860
 msgid "Donate to the ArcMenu Project"
 msgstr "תרומה למיזם ArcMenu"
 
-#: prefs.js:5868 menuButton.js:717
+#: prefs.js:5878 menuButton.js:720
 msgid "ArcMenu GitLab Page"
 msgstr "העמוד של ArcMenu ב־GitLab"
 
-#: prefs.js:5891
+#: prefs.js:5901
 msgid "Developers"
 msgstr "מפתחים"
 
-#: prefs.js:5893
+#: prefs.js:5903
 msgid "Translators"
 msgstr "מתרגמים"
 
-#: prefs.js:5895
+#: prefs.js:5905
 msgid "Contributors"
 msgstr "תורמים"
 
-#: prefs.js:5897
+#: prefs.js:5907
 msgid "Artwork"
 msgstr "עבודות אומנות"
 
-#: prefs.js:6028
+#: prefs.js:6038
 msgid "Menu Layout"
 msgstr "פריסת תפריט"
 
-#: prefs.js:6029
+#: prefs.js:6039
 msgid "Menu Theme"
 msgstr "ערכת הנושא לתפריט"
 
-#: prefs.js:6030 prefs.js:6039
+#: prefs.js:6040 prefs.js:6049
 msgid "Menu Settings"
 msgstr "הגדרות התפריט"
 
-#: prefs.js:6032
+#: prefs.js:6042
 msgid "Button Appearance"
 msgstr "מראה כפתור"
 
-#: prefs.js:6035
+#: prefs.js:6045
 msgid "About"
 msgstr "על אודות"
 
-#: prefs.js:6045
+#: prefs.js:6052 menulayouts/raven.js:314 menulayouts/ubuntudash.js:439
+msgid "Shortcuts"
+msgstr "קיצורים"
+
+#: prefs.js:6053 menuWidgets.js:1294
+msgid "Categories"
+msgstr "קטגוריות"
+
+#: prefs.js:6055
 msgid "Fine-Tune"
 msgstr ""
 
-#: prefs.js:6049
+#: prefs.js:6059
 msgid "Directories"
 msgstr "תיקיות"
 
-#: prefs.js:6051
+#: prefs.js:6060 menuWidgets.js:3073 menulayouts/plasma.js:141
+msgid "Applications"
+msgstr "יישומים"
+
+#: prefs.js:6061
 msgid "Session Buttons"
 msgstr "כפתורי הפעלה"
 
-#: prefs.js:6052
+#: prefs.js:6062
 msgid "Extra Shortcuts"
 msgstr "קיצורים נוספים"
 
-#: prefs.js:6063
+#: prefs.js:6073
 msgid "Reset all..."
 msgstr "לאפס הכול..."
 
-#: prefs.js:6065
+#: prefs.js:6075
 msgid "Reset all ArcMenu Settings to Default"
 msgstr "איפוס הגדרות ArcMenu לברירת המחדל"
 
-#: prefs.js:6071
+#: prefs.js:6081
 msgid "Restore Default Settings?"
 msgstr "לאפס להגדרות ברירת המחדל?"
 
-#: prefs.js:6071
-#, fuzzy
+#: prefs.js:6081
 msgid "All ArcMenu settings will be reset to the default value."
-msgstr "איפוס הגדרות ArcMenu לברירת המחדל"
+msgstr "כל הגדרות ArcMenu ישוחזרו לערך ברירת המחדל."
 
-#: prefs.js:6156
+#: prefs.js:6166
 msgid "Error - Invalid Shortcut"
 msgstr "שגיאה - קיצור לא תקין"
 
-#: prefs.js:6157
+#: prefs.js:6167
 msgid "Invalid Shortcut"
 msgstr "קיצור לא תקין"
 
-#: menuButton.js:734
+#: placeDisplay.js:133
+#, javascript-format
+msgid "Failed to launch “%s”"
+msgstr "הפעלת \"%s\" נכשלה"
+
+#: placeDisplay.js:148
+#, javascript-format
+msgid "Failed to mount volume for “%s”"
+msgstr "עיגון הכרך \"%s\" נכשל"
+
+#: placeDisplay.js:232 placeDisplay.js:256 menulayouts/ubuntudash.js:242
+#: menulayouts/baseMenuLayout.js:348 menulayouts/plasma.js:145
+msgid "Computer"
+msgstr "מחשב"
+
+#: placeDisplay.js:321
+#, javascript-format
+msgid "Ejecting drive “%s” failed:"
+msgstr "שליפת הכונן \"%s\" נכשלה:"
+
+#: placeDisplay.js:447 menulayouts/ubuntudash.js:234
+#: menulayouts/baseMenuLayout.js:348 menulayouts/baseMenuLayout.js:388
+msgid "Home"
+msgstr "בית"
+
+#: placeDisplay.js:717 menulayouts/baseMenuLayout.js:424
+#: menulayouts/baseMenuLayout.js:426
+msgid "Trash"
+msgstr "אשפה"
+
+#: placeDisplay.js:727 placeDisplay.js:733
+msgid "Empty Trash"
+msgstr "פינוי האשפה"
+
+#: prefsWidgets.js:321
+msgid "Included Layouts"
+msgstr "פריסות כלולות"
+
+#: prefsWidgets.js:368
+msgid "Browse all"
+msgstr "עיון בכולן"
+
+#: prefsWidgets.js:374
+msgid "Information"
+msgstr "מידע"
+
+#: menuButton.js:737
 msgid "Dash to Panel Settings"
 msgstr "הגדרות Dash to Panel"
 
 # אין שם עברי להרחבה. כשיהיה יש לשנות את התרגום.
-#: menuButton.js:741
+#: menuButton.js:744
 msgid "Dash to Dock Settings"
 msgstr "הגדרות Dash to Dock"
 
-#: menuButton.js:745
+#: menuButton.js:748
 msgid "Ubuntu Dock Settings"
 msgstr "הגדרות המעגן של Ubuntu"
+
+#: menuWidgets.js:163
+msgid "Open Folder Location"
+msgstr "פתיחת מיקום תיקיה"
+
+#: menuWidgets.js:179
+msgid "Current Windows:"
+msgstr "החלונות הנוכחיים:"
+
+#: menuWidgets.js:197
+msgid "New Window"
+msgstr "חלון חדש"
+
+#: menuWidgets.js:207
+msgid "Launch using Dedicated Graphics Card"
+msgstr ""
+
+#: menuWidgets.js:252
+msgid "Delete Desktop Shortcut"
+msgstr "מחיקת קיצור בשולחן העבודה"
+
+#: menuWidgets.js:260
+msgid "Create Desktop Shortcut"
+msgstr "יצירת קיצור בשולחן העבודה"
+
+#: menuWidgets.js:274
+msgid "Remove from Favorites"
+msgstr "הסרה מהמועדפים"
+
+#: menuWidgets.js:280
+msgid "Add to Favorites"
+msgstr "הוספה למועדפים"
+
+#: menuWidgets.js:297 menuWidgets.js:346
+msgid "Unpin from ArcMenu"
+msgstr "הסרה מ־ArcMenu"
+
+#: menuWidgets.js:311
+msgid "Pin to ArcMenu"
+msgstr "הצמדה ל־ArcMenu"
+
+#: menuWidgets.js:324
+msgid "Show Details"
+msgstr "הצגת פרטים"
+
+#: menuWidgets.js:762 menulayouts/tognee.js:155 menulayouts/raven.js:178
+#: menulayouts/ubuntudash.js:196 menulayouts/windows.js:146
+#: menulayouts/redmond.js:174 menulayouts/arcmenu.js:182
+#: menulayouts/plasma.js:180
+msgid "Activities Overview"
+msgstr "תצוגת פעילויות"
+
+#: menuWidgets.js:1094 menuWidgets.js:2324 menuWidgets.js:2446
+#: menuWidgets.js:2636 menulayouts/tweaks/tweaks.js:955 constants.js:66
+msgid "Frequent Apps"
+msgstr "יישומים תדירים"
+
+#: menuWidgets.js:1098 menuWidgets.js:2328 menuWidgets.js:2450
+#: menuWidgets.js:2640 menulayouts/tweaks/tweaks.js:466
+#: menulayouts/tweaks/tweaks.js:595
+msgid "Home Screen"
+msgstr "מסך הבית"
+
+#: menuWidgets.js:1103 menuWidgets.js:1537 menuWidgets.js:1631
+#: menuWidgets.js:2332 menuWidgets.js:2454 menuWidgets.js:2644
+#: menulayouts/raven.js:53 menulayouts/raven.js:219
+#: menulayouts/ubuntudash.js:54 menulayouts/ubuntudash.js:335
+#: menulayouts/tweaks/tweaks.js:467 menulayouts/tweaks/tweaks.js:596
+#: menulayouts/tweaks/tweaks.js:924 constants.js:67
+msgid "All Programs"
+msgstr "כל התכניות"
+
+#: menuWidgets.js:1107 menuWidgets.js:1261 menuWidgets.js:2336
+#: menuWidgets.js:2458 menuWidgets.js:2648 constants.js:65
+msgid "Favorites"
+msgstr "מועדפים"
+
+#: menuWidgets.js:1240 menulayouts/tognee.js:155 menulayouts/mint.js:222
+#: menulayouts/raven.js:178 menulayouts/ubuntudash.js:196
+#: menulayouts/insider.js:218 menulayouts/windows.js:146
+#: menulayouts/redmond.js:174 menulayouts/arcmenu.js:182
+#: menulayouts/plasma.js:180
+msgid "Settings"
+msgstr "הגדרות"
+
+#: menuWidgets.js:1272
+msgid "Extras"
+msgstr "נוספים"
+
+#: menuWidgets.js:1283 menulayouts/plasma.js:149
+msgid "Leave"
+msgstr "יציאה"
+
+#: menuWidgets.js:1304
+msgid "Users"
+msgstr "משתמשים"
+
+#: menuWidgets.js:1920 menulayouts/tognee.js:155 menulayouts/mint.js:221
+#: menulayouts/raven.js:178 menulayouts/ubuntudash.js:196
+#: menulayouts/windows.js:146 menulayouts/redmond.js:174
+#: menulayouts/arcmenu.js:182 menulayouts/plasma.js:180
+msgid "Terminal"
+msgstr "מסוף"
+
+#: menuWidgets.js:2178
+msgid "New"
+msgstr "חדש"
+
+#: menuWidgets.js:3173
+msgid "Show Applications"
+msgstr "הצגת יישומים"
+
+#: menuWidgets.js:3400
+msgid "Add world clocks…"
+msgstr "הוספת שעונים עולמיים…"
+
+#: menuWidgets.js:3401
+msgid "World Clocks"
+msgstr "שעונים עולמיים"
+
+#: menuWidgets.js:3509
+msgid "Weather"
+msgstr "מזג האוויר"
+
+#: menuWidgets.js:3629
+msgid "Select a location…"
+msgstr "בחירת מיקום…"
+
+#: menuWidgets.js:3642
+msgid "Loading…"
+msgstr "בטעינה…"
+
+#: menuWidgets.js:3652
+msgid "Go online for weather information"
+msgstr "התחברות לרשת לצורך מידע על מזג האוויר"
+
+#: menuWidgets.js:3654
+msgid "Weather information is currently unavailable"
+msgstr "מידע על מזג האוויר אינו זמין כרגע"
+
+#: menulayouts/tognee.js:155 menulayouts/mint.js:226 menulayouts/raven.js:178
+#: menulayouts/ubuntudash.js:196 menulayouts/ubuntudash.js:240
+#: menulayouts/baseMenuLayout.js:416 menulayouts/baseMenuLayout.js:418
+#: menulayouts/windows.js:146 menulayouts/redmond.js:174
+#: menulayouts/arcmenu.js:182 menulayouts/plasma.js:180
+msgid "Software"
+msgstr "תכנה"
+
+#: menulayouts/tognee.js:155 menulayouts/raven.js:178
+#: menulayouts/ubuntudash.js:196 menulayouts/windows.js:146
+#: menulayouts/redmond.js:174 menulayouts/arcmenu.js:182
+#: menulayouts/plasma.js:180
+msgid "Tweaks"
+msgstr "התאמות"
+
+#: menulayouts/mint.js:228 menulayouts/ubuntudash.js:235
+#: menulayouts/insider.js:70 menulayouts/insider.js:213
+#: menulayouts/baseMenuLayout.js:348 menulayouts/windows.js:71
+msgid "Documents"
+msgstr "מסמכים"
+
+#: menulayouts/mint.js:230 menulayouts/ubuntudash.js:244
+msgid "Files"
+msgstr "קבצים"
+
+#: menulayouts/ubuntudash.js:236 menulayouts/baseMenuLayout.js:348
+msgid "Downloads"
+msgstr "הורדות"
+
+#: menulayouts/baseMenuLayout.js:348
+msgid "Music"
+msgstr "מוזיקה"
+
+#: menulayouts/baseMenuLayout.js:348
+msgid "Pictures"
+msgstr "תמונות"
+
+#: menulayouts/baseMenuLayout.js:348
+msgid "Videos"
+msgstr "וידאו"
+
+#: menulayouts/baseMenuLayout.js:348 menulayouts/baseMenuLayout.js:404
+#: menulayouts/windows.js:208 menulayouts/plasma.js:307
+msgid "Network"
+msgstr "רשת"
+
+#: menulayouts/windows.js:200 menulayouts/plasma.js:299
+msgid "Devices"
+msgstr "התקנים"
+
+#: menulayouts/windows.js:247 menulayouts/plasma.js:341
+msgid "Session"
+msgstr "הפעלה"
+
+#: menulayouts/windows.js:256 menulayouts/plasma.js:350
+msgid "System"
+msgstr "מערכת"
+
+#: menulayouts/windows.js:262 menulayouts/plasma.js:357
+msgid "Restart..."
+msgstr "הפעלה מחדש..."
+
+#: menulayouts/windows.js:266 menulayouts/plasma.js:361
+msgid "Power Off..."
+msgstr "כיבוי..."
+
+#: menulayouts/windows.js:331 menulayouts/plasma.js:276
+msgid "Application Shortcuts"
+msgstr "קיצורים ליישומים"
+
+#: menulayouts/windows.js:335 menulayouts/plasma.js:280
+msgid "Places"
+msgstr "מקומות"
+
+#: menulayouts/windows.js:433
+msgid "Frequent"
+msgstr "תדירים"
+
+#: menulayouts/tweaks/tweaks.js:93
+msgid "Category Activation"
+msgstr "הפעלת קטגוריות"
+
+#: menulayouts/tweaks/tweaks.js:99
+msgid "Mouse Click"
+msgstr "לחיצה עם העכבר"
+
+#: menulayouts/tweaks/tweaks.js:100
+msgid "Mouse Hover"
+msgstr "מעבר עם העכבר"
+
+#: menulayouts/tweaks/tweaks.js:119
+msgid "Avatar Icon Shape"
+msgstr "צורת סמל תמונת המשתמש"
+
+#: menulayouts/tweaks/tweaks.js:124
+msgid "Circular"
+msgstr "עיגול"
+
+#: menulayouts/tweaks/tweaks.js:125
+msgid "Square"
+msgstr "ריבוע"
+
+#: menulayouts/tweaks/tweaks.js:140 menulayouts/tweaks/tweaks.js:218
+msgid "Searchbar Location"
+msgstr "מיקום סרגל החיפוש"
+
+#: menulayouts/tweaks/tweaks.js:146 menulayouts/tweaks/tweaks.js:224
+msgid "Bottom"
+msgstr "תחתית"
+
+#: menulayouts/tweaks/tweaks.js:147 menulayouts/tweaks/tweaks.js:225
+#: menulayouts/tweaks/tweaks.js:417
+msgid "Top"
+msgstr "חלק עליון"
+
+#: menulayouts/tweaks/tweaks.js:160
+#, fuzzy
+msgid "Flip Layout Horizontally"
+msgstr "פריסת התפריט הנוכחית"
+
+#: menulayouts/tweaks/tweaks.js:177
+msgid "Disable User Avatar"
+msgstr "השבתת תמונת המשתמש"
+
+#: menulayouts/tweaks/tweaks.js:195
+msgid "Show Applications Grid"
+msgstr "הצגת טבלת היישומים"
+
+#: menulayouts/tweaks/tweaks.js:237
+msgid "Activate on Hover"
+msgstr "הפעלה בעת מעבר עם העכבר"
+
+#: menulayouts/tweaks/tweaks.js:253
+msgid "Show Application Descriptions"
+msgstr "הצגת תיאורי יישומים"
+
+#: menulayouts/tweaks/tweaks.js:269
+#, fuzzy
+msgid "Selected Button Border Color"
+msgstr "צבע גבול"
+
+#: menulayouts/tweaks/tweaks.js:287
+#, fuzzy
+msgid "Selected Button Background Color"
+msgstr "צבע הרקע לתפריט"
+
+#: menulayouts/tweaks/tweaks.js:344 menulayouts/tweaks/tweaks.js:511
+#: menulayouts/tweaks/tweaks.js:652
+msgid "Save"
+msgstr "שמירה"
+
+#: menulayouts/tweaks/tweaks.js:365
+msgid "Brisk Menu Shortcuts"
+msgstr "קיצורי תפריט Brisk"
+
+#: menulayouts/tweaks/tweaks.js:393
+msgid "Enable Activities Overview Shortcut"
+msgstr "לאפשר את הקיצור לתצוגת הפעילויות"
+
+#: menulayouts/tweaks/tweaks.js:412
+#, fuzzy
+msgid "KRunner Position"
+msgstr "סגנון KRunner"
+
+#: menulayouts/tweaks/tweaks.js:418
+msgid "Centered"
+msgstr "במרכז"
+
+#: menulayouts/tweaks/tweaks.js:429 menulayouts/tweaks/tweaks.js:611
+msgid "Show Extra Large Icons with App Descriptions"
+msgstr ""
+
+#: menulayouts/tweaks/tweaks.js:453
+msgid "Buttons"
+msgstr "כפתורים"
+
+#: menulayouts/tweaks/tweaks.js:461 menulayouts/tweaks/tweaks.js:590
+#: menulayouts/tweaks/tweaks.js:914 menulayouts/tweaks/tweaks.js:944
+msgid "Default Screen"
+msgstr "מסך ברירת המחדל"
+
+#: menulayouts/tweaks/tweaks.js:532
+msgid "Ubuntu Dash Buttons"
+msgstr "סגנון הכפתורים ב־Ubuntu"
+
+#: menulayouts/tweaks/tweaks.js:541
+msgid "Button Separator Position"
+msgstr ""
+
+#: menulayouts/tweaks/tweaks.js:550 menulayouts/tweaks/tweaks.js:685
+msgid "Separator Position"
+msgstr ""
+
+#: menulayouts/tweaks/tweaks.js:569 menulayouts/tweaks/tweaks.js:704
+msgid "Adjust the position of the separator in the button panel"
+msgstr ""
+
+#: menulayouts/tweaks/tweaks.js:640
+msgid "Mint Menu Shortcuts"
+msgstr "קיצורי תפריט Mint"
+
+#: menulayouts/tweaks/tweaks.js:676
+msgid "Shortcut Separator Position"
+msgstr ""
+
+#: menulayouts/tweaks/tweaks.js:767
+msgid "Change"
+msgstr "שינוי"
+
+#: menulayouts/tweaks/tweaks.js:900
+msgid "Nothing Yet!"
+msgstr "עדיין כלום!"
+
+#: menulayouts/tweaks/tweaks.js:921
+msgid "Choose the default screen for tognee Layout"
+msgstr ""
+
+#: menulayouts/tweaks/tweaks.js:923 menulayouts/tweaks/tweaks.js:954
+msgid "Categories List"
+msgstr "רשימת קטגוריות"
+
+#: menulayouts/tweaks/tweaks.js:951
+msgid "Choose the default screen for ArcMenu"
+msgstr "נא לבחור את מסך ברירת המחדל ל־ArcMenu"
+
+#: menulayouts/tweaks/tweaks.js:987
+msgid "Enable Weather Widget"
+msgstr "הפעלת יישומון מזג האוויר"
+
+#: menulayouts/tweaks/tweaks.js:1005
+msgid "Enable Clock Widget"
+msgstr "הפעלת יישומון השעון"
+
+#: constants.js:296
+msgid "ArcMenu Tweaks"
+msgstr "התאמות ArcMenu"
+
+#: constants.js:297
+msgid "Brisk Menu Style"
+msgstr "סגנון תפריט Brisk"
+
+#: constants.js:297
+msgid "Brisk Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט Brisk"
+
+#: constants.js:298
+msgid "Whisker Menu Style"
+msgstr "סגנון תפריט Whisker"
+
+#: constants.js:298
+msgid "Whisker Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט Whisker"
+
+#: constants.js:299
+msgid "GNOME Menu Style"
+msgstr "סגנון תפריט GNOME"
+
+#: constants.js:299
+msgid "GNOME Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט GNOME"
+
+#: constants.js:300
+msgid "Mint Menu Style"
+msgstr "סגנון תפריט Mint"
+
+#: constants.js:300
+msgid "Mint Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט Mint"
+
+#: constants.js:301
+msgid "Budgie Style"
+msgstr "סגנון Budgie"
+
+#: constants.js:301
+msgid "Budgie Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט Budgie"
+
+#: constants.js:304
+msgid "Ubuntu Dash Style"
+msgstr "סגנון Ubuntu"
+
+#: constants.js:304
+msgid "Ubuntu Dash Style Tweaks"
+msgstr "התאמות סגנון Ubuntu"
+
+#: constants.js:305
+msgid "Plasma Style"
+msgstr "סגנון Plasma"
+
+#: constants.js:305
+msgid "Plasma Style Tweaks"
+msgstr "התאמות סגנון Plasma"
+
+#: constants.js:306
+msgid "tognee Menu"
+msgstr ""
+
+#: constants.js:306
+msgid "tognee Menu Tweaks"
+msgstr ""
+
+#: constants.js:307
+#, fuzzy
+msgid "Insider Menu"
+msgstr "פריסות תפריט"
+
+#: constants.js:307
+msgid "Insider Menu Tweaks"
+msgstr ""
+
+#: constants.js:308
+msgid "Redmond Menu Style"
+msgstr "סגנון תפריט Redmond"
+
+#: constants.js:308
+msgid "Redmond Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט Redmond"
+
+#: constants.js:309
+msgid "Windows 10 Style"
+msgstr "סגנון Windows 10"
+
+#: constants.js:309
+msgid "Windows 10 Style Tweaks"
+msgstr "התאמות סגנון Windows 10"
+
+#: constants.js:312
+msgid "Elementary Menu Style"
+msgstr "סגנון תפריט Elementary"
+
+#: constants.js:312
+msgid "Elementary Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט Elementary"
+
+#: constants.js:313
+msgid "Chromebook Style"
+msgstr "סגנון Chromebook"
+
+#: constants.js:313
+msgid "Chromebook Style Tweaks"
+msgstr "התאמות סגנון Chromebook"
+
+#: constants.js:316
+msgid "KRunner Style"
+msgstr "סגנון KRunner"
+
+#: constants.js:316
+msgid "KRunner Style Tweaks"
+msgstr "התאמות סגנון KRunner"
+
+#: constants.js:317
+msgid "GNOME Dash Style"
+msgstr "סגנון מעגן GNOME"
+
+#: constants.js:317
+msgid "GNOME Dash Style Tweaks"
+msgstr "התאמות סגנון GNOME"
+
+#: constants.js:320 constants.js:337
+msgid "Simple Menu Style"
+msgstr "סגנון תפריט פשוט"
+
+#: constants.js:320
+msgid "Simple Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט פשוט"
+
+#: constants.js:321
+msgid "Simple Menu 2 Style"
+msgstr "סגנון תפריט פשוט 2"
+
+#: constants.js:321
+msgid "Simple Menu 2 Style Tweaks"
+msgstr "התאמות סגנון תפריט פשוט 2"
+
+#: constants.js:324
+msgid "Raven Menu Style"
+msgstr "סגנון תפריט Raven"
+
+#: constants.js:324
+msgid "Raven Menu Style Tweaks"
+msgstr "התאמות סגנון תפריט Raven"
+
+#: constants.js:331
+msgid "Traditional"
+msgstr "מסורתיות"
+
+#: constants.js:331
+msgid "Traditional Menu Style"
+msgstr "סגנון תפריט מסורתי"
+
+#: constants.js:332
+msgid ""
+"Traditional layouts use a familiar style and have a traditional user "
+"experience."
+msgstr "לפריסות מסורתיות יש סגנון מוכר וחוויית משתמש מסורתית."
+
+#: constants.js:333
+msgid "Modern"
+msgstr "מודרניות"
+
+#: constants.js:333
+msgid "Modern Menu Style"
+msgstr "סגנון תפריט מודרני"
+
+#: constants.js:334
+msgid ""
+"Modern layouts use a style and UX based approach with a focus on design and "
+"functionality."
+msgstr ""
+
+#: constants.js:335
+msgid "Touch"
+msgstr "למסכי מגע"
+
+#: constants.js:335
+msgid "Touch Menu Style"
+msgstr "סגנון תפריט למסכי מגע"
+
+#: constants.js:336
+msgid ""
+"Touch layouts contain large menu elements that are well suited for touch "
+"based devices."
+msgstr ""
+"פריסות למסכי מגע כוללות אלמנטים גדולים בתפריט שמתאימים מעולה למכשירים בעלי "
+"מסך מגע."
+
+#: constants.js:337
+msgid "Simple"
+msgstr "פשוטות"
+
+#: constants.js:338
+msgid ""
+"Simple layouts are designed for mouse based devices and contain simplistic "
+"menu elements."
+msgstr ""
+"הפריסות הפשוטות עוצבו בשביל מכשירים עם עכבר והם כוללים אלמנטים פשוטים בתפריט."
+
+#: constants.js:339
+msgid "Launcher"
+msgstr "מפעיל"
+
+#: constants.js:339
+msgid "Launcher Menu Style"
+msgstr "תפריט סגנון מפעילים"
+
+#: constants.js:340
+msgid ""
+"Launcher layouts are well suited for keyboard driven devices and provide the "
+"user with quick and simple menu elements."
+msgstr ""
+"פריסות מפעילים מתאימות מעולה למכשירים שבהם נעשה שימוש בעיקר עם המקלדת והם "
+"מספקים למשתמש אלמנטים מהירים ופשוטים בתפריט."
+
+#: constants.js:341
+msgid "Alternative"
+msgstr "חלופיות"
+
+#: constants.js:341
+msgid "Alternative Menu Style"
+msgstr "סגנון תפריט חלופי"
+
+#: constants.js:342
+msgid ""
+"Alternative layouts have an unconventional style that provide a unique user "
+"experience."
+msgstr "לפריסות חלופיות סגנון לא שגרתי שמספק חוויית משתמש יוצאת דופן."
 
 #~ msgid "Arc Menu Icon Settings"
 #~ msgstr "הגדרות סמל תפריט Arc"
