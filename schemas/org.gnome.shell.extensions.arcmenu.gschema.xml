@@ -368,7 +368,7 @@
       <description>Show suspend button.</description>
     </key>
     <key type="b" name="show-restart-button">
-      <default>false</default>
+      <default>true</default>
       <summary>Show restart button</summary>
       <description>Show restart button.</description>
     </key>
