@@ -249,6 +249,7 @@ var MENU_ICONS = [
     { path: '/media/icons/menu_icons/somnia-symbolic.svg'},
     { path: '/media/icons/menu_icons/utool-symbolic.svg'},
     { path: '/media/icons/menu_icons/swirl-symbolic.svg'},
+    { path: '/media/icons/menu_icons/round-symbolic.svg'},
 ]
 
 var DISTRO_ICONS = [
