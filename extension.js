@@ -218,7 +218,8 @@ function _enableButtons() {
                 let iterLength = multiMonitor ? panel._allDocks.length : 1;
                 for(var index = 0; index < iterLength; index++){      
                     if(!panel._allDocks[index].dash.arcMenuEnabled){
-                        let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, index, Constants.ArcMenuPlacement.DASH);
+                        let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, 
+                                                                                        index, Constants.ArcMenuPlacement.DASH);
                         
                         settingsController.enableButton(index);
                         settingsController.bindSettingsChanges();
@@ -229,26 +230,22 @@ function _enableButtons() {
         }
     }
     else{
-        let panelArray = global.dashToPanel ? global.dashToPanel.panels.map(pw => pw.panel || pw) : [Main.panel];
+        let panelArray = global.dashToPanel ? global.dashToPanel.panels.map(pw => pw.panel) : [Main.panel];
         let iterLength = multiMonitor ? panelArray.length : 1;
         for(var index = 0; index < iterLength; index++){
             let panel = panelArray[index];
 
             if(global.dashToPanel) this.set_DtD_DtP_State(Constants.EXTENSION.DTP, true);
 
-            let isMainPanel = ('isSecondary' in panel && !panel.isSecondary) || panel == Main.panel;
-    
             if (panel.statusArea['ArcMenu'])
-                continue;
+                continue; 
             else if (settingsControllers[index])
-                _disableButton(settingsControllers[index], 1); 
+                _disableButton(settingsControllers[index], 1);
     
-            // Create a Menu Controller that is responsible for controlling
-            // and managing the menu as well as the menu button.
-        
-            let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, isMainPanel, Constants.ArcMenuPlacement.PANEL);
+            let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, 
+                                                                            index, Constants.ArcMenuPlacement.PANEL);
             
-            if (!isMainPanel) {
+            if (global.dashToPanel) {
                 panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController, 1) : null);
             }
     
@@ -256,8 +253,7 @@ function _enableButtons() {
             settingsController.bindSettingsChanges();
             settingsControllers.push(settingsController);
         }
-    }  
-    
+    } 
 }
 
 function _disableButton(controller, remove) {

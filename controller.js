@@ -47,13 +47,12 @@ var MenuSettingsController = class {
         });
         this.currentMonitorIndex = 0;
         this._activitiesButton = Main.panel.statusArea.activities;
+        this.enableHotkey = panelIndex === 0 ? true : false;
 
         if(this.arcMenuPlacement == Constants.ArcMenuPlacement.PANEL){
-            this.isMainPanel = panelIndex;
             this._menuButton = new MenuButton.MenuButton(settings, this.arcMenuPlacement, panel);
         }
         else if(this.arcMenuPlacement == Constants.ArcMenuPlacement.DASH){
-            this.isMainPanel = panelIndex == 0 ? true : false;
             this._menuButton = new MenuButton.MenuButton(settings, this.arcMenuPlacement, panel, panelIndex);
             this.menuButtonAdjustedActor = this._menuButton.container;
             this._configureActivitiesButton();
@@ -61,7 +60,7 @@ var MenuSettingsController = class {
             
         this._settingsControllers = settingsControllers
         this._hotCornerManager = new Helper.HotCornerManager(this._settings,() => this.toggleMenus());
-        if(this.isMainPanel){
+        if(this.enableHotkey){
             this._menuHotKeybinder = new Helper.MenuHotKeybinder(() => this._onHotkey());
             this._keybindingManager = new Helper.KeybindingManager(this._settings); 
         }
@@ -71,7 +70,7 @@ var MenuSettingsController = class {
     // Load and apply the settings from the arc-menu settings
     _applySettings() {
         this._updateHotCornerManager();
-        if(this.isMainPanel)
+        if(this.enableHotkey)
             this._updateHotKeyBinder();
         this._setButtonAppearance();
         this._setButtonText();
@@ -268,7 +267,7 @@ var MenuSettingsController = class {
     }
 
     _updateHotKeyBinder() {
-        if (this.isMainPanel) {
+        if (this.enableHotkey) {
             let hotkeySettingsKey = 'menu-keybinding-text';
             let menuKeyBinding = '';
             let hotKeyPos = this._settings.get_enum('menu-hotkey');
@@ -651,7 +650,7 @@ var MenuSettingsController = class {
             this._disableButton();
         }
 
-        if(this.isMainPanel){
+        if(this.enableHotkey){
             this.disconnectKeyRelease();
             this._menuHotKeybinder.destroy();
             this._keybindingManager.destroy();
