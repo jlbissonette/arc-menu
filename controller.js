@@ -92,7 +92,7 @@ var MenuSettingsController = class {
             this._settings.connect('changed::arc-menu-icon', this._setButtonIcon.bind(this)),
             this._settings.connect('changed::custom-menu-button-icon', this._setButtonIcon.bind(this)),
             this._settings.connect('changed::custom-menu-button-icon-size', this._setButtonIconSize.bind(this)),
-            this._settings.connect('changed::button-icon-padding', this._setButtonIconPadding.bind(this)),
+            this._settings.connect('changed::button-padding', this._setButtonIconPadding.bind(this)),
             this._settings.connect('changed::enable-menu-button-arrow', this._setMenuButtonArrow.bind(this)),
             this._settings.connect('changed::enable-custom-arc-menu', this._updateStyle.bind(this)),
             this._settings.connect('changed::remove-menu-arrow', this._updateStyle.bind(this)),
@@ -369,11 +369,13 @@ var MenuSettingsController = class {
                     menuButtonWidget.hidePanelText();
                     menuButtonWidget.showPanelIcon();
                     menuButtonWidget.showPanelText();
+                    menuButtonWidget.setPanelTextStyle('padding-left: 3px;');
                     break;
                 case Constants.MENU_APPEARANCE.Text_Icon:
                     menuButtonWidget.hidePanelIcon();
                     menuButtonWidget.hidePanelText();
                     menuButtonWidget.showPanelText();
+                    menuButtonWidget.setPanelTextStyle('padding-right: 3px;');
                     menuButtonWidget.showPanelIcon();
                     break;
                 case Constants.MENU_APPEARANCE.None:
@@ -457,10 +459,11 @@ var MenuSettingsController = class {
     }
     _setButtonIconPadding() {
         if(this.arcMenuPlacement == Constants.ArcMenuPlacement.PANEL){
-            let menuButtonWidget = this._menuButton.menuButtonWidget;
-            let stIcon = menuButtonWidget.getPanelIcon();
-            let iconPadding = this._settings.get_int('button-icon-padding');
-            stIcon.style = "padding: 0 "+iconPadding+"px;";
+            let padding = this._settings.get_int('button-padding');
+            if(padding > -1)
+                this._menuButton.style = "-natural-hpadding: " + (padding  * 2 ) + "px; -minimum-hpadding: " + padding + "px;";
+            else
+                this._menuButton.style = null;
         }
     }
 

@@ -74,11 +74,6 @@ var ArcMenuPlacement = {
     DASH: 2
 };
 
-var EXTENSION = {
-    DTP: 0,
-    DTD: 1
-};
-
 var DEFAULT_DIRECTORIES = [
     imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS,
     imports.gi.GLib.UserDirectory.DIRECTORY_DOWNLOAD,

@@ -3158,9 +3158,14 @@ var MenuButtonWidget = class Arc_Menu_MenuButtonWidget{
     }
 
     hidePanelText() {
+        this._label.style = '';
         if (this.actor.contains(this._label)) {
             this.actor.remove_child(this._label);
         }
+    }
+
+    setPanelTextStyle(style){
+        this._label.style = style;
     }
 };
 
