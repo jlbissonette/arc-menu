@@ -518,7 +518,7 @@
       <description>Active background color for the menu button icon.</description>
     </key>
     <key name="extra-categories" type="a(ib)">
-      <default>[(0, true), (1, true), (2, false), (3, false)]</default>
+      <default>[(0, true), (1, true), (2, false), (3, false), (4, false)]</default>
       <summary>List of recently installed apps</summary>
       <description>List of recently installed apps</description>
     </key>
