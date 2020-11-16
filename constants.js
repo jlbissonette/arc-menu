@@ -40,11 +40,12 @@ var CategoryType = {
     FREQUENT_APPS: 1,
     ALL_PROGRAMS: 2,
     PINNED_APPS: 3,
-    HOME_SCREEN: 4,
-    SEARCH_RESULTS: 5,
-    CATEGORIES_LIST: 6,
-    CATEGORY_APP_LIST: 7,
-    ALL_PROGRAMS_BUTTON: 8,
+    RECENT_FILES: 4,
+    HOME_SCREEN: 5,
+    SEARCH_RESULTS: 6,
+    CATEGORIES_LIST: 7,
+    CATEGORY_APP_LIST: 8,
+    ALL_PROGRAMS_BUTTON: 9,
 };
 
 var DefaultMenuView = {
@@ -65,7 +66,8 @@ var CATEGORIES = [
     {Category: CategoryType.FAVORITES, Name: _("Favorites"), Icon: 'emblem-favorite-symbolic'},
     {Category: CategoryType.FREQUENT_APPS, Name: _("Frequent Apps"), Icon: 'user-bookmarks-symbolic'},
     {Category: CategoryType.ALL_PROGRAMS, Name: _("All Programs"), Icon: 'view-grid-symbolic'},
-    {Category: CategoryType.PINNED_APPS, Name: _("Pinned Apps"), Icon: Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg'}
+    {Category: CategoryType.PINNED_APPS, Name: _("Pinned Apps"), Icon: Me.path + '/media/icons/arc-menu-symbolic.svg'},
+    {Category: CategoryType.RECENT_FILES, Name: _("Recent Files"), Icon: 'document-open-recent-symbolic'}
 ]
 
 var ArcMenuPlacement = {

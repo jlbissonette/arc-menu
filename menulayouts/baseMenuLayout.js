@@ -210,6 +210,10 @@ var BaseLayout = class {
                 favoriteMenuItem._updateIcon();
             }
         }
+        categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.RECENT_FILES);
+        if(categoryMenuItem){
+            this._loadRecentFiles(categoryMenuItem);
+        }
             
     }
 
@@ -342,6 +346,51 @@ var BaseLayout = class {
         }
 
         categoryMenuItem.appList = appList;
+    }
+
+    _loadRecentFiles(){
+        if(!this.recentManager)
+            this.recentManager = new Gtk.RecentManager();
+
+        this._recentFiles = this.recentManager.get_items();
+
+        if(!this._recentFilesChangedID){
+            this._recentFilesChangedID = this.recentManager.connect('changed', () => {
+                this._recentFiles = this.recentManager.get_items();
+            });
+        }
+    }
+
+    displayRecentFiles(box = this.applicationsBox){
+        this._clearActorsFromBox(box);
+        const homeRegExp = new RegExp('^(' + GLib.get_home_dir() + ')');
+        for(let i = 0; i < this._recentFiles.length; i++){
+            let file = Gio.File.new_for_uri(this._recentFiles[i].get_uri()).get_path();
+            let name = this._recentFiles[i].get_display_name();
+            let icon = Gio.content_type_get_symbolic_icon(this._recentFiles[i].get_mime_type()).to_string();
+            let placeMenuItem = this.createMenuItem([name, icon, file], Constants.MenuItemType.MENU_ITEM);
+            placeMenuItem.description = this._recentFiles[i].get_uri_display().replace(homeRegExp, '~');
+            placeMenuItem._updateIcon();
+            placeMenuItem.fileUri = this._recentFiles[i].get_uri();
+            placeMenuItem._removeBtn = new St.Button();
+            placeMenuItem._removeBtn.child = new St.Icon({
+                icon_name: 'edit-delete-symbolic',
+                style_class: 'popup-menu-icon',
+                icon_size: 16,
+                x_align: St.Align.END
+            });
+            placeMenuItem._removeBtn.connect('clicked', () =>  {
+                try {
+                    this.recentManager.remove_item(placeMenuItem.fileUri);
+                    box.remove_actor(placeMenuItem);
+                    placeMenuItem.destroy();
+                } catch(err) {
+                    log(err);
+                }
+            });
+            placeMenuItem.add(placeMenuItem._removeBtn);
+            box.add_actor(placeMenuItem);
+        }
     }
 
     _displayPlaces() {
@@ -519,7 +568,7 @@ var BaseLayout = class {
         }
     }
 
-    displayFavorites() {          
+    displayFavorites(){
         if(this.activeCategoryType === Constants.CategoryType.HOME_SCREEN || this.activeCategoryType === Constants.CategoryType.PINNED_APPS)
             this._clearActorsFromBox(this.applicationsBox);
         else
@@ -902,7 +951,12 @@ var BaseLayout = class {
             }
             this.placesManager.destroy();
         }
-            
+        if(this.recentManager){
+            if(this._recentFilesChangedID){
+                this.recentManager.disconnect(this._recentFilesChangedID);
+                this._recentFilesChangedID = null;
+            }
+        }
         if(this.searchBox){
             if (this._searchBoxChangedId > 0) {
                 this.searchBox.disconnect(this._searchBoxChangedId);
