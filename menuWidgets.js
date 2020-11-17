@@ -2281,7 +2281,7 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
         });
 
         let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category);
-        this._name = name;
+        this._name = _(name);
         if(gicon)
             this._icon.gicon = gicon;
         else if(iconName)
@@ -2379,7 +2379,7 @@ var SimpleMenuItem = GObject.registerClass(class Arc_Menu_SimpleMenuItem extends
         });
 
         let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category);
-        this._name = name;
+        this._name = _(name);
         if(gicon)
             this._icon.gicon = gicon;
         else if(iconName)
@@ -2546,7 +2546,7 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
         this.appList = [];
 
         let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category);
-        this._name = name;
+        this._name = _(name);
         if(gicon)
             this.icon.gicon = gicon;
         else if(iconName)

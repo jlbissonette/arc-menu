@@ -2461,7 +2461,7 @@ var MenuLayoutPage = GObject.registerClass(
         for(let styles of Constants.MENU_STYLES.Styles){
             for(let style of styles.layoutStyle){
                 if(style.layout == index){
-                    return style.name;
+                    return _(style.name);
                 }
             }
         }
@@ -2471,7 +2471,7 @@ var MenuLayoutPage = GObject.registerClass(
         for(let styles of Constants.MENU_STYLES.Styles){
             for(let style of styles.layoutStyle){
                 if(style.layout == index){
-                    return style.tweaksName;
+                    return _(style.tweaksName);
                 }
             }
         }
