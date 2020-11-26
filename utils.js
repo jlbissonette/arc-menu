@@ -105,7 +105,7 @@ function activateCategory(currentCategory, menuLayout, menuItem, extraParams = f
     else if(currentCategory === Constants.CategoryType.PINNED_APPS)
         menuLayout.displayFavorites();
     else if(currentCategory === Constants.CategoryType.FREQUENT_APPS){
-        menuLayout.setFrequentAppsList(this);
+        menuLayout.setFrequentAppsList(menuItem);
         menuLayout.displayCategoryAppList(menuItem.appList, null, extraParams ? menuItem : null);  
     }
     else if(currentCategory === Constants.CategoryType.ALL_PROGRAMS)
