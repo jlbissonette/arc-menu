@@ -334,10 +334,6 @@ var BaseLayout = class {
     _loadGnomeFavorites(categoryMenuItem){
         let appList = AppFavorites.getAppFavorites().getFavorites();
 
-        appList.sort((a, b) => {
-            return a.get_name().toLowerCase() > b.get_name().toLowerCase();
-        });
-
         //Show Recently Installed Indicator on GNOME favorites category
         for(let i = 0; i < appList.length; i++){
             let item = this.applicationsMap.get(appList[i]);
