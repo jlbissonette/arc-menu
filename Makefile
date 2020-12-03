@@ -1,7 +1,7 @@
 # Basic Makefile
 
 UUID = arcmenu@arcmenu.com
-BASE_MODULES = AUTHORS convenience.js COPYING extension.js helper.js metadata.json README.md utils.js 
+BASE_MODULES = convenience.js COPYING extension.js helper.js metadata.json README.md utils.js 
 EXTRA_MODULES = constants.js controller.js menuButton.js menuWidgets.js placeDisplay.js prefs.js prefsWidgets.js search.js
 
 MENU_LAYOUTS = arcmenu.js baseMenuLayout.js brisk.js budgie.js chromebook.js elementary.js gnomemenu.js insider.js mint.js plasma.js raven.js redmond.js runner.js simple.js simple2.js tognee.js ubuntudash.js whisker.js windows.js
