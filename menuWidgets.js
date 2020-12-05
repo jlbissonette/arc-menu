@@ -3166,30 +3166,9 @@ var DashMenuButtonWidget = class Arc_Menu_DashMenuButtonWidget{
             reactive: true
         });
         let path = this._settings.get_string('custom-menu-button-icon');
-        let iconEnum = this._settings.get_enum('menu-button-icon');
+        let iconString = Utils.getMenuButtonIcon(this._settings, path);
+        this._icon.set_gicon(Gio.icon_new_for_string(iconString));
 
-        if(iconEnum == Constants.MENU_BUTTON_ICON.Custom){
-            this._icon.set_icon_name('start-here-symbolic');
-            if (path && GLib.file_test(path, GLib.FileTest.IS_REGULAR))
-                this._icon.set_gicon(Gio.icon_new_for_string(path));
-            else{
-                global.log("ArcMenu - Custom Menu Icon Error! Set to System Default.")
-            }
-        }
-        else if(iconEnum == Constants.MENU_BUTTON_ICON.Distro_Icon){
-            iconEnum = this._settings.get_int('distro-icon');
-            path = Me.path + Constants.DISTRO_ICONS[iconEnum].path;
-            if (GLib.file_test(path, GLib.FileTest.IS_REGULAR))
-                this._icon.set_gicon(Gio.icon_new_for_string(path));
-        }
-        else{
-            iconEnum = this._settings.get_int('arc-menu-icon');
-            path = Me.path + Constants.MENU_ICONS[iconEnum].path;
-            if(Constants.MENU_ICONS[iconEnum].path === 'start-here-symbolic')
-                this._icon.set_icon_name('start-here-symbolic');
-            else if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
-                this._icon.set_gicon(Gio.icon_new_for_string(path));
-        }
         return this._icon;
     }
     getPanelIcon() {

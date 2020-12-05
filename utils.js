@@ -118,6 +118,32 @@ function activateCategory(currentCategory, menuLayout, menuItem, extraParams = f
     menuLayout.activeCategoryType = currentCategory;  
 }
 
+function getMenuButtonIcon(settings, path){
+    let iconType = settings.get_enum('menu-button-icon');
+
+    if(iconType === Constants.MENU_BUTTON_ICON.Custom){
+        if(path && GLib.file_test(path, GLib.FileTest.IS_REGULAR))
+            return path;
+    }
+    else if(iconType === Constants.MENU_BUTTON_ICON.Distro_Icon){
+        let iconEnum = settings.get_int('distro-icon');
+        path = Me.path + Constants.DISTRO_ICONS[iconEnum].path;
+        if(Constants.DISTRO_ICONS[iconEnum].path === 'start-here-symbolic')
+            return 'start-here-symbolic';
+        else if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
+            return path;   
+    }
+    else{
+        let iconEnum = settings.get_int('arc-menu-icon');
+        path = Me.path + Constants.MENU_ICONS[iconEnum].path;
+        if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
+            return path;
+    }
+
+    global.log("ArcMenu - Menu Button Icon Error! Set to System Default.");
+    return 'start-here-symbolic';
+}
+
 function setGridLayoutStyle(layout, actor, box){
     if(layout === Constants.MENU_LAYOUT.Elementary || layout === Constants.MENU_LAYOUT.UbuntuDash)
         actor.style = "width: 95px; height: 95px;";
