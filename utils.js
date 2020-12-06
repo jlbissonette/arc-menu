@@ -70,6 +70,96 @@ function getMenuLayout(button, layout){
     }
 }
 
+function getCategoryDetails(currentCategory){
+    let name, gicon, iconName, fallbackIconName;
+    let categoryMatchFound = false;
+    for(let entry of Constants.CATEGORIES){
+        if(entry.Category === currentCategory){
+            categoryMatchFound = true;
+            name = entry.Name;
+            if(entry.Icon.startsWith(Me.path))
+                gicon = Gio.icon_new_for_string(entry.Icon);
+            else
+                iconName = entry.Icon;
+            return [name, gicon, iconName, fallbackIconName];
+        }
+    }
+    if(currentCategory === Constants.CategoryType.HOME_SCREEN){
+        name = _("Home Screen");  
+        gicon = Gio.icon_new_for_string(Me.path + '/media/misc/homescreen-symbolic.svg');
+        return [name, gicon, iconName, fallbackIconName];
+    }
+    else if(!categoryMatchFound){
+        name = currentCategory.get_name();
+        gicon = currentCategory.get_icon() ? currentCategory.get_icon() : null;
+        fallbackIconName = currentCategory.get_icon() ? currentCategory.get_icon().to_string() : null;
+        return [name, gicon, iconName, fallbackIconName];
+    }
+}
+
+function activateCategory(currentCategory, menuLayout, menuItem, extraParams = false){
+    if(currentCategory === Constants.CategoryType.HOME_SCREEN){
+        menuLayout.activeCategory = _("Pinned Apps");
+        menuLayout.displayFavorites();
+    }
+    else if(currentCategory === Constants.CategoryType.PINNED_APPS)
+        menuLayout.displayFavorites();
+    else if(currentCategory === Constants.CategoryType.FREQUENT_APPS){
+        menuLayout.setFrequentAppsList(menuItem);
+        menuLayout.displayCategoryAppList(menuItem.appList, null, extraParams ? menuItem : null);  
+    }
+    else if(currentCategory === Constants.CategoryType.ALL_PROGRAMS)
+        menuLayout.displayCategoryAppList(menuItem.appList, currentCategory, extraParams ? menuItem : null);  
+    else if(currentCategory === Constants.CategoryType.RECENT_FILES)
+        menuLayout.displayRecentFiles();   
+    else
+        menuLayout.displayCategoryAppList(menuItem.appList, null, extraParams ? menuItem : null);   
+
+    menuLayout.activeCategoryType = currentCategory;  
+}
+
+function getMenuButtonIcon(settings, path){
+    let iconType = settings.get_enum('menu-button-icon');
+
+    if(iconType === Constants.MENU_BUTTON_ICON.Custom){
+        if(path && GLib.file_test(path, GLib.FileTest.IS_REGULAR))
+            return path;
+    }
+    else if(iconType === Constants.MENU_BUTTON_ICON.Distro_Icon){
+        let iconEnum = settings.get_int('distro-icon');
+        path = Me.path + Constants.DISTRO_ICONS[iconEnum].path;
+        if(Constants.DISTRO_ICONS[iconEnum].path === 'start-here-symbolic')
+            return 'start-here-symbolic';
+        else if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
+            return path;   
+    }
+    else{
+        let iconEnum = settings.get_int('arc-menu-icon');
+        path = Me.path + Constants.MENU_ICONS[iconEnum].path;
+        if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
+            return path;
+    }
+
+    global.log("ArcMenu - Menu Button Icon Error! Set to System Default.");
+    return 'start-here-symbolic';
+}
+
+function setGridLayoutStyle(layout, actor, box){
+    if(layout === Constants.MENU_LAYOUT.Elementary || layout === Constants.MENU_LAYOUT.UbuntuDash)
+        actor.style = "width: 95px; height: 95px;";
+    else
+        actor.style = "width: 80px; height: 80px;"
+    actor.style += "text-align: center; border-radius: 4px; padding: 5px; spacing: 0px";    
+    box.style = "padding: 0px; margin: 0px; spacing: 0px;";
+}
+
+function getGridIconSize(layout){
+    if(layout === Constants.MENU_LAYOUT.Elementary || layout === Constants.MENU_LAYOUT.UbuntuDash)
+        return 52;
+    else
+        return 36;
+}
+
 function findSoftwareManager(){
     let softwareManager = null;
     let appSys = imports.gi.Shell.AppSystem.get_default();
