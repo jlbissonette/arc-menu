@@ -4268,6 +4268,14 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             vbox.add(menuSettingsHeaderLabel);
 
+            let themeSettingsFrame = new Gtk.ListBox();
+            let themeSettingsFrameScrollWindow = new Gtk.ScrolledWindow();
+            themeSettingsFrameScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
+            themeSettingsFrameScrollWindow.set_max_content_height(235);
+            themeSettingsFrameScrollWindow.set_min_content_height(235);
+            themeSettingsFrameScrollWindow.add(themeSettingsFrame);
+            customArcMenuOptionsFrame.add(themeSettingsFrameScrollWindow);
+
             //ROW 1 - MENU BACKGROUND COLOR--------------------------------------   
             let menuBackgroudColorRow = new PW.FrameBoxRow();
             let menuBackgroudColorLabel = new Gtk.Label({
@@ -4288,7 +4296,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             menuBackgroudColorRow.add(menuBackgroudColorLabel);
             menuBackgroudColorRow.add(menuBackgroudColorChooser);
-            customArcMenuOptionsFrame.add(menuBackgroudColorRow);
+            themeSettingsFrame.add(menuBackgroudColorRow);
 
             //ROW 2 - MENU FOREGROUND COLOR--------------------------------------   
             let menuForegroundColorRow = new PW.FrameBoxRow();
@@ -4309,7 +4317,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             menuForegroundColorRow.add(menuForegroundColorLabel);
             menuForegroundColorRow.add(menuForegroundColorChooser);
-            customArcMenuOptionsFrame.add(menuForegroundColorRow);
+            themeSettingsFrame.add(menuForegroundColorRow);
             //ROW 2 - FONT SIZE--------------------------------------------------   
             let fontSizeRow = new PW.FrameBoxRow();
             let fontSizeLabel = new Gtk.Label({
@@ -4335,7 +4343,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             fontSizeRow.add(fontSizeLabel);
             fontSizeRow.add(fontScale);
-            customArcMenuOptionsFrame.add(fontSizeRow);
+            themeSettingsFrame.add(fontSizeRow);
             //ROW 3- Border Color-------------------------------------------------
             let borderColorRow = new PW.FrameBoxRow();
             let borderColorLabel = new Gtk.Label({
@@ -4356,7 +4364,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             borderColorRow.add(borderColorLabel);
             borderColorRow.add(borderColorChooser);
-            customArcMenuOptionsFrame.add(borderColorRow);
+            themeSettingsFrame.add(borderColorRow);
             //ROW 4 - Border Size-------------------------------------------------------
             let borderSizeRow = new PW.FrameBoxRow();
             let borderSizeLabel = new Gtk.Label({
@@ -4382,7 +4390,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             }); 
             borderSizeRow.add(borderSizeLabel);
             borderSizeRow.add(borderScale);
-            customArcMenuOptionsFrame.add(borderSizeRow);
+            themeSettingsFrame.add(borderSizeRow);
             //ROW 5- ITEM active background Color-----------------------------------------------
             let itemColorRow = new PW.FrameBoxRow();
             let itemColorLabel = new Gtk.Label({
@@ -4403,7 +4411,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             itemColorRow.add(itemColorLabel);
             itemColorRow.add(itemColorChooser);
-            customArcMenuOptionsFrame.add(itemColorRow);
+            themeSettingsFrame.add(itemColorRow);
             //ROW 5- ITEM active Foreground Color-----------------------------------------------
             let itemForegroundColorRow = new PW.FrameBoxRow();
             let itemForegroundColorLabel = new Gtk.Label({
@@ -4424,7 +4432,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             itemForegroundColorRow.add(itemForegroundColorLabel);
             itemForegroundColorRow.add(itemForegroundColorChooser);
-            customArcMenuOptionsFrame.add(itemForegroundColorRow);
+            themeSettingsFrame.add(itemForegroundColorRow);
             //ROW 6 - CORNER RADIUS-----------------------------------------------------
             let cornerRadiusRow = new PW.FrameBoxRow();
             let cornerRadiusLabel = new Gtk.Label({
@@ -4450,7 +4458,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });   
             cornerRadiusRow.add(cornerRadiusLabel);
             cornerRadiusRow.add(cornerScale);
-            customArcMenuOptionsFrame.add(cornerRadiusRow);
+            themeSettingsFrame.add(cornerRadiusRow);
             //ROW 7 - MENU MARGINS-------------------------------------------------------
             let menuMarginRow = new PW.FrameBoxRow();
             let menuMarginLabel = new Gtk.Label({
@@ -4476,7 +4484,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });   
             menuMarginRow.add(menuMarginLabel);
             menuMarginRow.add(marginScale);
-            customArcMenuOptionsFrame.add(menuMarginRow);
+            themeSettingsFrame.add(menuMarginRow);
             //ROW 8 - MENU ARROW SIZE------------------------------------------------------
             let menuArrowRow = new PW.FrameBoxRow();
             let menuArrowLabel = new Gtk.Label({
@@ -4502,7 +4510,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });   
             menuArrowRow.add(menuArrowLabel);
             menuArrowRow.add(arrowScale);
-            customArcMenuOptionsFrame.add(menuArrowRow);
+            themeSettingsFrame.add(menuArrowRow);
             let vertSeparatorRow = new PW.FrameBoxRow();
             let vertSeparatorLabel = new Gtk.Label({
                 label: _('Enable Vertical Separator'),
@@ -4522,7 +4530,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             vertSeparatorRow.add(vertSeparatorLabel);            
             vertSeparatorRow.add(vertSeparatorSwitch);             
-            customArcMenuOptionsFrame.add(vertSeparatorRow);
+            themeSettingsFrame.add(vertSeparatorRow);
             
             let separatorColorRow = new PW.FrameBoxRow();
             let separatorColorLabel = new Gtk.Label({
@@ -4545,9 +4553,11 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });
             separatorColorRow.add(separatorColorLabel);            
             separatorColorRow.add(colorChooser);             
-            customArcMenuOptionsFrame.add(separatorColorRow);
+            themeSettingsFrame.add(separatorColorRow);
             // Button Row -------------------------------------------------------
-            let buttonRow = new Gtk.Box();
+            let buttonRow = new Gtk.Box({
+                valign: Gtk.Align.END
+            });
             let resetButton = new Gtk.Button({
                 label: _("Restore Defaults")
             });   
