@@ -59,7 +59,7 @@ var DefaultMenuViewTognee = {
     ALL_PROGRAMS: 1
 }
 
-var SoftwareManagerIDs = ['org.gnome.Software.desktop', 'pamac-manager.desktop', 'io.elementary.appcenter.desktop',
+var SoftwareManagerIDs = ['org.gnome.Software.desktop', 'org.manjaro.pamac.manager.desktop', 'pamac-manager.desktop', 'io.elementary.appcenter.desktop',
                             'snap-store_ubuntu-software.desktop', 'snap-store_snap-store.desktop'];
 
 var CATEGORIES = [
