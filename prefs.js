@@ -2390,9 +2390,9 @@ var MenuLayoutPage = GObject.registerClass(
                 always_show_image: true,
                 image_position: Gtk.PositionType.RIGHT,
                 halign: Gtk.Align.END,
-                valign: Gtk.Align.FILL,
+                valign: Gtk.Align.CENTER,
                 hexpand: false,
-                vexpand: true,
+                vexpand: false,
                 tooltip_text: _("Tweaks for the current menu layout"),
             });
             menuTweaksButton.connect('clicked', () => {
@@ -2430,10 +2430,10 @@ var MenuLayoutPage = GObject.registerClass(
                 transition_type: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT
             });
 
-            let layoutsBox = new MenuLayoutsWindow(this._settings, this.stack);
             this.stack.add_named(this.scrollBox, "LayoutsBox");
             Constants.MENU_STYLES.Styles.forEach((style) => {
-                let tile = layoutsBox.createTile(style.name, Me.path + style.thumbnail, style);
+                let tile = new PW.LayoutTile(style.name, Me.path + style.thumbnail, style);
+                this.mainBox.add(tile);
                 let menuLayoutsBox = new MenuLayoutsDialog(this._settings, this, tile, style.name);
                 menuLayoutsBox.connect('menu-layout-response', (dialog, response) => { 
                     if(response === -10) {
@@ -2450,13 +2450,13 @@ var MenuLayoutPage = GObject.registerClass(
                     }
                 }); 
                 this.stack.add_named(menuLayoutsBox, "Layout_" + style.name);
-                tile.layoutButton.connect('clicked', ()=> {
+                tile._listBox.connect('row_activated', ()=> {
                     this.stack.set_visible_child_name("Layout_" + style.name);
                     menuLayoutsBox.enableSelectionMode();
                 });
                 
             });
-            this.mainBox.add(layoutsBox);
+            
             this.add(this.stack);         
     }
 
@@ -2621,48 +2621,6 @@ var MenuThemePage = GObject.registerClass(
                     break; //If equal we found match, break out of loops
                 }      
             }
-        }
-});
-//Dialog Window for ArcMenu Customization    
-var MenuLayoutsWindow = GObject.registerClass(
-    class Arc_Menu_MenuLayoutsWindow extends Gtk.Box {
-        _init(settings, stack) {
-            super._init({
-                orientation: Gtk.Orientation.VERTICAL,
-            });
-            this._settings = settings;
-            this.addResponse = false;
-            this.stack = stack;
-            this.index = this._settings.get_enum('menu-layout');
-            
-            this._params = {
-                maxColumns: Constants.MENU_STYLES.MaxColumns,
-                thumbnailHeight: Constants.MENU_STYLES.ThumbnailHeight,
-                thumbnailWidth: Constants.MENU_STYLES.ThumbnailWidth,
-                styles: Constants.MENU_STYLES.Styles
-            };
-            this._tileGrid = new PW.TileGrid(this._params.maxColumns);
-            
-            this._tileGrid.hexpand = true;
-            this._tileGrid.halign = Gtk.Align.FILL;
-            this._createLayout(this);
-        }
-
-        _createLayout(vbox) {         
-            //Add each menu layout to frame
-            this.add(this._tileGrid);
-            this._tileGrid.set_selection_mode(Gtk.SelectionMode.NONE);
-            this.show();
-        }
-
-        createTile(name, thumbnail, layoutStyle) {
-            let tile = new PW.LayoutTile(name, thumbnail, this._params.thumbnailWidth, this._params.thumbnailHeight, layoutStyle);
-            this._tileGrid.add(tile);
-            return tile;
-        }
-
-        get_response(){
-            return this.addResponse;
         }
 });
 
@@ -5633,7 +5591,40 @@ var MiscPage = GObject.registerClass(
             importColorPresetFrame.add(importColorPresetButtonsRow);
             this.add(importColorPresetFrame);
 
+            let resetSettingsButton = new Gtk.Button({ 
+                valign: Gtk.Align.END,
+                halign: Gtk.Align.END,
+                vexpand: true,
+                hexpand: true,
+                label: _("Reset all Settings"),
+                margin: 10,
+                tooltip_text: _('Reset all ArcMenu Settings to Default') 
+            });
+            let context = resetSettingsButton.get_style_context();
+            context.add_class('suggested-action');
+            resetSettingsButton.connect('clicked', (widget) => {
+                let dialog = new Gtk.MessageDialog({
+                    text: "<b>" + _("Restore Default Settings?") + '</b>\n' + _("All ArcMenu settings will be reset to the default value."),
+                    use_markup: true,
+                    buttons: Gtk.ButtonsType.YES_NO,
+                    message_type: Gtk.MessageType.WARNING,
+                    transient_for: this.get_toplevel(),
+                    modal: true
+                });
+                dialog.connect('response', (widget, response) => {
+                    if(response == Gtk.ResponseType.YES){
+                        GLib.spawn_command_line_sync('dconf reset -f /org/gnome/shell/extensions/arcmenu/');
+                        this.settingsFrameStack.foreach((child) => {
+                            this.settingsFrameStack.remove(child);
+                        });
+                        this.populateSettingsFrameStack();
+                    }
+                    dialog.destroy();
+                });
+                dialog.show();
+            });
 
+            this.add(resetSettingsButton);
         }
         _showFileChooser(title, params, acceptBtn, acceptHandler) {
             let dialog = new Gtk.FileChooserDialog(mergeObjects({ title: title, transient_for: this.get_toplevel() }, params));
@@ -6026,30 +6017,26 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
             transition_type: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT
         });
 
-
-
         let mainStackListBox = new PW.StackListBox(this, {width_request: 215});
+        
         let mainStackBox = mainStackListBox.scrollWindow;
         mainStackListBox.addRow("General", _("General"), Me.path + '/media/misc/homescreen-symbolic.svg');
-        mainStackListBox.add(createSeparator());
-        mainStackListBox.addRow("MenuLayout", _("Menu Layout"), Me.path + '/media/icons/settings_icons/menu-layouts-symbolic.svg');
+        mainStackListBox.addRow("MenuLayout", _("Menu Layout"), Me.path + '/media/icons/settings_icons/menu-layouts-symbolic.svg')
         mainStackListBox.addRow("MenuTheme", _("Menu Theme"), Me.path + '/media/icons/settings_icons/menu-theme-symbolic.svg');
         mainStackListBox.addRow("MenuSettingsGeneral", _("Menu Settings"), Me.path + '/media/icons/settings_icons/menu-settings-symbolic.svg', "MenuSettings");
-        mainStackListBox.add(createSeparator());
-        mainStackListBox.addRow("ButtonAppearance", _("Button Appearance"),  Me.path + '/media/icons/arc-menu-symbolic.svg');
-        mainStackListBox.add(createSeparator());
-        mainStackListBox.addRow("Misc", _("Misc"), Me.path + '/media/icons/settings_icons/misc-symbolic.svg');
+        mainStackListBox.addRow("ButtonAppearance", _("Button Appearance"),  Me.path + '/media/icons/arc-menu-symbolic.svg')
+        mainStackListBox.addRow("Misc", _("Misc"), Me.path + '/media/icons/settings_icons/misc-symbolic.svg')
         mainStackListBox.addRow("About", _("About"), Me.path + '/media/misc/info-circle-symbolic.svg');
+        mainStackListBox.setSeparatorIndices([1, 4, 5]);
 
         let menuSettingsStackListBox = new PW.StackListBox(this, {width_request: 215});
         let menuSettingsListBox = menuSettingsStackListBox.scrollWindow;
         menuSettingsStackListBox.addRow("MenuSettingsGeneral", _("Menu Settings"), Me.path + '/media/icons/settings_icons/menu-settings-symbolic.svg');
-        menuSettingsStackListBox.add(createSeparator());
         menuSettingsStackListBox.addRow("MenuSettingsPinnedApps", _("Pinned Apps"), Me.path + '/media/icons/settings_icons/pinned-apps-symbolic.svg');
         menuSettingsStackListBox.addRow("MenuSettingsShortcutDirectories", _("Shortcuts"), Me.path + '/media/icons/settings_icons/shortcuts-symbolic.svg', 'MenuSettingsShortcuts');
         menuSettingsStackListBox.addRow("MenuSettingsCategories", _("Categories"), Me.path + '/media/icons/settings_icons/categories-symbolic.svg');
-        menuSettingsStackListBox.add(createSeparator());
         menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), Me.path + '/media/icons/settings_icons/fine-tune-symbolic.svg');
+        menuSettingsStackListBox.setSeparatorIndices([1, 4]);
  
         let menuSettingsShortcutsStackListBox = new PW.StackListBox(this, {width_request: 215});
         let menuSettingsShortcutsListBox = menuSettingsShortcutsStackListBox.scrollWindow;
@@ -6066,42 +6053,6 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
         sidebar.set_stack(this.settingsListStack);
         this.add(this.settingsListStack);
         this.add(sidebar);
-
-        let resetButtonRow = new Gtk.ListBox({
-            valign: Gtk.Align.END,
-        });
-        let resetSettingsButton = new Gtk.Button({ 
-            valign: Gtk.Align.END,
-            label: _("Reset all..."),
-            margin: 10,
-            tooltip_text: _('Reset all ArcMenu Settings to Default') 
-        });
-        let context = resetSettingsButton.get_style_context();
-        context.add_class('suggested-action');
-        resetSettingsButton.connect('clicked', (widget) => {
-            let dialog = new Gtk.MessageDialog({
-                text: "<b>" + _("Restore Default Settings?") + '</b>\n' + _("All ArcMenu settings will be reset to the default value."),
-                use_markup: true,
-                buttons: Gtk.ButtonsType.YES_NO,
-                message_type: Gtk.MessageType.WARNING,
-                transient_for: this.get_toplevel(),
-                modal: true
-            });
-            dialog.connect('response', (widget, response) => {
-                if(response == Gtk.ResponseType.YES){
-                    GLib.spawn_command_line_sync('dconf reset -f /org/gnome/shell/extensions/arcmenu/');
-                    this.settingsFrameStack.foreach((child) => {
-                        this.settingsFrameStack.remove(child);
-                    });
-                    this.populateSettingsFrameStack();
-                }
-                dialog.destroy();
-            });
-            dialog.show();
-        });
-        resetButtonRow.add(resetSettingsButton);
-        resetSettingsButton.get_parent().set_activatable(false);
-        resetSettingsButton.get_parent().set_selectable(false);
 
         this.add(this.settingsFrameStack);
         this.populateSettingsFrameStack();
