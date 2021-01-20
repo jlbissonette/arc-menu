@@ -316,7 +316,11 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends Gtk.Button{
 
 var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBox{
     _init(name, file, width, height, layout) {
-        super._init();
+        super._init({
+            valign: Gtk.Align.CENTER,
+            hexpand: true,
+            vexpand: false
+        });
         this.name = name;
         this.layout = layout.layoutStyle;
         
@@ -324,28 +328,30 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
             selectable: false,
             activatable: false
         });
-        this.box._grid.row_spacing = 10;
+        this.box._grid.row_spacing = 0;
 
-        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(file, 75, 75);
+        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(file, 95, 95);
         this._image = new Gtk.Image({ 
             hexpand: false,
             halign: Gtk.Align.START,
             pixbuf: pixbuf 
         });
-        this.box._grid.attach(this._image, 0, 0, 1, 1);
+        this.box._grid.attach(this._image, 0, 0, 1, 2);
 
         let styleLabel = new Gtk.Label({
             label: "<b>" + _(layout.descriptionTitle) + "</b>",
             use_markup: true,
-            hexpand: false,
-            halign: Gtk.Align.START,
+            hexpand: true,
+            halign: Gtk.Align.CENTER,
             wrap: true,
         })
         let descriptoinLabel = new Gtk.Label({
             label: _(layout.description),
             use_markup: true,
             hexpand: true,
-            halign: Gtk.Align.START,
+            vexpand: false,
+            halign: Gtk.Align.CENTER,
+            justify: Gtk.Justification.CENTER,
             wrap: true,
             xalign: 0
         })
@@ -353,21 +359,19 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
             gicon: Gio.icon_new_for_string('go-next-symbolic'),
         })
         this.layoutButton = new Gtk.Button({
-            label: _(this.name),
             image: iconImage,
             always_show_image: true,
             image_position: Gtk.PositionType.RIGHT,
             halign: Gtk.Align.END,
-            valign: Gtk.Align.CENTER,
-            hexpand: true,
+            valign: Gtk.Align.FILL,
+            hexpand: false,
             vexpand: false,
             tooltip_text: _('Browse all %s layouts').format(_(this.name))
         });
 
-        this.box._grid.attach(this.layoutButton, 1, 0, 1, 1);
-        this.box._grid.attach(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), 0, 1, 2, 1);
-        this.box._grid.attach(styleLabel, 0, 2, 1, 1);
-        this.box._grid.attach(descriptoinLabel, 0, 3, 1, 1);
+        this.box._grid.attach(this.layoutButton, 2, 0, 1, 2);
+        this.box._grid.attach(styleLabel, 1, 0, 1, 1);
+        this.box._grid.attach(descriptoinLabel, 1, 1, 1, 1);
         
         this.add(this.box);
    }

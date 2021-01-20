@@ -2368,9 +2368,9 @@ var MenuLayoutPage = GObject.registerClass(
             let currentLayoutFrame = new PW.FrameBox();
 
             let currentLayoutBoxLabel = new Gtk.Label({
-                label: this.getMenuLayoutName(this._settings.get_enum('menu-layout')),
+                label: "<b>" + this.getMenuLayoutName(this._settings.get_enum('menu-layout')) + "</b>",
                 use_markup: true,
-                hexpand: false,
+                hexpand: true,
                 vexpand: false,
                 halign: Gtk.Align.CENTER,
                 valign: Gtk.Align.CENTER
@@ -2381,13 +2381,20 @@ var MenuLayoutPage = GObject.registerClass(
             });
             currentLayoutBoxRow._grid.row_spacing = 0;
             
-            let menuTweaksButton = new PW.IconButton({
-                circular: true,
+            let menuTweaksButtonImage = new Gtk.Image({
                 icon_name: 'emblem-system-symbolic',
+                halign: Gtk.Align.CENTER
+            });
+            let menuTweaksButton = new Gtk.Button({
+                image: menuTweaksButtonImage,
+                always_show_image: true,
+                image_position: Gtk.PositionType.RIGHT,
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.FILL,
+                hexpand: false,
+                vexpand: true,
                 tooltip_text: _("Tweaks for the current menu layout"),
             });
-            menuTweaksButton.vexpand = false;
-            menuTweaksButton.valign = Gtk.Align.CENTER;
             menuTweaksButton.connect('clicked', () => {
                 let dialog = new LayoutTweaks.tweaks.TweaksDialog(this._settings, this, this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')));
                 dialog.show_all();
@@ -2403,8 +2410,9 @@ var MenuLayoutPage = GObject.registerClass(
             
             let currentLayoutImage = new Gtk.Image({
                 gicon: Gio.icon_new_for_string(Me.path + currentLayoutThumbnailPath),
-                pixel_size: 100,
-                halign: Gtk.Align.START
+                pixel_size: 95,
+                halign: Gtk.Align.START,
+                valign: Gtk.Align.CENTER,
             });
             let tweaksLabel = new Gtk.Label({
                 label: this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')),
@@ -2414,9 +2422,8 @@ var MenuLayoutPage = GObject.registerClass(
                 hexpand: true
             }); 
 
-            currentLayoutBoxRow._grid.attach(currentLayoutBoxLabel, 0, 1, 1, 1);
-            currentLayoutBoxRow._grid.attach(tweaksLabel, 1, 0, 1, 1);
-            currentLayoutBoxRow._grid.attach(menuTweaksButton, 2, 0, 1, 1);
+            currentLayoutBoxRow._grid.attach(currentLayoutBoxLabel, 1, 0, 1, 1);
+            currentLayoutBoxRow._grid.attach(menuTweaksButton, 3, 0, 1, 1);
             currentLayoutBoxRow._grid.attach(currentLayoutImage, 0, 0, 1, 1);
             currentLayoutFrame.add(currentLayoutBoxRow);
             this.mainBox.add(currentLayoutFrame);
@@ -2436,7 +2443,7 @@ var MenuLayoutPage = GObject.registerClass(
                     if(response === -10) {
                         this._settings.set_enum('menu-layout', dialog.index);
                         this._settings.set_boolean('reload-theme', true);
-                        currentLayoutBoxLabel.label = this.getMenuLayoutName(dialog.index);
+                        currentLayoutBoxLabel.label = "<b>" + this.getMenuLayoutName(dialog.index) + "</b>";
                         tweaksLabel.label = this.getMenuLayoutTweaksName(dialog.index);
                         currentLayoutImage.gicon = Gio.icon_new_for_string(Me.path + this.getMenuLayoutThumbnailPath(dialog.index));
                         this.stack.set_visible_child_name("LayoutsBox");
@@ -2696,31 +2703,9 @@ var MenuLayoutsDialog = GObject.registerClass({
             })
             mainBox._grid.orientation = Gtk.Orientation.VERTICAL;
             mainFrame.add(mainBox);
-            let chooseNewLayoutLabel = new Gtk.Label({
-                label: "<b>" + _(this.title) + " " + _("Menu Layouts") + "</b>",
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
+            let buttonBox = new Gtk.Box({
+                spacing: 10
             });
-            this.add(chooseNewLayoutLabel);
-            this.add(mainFrame);
-            this._tileGrid = new PW.TileGrid(this._params.maxColumns);
-            this._createLayout(mainBox);
-        }
-
-        _createLayout(vbox){
-            //Add each menu layout to frame
-            this._params.styles.forEach((style) => {
-                this._addTile(style.name, Me.path + style.thumbnail, style.layout);
-            });
-
-            vbox.add(this._tileGrid);
-
-            this._tileGrid.connect('selected-children-changed', () => {
-                applyButton.set_sensitive(true);
-            });
-
-            let buttonBox = new Gtk.Box();
             let applyButton = new Gtk.Button({
                 label: _("Apply"),
                 hexpand: true,
@@ -2746,11 +2731,34 @@ var MenuLayoutsDialog = GObject.registerClass({
                 this.emit('menu-layout-response', -20);
             });
             buttonBox.add(backButton);
-            buttonBox.add(applyButton)
-            this.add(buttonBox);
-            this._tileGrid.set_selection_mode(Gtk.SelectionMode.NONE);
+            let chooseNewLayoutLabel = new Gtk.Label({
+                label: "<b>" + _(this.title) + " " + _("Menu Layouts") + "</b>",
+                use_markup: true,
+                halign: Gtk.Align.START,
+                hexpand: true
+            });
+            buttonBox.add(chooseNewLayoutLabel);
+            buttonBox.add(applyButton);
             applyButton.set_sensitive(false);
+
+            this.add(buttonBox);
+            this.add(mainFrame);
+            this._tileGrid = new PW.TileGrid(this._params.maxColumns);
+            //Add each menu layout to frame
+            this._params.styles.forEach((style) => {
+                this._addTile(style.name, Me.path + style.thumbnail, style.layout);
+            });
+
+            mainBox.add(this._tileGrid);
+
+            this._tileGrid.connect('selected-children-changed', () => {
+                applyButton.set_sensitive(true);
+            });
+
+   
+            this._tileGrid.set_selection_mode(Gtk.SelectionMode.NONE);
         }
+
 
         enableSelectionMode(){
             this._tileGrid.set_selection_mode(Gtk.SelectionMode.SINGLE);
@@ -6022,10 +6030,7 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
             transition_type: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT
         });
 
-        this.leftPanelBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL
-        });
-        this.leftPanelBox.add(this.settingsListStack);
+
 
         let mainStackListBox = new PW.StackListBox(this, {width_request: 215});
         let mainStackBox = mainStackListBox.scrollWindow;
@@ -6060,6 +6065,11 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
         this.settingsListStack.add_named(mainStackBox, "Main");
         this.settingsListStack.add_named(menuSettingsListBox, "MenuSettings");
         this.settingsListStack.add_named(menuSettingsShortcutsListBox, "MenuSettingsShortcuts");
+
+        let sidebar = new Gtk.StackSidebar();
+        sidebar.set_stack(this.settingsListStack);
+        this.add(this.settingsListStack);
+        this.add(sidebar);
 
         let resetButtonRow = new Gtk.ListBox({
             valign: Gtk.Align.END,
@@ -6097,11 +6107,7 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
         resetSettingsButton.get_parent().set_activatable(false);
         resetSettingsButton.get_parent().set_selectable(false);
 
-        this.leftPanelBox.add(resetButtonRow);
-        this.add(this.leftPanelBox);
-        this.add(Gtk.Separator.new(Gtk.Orientation.VERTICAL));
         this.add(this.settingsFrameStack);
-
         this.populateSettingsFrameStack();
     }
 
