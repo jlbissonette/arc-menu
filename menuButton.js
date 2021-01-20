@@ -387,10 +387,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             }
             else if(this._settings.get_boolean('gnome-dash-show-applications') && Main.overview.visible && !Main.overview.viewSelector._showAppsButton.checked)
                 Main.overview.viewSelector._showAppsButton.checked = true;
-            else if(this._settings.get_boolean('gnome-dash-show-applications') && Main.overview.visible && Main.overview.viewSelector._showAppsButton.checked){
-                Main.overview.viewSelector._showAppsButton.checked = false;
-                Main.overview.toggle();
-            }
             else
                 Main.overview.toggle();
         }
