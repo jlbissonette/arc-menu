@@ -2398,12 +2398,8 @@ var MenuLayoutPage = GObject.registerClass(
             menuTweaksButton.connect('clicked', () => {
                 let dialog = new LayoutTweaks.tweaks.TweaksDialog(this._settings, this, this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')));
                 dialog.show_all();
-                dialog.connect('response', (response) => { 
-                    if(dialog.get_response()){
-                        dialog.destroy();
-                    }
-                    else
-                        dialog.destroy();
+                dialog.connect('response', () => { 
+                    dialog.destroy();
                 }); 
             });
             let currentLayoutThumbnailPath = this.getMenuLayoutThumbnailPath(this._settings.get_enum('menu-layout'));
