@@ -129,6 +129,10 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
             //last row - save settings
             this.savePinnedAppsButton = new Gtk.Button({
                 label: _("Apply"),
+                hexpand: true,
+                halign: Gtk.Align.END,
+                vexpand: true,
+                valign: Gtk.Align.END
             });
             this.savePinnedAppsButton.connect('clicked', ()=> {
                 //iterate through each frame row (containing apps to pin) to create an array to save in settings
@@ -1643,8 +1647,8 @@ var ButtonAppearancePage = GObject.registerClass(
                     orientation: Gtk.Orientation.VERTICAL,
                     margin: 24,
                     spacing: 20,
-                    vexpand: false,
-                    valign: Gtk.Align.START
+                    vexpand: true,
+                    valign: Gtk.Align.FILL
             });
     
             this.add_with_viewport(this.mainBox);
@@ -2041,7 +2045,9 @@ var ButtonAppearancePage = GObject.registerClass(
             let resetButton = new Gtk.Button({
                 label: _("Restore Defaults"),
                 halign: Gtk.Align.START,
-                hexpand: true
+                hexpand: true,
+                valign: Gtk.Align.END,
+                vexpand: true
             });   
             resetButton.set_sensitive(this.checkIfResetButtonSensitive());
             resetButton.connect('clicked', ()=> {
@@ -2493,8 +2499,8 @@ var MenuThemePage = GObject.registerClass(
                     orientation: Gtk.Orientation.VERTICAL,
                     margin: 24,
                     spacing: 20,
-                    vexpand: false,
-                    valign: Gtk.Align.START
+                    vexpand: true,
+                    valign: Gtk.Align.FILL
             });
     
             this.add_with_viewport(this.mainBox);
@@ -2729,8 +2735,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
                 orientation: Gtk.Orientation.VERTICAL,
                 margin: 24,
                 spacing: 20,
-                vexpand: false,
-                valign: Gtk.Align.START
+                vexpand: true,
+                valign: Gtk.Align.FILL
         });
 
         this.add_with_viewport(this.mainBox);
@@ -3078,8 +3084,10 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         this.mainBox.add(recentAppsFrame);
 
-        let buttonRow = new PW.FrameBoxRow();
-        buttonRow.setVerticalAlignmentBottom();
+        let buttonRow = new Gtk.Box({
+            valign: Gtk.Align.END,
+            vexpand: true
+        });
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
             tooltip_text: _("Restore the default Extra Categories")
@@ -3160,8 +3168,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
                 orientation: Gtk.Orientation.VERTICAL,
                 margin: 24,
                 spacing: 20,
-                vexpand: false,
-                valign: Gtk.Align.START
+                vexpand: true,
+                valign: Gtk.Align.FILL
         });
 
         this.add_with_viewport(this.mainBox);
@@ -3404,8 +3412,10 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         gapAdjustmentFrame.add(gapAdjustmentRow);
         this.mainBox.add(gapAdjustmentFrame);
 
-        let buttonRow = new PW.FrameBoxRow();
-        buttonRow.setVerticalAlignmentBottom();
+        let buttonRow = new Gtk.Box({
+            valign: Gtk.Align.END,
+            vexpand: true
+        });
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
             tooltip_text: _("Restore the default Extra Categories")
@@ -3484,8 +3494,8 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
                 orientation: Gtk.Orientation.VERTICAL,
                 margin: 24,
                 spacing: 20,
-                vexpand: false,
-                valign: Gtk.Align.START
+                vexpand: true,
+                valign: Gtk.Align.FILL
         });
 
         this.add_with_viewport(this.mainBox);
@@ -3496,8 +3506,10 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
         this._createFrame(this._settings.get_value("extra-categories").deep_unpack());
         this.mainBox.add(this.categoriesFrame);
 
-        let buttonRow = new PW.FrameBoxRow();
-        buttonRow.setVerticalAlignmentBottom();
+        let buttonRow = new Gtk.Box({
+            valign: Gtk.Align.END,
+            vexpand: true
+        });
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
             tooltip_text: _("Restore the default Extra Categories")
@@ -3969,6 +3981,8 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             super._init({
                 orientation: Gtk.Orientation.VERTICAL,
                 spacing: 20,
+                vexpand: true,
+                valign: Gtk.Align.FILL
             });
             this.parentBox = parentBox;
             this._settings = settings;
@@ -4503,10 +4517,13 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             themeSettingsFrame.add(separatorColorRow);
             // Button Row -------------------------------------------------------
             let buttonRow = new Gtk.Box({
-                valign: Gtk.Align.END
+                valign: Gtk.Align.END,
+                vexpand: true
             });
             let resetButton = new Gtk.Button({
-                label: _("Restore Defaults")
+                label: _("Restore Defaults"),
+                valign: Gtk.Align.END,
+                vexpand: true
             });   
             resetButton.set_sensitive( this.checkIfResetButtonSensitive());
             resetButton.connect('clicked', ()=> {
@@ -4556,20 +4573,20 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             
             let applyButton = new Gtk.Button({
                 label: _("Apply"),
-                hexpand: true
+                hexpand: true,
+                halign: Gtk.Align.END
             });
             applyButton.connect('clicked', ()=> {
                 applyButton.set_sensitive(false); 
                 this.emit('menu-theme-response', -10);
             });
-            applyButton.set_halign(Gtk.Align.END);
             applyButton.set_sensitive(false);
+
             buttonRow.add(resetButton);
             buttonRow.add(applyButton);
 
             vbox.add(customArcMenuOptionsFrame);
-            vbox.add(buttonRow);
-            
+            vbox.add(buttonRow);   
         }
         get_response(){
             return this.addResponse;
@@ -4628,8 +4645,8 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
                 orientation: Gtk.Orientation.VERTICAL,
                 margin: 24,
                 spacing: 20,
-                vexpand: false,
-                valign: Gtk.Align.START
+                vexpand: true,
+                valign: Gtk.Align.FILL
         });
 
         this.add_with_viewport(this.mainBox);
@@ -4720,7 +4737,10 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
         this.mainBox.add(addCustomAppFrame);
 
 
-        let buttonRow = new PW.FrameBoxRow();
+        let buttonRow = new Gtk.Box({
+            valign: Gtk.Align.END,
+            vexpand: true
+        });
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
             tooltip_text: _("Restore the default Directory Shortcuts")
@@ -4905,8 +4925,8 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
                 orientation: Gtk.Orientation.VERTICAL,
                 margin: 24,
                 spacing: 20,
-                vexpand: false,
-                valign: Gtk.Align.START
+                vexpand: true,
+                valign: Gtk.Align.FILL
         });
 
         this.add_with_viewport(this.mainBox);
@@ -4996,7 +5016,10 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         addCustomAppFrame.add(addCustomAppFrameRow);
         this.mainBox.add(addCustomAppFrame);
 
-        let buttonRow = new PW.FrameBoxRow();
+        let buttonRow = new Gtk.Box({
+            valign: Gtk.Align.END,
+            vexpand: true
+        });
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
             tooltip_text: _("Restore the default Application Shortcuts")
@@ -5566,11 +5589,10 @@ var MiscPage = GObject.registerClass(
 
             let resetSettingsButton = new Gtk.Button({ 
                 valign: Gtk.Align.END,
-                halign: Gtk.Align.END,
+                halign: Gtk.Align.START,
                 vexpand: true,
-                hexpand: true,
+                hexpand: false,
                 label: _("Reset all Settings"),
-                margin: 10,
                 tooltip_text: _('Reset all ArcMenu Settings to Default') 
             });
             let context = resetSettingsButton.get_style_context();
