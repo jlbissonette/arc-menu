@@ -762,7 +762,6 @@ var TweaksDialog = GObject.registerClass(
                 //create the three buttons to handle the ordering of pinned apps
                 //and delete pinned apps
                 let addPinnedAppsButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'text-editor-symbolic',
                     tooltip_text: _("Change")
                 });
@@ -793,17 +792,14 @@ var TweaksDialog = GObject.registerClass(
                 });
 
                 let editButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'emblem-system-symbolic',
                     tooltip_text: _("Modify")
                 });
                 let upButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'go-up-symbolic',
                     tooltip_text: _('Move Up')
                 });
                 let downButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'go-down-symbolic',
                     tooltip_text: _('Move Down')
                 });

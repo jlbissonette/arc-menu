@@ -63,7 +63,6 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
                 hexpand: true
             });
             let addPinnedAppsButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'list-add-symbolic',
                 tooltip_text: _("Browse a list of all applications to add to your Pinned Apps list.")
             });
@@ -104,7 +103,6 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
                 hexpand: true
             });
             let addCustomAppButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'list-add-symbolic',
                 tooltip_text: _("Create a custom shortcut to add to your Pinned Apps list.")
             });
@@ -197,22 +195,18 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
                 //create the three buttons to handle the ordering of pinned apps
                 //and delete pinned apps
                 let editButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'emblem-system-symbolic',
                     tooltip_text: _('Modify')
                 });
                 let upButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'go-up-symbolic',
                     tooltip_text: _('Move Up')
                 });
                 let downButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'go-down-symbolic',
                     tooltip_text: _('Move Down')
                 });
                 let deleteButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'edit-delete-symbolic',
                     tooltip_text: _('Delete')
                 });
@@ -552,7 +546,6 @@ var AddAppsToPinnedListWindow = GObject.registerClass(
                     
                     
                     let checkButton = new PW.IconButton({
-                        circular: false,
                         icon_name: 'list-add-symbolic'
                     });
                     checkButton.margin_right = 20;
@@ -664,7 +657,6 @@ var AddAppsToPinnedListWindow = GObject.registerClass(
                     }
                     else{
                         let checkButton = new PW.IconButton({
-                            circular: false,
                             icon_name: 'list-add-symbolic'
                         });
                         checkButton.margin_right = 20;
@@ -848,7 +840,6 @@ var GeneralPage = GObject.registerClass(
             });
             
             let modifyHotCornerButton = new PW.IconButton({
-                circular: true,
                 icon_name: 'emblem-system-symbolic',
                 tooltip_text: _("Modify the action of the Activities Hot Corner")
             });
@@ -3586,12 +3577,10 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
             });
          
             let upButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'go-up-symbolic',
                 tooltip_text: _('Move Up')
             });
             let downButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'go-down-symbolic',
                 tooltip_text: _('Move Down')
             });
@@ -3891,19 +3880,15 @@ var ManageColorThemeDialogWindow = GObject.registerClass(
                 //create the three buttons to handle the ordering of pinned apps
                 //and delete pinned apps
                 let editButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'emblem-system-symbolic'
                 });
                 let upButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'go-up-symbolic'
                 });
                 let downButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'go-down-symbolic'
                 });
                 let deleteButton = new PW.IconButton({
-                     circular: false,
                     icon_name: 'edit-delete-symbolic'
                 });
                 editButton.connect('clicked', () => {
@@ -4673,7 +4658,6 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
             hexpand: true
         });
         let addPinnedAppsButton = new PW.IconButton({
-            circular: false,
             icon_name: 'list-add-symbolic',
             tooltip_text: _("Browse a list of all default User Directories to add to your Directories Shortcuts")
         });
@@ -4712,7 +4696,6 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
             hexpand: true
         });
         let addCustomAppButton = new PW.IconButton({
-            circular: false,
             icon_name: 'list-add-symbolic',
             tooltip_text: _("Create a custom shortcut to add to your Directories Shortcuts")
         });
@@ -4825,24 +4808,20 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
             let editButton;
             if(editable){
                 editButton = new PW.IconButton({
-                    circular: false,
                     icon_name: 'emblem-system-symbolic',
                     tooltip_text: _('Modify')
                 });
             }
 
             let upButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'go-up-symbolic',
                 tooltip_text: _('Move Up')
             });
             let downButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'go-down-symbolic',
                 tooltip_text: _('Move Down')
             });
             let deleteButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'edit-delete-symbolic',
                 tooltip_text: _('Delete')
             });
@@ -4956,7 +4935,6 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
             hexpand: true
         });
         let addPinnedAppsButton = new PW.IconButton({
-            circular: false,
             icon_name: 'list-add-symbolic',
             tooltip_text: _("Browse a list of all applications to add to your Application Shortcuts")
         });
@@ -4995,7 +4973,6 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
             hexpand: true
         });
         let addCustomAppButton = new PW.IconButton({
-            circular: false,
             icon_name: 'list-add-symbolic',
             tooltip_text: _("Create a custom shortcut to add to your Application Shortcuts")
         });
@@ -5108,22 +5085,18 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
             //create the buttons to handle the ordering of pinned apps
             //and delete pinned apps
             let editButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'emblem-system-symbolic',
                 tooltip_text: _('Modify')
             });
             let upButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'go-up-symbolic',
                 tooltip_text: _('Move Up')
             });
             let downButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'go-down-symbolic',
                 tooltip_text: _('Move Down')
             });
             let deleteButton = new PW.IconButton({
-                circular: false,
                 icon_name: 'edit-delete-symbolic',
                 tooltip_text: _('Delete')
             });

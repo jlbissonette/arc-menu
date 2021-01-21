@@ -67,10 +67,6 @@ var IconButton = GObject.registerClass(class Arc_Menu_IconButton extends Gtk.But
         super._init();
         this._params = params;
 
-        if (this._params.circular) {
-            let context = this.get_style_context();
-            context.add_class('circular');
-        }
         if (this._params.icon_name) {
             let image = new Gtk.Image({
                 icon_name: this._params.icon_name,
