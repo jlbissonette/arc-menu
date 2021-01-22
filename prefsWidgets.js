@@ -67,10 +67,6 @@ var IconButton = GObject.registerClass(class Arc_Menu_IconButton extends Gtk.But
         super._init();
         this._params = params;
 
-        if (this._params.circular) {
-            let context = this.get_style_context();
-            context.add_class('circular');
-        }
         if (this._params.icon_name) {
             let image = new Gtk.Image({
                 icon_name: this._params.icon_name,
@@ -230,7 +226,11 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
     }
 
     addRow(name, translateableName, iconName, nextPage){
+        let row1 = new Gtk.ListBoxRow();
+        this.add(row1);
+
         let row = new Gtk.Grid({margin: 12, column_spacing: 10});
+        row1.add(row);
         row.stackName = name;
         row.translateableName = translateableName;
         
@@ -254,8 +254,19 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
             });
             row.add(image2);
         }
+    }
 
-        this.add(row);
+    setSeparatorIndices(indexArray){
+        this.set_header_func((_row, _before) =>{
+            for(let i = 0; i < indexArray.length; i++){
+                if(_row.get_index() === indexArray[i]){
+                    let sep = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL);
+                    sep.show();
+                    _row.set_header(sep);
+                    
+                }
+            }
+        });
     }
 });
 
@@ -315,29 +326,32 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends Gtk.Button{
 });
 
 var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBox{
-    _init(name, file, width, height, layout) {
-        super._init();
+    _init(name, file, layout) {
+        super._init({
+            valign: Gtk.Align.CENTER,
+            hexpand: true,
+            vexpand: false
+        });
+        this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.name = name;
         this.layout = layout.layoutStyle;
         
-        this.box = new FrameBoxRow({ 
-            selectable: false,
-            activatable: false
-        });
-        this.box._grid.row_spacing = 10;
+        this.box = new FrameBoxRow();
+        this.box.activatable = true;
+        this.box._grid.row_spacing = 0;
 
-        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(file, 75, 75);
+        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(file, 95, 95);
         this._image = new Gtk.Image({ 
             hexpand: false,
             halign: Gtk.Align.START,
             pixbuf: pixbuf 
         });
-        this.box._grid.attach(this._image, 0, 0, 1, 1);
+        this.box._grid.attach(this._image, 0, 0, 1, 2);
 
         let styleLabel = new Gtk.Label({
             label: "<b>" + _(layout.descriptionTitle) + "</b>",
             use_markup: true,
-            hexpand: false,
+            hexpand: true,
             halign: Gtk.Align.START,
             wrap: true,
         })
@@ -345,6 +359,7 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
             label: _(layout.description),
             use_markup: true,
             hexpand: true,
+            vexpand: false,
             halign: Gtk.Align.START,
             wrap: true,
             xalign: 0
@@ -352,22 +367,10 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
         let iconImage = new Gtk.Image({
             gicon: Gio.icon_new_for_string('go-next-symbolic'),
         })
-        this.layoutButton = new Gtk.Button({
-            label: _(this.name),
-            image: iconImage,
-            always_show_image: true,
-            image_position: Gtk.PositionType.RIGHT,
-            halign: Gtk.Align.END,
-            valign: Gtk.Align.CENTER,
-            hexpand: true,
-            vexpand: false,
-            tooltip_text: _('Browse all %s layouts').format(_(this.name))
-        });
 
-        this.box._grid.attach(this.layoutButton, 1, 0, 1, 1);
-        this.box._grid.attach(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL), 0, 1, 2, 1);
-        this.box._grid.attach(styleLabel, 0, 2, 1, 1);
-        this.box._grid.attach(descriptoinLabel, 0, 3, 1, 1);
+        this.box._grid.attach(iconImage, 2, 0, 1, 2);
+        this.box._grid.attach(styleLabel, 1, 0, 1, 1);
+        this.box._grid.attach(descriptoinLabel, 1, 1, 1, 1);
         
         this.add(this.box);
    }
