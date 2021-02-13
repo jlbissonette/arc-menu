@@ -86,7 +86,7 @@ function getCategoryDetails(currentCategory){
     }
     if(currentCategory === Constants.CategoryType.HOME_SCREEN){
         name = _("Home Screen");  
-        gicon = Gio.icon_new_for_string(Me.path + '/media/misc/homescreen-symbolic.svg');
+        gicon = Gio.icon_new_for_string(Me.path + '/media/icons/menu_icons/homescreen-symbolic.svg');
         return [name, gicon, iconName, fallbackIconName];
     }
     else if(!categoryMatchFound){
@@ -447,7 +447,8 @@ function createStylesheet(settings){
     let plasmaSelectedItemColor = settings.get_string('plasma-selected-color');
     let plasmaSelectedItemBackgroundColor = settings.get_string('plasma-selected-background-color');
     let plasmaSearchBarTop = settings.get_enum('searchbar-default-top-location');
-    let tooltipStyle = '';
+    let disableMenuButtonActiveIndicator = settings.get_boolean('disable-menu-button-active-indicator');
+    let tooltipStyle;
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
         tooltipStyle = ".tooltip-menu-item{\nbox-shadow:0 0 0 1px " + modifyColorLuminance(menuColor, 0.10) + ";\nfont-size:" + fontSize + "pt;\npadding: 2px 5px;\nmin-height: 0px;"
@@ -456,6 +457,22 @@ function createStylesheet(settings){
     else
         tooltipStyle = ".tooltip-menu-item{\npadding: 2px 5px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
     
+    let menuButtonStyle = '';
+    if(settings.get_boolean('override-menu-button-color'))
+        menuButtonStyle += ".arc-menu-icon, .arc-menu-text, .arc-menu-arrow{\ncolor: " + menuButtonColor + ";\n}\n\n";
+    if(settings.get_boolean('override-menu-button-hover-background-color'))
+        menuButtonStyle += ".arc-menu-panel-menu:hover{\nbackground-color: " + menuButtonHoverBackgroundcolor + ";\n}\n\n";
+    if(settings.get_boolean('override-menu-button-hover-color'))
+        menuButtonStyle += ".arc-menu-panel-menu:hover .arc-menu-icon, .arc-menu-panel-menu:hover .arc-menu-text"
+                            +", .arc-menu-panel-menu:hover .arc-menu-arrow{\ncolor: " + menuButtonHoverColor + ";\n}\n\n";
+    if(settings.get_boolean('override-menu-button-active-color'))
+        menuButtonStyle += ".arc-menu-icon:active, .arc-menu-text:active, .arc-menu-arrow:active{\ncolor: " + menuButtonActiveColor + ";\n}\n\n";
+    if(settings.get_boolean('override-menu-button-active-background-color'))
+        menuButtonStyle += ".arc-menu-panel-menu:active{\nbackground-color: " + menuButtonActiveBackgroundcolor + ";\n" + (disableMenuButtonActiveIndicator ? "box-shadow: none;\n" : '') + "}\n\n";
+    else
+        menuButtonStyle += ".arc-menu-panel-menu:active{\n" + (disableMenuButtonActiveIndicator ? "box-shadow: none;\n" : '') + "}\n\n"
+
+
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
         +".arc-menu-status-text{\ncolor:" + menuForegroundColor + ";\nfont-size:" + fontSize + "pt;\n}\n\n"                                                     
         +".search-statustext{\nfont-size:11pt;\n}\n\n"    
@@ -469,14 +486,9 @@ function createStylesheet(settings){
                             +"color:" + menuForegroundColor + ";\nbackground-color:" + menuColor + ";\n}\n\n"
         +".arc-search-entry:focus{\nborder-color:" + highlightColor + ";\nborder-width: 1px;\nbox-shadow: inset 0 0 0 1px " + modifyColorLuminance(highlightColor, 0.05) + ";\n}\n\n"
         +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.3) + ";\n}\n\n"
+                
+        + menuButtonStyle
         
-        +".arc-menu-icon, .arc-menu-text, .arc-menu-arrow{\ncolor: " + menuButtonColor + ";\n}\n\n"
-        +".arc-menu-panel-menu:hover{\nbackground-color: " + menuButtonHoverBackgroundcolor + ";\n}\n\n"
-        +".arc-menu-panel-menu:hover .arc-menu-icon, .arc-menu-panel-menu:hover .arc-menu-text"
-                +", .arc-menu-panel-menu:hover .arc-menu-arrow{\ncolor: " + menuButtonHoverColor + ";\n}\n\n"
-        +".arc-menu-icon:active, .arc-menu-text:active, .arc-menu-arrow:active{\ncolor: " + menuButtonActiveColor + ";\n}\n\n"
-        +".arc-menu-panel-menu:active{\nbackground-color: " + menuButtonActiveBackgroundcolor + ";\nbox-shadow: none;\n}\n\n"
-
         +"#arc-menu-plasma-button{\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
         +"#arc-menu-plasma-button:active-item, .arc-menu-plasma-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             + plasmaButtonStyle + "\nborder-color: " + plasmaSelectedItemColor + ";\n}\n\n"

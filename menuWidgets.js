@@ -777,7 +777,10 @@ var Tooltip = class Arc_Menu_Tooltip{
         this._menuButton = menuLayout.menuButton;
         this._settings = this._menuButton._settings;
         this.sourceActor = sourceActor;
-        this.location = Constants.TooltipLocation.BOTTOM;
+        if(this.sourceActor.tooltipLocation)
+            this.location = this.sourceActor.tooltipLocation;
+        else
+            this.location = Constants.TooltipLocation.BOTTOM;
         let titleLabel, descriptionLabel;
         this.actor = new St.BoxLayout({ 
             vertical: true,
@@ -902,8 +905,8 @@ var Tooltip = class Arc_Menu_Tooltip{
                     x = stageX + Math.floor((itemWidth - labelWidth) / 2);
                     break;
                 case Constants.TooltipLocation.BOTTOM:
-                    y = stageY + itemHeight;
-                    x = stageX + gap * 2;
+                    y = stageY + itemHeight + gap;
+                    x = stageX + gap;
                     break;
             }
 
@@ -1207,7 +1210,7 @@ var SettingsButton = GObject.registerClass(class Arc_Menu_SettingsButton extends
 // ArcMenu Settings Button
 var ArcMenuSettingsButton = GObject.registerClass(class Arc_Menu_ArcMenuSettingsButton extends SessionButton {
     _init(menuLayout) {
-        super._init(menuLayout, _("ArcMenu Settings"), Me.path + '/media/icons/arc-menu-symbolic.svg');
+        super._init(menuLayout, _("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg');
         this.tooltip.location = Constants.TooltipLocation.BOTTOM_CENTERED;
     }
     activate() {
@@ -1690,6 +1693,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
     }
     setAsGridIcon(){
         this.isGridIcon = true;
+        this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
         this.box.vertical = true;
         this.label.x_align = Clutter.ActorAlign.CENTER;
         this._icon.y_align = Clutter.ActorAlign.CENTER;
@@ -1879,8 +1883,8 @@ var FavoritesMenuItem = GObject.registerClass({
         else if(this._name == "Terminal"){
             this._name = _("Terminal");
         }
-        if(this._iconPath === "ArcMenu_ArcMenuIcon"){
-            this._iconString = this._iconPath = Me.path + '/media/icons/arc-menu-symbolic.svg';
+        if(this._iconPath === "ArcMenu_ArcMenuIcon" || this._iconPath ===  Me.path + '/media/icons/arc-menu-symbolic.svg'){
+            this._iconString = this._iconPath = Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg';
         }
         //-------------------------------------------------------
               
@@ -1932,6 +1936,7 @@ var FavoritesMenuItem = GObject.registerClass({
             this._draggable.connect('drag-end', this._onDragEnd.bind(this));
         }
         else{
+            this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
             this.label.x_align = Clutter.ActorAlign.CENTER;
             this._icon.y_align = Clutter.ActorAlign.CENTER;
             if(this._settings.get_boolean('multi-lined-labels')){
@@ -2148,6 +2153,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             this._iconBin.x_align = Clutter.ActorAlign.CENTER;
             this._iconBin.y_align = Clutter.ActorAlign.CENTER;
             this.label.x_align = Clutter.ActorAlign.CENTER; 
+            this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
             
             if(this._settings.get_boolean('multi-lined-labels')){
                 this.label.get_clutter_text().set_line_wrap(true);
