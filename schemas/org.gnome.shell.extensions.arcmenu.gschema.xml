@@ -492,10 +492,10 @@
       <summary>Menu Button Padding.</summary>
       <description>Menu Button Padding.</description>
     </key>
-    <key type="b" name="disable-menu-button-active-indicator">
+    <key type="b" name="menu-button-disable-rounded-corners">
       <default>false</default>
-      <summary>Disable the active indicator for the menu button</summary>
-      <description>Disable the active indicator for the menu button.</description>
+      <summary>Disable rounded corner styling for the menu button</summary>
+      <description>Disable rounded corner for the menu button.</description>
     </key>
     <key type="s" name="menu-button-color">
       <default>'rgb(240,240,240)'</default>

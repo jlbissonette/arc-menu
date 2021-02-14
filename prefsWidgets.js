@@ -75,14 +75,14 @@ var Button = GObject.registerClass(class Arc_Menu_Button extends Gtk.Button {
             orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 5
         });
-        this.add(this.box);
+        this.set_child(this.box);
 
         if (this._params.icon_name) {
             let image = new Gtk.Image({
                 icon_name: this._params.icon_name,
                 halign: Gtk.Align.CENTER
             });
-            this.box.add(image);
+            this.box.append(image);
         }
         if (this._params.tooltip_text){
             this.set_tooltip_text(this._params.tooltip_text);
@@ -94,12 +94,9 @@ var Button = GObject.registerClass(class Arc_Menu_Button extends Gtk.Button {
                 xalign: 0
             });
             if(this._params.icon_first)
-                this.box.add(label);
-            else{
-                this.box.add(label);
-                this.box.reorder_child(label, 0);
-            }
-    
+                this.box.append(label);
+            else
+                this.box.prepend(label);
         }
     }
 });
@@ -108,7 +105,7 @@ var DialogWindow = GObject.registerClass(class Arc_Menu_DialogWindow extends Gtk
     _init(title, parent) {
         super._init({
             title: title,
-            transient_for: parent.get_toplevel(),
+            transient_for: parent.get_root(),
             modal: true
         });
         let vbox = new Gtk.Box({
@@ -122,7 +119,7 @@ var DialogWindow = GObject.registerClass(class Arc_Menu_DialogWindow extends Gtk
             hexpand: true,
             halign: Gtk.Align.FILL
         });
-        this.get_content_area().add(vbox);
+        vbox.insert_after(this.get_content_area(), null);
         this._createLayout(vbox);
     }
 
@@ -149,9 +146,33 @@ var MessageDialog = GObject.registerClass(class Arc_Menu_MessageDialog extends G
             hexpand: false,
             halign: Gtk.Align.CENTER
         });
-        this.text = _(params.text)
+        this.grid.insert_after(this.get_content_area(), null);
+        let text = new Gtk.Label({
+            label: "<b>" + _(params.text) + "</b>",
+            use_markup: true,
+            hexpand: false,
+            halign: Gtk.Align.START,
+            wrap: true,
+        });
+        this.grid.attach(text, 1, 0, 1, 1);
+
         if(params.secondaryText){
-            this.secondary_text = _(params.secondaryText)
+            let secondayText = new Gtk.Label({
+                label: _(params.secondaryText),
+                use_markup: true,
+                hexpand: false,
+                halign: Gtk.Align.START,
+                wrap: true,
+            });
+            this.grid.attach(secondayText, 1, 1, 1, 1);
+        }
+
+        if(params.iconName){
+            let image = new Gtk.Image({
+                icon_name: params.iconName,
+                pixel_size: 48
+            });
+            this.grid.attach(image, 0, 0, 1, 2);
         }
     }
 });
@@ -163,16 +184,16 @@ var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.count = 0;
         this.children = [];
-        Gtk.Frame.prototype.add.call(this, this._listBox);
+        Gtk.Frame.prototype.set_child.call(this, this._listBox);
     }
 
     add(boxRow) {
-        this._listBox.add(boxRow);
+        this._listBox.append(boxRow);
         this.children.push(boxRow);
         this.count++;
     }
-    show_all() {
-        this._listBox.show_all();
+    show() {
+        this._listBox.show();
     }
     length() {
         return this._listBox.length;
@@ -190,7 +211,7 @@ var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
             let child = this._listBox.get_row_at_index(i);
             if(child) this.remove(child);
         }
-        this._listBox.show_all();
+        this._listBox.show();
     }
     remove_all_children() {
         for(let i = 0; i < this.children.length; i++){
@@ -199,7 +220,7 @@ var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
         }
         this.children = [];
         this.count = 0;
-        this._listBox.show_all();
+        this._listBox.show();
     }
     get_index(index){
         return this._listBox.get_row_at_index(index);
@@ -226,7 +247,7 @@ var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.L
             row_spacing: 20
         });
         this.x = 0;
-        Gtk.ListBoxRow.prototype.add.call(this, this._grid);
+        Gtk.ListBoxRow.prototype.set_child.call(this, this._grid);
     }
 
     add(widget) {
@@ -257,7 +278,7 @@ var EditEntriesBox = GObject.registerClass({
             hexpand: false,
             column_spacing: 10
         });
-        let editPopover = new Gtk.Popover({});
+        let editPopover = new Gtk.Popover();
         let frameRow = params.frameRow;
         let frame = params.frame;
         let buttons = params.buttons;
@@ -267,7 +288,7 @@ var EditEntriesBox = GObject.registerClass({
         if(params.modifyButton){
             modifyButton = new Gtk.Button({
                 label: _("Modify"),
-                relief: Gtk.ReliefStyle.NONE
+                has_frame: false
             });
             modifyButton.connect('clicked', () => {
                 editPopover.popdown();
@@ -287,15 +308,9 @@ var EditEntriesBox = GObject.registerClass({
         }
 
         let editButton = new Gtk.MenuButton({
-            image:  new Gtk.Image({
-                icon_name: 'view-more-symbolic'
-            }),
+            icon_name: 'view-more-symbolic',
             popover: editPopover,
-            align_widget: editPopover
         });
-        editButton.connect("clicked", ()=>{
-            editPopover.show_all();
-        })
 
         this.attach(editButton, 0, 0, 1, 1);
 
@@ -303,11 +318,11 @@ var EditEntriesBox = GObject.registerClass({
             orientation: Gtk.Orientation.VERTICAL
         });
 
-        editPopover.add(editPopoverBox);
+        editPopover.set_child(editPopoverBox);
 
         let moveUpButton = new Gtk.Button({
             label: _("Move Up"),
-            relief: Gtk.ReliefStyle.NONE
+            has_frame: false
         });
         moveUpButton.connect('clicked', ()=> {
             this.emit('move-up');
@@ -316,14 +331,14 @@ var EditEntriesBox = GObject.registerClass({
                 frame.remove(frameRow);
                 frame.insert(frameRow, index - 1);
             }
-            frame.show_all();
+            frame.show();
             buttons.forEach(button => button.set_sensitive(true));
             editPopover.popdown();
         });
 
         let moveDownButton = new Gtk.Button({
             label: _("Move Down"),
-            relief: Gtk.ReliefStyle.NONE
+            has_frame: false
         });
         moveDownButton.connect('clicked', ()=> {
             this.emit('move-down');
@@ -332,7 +347,7 @@ var EditEntriesBox = GObject.registerClass({
               frame.remove(frameRow);
               frame.insert(frameRow, index + 1);
             }
-            frame.show_all();
+            frame.show();
             buttons.forEach(button => button.set_sensitive(true));
             editPopover.popdown();
         });
@@ -340,12 +355,12 @@ var EditEntriesBox = GObject.registerClass({
         if(params.deleteButton){
             deleteButton = new Gtk.Button({
                 label: _("Delete"),
-                relief: Gtk.ReliefStyle.NONE
+                has_frame: false,
             });
             deleteButton.connect('clicked', ()=> {
                 this.emit('delete');
                 frame.remove(frameRow);
-                frame.show_all();
+                frame.show();
                 buttons.forEach(button => button.set_sensitive(true));
                 editPopover.popdown();
             });
@@ -359,16 +374,16 @@ var EditEntriesBox = GObject.registerClass({
         }
 
         if(params.modifyButton){
-            editPopoverBox.add(modifyButton);
-            editPopoverBox.add(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+            editPopoverBox.append(modifyButton);
+            editPopoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
         }
 
-        editPopoverBox.add(moveUpButton);
-        editPopoverBox.add(moveDownButton);
+        editPopoverBox.append(moveUpButton);
+        editPopoverBox.append(moveDownButton);
 
         if(params.deleteButton){
-            editPopoverBox.add(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
-            editPopoverBox.add(deleteButton);
+            editPopoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+            editPopoverBox.append(deleteButton);
         }
     }
 });
@@ -386,7 +401,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
                 let stackName = row.stackName;
                 this.settingsFrameStack.set_visible_child_name(stackName);
                 if(row.nextPage){
-                    widget.leftHeaderBox.add(widget.backButton);
+                    widget.leftHeaderBox.prepend(widget.backButton);
                     this.settingsListStack.set_visible_child_name(row.nextPage);
                     this.settingsListStack.get_child_by_name(row.nextPage).listBox.selectFirstRow();
                 }
@@ -397,7 +412,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
             vexpand: true
         });
         this.scrollWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        this.scrollWindow.add_with_viewport(this);
+        this.scrollWindow.set_child(this);
         this.scrollWindow.listBox = this;
     }
 
@@ -415,7 +430,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
 
     addRow(name, translateableName, iconName, nextPage){
         let row1 = new Gtk.ListBoxRow();
-        this.add(row1);
+        this.append(row1);
 
         let row = new Gtk.Grid({
             margin_top: 12,
@@ -424,7 +439,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
             margin_end: 12, 
             column_spacing: 10
         });
-        row1.add(row);
+        row1.set_child(row);
         row1.stackName = name;
         row1.translateableName = translateableName;
         
@@ -455,7 +470,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
             for(let i = 0; i < indexArray.length; i++){
                 if(_row.get_index() === indexArray[i]){
                     let sep = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL);
-                    sep.show_all();
+                    sep.show();
                     _row.set_header(sep);
                     
                 }
@@ -526,7 +541,7 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
 
         this.box._grid.attach(this._image, 0, 0, 1, 1);
         this.box._grid.attach(this._label, 0, 1, 1, 1);
-        this._listBox.add(this.box);
+        this._listBox.append(this.box);
     }
 });
 
@@ -577,6 +592,6 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
         this.box._grid.attach(styleLabel, 1, 0, 1, 1);
         this.box._grid.attach(descriptoinLabel, 1, 1, 1, 1);
         
-        this._listBox.add(this.box);
+        this._listBox.append(this.box);
    }
 });
