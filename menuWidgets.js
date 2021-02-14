@@ -1696,15 +1696,13 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
         this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
         this.box.vertical = true;
         this.label.x_align = Clutter.ActorAlign.CENTER;
+        this.label.y_align = Clutter.ActorAlign.CENTER;
+        this.label.y_expand = true;
         this._icon.y_align = Clutter.ActorAlign.CENTER;
-        if(this._settings.get_boolean('multi-lined-labels')){
+        this._icon.y_expand = true;
+        if(this._settings.get_boolean('multi-lined-labels'))
             this.label.get_clutter_text().set_line_wrap(true);
-        }
-        else{
-            this._icon.y_expand = true;
-            this.label.y_align = Clutter.ActorAlign.CENTER;
-            this.label.y_expand = false;
-        }
+
         this.remove_child(this._ornamentLabel);
         let layout = this._settings.get_enum('menu-layout');    
         Utils.setGridLayoutStyle(layout, this.actor, this.box);
@@ -1938,15 +1936,13 @@ var FavoritesMenuItem = GObject.registerClass({
         else{
             this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
             this.label.x_align = Clutter.ActorAlign.CENTER;
+            this.label.y_align = Clutter.ActorAlign.CENTER;
+            this.label.y_expand = true;
             this._icon.y_align = Clutter.ActorAlign.CENTER;
-            if(this._settings.get_boolean('multi-lined-labels')){
+            this._icon.y_expand = true;
+            if(this._settings.get_boolean('multi-lined-labels'))
                 this.label.get_clutter_text().set_line_wrap(true);
-            }
-            else{
-                this._icon.y_expand = true;
-                this.label.y_align = Clutter.ActorAlign.END;
-                this.label.y_expand = false;
-            }
+            
             this.box.vertical = true;
             this.remove_child(this._ornamentLabel);
             let layout = this._settings.get_enum('menu-layout');
@@ -2152,17 +2148,15 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         if(this._isIconGrid){
             this._iconBin.x_align = Clutter.ActorAlign.CENTER;
             this._iconBin.y_align = Clutter.ActorAlign.CENTER;
-            this.label.x_align = Clutter.ActorAlign.CENTER; 
+            this._iconBin.y_expand = true;
+            this.label.x_align = Clutter.ActorAlign.CENTER;
+            this.label.y_align = Clutter.ActorAlign.CENTER;
+            this.label.y_expand = true;
             this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
             
-            if(this._settings.get_boolean('multi-lined-labels')){
+            if(this._settings.get_boolean('multi-lined-labels'))
                 this.label.get_clutter_text().set_line_wrap(true);
-            }
-            else{
-                this._iconBin.y_expand = true;
-                this.label.y_align = Clutter.ActorAlign.END;
-                this.label.y_expand = false;
-            }
+
             this.box.vertical = true;
             this.remove_child(this._ornamentLabel);
             if(this.isRecentlyInstalled){
