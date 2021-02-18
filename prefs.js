@@ -1679,6 +1679,7 @@ var ButtonAppearancePage = GObject.registerClass(
             paddingScale.connect('value-changed', () => {
                 this.resetButton.set_sensitive(true); 
                 this._settings.set_int('button-padding', paddingScale.get_value());
+                this._settings.set_boolean('reload-theme', true);
             });
             let menuButtonPaddingInfoButton = new PW.Button({
                 icon_name: 'info-circle-symbolic'
@@ -5731,18 +5732,11 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
             height_request: 650
         });
 
-        this.connect("realize", ()=> {
-            let window = this.get_root();
-            window.set_title(_("ArcMenu Settings"));
-
-            this.leftHeaderBox = new Gtk.Box({
-                hexpand: true,
-                visible: true
-            });
-
-            window.get_titlebar().pack_start(this.leftHeaderBox);
+        this.leftHeaderBox = new Gtk.Box({
+            hexpand: true,
+            visible: true
         });
-        
+
         this._settings = Convenience.getSettings(Me.metadata['settings-schema']);
         
         this.backButton = new Gtk.Button({
@@ -5849,6 +5843,15 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
             this.leftHeaderBox.remove(this.backButton);
         }
     }
+
+    modifyTitleBar(){
+        GLib.idle_add(GLib.PRIORITY_DEFAULT, () => {
+            let window = this.get_root();
+            window.set_title(_("ArcMenu Settings"));
+            window.get_titlebar().pack_start(this.leftHeaderBox);
+            return GLib.SOURCE_REMOVE;
+        });
+    }
 });
 
 function init() {
@@ -5861,6 +5864,7 @@ function buildPrefsWidget() {
         iconTheme.add_search_path(Me.path + "/media/icons/prefs_icons");
     let widget = new ArcMenuPreferencesWidget();
     widget.show();
+    widget.modifyTitleBar();
     return widget;
 }
 
