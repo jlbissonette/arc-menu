@@ -5398,6 +5398,8 @@ var MiscPage = GObject.registerClass(
                 modal: true,
                 action: params.action,
             });
+            if(params.action === Gtk.FileChooserAction.SAVE)
+                dialog.set_do_overwrite_confirmation(true);
             dialog.add_button("_Cancel", Gtk.ResponseType.CANCEL);
             dialog.add_button(acceptBtn, Gtk.ResponseType.ACCEPT);
     
