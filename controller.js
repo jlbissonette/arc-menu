@@ -76,6 +76,7 @@ var MenuSettingsController = class {
         this._setButtonText();
         this._setButtonIcon();
         this._setButtonIconSize();
+        this._setButtonIconPadding();
     }
     // Bind the callbacks for handling the settings changes to the event signals
     bindSettingsChanges() {
@@ -91,6 +92,7 @@ var MenuSettingsController = class {
             this._settings.connect('changed::arc-menu-icon', this._setButtonIcon.bind(this)),
             this._settings.connect('changed::custom-menu-button-icon', this._setButtonIcon.bind(this)),
             this._settings.connect('changed::custom-menu-button-icon-size', this._setButtonIconSize.bind(this)),
+            this._settings.connect('changed::button-padding', this._setButtonIconPadding.bind(this)),
             this._settings.connect('changed::enable-menu-button-arrow', this._setMenuButtonArrow.bind(this)),
             this._settings.connect('changed::enable-custom-arc-menu', this._updateStyle.bind(this)),
             this._settings.connect('changed::remove-menu-arrow', this._updateStyle.bind(this)),
