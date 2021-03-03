@@ -76,7 +76,6 @@ var MenuSettingsController = class {
         this._setButtonText();
         this._setButtonIcon();
         this._setButtonIconSize();
-        this._setButtonIconPadding();
     }
     // Bind the callbacks for handling the settings changes to the event signals
     bindSettingsChanges() {
@@ -92,7 +91,6 @@ var MenuSettingsController = class {
             this._settings.connect('changed::arc-menu-icon', this._setButtonIcon.bind(this)),
             this._settings.connect('changed::custom-menu-button-icon', this._setButtonIcon.bind(this)),
             this._settings.connect('changed::custom-menu-button-icon-size', this._setButtonIconSize.bind(this)),
-            this._settings.connect('changed::button-padding', this._setButtonIconPadding.bind(this)),
             this._settings.connect('changed::enable-menu-button-arrow', this._setMenuButtonArrow.bind(this)),
             this._settings.connect('changed::enable-custom-arc-menu', this._updateStyle.bind(this)),
             this._settings.connect('changed::remove-menu-arrow', this._updateStyle.bind(this)),
@@ -176,36 +174,35 @@ var MenuSettingsController = class {
     }
 
     toggleMenus(){
-        if(Main.overview.visible)
+        let layout = this._settings.get_enum('menu-layout');
+        if(Main.overview.visible && layout !== Constants.MENU_LAYOUT.GnomeDash)
             Main.overview.hide();
-        else{
-            if((global.dashToPanel) || this.arcMenuPlacement == Constants.ArcMenuPlacement.DASH){
-                this.currentMonitor = Main.layoutManager.currentMonitor;
-                //close current menus that are open on monitors other than current monitor
-                if(this._settingsControllers.length > 1){
-                    for (let i = 0; i < this._settingsControllers.length; i++) {
-                        let actor = this._settingsControllers[i]._menuButton.menuButtonWidget.actor;
-                        let monitorForActor = Main.layoutManager.findMonitorForActor(actor);
-                        if(this.currentMonitor == monitorForActor){
-                            this.currentMonitorIndex = i;
-                        }
-                        else{
-                            if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
-                                this._settingsControllers[i]._menuButton.toggleMenu();
-                            if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
-                                this._settingsControllers[i]._menuButton.toggleArcMenuContextMenu(); 
-                        }
-                    } 
-                    //open the current monitors menu
-                    this._settingsControllers[this.currentMonitorIndex]._menuButton.toggleMenu();
-                }
-                else{
-                    this._menuButton.toggleMenu();
-                }
+        if((global.dashToPanel) || this.arcMenuPlacement == Constants.ArcMenuPlacement.DASH){
+            this.currentMonitor = Main.layoutManager.currentMonitor;
+            //close current menus that are open on monitors other than current monitor
+            if(this._settingsControllers.length > 1){
+                for (let i = 0; i < this._settingsControllers.length; i++) {
+                    let actor = this._settingsControllers[i]._menuButton.menuButtonWidget.actor;
+                    let monitorForActor = Main.layoutManager.findMonitorForActor(actor);
+                    if(this.currentMonitor == monitorForActor){
+                        this.currentMonitorIndex = i;
+                    }
+                    else{
+                        if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
+                            this._settingsControllers[i]._menuButton.toggleMenu();
+                        if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
+                            this._settingsControllers[i]._menuButton.toggleArcMenuContextMenu();
+                    }
+                } 
+                //open the current monitors menu
+                this._settingsControllers[this.currentMonitorIndex]._menuButton.toggleMenu();
             }
-            else {
+            else{
                 this._menuButton.toggleMenu();
             }
+        }
+        else {
+            this._menuButton.toggleMenu();
         }
     }
 
