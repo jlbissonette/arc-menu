@@ -176,9 +176,6 @@ var MenuSettingsController = class {
     }
 
     toggleMenus(){
-        let layout = this._settings.get_enum('menu-layout');
-        if(Main.overview.visible && layout !== Constants.MENU_LAYOUT.GnomeDash)
-            Main.overview.hide();
         if((global.dashToPanel) || this.arcMenuPlacement == Constants.ArcMenuPlacement.DASH){
             this.currentMonitor = Main.layoutManager.currentMonitor;
             //close current menus that are open on monitors other than current monitor

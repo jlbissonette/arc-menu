@@ -1156,7 +1156,7 @@ var ShortcutButtonItem = GObject.registerClass(class Arc_Menu_ShortcutButtonItem
         else if(this._command === "ArcMenu_RunCommand")
             Main.openRunDialog();
         else if(this._command === "ArcMenu_ShowAllApplications")
-            Main.overview.viewSelector._toggleAppsPage();
+            Main.overview._overview._controls._toggleAppsPage();
         else
             Util.spawnCommandLine(this._command);   
     }
@@ -1375,13 +1375,15 @@ var PlasmaMenuItem = GObject.registerClass(class Arc_Menu_PlasmaMenuItem extends
         super._init(menuLayout);
         this.remove_child(this._ornamentLabel);
         this._menuLayout = menuLayout;
+        this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
         this._layout = this._menuLayout.layout;
         this._settings = this._menuLayout._settings;
         this.box.vertical = true;
-        this.box.y_expand = false;
-        this.box.y_align = Clutter.ActorAlign.CENTER;
+        this.box.y_expand = true;
+        this.box.y_align = Clutter.ActorAlign.FILL;
         this.name = "arc-menu-plasma-button";
-        this.actor.style = "padding: 8px; margin-left:0px;"
+
+        this.actor.style = "padding: 8px; margin-left:0px; max-width: 85px;"
         this._icon = new St.Icon({
             gicon: Gio.icon_new_for_string(iconPath),
             style_class: 'popup-menu-icon',
@@ -1389,17 +1391,21 @@ var PlasmaMenuItem = GObject.registerClass(class Arc_Menu_PlasmaMenuItem extends
             x_align: Clutter.ActorAlign.CENTER
         });
         this.box.add_actor(this._icon);
-        let backLabel = new St.Label({
-            text: title,
+        this.label = new St.Label({
+            text: _(title),
             y_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER
         });
-        this.box.add_actor(backLabel);
+        this.box.add_actor(this.label);
         this.actor.connect('notify::hover', this._onHover.bind(this));
     }
     
     _onHover(){
+        if(this.tooltip === undefined && this.actor.hover && this.label){
+            let description = null;
+            Utils.createTooltip(this._menuLayout, this, this.label, description);
+        }
         let shouldHover = this._settings.get_boolean('plasma-enable-hover');
         if(shouldHover && this.actor.hover && !this.isActive){
             this.activate(Clutter.get_current_event()); 
@@ -1692,7 +1698,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
         else if(this._command === "ArcMenu_RunCommand")
             Main.openRunDialog();
         else if(this._command === "ArcMenu_ShowAllApplications")
-            Main.overview.viewSelector._toggleAppsPage();
+            Main.overview._overview._controls._toggleAppsPage();
         else if(this._app)
             this._app.open_new_window(-1);
         else
@@ -2045,7 +2051,7 @@ var FavoritesMenuItem = GObject.registerClass({
         if(this._app)
             this._app.open_new_window(-1);
         else if(this._command === "ArcMenu_ShowAllApplications")
-            Main.overview.viewSelector._toggleAppsPage();
+            Main.overview._overview._controls._toggleAppsPage();
         else
             Util.spawnCommandLine(this._command);
 
