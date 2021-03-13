@@ -243,7 +243,6 @@ var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.L
 
 var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow extends Gtk.ListBoxRow {
     _init(params) {
-        this.moveIndex = 0;
         super._init(params);
 
         this._grid = new Gtk.Grid({
@@ -261,7 +260,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
 
         this._eventBox.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, null, Gdk.DragAction.MOVE);
         let targets = new Gtk.TargetList(null);
-        targets.add(Gdk.atom_intern('GTK_LIST_BOX_ROW', false), Gtk.TargetFlags.SAME_APP, 0);
+        targets.add(Gdk.atom_intern("GTK_LIST_BOX_ROW", false), Gtk.TargetFlags.SAME_APP, 0);
         this._eventBox.drag_source_set_target_list(targets);
         this.drag_dest_set(Gtk.DestDefaults.ALL, null, Gdk.DragAction.MOVE);
         this.drag_dest_set_target_list(targets);
@@ -290,7 +289,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
         });
 
         this._eventBox.connect("drag-data-get", (widget, context, selectionData, info, time)=> {   
-            selectionData.set(Gdk.atom_intern('GTK_LIST_BOX_ROW', false), 32, imports.byteArray.fromString("dragData"));
+            selectionData.set(Gdk.atom_intern("GTK_LIST_BOX_ROW", false), 32, imports.byteArray.fromString("dragData"));
             return true;
         });
 
@@ -298,6 +297,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             this.dragWidget.destroy();
             return true;
         });
+
         this.connect("drag-data-received", (widget, context, x, y, selection, info, time)=> {
             //get listbox parent
             let parent = this.get_parent();
@@ -306,7 +306,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             parent.show_all();
             parent.insert(parent.dragWidget, index);
             parent.show_all();
-            this.resetButton?.set_sensitive(true);
+            this.resetButton ? this.resetButton.set_sensitive(true) : null;
             this.saveButton.set_sensitive(true);
         });
     }
