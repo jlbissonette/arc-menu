@@ -261,6 +261,186 @@ var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.L
     }
 });
 
+var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow extends Gtk.ListBoxRow {
+    _init(params) {
+        super._init(params);
+
+        this._grid = new Gtk.Grid({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            margin_top: 5,
+            margin_bottom: 5,
+            margin_start: 5,
+            margin_end: 5,
+            column_spacing: 20,
+            row_spacing: 20
+        });
+
+        let dragSource = new Gtk.DragSource({ 
+            actions: Gdk.DragAction.MOVE
+        });
+        this.add_controller(dragSource);
+
+        let dropTarget = new Gtk.DropTargetAsync({ 
+            actions: Gdk.DragAction.MOVE
+        });
+        this.add_controller(dropTarget);
+
+        this.x = 0;
+        Gtk.ListBoxRow.prototype.set_child.call(this, this._grid);
+        dragSource.connect("drag-begin", (self, gdkDrag) => {
+            //get listbox parent
+            let listBox = self.get_widget().get_parent();
+            //get widgets parent - the listBoxDragRow
+            listBox.dragWidget = this;
+
+            let alloc = self.get_widget().get_allocation();
+            let dragWidget = self.get_widget().createDragRow(alloc);
+            
+            let icon = Gtk.DragIcon.get_for_drag(gdkDrag);
+            icon.set_child(dragWidget);
+
+            gdkDrag.set_hotspot(listBox.dragX, listBox.dragY);
+        });
+        dragSource.connect("prepare", (self, x, y) => {
+            //get listbox parent
+            this.set_state_flags(Gtk.StateFlags.NORMAL, true);
+            let listBox = self.get_widget().get_parent();
+            //store drag start cursor location
+            listBox.dragX = x;
+            listBox.dragY = y;
+            return new Gdk.ContentProvider(Arc_Menu_FrameBoxDragRow);    
+        });
+
+        dragSource.connect("drag-end", (self, deleteData)=> {
+            deleteData = true;
+            let listBox = self.get_widget().get_parent();
+            listBox.drag_unhighlight_row();
+            self.set_actions(Gdk.DragAction.MOVE);
+        });
+
+        dropTarget.connect("accept", (self, gdkDrop, x, y, selection, info, time)=> {
+           return true;
+        });
+
+        dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time)=> {
+            let listBox = self.get_widget().get_parent();
+            let widget = self.get_widget();
+            listBox.drag_highlight_row(widget);
+        });
+
+        dropTarget.connect("drag-leave", (self, gdkDrop, x, y, selection, info, time)=> {
+            let listBox = self.get_widget().get_parent();
+            listBox.drag_unhighlight_row();
+            self.set_actions(Gdk.DragAction.MOVE);
+        });
+
+        dropTarget.connect("drop", (self, gdkDrop, x, y, selection, info, time)=> {
+            //get listbox parent
+            let listBox = this.get_parent();
+            let index = this.get_index();
+            if(index === listBox.dragWidget.get_index()){
+                gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
+                    gdkDrop.finish(Gdk.DragAction.MOVE);
+                });
+                return true;
+            }
+            listBox.remove(listBox.dragWidget);
+            listBox.show();
+            listBox.insert(listBox.dragWidget, index);
+            this.resetButton?.set_sensitive(true);
+            this.saveButton.set_sensitive(true);
+            gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
+                gdkDrop.finish(Gdk.DragAction.MOVE);
+            });
+            return true;
+        });
+    }
+
+    createDragRow(alloc){
+        let dragWidget = new Gtk.ListBox();
+        dragWidget.set_size_request(alloc.width, alloc.height);
+
+        let dragRow = new FrameBoxRow();
+        dragWidget.append(dragRow);
+        dragWidget.drag_highlight_row(dragRow);
+
+        let image = new Gtk.Image( {
+            gicon: this._gicon,
+            pixel_size: 22
+        });
+
+        let imageBox = new Gtk.Box({
+            margin_start: 0,
+            hexpand: false,
+            vexpand: true,
+            spacing: 5,
+        });
+        let dragImage = new Gtk.Image( {
+            gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
+            pixel_size: 12
+        });
+
+        imageBox.append(dragImage);
+        imageBox.append(image);
+
+        dragRow.add(imageBox);
+
+        let label = new Gtk.Label({
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            label: _(this._name)
+        });
+        dragRow.add(label);
+        let grid = new Gtk.Grid({
+            margin_top: 0,
+            margin_bottom: 0,
+            vexpand: false,
+            hexpand: false,
+            column_spacing: 10
+        })
+        let editButton = new Button({
+            icon_name: 'view-more-symbolic'
+        });
+        grid.attach(editButton, 0, 0, 1, 1);
+
+        if(this.hasSwitch){
+            let modifyButton = new Gtk.Switch({
+                valign: Gtk.Align.CENTER,
+                margin_start: 10,
+                tooltip_text: _('Enable/Disble'),
+                active: this.switchActive
+            });
+            grid.insert_column(0);
+            grid.attach(Gtk.Separator.new(Gtk.Orientation.VERTICAL), 0, 0, 1, 1);
+            grid.insert_column(0);
+            grid.attach(modifyButton, 0, 0, 1, 1);
+        }
+        if(this.hasEditButton){
+            let editButton = new Button({
+                icon_name: 'text-editor-symbolic',
+            });
+            grid.insert_column(0);
+            grid.attach(Gtk.Separator.new(Gtk.Orientation.VERTICAL), 0, 0, 1, 1);
+            grid.insert_column(0);
+            grid.attach(editButton, 0, 0, 1, 1);
+        }
+        dragRow.add(grid);
+        
+        return dragWidget;
+    }
+
+    add(widget) {
+        this._grid.attach(widget, this.x, 0, 1, 1);
+        this.x++;
+    }
+    
+    setVerticalAlignmentBottom(){
+        this._grid.vexpand = true;
+        this._grid.valign = Gtk.Align.END;
+    }
+});
+
 var EditEntriesBox = GObject.registerClass({
     Signals: {
         'modify': {},

@@ -40,16 +40,18 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
             super._init(_('Pinned Apps'));
             this._settings = settings;
 
-            this.pinnedAppsScrollWindow = new Gtk.ScrolledWindow();
+            this.pinnedAppsScrollWindow = new Gtk.ScrolledWindow({
+                valign: Gtk.Align.FILL,
+                vexpand: true
+            });
             this.pinnedAppsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
-            this.pinnedAppsScrollWindow.set_max_content_height(300);
             this.pinnedAppsScrollWindow.set_min_content_height(300);
             this.frame = new PW.FrameBox();
             this.saveButton = new Gtk.Button({
                 label: _("Apply"),
                 hexpand: true,
                 halign: Gtk.Align.END,
-                vexpand: true,
+                vexpand: false,
                 valign: Gtk.Align.END
             });
             this._loadPinnedApps(this._settings.get_strv('pinned-app-list'));
@@ -143,11 +145,12 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
          
         _loadPinnedApps(array) {
             for(let i = 0; i < array.length; i += 3) {
-                let frameRow = new PW.FrameBoxRow();
+                let frameRow = new PW.FrameBoxDragRow();
                 let iconString;
                 frameRow._name = array[i];
                 frameRow._icon = array[i + 1];
                 frameRow._cmd = array[i + 2];
+                frameRow.saveButton = this.saveButton;
                 if(frameRow._icon === "ArcMenu_ArcMenuIcon"){
                     frameRow._icon = Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg';
                 }
@@ -155,17 +158,23 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
                 if(frameRow._icon === "" && Gio.DesktopAppInfo.new(frameRow._cmd)){
                     iconString = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon() ? Gio.DesktopAppInfo.new(frameRow._cmd).get_icon().to_string() : "";
                 }
-
+                frameRow._gicon = Gio.icon_new_for_string(iconString);
                 let arcMenuImage = new Gtk.Image( {
-                    gicon: Gio.icon_new_for_string(iconString),
+                    gicon: frameRow._gicon,
                     pixel_size: 22
+                });
+                let dragImage = new Gtk.Image( {
+                    gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
+                    pixel_size: 12
                 });
 
                 let arcMenuImageBox = new Gtk.Box({
-                    margin_start: 5,
+                    margin_start: 0,
                     hexpand: false,
-                    vexpand: false
+                    vexpand: false,
+                    spacing: 5,
                 });
+                arcMenuImageBox.append(dragImage);
                 arcMenuImageBox.append(arcMenuImage);
                 frameRow.add(arcMenuImageBox);
 
@@ -3530,19 +3539,31 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
             let categoryEnum = extraCategories[i][0];
             let name = Constants.CATEGORIES[categoryEnum].Name;
 
-            let frameRow = new PW.FrameBoxRow();
+            let frameRow = new PW.FrameBoxDragRow();
             frameRow._enum = extraCategories[i][0];
             frameRow._shouldShow = extraCategories[i][1]; 
+            frameRow._name = Constants.CATEGORIES[categoryEnum].Name; 
+            frameRow._gicon = Gio.icon_new_for_string(Constants.CATEGORIES[categoryEnum].Icon);
+            frameRow.saveButton = this.saveButton;
+            frameRow.resetButton = this.resetButton;
+            frameRow.hasSwitch = true;
+            frameRow.switchActive = frameRow._shouldShow;
             
             let applicationIcon = new Gtk.Image( {
-                gicon: Gio.icon_new_for_string(Constants.CATEGORIES[categoryEnum].Icon),
+                gicon: frameRow._gicon,
                 pixel_size: 22
             });
             let applicationImageBox = new Gtk.Box( {
-                margin_start: 5,
+                margin_start: 0,
                 hexpand: false,
-                vexpand: false
+                vexpand: false,
+                spacing: 5,
             });
+            let dragImage = new Gtk.Image( {
+                gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
+                pixel_size: 12
+            });
+            applicationImageBox.append(dragImage);
             applicationImageBox.append(applicationIcon);
             frameRow.add(applicationImageBox);
 
@@ -4563,9 +4584,11 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
         this.set_child(this.mainBox);
         this._settings = settings;
         let softwareShortcutsFrame = new PW.FrameBox();
-        let softwareShortcutsScrollWindow = new Gtk.ScrolledWindow();
+        let softwareShortcutsScrollWindow = new Gtk.ScrolledWindow({
+            valign: Gtk.Align.FILL,
+            vexpand: true
+        });
         softwareShortcutsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
-        softwareShortcutsScrollWindow.set_max_content_height(300);
         softwareShortcutsScrollWindow.set_min_content_height(300);
         softwareShortcutsScrollWindow.set_child(softwareShortcutsFrame);
 
@@ -4653,7 +4676,7 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
 
         let buttonRow = new Gtk.Box({
             valign: Gtk.Align.END,
-            vexpand: true
+            vexpand: false
         });
 
         this.resetButton.set_sensitive(this.getSensitive());
@@ -4697,20 +4720,29 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
                 editable = false;
             }
 
-            let frameRow = new PW.FrameBoxRow();
+            let frameRow = new PW.FrameBoxDragRow();
             frameRow._name = applicationName;
             frameRow._icon = applicationShortcuts[i][1];   
-       
+            frameRow._gicon = Gio.icon_new_for_string(getIconPath(applicationShortcuts[i]));
             frameRow._cmd = applicationShortcuts[i][2];
+            frameRow.saveButton = this.saveButton;
+            frameRow.resetButton = this.resetButton;
+
             let applicationIcon = new Gtk.Image( {
-                gicon: Gio.icon_new_for_string(getIconPath(applicationShortcuts[i])),
+                gicon: frameRow._gicon,
                 pixel_size: 22
             });
             let applicationImageBox = new Gtk.Box({
-                margin_start: 5,
+                margin_start: 0,
                 hexpand: false,
-                vexpand: false
+                vexpand: false,
+                spacing: 5,
             });
+            let dragImage = new Gtk.Image( {
+                gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
+                pixel_size: 12
+            });
+            applicationImageBox.append(dragImage);
             applicationImageBox.append(applicationIcon);
             frameRow.add(applicationImageBox);
 
@@ -4779,9 +4811,11 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         this.set_child(this.mainBox);
         this._settings = settings;
         let softwareShortcutsFrame = new PW.FrameBox();
-        let softwareShortcutsScrollWindow = new Gtk.ScrolledWindow();
+        let softwareShortcutsScrollWindow = new Gtk.ScrolledWindow({
+            valign: Gtk.Align.FILL,
+            vexpand: true
+        });
         softwareShortcutsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
-        softwareShortcutsScrollWindow.set_max_content_height(300);
         softwareShortcutsScrollWindow.set_min_content_height(300);
         softwareShortcutsScrollWindow.set_child(softwareShortcutsFrame);
 
@@ -4869,7 +4903,7 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
 
         let buttonRow = new Gtk.Box({
             valign: Gtk.Align.END,
-            vexpand: true
+            vexpand: false
         });
          
 
@@ -4910,24 +4944,33 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
 
-            let frameRow = new PW.FrameBoxRow();
+            let frameRow = new PW.FrameBoxDragRow();
             let iconString;
             frameRow._name = applicationShortcuts[i][0];
             frameRow._icon = applicationShortcuts[i][1];
             frameRow._cmd = applicationShortcuts[i][2];
+            frameRow.saveButton = this.saveButton;
+            frameRow.resetButton = this.resetButton;
             iconString = frameRow._icon;
             if(frameRow._icon === "" && Gio.DesktopAppInfo.new(frameRow._cmd)){
                 iconString = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon() ? Gio.DesktopAppInfo.new(frameRow._cmd).get_icon().to_string() : "";
             }
+            frameRow._gicon = Gio.icon_new_for_string(iconString);
             let applicationIcon = new Gtk.Image( {
-                gicon: Gio.icon_new_for_string(iconString),
+                gicon: frameRow._gicon,
                 pixel_size: 22
             });
             let applicationImageBox = new Gtk.Box( {
-                margin_start: 5,
+                margin_start: 0,
                 hexpand: false,
-                vexpand: false
+                vexpand: false,
+                spacing: 5,
             });
+            let dragImage = new Gtk.Image( {
+                gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
+                pixel_size: 12
+            });
+            applicationImageBox.append(dragImage);
             applicationImageBox.append(applicationIcon);
             frameRow.add(applicationImageBox);
 
