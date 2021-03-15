@@ -262,8 +262,8 @@ var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.L
 });
 
 var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow extends Gtk.ListBoxRow {
-    _init(params) {
-        super._init(params);
+    _init(scrolledWindow) {
+        super._init();
 
         this._grid = new Gtk.Grid({
             orientation: Gtk.Orientation.HORIZONTAL,
@@ -325,13 +325,23 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
         dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time)=> {
             let listBox = self.get_widget().get_parent();
             let widget = self.get_widget();
+            let height = widget.get_height();
+            let scrollHeight = scrolledWindow.get_height();
+            let widgetLoc = widget.get_index() * height;
+            let value = scrolledWindow.vadjustment.value;
+            
+            if((widgetLoc + (height * 4)) > (value + scrollHeight))
+                scrolledWindow.vadjustment.value += height;
+            else if((widgetLoc - (height * 2)) < value)
+                scrolledWindow.vadjustment.value -= height;
+
+            listBox.startIndex = widget.get_index();
             listBox.drag_highlight_row(widget);
         });
 
         dropTarget.connect("drag-leave", (self, gdkDrop, x, y, selection, info, time)=> {
             let listBox = self.get_widget().get_parent();
             listBox.drag_unhighlight_row();
-            self.set_actions(Gdk.DragAction.MOVE);
         });
 
         dropTarget.connect("drop", (self, gdkDrop, x, y, selection, info, time)=> {

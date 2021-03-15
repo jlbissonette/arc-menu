@@ -145,7 +145,7 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
          
         _loadPinnedApps(array) {
             for(let i = 0; i < array.length; i += 3) {
-                let frameRow = new PW.FrameBoxDragRow();
+                let frameRow = new PW.FrameBoxDragRow(this.pinnedAppsScrollWindow);
                 let iconString;
                 frameRow._name = array[i];
                 frameRow._icon = array[i + 1];
@@ -3539,7 +3539,7 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
             let categoryEnum = extraCategories[i][0];
             let name = Constants.CATEGORIES[categoryEnum].Name;
 
-            let frameRow = new PW.FrameBoxDragRow();
+            let frameRow = new PW.FrameBoxDragRow(this);
             frameRow._enum = extraCategories[i][0];
             frameRow._shouldShow = extraCategories[i][1]; 
             frameRow._name = Constants.CATEGORIES[categoryEnum].Name; 
@@ -4584,13 +4584,13 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
         this.set_child(this.mainBox);
         this._settings = settings;
         let softwareShortcutsFrame = new PW.FrameBox();
-        let softwareShortcutsScrollWindow = new Gtk.ScrolledWindow({
+        this.softwareShortcutsScrollWindow = new Gtk.ScrolledWindow({
             valign: Gtk.Align.FILL,
             vexpand: true
         });
-        softwareShortcutsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
-        softwareShortcutsScrollWindow.set_min_content_height(300);
-        softwareShortcutsScrollWindow.set_child(softwareShortcutsFrame);
+        this.softwareShortcutsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
+        this.softwareShortcutsScrollWindow.set_min_content_height(300);
+        this.softwareShortcutsScrollWindow.set_child(softwareShortcutsFrame);
 
         let applicationShortcuts = this._settings.get_value('directory-shortcuts-list').deep_unpack();
 
@@ -4604,7 +4604,7 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
         });
 
         this._loadPinnedApps(applicationShortcuts,softwareShortcutsFrame);
-        this.mainBox.append(softwareShortcutsScrollWindow);
+        this.mainBox.append(this.softwareShortcutsScrollWindow);
 
         let addPinnedAppsFrame = new PW.FrameBox();
         let addPinnedAppsFrameRow = new PW.FrameBoxRow();
@@ -4720,7 +4720,7 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
                 editable = false;
             }
 
-            let frameRow = new PW.FrameBoxDragRow();
+            let frameRow = new PW.FrameBoxDragRow(this.softwareShortcutsScrollWindow);
             frameRow._name = applicationName;
             frameRow._icon = applicationShortcuts[i][1];   
             frameRow._gicon = Gio.icon_new_for_string(getIconPath(applicationShortcuts[i]));
@@ -4811,13 +4811,13 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         this.set_child(this.mainBox);
         this._settings = settings;
         let softwareShortcutsFrame = new PW.FrameBox();
-        let softwareShortcutsScrollWindow = new Gtk.ScrolledWindow({
+        this.softwareShortcutsScrollWindow = new Gtk.ScrolledWindow({
             valign: Gtk.Align.FILL,
             vexpand: true
         });
-        softwareShortcutsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
-        softwareShortcutsScrollWindow.set_min_content_height(300);
-        softwareShortcutsScrollWindow.set_child(softwareShortcutsFrame);
+        this.softwareShortcutsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
+        this.softwareShortcutsScrollWindow.set_min_content_height(300);
+        this.softwareShortcutsScrollWindow.set_child(softwareShortcutsFrame);
 
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
 
@@ -4831,7 +4831,7 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         });
 
         this._loadPinnedApps(applicationShortcuts,softwareShortcutsFrame);
-        this.mainBox.append(softwareShortcutsScrollWindow);
+        this.mainBox.append(this.softwareShortcutsScrollWindow);
 
         let addPinnedAppsFrame = new PW.FrameBox();
         let addPinnedAppsFrameRow = new PW.FrameBoxRow();
@@ -4944,7 +4944,7 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
 
-            let frameRow = new PW.FrameBoxDragRow();
+            let frameRow = new PW.FrameBoxDragRow(this.softwareShortcutsScrollWindow);
             let iconString;
             frameRow._name = applicationShortcuts[i][0];
             frameRow._icon = applicationShortcuts[i][1];

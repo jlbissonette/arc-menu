@@ -351,7 +351,7 @@ var TweaksDialog = GObject.registerClass(
             savePinnedAppsButton.set_halign(Gtk.Align.END);
             savePinnedAppsButton.set_sensitive(false);
             
-            this._loadPinnedApps(this._settings.get_strv('brisk-shortcuts-list'), pinnedAppsFrame, savePinnedAppsButton);
+            this._loadPinnedApps(this._settings.get_strv('brisk-shortcuts-list'), pinnedAppsFrame, savePinnedAppsButton, pinnedAppsScrollWindow);
             pinnedAppsScrollWindow.set_child(pinnedAppsFrame);
 
             let pinnedAppsHeaderLabel = new Gtk.Label({
@@ -516,7 +516,7 @@ var TweaksDialog = GObject.registerClass(
             savePinnedAppsButton.set_halign(Gtk.Align.END);
             savePinnedAppsButton.set_sensitive(false);
             
-            this._loadPinnedApps(this._settings.get_strv('ubuntu-dash-pinned-app-list'), pinnedAppsFrame, savePinnedAppsButton);
+            this._loadPinnedApps(this._settings.get_strv('ubuntu-dash-pinned-app-list'), pinnedAppsFrame, savePinnedAppsButton, pinnedAppsScrollWindow);
             pinnedAppsScrollWindow.set_child(pinnedAppsFrame);
 
             let pinnedAppsHeaderLabel = new Gtk.Label({
@@ -654,7 +654,7 @@ var TweaksDialog = GObject.registerClass(
             savePinnedAppsButton.set_halign(Gtk.Align.END);
             savePinnedAppsButton.set_sensitive(false);
             
-            this._loadPinnedApps(this._settings.get_strv('mint-pinned-app-list'), pinnedAppsFrame, savePinnedAppsButton);
+            this._loadPinnedApps(this._settings.get_strv('mint-pinned-app-list'), pinnedAppsFrame, savePinnedAppsButton, pinnedAppsScrollWindow);
             pinnedAppsScrollWindow.set_child(pinnedAppsFrame);
             vbox.append(pinnedAppsScrollWindow);
 
@@ -705,9 +705,9 @@ var TweaksDialog = GObject.registerClass(
             pinnedAppsSeparatorFrame.add(pinnedAppsSeparatorRow);
             vbox.append(pinnedAppsSeparatorFrame);
         }
-        _loadPinnedApps(array,frame, savePinnedAppsButton) {
+        _loadPinnedApps(array,frame, savePinnedAppsButton, scrollWindow) {
             for(let i = 0; i < array.length; i += 3) {
-                let frameRow = new PW.FrameBoxDragRow();
+                let frameRow = new PW.FrameBoxDragRow(scrollWindow);
                 frameRow._name = array[i];
                 frameRow._icon = Prefs.getIconPath([array[i], array[i+1], array[i+2]]);
                 frameRow._cmd = array[i+2];
