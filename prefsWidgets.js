@@ -291,16 +291,17 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             //get listbox parent
             let listBox = self.get_widget().get_parent();
             //get widgets parent - the listBoxDragRow
-            listBox.dragWidget = this;
+            listBox.dragRow = this;
 
             let alloc = self.get_widget().get_allocation();
             let dragWidget = self.get_widget().createDragRow(alloc);
-            
+
             let icon = Gtk.DragIcon.get_for_drag(gdkDrag);
             icon.set_child(dragWidget);
 
             gdkDrag.set_hotspot(listBox.dragX, listBox.dragY);
         });
+
         dragSource.connect("prepare", (self, x, y) => {
             //get listbox parent
             this.set_state_flags(Gtk.StateFlags.NORMAL, true);
@@ -315,11 +316,6 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             deleteData = true;
             let listBox = self.get_widget().get_parent();
             listBox.drag_unhighlight_row();
-            self.set_actions(Gdk.DragAction.MOVE);
-        });
-
-        dropTarget.connect("accept", (self, gdkDrop, x, y, selection, info, time)=> {
-           return true;
         });
 
         dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time)=> {
@@ -348,15 +344,15 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             //get listbox parent
             let listBox = this.get_parent();
             let index = this.get_index();
-            if(index === listBox.dragWidget.get_index()){
+            if(index === listBox.dragRow.get_index()){
                 gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
                     gdkDrop.finish(Gdk.DragAction.MOVE);
                 });
                 return true;
             }
-            listBox.remove(listBox.dragWidget);
+            listBox.remove(listBox.dragRow);
             listBox.show();
-            listBox.insert(listBox.dragWidget, index);
+            listBox.insert(listBox.dragRow, index);
             this.resetButton?.set_sensitive(true);
             this.saveButton.set_sensitive(true);
             gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
