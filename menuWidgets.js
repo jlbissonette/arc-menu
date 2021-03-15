@@ -1055,8 +1055,15 @@ var PlaceButtonItem = GObject.registerClass(class Arc_Menu_PlaceButtonItem exten
 var CategoryMenuButton = GObject.registerClass(class Arc_Menu_CategoryMenuButton extends SessionButton {
     _init(menuLayout, category) {
         let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(category);
+        super._init(menuLayout, _(name), "", null);
 
-        super._init(menuLayout, _(name), iconName ? iconName : fallbackIconName, gicon);
+        if(gicon)
+            this._icon.gicon = gicon;
+        else if(iconName)
+            this._icon.icon_name = iconName;
+        else
+            this._icon.fallback_icon_name = fallbackIconName;
+
         this._name = name;
         this.appList = [];
         this.isRecentlyInstalled = false;
