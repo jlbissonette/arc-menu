@@ -295,6 +295,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
 
             let alloc = self.get_widget().get_allocation();
             let dragWidget = self.get_widget().createDragRow(alloc);
+            listBox.dragWidget = dragWidget;
 
             let icon = Gtk.DragIcon.get_for_drag(gdkDrag);
             icon.set_child(dragWidget);
@@ -312,9 +313,10 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             return new Gdk.ContentProvider(Arc_Menu_FrameBoxDragRow);    
         });
 
-        dragSource.connect("drag-end", (self, deleteData)=> {
+        dragSource.connect("drag-end", (self, gdkDrag, deleteData)=> {
             deleteData = true;
             let listBox = self.get_widget().get_parent();
+            listBox.dragWidget = null;
             listBox.drag_unhighlight_row();
         });
 
