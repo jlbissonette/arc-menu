@@ -5189,7 +5189,7 @@ var MenuSettingsShortcutExtrasPage = GObject.registerClass(
 
 var MiscPage = GObject.registerClass(
     class Arc_Menu_MiscPage extends PW.NotebookPage {
-        _init(settings) {
+        _init(settings, parentBox) {
             super._init(_('Misc'));
             this._settings = settings;
 
@@ -5423,10 +5423,10 @@ var MiscPage = GObject.registerClass(
                 dialog.connect('response', (widget, response) => {
                     if(response == Gtk.ResponseType.YES){
                         GLib.spawn_command_line_sync('dconf reset -f /org/gnome/shell/extensions/arcmenu/');
-                        this.settingsFrameStack.foreach((child) => {
-                            this.settingsFrameStack.remove(child);
+                        parentBox.settingsFrameStack.foreach((child) => {
+                            parentBox.settingsFrameStack.remove(child);
                         });
-                        this.populateSettingsFrameStack();
+                        parentBox.populateSettingsFrameStack();
                     }
                     dialog.destroy();
                 });
@@ -5876,7 +5876,7 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
         this.settingsFrameStack.add_named(new MenuSettingsCategoriesPage(this._settings), "MenuSettingsCategories");
         this.settingsFrameStack.add_named(new MenuSettingsFineTunePage(this._settings), "MenuSettingsFineTune");
         this.settingsFrameStack.add_named(new ButtonAppearancePage(this._settings), "ButtonAppearance");
-        this.settingsFrameStack.add_named(new MiscPage(this._settings), "Misc");
+        this.settingsFrameStack.add_named(new MiscPage(this._settings, this), "Misc");
         this.settingsFrameStack.add_named(new AboutPage(this._settings), "About");
 
         this.show_all();
