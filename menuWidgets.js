@@ -2141,6 +2141,8 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             Utils.setGridLayoutStyle(layout, this.actor, this.box);
         }
         this._updateIcon();
+        this.connect("notify::hover", () => this.removeIndicator());
+        this.connect("key-focus-in", () => this.removeIndicator());
     }
 
     removeIndicator(){
