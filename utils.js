@@ -183,8 +183,10 @@ function isTwoPanedLayout(layout){
 var ScrollViewShader = `uniform sampler2D tex;
 uniform float height;
 uniform float width;
-uniform float vfade_offset;
-uniform float hfade_offset;
+uniform float fade_offset_top;
+uniform float fade_offset_bottom;
+uniform float fade_offset_left;
+uniform float fade_offset_right;
 uniform bool  fade_edges_top;
 uniform bool  fade_edges_right;
 uniform bool  fade_edges_bottom;
@@ -201,18 +203,18 @@ void main ()
     float x = width * cogl_tex_coord_in[0].x;
 
     if (x > fade_area_topleft[0] && x < fade_area_bottomright[0] &&
-        y > fade_area_topleft[1] && y < fade_area_bottomright[1]) {
+        y > fade_area_topleft[1] && y < fade_area_bottomright[1])
+    {
         float ratio = 1.0;
-        float fade_top_start = fade_area_topleft[1] + vfade_offset;
-        float fade_left_start = fade_area_topleft[0] + hfade_offset;
-        float fade_bottom_start = fade_area_bottomright[1] - vfade_offset;
-        float fade_right_start = fade_area_bottomright[0] - hfade_offset;
-        bool fade_top = y < vfade_offset && fade_edges_top;
+        float fade_top_start = fade_area_topleft[1] + fade_offset_top;
+        float fade_left_start = fade_area_topleft[0] + fade_offset_left;
+        float fade_bottom_start = fade_area_bottomright[1] - fade_offset_bottom;
+        float fade_right_start = fade_area_bottomright[0] - fade_offset_right;
+        bool fade_top = y < fade_top_start && fade_edges_top;
         bool fade_bottom = y > fade_bottom_start && fade_edges_bottom;
         bool fade_left = x < fade_left_start && fade_edges_left;
         bool fade_right = x > fade_right_start && fade_edges_right;
 
-        float vfade_scale = height / vfade_offset;
         if (fade_top) {
             ratio *= (fade_area_topleft[1] - y) / (fade_area_topleft[1] - fade_top_start);
         }
@@ -221,7 +223,6 @@ void main ()
             ratio *= (fade_area_bottomright[1] - y) / (fade_area_bottomright[1] - fade_bottom_start);
         }
 
-        float hfade_scale = width / hfade_offset;
         if (fade_left) {
             ratio *= (fade_area_topleft[0] - x) / (fade_area_topleft[0] - fade_left_start);
         }
@@ -268,7 +269,7 @@ function ensureActorVisibleInScrollView(actor) {
     let offset = 0;
     let vfade = parent.get_effect("fade");
     if (vfade)
-        offset = vfade.vfade_offset;
+        offset = vfade.fade_margins.top;
 
     if (y1 < value + offset)
         value = Math.max(0, y1 - offset);
