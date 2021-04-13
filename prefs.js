@@ -1023,23 +1023,32 @@ var GeneralPage = GObject.registerClass(
             menuPlacementRow.add(menuPlacementCombo);
             menuPlacementFrame.add(menuPlacementRow);
 
-            let dtdExtraRow = new PW.FrameBoxRow();
-            let dtdExtraRowLabel = new Gtk.Label({
-                label: avaliablePlacement[Constants.ArcMenuPlacement.DASH] ? _("Disable Activities Button") :
-                                         _("Dash to Dock extension not running!") + "\n" + _("Enable Dash to Dock for this feature to work."),
+            let dashToDockWarningRow = new PW.FrameBoxRow();
+            let dashToDockWarningLabel = new Gtk.Label({
+                label: _("Dash to Dock extension not running!") + "\n" + _("Enable Dash to Dock for this feature to work."),
                 use_markup: true,
                 xalign: 0,
                 hexpand: true
             });
 
-            let disableActivitiesSwitch = new Gtk.Switch({ 
+            let showActivitiesRow = new PW.FrameBoxRow();
+            let showActivitiesLabel = new Gtk.Label({
+                label: _("Show Activities Button"),                 
+                use_markup: true,
+                xalign: 0,
+                hexpand: true
+            });
+
+            let showActivitiesSwitch = new Gtk.Switch({ 
                 halign: Gtk.Align.END,
-                tooltip_text: _("Disable Activities Button in panel") 
+                tooltip_text: _("Show Activities Button in panel") 
             });
-            disableActivitiesSwitch.set_active(this._settings.get_boolean('disable-activities-button'));
-            disableActivitiesSwitch.connect('notify::active', (widget) => {
-                this._settings.set_boolean('disable-activities-button', widget.get_active());
+            showActivitiesSwitch.set_active(this._settings.get_boolean('show-activities-button'));
+            showActivitiesSwitch.connect('notify::active', (widget) => {
+                this._settings.set_boolean('show-activities-button', widget.get_active());
             });
+            showActivitiesRow.add(showActivitiesLabel);
+            showActivitiesRow.add(showActivitiesSwitch);
 
             let warningImage = new Gtk.Image({ 
                 icon_name: 'warning-symbolic',
@@ -1053,12 +1062,9 @@ var GeneralPage = GObject.registerClass(
             warningImageBox.append(warningImage);
 
             if(!avaliablePlacement[Constants.ArcMenuPlacement.DASH]){
-                dtdExtraRow.add(warningImageBox);
+                dashToDockWarningRow.add(warningImageBox);
             }
-            dtdExtraRow.add(dtdExtraRowLabel);
-
-            if(avaliablePlacement[Constants.ArcMenuPlacement.DASH])
-                dtdExtraRow.add(disableActivitiesSwitch);
+            dashToDockWarningRow.add(dashToDockWarningLabel);
 
             let panelWarningRow = new PW.FrameBoxRow();
             let panelWarningLabel = new Gtk.Label({
@@ -1181,6 +1187,7 @@ var GeneralPage = GObject.registerClass(
                             menuPlacementFrame.add(menuPositionAdjustmentRow);
                         if(avaliablePlacement[Constants.ArcMenuPlacement.DTP])
                             menuPlacementFrame.add(multiMonitorRow);
+                        menuPlacementFrame.add(showActivitiesRow);
                     }
                     menuPlacementFrame.show();
                 }
@@ -1190,16 +1197,21 @@ var GeneralPage = GObject.registerClass(
                         if(this._settings.get_enum('position-in-panel') == Constants.MENU_POSITION.Center)
                             menuPlacementFrame.add(menuPositionAdjustmentRow);
                         menuPlacementFrame.add(multiMonitorRow);
+                        menuPlacementFrame.add(showActivitiesRow);
                     }
-                    else{
+                    else
                         menuPlacementFrame.add(panelWarningRow);
-                    }
+    
                     menuPlacementFrame.show();
                 }
                 else{
-                    menuPlacementFrame.add(dtdExtraRow);
-                    if(avaliablePlacement[Constants.ArcMenuPlacement.DASH])
+                    if(avaliablePlacement[Constants.ArcMenuPlacement.DASH]){
                         menuPlacementFrame.add(multiMonitorRow);
+                        menuPlacementFrame.add(showActivitiesRow);  
+                    }
+                    else
+                        menuPlacementFrame.add(dashToDockWarningRow);
+
                     menuPlacementFrame.show();
                 }
             });
@@ -1616,7 +1628,6 @@ var ButtonAppearancePage = GObject.registerClass(
                 this.resetButton.set_sensitive(true); 
                 menuButtonAppearanceFrame.removeChildrenAfterIndex(0);
                 if(widget.get_active() === Constants.MENU_APPEARANCE.None){
-                    menuButtonAppearanceFrame.add(restoreActivitiesRow);
                     menuButtonAppearanceFrame.show();
                 }
                 else if(widget.get_active() === Constants.MENU_APPEARANCE.Icon){
@@ -1731,27 +1742,6 @@ var ButtonAppearancePage = GObject.registerClass(
             if(this._settings.get_enum('menu-button-appearance') != Constants.MENU_APPEARANCE.Icon && this._settings.get_enum('menu-button-appearance') != Constants.MENU_APPEARANCE.None)
                 menuButtonAppearanceFrame.add(menuButtonCustomTextBoxRow);
             vbox.append(menuButtonAppearanceFrame);
-            
-            let restoreActivitiesRow = new PW.FrameBoxRow();
-            let restoreActivitiesLabel = new Gtk.Label({
-                label: _("Restore Activities Button"),
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
-            });
-
-            let restoreActivitiesSwitch = new Gtk.Switch({ 
-                halign: Gtk.Align.END,
-                tooltip_text: _("Restore Activities Button in panel") 
-            });
-            restoreActivitiesSwitch.set_active(this._settings.get_boolean('restore-activities-button'));
-            restoreActivitiesSwitch.connect('notify::active', (widget) => {
-                this._settings.set_boolean('restore-activities-button', widget.get_active());
-            });
-            restoreActivitiesRow.add(restoreActivitiesLabel);
-            restoreActivitiesRow.add(restoreActivitiesSwitch);
-            if(this._settings.get_enum('menu-button-appearance') == Constants.MENU_APPEARANCE.None)
-                menuButtonAppearanceFrame.add(restoreActivitiesRow);
 
             let menuButtonIconHeaderLabel = new Gtk.Label({
                 label: "<b>" + _('Icon Appearance') +"</b>",
