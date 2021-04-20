@@ -2286,6 +2286,9 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
         }
 
         this.box.label_actor = this.label;
+        this._oldX = -1;
+        this._oldY = -1;
+        this.connect('motion-event', this._onMotionEvent.bind(this));   
     }
 
     setRecentlyInstalledIndicator(shouldShow){
@@ -2327,12 +2330,89 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
         super.activate(event);
     }
 
-    _onHover() {
-        if (this.actor.hover){
-            if(Utils.isTwoPanedLayout(this._layout) && this._settings.get_boolean('activate-on-hover'))
-                this.activate(Clutter.get_current_event());
-        }  
-        super._onHover(); 
+    _onMotionEvent(actor, event) {
+        if(Utils.isTwoPanedLayout(this._layout) && this._settings.get_boolean('activate-on-hover')){
+            let device = event.get_device();
+            if (!device.get_grabbed_actor()) {
+                this._oldX = -1;
+                this._oldY = -1;
+                device.grab(this);
+            }
+            
+            if (this._isNavigatingSubmenu(event.get_coords())){
+                if(this._menuLayout.activeCategory !== this._name)
+                    this.activate(Clutter.get_current_event());
+                return true;
+            }
+    
+            this._oldX = -1;
+            this._oldY = -1;
+            device.ungrab();
+    
+            let source = event.get_source();
+            if (source instanceof St.Widget)
+                source.sync_hover();
+    
+            return false;
+        }
+    }
+
+    //Borrowed from apps-menu extension. See: https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/blob/master/extensions/apps-menu/extension.js#L126-181
+    _isNavigatingSubmenu([x, y]) {
+        let [posX, posY] = this.get_transformed_position();
+
+        if (this._oldX === -1) {
+            this._oldX = x;
+            this._oldY = y;
+            return true;
+        }
+
+        let deltaX = Math.abs(x - this._oldX);
+        let deltaY = Math.abs(y - this._oldY);
+
+        this._oldX = x;
+        this._oldY = y;
+
+        // If it lies outside the x-coordinates then it is definitely outside.
+        if (posX > x || posX + this.width < x)
+            return false;
+
+        // If it lies inside the menu item then it is definitely inside.
+        if (posY <= y && posY + this.height >= y)
+            return true;
+
+        // We want the keep-up triangle only if the movement is more
+        // horizontal than vertical.
+        if (deltaX * 5 < deltaY)
+            return false;
+
+        // Check whether the point lies inside triangle ABC, and a similar
+        // triangle on the other side of the menu item.
+        //
+        //   +---------------------+
+        //   | menu item           |
+        // A +---------------------+ C
+        //              P          |
+        //                         B
+
+        // Ensure that the point P always lies below line AC so that we can
+        // only check for triangle ABC.
+        if (posY > y) {
+            let offset = posY - y;
+            y = posY + this.height + offset;
+        }
+
+        // Ensure that A is (0, 0).
+        x -= posX;
+        y -= posY + this.height;
+
+        // Check which side of line AB the point P lies on by taking the
+        // cross-product of AB and AP. See:
+        // http://stackoverflow.com/questions/3461453/determine-which-side-of-a-line-a-point-lies
+        if (this.width * y - 50 * x <= 0)
+            return true;
+
+        return false;
     }
 });
 // Simple Menu item class
