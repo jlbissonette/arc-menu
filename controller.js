@@ -469,7 +469,7 @@ var MenuSettingsController = class {
         // Thanks to lestcape @github.com for the refinement of this method.
         return (this._activitiesButton &&
             this._activitiesButton.container &&
-            this.panel._leftBox.contains(this._activitiesButton.container));
+            Main.panel._leftBox.contains(this._activitiesButton.container));
     }
 
     // Add or restore the activities button on the main panel
