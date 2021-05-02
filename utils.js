@@ -180,6 +180,10 @@ function isTwoPanedLayout(layout){
                     || layout == Constants.MENU_LAYOUT.Mint || layout==Constants.MENU_LAYOUT.Budgie);
 }
 
+function areaOfTriangle(p1, p2, p3){
+    return Math.abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0);
+}
+
 var ScrollViewShader = `uniform sampler2D tex;
 uniform float height;
 uniform float width;

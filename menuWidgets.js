@@ -1039,6 +1039,7 @@ var SessionButton = GObject.registerClass(
         global.log("Activate Not Implemented")
     }
 });
+
 // Menu Place Button Shortcut item class
 var PlaceButtonItem = GObject.registerClass(class Arc_Menu_PlaceButtonItem extends SessionButton {
     _init(menuLayout, info) {
@@ -1049,7 +1050,6 @@ var PlaceButtonItem = GObject.registerClass(class Arc_Menu_PlaceButtonItem exten
     activate() {
         this._info.launch();
     }
-
 });
 
 var CategoryMenuButton = GObject.registerClass(class Arc_Menu_CategoryMenuButton extends SessionButton {
@@ -2286,8 +2286,6 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
         }
 
         this.box.label_actor = this.label;
-        this._oldX = -1;
-        this._oldY = -1;
         this.connect('motion-event', this._onMotionEvent.bind(this));   
     }
 
@@ -2332,87 +2330,49 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
 
     _onMotionEvent(actor, event) {
         if(Utils.isTwoPanedLayout(this._layout) && this._settings.get_boolean('activate-on-hover')){
-            let device = event.get_device();
-            if (!device.get_grabbed_actor()) {
-                this._oldX = -1;
-                this._oldY = -1;
-                device.grab(this);
+            if (!this._menuLayout.navigatingCategory) {
+                this._menuLayout.navigatingCategory = this;
             }
-            
-            if (this._isNavigatingSubmenu(event.get_coords())){
-                if(this._menuLayout.activeCategory !== this._name)
+
+            if (this._isInTriangle(event.get_coords())){
+                if(this._menuLayout.activeCategory !== this._name && this._menuLayout.navigatingCategory === this)
                     this.activate(Clutter.get_current_event());
                 return true;
             }
-    
-            this._oldX = -1;
-            this._oldY = -1;
-            device.ungrab();
-    
-            let source = event.get_source();
-            if (source instanceof St.Widget)
-                source.sync_hover();
-    
-            return false;
+            this._menuLayout.navigatingCategory = this;
+            return true;
         }
     }
 
-    //Borrowed from apps-menu extension. See: https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/blob/master/extensions/apps-menu/extension.js#L126-181
-    _isNavigatingSubmenu([x, y]) {
-        let [posX, posY] = this.get_transformed_position();
+    _isInTriangle([x, y]){
+        let [posX, posY] = this._menuLayout.navigatingCategory.get_transformed_position();
 
-        if (this._oldX === -1) {
-            this._oldX = x;
-            this._oldY = y;
+        //the mouse is still in the active category
+        if (this._menuLayout.navigatingCategory === this){
+            this._menuLayout._oldX = x;
+            this._menuLayout._oldY = y;
             return true;
         }
 
-        let deltaX = Math.abs(x - this._oldX);
-        let deltaY = Math.abs(y - this._oldY);
-
-        this._oldX = x;
-        this._oldY = y;
-
-        // If it lies outside the x-coordinates then it is definitely outside.
-        if (posX > x || posX + this.width < x)
+        if(!this._menuLayout.navigatingCategory)
             return false;
 
-        // If it lies inside the menu item then it is definitely inside.
-        if (posY <= y && posY + this.height >= y)
-            return true;
+        let width = this._menuLayout.navigatingCategory.width;
+        let height = this._menuLayout.navigatingCategory.height;
 
-        // We want the keep-up triangle only if the movement is more
-        // horizontal than vertical.
-        if (deltaX * 5 < deltaY)
-            return false;
+        let maxX = posX + width;
+        let maxY = posY + height;
 
-        // Check whether the point lies inside triangle ABC, and a similar
-        // triangle on the other side of the menu item.
-        //
-        //   +---------------------+
-        //   | menu item           |
-        // A +---------------------+ C
-        //              P          |
-        //                         B
+        let distance = maxX - this._menuLayout._oldX;
+        let point1 = [this._menuLayout._oldX, this._menuLayout._oldY]
+        let point2 = [maxX, posY - distance];
+        let point3 = [maxX, maxY + distance];
 
-        // Ensure that the point P always lies below line AC so that we can
-        // only check for triangle ABC.
-        if (posY > y) {
-            let offset = posY - y;
-            y = posY + this.height + offset;
-        }
-
-        // Ensure that A is (0, 0).
-        x -= posX;
-        y -= posY + this.height;
-
-        // Check which side of line AB the point P lies on by taking the
-        // cross-product of AB and AP. See:
-        // http://stackoverflow.com/questions/3461453/determine-which-side-of-a-line-a-point-lies
-        if (this.width * y - 50 * x <= 0)
-            return true;
-
-        return false;
+        let area = Utils.areaOfTriangle(point1, point2, point3);
+        let a1 = Utils.areaOfTriangle([x, y], point2, point3);
+        let a2 = Utils.areaOfTriangle(point1, [x, y], point3);
+        let a3 = Utils.areaOfTriangle(point1, point2, [x, y]);
+        return area === a1 + a2 + a3;
     }
 });
 // Simple Menu item class
