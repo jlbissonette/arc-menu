@@ -79,7 +79,7 @@ var ListSearchResult = class Arc_Menu_ListSearchResult {
             descriptionText = descriptionText.split('\n')[0];
 
         let descriptionLabel = new St.Label({ 
-            text: descriptionText,
+            text: descriptionText ? descriptionText : '',
             y_expand: false,
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER 
@@ -224,15 +224,13 @@ var AppSearchResult = class Arc_Menu_AppSearchResult {
                 }      
     
                 let descriptionText = this._app ? this._app.get_description() : this.metaInfo['description'];
-                if(descriptionText)
-                    descriptionText = descriptionText.split('\n')[0];
-
-                let descriptionLabel = new St.Label({ 
-                    text: descriptionText,
-                    x_align: Clutter.ActorAlign.START,
-                    style: "font-weight: lighter;"
-                });
                 if(descriptionText){
+                    descriptionText = descriptionText.split('\n')[0];
+                    let descriptionLabel = new St.Label({ 
+                        text: descriptionText,
+                        x_align: Clutter.ActorAlign.START,
+                        style: "font-weight: lighter;"
+                    });
                     descriptionBox.add(this.label);
                     descriptionBox.add(descriptionLabel);
                     this.menuItem.box.add_child(descriptionBox);
