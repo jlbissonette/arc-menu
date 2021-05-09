@@ -823,7 +823,7 @@ var BaseLayout = class {
 
     _onSearchBoxChanged(searchBox, searchString) {        
         if(searchBox.isEmpty()){  
-            this.newSearch.setTerms(['']); 
+            this.newSearch.setTerms([]); 
             this.setDefaultMenuView();                     	          	
             this.newSearch.actor.hide();
         }            
@@ -831,9 +831,10 @@ var BaseLayout = class {
             this._clearActorsFromBox(); 
             let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
             appsScrollBoxAdj.set_value(0);
-            this.applicationsBox.add(this.newSearch.actor); 
-            this.newSearch.actor.show();         
-            this.newSearch.setTerms([searchString]); 
+            this.applicationsBox.add(this.newSearch.actor);
+            this.newSearch.actor.show();
+            searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
+            this.newSearch.setTerms(searchString.split(/\s+/));
             this.newSearch.highlightDefault(true);
         }            	
     }

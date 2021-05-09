@@ -786,7 +786,7 @@ var SearchResults = class Arc_Menu_SearchResults {
             this._searchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, this._onSearchTimeout.bind(this));
 
         let escapedTerms = this._terms.map(term => Shell.util_regex_escape(term));
-        this._highlightRegex = new RegExp(`(${escapedTerms.join('|')})`, 'gi');
+        this._highlightRegex = new RegExp('(%s)'.format(escapedTerms.join('|')), 'gi');
      
         this.emit('terms-changed');
     }
