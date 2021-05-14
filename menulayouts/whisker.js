@@ -35,11 +35,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            SearchType: Constants.SearchType.LIST_VIEW,
+            AppType: Constants.AppDisplayType.LIST,
+            SearchType: Constants.AppDisplayType.LIST,
+            GridColumns: 1,
+            ColumnSpacing: 0,
+            RowSpacing: 0,
+            SupportsCategoryOnHover: true,
             VerticalMainBox: true
         });
     }
     createLayout(){
+        super.createLayout();
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
             y_expand: false,
@@ -90,7 +96,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add(this.searchBox.actor);
         }
         else{
-            let horizontalSep = this._createHorizontalSeparator(Constants.SEPARATOR_STYLE.LONG);
+            let horizontalSep = this._createHorizontalSeparator(Constants.SeparatorStyle.LONG);
             this.mainBox.add(horizontalSep);
         }
 
@@ -155,10 +161,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.actor.style = "margin: 10px 10px 0px 10px; padding-left: 0.4em;padding-right: 0.4em;";
             this.mainBox.add(this.searchBox.actor);
         }
-        this.loadFavorites();
+        this.loadPinnedApps();
         this.loadCategories();
         this.displayCategories();
-        this.setDefaultMenuView(); 
+        this.setDefaultMenuView();
     }
    
     setDefaultMenuView(){
@@ -193,7 +199,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.loadCategories();
         for(let categoryMenuItem of this.categoryDirectories.values()){
             if(categoryMenuItem._arrowIcon)
-                categoryMenuItem.box.remove_actor(categoryMenuItem._arrowIcon);
+                categoryMenuItem.remove_actor(categoryMenuItem._arrowIcon);
         }
     } 
 
