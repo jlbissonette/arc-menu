@@ -27,60 +27,121 @@ const {Gio, GLib} = imports.gi;
 function getMenuLayout(button, layout){
     let MenuLayout = Me.imports.menulayouts;
     switch(layout){
-        case Constants.MENU_LAYOUT.Default:
+        case Constants.MenuLayout.ARCMENU:
             return new MenuLayout.arcmenu.createMenu(button);
-        case Constants.MENU_LAYOUT.Brisk:
+        case Constants.MenuLayout.BRISK:
             return new MenuLayout.brisk.createMenu(button); 
-        case Constants.MENU_LAYOUT.Whisker:
+        case Constants.MenuLayout.WHISKER:
             return new MenuLayout.whisker.createMenu(button); 
-        case Constants.MENU_LAYOUT.GnomeMenu:
+        case Constants.MenuLayout.GNOME_MENU:
             return new MenuLayout.gnomemenu.createMenu(button); 
-        case Constants.MENU_LAYOUT.Mint:
+        case Constants.MenuLayout.MINT:
             return new MenuLayout.mint.createMenu(button); 
-        case Constants.MENU_LAYOUT.GnomeDash:
+        case Constants.MenuLayout.GNOME_OVERVIEW:
             return null;
-        case Constants.MENU_LAYOUT.Elementary:
+        case Constants.MenuLayout.ELEMENTARY:
             return new MenuLayout.elementary.createMenu(button); 
-        case Constants.MENU_LAYOUT.Redmond:
+        case Constants.MenuLayout.REDMOND:
             return new MenuLayout.redmond.createMenu(button); 
-        case Constants.MENU_LAYOUT.Simple:
+        case Constants.MenuLayout.SIMPLE:
             return new MenuLayout.simple.createMenu(button);  
-        case Constants.MENU_LAYOUT.Simple2:
+        case Constants.MenuLayout.SIMPLE_2:
             return new MenuLayout.simple2.createMenu(button);  
-        case Constants.MENU_LAYOUT.UbuntuDash:
-            return new MenuLayout.ubuntudash.createMenu(button); 
-        case Constants.MENU_LAYOUT.Budgie:
+        case Constants.MenuLayout.UNITY:
+            return new MenuLayout.unity.createMenu(button); 
+        case Constants.MenuLayout.BUDGIE:
             return new MenuLayout.budgie.createMenu(button);
-        case Constants.MENU_LAYOUT.Insider:
+        case Constants.MenuLayout.INSIDER:
             return new MenuLayout.insider.createMenu(button);
-        case Constants.MENU_LAYOUT.Runner:
+        case Constants.MenuLayout.RUNNER:
             return new MenuLayout.runner.createMenu(button);
-        case Constants.MENU_LAYOUT.Chromebook:
+        case Constants.MenuLayout.CHROMEBOOK:
             return new MenuLayout.chromebook.createMenu(button);
-        case Constants.MENU_LAYOUT.Raven:
+        case Constants.MenuLayout.RAVEN:
             return new MenuLayout.raven.createMenu(button);
-        case Constants.MENU_LAYOUT.Tognee:
+        case Constants.MenuLayout.TOGNEE:
             return new MenuLayout.tognee.createMenu(button);
-        case Constants.MENU_LAYOUT.Plasma:
+        case Constants.MenuLayout.PLASMA:
             return new MenuLayout.plasma.createMenu(button);
-        case Constants.MENU_LAYOUT.Windows:
+        case Constants.MenuLayout.WINDOWS:
             return new MenuLayout.windows.createMenu(button);
         default:
             return new MenuLayout.arcmenu.createMenu(button);    
     }
 }
 
+function getSettings(schema, extensionUUID) {
+    let extension = imports.ui.main.extensionManager.lookup(extensionUUID);
+  
+    if (!extension)
+        throw new Error('ArcMenu - getSettings() unable to find extension');
+
+    schema = schema || extension.metadata['settings-schema'];
+
+    const GioSSS = Gio.SettingsSchemaSource;
+
+    // Expect USER extensions to have a schemas/ subfolder, otherwise assume a
+    // SYSTEM extension that has been installed in the same prefix as the shell
+    let schemaDir = extension.dir.get_child('schemas');
+    let schemaSource;
+    if (schemaDir.query_exists(null)) {
+        schemaSource = GioSSS.new_from_directory(schemaDir.get_path(),
+                                                GioSSS.get_default(),
+                                                false);
+    } else {
+        schemaSource = GioSSS.get_default();
+    }
+
+    let schemaObj = schemaSource.lookup(schema, true);
+    if (!schemaObj)
+        throw new Error(`Schema ${schema} could not be found for extension ${extension.metadata.uuid}. Please check your installation`);
+
+    return new Gio.Settings({ settings_schema: schemaObj });
+}
+
+function convertToGridLayout(item){
+    const Clutter = imports.gi.Clutter;
+
+    let icon = item._icon ? item._icon : item._iconBin;
+
+    item.vertical = true;
+    item.remove_child(item._ornamentLabel);
+
+    item.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
+    item.label.x_align = item.label.y_align = Clutter.ActorAlign.CENTER;
+    item.label.y_expand = true;
+
+    icon.x_align = icon.y_align = Clutter.ActorAlign.CENTER;
+    icon.y_expand = true;
+
+    if(item._settings.get_boolean('multi-lined-labels'))
+        item.label.get_clutter_text().set_line_wrap(true);
+    
+
+    if(item._indicator){
+        item.remove_child(item._indicator);
+        item.insert_child_at_index(item._indicator, 0);
+        item._indicator.x_align = Clutter.ActorAlign.CENTER;
+        item._indicator.y_align = Clutter.ActorAlign.START;
+        item._indicator.y_expand = false;
+    }
+
+    item.name = item._menuLayout.layoutProperties.IconGridStyle;
+    if(item._icon) 
+        icon.icon_size = item._menuLayout.layoutProperties.IconGridSize;
+}
+
 function getCategoryDetails(currentCategory){
     let name, gicon, iconName, fallbackIconName;
     let categoryMatchFound = false;
-    for(let entry of Constants.CATEGORIES){
-        if(entry.Category === currentCategory){
+    for(let entry of Constants.Categories){
+        if(entry.CATEGORY === currentCategory){
             categoryMatchFound = true;
-            name = entry.Name;
-            if(entry.Icon.startsWith(Me.path))
-                gicon = Gio.icon_new_for_string(entry.Icon);
+            name = entry.NAME;
+            if(entry.ICON.startsWith(Me.path))
+                gicon = Gio.icon_new_for_string(entry.ICON);
             else
-                iconName = entry.Icon;
+                iconName = entry.ICON;
             return [name, gicon, iconName, fallbackIconName];
         }
     }
@@ -100,20 +161,20 @@ function getCategoryDetails(currentCategory){
 function activateCategory(currentCategory, menuLayout, menuItem, extraParams = false){
     if(currentCategory === Constants.CategoryType.HOME_SCREEN){
         menuLayout.activeCategory = _("Pinned Apps");
-        menuLayout.displayFavorites();
+        menuLayout.displayPinnedApps();
     }
     else if(currentCategory === Constants.CategoryType.PINNED_APPS)
-        menuLayout.displayFavorites();
+        menuLayout.displayPinnedApps();
     else if(currentCategory === Constants.CategoryType.FREQUENT_APPS){
         menuLayout.setFrequentAppsList(menuItem);
-        menuLayout.displayCategoryAppList(menuItem.appList, null, extraParams ? menuItem : null);  
+        menuLayout.displayCategoryAppList(menuItem.appList, currentCategory, extraParams ? menuItem : null);
     }
     else if(currentCategory === Constants.CategoryType.ALL_PROGRAMS)
-        menuLayout.displayCategoryAppList(menuItem.appList, currentCategory, extraParams ? menuItem : null);  
+        menuLayout.displayCategoryAppList(menuItem.appList, currentCategory, extraParams ? menuItem : null);
     else if(currentCategory === Constants.CategoryType.RECENT_FILES)
-        menuLayout.displayRecentFiles();   
+        menuLayout.displayRecentFiles();
     else
-        menuLayout.displayCategoryAppList(menuItem.appList, null, extraParams ? menuItem : null);   
+        menuLayout.displayCategoryAppList(menuItem.appList, currentCategory, extraParams ? menuItem : null);          
 
     menuLayout.activeCategoryType = currentCategory;  
 }
@@ -121,43 +182,27 @@ function activateCategory(currentCategory, menuLayout, menuItem, extraParams = f
 function getMenuButtonIcon(settings, path){
     let iconType = settings.get_enum('menu-button-icon');
 
-    if(iconType === Constants.MENU_BUTTON_ICON.Custom){
+    if(iconType === Constants.MenuIcon.CUSTOM){
         if(path && GLib.file_test(path, GLib.FileTest.IS_REGULAR))
             return path;
     }
-    else if(iconType === Constants.MENU_BUTTON_ICON.Distro_Icon){
+    else if(iconType === Constants.MenuIcon.DISTRO_ICON){
         let iconEnum = settings.get_int('distro-icon');
-        path = Me.path + Constants.DISTRO_ICONS[iconEnum].path;
-        if(Constants.DISTRO_ICONS[iconEnum].path === 'start-here-symbolic')
+        path = Me.path + Constants.DistroIcons[iconEnum].PATH;
+        if(Constants.DistroIcons[iconEnum].PATH === 'start-here-symbolic')
             return 'start-here-symbolic';
         else if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
             return path;   
     }
     else{
         let iconEnum = settings.get_int('arc-menu-icon');
-        path = Me.path + Constants.MENU_ICONS[iconEnum].path;
+        path = Me.path + Constants.MenuIcons[iconEnum].PATH;
         if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
             return path;
     }
 
     global.log("ArcMenu - Menu Button Icon Error! Set to System Default.");
     return 'start-here-symbolic';
-}
-
-function setGridLayoutStyle(layout, actor, box){
-    if(layout === Constants.MENU_LAYOUT.Elementary || layout === Constants.MENU_LAYOUT.UbuntuDash)
-        actor.style = "width: 95px; height: 95px;";
-    else
-        actor.style = "width: 80px; height: 80px;"
-    actor.style += "text-align: center; border-radius: 4px; padding: 5px; spacing: 0px";    
-    box.style = "padding: 0px; margin: 0px; spacing: 0px;";
-}
-
-function getGridIconSize(layout){
-    if(layout === Constants.MENU_LAYOUT.Elementary || layout === Constants.MENU_LAYOUT.UbuntuDash)
-        return 52;
-    else
-        return 36;
 }
 
 function findSoftwareManager(){
@@ -174,13 +219,8 @@ function findSoftwareManager(){
     return softwareManager;
 }
 
-//Menu Layouts that have two panes with categories on left and apps on right
-function isTwoPanedLayout(layout){
-    return (layout == Constants.MENU_LAYOUT.Brisk || layout == Constants.MENU_LAYOUT.Whisker || layout == Constants.MENU_LAYOUT.GnomeMenu
-                    || layout == Constants.MENU_LAYOUT.Mint || layout==Constants.MENU_LAYOUT.Budgie);
-}
-
-var ScrollViewShader = `uniform sampler2D tex;
+var ScrollViewShader = `
+uniform sampler2D tex;
 uniform float height;
 uniform float width;
 uniform float fade_offset_top;
@@ -233,7 +273,8 @@ void main ()
 
         cogl_color_out *= ratio;
     }
-}`;
+}
+`;
 
 function createXpmImage(color1, color2, color3, color4){
     let width = 42;
@@ -248,10 +289,14 @@ function createXpmImage(color1, color2, color3, color4){
     return xpm;
 }
 
+function areaOfTriangle(p1, p2, p3){
+    return Math.abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0);
+}
+
 function ensureActorVisibleInScrollView(actor) {
     let box = actor.get_allocation_box();
     let y1 = box.y1, y2 = box.y2;
-
+    
     let parent = actor.get_parent();
     while (!(parent instanceof imports.gi.St.ScrollView)) {
         if (!parent)
@@ -260,7 +305,7 @@ function ensureActorVisibleInScrollView(actor) {
         box = parent.get_allocation_box();
         y1 += box.y1;
         y2 += box.y1;
-        parent = parent.get_parent();
+        parent = parent.get_parent();    
     }
 
     let adjustment = parent.vscroll.adjustment;
@@ -277,7 +322,6 @@ function ensureActorVisibleInScrollView(actor) {
         value = Math.min(upper, y2 + offset - pageSize);
     else
         return;
-    
     adjustment.set_value(value);  
 }
 
@@ -453,11 +497,11 @@ function createStylesheet(settings){
     let tooltipStyle;
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
-        tooltipStyle = ".tooltip-menu-item{\nbox-shadow:0 0 0 1px " + modifyColorLuminance(menuColor, 0.10) + ";\nfont-size:" + fontSize + "pt;\npadding: 2px 5px;\nmin-height: 0px;"
+        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 4px;\nbox-shadow:0 0 0 1px " + modifyColorLuminance(menuColor, 0.10) + ";\nfont-size:" + fontSize + "pt;\npadding: 2px 5px;\nmin-height: 0px;"
                         + "\ncolor:" + menuForegroundColor+ ";\nbackground-color:" + modifyColorLuminance(menuColor, 0.05) + ";\nmax-width:550px;\n}\n\n"; 
     }
     else
-        tooltipStyle = ".tooltip-menu-item{\npadding: 2px 5px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
+        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 4px;\npadding: 2px 5px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
     
     let menuButtonStyle = '';
     if(settings.get_boolean('override-menu-button-color'))
@@ -478,9 +522,10 @@ function createStylesheet(settings){
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
         +".arc-menu-status-text{\ncolor:" + menuForegroundColor + ";\nfont-size:" + fontSize + "pt;\n}\n\n"                                                     
         +".search-statustext{\nfont-size:11pt;\n}\n\n"    
+        +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +".left-scroll-area{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
-        +".left-scroll-area-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"  
-    	+".arc-empty-dash-drop-target{\nwidth: " + leftPanelWidth + "px; \nheight: 2px; \nbackground-color:" + separatorColor + "; \npadding: 0 0; \nmargin:0;\n}\n\n"     
+        +".left-scroll-area-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"   
         +".left-box{\nwidth:" + leftPanelWidth + "px;\n}\n\n"
         +".vert-sep{\nwidth:11px;\n}\n\n"
         +".default-search-entry{\nmax-width: 17.667em;\n}\n\n"
@@ -491,7 +536,7 @@ function createStylesheet(settings){
                 
         + menuButtonStyle
         
-        +"#arc-menu-plasma-button{\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
+        +"#arc-menu-plasma-button{\nwidth: 90px;\n height: 65px;\nborder-radius: 4px;\n text-align: center;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
         +"#arc-menu-plasma-button:active-item, .arc-menu-plasma-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             + plasmaButtonStyle + "\nborder-color: " + plasmaSelectedItemColor + ";\n}\n\n"
 
@@ -516,26 +561,22 @@ function createStylesheet(settings){
         +".arc-menu{\n-boxpointer-gap: " + gapAdjustment + "px;\nmin-width: 15em;\ncolor: #D3DAE3;\nborder-image: none;\n"
                         +"box-shadow: none;\nfont-size:" + fontSize + "pt;\n}\n\n"
         +".arc-menu .popup-sub-menu{\npadding-bottom: 1px;\nbackground-color: " + modifyColorLuminance(menuColor, 0.04) + ";\n}\n\n"
-        +".arc-menu .popup-menu-content{\npadding: 1em 0em;\n}\n\n"
-        +".arc-menu .popup-menu-item{\nspacing: 12px; \nborder: 0;\ncolor:" + menuForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item:ltr{\npadding: .4em 1.75em .4em 0em;\n}\n\n.arc-menu .popup-menu-item:rtl\n{\npadding: .4em 0em .4em 1.75em;\n}\n\n"
-        +".arc-menu .popup-menu-item:checked{\nbackground-color:" + modifyColorLuminance(menuColor, 0.04) + ";\nbox-shadow: 0;\nfont-weight: bold;\n"
-                                                +"\nborder-color: " + modifyColorLuminance(menuColor,0.15) + ";\nborder-top-width:1px;\n}\n\n"
-        +".arc-menu .popup-menu-item.selected, .arc-menu .popup-menu-item:active{\n"
-                                +"background-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n" 
-        +".arc-menu .popup-menu-item:disabled{\ncolor: rgba(238, 238, 236, 0.5);\n}\n\n"
+        +".arc-menu .popup-menu-item{\npadding: 6px; spacing: 6px; \nborder: none;\ncolor:" + menuForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item:ltr{\npadding-right:1.75em;\npadding-left: 0;\n}\n\n.arc-menu .popup-menu-item:rtl\n{\npadding-right: 0;\npadding-left:1.75em;\n}\n\n"
+        +".arc-menu .popup-menu-item:checked, .arc-menu .popup-menu-item:active, .arc-menu .popup-menu-item.selected{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n" 
+        +".arc-menu .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0.15) + ";\n}\n\n"
         +".arc-menu-boxpointer{ \n-arrow-border-radius:" + cornerRadius + "px;\n"
                                 +"-arrow-background-color:" + menuColor + ";\n"
                                 +"-arrow-border-color:" + borderColor + ";\n"
                                 +"-arrow-border-width:" + borderSize + "px;\n"
                                 +"-arrow-base:" + menuMargin + "px;\n"
                                 +"-arrow-rise:" + menuArrowSize + "px;\n}\n\n"
-        +".arc-menu .popup-menu-content{\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nbox-shadow: 0;\n}\n\n"
+        +".arc-menu .popup-menu-content{\npadding: 16px 0px;\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nbox-shadow: 0;\n}\n\n"
 
         +".arc-menu-sep{\nheight: 1px;\nmargin: 5px 20px;\nbackground-color: transparent;\nborder-bottom-style: solid;"
                             +"\nborder-color:" + separatorColor + ";\nborder-bottom-width: 1px;\n}\n\n"
 
-        +".menu-user-avatar{\nbackground-size: contain;\nborder: none;\nborder-radius: " + avatarRadius + "px;\n}\n\n"
+        +".menu-user-avatar{\nbackground-size: contain;\nborder-radius: " + avatarRadius + "px;\n}\n\n"
 
         +".arc-right-click{\nmax-width:350px;\nmin-width: 15em;\ncolor: #D3DAE3;\nborder-image: none;\nfont-size:" + fontSize + "pt;\nmargin:0px;\npadding:0px;"
                             +"box-shadow: none;\nspacing:0px;\n}\n\n"
@@ -543,10 +584,9 @@ function createStylesheet(settings){
         +".arc-right-click .popup-menu-content{\npadding: 3px 0px;\n}\n\n"
         +".arc-right-click .popup-menu-item{\nspacing: 12px; \nborder: 0;\ncolor:" + menuForegroundColor + ";\n}\n\n" 
         +".arc-right-click .popup-menu-item:ltr{\npadding: .4em 1.75em .4em 0em;\n}\n\n.arc-right-click .popup-menu-item:rtl{\npadding: .4em 0em .4em 1.75em;\n}\n\n"
-        +".arc-right-click .popup-menu-item:checked{\nbackground-color: #3a393b;\nbox-shadow: inset 0 1px 0px #323233;\nfont-weight: bold;\n}\n\n"
+        +".arc-right-click .popup-menu-item:checked{\nbackground-color:" + modifyColorLuminance(highlightColor, 0.08) + ";\ncolor: " + highlightForegroundColor + ";\n}\n\n"
         +".arc-right-click .popup-menu-item.selected, .arc-right-click .popup-menu-item:active{"
                                 +"\nbackground-color:" + modifyColorLuminance(highlightColor, 0.05) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n" 
-        +".arc-right-click .popup-menu-item:disabled{\ncolor: rgba(238, 238, 236, 0.5);\n}\n\n"
         +".arc-right-click .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0.15) + ";\n}\n\n"
         +".arc-right-click-boxpointer{ \n-arrow-border-radius:" + cornerRadius + "px;\n"
                                         +"-arrow-background-color:" + modifyColorLuminance(menuColor, 0.05) + ";\n"
@@ -565,9 +605,9 @@ function createStylesheet(settings){
             stylesheet.replace_contents(stylesheetCSS, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
         }
         catch(e){
-            global.log("Arc-Menu - Error updating stylesheet! " + e.message);
+            global.log("ArcMenu - Error updating stylesheet! " + e.message);
         }
     }
     else
-        global.log("Arc-Menu - Error getting stylesheet!");
+        global.log("ArcMenu - Error getting stylesheet!");
 }

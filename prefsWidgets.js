@@ -178,8 +178,8 @@ var MessageDialog = GObject.registerClass(class Arc_Menu_MessageDialog extends G
 });
 
 var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
-    _init() {
-        super._init();
+    _init(params) {
+        super._init(params);
         this._listBox = new Gtk.ListBox();
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.count = 0;
@@ -384,7 +384,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             spacing: 5,
         });
         let dragImage = new Gtk.Image( {
-            gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
+            gicon: Gio.icon_new_for_string("drag-symbolic"),
             pixel_size: 12
         });
 
@@ -618,6 +618,10 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
         this.select_row(this.get_row_at_index(0));
     }
 
+    selectRowAtIndex(index){
+        this.select_row(this.get_row_at_index(index));
+    }
+
     addRow(name, translateableName, iconName, nextPage){
         let row1 = new Gtk.ListBoxRow();
         this.append(row1);
@@ -722,8 +726,8 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
         this.activatable = true;
         this.name = name;
         this.layout = layout;
-
         this._image = new Gtk.Image({
+            
             gicon: Gio.icon_new_for_string(file),
             pixel_size: width
         });
@@ -738,49 +742,48 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
 var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBox{
     _init(name, file, layout) {
         super._init({
+            halign: Gtk.Align.FILL,
             valign: Gtk.Align.CENTER,
             hexpand: true,
             vexpand: false
         });
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.name = name;
-        this.layout = layout.layoutStyle;
+        this.layout = layout.MENU_TYPE;
         
         this.box = new FrameBoxRow();
         this.box.activatable = true;
         this.box._grid.row_spacing = 0;
+        this.box._grid.column_spacing = 0;
 
         this._image = new Gtk.Image({ 
             hexpand: false,
             halign: Gtk.Align.START,
             gicon: Gio.icon_new_for_string(file),
-            pixel_size: 95
+            pixel_size: 46
         });
-        this.box._grid.attach(this._image, 0, 0, 1, 2);
+        
+        let titleLabel = new Gtk.Label({
+            label: "<b>" + _("%s Menu Layouts", layout.TITLE).format(layout.TITLE) + "</b>",
+            use_markup: true,
+            hexpand: true,
+            halign: Gtk.Align.CENTER,
+            vexpand: true,
+            valign: Gtk.Align.CENTER,
+            wrap: true,
+        })
 
-        let styleLabel = new Gtk.Label({
-            label: "<b>" + _(layout.descriptionTitle) + "</b>",
-            use_markup: true,
-            hexpand: true,
-            halign: Gtk.Align.START,
-            wrap: true,
-        })
-        let descriptoinLabel = new Gtk.Label({
-            label: _(layout.description),
-            use_markup: true,
-            hexpand: true,
-            vexpand: false,
-            halign: Gtk.Align.START,
-            wrap: true,
-            xalign: 0
-        })
-        let iconImage = new Gtk.Image({
+        let goNextImage = new Gtk.Image({
             gicon: Gio.icon_new_for_string('go-next-symbolic'),
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            hexpand: false,
+            vexpand: false,
         })
 
-        this.box._grid.attach(iconImage, 2, 0, 1, 2);
-        this.box._grid.attach(styleLabel, 1, 0, 1, 1);
-        this.box._grid.attach(descriptoinLabel, 1, 1, 1, 1);
+        this.box._grid.attach(this._image, 0, 0, 1, 2);
+        this.box._grid.attach(titleLabel, 1, 0, 1, 1);
+        this.box._grid.attach(goNextImage, 2, 0, 1, 2);
         
         this._listBox.append(this.box);
    }
