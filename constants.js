@@ -161,7 +161,7 @@ var MenuButtonAppearance = {
 var MenuIcon = { 
     ARC_MENU: 0,
     DISTRO_ICON: 1,
-    Custom: 2
+    CUSTOM: 2
 };
 
 var PowerType = {
