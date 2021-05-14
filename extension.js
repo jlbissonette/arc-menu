@@ -20,17 +20,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
 
 const {GLib, Gio, St} = imports.gi;
 const Constants = Me.imports.constants;
 const Controller = Me.imports.controller;
-const Convenience = Me.imports.convenience;
+
 const Main = imports.ui.main;
 const Util = imports.misc.util;
 const Utils = Me.imports.utils;
-
 
 // Initialize panel button variables
 let settings;
@@ -41,7 +40,7 @@ let dockExtension;
 
 // Initialize menu language translations
 function init(metadata) {
-    Convenience.initTranslations(Me.metadata['gettext-domain']);      
+    ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);      
 }
 
 // Enable the extension
@@ -58,7 +57,7 @@ function enable() {
     Me.stylesheet = stylesheet;
     theme.load_stylesheet(Me.stylesheet);
 
-    settings = Convenience.getSettings(Me.metadata['settings-schema']);
+    settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
     settings.connect('changed::multi-monitor', () => _onMultiMonitorChange());
     settings.connect('changed::arc-menu-placement', () => _onArcMenuPlacementChange());
     settingsControllers = [];

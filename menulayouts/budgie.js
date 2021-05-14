@@ -37,11 +37,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            SearchType: Constants.SearchType.LIST_VIEW,
+            AppType: Constants.AppDisplayType.LIST,
+            SearchType: Constants.AppDisplayType.LIST,
+            GridColumns: 1,
+            ColumnSpacing: 0,
+            RowSpacing: 0,
+            SupportsCategoryOnHover: true,
             VerticalMainBox: true
         });
     }
     createLayout(){
+        super.createLayout();
         this.searchBox = new MW.SearchBox(this);
         this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
         this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
@@ -49,7 +55,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.actor.style ="margin: 0px 10px 10px 10px;";
             this.mainBox.add(this.searchBox.actor);
-            let horizontalSep = this._createHorizontalSeparator(Constants.SEPARATOR_STYLE.MAX);
+            let horizontalSep = this._createHorizontalSeparator(Constants.SeparatorStyle.MAX);
             horizontalSep.style = "margin-bottom: 6px;";
             this.mainBox.add(horizontalSep);
         }
@@ -129,14 +135,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            let horizontalSep = this._createHorizontalSeparator(Constants.SEPARATOR_STYLE.MAX);
+            let horizontalSep = this._createHorizontalSeparator(Constants.SeparatorStyle.MAX);
             horizontalSep.style = "margin-top: 6px;";
             this.mainBox.add(horizontalSep);
             this.searchBox.actor.style ="margin: 10px 10px 0px 10px;";
             this.mainBox.add(this.searchBox.actor); 
         }
         
-        this.loadFavorites();
+        this.loadPinnedApps();
         this.loadCategories();
         this.displayCategories();
         this.setDefaultMenuView(); 
@@ -174,9 +180,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.loadCategories();
         for(let categoryMenuItem of this.categoryDirectories.values()){
             categoryMenuItem.actor.style = "padding-top: 8px; padding-bottom: 8px; margin: 0; spacing: 0;";
-            categoryMenuItem.box.remove_actor(categoryMenuItem._icon);
+            categoryMenuItem.remove_actor(categoryMenuItem._icon);
             if(categoryMenuItem._arrowIcon)
-                categoryMenuItem.box.remove_actor(categoryMenuItem._arrowIcon);
+                categoryMenuItem.remove_actor(categoryMenuItem._arrowIcon);
         }
     }
     
