@@ -364,7 +364,7 @@ var BaseLayout = class {
         }
 
         categoryMenuItem.appList = appList;
-        if(this.activeCategoryType === Constants.CategoryType.FAVORITES)
+        if(this.activeCategoryType && this.activeCategoryType === Constants.CategoryType.FAVORITES)
             categoryMenuItem.displayAppList();
     }
 
