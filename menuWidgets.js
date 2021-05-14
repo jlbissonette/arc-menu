@@ -52,6 +52,9 @@ const SwitcherooProxyInterface = '<node> \
 </interface> \
 </node>';
 
+Gio._promisify(Gio._LocalFilePrototype, 'query_info_async', 'query_info_finish');
+Gio._promisify(Gio._LocalFilePrototype, 'set_attributes_async', 'set_attributes_finish');
+
 const SwitcherooProxy = Gio.DBusProxy.makeProxyWrapper(SwitcherooProxyInterface);
 
 // Menu Size variables
