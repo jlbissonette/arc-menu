@@ -81,6 +81,7 @@ var BaseLayout = class {
     }
 
     createLayout(){
+        this.activeCategoryType = -1;
         let layout = new Clutter.GridLayout({ 
             orientation: Clutter.Orientation.VERTICAL,
             column_spacing: this.layoutProperties.ColumnSpacing,
@@ -364,7 +365,7 @@ var BaseLayout = class {
         }
 
         categoryMenuItem.appList = appList;
-        if(this.activeCategoryType && this.activeCategoryType === Constants.CategoryType.FAVORITES)
+        if(this.activeCategoryType === Constants.CategoryType.FAVORITES)
             categoryMenuItem.displayAppList();
     }
 
