@@ -2032,7 +2032,6 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
     class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         _init(settings, parent) {
             this._settings = settings;
-            this.customIconPath = this._settings.get_string('custom-menu-button-icon');
             super._init(_('ArcMenu Icons'), parent);
             this.set_default_size(550, 400);
         }
@@ -2048,6 +2047,8 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
 
             let arcMenuIconsFlowBox = new PW.IconGrid();
             arcMenuIconsFlowBox.connect('child-activated', ()=> {
+                distroIconsBox.unselect_all();
+                customIconFlowBox.unselect_all();
                 let selectedChild = arcMenuIconsFlowBox.get_selected_children();
                 let selectedChildIndex = selectedChild[0].get_index();
                 this._settings.set_enum('menu-button-icon', Constants.MenuIcon.ARC_MENU);
@@ -2066,6 +2067,8 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
 
             let distroIconsBox = new PW.IconGrid();
             distroIconsBox.connect('child-activated', ()=> {
+                arcMenuIconsFlowBox.unselect_all();
+                customIconFlowBox.unselect_all();
                 let selectedChild = distroIconsBox.get_selected_children();
                 let selectedChildIndex = selectedChild[0].get_index();
                 this._settings.set_enum('menu-button-icon', Constants.MenuIcon.DISTRO_ICON);
@@ -2097,7 +2100,9 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
             customIconFlowBox.vexpand = false;
             customIconFlowBox.homogeneous = false;
             customIconFlowBox.connect('child-activated', ()=> {
-                let customIconPath = dialog.get_file() ? dialog.get_file().get_path() : '';
+                arcMenuIconsFlowBox.unselect_all();
+                distroIconsBox.unselect_all();
+                let customIconPath = this._settings.get_string('custom-menu-button-icon');
                 this._settings.set_string('custom-menu-button-icon', customIconPath)
                 this._settings.set_enum('menu-button-icon', Constants.MenuIcon.CUSTOM);
             });
@@ -2121,12 +2126,6 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
                 hexpand: true
             });
 
-            let dialog = new Gtk.FileChooserDialog({ 
-                title: _('Select an Icon'),
-                transient_for: this.get_root(), 
-                modal: true,
-                action: Gtk.FileChooserAction.OPEN,
-            });
             let fileFilter = new Gtk.FileFilter();
             fileFilter.add_pixbuf_formats();
             let fileChooserButton = new Gtk.Button({
@@ -2149,6 +2148,8 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
         
                 dialog.connect("response", (self, response) => {
                     if(response === Gtk.ResponseType.ACCEPT){
+                        arcMenuIconsFlowBox.unselect_all();
+                        distroIconsBox.unselect_all();
                         customIconImage.gicon = Gio.icon_new_for_string(dialog.get_file().get_path());
                         this._settings.set_string('custom-menu-button-icon', dialog.get_file().get_path());
                         this._settings.set_enum('menu-button-icon', Constants.MenuIcon.CUSTOM);
@@ -2166,8 +2167,6 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
             fileChooserRow.add(fileChooserButton);
             fileChooserFrame.add(fileChooserRow);
             customIconBox.append(fileChooserFrame);
-            if(GLib.file_test(this.customIconPath, GLib.FileTest.IS_REGULAR))
-                dialog.set_file(Gio.file_new_for_path(this.customIconPath));
             
             this.stack.add_titled(arcMenuIconsBox, 'ArcMenu Icons', _('ArcMenu Icons'));
             this.stack.add_titled(distroIconsBox, 'Distro Icons', _('Distro Icons'));
