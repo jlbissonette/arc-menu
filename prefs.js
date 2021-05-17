@@ -5461,7 +5461,7 @@ var AboutPage = GObject.registerClass(
             let arcMenuImageBox = new Gtk.Box( {
                 orientation: Gtk.Orientation.VERTICAL,
                 margin_top: 10,
-                margin_bottom: 0,
+                margin_bottom: 10,
                 hexpand: false,
                 vexpand: false
             });
@@ -5601,7 +5601,7 @@ var AboutPage = GObject.registerClass(
             let linksBox = new Gtk.Box({
                 hexpand: false,
                 vexpand: false,
-                valign: Gtk.Align.START,
+                valign: Gtk.Align.END,
                 halign: Gtk.Align.CENTER,
                 margin_top: 0,
                 margin_bottom: 0,
@@ -5618,33 +5618,36 @@ var AboutPage = GObject.registerClass(
                 tooltip_text: _("Donate to the ArcMenu Project")
             });
 
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path + '/media/icons/prefs_icons/gitlab-icon.svg', 35, 35);
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path + '/media/icons/prefs_icons/patreon-icon.svg', 150, 50);
+            let patreonImage = Gtk.Picture.new_for_pixbuf(pixbuf);
+            let patreonLinkButton = new Gtk.LinkButton({
+                child: patreonImage,
+                uri: 'https://www.patreon.com/ArcMenu',
+                tooltip_text: _("Become a Patron of the ArcMenu Project")
+            });
+
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path + '/media/icons/prefs_icons/gitlab-icon.svg', 150, 50);
             let gitlabImage = Gtk.Picture.new_for_pixbuf(pixbuf);
-            let gitlabBox = new Gtk.Box({
-                orientation: Gtk.Orientation.HORIZONTAL
-            });
-            let gitlabLabel = new Gtk.Label({
-                label: _("ArcMenu GitLab"),
-            });
-            gitlabBox.append(gitlabLabel);
-            gitlabBox.append(gitlabImage);
             let projectLinkButton = new Gtk.LinkButton({
-                child: gitlabBox,
+                child: gitlabImage,
                 uri: projectUrl,
                 tooltip_text: _("ArcMenu GitLab")
             });
             
             linksBox.append(projectLinkButton);
+            linksBox.append(patreonLinkButton);
             linksBox.append(donateLinkButton);
 
             this.creditsScrollWindow = new Gtk.ScrolledWindow({
                 margin_top: 10,
-                margin_bottom: 0
+                margin_bottom: 0,
+                hexpand: false,
             });
-            this.creditsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
+            this.creditsScrollWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
             this.creditsScrollWindow.set_max_content_height(200);
             this.creditsScrollWindow.set_min_content_height(200);
             this.creditsFrame = new PW.Notebook();
+            this.creditsFrame.scrollable = true;
             let developersPage = new PW.NotebookPage(_("Developers"));
             this.creditsFrame.append_page(developersPage);
             let translatorsPage = new PW.NotebookPage(_("Translators"));
@@ -5653,6 +5656,10 @@ var AboutPage = GObject.registerClass(
             this.creditsFrame.append_page(contributorsPage );
             let artworkPage = new PW.NotebookPage(_("Artwork"));
             this.creditsFrame.append_page(artworkPage);
+            let patronsPage = new PW.NotebookPage(_("Patrons"));
+            this.creditsFrame.append_page(patronsPage);
+            let creditsPage = new PW.NotebookPage(_("Credits"));
+            this.creditsFrame.append_page(creditsPage);
             this.creditsScrollWindow.set_child(this.creditsFrame);
   	        let creditsLabel = new Gtk.Label({
 		        label: _(Constants.DEVELOPERS),
@@ -5676,19 +5683,40 @@ var AboutPage = GObject.registerClass(
 		        halign: Gtk.Align.START,
                 hexpand: false,
                 vexpand: false,
+                wrap: true
             });
             contributorsPage.append(creditsLabel);
+            contributorsPage.hexpand = false;
             creditsLabel = new Gtk.Label({
 		        label: _(Constants.ARTWORK),
 		        use_markup: true,
 		        halign: Gtk.Align.START,
                 hexpand: false,
                 vexpand: false,
+                wrap: true
             });
             artworkPage.append(creditsLabel);
+            creditsLabel = new Gtk.Label({
+		        label: _(Constants.PATRONS),
+		        use_markup: true,
+		        halign: Gtk.Align.START,
+                hexpand: false,
+                vexpand: false,
+            });
+            patronsPage.append(creditsLabel);
+            creditsLabel = new Gtk.Label({
+		        label: _(Constants.ADDITIONAL_CREDITS),
+		        use_markup: true,
+		        halign: Gtk.Align.START,
+                hexpand: false,
+                vexpand: false,
+                wrap: true,
+
+            });
+            creditsPage.hexpand = false;
+            creditsPage.append(creditsLabel);
             arcMenuImageBox.append(arcMenuLabel);
             arcMenuImageBox.append(projectDescriptionLabel);
-            arcMenuInfoBox.append(linksBox);
 
             let gnuSofwareLabel = new Gtk.Label({
                 label: _(Constants.GNU_SOFTWARE),
@@ -5710,6 +5738,7 @@ var AboutPage = GObject.registerClass(
 
             this.mainBox.append(this.creditsScrollWindow)
             this.mainBox.append(gnuSofwareLabelBox);
+            this.mainBox.append(linksBox);
         }
 });
 
@@ -5881,7 +5910,7 @@ function buildPrefsWidget() {
     let widget = new ArcMenuPreferencesWidget();
     widget.connect("realize", () => {
         let window = widget.get_root();
-        window.width_request = 875;
+        window.width_request = window.default_width = 850;
         window.height_request = 775;
         window.set_title(_("ArcMenu Settings"));
         window.get_titlebar().pack_start(widget.leftHeaderBox);
