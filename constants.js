@@ -360,11 +360,18 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
 
 var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer\t' +
                 '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a> - <b>(Inactive)</b>\nArcMenu Founder - Former Maintainer - Former Digital Art Designer';
-var TRANSLATORS = '<b>Thank you to all translators!</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#please-refer-to-the-wiki-section-for-a-translation-guide">Full List of Translators</a>';
-var CONTRIBUTORS = '<b>Thank you to the following Top Contributors:</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#top-project-contributors">Top Contributors</a>' +
-                    '\n\n<b>A thank you to those who submited Pull Requests</b>\n<a href="https://gitlab.com/arcmenu/ArcMenu#pull-requests">Pull Request Contributors</a>';
+var TRANSLATORS = '<b>Thank you to all translators!</b>\n\n' +
+                    '<b>For a list of all translators please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
+var CONTRIBUTORS = '<b>Thank you to all who contributed to, and/or helped, the developement of ArcMenu!</b>'
+                    +'\n\n<b>For a list of all contributors please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
 var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
                 '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
+var PATRONS = "<b>A BIG thank you to the all Patrons!</b>"
+                +'\n\n<b>For a list of all Patron please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
+var ADDITIONAL_CREDITS = '<b>Additional Credits:</b>' +
+                        '\n\n•    ArcMenu leverages some of the design elements for the "ArcMenu" layout from Zorin OS.' +
+                        '\n\n•    ArcMenu utilizes some modified code from GNOME Shell and the GNOME Shell extensions package.' +
+                        '\n\n•    ArcMenu also uses some adapted code from Dash to Panel and Dash to Dock';                
         
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +
