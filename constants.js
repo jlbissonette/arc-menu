@@ -367,11 +367,7 @@ var CONTRIBUTORS = '<b>Thank you to all who contributed to, and/or helped, the d
 var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
                 '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
 var PATRONS = "<b>A BIG thank you to the all Patrons!</b>"
-                +'\n\n<b>For a list of all Patron please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
-var ADDITIONAL_CREDITS = '<b>Additional Credits:</b>' +
-                        '\n\n•    ArcMenu leverages some of the design elements for the "ArcMenu" layout from Zorin OS.' +
-                        '\n\n•    ArcMenu utilizes some modified code from GNOME Shell and the GNOME Shell extensions package.' +
-                        '\n\n•    ArcMenu also uses some adapted code from Dash to Panel and Dash to Dock';                
+                +'\n\n<b>For a list of all Patrons please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';     
         
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +

@@ -5661,8 +5661,6 @@ var AboutPage = GObject.registerClass(
             this.creditsFrame.append_page(artworkPage);
             let patronsPage = new PW.NotebookPage(_("Patrons"));
             this.creditsFrame.append_page(patronsPage);
-            let creditsPage = new PW.NotebookPage(_("Credits"));
-            this.creditsFrame.append_page(creditsPage);
             this.creditsScrollWindow.add_with_viewport(this.creditsFrame);
   	        let creditsLabel = new Gtk.Label({
 		        label: _(Constants.DEVELOPERS),
@@ -5706,17 +5704,6 @@ var AboutPage = GObject.registerClass(
                 vexpand: false,
             });
             patronsPage.add(creditsLabel);
-            creditsLabel = new Gtk.Label({
-		        label: _(Constants.ADDITIONAL_CREDITS),
-		        use_markup: true,
-		        halign: Gtk.Align.START,
-                hexpand: false,
-                vexpand: false,
-                wrap: true,
-
-            });
-            creditsPage.hexpand = false;
-            creditsPage.add(creditsLabel);
 
             arcMenuImageBox.add(arcMenuLabel);
             arcMenuImageBox.add(projectDescriptionLabel);
