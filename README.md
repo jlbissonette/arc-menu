@@ -12,7 +12,7 @@ ArcMenu is an application menu for GNOME Shell, designed to provide a more tradi
 
 -----
 
-### Support Arcmenu via Patreon or Paypal
+### Support ArcMenu via Patreon or Paypal
 
 ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help support the project via Patreon or Paypal, feel free to use the links below!
 
