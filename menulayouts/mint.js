@@ -151,7 +151,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesScrollBox.add_actor( this.categoriesBox);  
         this.categoriesScrollBox.clip_to_allocation = true;
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.actor.style = "margin: 10px 10px 0px 10px; padding-left: 0.4em;padding-right: 0.4em;";
+            this.searchBox.actor.style = "margin: 10px 20px 10px 0px; padding-left: 0em;padding-right: 0.4em;";
             this.rightMenuBox.add(this.searchBox.actor);
         }
         this.loadPinnedApps();
