@@ -178,7 +178,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadPinnedApps();
         this.loadCategories();
         this.displayCategories();
-        this.displayPinnedApps();
         this.setDefaultMenuView();
     }
 

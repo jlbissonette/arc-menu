@@ -124,6 +124,8 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
         super.open(animate);
     }
     close(animate){
+        if(this.sourceActor instanceof SessionButton)
+            this.sourceActor.sync_hover();
         super.close(animate);
     }
     redisplay(){
@@ -1385,7 +1387,7 @@ var CurrentUserButton = GObject.registerClass(class Arc_Menu_CurrentUserButton e
                 iconFileName = null;
             if (iconFileName) {
                 this.iconBin.child = null;
-                this.iconBin.style = 'background-image: url("%s");'.format(iconFileName) + "width: "+SMALL_ICON_SIZE+"px; height: "+SMALL_ICON_SIZE+"px; icon-size: " + SMALL_ICON_SIZE +";";
+                this.iconBin.style = 'background-image: url("%s");'.format(iconFileName) + "width: "+SMALL_ICON_SIZE+"px; height: "+SMALL_ICON_SIZE+"px;";
             } else {
                 this.iconBin.style = null;
                 this.iconBin.child = new St.Icon({ 

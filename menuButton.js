@@ -596,8 +596,15 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     }
 
     reload(){
-        if(this.MenuLayout)
-            this.MenuLayout.needsReload = true;
+        if(this.MenuLayout){
+            if(this.arcMenu.isOpen){
+                this.MenuLayout.needsReload = true;
+            }
+            else{
+                this.MenuLayout.needsReload = false;
+                this.MenuLayout.reload();
+            }
+        }
     }
 
     shouldLoadPinnedApps(){
@@ -704,15 +711,15 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
         if(this._menuButton.MenuLayout && this._menuButton.MenuLayout.needsReload){
             this._menuButton.MenuLayout.reload();
             this._menuButton.MenuLayout.needsReload = false;
-            this._menuButton.setDefaultMenuView(); 
         } 
     }
 
     _onCloseEvent(){
         if(this._menuButton.MenuLayout && this._menuButton.MenuLayout.isRunning){
-            if(this._menuButton.MenuLayout.needsReload)
+            if(this._menuButton.MenuLayout.needsReload){
                 this._menuButton.MenuLayout.reload();
-            this._menuButton.MenuLayout.needsReload = false;
+                this._menuButton.MenuLayout.needsReload = false;
+            }
             this._menuButton.setDefaultMenuView(); 
         }
     }

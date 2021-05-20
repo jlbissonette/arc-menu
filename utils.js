@@ -547,12 +547,12 @@ function createStylesheet(settings){
 
         +".arc-menu-button{\n-st-icon-style: symbolic;\nmin-height: 0px;\nmin-width: 16px;\nborder-radius: 26px;\npadding: 13px;\n}\n\n"
 
-        +".arc-menu-action{\nmargin: 1px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 1px;\n"
+        +".arc-menu-action{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 1px;\n"
                             +"border-color: transparent;\n}\n\n"
         +".arc-menu-action:hover, .arc-menu-action:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\nborder-width: 1px;\n"
-                                +"box-shadow: 0 1px 1px 0 " + modifyColorLuminance(menuColor, -0.05) + ";\nborder-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
-        +".arc-menu-action:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.15) + ";\nborder-width: 1px;\n"
-                                +"border-color:" + modifyColorLuminance(menuColor, -0.1) + ";\n}\n\n"
+                            +"box-shadow: 0px 0px 1px " + modifyColorLuminance(menuColor, -0.05) + ";\nborder-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
+        +".arc-menu-action:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\nborder-width: 1px;\n"
+                            +"border-color:" + modifyColorLuminance(menuColor, -0.1) + ";\n}\n\n"
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"
 

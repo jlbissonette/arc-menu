@@ -180,12 +180,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadPinnedApps();
         this.loadCategories();
 
-        if(!this._settings.get_boolean('windows-disable-pinned-apps')){
-            this.mainBox.add(this.pinnedAppsScrollBox);
-            this.displayPinnedApps();
-        }
-
-        this.displayAllApps();
         this._createExtrasMenu();
         this.setDefaultMenuView();
     }
@@ -365,8 +359,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.setDefaultMenuView();
 
         this.displayAllApps();
-        if(!this._settings.get_boolean('windows-disable-pinned-apps'))
+        if(!this._settings.get_boolean('windows-disable-pinned-apps')){
+            if(!this.mainBox.contains(this.pinnedAppsScrollBox))
+                this.mainBox.add(this.pinnedAppsScrollBox);
             this.displayPinnedApps();
+        }
+
         let appsScrollBoxAdj = this.pinnedAppsScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
     }
@@ -449,7 +447,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let label = this.createLabelRow(_("Pinned Apps"));
         label.remove_actor(label._ornamentLabel);
         this.pinnedAppsBox.add_actor(label);
-        this.layoutProperties.AppType = Constants.AppDisplayType.Grid;
         this.layoutProperties.GridColumns = 3;
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.HOME_SCREEN, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))

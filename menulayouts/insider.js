@@ -135,7 +135,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         this.loadPinnedApps();
         this.loadCategories();
-        this.displayAllApps();
 
         this._createPinnedAppsMenu();
         this.setDefaultMenuView();
@@ -282,6 +281,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     
     setDefaultMenuView(){
         super.setDefaultMenuView();
+        this.displayAllApps();
         this.activeMenuItem = this.applicationsGrid.layout_manager.get_child_at(0, 0);
         if(!this.applicationsBox.contains(this.applicationsGrid))
             this.applicationsBox.add(this.applicationsGrid);
