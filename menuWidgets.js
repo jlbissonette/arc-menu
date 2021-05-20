@@ -1389,7 +1389,6 @@ var CurrentUserButton = GObject.registerClass(class Arc_Menu_CurrentUserButton e
                 this.iconBin.child = null;
                 this.iconBin.style = 'background-image: url("%s");'.format(iconFileName) + "width: "+SMALL_ICON_SIZE+"px; height: "+SMALL_ICON_SIZE+"px;";
             } else {
-                this.iconBin.style = null;
                 this.iconBin.child = new St.Icon({ 
                     icon_name: 'avatar-default-symbolic',
                     icon_size: SMALL_ICON_SIZE
@@ -1876,7 +1875,6 @@ var UserMenuItem = GObject.registerClass(class Arc_Menu_UserMenuItem extends Arc
                 this.iconBin.add_style_class_name('user-avatar');
                 this.iconBin.style = 'background-image: url("%s");'.format(iconFileName) + "width: "+this._userAvatarSize +"px; height: "+this._userAvatarSize +"px;";
             } else {
-                this.iconBin.style = null;
                 this.iconBin.child = new St.Icon({ 
                     icon_name: 'avatar-default-symbolic',
                     icon_size: this._userAvatarSize
@@ -1937,7 +1935,6 @@ var UserMenuIcon = class Arc_Menu_UserMenuIcon{
                 this.actor.add_style_class_name('user-avatar');
                 this.actor.style = 'background-image: url("%s");'.format(iconFileName) + "width: " + this._size + "px; height: " + this._size + "px;";
             } else {
-                this.actor.style = null;
                 this.actor.child = new St.Icon({ icon_name: 'avatar-default-symbolic',
                                                     icon_size: this._size});
             }

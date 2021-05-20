@@ -57,7 +57,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsBox.style ="spacing: 6px; margin-right: 10px; padding-right: 0.4em;";
         this.mainBox.add(this.actionsBox);
 
-        let userAvatarSize = 32;
+        let userAvatarSize = 28;
         this.user = new MW.UserMenuItem(this, userAvatarSize);
         this.user.actor.x_expand = true;
         this.user.actor.x_align = Clutter.ActorAlign.FILL;
