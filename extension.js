@@ -47,8 +47,8 @@ function init(metadata) {
 
 // Enable the extension
 function enable() {
-    if (ShellVersion < 3.36) {
-        throw new Error('GNOME Shell version "' + ShellVersion + '" is not supported. Please visit https://extensions.gnome.org/extension/1228/arc-menu/ for older GNOME shell versions.');
+    if (ShellVersion < 50) {
+        throw new Error('GNOME Shell version "' + ShellVersion + '" is not supported. Please visit https://extensions.gnome.org/extension/1228/arc-menu/ which supports GNOME Shell versions 3.14 - 3.34');
     }
 
     if(imports.gi.Meta.is_wayland_compositor())
