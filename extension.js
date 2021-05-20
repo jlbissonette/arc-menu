@@ -26,6 +26,8 @@ const Me = ExtensionUtils.getCurrentExtension();
 const {GLib, Gio, St} = imports.gi;
 const Constants = Me.imports.constants;
 const Controller = Me.imports.controller;
+const Config = imports.misc.config;
+const ShellVersion = parseFloat(Config.PACKAGE_VERSION);
 
 const Main = imports.ui.main;
 const Util = imports.misc.util;
@@ -45,6 +47,10 @@ function init(metadata) {
 
 // Enable the extension
 function enable() {
+    if (ShellVersion < 50) {
+        throw new Error('GNOME Shell version "' + ShellVersion + '" is not supported. Please visit https://extensions.gnome.org/extension/1228/arc-menu/ which supports GNOME Shell versions 3.14 - 3.34');
+    }
+
     if(imports.gi.Meta.is_wayland_compositor())
         Me.metadata.isWayland = true;
     else
