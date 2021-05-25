@@ -37,12 +37,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton,{
             Search: true,
-            SearchType: Constants.SearchType.LIST_VIEW,
+            AppType: Constants.AppDisplayType.LIST,
+            SearchType: Constants.AppDisplayType.LIST,
+            GridColumns: 1,
+            ColumnSpacing: 0,
+            RowSpacing: 0,
             VerticalMainBox: true
         });
     }
 
     createLayout(){
+        super.createLayout();
         this.searchBox = new MW.SearchBox(this);
         this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
         this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
@@ -60,7 +65,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 }
             }
         });
-        
+
         //subMainBox stores left and right box
         this.subMainBox = new St.BoxLayout({
             vertical: false,
@@ -97,7 +102,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.END
         });
-        this.navigateBox.add(this._createHorizontalSeparator(Constants.SEPARATOR_STYLE.LONG));
+        this.navigateBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
         
         this.backButton = new MW.BackMenuItem(this);
         this.navigateBox.add(this.backButton.actor);
@@ -129,7 +134,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(!this._settings.get_boolean('disable-user-avatar')){
             this.user = new MW.UserMenuItem(this);
             this.rightBox.add(this.user.actor);
-            this.rightBox.add(this._createHorizontalSeparator(Constants.SEPARATOR_STYLE.SHORT));
+            this.rightBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
         }
 
         this.shortcutsBox = new St.BoxLayout({
@@ -161,7 +166,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.placesShortcuts && (this._settings.get_boolean('show-external-devices') || this.softwareShortcuts || this._settings.get_boolean('show-bookmarks'))  )
             shouldDraw=true;  
         if(shouldDraw){
-            this.shortcutsBox.add(this._createHorizontalSeparator(Constants.SEPARATOR_STYLE.SHORT));
+            this.shortcutsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
         }
 
         //External Devices and Bookmarks Shortcuts
@@ -192,7 +197,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2]);
+            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.AppDisplayType.LIST);
             if(shortcutMenuItem.shouldShow)
                 this.shortcutsBox.add(shortcutMenuItem.actor);
         }
@@ -243,7 +248,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.rightBox.style = "width: " + rightPanelWidth + "px;";
         this.shortcutsScrollBox.style = "width: " + rightPanelWidth + "px;";
         
-        this.loadFavorites();
+        this.loadPinnedApps();
         this.loadCategories();
         this.setDefaultMenuView(); 
     }
@@ -254,6 +259,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let extraCategories = this._settings.get_value("extra-categories").deep_unpack();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
+        if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS)
+            this.hasPinnedApps = true;
 
         for(let i = 0; i < extraCategories.length; i++){
             let categoryEnum = extraCategories[i][0];
@@ -273,7 +280,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.loadCategories();
     }
 
-    displayFavorites(){
+    displayPinnedApps(){
         this.activeCategoryType = Constants.CategoryType.PINNED_APPS;
         let defaultMenuView = this._settings.get_enum('default-menu-view');
         if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS){
@@ -288,7 +295,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.viewProgramsButton.actor.show();
             this.backButton.actor.hide();
         }
-        super.displayFavorites();
+        super.displayPinnedApps();
     }
 
     displayAllApps(){
@@ -316,7 +323,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.setDefaultMenuView();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
         if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS)
-            this.displayFavorites();
+            this.displayPinnedApps();
         else if(defaultMenuView === Constants.DefaultMenuView.CATEGORIES_LIST)
             this.displayCategories();
         else if(defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS)

@@ -36,11 +36,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            SearchType: Constants.SearchType.LIST_VIEW,
+            AppType: Constants.AppDisplayType.LIST,
+            SearchType: Constants.AppDisplayType.LIST,
+            GridColumns: 1,
+            ColumnSpacing: 0,
+            RowSpacing: 0,
+            SupportsCategoryOnHover: true,
             VerticalMainBox: true
         });
     }
     createLayout(){
+        super.createLayout();
         this.searchBox = new MW.SearchBox(this);
         this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
         this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
@@ -154,28 +160,28 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add(this.searchBox.actor); 
         }
 
-        this.loadFavorites();
+        this.loadPinnedApps();
         this.loadCategories();
-        this.loadPinnedShortcuts();
+        this.loadExtraPinnedApps();
         this.displayCategories();
         this.setDefaultMenuView();
     }
 
     updateStyle(){
-        let addStyle = this._settings.get_boolean('enable-custom-arc-menu');
+        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
         if(this.sessionBox){
             this.sessionBox.get_children().forEach((actor) => {
                 if(actor instanceof St.Button){
-                    addStyle ? actor.add_style_class_name('arc-menu-action') : actor.remove_style_class_name('arc-menu-action');
+                    customStyle ? actor.add_style_class_name('arc-menu-action') : actor.remove_style_class_name('arc-menu-action');
                 }
             });
         }
         super.updateStyle();
     }
 
-    loadPinnedShortcuts(){
+    loadExtraPinnedApps(){
         this.actionsBox.destroy_all_children();
-        this.actionsBox.add(this._createHorizontalSeparator(Constants.SEPARATOR_STYLE.LONG));
+        this.actionsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
         let pinnedApps = this._settings.get_strv('brisk-shortcuts-list');
 
         for(let i = 0;i < pinnedApps.length; i += 3){
@@ -185,7 +191,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 this.actionsBox.add(placeMenuItem.actor);
             }
         }
-        this.actionsBox.add(this._createHorizontalSeparator(Constants.SEPARATOR_STYLE.LONG));  
+        this.actionsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));  
     }
 
     setDefaultMenuView(){
