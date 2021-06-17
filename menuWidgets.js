@@ -33,6 +33,8 @@ const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 const Signals = imports.signals;
+const _SystemActions = imports.misc.systemActions;
+const SystemActions = _SystemActions.getDefault();
 const Util = imports.misc.util;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
@@ -64,17 +66,25 @@ const INDICATOR_ICON_SIZE = 18;
 const SMALL_ICON_SIZE = 16;
 const USER_AVATAR_SIZE = 28;
 
-var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends PopupMenu.PopupMenu {
-    constructor(actor, app, menuLayout){
-        super(actor, 0.0, St.Side.TOP);
+var ApplicationContextItems = GObject.registerClass({
+    Signals: {
+        'close-context-menu': { },
+    },
+
+},   class Arc_Menu_ApplicationContextItems extends St.BoxLayout{
+    _init(actor, app, menuLayout){
+        super._init({
+            vertical: true,
+            x_expand: true,
+            y_expand: true,
+        });
         this._menuLayout = menuLayout;
         this._settings = menuLayout._settings;
         this._menuButton = menuLayout.menuButton;
         this._app = app;
+        this.sourceActor = actor;
         this.layout = this._settings.get_enum('menu-layout');
-        this._boxPointer.setSourceAlignment(.20);
-        this._boxPointer._border.queue_repaint();
-        this.blockSourceEvents = true;
+
         this.discreteGpuAvailable = false;
         Gio.DBus.system.watch_name(SWITCHEROO_BUS_NAME,
             Gio.BusNameWatcherFlags.NONE,
@@ -83,28 +93,6 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
                 this._switcherooProxy = null;
                 this._updateDiscreteGpuAvailable();
             });
-
-        Main.uiGroup.add_actor(this.actor);
-        this._menuLayout.contextMenuManager.addMenu(this);
-    }
-
-    centerBoxPointerPosition(){
-        this._boxPointer.setSourceAlignment(.50);
-        this._arrowAlignment = .5;
-        this._boxPointer._border.queue_repaint();
-    }
-
-    rightBoxPointerPosition(){
-        this._arrowSide = St.Side.LEFT;
-        this._boxPointer._arrowSide = St.Side.LEFT;
-        this._boxPointer._userArrowSide = St.Side.LEFT;
-        this._boxPointer.setSourceAlignment(.50);
-        this._arrowAlignment = .5;
-        this._boxPointer._border.queue_repaint();
-    }
-
-    set isPinnedApp(isPinnedApp){
-        this._isPinnedApp = isPinnedApp;
     }
 
     set path(path){
@@ -131,240 +119,211 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
 
     closeMenus(){
         this.close();
-        this._menuLayout.arcMenu.toggle(); 
+        this._menuLayout.arcMenu.toggle();
     }
-    open(animate){
-        if(this._menuLayout.searchResults && this._menuLayout.searchResults._highlightDefault)
-            this._menuLayout.searchResults.highlightDefault(false);
-        if(this._menuButton.tooltipShowingID){
-            GLib.source_remove(this._menuButton.tooltipShowingID);
-            this._menuButton.tooltipShowingID = null;
-            this._menuButton.tooltipShowing = false;
-        }
-        if(this.sourceActor.tooltip){
-            this.sourceActor.tooltip.hide();
-            this._menuButton.tooltipShowing = false;
-        }
-            
-        super.open(animate);
+
+    close(){
+        this.emit('close-context-menu');
     }
-    close(animate){
-        if(this.sourceActor instanceof SessionButton)
-            this.sourceActor.sync_hover();
-        super.close(animate);
-    }
-    redisplay(){
-        this.removeAll();
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        if(customStyle){
-            this.actor.style_class = 'arc-right-click-boxpointer';
-            this.actor.add_style_class_name('arc-right-click');
-        }
-        else{
-            this.actor.style_class = 'popup-menu-boxpointer';
-            this.actor.add_style_class_name('popup-menu');   
-        }
+
+    rebuildItems(){
+        this.destroy_all_children();
         if(this._app instanceof Shell.App){
-            if(this._path != undefined){
-                this._newWindowMenuItem = this._appendMenuItem(_("Open Folder Location"));
-                this._newWindowMenuItem.connect('activate', () => {
-                    Util.spawnCommandLine('nautilus "' +this._path +'"');
-                    this.emit('activate-window', null);
-                    this.closeMenus();
-                });  
-            }
-            else{
-                this.appInfo = this._app.get_app_info();
-                let actions = this.appInfo.list_actions();
-                
-                let windows = this._app.get_windows().filter(
-                    w => !w.skip_taskbar
-                );
-    
-                if (windows.length > 0){    
-                    let item = new PopupMenu.PopupMenuItem(_("Current Windows:"), {
-                        reactive:false,
-                        can_focus:false
-                    });
-                    item.actor.add_style_class_name('inactive');  
-                    this.addMenuItem(item);
-                }
-    
+            this.appInfo = this._app.get_app_info();
+            let actions = this.appInfo.list_actions();
+            
+            let windows = this._app.get_windows().filter(
+                w => !w.skip_taskbar
+            );
+
+            if (windows.length > 0){    
+                let item = new PopupMenu.PopupMenuItem(_("Current Windows:"), {
+                    reactive: false,
+                    can_focus: false
+                });
+                item.actor.add_style_class_name('inactive');  
+                this.add_actor(item);
+
                 windows.forEach(window => {
                     let title = window.title ? window.title
                                             : this._app.get_name();
                     let item = this._appendMenuItem(title);
                     item.connect('activate', () => {
                         this.closeMenus();
-                        this.emit('activate-window', window);
                         Main.activateWindow(window);                        
                     });
                 });
-                if (!this._app.is_window_backed()) {
-                    this._appendSeparator();
-                    if (this._app.can_open_new_window() && !actions.includes('new-window')) {
-                        this._newWindowMenuItem = this._appendMenuItem(_("New Window"));
-                        this._newWindowMenuItem.connect('activate', () => {
-                            this.closeMenus();
-                            this._app.open_new_window(-1);
-                            this.emit('activate-window', null);
-                        });  
-                    }
-                    if (this.discreteGpuAvailable && this._app.state == Shell.AppState.STOPPED &&
-                        !actions.includes('activate-discrete-gpu')) {
-                        this._onDiscreteGpuMenuItem = this._appendMenuItem(_("Launch using Dedicated Graphics Card"));
-                        this._onDiscreteGpuMenuItem.connect('activate', () => {
-                            this.closeMenus();
-                            this._app.launch(0, -1, true);
-                            this.emit('activate-window', null);
-                        });
-                    }
-        
-                    for (let i = 0; i < actions.length; i++) {
-                        let action = actions[i];
-                        let item;
-                        if(action === "empty-trash-inactive"){
-                            item = new PopupMenu.PopupMenuItem(this.appInfo.get_action_name(action), {reactive:false,can_focus:false});
-                            item.actor.add_style_class_name('inactive');  
-                            this._appendSeparator();
-                            this.addMenuItem(item);
-                        }
-                        else if(action === "empty-trash"){
-                            this._appendSeparator();
-                            item = this._appendMenuItem(this.appInfo.get_action_name(action));
-                        }
-                        else{
-                            item = this._appendMenuItem(this.appInfo.get_action_name(action));
-                        }
-                       
-                        item.connect('activate', (emitter, event) => {
-                            this.closeMenus();
-                            this._app.launch_action(action, event.get_time(), -1);
-                            this.emit('activate-window', null);
-                        });
-                    }
-                    
-                    //If Trash Can, we don't want to add the rest of the entries below.
-                    if(this.appInfo.get_string('Id') === "ArcMenu_Trash")
-                        return false;
+                this._appendSeparator();
+            }
 
-                    let desktopIcons = Main.extensionManager.lookup("desktop-icons@csoriano");
-                    let desktopIconsNG = Main.extensionManager.lookup("ding@rastersoft.com");
-                    if((desktopIcons && desktopIcons.stateObj) || (desktopIconsNG && desktopIconsNG.stateObj)){
-                        this._appendSeparator();
-                        let fileSource = this.appInfo.get_filename();
-                        let fileDestination = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP);
-                        let file = Gio.File.new_for_path(fileDestination + "/" + this._app.get_id());
-                        let exists = file.query_exists(null);
-                        if(exists) {
-                            let item = this._appendMenuItem(_("Delete Desktop Shortcut"));
-                            item.connect('activate', () => {
-                                if(fileSource && fileDestination)
-                                    Util.spawnCommandLine("rm " + fileDestination + "/" + this._app.get_id());
-                                this.close();
-                            });
-                        }
-                        else {
-                            let item = this._appendMenuItem(_("Create Desktop Shortcut"));
-                            item.connect('activate', () => {
-                                let src = Gio.File.new_for_path(this.appInfo.get_filename());
-                                let dst = Gio.File.new_for_path(GLib.build_filenamev([fileDestination, src.get_basename()]));
-
-                                if(fileSource && fileDestination){
-                                    try {
-                                        // copy_async() isn't introspectable :-(
-                                        src.copy(dst, Gio.FileCopyFlags.OVERWRITE, null, null);
-                                        this._markTrusted(dst);
-                                    } catch (e) {
-                                        log(`Failed to copy to desktop: ${e.message}`);
-                                    }
-                                }
-                                this.close();
-                            });
-                        }
-                    }
-
-                    let canFavorite = global.settings.is_writable('favorite-apps');
-                    if (canFavorite) {
-                        this._appendSeparator();
-                        let isFavorite = AppFavorites.getAppFavorites().isFavorite(this._app.get_id());
-                        if (isFavorite) {
-                            let item = this._appendMenuItem(_("Remove from Favorites"));
-                            item.connect('activate', () => {
-                                let favs = AppFavorites.getAppFavorites();
-                                favs.removeFavorite(this._app.get_id());
-                            });
-                        } else {
-                            let item = this._appendMenuItem(_("Add to Favorites"));
-                            item.connect('activate', () => {
-                                let favs = AppFavorites.getAppFavorites();
-                                favs.addFavorite(this._app.get_id());
-                            });
-                        }
-                    }
-
-                    let pinnedApps = this._settings.get_strv('pinned-app-list');
-                    let pinnedAppID = [];
-                    
-                    //filter pinnedApps list by every 3rd entry in list. 3rd entry contains an appID or command
-                    for(let i = 2; i < pinnedApps.length; i += 3){
-                        pinnedAppID.push(pinnedApps[i]);  
-                    }
-                    let isAppPinned = pinnedAppID.find((element) => {
-                        return element == this._app.get_id();
+            if (!this._app.is_window_backed()) {
+                if (this._app.can_open_new_window() && !actions.includes('new-window')) {
+                    let newWindowItem = this._appendMenuItem(_("New Window"));
+                    newWindowItem.connect('activate', () => {
+                        this.closeMenus();
+                        this._app.open_new_window(-1);
+                    });  
+                }
+                if (this.discreteGpuAvailable && this._app.state == Shell.AppState.STOPPED &&
+                    !actions.includes('activate-discrete-gpu')) {
+                    this._onDiscreteGpuMenuItem = this._appendMenuItem(_("Launch using Dedicated Graphics Card"));
+                    this._onDiscreteGpuMenuItem.connect('activate', () => {
+                        this.closeMenus();
+                        this._app.launch(0, -1, true);
                     });
+                }
+    
+                for (let i = 0; i < actions.length; i++) {
+                    let action = actions[i];
+                    let item;
+                    if(action === "empty-trash-inactive"){
+                        item = new PopupMenu.PopupMenuItem(this.appInfo.get_action_name(action), {reactive:false, can_focus:false});
+                        item.actor.add_style_class_name('inactive');  
+                        this._appendSeparator();
+                        this.add_actor(item);
+                    }
+                    else if(action === "empty-trash"){
+                        this._appendSeparator();
+                        item = this._appendMenuItem(this.appInfo.get_action_name(action));
+                    }
+                    else{
+                        item = this._appendMenuItem(this.appInfo.get_action_name(action));
+                    }
+                    
+                    item.connect('activate', (emitter, event) => {
+                        this.closeMenus();
+                        this._app.launch_action(action, event.get_time(), -1);
+                    });
+                }
+                
+                //If Trash Can, we don't want to add the rest of the entries below.
+                if(this.appInfo.get_string('Id') === "ArcMenu_Trash")
+                    return false;
 
-                    //if app is pinned and menulayout has PinnedApps category, show Unpin from ArcMenu entry
-                    if(isAppPinned && this._menuLayout.hasPinnedApps) {
-                        let item = new PopupMenu.PopupMenuItem(_("Unpin from ArcMenu"));  
-                        item.connect('activate', ()=>{
-                            this.close();
-                            for(let i = 0;i<pinnedApps.length;i+=3){
-                                if(pinnedApps[i + 2] === this._app.get_id()){
-                                    pinnedApps.splice(i, 3);
-                                    this._settings.set_strv('pinned-app-list', pinnedApps);
-                                    break;
+                let desktopIcons = Main.extensionManager.lookup("desktop-icons@csoriano");
+                let desktopIconsNG = Main.extensionManager.lookup("ding@rastersoft.com");
+                if((desktopIcons && desktopIcons.stateObj) || (desktopIconsNG && desktopIconsNG.stateObj)){
+                    this._appendSeparator();
+                    let fileDestination = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP);
+                    let src = Gio.File.new_for_path(this.appInfo.get_filename());
+                    let dst = Gio.File.new_for_path(GLib.build_filenamev([fileDestination, src.get_basename()]));
+                    let exists = dst.query_exists(null);
+                    if(exists) {
+                        let item = this._appendMenuItem(_("Delete Desktop Shortcut"));
+                        item.connect('activate', () => {
+                            if(src && dst){
+                                try {
+                                    dst.delete(null);
+                                } catch (e) {
+                                    log(`Failed to delete shortcut: ${e.message}`);
                                 }
                             }
-                        });      
-                        this.addMenuItem(item);
-                    }
-                    else if(this._menuLayout.hasPinnedApps) {
-                        let item = new PopupMenu.PopupMenuItem(_("Pin to ArcMenu"));   
-                        item.connect('activate', ()=>{
                             this.close();
-                            pinnedApps.push(this.appInfo.get_display_name());
-                            pinnedApps.push('');
-                            pinnedApps.push(this._app.get_id());
-                            this._settings.set_strv('pinned-app-list',pinnedApps);
-                        });      
-                        this.addMenuItem(item);
+                        });
                     }
-                              
-                    if (Shell.AppSystem.get_default().lookup_app('org.gnome.Software.desktop')) {
-                        this._appendSeparator(); 
-                        let item = this._appendMenuItem(_("Show Details"));
+                    else {
+                        let item = this._appendMenuItem(_("Create Desktop Shortcut"));
                         item.connect('activate', () => {
-                            let id = this._app.get_id();
-                            let args = GLib.Variant.new('(ss)', [id, '']);
-                            Gio.DBus.get(Gio.BusType.SESSION, null, (o, res) => {
-                                let bus = Gio.DBus.get_finish(res);
-                                bus.call('org.gnome.Software',
-                                        '/org/gnome/Software',
-                                        'org.gtk.Actions', 'Activate',
-                                        GLib.Variant.new('(sava{sv})',
-                                                        ['details', [args], null]),
-                                        null, 0, -1, null, null);
-                                this.closeMenus();
-                            });
+                            if(src && dst){
+                                try {
+                                    // copy_async() isn't introspectable :-(
+                                    src.copy(dst, Gio.FileCopyFlags.OVERWRITE, null, null);
+                                    this._markTrusted(dst);
+                                } catch (e) {
+                                    log(`Failed to copy to desktop: ${e.message}`);
+                                }
+                            }
+                            this.close();
                         });
                     }
                 }
+
+                let canFavorite = global.settings.is_writable('favorite-apps');
+                if (canFavorite) {
+                    this._appendSeparator();
+                    let isFavorite = AppFavorites.getAppFavorites().isFavorite(this._app.get_id());
+                    if (isFavorite) {
+                        let item = this._appendMenuItem(_("Remove from Favorites"));
+                        item.connect('activate', () => {
+                            let favs = AppFavorites.getAppFavorites();
+                            favs.removeFavorite(this._app.get_id());
+                            this.close();
+                        });
+                    } else {
+                        let item = this._appendMenuItem(_("Add to Favorites"));
+                        item.connect('activate', () => {
+                            let favs = AppFavorites.getAppFavorites();
+                            favs.addFavorite(this._app.get_id());
+                            this.close();
+                        });
+                    }
+                }
+
+                let pinnedApps = this._settings.get_strv('pinned-app-list');
+                let pinnedAppID = [];
+                
+                //filter pinnedApps list by every 3rd entry in list. 3rd entry contains an appID or command
+                for(let i = 2; i < pinnedApps.length; i += 3){
+                    pinnedAppID.push(pinnedApps[i]);  
+                }
+                let isAppPinned = pinnedAppID.find((element) => {
+                    return element == this._app.get_id();
+                });
+
+                //if app is pinned and menulayout has PinnedApps category, show Unpin from ArcMenu entry
+                if(isAppPinned && this._menuLayout.hasPinnedApps) {
+                    let item = this._appendMenuItem(_("Unpin from ArcMenu"));  
+                    item.connect('activate', ()=>{
+                        this.close();
+                        for(let i = 0; i < pinnedApps.length; i += 3){
+                            if(pinnedApps[i + 2] === this._app.get_id()){
+                                pinnedApps.splice(i, 3);
+                                this._settings.set_strv('pinned-app-list', pinnedApps);
+                                break;
+                            }
+                        }
+                    });
+                }
+                else if(this._menuLayout.hasPinnedApps) {
+                    let item = this._appendMenuItem(_("Pin to ArcMenu"));
+                    item.connect('activate', ()=>{
+                        this.close();
+                        pinnedApps.push(this.appInfo.get_display_name());
+                        pinnedApps.push('');
+                        pinnedApps.push(this._app.get_id());
+                        this._settings.set_strv('pinned-app-list',pinnedApps);
+                    });
+                }
+                            
+                if (Shell.AppSystem.get_default().lookup_app('org.gnome.Software.desktop')) {
+                    this._appendSeparator(); 
+                    let item = this._appendMenuItem(_("Show Details"));
+                    item.connect('activate', () => {
+                        let id = this._app.get_id();
+                        let args = GLib.Variant.new('(ss)', [id, '']);
+                        Gio.DBus.get(Gio.BusType.SESSION, null, (o, res) => {
+                            let bus = Gio.DBus.get_finish(res);
+                            bus.call('org.gnome.Software',
+                                    '/org/gnome/Software',
+                                    'org.gtk.Actions', 'Activate',
+                                    GLib.Variant.new('(sava{sv})',
+                                                    ['details', [args], null]),
+                                    null, 0, -1, null, null);
+                            this.closeMenus();
+                        });
+                    });
+                }
             }
         }
-        else if(this._menuLayout.hasPinnedApps) {  
-            this._appendSeparator();
-            let item = new PopupMenu.PopupMenuItem(_("Unpin from ArcMenu"));   
+        else if(this._path){
+            let newWindowItem = this._appendMenuItem(_("Open Folder Location"));
+            newWindowItem.connect('activate', () => {
+                Util.spawnCommandLine('nautilus "' + this._path + '"');
+                this.closeMenus();
+            });
+        }
+        else if(this._menuLayout.hasPinnedApps && this.sourceActor instanceof PinnedAppsMenuItem) {  
+            let item = this._appendMenuItem(_("Unpin from ArcMenu"));   
             item.connect('activate', () => {
                 this.close();
                 let pinnedApps = this._settings.get_strv('pinned-app-list');
@@ -376,7 +335,6 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
                     }
                 }
             });
-            this.addMenuItem(item);
         }
     }
 
@@ -411,66 +369,106 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
     }
 
     _appendSeparator() {
-        let separator = new PopupMenu.PopupSeparatorMenuItem();
-        separator.actor.style_class='app-right-click-sep';
-        separator._separator.style_class = null;
-        this.addMenuItem(separator);
+        let alignment = Constants.SeparatorAlignment.HORIZONTAL;
+        let hSep = new SeparatorDrawingArea(this._settings, alignment, Constants.SeparatorStyle.MEDIUM,{
+            x_expand: true,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.END
+        });
+        hSep.queue_repaint();
+        hSep._delegate = hSep;
+        this.add_actor(hSep);
     }
 
     _appendMenuItem(labelText) {
-        let item = new PopupMenu.PopupMenuItem(labelText);
-        this.addMenuItem(item);
+        let item = new ArcMenuPopupBaseMenuItem(this._menuLayout);
+        this.label = new St.Label({
+            text: _(labelText),
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER
+        });
+        item.add_actor(this.label);
+        this.add_actor(item);
         return item;
     }
+});
+
+var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends PopupMenu.PopupMenu {
+    constructor(actor, app, menuLayout){
+        super(actor, 0.0, St.Side.TOP);
+        this._menuLayout = menuLayout;
+        this._settings = menuLayout._settings;
+        this._menuButton = menuLayout.menuButton;
+        this._app = app;
+        this.layout = this._settings.get_enum('menu-layout');
+        this._boxPointer.setSourceAlignment(.20);
+        this._boxPointer._border.queue_repaint();
+        this.blockSourceEvents = true;
+        Main.uiGroup.add_actor(this.actor);
+        this._menuLayout.contextMenuManager.addMenu(this);
+        this.contextMenuItems = new ApplicationContextItems(actor, app, menuLayout);
+        this.contextMenuItems.connect('close-context-menu', () => this.toggle());
+        this.contextMenuItems._delegate = this.contextMenuItems;
+        this.box.add_actor(this.contextMenuItems);
+    }
+
+    centerBoxPointerPosition(){
+        this._boxPointer.setSourceAlignment(.50);
+        this._arrowAlignment = .5;
+        this._boxPointer._border.queue_repaint();
+    }
+
+    rightBoxPointerPosition(){
+        this._arrowSide = St.Side.LEFT;
+        this._boxPointer._arrowSide = St.Side.LEFT;
+        this._boxPointer._userArrowSide = St.Side.LEFT;
+        this._boxPointer.setSourceAlignment(.50);
+        this._arrowAlignment = .5;
+        this._boxPointer._border.queue_repaint();
+    }
+
+    set path(path){
+        this.contextMenuItems.path = path;
+    }
+
+    open(animate){
+        if(this._menuLayout.searchResults && this._menuLayout.searchResults._highlightDefault)
+            this._menuLayout.searchResults.highlightDefault(false);
+        if(this._menuButton.tooltipShowingID){
+            GLib.source_remove(this._menuButton.tooltipShowingID);
+            this._menuButton.tooltipShowingID = null;
+            this._menuButton.tooltipShowing = false;
+        }
+        if(this.sourceActor.tooltip){
+            this.sourceActor.tooltip.hide();
+            this._menuButton.tooltipShowing = false;
+        }
+            
+        super.open(animate);
+    }
+
+    close(animate){
+        if(this.sourceActor instanceof SessionButton)
+            this.sourceActor.sync_hover();
+        super.close(animate);
+    }
+
+    rebuildItems(){
+        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
+        if(customStyle){
+            this.actor.style_class = 'arc-right-click-boxpointer';
+            this.actor.add_style_class_name('arc-right-click');
+        }
+        else{
+            this.actor.style_class = 'popup-menu-boxpointer';
+            this.actor.add_style_class_name('popup-menu');   
+        }
+
+        this.contextMenuItems.rebuildItems();
+    }
+
     _onKeyPress(actor, event) {
-        // Disable toggling the menu by keyboard
-        // when it cannot be toggled by pointer
-        if (!actor.reactive)
-            return Clutter.EVENT_PROPAGATE;
-
-        let navKey;
-        switch (this._boxPointer.arrowSide) {
-        case St.Side.TOP:
-            navKey = Clutter.KEY_Down;
-            break;
-        case St.Side.BOTTOM:
-            navKey = Clutter.KEY_Up;
-            break;
-        case St.Side.LEFT:
-            navKey = Clutter.KEY_Right;
-            break;
-        case St.Side.RIGHT:
-            navKey = Clutter.KEY_Left;
-            break;
-        }
-
-        let state = event.get_state();
-
-        // if user has a modifier down (except capslock)
-        // then don't handle the key press here
-        state &= ~Clutter.ModifierType.LOCK_MASK;
-        state &= Clutter.ModifierType.MODIFIER_MASK;
-
-        if (state)
-            return Clutter.EVENT_PROPAGATE;
-
-        let symbol = event.get_key_symbol();
-        if (symbol == Clutter.KEY_space || symbol == Clutter.KEY_Return) {
-            this.toggle();
-            return Clutter.EVENT_STOP;
-        } else if (symbol == Clutter.KEY_Escape && this.isOpen) {
-            this.close();
-            return Clutter.EVENT_STOP;
-        } else if (symbol == navKey) {
-            if (this.isOpen){
-                this.actor.navigate_focus(null, Gtk.DirectionType.TAB_FORWARD, false);
-                return Clutter.EVENT_STOP;
-            }
-            else 
-                return Clutter.EVENT_PROPAGATE;
-        } else {
-            return Clutter.EVENT_PROPAGATE;
-        }
+        return Clutter.EVENT_PROPAGATE;
     }
 };
 
@@ -734,6 +732,8 @@ var SeparatorDrawingArea = GObject.registerClass(class Arc_Menu_SeparatorDrawing
             this.set_height(10);
         else if(this._style === Constants.SeparatorStyle.MAX)
             this.set_height(1);
+        if(this._style === Constants.SeparatorStyle.MEDIUM)
+            this.set_height(10);
     }
     vfunc_repaint(){
         let vertSeparatorEnabled = this._settings.get_boolean('vert-separator');
@@ -772,6 +772,10 @@ var SeparatorDrawingArea = GObject.registerClass(class Arc_Menu_SeparatorDrawing
                 else if(this._style == Constants.SeparatorStyle.MAX){
                     cr.moveTo(4, 0.5);
                     cr.lineTo(width - 4, 0.5);
+                }
+                else if(this._style == Constants.SeparatorStyle.MEDIUM){
+                    cr.moveTo(width / 5, height - 4.5);
+                    cr.lineTo(4 * width / 5, height - 4.5);
                 }
             }
             Clutter.cairo_set_source_color(cr, stippleColor);
@@ -1210,24 +1214,24 @@ var ShortcutButtonItem = GObject.registerClass(class Arc_Menu_ShortcutButtonItem
         }
         this.tooltip.hide();
         if(!this.contextMenu.isOpen)
-            this.contextMenu.redisplay();
+            this.contextMenu.rebuildItems();
         this.contextMenu.toggle();        
     }
     activate() {
         if(this._app)
             this._app.open_new_window(-1);
         else if(this._command === "ArcMenu_LogOut")
-            this._menuLayout.systemActions.activateLogout();
+            SystemActions.activateLogout();
         else if(this._command === "ArcMenu_Lock"){
             this._menuLayout.isRunning = false;
-            this._menuLayout.systemActions.activateLockScreen();
+            SystemActions.activateLockScreen();
         }
         else if(this._command === "ArcMenu_PowerOff")
-            this._menuLayout.systemActions.activatePowerOff();
+            SystemActions.activatePowerOff();
         else if(this._command === "ArcMenu_Restart")
-            this._menuLayout.systemActions.activateRestart ? this._menuLayout.systemActions.activateRestart() : this._menuLayout.systemActions.activatePowerOff();
+            SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
         else if(this._command === "ArcMenu_Suspend")
-            this._menuLayout.systemActions.activateSuspend();
+            SystemActions.activateSuspend();
         else if(this._command === "ArcMenu_ActivitiesOverview")
             Main.overview.show();
         else if(this._command === "ArcMenu_RunCommand")
@@ -1429,7 +1433,7 @@ var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends Sessi
         super._init(menuLayout, _("Power Off"), 'system-shutdown-symbolic');
     }
     activate() {
-        this._menuLayout.systemActions.activatePowerOff();
+        SystemActions.activatePowerOff();
     }
 });
 
@@ -1438,7 +1442,7 @@ var RestartButton = GObject.registerClass(class Arc_Menu_RestartButton extends S
         super._init(menuLayout, _("Restart"), Me.path + Constants.RestartIcon.PATH);
     }
     activate() {
-        this._menuLayout.systemActions.activateRestart ? this._menuLayout.systemActions.activateRestart() : this._menuLayout.systemActions.activatePowerOff();
+        SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
     }
 });
 
@@ -1447,7 +1451,7 @@ var LogoutButton = GObject.registerClass(class Arc_Menu_LogoutButton extends Ses
         super._init(menuLayout, _("Log Out"), 'application-exit-symbolic');
     }
     activate() {
-        this._menuLayout.systemActions.activateLogout();
+        SystemActions.activateLogout();
     }
 });
 
@@ -1456,7 +1460,7 @@ var SuspendButton = GObject.registerClass(class Arc_Menu_SuspendButton extends S
         super._init(menuLayout, _("Suspend"), 'media-playback-pause-symbolic');
     }
     activate() {
-        this._menuLayout.systemActions.activateSuspend();
+        SystemActions.activateSuspend();
     }
 });
 
@@ -1466,7 +1470,7 @@ var LockButton = GObject.registerClass(class Arc_Menu_LockButton extends Session
     }
     activate() {
         this._menuLayout.isRunning = false;
-        this._menuLayout.systemActions.activateLockScreen();
+        SystemActions.activateLockScreen();
     }
 });
 
@@ -1495,17 +1499,17 @@ var PlasmaPowerItem = GObject.registerClass(class Arc_Menu_PlasmaPowerItem exten
 
     activate(event){
         if(this.type === Constants.PowerType.POWEROFF)
-            this._menuLayout.systemActions.activatePowerOff();
+            SystemActions.activatePowerOff();
         if(this.type === Constants.PowerType.RESTART)
-            this._menuLayout.systemActions.activateRestart ? this._menuLayout.systemActions.activateRestart() : this._menuLayout.systemActions.activatePowerOff();
+            SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
         if(this.type === Constants.PowerType.LOCK){
             this._menuLayout.isRunning = false;
-            this._menuLayout.systemActions.activateLockScreen();
+            SystemActions.activateLockScreen();
         }
         if(this.type === Constants.PowerType.LOGOUT)
-            this._menuLayout.systemActions.activateLogout();
+            SystemActions.activateLogout();
         if(this.type === Constants.PowerType.SUSPEND)
-            this._menuLayout.systemActions.activateSuspend();
+            SystemActions.activateSuspend();
         super.activate(event);
     }
 });
@@ -1806,7 +1810,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
             if(this.tooltip!=undefined)
                 this.tooltip.hide();
             if(!this.contextMenu.isOpen){
-                this.contextMenu.redisplay();
+                this.contextMenu.rebuildItems();
             }
             this.contextMenu.toggle(); 
         }
@@ -1815,17 +1819,17 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
     activate(event) {
         this._menuLayout.arcMenu.toggle();
         if(this._command === "ArcMenu_LogOut")
-            this._menuLayout.systemActions.activateLogout();
+            SystemActions.activateLogout();
         else if(this._command === "ArcMenu_Lock"){
             this._menuLayout.isRunning = false;
-            this._menuLayout.systemActions.activateLockScreen();
+            SystemActions.activateLockScreen();
         }
         else if(this._command === "ArcMenu_PowerOff")
-            this._menuLayout.systemActions.activatePowerOff();
+            SystemActions.activatePowerOff();
         else if(this._command === "ArcMenu_Restart")
-            this._menuLayout.systemActions.activateRestart ? this._menuLayout.systemActions.activateRestart() : this._menuLayout.systemActions.activatePowerOff();
+            SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
         else if(this._command === "ArcMenu_Suspend")
-            this._menuLayout.systemActions.activateSuspend();
+            SystemActions.activateSuspend();
         else if(this._command === "ArcMenu_ActivitiesOverview")
             Main.overview.show();
         else if(this._command === "ArcMenu_RunCommand")
@@ -2069,12 +2073,11 @@ var PinnedAppsMenuItem = GObject.registerClass({
             this.contextMenu = new ApplicationContextMenu(this.actor, app, this._menuLayout);
             if(this._appType === Constants.AppDisplayType.GRID)
                 this.contextMenu.centerBoxPointerPosition();
-            this.contextMenu.isPinnedApp = true;
         }
         if(this.tooltip!=undefined)
             this.tooltip.hide();
         if(!this.contextMenu.isOpen)
-            this.contextMenu.redisplay();
+            this.contextMenu.rebuildItems();
         this.contextMenu.toggle();
     }
 
@@ -2215,41 +2218,50 @@ var PinnedAppsMenuItem = GObject.registerClass({
 });
 
 var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuItem extends ArcMenuPopupBaseMenuItem{
-    _init(menuLayout, app, appType) {
+    _init(menuLayout, app, appType, metaInfo) {
         super._init(menuLayout);
         this._app = app;
         this._menuLayout = menuLayout;
+        this.metaInfo = metaInfo;
         this._settings = this._menuLayout._settings;
+        this.searchType = this._menuLayout.layoutProperties.SearchType;
         this._appType = appType;
         this.hasContextMenu = true;
-        let disableRecentAppsIndicator = this._settings.get_boolean("disable-recently-installed-apps")
-        if(!disableRecentAppsIndicator){
-            let recentApps = this._settings.get_strv('recently-installed-apps');
-            this.isRecentlyInstalled = recentApps.some( (app) => app === this._app.get_id());
+
+        if(this._app){
+            let disableRecentAppsIndicator = this._settings.get_boolean("disable-recently-installed-apps")
+            if(!disableRecentAppsIndicator){
+                let recentApps = this._settings.get_strv('recently-installed-apps');
+                this.isRecentlyInstalled = recentApps.some((appIter) => appIter === this._app.get_id());
+            }
         }
 
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
         this.label = new St.Label({
-            text: app.get_name(),
+            text: this._app ? this._app.get_name() : this.metaInfo['name'],
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER
         });
-
-        let layout = this._settings.get_enum('menu-layout'); 
-        if(layout === Constants.MenuLayout.PLASMA && this._settings.get_boolean('apps-show-extra-details')){
+        this.description = this._app ? this._app.get_description() : this.metaInfo['description'];
+        let layout = this._settings.get_enum('menu-layout');
+        this.isPlasmaLayout = layout === Constants.MenuLayout.PLASMA;
+        this.showExtraDetails = this._settings.get_boolean('apps-show-extra-details');
+        let isSearchResult = this._appType === Constants.AppDisplayType.SEARCH;
+        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
+        if(this.description && ((this.isPlasmaLayout && this.showExtraDetails) || (isSearchResult && showSearchResultDescriptions))){
             let labelBox = new St.BoxLayout({
                 vertical: true
             });
-            let descriptionLabel = new St.Label({
-                text: app.get_description(),
+            let descriptionText = this.description.split('\n')[0];
+            this.descriptionLabel = new St.Label({
+                text: descriptionText,
                 y_expand: true,
                 y_align: Clutter.ActorAlign.CENTER,
                 style: "font-weight: lighter;"
             });
             labelBox.add(this.label);
-            if(app.get_description())
-                labelBox.add(descriptionLabel);
+            labelBox.add(this.descriptionLabel);
             this.add_child(labelBox);
         }
         else{
@@ -2294,15 +2306,20 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
 
     popupContextMenu(){
         this.removeIndicator();
-        if(this.contextMenu == undefined){
+        if(this.tooltip)
+            this.tooltip.hide();
+        if(!this._app && !this._path)
+            return;
+
+        if(this.contextMenu === undefined){
             this.contextMenu = new ApplicationContextMenu(this.actor, this._app, this._menuLayout);
+            if(this._path) 
+                this.contextMenu.path = this._path;
             if(this._appType === Constants.AppDisplayType.GRID)
                 this.contextMenu.centerBoxPointerPosition();
         }
-        if(this.tooltip!=undefined)
-            this.tooltip.hide();
         if(!this.contextMenu.isOpen)
-            this.contextMenu.redisplay();
+            this.contextMenu.rebuildItems();
         this.contextMenu.toggle();
     }  
     get_app_id() {
@@ -2311,58 +2328,65 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
     _createIcon(iconSize) {
         return this._app.create_icon_texture(iconSize);
     }
+
+    activateSearchResult(provider, metaInfo, terms){
+        if(provider.activateResult){
+            provider.activateResult(metaInfo.id, terms);
+            if (metaInfo.clipboardText)
+                St.Clipboard.get_default().set_text(St.ClipboardType.CLIPBOARD, metaInfo.clipboardText);
+        }
+        else{
+            if (metaInfo.id.endsWith('.desktop')) {
+                let app = Shell.AppSystem.get_default().lookup_app(metaInfo.id);
+                app.open_new_window(-1);
+            }
+            else
+                SystemActions.activateAction(metaInfo.id);
+        }
+    }
+
     activate(event) {
         this.removeIndicator();
-        this._app.open_new_window(-1);
+
+        if(this.metaInfo)
+            this.activateSearchResult(this.provider, this.metaInfo, this.resultsView.terms);
+        else
+            this._app.open_new_window(-1);
+
         this._menuLayout.arcMenu.toggle();
         super.activate(event);
     }
+
     grabKeyFocus() {
         this.actor.grab_key_focus();
     }
+
     _updateIcon() {
-        if(this._appType === Constants.AppDisplayType.GRID){
+        if(this.searchType === Constants.AppDisplayType.GRID && this._appType === Constants.AppDisplayType.SEARCH){
+            let iconSize = this._menuLayout.layoutProperties.ListSearchResults_IconSize;
+            let icon = this._app ? this._app.create_icon_texture(iconSize) : this.metaInfo['createIcon'](iconSize);
+            this._iconBin.set_child(icon);
+        }
+        else if(this._appType === Constants.AppDisplayType.GRID){
             let iconSize = this._menuLayout.layoutProperties.IconGridSize;
-            let icon = this._app.create_icon_texture(iconSize);
+            let icon = this._app ? this._app.create_icon_texture(iconSize) : this.metaInfo['createIcon'](iconSize);
             this._iconBin.set_child(icon);
         }
         else{
             let largeIcons = this._settings.get_boolean('enable-large-icons');
-            let icon = this._app.create_icon_texture(largeIcons ? MEDIUM_ICON_SIZE : SMALL_ICON_SIZE);
+            let plasmaLayoutLargeIcons = this.isPlasmaLayout && this.showExtraDetails;
+            let iconSize = largeIcons || plasmaLayoutLargeIcons ? MEDIUM_ICON_SIZE : SMALL_ICON_SIZE;
+            let icon = this._app ? this._app.create_icon_texture(iconSize) : this.metaInfo['createIcon'](iconSize);
             this._iconBin.set_child(icon);
         }
     }
     forceLargeIcon(size){
-        let icon = this._app.create_icon_texture(size ? size : MEDIUM_ICON_SIZE);
+        let iconSize = size ? size : MEDIUM_ICON_SIZE;
+        let icon = this._app ? this._app.create_icon_texture(iconSize) : this.metaInfo['createIcon'](iconSize);
         this._iconBin.set_child(icon);
     }
 });
-var SearchResultItem = GObject.registerClass(class Arc_Menu_SearchResultItem extends ArcMenuPopupBaseMenuItem{
-    _init(menuLayout, app, path) {
-        super._init(menuLayout);
-        this._menuLayout = menuLayout;
-        this._app = app;
-        this.hasContextMenu = this._app ? true : false;
-        this._path = path;
-    }
-    _createIcon(iconSize) {
-        return this._app.create_icon_texture(iconSize);
-    }
-    popupContextMenu(){
-        if(this._app && this.contextMenu == undefined){
-            this.contextMenu = new ApplicationContextMenu(this.actor, this._app, this._menuLayout);
-            if(this._path) 
-                this.contextMenu.path = this._path;
-        }
-        if(this.contextMenu != undefined){
-            if(this.tooltip!=undefined)
-                this.tooltip.hide();
-            if(!this.contextMenu.isOpen)
-                this.contextMenu.redisplay();
-            this.contextMenu.toggle();
-        }
-    }
-});
+
 // Menu Category item class
 var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem extends ArcMenuPopupBaseMenuItem{  
     _init(menuLayout, category) {
@@ -2891,22 +2915,27 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
     }
 });
 
-var SearchBox = class Arc_Menu_SearchBox{
-    constructor(menuLayout) {
-        this.searchResults= menuLayout.searchResults;
-        this.actor = new St.BoxLayout({
-            x_expand: true,
-            style_class: 'search-box search-box-padding'
-        });
-        this._stEntry = new St.Entry({
+var SearchBox = GObject.registerClass({
+    Signals: {
+        'search-changed': { param_types: [GObject.TYPE_STRING] },
+        'entry-key-focus-in': { },
+        'entry-key-press': { param_types: [Clutter.Event.$gtype] },
+    },
+},
+    class Arc_Menu_SearchBox extends St.Entry {
+    _init(menuLayout) {
+        super._init({
             hint_text: _("Type to search…"),
             track_hover: true,
             can_focus: true,
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL,
-            y_align: Clutter.ActorAlign.START
+            y_align: Clutter.ActorAlign.START,
+            name: "ArcSearchEntry"
         });
-        this._stEntry.style = "min-height: 0px; border-radius:4px; padding: 7px 9px;";
+
+        this.searchResults = menuLayout.searchResults;
+
         this._findIcon = new St.Icon({
             style_class: 'search-entry-icon',
             icon_name: 'edit-find-symbolic',
@@ -2917,106 +2946,73 @@ var SearchBox = class Arc_Menu_SearchBox{
             icon_name: 'edit-clear-symbolic',
             icon_size: 16
         });
-        this._stEntry.set_primary_icon(this._findIcon);
-        this.actor.add(this._stEntry);
+        this.set_primary_icon(this._findIcon);
 
-        this._text = this._stEntry.get_clutter_text();
+        this._text = this.get_clutter_text();
         this._textChangedId = this._text.connect('text-changed', this._onTextChanged.bind(this));
         this._keyPressId = this._text.connect('key-press-event', this._onKeyPress.bind(this));
         this._keyFocusInId = this._text.connect('key-focus-in', this._onKeyFocusIn.bind(this));
-        this._searchIconClickedId = 0;
-        this._inputHistory = [];
-        this._maxInputHistory = 5;
-
-        this.actor.connect('destroy', this._onDestroy.bind(this));
+        this._keyFocusInId = this._text.connect('key-focus-out', this._onKeyFocusOut.bind(this));
+        this._searchIconClickedId = this.connect('secondary-icon-clicked', () => this.clear());
+        this.connect('destroy', this._onDestroy.bind(this));
     }
 
     updateStyle(removeBorder){
-        let style = this._stEntry.style;
-        this._stEntry.style = style.replace("border-width: 0;", "");
+        let style = this.style;
+        this.style = style.replace("border-width: 0;", "");
         if(removeBorder)
-            this._stEntry.style += 'border-width: 0;'; 
+            this.style += 'border-width: 0;'; 
     }
 
-    _pushInput(searchString) {
-        if (this._inputHistory.length == this._maxInputHistory) {
-            this._inputHistory.shift();
-        }
-        this._inputHistory.push(searchString);
+    get entryBox(){
+        return this;
     }
 
-    _lastInput() {
-        if (this._inputHistory.length != 0) {
-            return this._inputHistory[this._inputHistory.length - 1];
-        }
-        return '';
-    }
-
-    _previousInput() {
-        if (this._inputHistory.length > 1) {
-            return this._inputHistory[this._inputHistory.length - 2];
-        }
-        return '';
+    get actor(){
+        return this;
     }
 
     getText() {
-        return this._stEntry.get_text();
+        return this.get_text();
     }
 
     setText(text) {
-        this._stEntry.set_text(text);
+        this.set_text(text);
     }
 
     grabKeyFocus() {
-        this._stEntry.grab_key_focus();
+        this.grab_key_focus();
     }
 
     hasKeyFocus() {
-        return this._stEntry.contains(global.stage.get_key_focus());
+        return this.contains(global.stage.get_key_focus());
     }
 
     clear() {
-        this._stEntry.set_text('');
-        this.emit('cleared');
+        this.set_text('');
     }
 
     isEmpty() {
-        return this._stEntry.get_text() == '';
+        return this.get_text() == '';
     }
 
-    _isActivated() {
-        return this._stEntry.get_text() != '';
-    }
-
-    _setClearIcon() {
-        this._stEntry.set_secondary_icon(this._clearIcon);
-        if (this._searchIconClickedId == 0) {
-            this._searchIconClickedId = this._stEntry.connect('secondary-icon-clicked',
-                this.clear.bind(this));
+    _onKeyFocusOut(){
+        if(!this.isEmpty()){
+            this.add_style_pseudo_class('focus');
+            return Clutter.EVENT_STOP;
         }
     }
 
-    _unsetClearIcon() {
-        if (this._searchIconClickedId > 0) {
-            this._stEntry.disconnect(this._searchIconClickedId);
+    _onTextChanged() {
+        let searchString = this.get_text();
+        if(!this.isEmpty())
+            this.set_secondary_icon(this._clearIcon);
+        else{
+            this.remove_style_pseudo_class('focus');
+            this.set_secondary_icon(null);
         }
-        this._searchIconClickedId = 0;
-        this._stEntry.set_secondary_icon(null);
-    }
-
-    _onTextChanged(entryText) {
-        let searchString = this._stEntry.get_text();
-        this._pushInput(searchString);
-        if (this._isActivated()) {
-            this._setClearIcon();
-        } else {
-            this._unsetClearIcon();
-            if (searchString == '' && this._previousInput() != '') {
-                this.emit('cleared');
-               
-            }
-        }
-        this.emit('changed', searchString);
+            
+        this.emit('search-changed', searchString);
     }
 
     _onKeyPress(actor, event) {
@@ -3030,31 +3026,34 @@ var SearchBox = class Arc_Menu_SearchBox{
             }
             return Clutter.EVENT_STOP;
         }
-        this.emit('key-press-event', event);
+        this.emit('entry-key-press', event);
         return Clutter.EVENT_PROPAGATE;
     }
 
-    _onKeyFocusIn(actor) {
-        this.emit('key-focus-in');
+    _onKeyFocusIn() {
+        this.emit('entry-key-focus-in');
         return Clutter.EVENT_PROPAGATE;
     }
 
     _onDestroy() {
-        if (this._textChangedId > 0) {
+        if (this._textChangedId) {
             this._text.disconnect(this._textChangedId);
-            this._textChangedId = 0;
+            this._textChangedId = null;
         }
-        if (this._keyPressId > 0) {
+        if (this._keyPressId) {
             this._text.disconnect(this._keyPressId);
-            this._keyPressId = 0;
+            this._keyPressId = null;
         }
-        if (this._keyFocusInId > 0) {
+        if (this._keyFocusInId) {
             this._text.disconnect(this._keyFocusInId);
-            this._keyFocusInId = 0;
+            this._keyFocusInId = null;
+        }
+        if(this._searchIconClickedId){
+            this.disconnect(this._searchIconClickedId);
+            this._searchIconClickedId = null;
         }
     }
-};
-Signals.addSignalMethods(SearchBox.prototype);
+});
 
 /**
  * This class is responsible for the appearance of the menu button.
@@ -3084,7 +3083,6 @@ var MenuButtonWidget = class Arc_Menu_MenuButtonWidget{
         this.actor.add_child(this._icon);
         this.actor.add_child(this._label);
         this.actor.add_child(this._arrowIcon);
-
     }
 
     setActiveStylePseudoClass(enable){
@@ -3126,6 +3124,7 @@ var MenuButtonWidget = class Arc_Menu_MenuButtonWidget{
     getPanelIcon() {
         return this._icon;
     }
+
     showArrowIcon() {
         if (!this.actor.contains(this._arrowIcon)) {
             this.actor.add_child(this._arrowIcon);

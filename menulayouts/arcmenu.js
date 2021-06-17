@@ -49,11 +49,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     createLayout(){
         super.createLayout();
         this.searchBox = new MW.SearchBox(this);
-        this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.actor.style = "margin: 0px 10px 5px 10px; padding-top: 0.0em; padding-bottom: 0.5em;padding-left: 0.4em;padding-right: 0.4em;";
+            this.searchBox.style = "margin: 0px 10px 5px 10px;";
             this.mainBox.add(this.searchBox.actor);
         }
             
@@ -111,7 +111,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add(this.viewProgramsButton.actor);
         this.leftBox.add(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.actor.style = "padding-top: 0.75em; padding-bottom: 0.25em; padding-left: 1em; padding-right: 0.25em; margin-right: .5em;";
+            this.searchBox.style = "margin: 10px 10px 5px 10px;";
             this.leftBox.add(this.searchBox.actor);
         }
             

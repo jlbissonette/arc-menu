@@ -20,6 +20,7 @@
         <value value='16' nick='Tognee'/>
         <value value='17' nick='Plasma'/>
         <value value='18' nick='Windows'/>
+        <value value='19' nick='Launcher'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>
@@ -161,6 +162,11 @@
       <default>true</default>
       <summary>Multi-lined labels for large icon application grid layouts</summary>
       <description>Multi-lined labels for large icon application grid layouts.</description>
+    </key>
+    <key type="b" name="show-search-result-details">
+      <default>true</default>
+      <summary>Show search result description label</summary>
+      <description>Show search result description label.</description>
     </key>
     <key enum="org.gnome.shell.extensions.arcmenu.default-menu-view" name="default-menu-view">
       <default>'Pinned_Apps'</default>
