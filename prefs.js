@@ -25,6 +25,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 const {Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
+const ByteArray = imports.byteArray;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const LayoutTweaks = Me.imports.menulayouts.tweaks;
@@ -3169,6 +3170,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         this.disableSearchStyle = this._settings.get_boolean('disable-searchbox-border');
         this.alphabetizeAllPrograms = this._settings.get_boolean('alphabetize-all-programs')
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
+        this.searchResultsDetails = this._settings.get_boolean('show-search-result-details');
 
         let disableCategoryArrowFrame = new PW.FrameBox();
         let disableCategoryArrowRow = new PW.FrameBoxRow();
@@ -3192,8 +3194,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         disableCategoryArrowRow.add(disableCategoryArrowLabel);            
         disableCategoryArrowRow.add(disableCategoryArrowSwitch);  
         disableCategoryArrowFrame.add(disableCategoryArrowRow);  
-        this.mainBox.append(disableCategoryArrowFrame);  
-        
+        this.mainBox.append(disableCategoryArrowFrame);
+
         let searchStyleFrame = new PW.FrameBox();
         let searchStyleRow = new PW.FrameBoxRow();
         let searchStyleLabel = new Gtk.Label({
@@ -3241,7 +3243,27 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         tweakStyleRow.add(tweakStyleSwitch);
         tweakStyleFrame.add(tweakStyleRow);
         this.mainBox.append(tweakStyleFrame);
-        
+
+        let descriptionsFrame = new PW.FrameBox();
+        let descriptionsRow = new PW.FrameBoxRow();
+        let descriptionsLabel = new Gtk.Label({
+            label: _("Search Results - Show Descriptions"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let descriptionsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
+        descriptionsSwitch.set_active(this.searchResultsDetails);
+        descriptionsSwitch.connect('notify::active', (widget) => {
+            this.searchResultsDetails = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        descriptionsRow.add(descriptionsLabel);
+        descriptionsRow.add(descriptionsSwitch);
+        descriptionsFrame.add(descriptionsRow);
+        this.mainBox.append(descriptionsFrame);
+
         let alphabetizeAllProgramsFrame = new PW.FrameBox();
         let alphabetizeAllProgramsRow = new PW.FrameBoxRow();
         let alphabetizeAllProgramsLabel = new Gtk.Label({
@@ -3421,12 +3443,14 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.disableSearchStyle = this._settings.get_default_value('disable-searchbox-border').unpack();
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
             this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
+            this.searchResultsDetails = this._settings.get_default_value('show-search-result-details').unpack();
             alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
             gapAdjustmentScale.set_value(this.gapAdjustment);
             disableCategoryArrowSwitch.set_active(this.disableCategoryArrow);
             searchStyleSwitch.set_active(this.disableSearchStyle); 
             tweakStyleSwitch.set_active(this.removeMenuArrow);
             multiLinedLabelSwitch.set_active(this.multiLinedLabels);
+            descriptionsSwitch.set_active(this.searchResultsDetails);
             let color = new Gdk.RGBA();
             color.parse(this.indicatorColor);
             appIndicatorColorChooser.set_rgba(color);
@@ -3450,6 +3474,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this._settings.set_boolean('disable-searchbox-border', this.disableSearchStyle);
             this._settings.set_boolean('alphabetize-all-programs', this.alphabetizeAllPrograms);
             this._settings.set_boolean('multi-lined-labels', this.multiLinedLabels);
+            this._settings.set_boolean('show-search-result-details', this.searchResultsDetails);
             this._settings.set_boolean('reload-theme', true);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
@@ -3471,7 +3496,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.removeMenuArrow !== this._settings.get_default_value('remove-menu-arrow').unpack() ||
             this.disableSearchStyle !== this._settings.get_default_value('disable-searchbox-border').unpack()||
             this.alphabetizeAllPrograms !== this._settings.get_default_value('alphabetize-all-programs').unpack()||
-            this.multiLinedLabels !== this._settings.get_default_value('multi-lined-labels').unpack()) ? true : false;
+            this.multiLinedLabels !== this._settings.get_default_value('multi-lined-labels').unpack() ||
+            this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack()) ? true : false;
     }
 });
 
@@ -4055,11 +4081,6 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
                                         this.menuMargin.toString(), this.verticalSeparator.toString()];
                         this.color_themes.push(array);
                         this._settings.set_value('color-themes',new GLib.Variant('aas',this.color_themes));
-                        store.clear();
-                        this.createIconList(store);
-                        this.colorPresetCombo.model = store;
-                        this.colorPresetCombo.show();
-                        this.checkIfPresetMatch();
                         dialog.destroy();
                     }
                     else
@@ -4067,7 +4088,6 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
                 }); 
             });
 
-                        
             let manageButton = new Gtk.Button({
                 label: _("Manage Presets")
             });   
@@ -4078,12 +4098,6 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
                     if(dialog.get_response()){
                         this.color_themes = dialog.color_themes;
                         this._settings.set_value('color-themes',new GLib.Variant('aas',dialog.color_themes));
-                        store.clear();
-                        this.createIconList(store);
-                        this.colorPresetCombo.model = store;
-                        this.colorPresetCombo.show();
-
-                        this.checkIfPresetMatch();
                         dialog.destroy();
                     }
                     else
@@ -4098,7 +4112,7 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             addButton.connect('clicked', () => {
                 let settingsFile = Gio.File.new_for_path(Me.path + '/media/misc/ArcMenuDefaultPresets');
                 let [ success, content, etags] = settingsFile.load_contents(null);
-                let string = content.toString();
+                let string = ByteArray.toString(content);
                 let themes = string.split("\n")
                 themes.pop(); //remove last blank array 
                 let colorThemes = [];
@@ -4117,11 +4131,6 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
                             this.color_themes.push(selectedThemes[i]);
                         }
                         this._settings.set_value('color-themes',new GLib.Variant('aas',this.color_themes));
-                        store.clear();
-                        this.createIconList(store);
-                        this.colorPresetCombo.model = store;
-                        this.colorPresetCombo.show();
-                        this.checkIfPresetMatch();
                         dialog.destroy();
                     }
                     else
@@ -4134,6 +4143,15 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             presetsButtonRow.add(this.saveButton);
             this.colorPresetFrame.add(presetsButtonRow);
             vbox.append(this.colorPresetFrame);
+
+            this._settings.connect("changed::color-themes", () => {
+                store.clear();
+                this.createIconList(store);
+                this.colorPresetCombo.model = store;
+                this.colorPresetCombo.show();
+
+                this.checkIfPresetMatch();
+            });  
 
             let menuSettingsHeaderLabel = new Gtk.Label({
                 label: "<b>" + _('Theme Settings') +"</b>",
@@ -5282,7 +5300,7 @@ var MiscPage = GObject.registerClass(
                     filename => {
                         let settingsFile = Gio.File.new_for_path(filename);
                         let [ success, content, etags] = settingsFile.load_contents(null);
-                        let string = content.toString();
+                        let string = ByteArray.toString(content);
                         let themes = string.split("\n")
                         themes.pop(); //remove last blank array 
                         this.color_themes = [];

@@ -624,6 +624,12 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 
     _onOpenStateChanged(menu, open) {
         if(open){
+            //Avoid Super L hotkey conflicts with Pop Shell extension by 
+            //setting 'overlay-key' mode  to  Shell.ActionMode.ALL.
+            let hotKeyPos = this._settings.get_enum('menu-hotkey');
+            if(hotKeyPos === Constants.HotKey.SUPER_L)
+                Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
+
             if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
                 this.menuButtonWidget.setActiveStylePseudoClass(true);
                 this.add_style_pseudo_class('active');
@@ -720,7 +726,7 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
                 this._menuButton.MenuLayout.reload();
                 this._menuButton.MenuLayout.needsReload = false;
             }
-            this._menuButton.setDefaultMenuView(); 
+            this._menuButton.setDefaultMenuView();
         }
     }
 

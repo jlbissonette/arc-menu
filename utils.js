@@ -65,6 +65,8 @@ function getMenuLayout(button, layout){
             return new MenuLayout.plasma.createMenu(button);
         case Constants.MenuLayout.WINDOWS:
             return new MenuLayout.windows.createMenu(button);
+        case Constants.MenuLayout.LAUNCHER:
+            return new MenuLayout.launcher.createMenu(button);
         default:
             return new MenuLayout.arcmenu.createMenu(button);    
     }
@@ -105,7 +107,8 @@ function convertToGridLayout(item){
     let icon = item._icon ? item._icon : item._iconBin;
 
     item.vertical = true;
-    item.remove_child(item._ornamentLabel);
+    if(item._ornamentLabel)
+        item.remove_child(item._ornamentLabel);
 
     item.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
     item.label.x_align = item.label.y_align = Clutter.ActorAlign.CENTER;
@@ -522,6 +525,7 @@ function createStylesheet(settings){
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
         +".arc-menu-status-text{\ncolor:" + menuForegroundColor + ";\nfont-size:" + fontSize + "pt;\n}\n\n"                                                     
         +".search-statustext{\nfont-size:11pt;\n}\n\n"    
+        +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;\n text-align: center;\n border-radius: 12px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +".left-scroll-area{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
@@ -533,9 +537,15 @@ function createStylesheet(settings){
                             +"color:" + menuForegroundColor + ";\nbackground-color:" + menuColor + ";\n}\n\n"
         +".arc-search-entry:focus{\nborder-color:" + highlightColor + ";\nborder-width: 1px;\nbox-shadow: inset 0 0 0 1px " + modifyColorLuminance(highlightColor, 0.05) + ";\n}\n\n"
         +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.3) + ";\n}\n\n"
-                
+        +"#ArcSearchEntry{\nmin-height: 0px;\nborder-radius: 4px;\npadding: 7px 9px;\n}\n\n"
+        +"#ArcSearchEntryRound{\nmin-height: 0px;\nborder-radius: 18px;\npadding: 7px 12px;\n}\n\n"       
         + menuButtonStyle
         
+                
+        +"#arc-menu-launcher-button{\nmax-width: 90px;\nborder-radius: 0px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\nborder-color: transparent;\nborder-bottom-width: 3px;\n}\n\n"
+        +"#arc-menu-launcher-button.active-item, #arc-menu-launcher-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
+            +"\nborder-color: " + plasmaSelectedItemColor + ";\nborder-bottom-width: 3px;\n}\n\n"
+
         +"#arc-menu-plasma-button{\nwidth: 90px;\n height: 65px;\nborder-radius: 4px;\n text-align: center;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
         +"#arc-menu-plasma-button:active-item, .arc-menu-plasma-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             + plasmaButtonStyle + "\nborder-color: " + plasmaSelectedItemColor + ";\n}\n\n"
@@ -550,9 +560,9 @@ function createStylesheet(settings){
         +".arc-menu-action{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 1px;\n"
                             +"border-color: transparent;\n}\n\n"
         +".arc-menu-action:hover, .arc-menu-action:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\nborder-width: 1px;\n"
-                            +"box-shadow: 0px 0px 1px " + modifyColorLuminance(menuColor, -0.05) + ";\nborder-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
+                                +"box-shadow: 0px 0px 1px " + modifyColorLuminance(menuColor, -0.05) + ";\nborder-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
         +".arc-menu-action:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\nborder-width: 1px;\n"
-                            +"border-color:" + modifyColorLuminance(menuColor, -0.1) + ";\n}\n\n"
+                                +"border-color:" + modifyColorLuminance(menuColor, -0.1) + ";\n}\n\n"
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"
 

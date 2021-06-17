@@ -20,6 +20,7 @@
         <value value='16' nick='Tognee'/>
         <value value='17' nick='Plasma'/>
         <value value='18' nick='Windows'/>
+        <value value='19' nick='Launcher'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>
@@ -136,6 +137,11 @@
       <default>false</default>
       <summary>Show a larger icon and extra app details</summary>
       <description>Show a larger icon and extra app details.</description>
+    </key>
+    <key type="b" name="show-search-result-details">
+      <default>true</default>
+      <summary>Show search result description label</summary>
+      <description>Show search result description label.</description>
     </key>
     <key type="b" name="activate-on-hover">
       <default>false</default>
