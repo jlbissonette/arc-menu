@@ -75,10 +75,10 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.topBox.style = "width: " + RUNNER_WIDTH + "px;";
 
         this.searchBox = new MW.SearchBox(this);
-        this.searchBox.actor.style = "padding-top: 0.5em; padding-bottom: 0.5em;padding-left: 1.5em;padding-right: 1.5em;";
-        this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this.searchBox.style = "margin: 5px 10px 5px 10px;";
+        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.topBox.add(this.searchBox.actor);
         this.mainBox.add(this.topBox);
 
