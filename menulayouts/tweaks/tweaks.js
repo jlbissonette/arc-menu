@@ -513,24 +513,7 @@ var TweaksPage = GObject.registerClass({
         runnerPositionRow.add(runnerPositionLabel);
         runnerPositionRow.add(runnerPositionCombo);
         runnerMenuTweaksFrame.add(runnerPositionRow);
-        
-        let showMoreDetailsRow = new PW.FrameBoxRow();
-        let showMoreDetailsLabel = new Gtk.Label({
-            label: _("Show Extra Large Icons with App Descriptions"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
 
-        let showMoreDetailsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
-        showMoreDetailsSwitch.set_active(this._settings.get_boolean('apps-show-extra-details'));
-        showMoreDetailsSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('apps-show-extra-details', widget.get_active());
-        });
-
-        showMoreDetailsRow.add(showMoreDetailsLabel);
-        showMoreDetailsRow.add(showMoreDetailsSwitch);
-        runnerMenuTweaksFrame.add(showMoreDetailsRow);
         this.mainBox.append(runnerMenuTweaksFrame);
     }
     _loadUnityTweaks(){
@@ -660,27 +643,6 @@ var TweaksPage = GObject.registerClass({
         homeScreenRow.add(homeScreenCombo);
         generalTweaksFrame.add(homeScreenRow);
         this.mainBox.append(generalTweaksFrame);
-
-        let showMoreDetailsFrame = new PW.FrameBox();
-        let showMoreDetailsRow = new PW.FrameBoxRow();
-        let showMoreDetailsLabel = new Gtk.Label({
-            label: _("Show Extra Large Icons with App Descriptions"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-
-        let showMoreDetailsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
-        showMoreDetailsSwitch.set_active(this._settings.get_boolean('apps-show-extra-details'));
-        showMoreDetailsSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('apps-show-extra-details', widget.get_active());
-        });
-
-        showMoreDetailsRow.add(showMoreDetailsLabel);
-        showMoreDetailsRow.add(showMoreDetailsSwitch);
-        showMoreDetailsFrame.add(showMoreDetailsRow);
-        if(this._settings.get_enum('menu-layout') === Constants.MenuLayout.RAVEN)
-            this.mainBox.append(showMoreDetailsFrame);
 
         let widgetFrame =  this._createWidgetsRows(Constants.MenuLayout.RAVEN);
         this.mainBox.append(widgetFrame);

@@ -32,7 +32,8 @@ var SearchbarLocation = {
 
 var AppDisplayType = {
     LIST: 0,
-    GRID: 1
+    GRID: 1,
+    SEARCH: 2,
 }
 
 var CategoryType = {
@@ -102,6 +103,13 @@ var SeparatorStyle = {
     LONG: 1,
     SHORT: 2,
     MAX: 3,
+    MEDIUM: 4,
+};
+
+var CaretPosition = {
+    END: -1,
+    START: 0,
+    MIDDLE: 2,
 };
 
 var MenuItemType = {
@@ -285,7 +293,8 @@ var MenuLayout = {
     RAVEN: 15,
     TOGNEE: 16,
     PLASMA: 17,
-    WINDOWS: 18
+    WINDOWS: 18,
+    LAUNCHER: 19,
 };
 
 var TraditionalMenus = [   
@@ -308,7 +317,8 @@ var TouchMenus = [
     { IMAGE: 'elementary-layout-symbolic', TITLE: _('Elementary'), LAYOUT: MenuLayout.ELEMENTARY},
     { IMAGE: 'chromebook-layout-symbolic', TITLE: _('Chromebook'), LAYOUT: MenuLayout.CHROMEBOOK}];
 
-var LauncherMenus = [   
+var LauncherMenus = [
+    { IMAGE: 'launcher-layout-symbolic', TITLE: _('Launcher'), LAYOUT: MenuLayout.LAUNCHER},
     { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
     { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 
@@ -367,7 +377,7 @@ var CONTRIBUTORS = '<b>Thank you to all who contributed to, and/or helped, the d
 var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
                 '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
 var PATRONS = "<b>A BIG thank you to the all Patrons!</b>"
-                +'\n\n<b>For a list of all Patrons please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
+                +'\n\n<b>For a list of all Patrons please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';     
         
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +
