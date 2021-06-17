@@ -222,7 +222,11 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
  
 -----
 
- **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** | **- @[prescott66](https://gitlab.com/prescott66) - Slovak** | **- @[Mejans](https://gitlab.com/Mejans) - Occitan** | **- @[UtsushimiNeneka](https://gitlab.com/UtsushimiNeneka) - Korean**
+ **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** | **- @[prescott66](https://gitlab.com/prescott66) - Slovak** | **- @[Mejans](https://gitlab.com/Mejans) - Occitan** | **- @[UtsushimiNeneka](https://gitlab.com/UtsushimiNeneka) - Korean** |
+
+-----
+
+ **- @[sayuri](https://gitlab.com/sayuri-) - Sinhalese** | **- @[Latgardi](https://gitlab.com/Latgardi) - Belarusian** |
 
 </p>
 </details>
