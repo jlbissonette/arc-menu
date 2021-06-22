@@ -1443,11 +1443,11 @@ var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends Sessi
             this._proxy = Utils.PowerManager(Gio.DBus.system,
                 'org.freedesktop.login1',
                 '/org/freedesktop/login1');
-            this._proxy.CanHibernateRemote((result, error) => {
+            this._proxy.CanHybridSleepRemote((result, error) => {
                 if(!error && result[0] === 'yes')
-                    this._proxy.HibernateRemote(true);
+                    this._proxy.HybridSleepRemote(true);
                 else
-                    Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+                    Main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
             });
         }
         else if(this.powerType === Constants.PowerType.HIBERNATE){
@@ -1504,11 +1504,11 @@ var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends A
             this._proxy = Utils.PowerManager(Gio.DBus.system,
                 'org.freedesktop.login1',
                 '/org/freedesktop/login1');
-            this._proxy.CanHibernateRemote((result, error) => {
+            this._proxy.CanHybridSleepRemote((result, error) => {
                 if(!error && result[0] === 'yes')
-                    this._proxy.HibernateRemote(true);
+                    this._proxy.HybridSleepRemote(true);
                 else
-                    Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+                    Main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
             });
         }
         else if(this.powerType === Constants.PowerType.HIBERNATE){
