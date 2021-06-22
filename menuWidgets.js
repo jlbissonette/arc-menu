@@ -1305,27 +1305,37 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends Sessi
 
         box.add(this._menuLayout.createLabelRow(_("Session")));
 
-        let lockItem = new PlasmaPowerItem(this._menuLayout, Constants.PowerType.LOCK, _("Lock"), 'changes-prevent-symbolic');
+        let lockItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.LOCK);
         lockItem._icon.icon_size = 16;
         box.add(lockItem);
 
-        let logOutItem = new PlasmaPowerItem(this._menuLayout, Constants.PowerType.LOGOUT, _("Log Out"), 'application-exit-symbolic');
+        let logOutItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.LOGOUT);
         logOutItem._icon.icon_size = 16;
         box.add(logOutItem);
 
         box.add(this._menuLayout.createLabelRow(_("System")));
 
-        let suspendItem = new PlasmaPowerItem(this._menuLayout, Constants.PowerType.SUSPEND, _("Suspend"), 'media-playback-pause-symbolic');
+        let sleepItem = new PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
+        sleepItem._icon.icon_size = 16;
+        box.add(sleepItem);
+
+        let hibernateItem = new PowerMenuItem(this, Constants.PowerType.HIBERNATE);
+        hibernateItem._icon.icon_size = 16;
+        box.add(hibernateItem);
+
+        box.add(this._menuLayout._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+
+        let suspendItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.SUSPEND);
         suspendItem._icon.icon_size = 16;
         box.add(suspendItem);
         
-        let restartItem = new PlasmaPowerItem(this._menuLayout, Constants.PowerType.RESTART, _("Restart..."), Me.path + Constants.RestartIcon.PATH);
+        let restartItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.RESTART);
         restartItem._icon.icon_size = 16;
         box.add(restartItem);
         
-        let powerOffItem = new PlasmaPowerItem(this._menuLayout, Constants.PowerType.POWEROFF, _("Power Off..."), 'system-shutdown-symbolic');
+        let powerOffItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.POWER_OFF);
         powerOffItem._icon.icon_size = 16;
-        box.add(powerOffItem);
+        box.add(powerOffItem); 
 
         this._menuLayout.subMenuManager.addMenu(this.leaveMenu);
         this.leaveMenu.actor.hide();
@@ -1359,6 +1369,7 @@ var UserButton = GObject.registerClass(class Arc_Menu_UserButton extends Session
         Util.spawnCommandLine("gnome-control-center user-accounts");
     }
 });
+
 // User Button
 var CurrentUserButton = GObject.registerClass(class Arc_Menu_CurrentUserButton extends SessionButton {
     _init(menuLayout) {
@@ -1411,66 +1422,63 @@ var CurrentUserButton = GObject.registerClass(class Arc_Menu_CurrentUserButton e
 });
 
 var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends SessionButton {
-    _init(menuLayout) {
-        super._init(menuLayout, _("Power Off"), 'system-shutdown-symbolic');
+    _init(menuLayout, powerType) {
+        super._init(menuLayout, Constants.PowerOptions[powerType].TITLE, Constants.PowerOptions[powerType].IMAGE);
+        this.powerType = powerType;
     }
     activate() {
-        SystemActions.activatePowerOff();
+        if(this.powerType === Constants.PowerType.POWER_OFF)
+            SystemActions.activatePowerOff();
+        else if(this.powerType === Constants.PowerType.RESTART)
+            SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
+        else if(this.powerType === Constants.PowerType.LOCK){
+            this._menuLayout.isRunning = false;
+            SystemActions.activateLockScreen();
+        }
+        else if(this.powerType === Constants.PowerType.LOGOUT)
+            SystemActions.activateLogout();
+        else if(this.powerType === Constants.PowerType.SUSPEND)
+            SystemActions.activateSuspend();
+        else if(this.powerType === Constants.PowerType.HYBRID_SLEEP){
+            this._proxy = Utils.PowerManager(Gio.DBus.system,
+                'org.freedesktop.login1',
+                '/org/freedesktop/login1');
+            this._proxy.CanHibernateRemote((result, error) => {
+                if(!error && result[0] === 'yes')
+                    this._proxy.HibernateRemote(true);
+                else
+                    Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+            });
+        }
+        else if(this.powerType === Constants.PowerType.HIBERNATE){
+            this._proxy = Utils.PowerManager(Gio.DBus.system,
+                'org.freedesktop.login1',
+                '/org/freedesktop/login1');
+            this._proxy.CanHibernateRemote((result, error) => {
+                if(!error && result[0] === 'yes')
+                    this._proxy.HibernateRemote(true);
+                else
+                    Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+            });
+        }
     }
 });
 
-var RestartButton = GObject.registerClass(class Arc_Menu_RestartButton extends SessionButton {
-    _init(menuLayout) {
-        super._init(menuLayout, _("Restart"), Me.path + Constants.RestartIcon.PATH);
-    }
-    activate() {
-        SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
-    }
-});
-
-var LogoutButton = GObject.registerClass(class Arc_Menu_LogoutButton extends SessionButton {
-    _init(menuLayout) {
-        super._init(menuLayout, _("Log Out"), 'application-exit-symbolic');
-    }
-    activate() {
-        SystemActions.activateLogout();
-    }
-});
-
-var SuspendButton = GObject.registerClass(class Arc_Menu_SuspendButton extends SessionButton {
-    _init(menuLayout) {
-        super._init(menuLayout, _("Suspend"), 'media-playback-pause-symbolic');
-    }
-    activate() {
-        SystemActions.activateSuspend();
-    }
-});
-
-var LockButton = GObject.registerClass(class Arc_Menu_LockButton extends SessionButton {
-    _init(menuLayout) {
-        super._init(menuLayout, _("Lock"), 'changes-prevent-symbolic');
-    }
-    activate() {
-        this._menuLayout.isRunning = false;
-        SystemActions.activateLockScreen();
-    }
-});
-
-var PlasmaPowerItem = GObject.registerClass(class Arc_Menu_PlasmaPowerItem extends ArcMenuPopupBaseMenuItem{
-    _init(menuLayout, type, title, icon) {
+var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends ArcMenuPopupBaseMenuItem{
+    _init(menuLayout, type) {
         super._init(menuLayout);
-        this.type = type;
+        this.powerType = type;
         this._menuLayout = menuLayout;
         this._layout = this._menuLayout.layout;
         this._settings = this._menuLayout._settings;
         this._icon = new St.Icon({
-            gicon: Gio.icon_new_for_string(icon),
+            gicon: Gio.icon_new_for_string(Constants.PowerOptions[this.powerType].IMAGE),
             style_class: 'popup-menu-icon',
             icon_size: MEDIUM_ICON_SIZE,
         });
 
         this.label = new St.Label({
-            text: _(title),
+            text: _(Constants.PowerOptions[this.powerType].TITLE),
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER
         });
@@ -1480,18 +1488,40 @@ var PlasmaPowerItem = GObject.registerClass(class Arc_Menu_PlasmaPowerItem exten
     }
 
     activate(event){
-        if(this.type === Constants.PowerType.POWEROFF)
+        if(this.powerType === Constants.PowerType.POWER_OFF)
             SystemActions.activatePowerOff();
-        if(this.type === Constants.PowerType.RESTART)
+        else if(this.powerType === Constants.PowerType.RESTART)
             SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
-        if(this.type === Constants.PowerType.LOCK){
+        else if(this.powerType === Constants.PowerType.LOCK){
             this._menuLayout.isRunning = false;
             SystemActions.activateLockScreen();
         }
-        if(this.type === Constants.PowerType.LOGOUT)
+        else if(this.powerType === Constants.PowerType.LOGOUT)
             SystemActions.activateLogout();
-        if(this.type === Constants.PowerType.SUSPEND)
+        else if(this.powerType === Constants.PowerType.SUSPEND)
             SystemActions.activateSuspend();
+        else if(this.powerType === Constants.PowerType.HYBRID_SLEEP){
+            this._proxy = Utils.PowerManager(Gio.DBus.system,
+                'org.freedesktop.login1',
+                '/org/freedesktop/login1');
+            this._proxy.CanHibernateRemote((result, error) => {
+                if(!error && result[0] === 'yes')
+                    this._proxy.HibernateRemote(true);
+                else
+                    Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+            });
+        }
+        else if(this.powerType === Constants.PowerType.HIBERNATE){
+            this._proxy = Utils.PowerManager(Gio.DBus.system,
+                'org.freedesktop.login1',
+                '/org/freedesktop/login1');
+            this._proxy.CanHibernateRemote((result, error) => {
+                if(!error && result[0] === 'yes')
+                    this._proxy.HibernateRemote(true);
+                else
+                    Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+            });
+        }
         super.activate(event);
     }
 });

@@ -24,6 +24,25 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Constants = Me.imports.constants;
 const {Gio, GLib} = imports.gi;
 
+// D-Bus
+const PowerManagerInterface = `<node>
+  <interface name="org.freedesktop.login1.Manager">
+    <method name="HybridSleep">
+      <arg type="b" direction="in"/>
+    </method>
+    <method name="CanHybridSleep">
+      <arg type="s" direction="out"/>
+    </method>
+    <method name="Hibernate">
+      <arg type="b" direction="in"/>
+    </method>
+    <method name="CanHibernate">
+      <arg type="s" direction="out"/>
+    </method>
+  </interface>
+</node>`;
+const PowerManager = Gio.DBusProxy.makeProxyWrapper(PowerManagerInterface);
+
 function getMenuLayout(button, layout){
     let MenuLayout = Me.imports.menulayouts;
     switch(layout){

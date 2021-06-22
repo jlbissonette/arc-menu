@@ -173,12 +173,28 @@ var MenuIcon = {
 };
 
 var PowerType = {
-    POWEROFF: 1,
-    LOCK: 2,
-    LOGOUT: 3,
+    LOGOUT: 0,
+    LOCK: 1,
+    RESTART: 2,
+    POWER_OFF: 3,
     SUSPEND: 4,
-    RESTART: 5
+    HYBRID_SLEEP: 5,
+    HIBERNATE: 6,
 };
+
+var SleepIcon = {
+    PATH: '/media/icons/menu_icons/sleep-symbolic.svg'
+};
+
+var PowerOptions = [
+    { TYPE: PowerType.LOGOUT, IMAGE: 'application-exit-symbolic', TITLE: _("Log Out") },
+    { TYPE: PowerType.LOCK, IMAGE: 'changes-prevent-symbolic', TITLE: _("Lock") },
+    { TYPE: PowerType.RESTART, IMAGE: 'system-reboot-symbolic', TITLE: _("Restart") },
+    { TYPE: PowerType.POWER_OFF, IMAGE: 'system-shutdown-symbolic', TITLE: _("Power Off") },
+    { TYPE: PowerType.SUSPEND, IMAGE: 'media-playback-pause-symbolic', TITLE: _("Suspend") },
+    { TYPE: PowerType.HYBRID_SLEEP, IMAGE: Me.path + SleepIcon.PATH, TITLE: _("Hybrid Sleep") },
+    { TYPE: PowerType.HIBERNATE, IMAGE: 'document-save-symbolic', TITLE: _("Hibernate") },
+];
 
 var MenuIcons = [
     { PATH: '/media/icons/menu_button_icons/icons/arcmenu-logo-symbolic.svg'},
@@ -341,10 +357,6 @@ var MenuStyles = {
 };
 
 var ArcMenuSettingsCommand = 'gnome-extensions prefs arcmenu@arcmenu.com';
-
-var RestartIcon = {
-    PATH: '/media/icons/menu_icons/restart-symbolic.svg'
-};
 
 var HamburgerIcon = {
     PATH: '/media/icons/menu_icons/hamburger-symbolic.svg'

@@ -323,6 +323,13 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
         dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time)=> {
             let listBox = self.get_widget().get_parent();
             let widget = self.get_widget();
+
+            listBox.startIndex = widget.get_index();
+            listBox.drag_highlight_row(widget);
+           
+            if(!scrolledWindow)
+                return true;
+            
             let height = widget.get_height();
             let scrollHeight = scrolledWindow.get_height();
             let widgetLoc = widget.get_index() * height;
@@ -332,9 +339,6 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
                 scrolledWindow.vadjustment.value += height;
             else if((widgetLoc - (height * 2)) < value)
                 scrolledWindow.vadjustment.value -= height;
-
-            listBox.startIndex = widget.get_index();
-            listBox.drag_highlight_row(widget);
         });
 
         dropTarget.connect("drag-leave", (self, gdkDrop, x, y, selection, info, time)=> {

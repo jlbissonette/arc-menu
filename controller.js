@@ -100,15 +100,11 @@ var MenuSettingsController = class {
             this._settings.connect('changed::indicator-text-color', this._updateStyle.bind(this)),
             this._settings.connect('changed::directory-shortcuts-list', this._reload.bind(this)),
             this._settings.connect('changed::application-shortcuts-list', this._reload.bind(this)),
-            this._settings.connect('changed::disable-recently-installed-apps', this._reload.bind(this)),
+            this._settings.connect('changed::disable-recently-installed-apps', this._initiateRecentlyInstalledApps.bind(this)),
             this._settings.connect('changed::extra-categories', this._reload.bind(this)),
-            this._settings.connect('changed::show-power-button', this._reload.bind(this)),
-            this._settings.connect('changed::show-restart-button', this._reload.bind(this)),
-            this._settings.connect('changed::show-logout-button', this._reload.bind(this)),
-            this._settings.connect('changed::show-lock-button', this._reload.bind(this)),
+            this._settings.connect('changed::power-options', this._reload.bind(this)),
             this._settings.connect('changed::show-external-devices', this._reload.bind(this)),
             this._settings.connect('changed::show-bookmarks', this._reload.bind(this)),
-            this._settings.connect('changed::show-suspend-button', this._reload.bind(this)),
             this._settings.connect('changed::disable-user-avatar', this._reload.bind(this)),
             this._settings.connect('changed::enable-activities-shortcut', this._reload.bind(this)),
             this._settings.connect('changed::enable-horizontal-flip', this._reload.bind(this)),
@@ -148,6 +144,11 @@ var MenuSettingsController = class {
     }
 
     _reload(){
+        this._menuButton.reload();
+    }
+
+    _initiateRecentlyInstalledApps(){
+        this._menuButton.initiateRecentlyInstalledApps();
         this._menuButton.reload();
     }
 

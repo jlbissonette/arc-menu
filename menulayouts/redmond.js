@@ -194,26 +194,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.actionsScrollBox.add_actor(this.actionsBox);  
 
-        if(this._settings.get_boolean('show-logout-button')){
-            let logout = new MW.LogoutButton(this);
-            this.actionsBox.add(logout.actor);
-        }  
-        if(this._settings.get_boolean('show-lock-button')){
-            let lock = new MW.LockButton(this);
-            this.actionsBox.add(lock.actor);
-        }
-        if(this._settings.get_boolean('show-suspend-button')){
-            let suspend = new MW.SuspendButton(this);
-            this.actionsBox.add(suspend.actor);
-        }
-        if(this._settings.get_boolean('show-restart-button')){
-            let restart = new MW.RestartButton(this);
-            this.actionsBox.add(restart.actor);
-        }      
-        if(this._settings.get_boolean('show-power-button')){
-            let power = new MW.PowerButton(this);
-            this.actionsBox.add(power.actor);
-        }      
+        let powerOptions = this._settings.get_value("power-options").deep_unpack();
+        for(let i = 0; i < powerOptions.length; i++){
+            let powerType = powerOptions[i][0];
+            let shouldShow = powerOptions[i][1];
+            if(shouldShow){
+                let powerButton = new MW.PowerButton(this, powerType);
+                this.actionsBox.add(powerButton);
+            }
+        } 
         this.rightBox.add(this.actionsScrollBox);
         
         let rightPanelWidth = this._settings.get_int('right-panel-width');
