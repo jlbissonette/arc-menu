@@ -335,6 +335,12 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
         this.connect("drag-motion", (widget)=> {
             let listBox = widget.get_parent();
             if(listBox.dragLeave){
+                listBox.drag_highlight_row(widget);
+                listBox.dragLeave = false;
+                
+                if(!scrolledWindow)
+                    return true;
+
                 let alloc = widget.get_allocation();
 
                 let height = alloc.height;
@@ -348,8 +354,6 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
                 else if((widgetLoc - (height * 2)) < value)
                     scrolledWindow.vadjustment.value -= height;
 
-                listBox.drag_highlight_row(widget);
-                listBox.dragLeave = false;
             }
         });
 

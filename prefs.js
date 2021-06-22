@@ -5044,115 +5044,146 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         }
     }
 });
-var MenuSettingsShortcutSessionButtonsPage = GObject.registerClass(
-    class Arc_Menu_MenuSettingsShortcutSessionButtonsPage extends Gtk.ScrolledWindow {
-    _init(settings) {
-        super._init();
-        this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-
-        this.mainBox = new Gtk.Box({
-                orientation: Gtk.Orientation.VERTICAL,
-                margin_top: 24,
-                margin_bottom: 24,
-                margin_start: 24,
-                margin_end: 24,
-                spacing: 20,
-                vexpand: false,
-                valign: Gtk.Align.START
-        });
-
-        this.add_with_viewport(this.mainBox);
-        this._settings = settings;
-
-        let sessionButtonsFrame = new PW.FrameBox();
-        this.mainBox.add(sessionButtonsFrame);
-        let suspendRow = new PW.FrameBoxRow();
-        let suspendLabel = new Gtk.Label({
-            label: _("Suspend"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let suspendButton = new Gtk.Switch();
-        if(this._settings.get_boolean('show-suspend-button'))
-            suspendButton.set_active(true);
-        suspendButton.connect('notify::active', (widget) => {
-            this._settings.set_boolean('show-suspend-button', widget.get_active());
-        });
-        suspendRow.add(suspendLabel);
-        suspendRow.add(suspendButton);
-        
-        let lockRow = new PW.FrameBoxRow();
-        let lockLabel = new Gtk.Label({
-            label: _("Lock"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let lockButton = new Gtk.Switch();
-        if(this._settings.get_boolean('show-lock-button'))
-            lockButton.set_active(true);
-        lockButton.connect('notify::active', (widget) => {
-            this._settings.set_boolean('show-lock-button', widget.get_active());
-        });
-        lockRow.add(lockLabel);
-        lockRow.add(lockButton);
-        
-        let logOffRow = new PW.FrameBoxRow();
-        let logOffLabel = new Gtk.Label({
-            label: _("Log Out"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let logOffButton = new Gtk.Switch();
-        if(this._settings.get_boolean('show-logout-button'))
-            logOffButton.set_active(true);
-        logOffButton.connect('notify::active', (widget) => {
-            this._settings.set_boolean('show-logout-button', widget.get_active());
-        });   
-        logOffRow.add(logOffLabel);
-        logOffRow.add(logOffButton);
-
-        let restartRow = new PW.FrameBoxRow();
-        let restartLabel = new Gtk.Label({
-            label: _("Restart"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let restartButton = new Gtk.Switch();
-        if(this._settings.get_boolean('show-restart-button'))
-            restartButton.set_active(true);
-        restartButton.connect('notify::active', (widget) => {
-            this._settings.set_boolean('show-restart-button', widget.get_active());
-        });   
-        restartRow.add(restartLabel);
-        restartRow.add(restartButton);
-
-        let powerRow = new PW.FrameBoxRow();
-        let powerLabel = new Gtk.Label({
-            label: _("Power Off"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let powerButton = new Gtk.Switch();
-        if(this._settings.get_boolean('show-power-button'))
-            powerButton.set_active(true);
-        powerButton.connect('notify::active', (widget) => {
-            this._settings.set_boolean('show-power-button', widget.get_active());
-        });   
-        powerRow.add(powerLabel);
-        powerRow.add(powerButton);
-
-        sessionButtonsFrame.add(suspendRow);
-        sessionButtonsFrame.add(logOffRow);
-        sessionButtonsFrame.add(lockRow);
-        sessionButtonsFrame.add(restartRow);
-        sessionButtonsFrame.add(powerRow);
-    }
-});
+var MenuSettingsPowerOptionsPage = GObject.registerClass(
+    class Arc_Menu_MenuSettingsPowerOptionsPage extends Gtk.ScrolledWindow {
+        _init(settings) {
+            super._init();
+            this.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+    
+            this.mainBox = new Gtk.Box({
+                    orientation: Gtk.Orientation.VERTICAL,
+                    margin_top: 24,
+                    margin_bottom: 24,
+                    margin_start: 24,
+                    margin_end: 24,
+                    spacing: 20,
+                    vexpand: true,
+                    valign: Gtk.Align.FILL
+            });
+    
+            this.add_with_viewport(this.mainBox);
+            this._settings = settings;
+            this.powerOptionsFrame = new PW.FrameBox();
+    
+            this.resetButton = new Gtk.Button({
+                label: _("Restore Defaults"),
+                tooltip_text: _("Restore the default settings on this page")
+            });
+            this.saveButton = new Gtk.Button({
+                label: _("Apply"),
+                hexpand: true
+            });
+    
+            this._createFrame(this._settings.get_value("power-options").deep_unpack());
+            this.mainBox.add(this.powerOptionsFrame);
+    
+            let buttonRow = new Gtk.Box({
+                valign: Gtk.Align.END,
+                vexpand: true
+            });
+    
+            this.resetButton.set_sensitive(this.getSensitive());
+    
+            this.resetButton.connect('clicked', ()=> {
+                this.saveButton.set_sensitive(true);
+                this.powerOptionsFrame.remove_all_children();
+                this._createFrame(this._settings.get_default_value('power-options').deep_unpack());
+                this.powerOptionsFrame.show();
+                this.resetButton.set_sensitive(false);
+            });
+    
+            this.saveButton.connect('clicked', ()=> {
+                let array = [];
+                for(let i = 0; i < this.powerOptionsFrame.count; i++) {
+                    let frame = this.powerOptionsFrame.get_index(i);
+                    array.push([frame._enum, frame._shouldShow]);
+                }
+                this._settings.set_value('power-options', new GLib.Variant('a(ib)', array));
+                this.saveButton.set_sensitive(false);
+                this.resetButton.set_sensitive(this.getSensitive());
+            }); 
+            this.saveButton.set_halign(Gtk.Align.END);
+            this.saveButton.set_sensitive(false);
+            buttonRow.add(this.resetButton);
+            buttonRow.add(this.saveButton);
+            this.mainBox.add(buttonRow);
+        }
+    
+        getSensitive(){
+            let defaultPowerOptions = this._settings.get_default_value("power-options").deep_unpack();
+            let currentPowerOptions = this._settings.get_value("power-options").deep_unpack();
+            return !Utils.getArraysEqual(defaultPowerOptions, currentPowerOptions);
+        }
+    
+        _createFrame(powerOptions){
+            for(let i = 0; i < powerOptions.length; i++){
+                let powerType = powerOptions[i][0];
+                let name = Constants.PowerOptions[powerType].TITLE;
+    
+                let frameRow = new PW.FrameBoxDragRow(this);
+                frameRow._enum = powerOptions[i][0];
+                frameRow._shouldShow = powerOptions[i][1]; 
+                frameRow._name = Constants.PowerOptions[powerType].TITLE; 
+                frameRow._gicon = Gio.icon_new_for_string(Constants.PowerOptions[powerType].IMAGE);
+                frameRow.saveButton = this.saveButton;
+                frameRow.resetButton = this.resetButton;
+                frameRow.hasSwitch = true;
+                frameRow.switchActive = frameRow._shouldShow;
+                
+                let powerIcon = new Gtk.Image( {
+                    gicon: frameRow._gicon,
+                    pixel_size: 22
+                });
+                let powerImageBox = new Gtk.Box( {
+                    margin_start: 0,
+                    hexpand: false,
+                    vexpand: false,
+                    spacing: 5,
+                });
+                let dragImage = new Gtk.Image( {
+                    gicon: Gio.icon_new_for_string("drag-symbolic"),
+                    pixel_size: 12
+                });
+                powerImageBox.add(dragImage);
+                powerImageBox.add(powerIcon);
+                frameRow.add(powerImageBox);
+    
+                let powerLabel = new Gtk.Label({
+                    label: _(name),
+                    use_markup: true,
+                    xalign: 0,
+                    hexpand: true
+                });
+    
+                let buttonBox = new PW.EditEntriesBox({
+                    frameRow: frameRow, 
+                    frame: this.powerOptionsFrame, 
+                    buttons: [this.saveButton, this.resetButton],
+                });
+                
+                let modifyButton = new Gtk.Switch({
+                    valign: Gtk.Align.CENTER,
+                    margin_start: 10,
+                    tooltip_text: _('Enable/Disble')
+                });
+                
+                modifyButton.set_active(frameRow._shouldShow);
+                modifyButton.connect('notify::active', ()=> {
+                    frameRow._shouldShow = modifyButton.get_active(); 
+                    this.saveButton.set_sensitive(true);
+                    this.resetButton.set_sensitive(true);
+                });
+                buttonBox.insert_column(0);
+                buttonBox.attach(Gtk.Separator.new(Gtk.Orientation.VERTICAL), 0, 0, 1, 1);
+                buttonBox.insert_column(0);
+                buttonBox.attach(modifyButton, 0, 0, 1, 1);
+                
+                frameRow.add(powerLabel);
+                frameRow.add(buttonBox);
+                this.powerOptionsFrame.add(frameRow);
+            }
+        }
+    });
 
 var MiscPage = GObject.registerClass(
     class Arc_Menu_MiscPage extends PW.NotebookPage {
@@ -5815,7 +5846,7 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
         menuSettingsStackListBox.addRow("MenuSettingsPinnedApps", _("Pinned Apps"), 'pinned-apps-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsShortcutDirectories", _("Directory Shortcuts"), 'folder-documents-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsShortcutApplications", _("Application Shortcuts"), 'preferences-desktop-apps-symbolic');
-        menuSettingsStackListBox.addRow("MenuSettingsShortcutSessionButtons", _("Session Buttons"), 'gnome-power-manager-symbolic');
+        menuSettingsStackListBox.addRow("MenuSettingsPowerOptions", _("Power Options"), 'gnome-power-manager-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsCategories", _("Extra Categories"), 'categories-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), 'fine-tune-symbolic');
         menuSettingsStackListBox.setSeparatorIndices([1, 4, 6]);
@@ -5855,7 +5886,7 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box{
         
         this.settingsFrameStack.add_named(new MenuSettingsShortcutDirectoriesPage(this._settings), "MenuSettingsShortcutDirectories");
         this.settingsFrameStack.add_named(new MenuSettingsShortcutApplicationsPage(this._settings), "MenuSettingsShortcutApplications");
-        this.settingsFrameStack.add_named(new MenuSettingsShortcutSessionButtonsPage(this._settings), "MenuSettingsShortcutSessionButtons");
+        this.settingsFrameStack.add_named(new MenuSettingsPowerOptionsPage(this._settings), "MenuSettingsPowerOptions");
         this.settingsFrameStack.add_named(new MenuSettingsCategoriesPage(this._settings), "MenuSettingsCategories");
         this.settingsFrameStack.add_named(new MenuSettingsFineTunePage(this._settings), "MenuSettingsFineTune");
         this.settingsFrameStack.add_named(new ButtonAppearancePage(this._settings), "ButtonAppearance");

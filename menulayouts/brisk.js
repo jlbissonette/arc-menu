@@ -133,26 +133,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });	
         this.sessionBox.style = "spacing: 6px;";
 
-        if(this._settings.get_boolean('show-logout-button')){
-            let logout = new MW.LogoutButton( this);
-            this.sessionBox.add(logout.actor);
-        }  
-        if(this._settings.get_boolean('show-lock-button')){
-            let lock = new MW.LockButton( this);
-            this.sessionBox.add(lock.actor);
+        let powerOptions = this._settings.get_value("power-options").deep_unpack();
+        for(let i = 0; i < powerOptions.length; i++){
+            let powerType = powerOptions[i][0];
+            let shouldShow = powerOptions[i][1];
+            if(shouldShow){
+                let powerButton = new MW.PowerButton(this, powerType);
+                this.sessionBox.add(powerButton);
+            }
         }
-        if(this._settings.get_boolean('show-suspend-button')){
-            let suspend = new MW.SuspendButton( this);
-            this.sessionBox.add(suspend.actor);
-        }
-        if(this._settings.get_boolean('show-restart-button')){
-            let restart = new MW.RestartButton(this);
-            this.sessionBox.add(restart.actor);
-        }
-        if(this._settings.get_boolean('show-power-button')){
-            let power = new MW.PowerButton( this);
-            this.sessionBox.add(power.actor);
-        }           
         this.leftBox.add(this.sessionBox);
         
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){

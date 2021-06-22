@@ -369,25 +369,35 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._clearActorsFromBox(this.applicationsBox);
         this.applicationsBox.add(this.createLabelRow(_("Session")));
         if(!this.lock)
-            this.lock = new MW.PlasmaPowerItem(this, Constants.PowerType.LOCK, _("Lock"), 'changes-prevent-symbolic');
+            this.lock = new MW.PowerMenuItem(this, Constants.PowerType.LOCK);
         this.applicationsBox.add(this.lock);
 
         if(!this.logOut)
-            this.logOut = new MW.PlasmaPowerItem(this, Constants.PowerType.LOGOUT, _("Log Out"), 'application-exit-symbolic');
+            this.logOut = new MW.PowerMenuItem(this, Constants.PowerType.LOGOUT);
         this.applicationsBox.add(this.logOut);
         
         this.applicationsBox.add(this.createLabelRow(_("System")));
 
+        if(!this.sleep)
+            this.sleep = new MW.PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
+        this.applicationsBox.add(this.sleep);
+
+        if(!this.hibernate)
+            this.hibernate = new MW.PowerMenuItem(this, Constants.PowerType.HIBERNATE);
+        this.applicationsBox.add(this.hibernate);
+
+        this.applicationsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+
         if(!this.suspend)
-            this.suspend = new MW.PlasmaPowerItem(this, Constants.PowerType.SUSPEND, _("Suspend"), 'media-playback-pause-symbolic');
+            this.suspend = new MW.PowerMenuItem(this, Constants.PowerType.SUSPEND);
         this.applicationsBox.add(this.suspend);
 
         if(!this.restart)
-            this.restart = new MW.PlasmaPowerItem(this, Constants.PowerType.RESTART, _("Restart..."), Me.path + Constants.RestartIcon.PATH);
+            this.restart = new MW.PowerMenuItem(this, Constants.PowerType.RESTART);
         this.applicationsBox.add(this.restart);
 
         if(!this.powerOff)
-            this.powerOff = new MW.PlasmaPowerItem(this, Constants.PowerType.POWEROFF, _("Power Off..."), 'system-shutdown-symbolic');
+            this.powerOff = new MW.PowerMenuItem(this, Constants.PowerType.POWER_OFF);
         this.applicationsBox.add(this.powerOff);
     }
 

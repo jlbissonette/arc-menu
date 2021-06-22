@@ -363,30 +363,10 @@
       <summary>Show Bookmarks</summary>
       <description>Show Bookmarks.</description>
     </key>
-    <key type="b" name="show-logout-button">
-      <default>true</default>
-      <summary>Show logout button</summary>
-      <description>Show logout button.</description>
-    </key>
-    <key type="b" name="show-lock-button">
-      <default>true</default>
-      <summary>Show lock button</summary>
-      <description>Show lock button.</description>
-    </key>
-    <key type="b" name="show-suspend-button">
-      <default>false</default>
-      <summary>Show suspend button</summary>
-      <description>Show suspend button.</description>
-    </key>
-    <key type="b" name="show-restart-button">
-      <default>true</default>
-      <summary>Show restart button</summary>
-      <description>Show restart button.</description>
-    </key>
-    <key type="b" name="show-power-button">
-      <default>true</default>
-      <summary>Show power button</summary>
-      <description>Show power button.</description>
+    <key name="power-options" type="a(ib)">
+      <default>[(0, true), (1, true), (2, true), (3, true), (4, false), (5, false), (6, false)]</default>
+      <summary>Power Options</summary>
+      <description>See Constants.js PowerOptions</description>
     </key>
     <key type="b" name="multi-monitor">
       <default>false</default>

@@ -142,24 +142,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.updateHeight();
         });
 
-        this._appList = this.listAllApps();
-        //Update Categories on 'installed-changed' event-------------------------------------
-        this._installedChangedId = appSys.connect('installed-changed', () => {
-            this._newAppList = this.listAllApps();
-
-            //Filter to find if a new application has been installed
-            let newApps = this._newAppList.filter(app => !this._appList.includes(app));
-
-            //A New Application has been installed
-            //Save it in settings
-            if(newApps.length){
-                let recentApps = this._settings.get_strv('recently-installed-apps');
-                let newRecentApps = [...new Set(recentApps.concat(newApps))];
-                this._settings.set_strv('recently-installed-apps', newRecentApps);
-            }
-            
-            this._appList = this._newAppList;
-        });
+        this.initiateRecentlyInstalledApps();
         this.setMenuPositionAlignment();
 
         //Create Basic Layout
@@ -205,6 +188,35 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 }
             });
         }
+    }
+
+    initiateRecentlyInstalledApps(){
+        if(this._installedChangedId){
+            appSys.disconnect(this._installedChangedId);
+            this._installedChangedId = null;
+        }
+
+        if(this._settings.get_boolean('disable-recently-installed-apps'))
+            return;
+
+        this._appList = this.listAllApps();
+        //Update Categories on 'installed-changed' event-------------------------------------
+        this._installedChangedId = appSys.connect('installed-changed', () => {
+            this._newAppList = this.listAllApps();
+
+            //Filter to find if a new application has been installed
+            let newApps = this._newAppList.filter(app => !this._appList.includes(app));
+
+            //A New Application has been installed
+            //Save it in settings
+            if(newApps.length){
+                let recentApps = this._settings.get_strv('recently-installed-apps');
+                let newRecentApps = [...new Set(recentApps.concat(newApps))];
+                this._settings.set_strv('recently-installed-apps', newRecentApps);
+            }
+            
+            this._appList = this._newAppList;
+        });
     }
 
     listAllApps(){
@@ -628,8 +640,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     _onOpenStateChanged(menu, open) {
         if(open){
             //Avoid Super L hotkey conflicts with Pop Shell extension by 
-            //setting 'overlay-key' mode  to  Shell.ActionMode.ALL
-            //when ArcMenu is opened
+            //setting 'overlay-key' mode  to  Shell.ActionMode.ALL.
             let hotKeyPos = this._settings.get_enum('menu-hotkey');
             if(hotKeyPos === Constants.HotKey.SUPER_L)
                 Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
