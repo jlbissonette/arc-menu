@@ -5090,7 +5090,7 @@ var MenuSettingsPowerOptionsPage = GObject.registerClass(
                 this.saveButton.set_sensitive(true);
                 this.powerOptionsFrame.remove_all_children();
                 this._createFrame(this._settings.get_default_value('power-options').deep_unpack());
-                this.powerOptionsFrame.show();
+                this.powerOptionsFrame.show_all();
                 this.resetButton.set_sensitive(false);
             });
     
