@@ -46,12 +46,28 @@ const ClocksProxy = Gio.DBusProxy.makeProxyWrapper(ClocksIntegrationIface);
 Gio._promisify(Gio._LocalFilePrototype, 'query_info_async', 'query_info_finish');
 Gio._promisify(Gio._LocalFilePrototype, 'set_attributes_async', 'set_attributes_finish');
 
-// Menu Size variables
 const LARGE_ICON_SIZE = 34;
 const MEDIUM_ICON_SIZE = 25;
 const INDICATOR_ICON_SIZE = 18;
 const SMALL_ICON_SIZE = 16;
 const USER_AVATAR_SIZE = 28;
+
+function activatePowerOption(powerType){
+    if(powerType === Constants.PowerType.POWER_OFF)
+        SystemActions.activatePowerOff();
+    else if(powerType === Constants.PowerType.RESTART)
+        SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
+    else if(powerType === Constants.PowerType.LOCK)
+        SystemActions.activateLockScreen();
+    else if(powerType === Constants.PowerType.LOGOUT)
+        SystemActions.activateLogout();
+    else if(powerType === Constants.PowerType.SUSPEND)
+        SystemActions.activateSuspend();
+    else if(powerType === Constants.PowerType.HYBRID_SLEEP)
+        Utils.activateHybridSleep();
+    else if(powerType === Constants.PowerType.HIBERNATE)
+        Utils.activateHibernate();
+}
 
 var ApplicationContextItems = GObject.registerClass({
     Signals: {
@@ -1203,17 +1219,19 @@ var ShortcutButtonItem = GObject.registerClass(class Arc_Menu_ShortcutButtonItem
         if(this._app)
             this._app.open_new_window(-1);
         else if(this._command === "ArcMenu_LogOut")
-            SystemActions.activateLogout();
-        else if(this._command === "ArcMenu_Lock"){
-            this._menuLayout.isRunning = false;
-            SystemActions.activateLockScreen();
-        }
+            activatePowerOption(Constants.PowerType.LOGOUT);
+        else if(this._command === "ArcMenu_Lock")
+            activatePowerOption(Constants.PowerType.LOCK);
         else if(this._command === "ArcMenu_PowerOff")
-            SystemActions.activatePowerOff();
+            activatePowerOption(Constants.PowerType.POWER_OFF);
         else if(this._command === "ArcMenu_Restart")
-            SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
+            activatePowerOption(Constants.PowerType.RESTART);
         else if(this._command === "ArcMenu_Suspend")
-            SystemActions.activateSuspend();
+            activatePowerOption(Constants.PowerType.SUSPEND);
+        else if(this._command === "ArcMenu_HybridSleep")
+            activatePowerOption(Constants.PowerType.HYBRID_SLEEP);
+        else if(this._command === "ArcMenu_Hibernate")
+            activatePowerOption(Constants.PowerType.HIBERNATE);
         else if(this._command === "ArcMenu_ActivitiesOverview")
             Main.overview.show();
         else if(this._command === "ArcMenu_RunCommand")
@@ -1234,13 +1252,14 @@ var SettingsButton = GObject.registerClass(class Arc_Menu_SettingsButton extends
     }
 });
 
-// ArcMenu Settings Button
-var ArcMenuSettingsButton = GObject.registerClass(class Arc_Menu_ArcMenuSettingsButton extends SessionButton {
+// Runner Layout Tweaks Button
+var RunnerTweaksButton = GObject.registerClass(class Arc_Menu_RunnerTweaksButton extends SessionButton {
     _init(menuLayout) {
-        super._init(menuLayout, _("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg');
+        super._init(menuLayout, _("Configure Runner Layout"), 'emblem-system-symbolic');
         this.tooltip.location = Constants.TooltipLocation.BOTTOM_CENTERED;
     }
     activate() {
+        this._menuLayout._settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.LAYOUT_TWEAKS);
         Util.spawnCommandLine(Constants.ArcMenuSettingsCommand);
     }
 });
@@ -1427,40 +1446,7 @@ var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends Sessi
         this.powerType = powerType;
     }
     activate() {
-        if(this.powerType === Constants.PowerType.POWER_OFF)
-            SystemActions.activatePowerOff();
-        else if(this.powerType === Constants.PowerType.RESTART)
-            SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
-        else if(this.powerType === Constants.PowerType.LOCK){
-            this._menuLayout.isRunning = false;
-            SystemActions.activateLockScreen();
-        }
-        else if(this.powerType === Constants.PowerType.LOGOUT)
-            SystemActions.activateLogout();
-        else if(this.powerType === Constants.PowerType.SUSPEND)
-            SystemActions.activateSuspend();
-        else if(this.powerType === Constants.PowerType.HYBRID_SLEEP){
-            this._proxy = Utils.PowerManager(Gio.DBus.system,
-                'org.freedesktop.login1',
-                '/org/freedesktop/login1');
-            this._proxy.CanHybridSleepRemote((result, error) => {
-                if(!error && result[0] === 'yes')
-                    this._proxy.HybridSleepRemote(true);
-                else
-                    Main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
-            });
-        }
-        else if(this.powerType === Constants.PowerType.HIBERNATE){
-            this._proxy = Utils.PowerManager(Gio.DBus.system,
-                'org.freedesktop.login1',
-                '/org/freedesktop/login1');
-            this._proxy.CanHibernateRemote((result, error) => {
-                if(!error && result[0] === 'yes')
-                    this._proxy.HibernateRemote(true);
-                else
-                    Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
-            });
-        }
+        activatePowerOption(this.powerType);
     }
 });
 
@@ -1488,40 +1474,7 @@ var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends A
     }
 
     activate(event){
-        if(this.powerType === Constants.PowerType.POWER_OFF)
-            SystemActions.activatePowerOff();
-        else if(this.powerType === Constants.PowerType.RESTART)
-            SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
-        else if(this.powerType === Constants.PowerType.LOCK){
-            this._menuLayout.isRunning = false;
-            SystemActions.activateLockScreen();
-        }
-        else if(this.powerType === Constants.PowerType.LOGOUT)
-            SystemActions.activateLogout();
-        else if(this.powerType === Constants.PowerType.SUSPEND)
-            SystemActions.activateSuspend();
-        else if(this.powerType === Constants.PowerType.HYBRID_SLEEP){
-            this._proxy = Utils.PowerManager(Gio.DBus.system,
-                'org.freedesktop.login1',
-                '/org/freedesktop/login1');
-            this._proxy.CanHybridSleepRemote((result, error) => {
-                if(!error && result[0] === 'yes')
-                    this._proxy.HybridSleepRemote(true);
-                else
-                    Main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
-            });
-        }
-        else if(this.powerType === Constants.PowerType.HIBERNATE){
-            this._proxy = Utils.PowerManager(Gio.DBus.system,
-                'org.freedesktop.login1',
-                '/org/freedesktop/login1');
-            this._proxy.CanHibernateRemote((result, error) => {
-                if(!error && result[0] === 'yes')
-                    this._proxy.HibernateRemote(true);
-                else
-                    Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
-            });
-        }
+        activatePowerOption(this.powerType);
         super.activate(event);
     }
 });
@@ -1831,17 +1784,19 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
     activate(event) {
         this._menuLayout.arcMenu.toggle();
         if(this._command === "ArcMenu_LogOut")
-            SystemActions.activateLogout();
-        else if(this._command === "ArcMenu_Lock"){
-            this._menuLayout.isRunning = false;
-            SystemActions.activateLockScreen();
-        }
+            activatePowerOption(Constants.PowerType.LOGOUT);
+        else if(this._command === "ArcMenu_Lock")
+            activatePowerOption(Constants.PowerType.LOCK);
         else if(this._command === "ArcMenu_PowerOff")
-            SystemActions.activatePowerOff();
+            activatePowerOption(Constants.PowerType.POWER_OFF);
         else if(this._command === "ArcMenu_Restart")
-            SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
+            activatePowerOption(Constants.PowerType.RESTART);
         else if(this._command === "ArcMenu_Suspend")
-            SystemActions.activateSuspend();
+            activatePowerOption(Constants.PowerType.SUSPEND);
+        else if(this._command === "ArcMenu_HybridSleep")
+            activatePowerOption(Constants.PowerType.HYBRID_SLEEP);
+        else if(this._command === "ArcMenu_Hibernate")
+            activatePowerOption(Constants.PowerType.HIBERNATE);
         else if(this._command === "ArcMenu_ActivitiesOverview")
             Main.overview.show();
         else if(this._command === "ArcMenu_RunCommand")

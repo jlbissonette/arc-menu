@@ -488,7 +488,7 @@ var BaseLayout = class {
             placeMenuItem = new ShortcutMenuItemClass(this, _("Trash"), '', "ArcMenu_Trash", Constants.AppDisplayType.LIST);
         }
         else if(command === Constants.ArcMenuSettingsCommand || command === "ArcMenu_Suspend" || command === "ArcMenu_LogOut" || command === "ArcMenu_PowerOff"
-            || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || app){
+            || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || command === "ArcMenu_HybridSleep" || command === "ArcMenu_Hibernate" || app){
 
                 placeMenuItem = new ShortcutMenuItemClass(this, menuItemArray[0], menuItemArray[1], menuItemArray[2], Constants.AppDisplayType.LIST);
         }

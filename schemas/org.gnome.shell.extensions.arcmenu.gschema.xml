@@ -248,6 +248,16 @@
       <summary>Plasma Menu Hover to activate item</summary>
       <description>Plasma Menu Hover to activate item.</description>
     </key>
+    <key type="b" name="runner-show-frequent-apps">
+      <default>false</default>
+      <summary>Runner layout - show frequent apps</summary>
+      <description>Runner layout - show frequent apps</description>
+    </key>
+    <key type="b" name="runner-use-theme-gap">
+      <default>false</default>
+      <summary>Runner layout - use current shell theme gap</summary>
+      <description>Runner layout - use current shell theme gap</description>
+    </key>
     <key type="b" name="reload-theme">
       <default>false</default>
       <summary>Used to reload theme</summary>

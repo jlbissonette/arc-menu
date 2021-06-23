@@ -137,6 +137,7 @@ var MenuSettingsController = class {
             this._settings.connect('changed::menu-layout', this._updateMenuLayout.bind(this)),
             this._settings.connect('changed::enable-large-icons', this.updateIcons.bind(this)),
             this._settings.connect('changed::runner-position', this.updateLocation.bind(this)),
+            this._settings.connect('changed::runner-show-frequent-apps', this._reload.bind(this)),
             this._settings.connect('changed::enable-sub-menus', this._reload.bind(this)), 
             this._settings.connect('changed::disable-category-arrows', this._reload.bind(this)),
             this._settings.connect('changed::show-activities-button', this._configureActivitiesButton.bind(this))
