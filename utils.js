@@ -24,7 +24,6 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Constants = Me.imports.constants;
 const {Gio, GLib} = imports.gi;
 
-// D-Bus
 const PowerManagerInterface = `<node>
   <interface name="org.freedesktop.login1.Manager">
     <method name="HybridSleep">
@@ -42,6 +41,26 @@ const PowerManagerInterface = `<node>
   </interface>
 </node>`;
 const PowerManager = Gio.DBusProxy.makeProxyWrapper(PowerManagerInterface);
+
+function activateHybridSleep(){
+    let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+    proxy.CanHybridSleepRemote((result, error) => {
+        if(!error && result[0] === 'yes')
+           proxy.HybridSleepRemote(true);
+        else
+            imports.ui.main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
+    });
+}
+
+function activateHibernate(){
+    let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+    proxy.CanHibernateRemote((result, error) => {
+        if(!error && result[0] === 'yes')
+            proxy.HibernateRemote(true);
+        else
+            imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+    });
+}
 
 function getMenuLayout(button, layout){
     let MenuLayout = Me.imports.menulayouts;

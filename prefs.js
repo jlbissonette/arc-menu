@@ -461,8 +461,10 @@ var AddAppsToPinnedListWindow = GObject.registerClass(
                 defaultApplicationShortcuts.push([_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock"]);
                 defaultApplicationShortcuts.push([_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut"]);
                 defaultApplicationShortcuts.push([_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
-                defaultApplicationShortcuts.push([_("Restart"), Me.path + Constants.RestartIcon.PATH, "ArcMenu_Restart"]);
+                defaultApplicationShortcuts.push([_("Restart"), 'system-reboot-symbolic', "ArcMenu_Restart"]);
                 defaultApplicationShortcuts.push([_("Suspend"), "media-playback-pause-symbolic", "ArcMenu_Suspend"]);
+                defaultApplicationShortcuts.push([_("Hybrid Sleep"), Me.path + Constants.SleepIcon.PATH, "ArcMenu_HybridSleep"]);
+                defaultApplicationShortcuts.push([_("Hibernate"), "document-save-symbolic", "ArcMenu_Hibernate"]);
                 for(let i = 0;i < defaultApplicationShortcuts.length; i++) {
                     let frameRow = new PW.FrameBoxRow();
 

@@ -516,6 +516,42 @@ var TweaksPage = GObject.registerClass({
         runnerPositionRow.add(runnerPositionCombo);
         runnerMenuTweaksFrame.add(runnerPositionRow);
 
+        let frequentAppsRow = new PW.FrameBoxRow();
+        let frequentAppsLabel = new Gtk.Label({
+            label: _("Show Frequent Apps"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        
+        let frequentAppsSwitch = new Gtk.Switch();
+        if(this._settings.get_boolean('runner-show-frequent-apps'))
+            frequentAppsSwitch.set_active(true);
+        frequentAppsSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('runner-show-frequent-apps', widget.get_active());
+        });   
+        frequentAppsRow.add(frequentAppsLabel);
+        frequentAppsRow.add(frequentAppsSwitch);
+        runnerMenuTweaksFrame.add(frequentAppsRow);
+
+        let inheritThemeGapRow = new PW.FrameBoxRow();
+        let inheritThemeGapLabel = new Gtk.Label({
+            label: _("Inherit Shell Theme Popup Gap"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        
+        let inheritThemeGapSwitch = new Gtk.Switch();
+        if(this._settings.get_boolean('runner-use-theme-gap'))
+            inheritThemeGapSwitch.set_active(true);
+        inheritThemeGapSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('runner-use-theme-gap', widget.get_active());
+        });   
+        inheritThemeGapRow.add(inheritThemeGapLabel);
+        inheritThemeGapRow.add(inheritThemeGapSwitch);
+        runnerMenuTweaksFrame.add(inheritThemeGapRow);
+
         this.mainBox.add(runnerMenuTweaksFrame);
     }
     _loadUnityTweaks(){
