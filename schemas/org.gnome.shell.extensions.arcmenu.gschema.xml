@@ -139,7 +139,7 @@
       <description>Show a larger icon and extra app details.</description>
     </key>
     <key type="b" name="show-search-result-details">
-      <default>true</default>
+      <default>false</default>
       <summary>Show search result description label</summary>
       <description>Show search result description label.</description>
     </key>

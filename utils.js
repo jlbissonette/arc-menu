@@ -42,24 +42,38 @@ const PowerManagerInterface = `<node>
 </node>`;
 const PowerManager = Gio.DBusProxy.makeProxyWrapper(PowerManagerInterface);
 
-function activateHybridSleep(){
+function canHybridSleep(){
     let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
     proxy.CanHybridSleepRemote((result, error) => {
         if(!error && result[0] === 'yes')
-           proxy.HybridSleepRemote(true);
+            return true;
         else
-            imports.ui.main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
+            return false;
+    });
+}
+
+function activateHybridSleep(){
+    if(canHybridSleep())
+        proxy.HybridSleepRemote(true);
+    else
+        imports.ui.main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
+}
+
+function canHibernate(){
+    let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+    proxy.CanHibernateRemote((result, error) => {
+        if(!error && result[0] === 'yes')
+            return true;
+        else
+            return false;
     });
 }
 
 function activateHibernate(){
-    let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
-    proxy.CanHibernateRemote((result, error) => {
-        if(!error && result[0] === 'yes')
-            proxy.HibernateRemote(true);
-        else
-            imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
-    });
+    if(canHibernate())
+        proxy.HibernateRemote(true);
+    else
+        imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
 }
 
 function getMenuLayout(button, layout){
@@ -494,20 +508,6 @@ function modifyColorLuminance(colorString, luminanceFactor, modifyAlpha){
 }
 
 function createStylesheet(settings){
-    //Added "Active Item Foreground Color" setting in v46. To update older color themes,
-    //add a preset color based on "Menu Foreground Color' into existing array.
-    //Old aray length was 12, New array length is 13
-    let all_color_themes = settings.get_value('color-themes').deep_unpack();
-    let changesMade = false;
-    for(let i = 0; i < all_color_themes.length; i++){
-        if(all_color_themes[i].length === 12){
-            all_color_themes[i].splice(5, 0, modifyColorLuminance(all_color_themes[i][2], 0.15));
-            changesMade = true;
-        }
-    }
-    if(changesMade)
-        settings.set_value('color-themes',new GLib.Variant('aas', all_color_themes));
-
     let customarcMenu = settings.get_boolean('enable-custom-arc-menu');
     let separatorColor = settings.get_string('separator-color');
     let menuColor = settings.get_string('menu-color');

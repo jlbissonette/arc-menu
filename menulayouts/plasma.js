@@ -366,6 +366,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     displayPowerItems(){
+        let needsSeparator = false;
         this._clearActorsFromBox(this.applicationsBox);
         this.applicationsBox.add(this.createLabelRow(_("Session")));
         if(!this.lock)
@@ -378,15 +379,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         this.applicationsBox.add(this.createLabelRow(_("System")));
 
-        if(!this.sleep)
-            this.sleep = new MW.PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
-        this.applicationsBox.add(this.sleep);
+        if(Utils.canHybridSleep()){
+            if(!this.sleep)
+                this.sleep = new MW.PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
+            this.applicationsBox.add(this.sleep);
+            needsSeparator = true;
+        }
 
-        if(!this.hibernate)
-            this.hibernate = new MW.PowerMenuItem(this, Constants.PowerType.HIBERNATE);
-        this.applicationsBox.add(this.hibernate);
+        if(Utils.canHibernate()){
+            if(!this.hibernate)
+                this.hibernate = new MW.PowerMenuItem(this, Constants.PowerType.HIBERNATE);
+            this.applicationsBox.add(this.hibernate);
+            needsSeparator = true;
+        }
 
-        this.applicationsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+        if(needsSeparator)
+            this.applicationsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
 
         if(!this.suspend)
             this.suspend = new MW.PowerMenuItem(this, Constants.PowerType.SUSPEND);
