@@ -1352,15 +1352,23 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends Sessi
 
         box.add(this._menuLayout.createLabelRow(_("System")));
 
-        let sleepItem = new PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
-        sleepItem._icon.icon_size = 16;
-        box.add(sleepItem);
+        let needsSeparator = false;
+        if(Utils.canHybridSleep()){
+            let sleepItem = new PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
+            sleepItem._icon.icon_size = 16;
+            box.add(sleepItem);
+            needsSeparator = true;
+        }
 
-        let hibernateItem = new PowerMenuItem(this, Constants.PowerType.HIBERNATE);
-        hibernateItem._icon.icon_size = 16;
-        box.add(hibernateItem);
+        if(Utils.canHibernate()){
+            let hibernateItem = new PowerMenuItem(this, Constants.PowerType.HIBERNATE);
+            hibernateItem._icon.icon_size = 16;
+            box.add(hibernateItem);
+            needsSeparator = true;
+        }
 
-        box.add(this._menuLayout._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+        if(needsSeparator)
+            box.add(this._menuLayout._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
 
         let suspendItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.SUSPEND);
         suspendItem._icon.icon_size = 16;
