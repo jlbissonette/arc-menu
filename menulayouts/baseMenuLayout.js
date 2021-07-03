@@ -476,7 +476,7 @@ var BaseLayout = class {
             placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
         }
         else if(command === "ArcMenu_Network"){
-            placeInfo = new PlaceDisplay.PlaceInfo('network',Gio.File.new_for_uri('network:///'), _('Network'),'network-workgroup-symbolic');
+            placeInfo = new PlaceDisplay.PlaceInfo('network', Gio.File.new_for_uri('network:///'), _('Network'),'network-workgroup-symbolic');
             placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
         }
         else if(command === "ArcMenu_Software"){

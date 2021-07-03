@@ -1132,7 +1132,7 @@ var SessionButton = GObject.registerClass(
 // Menu Place Button Shortcut item class
 var PlaceButtonItem = GObject.registerClass(class Arc_Menu_PlaceButtonItem extends SessionButton {
     _init(menuLayout, info) {
-        super._init(menuLayout, _(info.name), info.icon, info.gicon ? info.gicon : null);
+        super._init(menuLayout, _(info.name), '', info.gicon ? info.gicon : info.icon);
         this._menuLayout = menuLayout;
         this._info = info;
     }
@@ -2864,7 +2864,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         this._menuLayout = menuLayout;
         this._info = info;
         this._icon = new St.Icon({
-            gicon: info.gicon ? info.gicon : Gio.icon_new_for_string(info.icon),
+            gicon: info.gicon ? info.gicon : info.icon,
             icon_size: SMALL_ICON_SIZE
         });
 
