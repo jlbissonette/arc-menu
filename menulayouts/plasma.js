@@ -138,20 +138,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add(this.grid);
 
         this.pinnedAppsButton = new MW.PlasmaMenuItem(this, _("Pinned Apps"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg');
-        this.pinnedAppsButton.connect("activate", () => this.displayPinnedApps() );
         this.grid.layout_manager.attach(this.pinnedAppsButton, 0, 0, 1, 1);
         this.pinnedAppsButton.set_style_pseudo_class("active-item");
 
         this.applicationsButton = new MW.PlasmaMenuItem(this, _("Applications"), 'preferences-desktop-apps-symbolic');
-        this.applicationsButton.connect("activate", () => this.displayCategories() );
         this.grid.layout_manager.attach(this.applicationsButton, 1, 0, 1, 1);
 
         this.computerButton = new MW.PlasmaMenuItem(this, _("Computer"), 'computer-symbolic');
-        this.computerButton.connect("activate", () => this.displayComputerCategory() );
         this.grid.layout_manager.attach(this.computerButton, 2, 0, 1, 1);
 
         this.leaveButton = new MW.PlasmaMenuItem(this, _("Leave"), 'system-shutdown-symbolic');
-        this.leaveButton.connect("activate", () => this.displayPowerItems() );
         this.grid.layout_manager.attach(this.leaveButton, 3, 0, 1, 1);
 
         this.categoryHeader = new MW.PlasmaCategoryHeader(this);
@@ -219,7 +215,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         this.loadPinnedApps();
         this.loadCategories();
-        this.setDefaultMenuView(); 
+        this.setDefaultMenuView();
+        this.pinnedAppsButton.connect("activate", () => this.displayPinnedApps() );
+        this.applicationsButton.connect("activate", () => this.displayCategories() );
+        this.computerButton.connect("activate", () => this.displayComputerCategory() );
+        this.leaveButton.connect("activate", () => this.displayPowerItems() );
         this.updateIcons();
     }
 
