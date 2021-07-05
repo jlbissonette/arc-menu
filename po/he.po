@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-27 13:53-0400\n"
-"PO-Revision-Date: 2021-07-05 13:03+0300\n"
+"PO-Revision-Date: 2021-07-05 13:22+0300\n"
 "Last-Translator: Omer I.S. <omeritzicschwartz@gmail.com>\n"
 "Language-Team: Hebrew <kde-i18n-he@kde.org>\n"
 "Language: he\n"
@@ -373,7 +373,7 @@ msgstr "לחיצה עם העכבר"
 
 #: menulayouts/tweaks/tweaks.js:154
 msgid "Mouse Hover"
-msgstr "מעבר עם העכבר"
+msgstr "ריחוף עם העכבר"
 
 #: menulayouts/tweaks/tweaks.js:173
 msgid "Avatar Icon Shape"
@@ -422,7 +422,7 @@ msgstr "השבתת \"היישומים המוצמדים\""
 
 #: menulayouts/tweaks/tweaks.js:328
 msgid "Activate on Hover"
-msgstr "הפעלה בעת מעבר עם העכבר"
+msgstr "הפעלה בעת ריחוף עם העכבר"
 
 #: menulayouts/tweaks/tweaks.js:344
 msgid "Show Application Descriptions"
@@ -1094,7 +1094,7 @@ msgstr "מקש חם חדש"
 
 #: prefs.js:1631
 msgid "Menu Button Appearance"
-msgstr "מראה כפתור תפריט"
+msgstr "מראה כפתור התפריט"
 
 #: prefs.js:1641
 msgid "Appearance"
@@ -1159,21 +1159,19 @@ msgstr "צבע"
 
 #: prefs.js:1860
 msgid "Hover Color"
-msgstr ""
+msgstr "צבע בעת ריחוף עם העכבר"
 
 #: prefs.js:1867
 msgid "Active Color"
 msgstr "צבע פעיל"
 
 #: prefs.js:1874
-#, fuzzy
 msgid "Hover Background Color"
-msgstr "צבע הרקע לתפריט"
+msgstr "צבע הרקע בעת ריחוף עם העכבר"
 
 #: prefs.js:1881
-#, fuzzy
 msgid "Active Background Color"
-msgstr "צבע הרקע כאשר התפריט פעיל"
+msgstr "צבע הרקע לתפריט כאשר הוא פעיל"
 
 #: prefs.js:1889
 msgid "Disable Rounded Corners"
@@ -1480,14 +1478,12 @@ msgid "Border Size"
 msgstr "גודל גבול"
 
 #: prefs.js:4302
-#, fuzzy
 msgid "Active Item Background Color"
-msgstr "צבע הרקע לתפריט"
+msgstr "צבע הרקע לפריט כאשר הוא פעיל"
 
 #: prefs.js:4324
-#, fuzzy
 msgid "Active Item Foreground Color"
-msgstr "צבע הקדמה לתפריט"
+msgstr "צבע הקִדמה לפריט כאשר הוא פעיל"
 
 #: prefs.js:4346
 msgid "Corner Radius"
