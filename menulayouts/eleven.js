@@ -92,6 +92,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             clip_to_allocation: true,
             x_expand: true,
             y_expand: true,
+            x_align: Clutter.ActorAlign.FILL,
+            y_align: Clutter.ActorAlign.START,
             style_class: this.disableFadeEffect ? '' : 'vfade',
         });   
         this.applicationsScrollBox.style = "width:700px;";    
@@ -276,6 +278,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     setGridLayout(appType, columns, spacing){
         this.applicationsGrid.x_align = appType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
+        this.applicationsGrid.style = appType === Constants.AppDisplayType.LIST ? 'padding: 0px 10px 0px 25px;' : '';
         this.applicationsGrid.layout_manager.column_spacing = spacing;
         this.applicationsGrid.layout_manager.row_spacing = spacing;
         this.layoutProperties.GridColumns = columns;
