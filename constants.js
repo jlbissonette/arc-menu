@@ -311,6 +311,7 @@ var MenuLayout = {
     PLASMA: 17,
     WINDOWS: 18,
     LAUNCHER: 19,
+    ELEVEN: 20,
 };
 
 var TraditionalMenus = [   
@@ -327,7 +328,8 @@ var ModernMenus = [
     { IMAGE: 'tognee-layout-symbolic', TITLE: _('tognee'), LAYOUT: MenuLayout.TOGNEE},
     { IMAGE: 'insider-layout-symbolic', TITLE: _('Insider'), LAYOUT: MenuLayout.INSIDER},
     { IMAGE: 'redmond-layout-symbolic', TITLE: _('Redmond'), LAYOUT: MenuLayout.REDMOND},
-    { IMAGE: 'windows-layout-symbolic', TITLE: _('Windows'), LAYOUT: MenuLayout.WINDOWS}];
+    { IMAGE: 'windows-layout-symbolic', TITLE: _('Windows'), LAYOUT: MenuLayout.WINDOWS},
+    { IMAGE: 'eleven-layout-symbolic', TITLE: _('Eleven'), LAYOUT: MenuLayout.ELEVEN}];
 
 var TouchMenus = [   
     { IMAGE: 'elementary-layout-symbolic', TITLE: _('Elementary'), LAYOUT: MenuLayout.ELEMENTARY},

@@ -119,6 +119,8 @@ function getMenuLayout(button, layout){
             return new MenuLayout.windows.createMenu(button);
         case Constants.MenuLayout.LAUNCHER:
             return new MenuLayout.launcher.createMenu(button);
+        case Constants.MenuLayout.ELEVEN:
+            return new MenuLayout.eleven.createMenu(button);
         default:
             return new MenuLayout.arcmenu.createMenu(button);    
     }
@@ -171,7 +173,6 @@ function convertToGridLayout(item){
 
     if(item._settings.get_boolean('multi-lined-labels'))
         item.label.get_clutter_text().set_line_wrap(true);
-    
 
     if(item._indicator){
         item.remove_child(item._indicator);

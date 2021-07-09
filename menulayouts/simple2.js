@@ -165,6 +165,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     destroy(isReload){
+        let children = this.arcMenu._getMenuItems();
+        for (let i = 0; i < children.length; i++) {
+            let item = children[i];
+            if(item instanceof MW.CategorySubMenuItem){
+                let item = children[i];
+                item.destroy();
+            }
+        }
+
         this.arcMenu.actor.style = null;
         super.destroy(isReload);
     }

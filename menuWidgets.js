@@ -1641,6 +1641,97 @@ var PlasmaCategoryHeader = GObject.registerClass(class Arc_Menu_PlasmaCategoryHe
     }
 });
 
+var AllAppsButton = GObject.registerClass(class Arc_Menu_AllAppsButton extends St.Button{
+    _init(menuLayout) {
+        super._init({
+            style_class: 'arc-menu-eject-button',
+            x_expand: true,
+            x_align: Clutter.ActorAlign.END,
+            style: 'min-height: 30px;'
+        });
+        this._menuLayout = menuLayout;
+        this._layout = this._menuLayout.layout;
+        this._settings = this._menuLayout._settings;
+        this._icon = new St.Icon({
+            gicon: Gio.icon_new_for_string('go-next-symbolic'),
+            style_class: 'popup-menu-icon',
+            icon_size: 12,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER,
+            x_expand: false,
+            x_align: Clutter.ActorAlign.END,
+            style: 'padding-left: 10px;'
+        });
+        this._label = new St.Label({
+            text: _("All Apps"),
+            x_expand: true,
+            x_align: Clutter.ActorAlign.FILL,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER
+        });
+        this.box = new St.BoxLayout({
+            x_expand: true,
+            x_align: Clutter.ActorAlign.END,
+        });
+        this.box.add(this._label);
+        this.box.add(this._icon);
+        this.set_child(this.box);
+        this.connect('clicked', () => this.activate());
+    }
+
+    activate(){
+        this._menuLayout.activeCategory = _("All Apps");
+        this._menuLayout.layoutProperties.GridColumns = 1;
+        this._menuLayout.displayAllApps();
+        this._menuLayout.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
+        this._menuLayout.layoutProperties.GridColumns = 6;
+    }
+});
+
+var BackButton = GObject.registerClass(class Arc_Menu_BackButton extends St.Button{
+    _init(menuLayout) {
+        super._init({
+            style_class: 'arc-menu-eject-button',
+            x_expand: true,
+            x_align: Clutter.ActorAlign.END,
+            style: 'min-height: 30px;'
+        });
+        this._menuLayout = menuLayout;
+        this._layout = this._menuLayout.layout;
+        this._settings = this._menuLayout._settings;
+        this._icon = new St.Icon({
+            gicon: Gio.icon_new_for_string('go-previous-symbolic'),
+            style_class: 'popup-menu-icon',
+            icon_size: 12,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER,
+            x_expand: true,
+            x_align: Clutter.ActorAlign.END,
+            style: 'padding-right: 10px;'
+        });
+        this._label = new St.Label({
+            text: _("Back"),
+            x_expand: true,
+            x_align: Clutter.ActorAlign.FILL,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER
+        });
+        this.box = new St.BoxLayout({
+            x_expand: true,
+            x_align: Clutter.ActorAlign.END
+        });
+        this.box.add(this._icon);
+        this.box.add(this._label);
+
+        this.set_child(this.box);
+        this.connect('clicked', () => this.activate());
+    }
+
+    activate(){
+        this._menuLayout.setDefaultMenuView();
+    }
+});
+
 // Menu item to go back to category view
 var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout) {
@@ -2564,7 +2655,7 @@ var SimpleMenuItem = GObject.registerClass(class Arc_Menu_SimpleMenuItem extends
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'apps-menu small-vfade left-scroll-area',
+            style_class: 'left-scroll-area ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });           
         this._menuLayout.subMenuManager.addMenu(this.subMenu);
@@ -2707,7 +2798,7 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
         this._updateIcon();
         this.menu.actor.style = 'max-height: 250px;';
         this.menu.actor.overlay_scrollbars = true;
-        this.menu.actor.style_class = 'small-vfade popup-sub-menu';
+        this.menu.actor.style_class = 'popup-sub-menu ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade');
         this.menu._needsScrollbar = this._needsScrollbar.bind(this);
         this.actor.connect('notify::active',()=> this.setActive(this.actor.active));
         this.menu.connect('open-state-changed', () => {

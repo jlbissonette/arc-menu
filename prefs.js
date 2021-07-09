@@ -3170,6 +3170,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
 
         this.add_with_viewport(this.mainBox);
         this._settings = settings;
+        this.disableFadeEffect = this._settings.get_boolean('disable-scrollview-fade-effect');
         this.indicatorColor = this._settings.get_string('indicator-color');
         this.indicatorTextColor = this._settings.get_string('indicator-text-color');
         this.gapAdjustment = this._settings.get_int('gap-adjustment');
@@ -3251,6 +3252,30 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         tweakStyleRow.add(tweakStyleSwitch);
         tweakStyleFrame.add(tweakStyleRow);
         this.mainBox.add(tweakStyleFrame);
+
+        let fadeEffectFrame = new PW.FrameBox();
+        let fadeEffectRow = new PW.FrameBoxRow();
+        let fadeEffectLabel = new Gtk.Label({
+            label: _("Disable ScrollView Fade Effects"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+
+        let fadeEffectSwitch = new Gtk.Switch({ 
+            halign: Gtk.Align.END,
+            tooltip_text: _("Disable all ScrollView fade effects")
+        });
+        fadeEffectSwitch.set_active(this._settings.get_boolean('disable-scrollview-fade-effect'));
+        fadeEffectSwitch.connect('notify::active', (widget) => {
+            this.disableFadeEffect = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        fadeEffectRow.add(fadeEffectLabel);
+        fadeEffectRow.add(fadeEffectSwitch);
+        fadeEffectFrame.add(fadeEffectRow);
+        this.mainBox.add(fadeEffectFrame);
 
         let descriptionsFrame = new PW.FrameBox();
         let descriptionsRow = new PW.FrameBoxRow();
@@ -3450,6 +3475,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
             this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
             this.searchResultsDetails = this._settings.get_default_value('show-search-result-details').unpack();
+            this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
             gapAdjustmentScale.set_value(this.gapAdjustment);
             disableCategoryArrowSwitch.set_active(this.disableCategoryArrow);
@@ -3461,8 +3487,9 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             color.parse(this.indicatorColor);
             appIndicatorColorChooser.set_rgba(color);
             color.parse(this.indicatorTextColor);
-            appIndicatorTextColorChooser.set_rgba(color);         
-   
+            appIndicatorTextColorChooser.set_rgba(color);
+            fadeEffectSwitch.set_active(this.disableFadeEffect);
+
             this.saveButton.set_sensitive(true);
             this.resetButton.set_sensitive(false);
         });
@@ -3481,6 +3508,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this._settings.set_boolean('alphabetize-all-programs', this.alphabetizeAllPrograms);
             this._settings.set_boolean('multi-lined-labels', this.multiLinedLabels);
             this._settings.set_boolean('show-search-result-details', this.searchResultsDetails);
+            this._settings.set_boolean('disable-scrollview-fade-effect', this.disableFadeEffect);
             this._settings.set_boolean('reload-theme', true);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
@@ -3503,7 +3531,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.disableSearchStyle !== this._settings.get_default_value('disable-searchbox-border').unpack()||
             this.alphabetizeAllPrograms !== this._settings.get_default_value('alphabetize-all-programs').unpack()||
             this.multiLinedLabels !== this._settings.get_default_value('multi-lined-labels').unpack()||
-            this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack()) ? true : false;
+            this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack()) ||
+            this.disableFadeEffect !== this._settings.get_default_value('disable-scrollview-fade-effect').unpack() ? true : false;
     }
 });
 
