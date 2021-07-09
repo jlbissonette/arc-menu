@@ -61,7 +61,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
         });
         this.add_child(this._icon);
         this.label = new St.Label({ text: info.name, 
-                                    x_expand: true,
+                                    x_expand: false,
                                     y_expand: true,
                                     x_align: Clutter.ActorAlign.FILL,
                                     y_align: Clutter.ActorAlign.CENTER });

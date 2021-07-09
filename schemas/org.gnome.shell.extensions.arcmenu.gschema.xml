@@ -21,6 +21,7 @@
         <value value='17' nick='Plasma'/>
         <value value='18' nick='Windows'/>
         <value value='19' nick='Launcher'/>
+        <value value='20' nick='Eleven'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>
@@ -132,6 +133,11 @@
       <default>false</default>
       <summary>disable the arrows on category menu items</summary>
       <description>disable the arrows on category menu items</description>
+    </key>
+    <key type="b" name="disable-scrollview-fade-effect">
+      <default>false</default>
+      <summary>disable the fade effect on scrollviews</summary>
+      <description>ddisable the fade effect on scrollviews (may help improve performace)</description>
     </key>
     <key type="b" name="apps-show-extra-details">
       <default>false</default>
