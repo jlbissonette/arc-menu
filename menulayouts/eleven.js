@@ -345,17 +345,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _displayAppList(apps, category, grid){      
         super._displayAppList(apps, category, grid);
         let label = this.createLabelRow(this.activeCategory);
-        label.style = 'padding: 15px;';
 
         if(category === Constants.CategoryType.PINNED_APPS){
+            label.style = 'padding: 0px 15px;'
+            label.label.style = 'font-weight: bold; padding: 15px 0px;';
             label.add(new MW.AllAppsButton(this));
             this.applicationsBox.insert_child_at_index(label.actor, 0);
         }
-        else if(category === Constants.CategoryType.HOME_SCREEN)
+        else if(category === Constants.CategoryType.HOME_SCREEN){
+            label.style = 'padding: 0px 15px;'
+            label.label.style = 'font-weight: bold; padding: 15px 0px;';
             this.applicationsBox.insert_child_at_index(label.actor, 2);
+        }
         else if(category === Constants.CategoryType.ALL_PROGRAMS){
             this.allAppsLabel = label;
-            label.style = 'padding: 15px 30px 15px 15px;';
+            label.style = 'padding: 0px 30px 0px 15px;';
+            label.label.style = 'font-weight: bold; padding: 15px 0px;';
             label.add(new MW.BackButton(this));
             this.mainBox.insert_child_at_index(label.actor, 0);        
         }      

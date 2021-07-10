@@ -1629,6 +1629,8 @@ var AllAppsButton = GObject.registerClass(class Arc_Menu_AllAppsButton extends S
             style_class: 'arc-menu-eject-button',
             x_expand: true,
             x_align: Clutter.ActorAlign.END,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.CENTER,
             style: 'min-height: 30px;'
         });
         this._menuLayout = menuLayout;
@@ -1676,6 +1678,8 @@ var BackButton = GObject.registerClass(class Arc_Menu_BackButton extends St.Butt
             style_class: 'arc-menu-eject-button',
             x_expand: true,
             x_align: Clutter.ActorAlign.END,
+            y_expand: false,
+            y_align: Clutter.ActorAlign.CENTER,
             style: 'min-height: 30px;'
         });
         this._menuLayout = menuLayout;
