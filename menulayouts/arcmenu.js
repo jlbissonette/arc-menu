@@ -88,7 +88,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true, 
             y_align: Clutter.ActorAlign.START,
-            style_class: 'apps-menu small-vfade left-scroll-area',
+            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true,
             reactive:true
         });
@@ -144,7 +144,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'small-vfade',
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });    
 
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);

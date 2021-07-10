@@ -79,6 +79,7 @@ var BaseLayout = class {
     }
 
     createLayout(){
+        this.disableFadeEffect = this._settings.get_boolean('disable-scrollview-fade-effect');
         this.activeCategoryType = -1;
         let layout = new Clutter.GridLayout({ 
             orientation: Clutter.Orientation.VERTICAL,
@@ -1004,7 +1005,7 @@ var BaseLayout = class {
     }
 
     _createScrollBox(params){
-        let scrollBox = new MW.ScrollView(params);           
+        let scrollBox = new MW.ScrollView(params);    
         let panAction = new Clutter.PanAction({ interpolate: false });
         panAction.connect('pan', (action) => {
             this._blockActivateEvent = true;

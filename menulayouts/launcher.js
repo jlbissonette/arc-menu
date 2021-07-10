@@ -97,7 +97,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'vfade'
+            style_class:  this.disableFadeEffect ? '' : 'vfade',
         }); 
         this.subMainBox.style = "width:750px; spacing: 8px;";  
 
@@ -114,7 +114,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'vfade'
+            style_class:  this.disableFadeEffect ? '' : 'vfade',
         }); 
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
@@ -324,7 +324,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'vfade',
+            style_class:  this.disableFadeEffect ? '' : 'vfade',
             overlay_scrollbars: true,
             reactive: true
         }); 

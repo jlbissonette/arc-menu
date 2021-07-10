@@ -85,7 +85,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.runnerTweaksButton.actor.x_align = Clutter.ActorAlign.CENTER;
         this.runnerTweaksButton.actor.style = "margin-right: 10px; padding: 8px;";
 
-        
         this.topBox.add(this.searchBox.actor);
         this.topBox.add(this.runnerTweaksButton);
         this.mainBox.add(this.topBox);
@@ -96,7 +95,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             x_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'apps-menu small-vfade',
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
             reactive:true
         });
         this.applicationsScrollBox.style = "width: " + RUNNER_WIDTH + "px";
@@ -109,12 +108,12 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
 
     setDefaultMenuView(){
         super.setDefaultMenuView();
+        this._clearActorsFromBox();
         if(this._settings.get_boolean("runner-show-frequent-apps"))
             this.displayFrequentApps();
     }
 
     displayFrequentApps(){
-        this._clearActorsFromBox();
         let labelRow = this.createLabelRow(_("Frequent Apps"));
         this.applicationsBox.add(labelRow);
         let mostUsed = Shell.AppUsage.get_default().get_most_used();

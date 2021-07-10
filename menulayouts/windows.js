@@ -98,7 +98,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'vfade',
+            style_class: this.disableFadeEffect ? '' : 'vfade',
             style: "padding: 0px 12px;"
         });
 
@@ -137,8 +137,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'small-vfade left-scroll-area'
-        }); 
+            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+        });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
@@ -274,10 +274,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'small-vfade',
             overlay_scrollbars: true,
-            reactive:true
-        });   
+            reactive:true,
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
+        });
         
         this.leftPanelPopup.add(this.computerScrollBox);
        
