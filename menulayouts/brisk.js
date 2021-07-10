@@ -83,7 +83,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'small-vfade'
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });   
         this.applicationsScrollBox.style = "width: " + rightPanelWidth + "px;";
         this.applicationsScrollBox.add_actor(this.applicationsBox);
@@ -106,7 +106,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'apps-menu small-vfade left-scroll-area-small'
+            style_class: 'left-scroll-area-small ' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });
 
         this.leftBox.add(this.categoriesScrollBox);
