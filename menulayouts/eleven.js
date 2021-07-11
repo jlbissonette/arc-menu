@@ -254,15 +254,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     reload() {
         this.shortcutsBox.destroy_all_children();  
         super.reload();
-        let themeContext = St.ThemeContext.get_for_stage(global.stage);
-        let scaleFactor = themeContext.scale_factor;
-        let height =  Math.round(350 / scaleFactor);
-        this.leftPanelPopup.style = `max-height: ${height}px`;   
     }
 
     updateStyle(){
         super.updateStyle();
-        let customStyle=this._settings.get_boolean('enable-custom-arc-menu');
         let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow'); 
        
         let themeNode = this.arcMenu.actor.get_theme_node();
@@ -320,10 +315,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMainBox.remove_actor(this.actionsContainerBox);
         this.activeCategory = _("Pinned Apps");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
-        this.activeCategory = _("Frequent Apps");
-        this.setGridLayout(Constants.AppDisplayType.GRID, 2, 10);
-        this._displayAppList(this.appShortcuts, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
-        this.setGridLayout(Constants.AppDisplayType.GRID, 6, 10);
+
+        if(this.appShortcuts.length > 0){
+            this.activeCategory = _("Frequent Apps");
+            this.setGridLayout(Constants.AppDisplayType.GRID, 2, 10);
+            this._displayAppList(this.appShortcuts, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
+            this.setGridLayout(Constants.AppDisplayType.GRID, 6, 10);
+        }
 
         if(!this.applicationsBox.contains(this.shortcutsBox))
             this.applicationsBox.add(this.shortcutsBox);
