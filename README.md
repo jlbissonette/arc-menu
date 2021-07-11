@@ -218,7 +218,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 -----
 
- **- @[Vombato](https://gitlab.com/Vombato) @[matguidi](https://gitlab.com/matguidi) - Italian** | **- @[skygmin](https://gitlab.com/skygmin) - Simplified Chinese** | **- @[vinno97](https://gitlab.com/vinno97) - Dutch** | **- @[artnay](https://gitlab.com/artnay) - Finnish** |  **- @[rimasx](https://gitlab.com/rimasx) - Estonian** |
+ **- @[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian** | **- @[skygmin](https://gitlab.com/skygmin) - Simplified Chinese** | **-@[Vistaus](https://gitlab.com/Vistaus), @[vinno97](https://gitlab.com/vinno97) - Dutch** | **- @[artnay](https://gitlab.com/artnay) - Finnish** |  **- @[rimasx](https://gitlab.com/rimasx) - Estonian** |
  
 -----
 
