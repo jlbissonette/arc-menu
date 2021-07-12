@@ -334,7 +334,18 @@ var ApplicationContextItems = GObject.registerClass({
         else if(this._path){
             let newWindowItem = this._appendMenuItem(_("Open Folder Location"));
             newWindowItem.connect('activate', () => {
-                Util.spawnCommandLine('nautilus "' + this._path + '"');
+                let file = Gio.File.new_for_path(this._path);
+                let context = global.create_app_launch_context(Clutter.get_current_event().get_time(), -1)
+                new Promise((resolve, reject) => { 
+                    Gio.AppInfo.launch_default_for_uri_async(file.get_uri(), context, null, (o, res) => {
+                        try {
+                            Gio.AppInfo.launch_default_for_uri_finish(res);
+                            resolve();
+                        } catch (e) {
+                            reject(e);
+                        }
+                    });
+                });
                 this.closeMenus();
             });
         }
@@ -2452,25 +2463,25 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
     _updateIcon() {
         if(this.searchType === Constants.AppDisplayType.GRID && this._appType === Constants.AppDisplayType.SEARCH){
             let iconSize = this._menuLayout.layoutProperties.ListSearchResults_IconSize;
-            let icon = this._app ? this._app.create_icon_texture(iconSize) : this.metaInfo['createIcon'](iconSize);
+            let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
             this._iconBin.set_child(icon);
         }
         else if(this._appType === Constants.AppDisplayType.GRID){
             let iconSize = this._menuLayout.layoutProperties.IconGridSize;
-            let icon = this._app ? this._app.create_icon_texture(iconSize) : this.metaInfo['createIcon'](iconSize);
+            let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
             this._iconBin.set_child(icon);
         }
         else{
             let largeIcons = this._settings.get_boolean('enable-large-icons');
             let plasmaLayoutLargeIcons = this.isPlasmaLayout && this.showExtraDetails;
             let iconSize = largeIcons || plasmaLayoutLargeIcons ? MEDIUM_ICON_SIZE : SMALL_ICON_SIZE;
-            let icon = this._app ? this._app.create_icon_texture(iconSize) : this.metaInfo['createIcon'](iconSize);
+            let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
             this._iconBin.set_child(icon);
         }
     }
     forceLargeIcon(size){
         let iconSize = size ? size : MEDIUM_ICON_SIZE;
-        let icon = this._app ? this._app.create_icon_texture(iconSize) : this.metaInfo['createIcon'](iconSize);
+        let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
         this._iconBin.set_child(icon);
     }
 });
