@@ -51,11 +51,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     createLayout(){
         super.createLayout();
-        let homeScreen = this._settings.get_boolean('enable-unity-homescreen');
-        if(homeScreen)
-            this.activeCategory = _("Pinned Apps");
-        else
-            this.activeCategory = _("All Programs");
 
         this.topBox = new St.BoxLayout({
             x_expand: false,
@@ -65,7 +60,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false
         });
 
-        this.mainBox.add(this.topBox);
         this.subMainBox= new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -76,7 +70,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add(this.subMainBox);
 
         this.searchBox = new MW.SearchBox(this);
-        this.searchBox.hide();
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 5px 25px 10px 25px;";
         this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
@@ -203,10 +196,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.loadPinnedApps();
     }
 
-    _addSeparator(){
-        this.actionsBox.add(this._createVerticalSeparator(Constants.SeparatorStyle.SHORT));
-    }
-
     loadFrequentApps(){
         let labelRow = this.createLabelRow(_("Frequent Apps"));
         this.applicationsBox.add(labelRow);
@@ -273,7 +262,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     setGridLayout(appType, columns, spacing){
         this.applicationsGrid.x_align = appType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
-        this.applicationsGrid.style = appType === Constants.AppDisplayType.LIST ? 'padding: 0px 10px 0px 25px;' : '';
+        this.applicationsGrid.style = appType === Constants.AppDisplayType.LIST ? 'padding: 0px 10px 0px 25px;' : null;
         this.applicationsGrid.layout_manager.column_spacing = spacing;
         this.applicationsGrid.layout_manager.row_spacing = spacing;
         this.layoutProperties.GridColumns = columns;
@@ -282,37 +271,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories() {
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
-        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.HOME_SCREEN);
-        this.categoryDirectories.set(Constants.CategoryType.HOME_SCREEN, categoryMenuItem);
+        this.categoryDirectories = new Map();
         this.hasPinnedApps = true;
-
-        let extraCategories = this._settings.get_value("extra-categories").deep_unpack();
-
-        for(let i = 0; i < extraCategories.length; i++){
-            let categoryEnum = extraCategories[i][0];
-            let shouldShow = extraCategories[i][1];
-            if(categoryEnum == Constants.CategoryType.PINNED_APPS)
-                shouldShow = false;
-            if(shouldShow){
-                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum);
-                this.categoryDirectories.set(categoryEnum, categoryMenuItem);
-            }
-        }
-
         super.loadCategories();
-        for(let categoryMenuItem of this.categoryDirectories.values()){
-            if(categoryMenuItem._arrowIcon)
-                categoryMenuItem.remove_actor(categoryMenuItem._arrowIcon);
-        }
     }
 
     displayPinnedApps() {
-        if(this.activeCategoryType === Constants.CategoryType.HOME_SCREEN)
-            this._clearActorsFromBox(this.applicationsBox);
-        else
-            this._clearActorsFromBox();
-        this.subMainBox.remove_actor(this.actionsContainerBox);
+        this._clearActorsFromBox(this.applicationsBox);
         this.activeCategory = _("Pinned Apps");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
 
@@ -325,19 +290,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(!this.applicationsBox.contains(this.shortcutsBox))
             this.applicationsBox.add(this.shortcutsBox);
-        this.subMainBox.add(this.actionsContainerBox);     
-    }
-
-    displayRecentFiles(){
-        super.displayRecentFiles();
-        let label = this._createHeaderLabel(_("Recent Files"));
-        this.applicationsBox.insert_child_at_index(label, 0);
-        this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
-    }
-
-    displayCategoryAppList(appList, category){
-        this._clearActorsFromBox();
-        this._displayAppList(appList, category, this.applicationsGrid);
     }
 
     _displayAppList(apps, category, grid){      
@@ -348,27 +300,32 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             label.style = 'padding: 0px 15px;'
             label.label.style = 'font-weight: bold; padding: 15px 0px;';
             label.add(new MW.AllAppsButton(this));
-            this.applicationsBox.insert_child_at_index(label.actor, 0);
+            this.applicationsBox.insert_child_at_index(label, 0);
         }
         else if(category === Constants.CategoryType.HOME_SCREEN){
             label.style = 'padding: 0px 15px;'
             label.label.style = 'font-weight: bold; padding: 15px 0px;';
-            this.applicationsBox.insert_child_at_index(label.actor, 2);
+            this.applicationsBox.insert_child_at_index(label, 2);
         }
         else if(category === Constants.CategoryType.ALL_PROGRAMS){
             this.allAppsLabel = label;
             label.style = 'padding: 0px 30px 0px 15px;';
             label.label.style = 'font-weight: bold; padding: 15px 0px;';
             label.add(new MW.BackButton(this));
-            this.mainBox.insert_child_at_index(label.actor, 0);        
+            this.mainBox.insert_child_at_index(this.allAppsLabel, 0);        
         }      
     }
 
     _onSearchBoxChanged(searchBox, searchString) {        
-        if(searchBox.isEmpty())
-            this.searchBox.hide();         
-        else   
-            this.searchBox.show();
+        if(searchBox.isEmpty()){
+            if(this.mainBox.contains(this.topBox))
+                this.mainBox.remove_actor(this.topBox);
+        }    
+        else{
+            if(!this.mainBox.contains(this.topBox))
+                this.mainBox.insert_child_at_index(this.topBox, 0);
+        }
+            
         super._onSearchBoxChanged(searchBox, searchString);
     }
 
