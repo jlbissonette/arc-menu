@@ -807,6 +807,8 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
             }
             else
                 this.label.text = this.provider.appInfo.get_name() + "  (" + this._moreText + ")";
-        }           
+        }
+        else
+            this.label.text = this.provider.appInfo.get_name();
     }
 });
