@@ -94,6 +94,16 @@
       <summary>disable hotkey on key release</summary>
       <description>disable hotkey on key release.</description>
     </key>
+    <key type="i" name="settings-width">
+      <default>775</default>
+      <summary>ArcMenu Settings Width</summary>
+      <description>ArcMenu Settings Width.</description>
+    </key>
+    <key type="i" name="settings-height">
+      <default>850</default>
+      <summary>ArcMenu Settings Height</summary>
+      <description>ArcMenu Settings Height.</description>
+    </key>
     <key type="ab" name="available-placement">
       <default>[true, false, false]</default>
       <summary>Keeps track of available placement for ArcMenu. [Main Panel, Dash to Panel, Dash to Dock] </summary>
