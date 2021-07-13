@@ -5483,6 +5483,65 @@ var MiscPage = GObject.registerClass(
             importColorPresetFrame.add(importColorPresetButtonsRow);
             this.mainBox.append(importColorPresetFrame);
 
+            let settingsSizeHeaderLabel = new Gtk.Label({
+                label: "<b>" + _('ArcMenu Settings Window Size') +"</b>",
+                use_markup: true,
+                xalign: 0,
+                hexpand: true
+            });
+            this.mainBox.append(settingsSizeHeaderLabel);
+
+            let settingsSizeFrame = new PW.FrameBox();
+            let settingsWidthRow = new PW.FrameBoxRow();
+            let settingsWidthLabel = new Gtk.Label({
+                label: _('ArcMenu Settings Width'),
+                xalign:0,
+                hexpand: false,
+            });
+            let settingsWidthScale = new Gtk.SpinButton({
+                adjustment: new Gtk.Adjustment({
+                    lower: 850, upper: 1800, step_increment: 1, page_increment: 1, page_size: 0,
+                }),
+                climb_rate: 1,
+                digits: 0,
+                numeric: true,
+                hexpand: true,
+                halign: Gtk.Align.END
+            });
+            settingsWidthScale.set_value(this._settings.get_int("settings-width"));
+            settingsWidthScale.connect('value-changed', (widget) => {
+                this._settings.set_int("settings-width", widget.get_value())
+            });
+            settingsWidthRow.add(settingsWidthLabel);
+            settingsWidthRow.add(settingsWidthScale);
+            settingsSizeFrame.add(settingsWidthRow);
+
+            let settingsHeightRow = new PW.FrameBoxRow();
+            let settingsHeightLabel = new Gtk.Label({
+                label: _('ArcMenu Settings Height'),
+                xalign:0,
+                hexpand: false,
+            });
+            let settingsHeightScale = new Gtk.SpinButton({
+                adjustment: new Gtk.Adjustment({
+                    lower: 300, upper: 1600, step_increment: 1, page_increment: 1, page_size: 0,
+                }),
+                climb_rate: 1,
+                digits: 0,
+                numeric: true,
+                hexpand: true,
+                halign: Gtk.Align.END
+            });
+            settingsHeightScale.set_value(this._settings.get_int("settings-height"));
+            settingsHeightScale.connect('value-changed', (widget) => {
+                this._settings.set_int("settings-height", widget.get_value())
+            });
+            settingsHeightRow.add(settingsHeightLabel);
+            settingsHeightRow.add(settingsHeightScale);
+            settingsSizeFrame.add(settingsHeightRow);
+
+            this.mainBox.append(settingsSizeFrame);
+
             let resetSettingsButton = new Gtk.Button({ 
                 valign: Gtk.Align.END,
                 halign: Gtk.Align.START,
@@ -6024,10 +6083,7 @@ function buildPrefsWidget() {
     let widget = new ArcMenuPreferencesWidget();
     widget.connect("realize", () => {
         let window = widget.get_root();
-        window.connect("close_request", () => {
-            this._settings.set_int('settings-width', window.get_width());
-            this._settings.set_int('settings-height', window.get_height());
-        });
+
         window.default_width = this._settings.get_int('settings-width');
         window.default_height = this._settings.get_int('settings-height');
 
