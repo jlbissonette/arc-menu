@@ -5494,7 +5494,7 @@ var MiscPage = GObject.registerClass(
             let settingsSizeFrame = new PW.FrameBox();
             let settingsWidthRow = new PW.FrameBoxRow();
             let settingsWidthLabel = new Gtk.Label({
-                label: _('ArcMenu Settings Width'),
+                label: _('Window Width'),
                 xalign:0,
                 hexpand: false,
             });
@@ -5518,7 +5518,7 @@ var MiscPage = GObject.registerClass(
 
             let settingsHeightRow = new PW.FrameBoxRow();
             let settingsHeightLabel = new Gtk.Label({
-                label: _('ArcMenu Settings Height'),
+                label: _('Window Height'),
                 xalign:0,
                 hexpand: false,
             });
