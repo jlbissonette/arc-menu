@@ -515,7 +515,7 @@ var BaseLayout = class {
         }
         else{
             let path = command;
-            placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]), (menuItemArray[1] !== "ArcMenu_Folder") ? menuItemArray[1] : null);
+            placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]), (menuItemArray[1] !== "ArcMenu_Folder") ? Gio.icon_new_for_string(menuItemArray[1]) : null);
             placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
         }
         return placeMenuItem;
