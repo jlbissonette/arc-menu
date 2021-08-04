@@ -206,7 +206,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 -----
 
-**- @[Nilvus](https://gitlab.com/Nilvus) - French** | **- @[Etamuk](https://gitlab.com/Etamuk) - German** | **- @[alex4401](https://gitlab.com/alex4401) - Polish** | **- @[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **- @[sigbjokj](https://gitlab.com/sigbjokj) - Norwegian** |
+**- @[Nilvus](https://gitlab.com/Nilvus) - French** | **- @[Etamuk](https://gitlab.com/Etamuk) - German** | **- @[alex4401](https://gitlab.com/alex4401) - Polish** | **- @[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **- @[sigbjokj](https://gitlab.com/sigbjokj), @[sssandum](https://gitlab.com/sssandum) - Norwegian** |
 
 -----
 
