@@ -156,7 +156,7 @@ var ApplicationContextItems = GObject.registerClass({
                     });  
                 }
                 if (this.discreteGpuAvailable && this._app.state == Shell.AppState.STOPPED) {
-                    const appPrefersNonDefaultGPU = appInfo.get_boolean('PrefersNonDefaultGPU');
+                    const appPrefersNonDefaultGPU = this.appInfo.get_boolean('PrefersNonDefaultGPU');
                     const gpuPref = appPrefersNonDefaultGPU
                         ? Shell.AppLaunchGpu.DEFAULT
                         : Shell.AppLaunchGpu.DISCRETE;
