@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-07-09 19:20-0400\n"
-"PO-Revision-Date: 2021-08-03 23:05+0200\n"
+"PO-Revision-Date: 2021-08-06 18:21+0200\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: \n"
 "Language: oc\n"
@@ -83,15 +83,15 @@ msgstr "Ivernar"
 
 #: constants.js:318 menuWidgets.js:3260 prefs.js:5669
 msgid "ArcMenu"
-msgstr ""
+msgstr "ArcMenu"
 
 #: constants.js:319
 msgid "Brisk"
-msgstr ""
+msgstr "Brisk"
 
 #: constants.js:320
 msgid "Whisker"
-msgstr ""
+msgstr "Whisker"
 
 #: constants.js:321
 msgid "GNOME Menu"
@@ -99,19 +99,19 @@ msgstr "Menú GNOME"
 
 #: constants.js:322
 msgid "Mint"
-msgstr ""
+msgstr "Mint"
 
 #: constants.js:323
 msgid "Budgie"
-msgstr ""
+msgstr "Budgie"
 
 #: constants.js:326
 msgid "Unity"
-msgstr ""
+msgstr "Unity"
 
 #: constants.js:327
 msgid "Plasma"
-msgstr ""
+msgstr "Plasma"
 
 #: constants.js:328
 msgid "tognee"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: constants.js:330
 msgid "Redmond"
-msgstr ""
+msgstr "Redmond"
 
 #: constants.js:331
 msgid "Windows"
@@ -131,15 +131,15 @@ msgstr "Fenèstras"
 
 #: constants.js:332
 msgid "Eleven"
-msgstr ""
+msgstr "Eleven"
 
 #: constants.js:335
 msgid "Elementary"
-msgstr ""
+msgstr "Elementary"
 
 #: constants.js:336
 msgid "Chromebook"
-msgstr ""
+msgstr "Chromebook"
 
 #: constants.js:339 constants.js:356
 msgid "Launcher"
@@ -163,7 +163,7 @@ msgstr "Simple 2"
 
 #: constants.js:348
 msgid "Raven"
-msgstr ""
+msgstr "Raven"
 
 #: constants.js:352
 msgid "Traditional"
@@ -406,7 +406,7 @@ msgstr "Carrat"
 
 #: menulayouts/tweaks/tweaks.js:194 menulayouts/tweaks/tweaks.js:309
 msgid "Searchbar Location"
-msgstr ""
+msgstr "Posicion de la barra de recèrca"
 
 #: menulayouts/tweaks/tweaks.js:200 menulayouts/tweaks/tweaks.js:315
 msgid "Bottom"
@@ -443,11 +443,11 @@ msgstr "Aplicacions penjadas"
 
 #: menulayouts/tweaks/tweaks.js:328
 msgid "Activate on Hover"
-msgstr ""
+msgstr "Activar al susvòl"
 
 #: menulayouts/tweaks/tweaks.js:344
 msgid "Show Application Descriptions"
-msgstr ""
+msgstr "Afichar la descripcion de las aplicacions"
 
 #: menulayouts/tweaks/tweaks.js:360
 msgid "Selected Button Border Color"
@@ -501,7 +501,7 @@ msgstr ""
 #: menulayouts/tweaks/tweaks.js:559 menulayouts/tweaks/tweaks.js:664
 #: menulayouts/tweaks/tweaks.js:968 menulayouts/tweaks/tweaks.js:995
 msgid "Default Screen"
-msgstr ""
+msgstr "Ecran per defaut"
 
 #: menulayouts/tweaks/tweaks.js:564 menulayouts/tweaks/tweaks.js:669
 #: utils.js:205
@@ -1627,7 +1627,7 @@ msgstr ""
 
 #: prefs.js:5450
 msgid "Restore Default Settings?"
-msgstr ""
+msgstr "Restablir las valors per defaut ?"
 
 #: prefs.js:5450
 msgid "All ArcMenu settings will be reset to the default value."
