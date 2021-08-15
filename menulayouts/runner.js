@@ -164,6 +164,10 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.mainBox.style = `max-height: ${this._runnerHeight}px;`;
         if(this._runnerFontSize > 0){
             this.mainBox.style += `font-size: ${this._runnerFontSize}pt;`
+            this.searchBox.style += `font-size: ${this._runnerFontSize}pt;`
+        }
+        else{
+            this.searchBox.style = "margin: 5px 10px 5px 10px;";
         }
         this.topBox.style = `width: ${this._runnerWidth}px;`;
         this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
