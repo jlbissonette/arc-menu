@@ -499,7 +499,7 @@ var TweaksPage = GObject.registerClass({
         let runnerMenuTweaksFrame = new PW.FrameBox();
         let runnerPositionRow = new PW.FrameBoxRow();
         let runnerPositionLabel = new Gtk.Label({
-            label: _('Runner Position'),
+            label: _('Position'),
             xalign:0,
             hexpand: true,
         });   
@@ -513,6 +513,79 @@ var TweaksPage = GObject.registerClass({
         runnerPositionRow.add(runnerPositionLabel);
         runnerPositionRow.add(runnerPositionCombo);
         runnerMenuTweaksFrame.add(runnerPositionRow);
+
+        let runnerWidthRow = new PW.FrameBoxRow();
+        let runnerWidthLabel = new Gtk.Label({
+            label: _("Width"),
+            use_markup: true,
+            xalign: 0
+        });
+        let runnerWidthScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL, 
+            adjustment: new Gtk.Adjustment({lower: 300, upper: 1100, step_increment: 1, page_increment: 1, page_size: 0}),
+            digits: 0, round_digits: 0, hexpand: true,
+            draw_value: true, value_pos: Gtk.PositionType.RIGHT
+        });
+        runnerWidthScale.add_mark(500, Gtk.PositionType.TOP, _("Default"));
+        runnerWidthScale.set_value(this._settings.get_int('runner-menu-width'));
+        runnerWidthScale.connect('value-changed', (widget) => {
+            this._settings.set_int('runner-menu-width', widget.get_value());
+        });
+        runnerWidthScale.set_format_value_func( (scale, value) => {
+            return "\t" + value + "px";
+        });
+        runnerWidthRow.add(runnerWidthLabel);
+        runnerWidthRow.add(runnerWidthScale);
+        runnerMenuTweaksFrame.add(runnerWidthRow);
+
+        let runnerHeightRow = new PW.FrameBoxRow();
+        let runnerHeightLabel = new Gtk.Label({
+            label: _("Height"),
+            use_markup: true,
+            xalign: 0
+        });
+        let runnerHeightScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL, 
+            adjustment: new Gtk.Adjustment({lower: 300, upper: 1100, step_increment: 1, page_increment: 1, page_size: 0}),
+            digits: 0, round_digits: 0, hexpand: true,
+            draw_value: true, value_pos: Gtk.PositionType.RIGHT
+        });
+        runnerHeightScale.add_mark(400, Gtk.PositionType.TOP, _("Default"));
+        runnerHeightScale.set_value(this._settings.get_int('runner-menu-height'));
+        runnerHeightScale.connect('value-changed', (widget) => {
+            this._settings.set_int('runner-menu-height', widget.get_value());
+        });
+        runnerHeightScale.set_format_value_func( (scale, value) => {
+            return "\t" + value + "px";
+        });
+        runnerHeightRow.add(runnerHeightLabel);
+        runnerHeightRow.add(runnerHeightScale);
+        runnerMenuTweaksFrame.add(runnerHeightRow);
+
+        let runnerFontSizeRow = new PW.FrameBoxRow();
+        let runnerFontSizeLabel = new Gtk.Label({
+            label: _("Font Size"),
+            use_markup: true,
+            xalign: 0
+        });
+        let runnerFontSizeScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL, 
+            adjustment: new Gtk.Adjustment({lower: 0, upper: 30, step_increment: 1, page_increment: 1, page_size: 0}),
+            digits: 0, round_digits: 0, hexpand: true,
+            draw_value: true, value_pos: Gtk.PositionType.RIGHT
+        });
+        runnerFontSizeScale.add_mark(0, Gtk.PositionType.TOP, _("Default"));
+        runnerFontSizeScale.set_value(this._settings.get_int('runner-font-size'));
+        runnerFontSizeScale.connect('value-changed', (widget) => {
+            this._settings.set_int('runner-font-size', widget.get_value());
+        });
+        runnerFontSizeScale.set_format_value_func( (scale, value) => {
+            return "\t" + value + "pt";
+        });
+        runnerFontSizeRow.add(runnerFontSizeLabel);
+        runnerFontSizeRow.add(runnerFontSizeScale);
+        runnerMenuTweaksFrame.add(runnerFontSizeRow);
+
         let frequentAppsRow = new PW.FrameBoxRow();
         let frequentAppsLabel = new Gtk.Label({
             label: _("Show Frequent Apps"),

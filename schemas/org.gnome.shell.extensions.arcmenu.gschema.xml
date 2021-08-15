@@ -274,6 +274,21 @@
       <summary>Runner layout - use current shell theme gap</summary>
       <description>Runner layout - use current shell theme gap</description>
     </key>
+    <key type="i" name="runner-menu-height">
+      <default>400</default>
+      <summary>Runner layout - menu height</summary>
+      <description>Runner layout - menu height</description>
+    </key>
+    <key type="i" name="runner-menu-width">
+      <default>500</default>
+      <summary>Runner layout - menu width</summary>
+      <description>Runner layout - menu width</description>
+    </key>
+    <key type="i" name="runner-font-size">
+      <default>0</default>
+      <summary>Runner layout - font size</summary>
+      <description>Runner layout - font size</description>
+    </key>
     <key type="b" name="reload-theme">
       <default>false</default>
       <summary>Used to reload theme</summary>
