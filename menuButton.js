@@ -232,6 +232,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     }
 
     createMenuLayout(){
+        this.arcMenu.actor.style = null;
         this.section = new PopupMenu.PopupMenuSection();
         this.arcMenu.addMenuItem(this.section);            
         this.mainBox = new St.BoxLayout({
