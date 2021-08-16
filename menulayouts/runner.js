@@ -32,8 +32,6 @@ const MW = Me.imports.menuWidgets;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
-const RUNNER_WIDTH = 500;
-
 var createMenu =  class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton,{
@@ -49,7 +47,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
 
     createLayout(){
         super.createLayout();
-        this.mainBox.style = `max-height: 400px;`;       
 
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_actor(this.dummyCursor);
@@ -71,7 +68,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             vertical: false
         });
-        this.topBox.style = "width: " + RUNNER_WIDTH + "px;";
 
         this.searchBox = new MW.SearchBox(this);
         this.searchBox.style = "margin: 5px 10px 5px 10px;";
@@ -98,7 +94,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             reactive:true
         });
-        this.applicationsScrollBox.style = "width: " + RUNNER_WIDTH + "px";
 
         this.mainBox.add(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ vertical: true });
@@ -160,6 +155,22 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             positionY = Math.round(rect.y + (rect.height / 2) - 125);
         this.dummyCursor.set_position(positionX,  positionY);
 
+        if(!this.topBox)
+            return;
+
+        this._runnerWidth = this._settings.get_int("runner-menu-width");
+        this._runnerHeight = this._settings.get_int("runner-menu-height");
+        this._runnerFontSize = this._settings.get_int("runner-font-size");
+        this.mainBox.style = `max-height: ${this._runnerHeight}px;`;
+        if(this._runnerFontSize > 0){
+            this.mainBox.style += `font-size: ${this._runnerFontSize}pt;`
+            this.searchBox.style += `font-size: ${this._runnerFontSize}pt;`
+        }
+        else{
+            this.searchBox.style = "margin: 5px 10px 5px 10px;";
+        }
+        this.topBox.style = `width: ${this._runnerWidth}px;`;
+        this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
     }
     
     updateIcons(){

@@ -141,12 +141,17 @@ var MenuSettingsController = class {
             this._settings.connect('changed::runner-show-frequent-apps', this._reload.bind(this)),
             this._settings.connect('changed::enable-sub-menus', this._reload.bind(this)), 
             this._settings.connect('changed::disable-category-arrows', this._reload.bind(this)),
-            this._settings.connect('changed::show-activities-button', this._configureActivitiesButton.bind(this))
+            this._settings.connect('changed::show-activities-button', this._configureActivitiesButton.bind(this)),
+            this._settings.connect('changed::force-menu-location', this._forceMenuLocation.bind(this)),
         ];
     }
 
     _reload(){
         this._menuButton.reload();
+    }
+
+    _forceMenuLocation(){
+        this._menuButton.forceMenuLocation();
     }
 
     _initiateRecentlyInstalledApps(){

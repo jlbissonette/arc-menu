@@ -23,6 +23,11 @@
         <value value='19' nick='Launcher'/>
         <value value='20' nick='Eleven'/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.forcemenulocation'>
+        <value value='0' nick='Off'/>
+        <value value='1' nick='TopCentered'/>
+        <value value='2' nick='BottomCentered'/>
+    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>
         <value value='1' nick='Super_L'/>
@@ -88,6 +93,11 @@
       <default>'Default'</default>
       <summary>menu layout</summary>
       <description>Menu Layout</description>
+    </key>
+    <key name="force-menu-location" enum="org.gnome.shell.extensions.arcmenu.forcemenulocation">
+      <default>'Off'</default>
+      <summary>Force the menu to a specific location</summary>
+      <description>Force the menu to a specific location</description>
     </key>
     <key type="b" name="disable-hotkey-onkeyrelease">
       <default>false</default>
@@ -273,6 +283,21 @@
       <default>false</default>
       <summary>Runner layout - use current shell theme gap</summary>
       <description>Runner layout - use current shell theme gap</description>
+    </key>
+    <key type="i" name="runner-menu-height">
+      <default>400</default>
+      <summary>Runner layout - menu height</summary>
+      <description>Runner layout - menu height</description>
+    </key>
+    <key type="i" name="runner-menu-width">
+      <default>500</default>
+      <summary>Runner layout - menu width</summary>
+      <description>Runner layout - menu width</description>
+    </key>
+    <key type="i" name="runner-font-size">
+      <default>0</default>
+      <summary>Runner layout - font size</summary>
+      <description>Runner layout - font size</description>
     </key>
     <key type="b" name="reload-theme">
       <default>false</default>

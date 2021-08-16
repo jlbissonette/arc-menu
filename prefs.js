@@ -89,7 +89,6 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
             });
             let addPinnedAppsButton = new PW.Button({
                 icon_name: 'list-add-symbolic',
-                tooltip_text: _("Browse a list of all applications to add to your Pinned Apps list.")
             });
             addPinnedAppsButton.connect('clicked', ()=> {
                 let dialog = new AddAppsToPinnedListWindow(this._settings, this, Constants.DiaglogType.DEFAULT);
@@ -127,7 +126,6 @@ var MenuSettingsPinnedAppsPage = GObject.registerClass(
             });
             let addCustomAppButton = new PW.Button({
                 icon_name: 'list-add-symbolic',
-                tooltip_text: _("Create a custom shortcut to add to your Pinned Apps list.")
             });
             addCustomAppButton.connect('clicked', ()=> {
                 let dialog = new AddCustomLinkDialogWindow(this._settings, this, Constants.DiaglogType.DEFAULT);
@@ -836,7 +834,6 @@ var GeneralPage = GObject.registerClass(
             
             let modifyHotCornerButton = new PW.Button({
                 icon_name: 'emblem-system-symbolic',
-                tooltip_text: _("Modify the action of the Activities Hot Corner")
             });
             modifyHotCornerButton.connect('clicked', ()=> {
                 let dialog = new ModifyHotCornerDialogWindow(this._settings, this);
@@ -848,7 +845,6 @@ var GeneralPage = GObject.registerClass(
             let modifyHotCornerSwitch = new Gtk.Switch({ 
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
-                tooltip_text: _("Override the default behavoir of the Activities Hot Corner")
             });
             modifyHotCornerSwitch.set_active(this._settings.get_boolean('override-hot-corners'));
             modifyHotCornerButton.set_sensitive(this._settings.get_boolean('override-hot-corners'));
@@ -874,7 +870,6 @@ var GeneralPage = GObject.registerClass(
             });
             let keyReleaseCombo = new Gtk.ComboBoxText({ 
                 halign: Gtk.Align.END,
-                tooltip_text: _("Choose a method for the hotkey activation")  
             });
             keyReleaseCombo.append_text(_("Key Release"));
             keyReleaseCombo.append_text(_("Key Press"));
@@ -915,7 +910,6 @@ var GeneralPage = GObject.registerClass(
                 label: _("Left Super Key"),
                 halign: Gtk.Align.CENTER,
                 hexpand: true,
-                tooltip_text: _("Set ArcMenu hotkey to Left Super Key"),
                 draw_indicator: false
             });   
             let rightButton = new Gtk.RadioButton({
@@ -923,7 +917,6 @@ var GeneralPage = GObject.registerClass(
                 group: leftButton,
                 halign: Gtk.Align.CENTER,
                 hexpand: true,
-                tooltip_text: _("Set ArcMenu hotkey to Right Super Key"),
                 draw_indicator: false
             });   
             let customButton = new Gtk.RadioButton({
@@ -931,7 +924,6 @@ var GeneralPage = GObject.registerClass(
                 group: leftButton,
                 halign: Gtk.Align.CENTER,
                 hexpand: true,
-                tooltip_text: _("Set a custom hotkey for ArcMenu"),
                 draw_indicator: false 
             });   
             this.undefinedButton = new Gtk.RadioButton({
@@ -939,7 +931,6 @@ var GeneralPage = GObject.registerClass(
                 group: leftButton,
                 halign: Gtk.Align.CENTER,
                 hexpand: true,
-                tooltip_text: _("Clear ArcMenu hotkey, use GNOME default"),
                 draw_indicator: false
             });  
             switch (this._settings.get_enum('menu-hotkey')) {
@@ -1009,7 +1000,6 @@ var GeneralPage = GObject.registerClass(
             let shortcutCell = new Gtk.ShortcutsShortcut({
                 halign: Gtk.Align.CENTER,
                 hexpand: true,
-                tooltip_text: _("Current custom hotkey")  
             });
             shortcutCell.accelerator = this._settings.get_string('menu-keybinding-text');
             
@@ -1017,7 +1007,6 @@ var GeneralPage = GObject.registerClass(
                 label: _("Modify Hotkey"),
                 halign: Gtk.Align.END,
                 hexpand: false,
-                tooltip_text: _("Create your own hotkey combination for ArcMenu")  
             });   
             menuKeybindingRow.add(currentHotkeyLabel);
             menuKeybindingRow.add(shortcutCell);
@@ -1058,7 +1047,6 @@ var GeneralPage = GObject.registerClass(
             });
             let menuPlacementCombo = new Gtk.ComboBoxText({ 
                 halign: Gtk.Align.END,
-                tooltip_text: _("Choose where to place ArcMenu") 
             });
 
             let avaliablePlacement = this._settings.get_value('available-placement').deep_unpack();
@@ -1095,7 +1083,6 @@ var GeneralPage = GObject.registerClass(
 
             let showActivitiesSwitch = new Gtk.Switch({ 
                 halign: Gtk.Align.END,
-                tooltip_text: _("Show Activities Button in panel") 
             });
             showActivitiesSwitch.set_active(this._settings.get_boolean('show-activities-button'));
             showActivitiesSwitch.connect('notify::active', (widget) => {
@@ -1151,19 +1138,16 @@ var GeneralPage = GObject.registerClass(
 
             let menuPositionLeftButton = new Gtk.RadioButton({
                 label: _('Left'),
-                tooltip_text: _("Position ArcMenu on the left side of the panel"),
                 draw_indicator: false
             });
             let menuPositionCenterButton = new Gtk.RadioButton({
                 label: _('Center'),
                 group: menuPositionLeftButton,
-                tooltip_text: _("Position ArcMenu in the center of the panel"),
                 draw_indicator: false
             });
             let menuPositionRightButton = new Gtk.RadioButton({
                 label: _('Right'),
                 group: menuPositionLeftButton,
-                tooltip_text: _("Position ArcMenu on the right side of the panel"),
                 draw_indicator: false
             });
             
@@ -1196,7 +1180,6 @@ var GeneralPage = GObject.registerClass(
                 orientation: Gtk.Orientation.HORIZONTAL, 
                 adjustment: new Gtk.Adjustment({lower: 0, upper: 100, step_increment: 1, page_increment: 1, page_size: 0}),
                 digits: 0, round_digits: 0, hexpand: true,
-                tooltip_text: _("Adjust ArcMenu's menu alignment relative to ArcMenu's icon")
             });
             alignmentScale.add_mark(0, Gtk.PositionType.BOTTOM, _("Left"));
             alignmentScale.add_mark(50, Gtk.PositionType.BOTTOM, _("Center"));
@@ -1219,7 +1202,6 @@ var GeneralPage = GObject.registerClass(
 
             let multiMonitorSwitch = new Gtk.Switch({ 
                 halign: Gtk.Align.END,
-                tooltip_text: _("Display ArcMenu on all monitors") 
             });
             multiMonitorSwitch.set_active(this._settings.get_boolean('multi-monitor'));
             multiMonitorSwitch.connect('notify::active', (widget) => {
@@ -1324,7 +1306,6 @@ var ModifyHotCornerDialogWindow = GObject.registerClass(
             });
             let hotCornerActionCombo = new Gtk.ComboBoxText({ 
                 halign: Gtk.Align.END,
-                tooltip_text: _("Choose the action of the Activities Hot Corner") 
             });
             hotCornerActionCombo.append_text(_("GNOME Default"));
             hotCornerActionCombo.append_text(_("Disabled"));
@@ -1351,7 +1332,6 @@ var ModifyHotCornerDialogWindow = GObject.registerClass(
                 hexpand: true
             });
             let hotCornerPresetsCombo = new Gtk.ComboBoxText({ 
-                tooltip_text: _("Choose from a list of preset Activities Hot Corner commands"),
                 hexpand: true
             });
 
@@ -1392,7 +1372,6 @@ var ModifyHotCornerDialogWindow = GObject.registerClass(
                 hexpand: true
             });
             let customHotCornerEntry = new Gtk.Entry({
-                tooltip_text: _("Set a custom terminal command to launch on active hot corner")
             });
             customHotCornerEntry.set_text(this._settings.get_string('custom-hot-corner-cmd'));
             customHotCornerEntry.connect('changed', (widget) => {
@@ -1414,7 +1393,6 @@ var ModifyHotCornerDialogWindow = GObject.registerClass(
             let applyButton = new Gtk.Button({
                 label: _("Apply"),
                 hexpand: true,
-                tooltip_text: _("Apply changes and set new hot corner action")
             });
             applyButton.connect('clicked', () => {
                 this._settings.set_string('custom-hot-corner-cmd',customHotCornerEntry.get_text());
@@ -1827,7 +1805,6 @@ var ButtonAppearancePage = GObject.registerClass(
                 title: _("Browse Icons") + " ",
                 icon_name: 'icon-preview-symbolic',
                 hexpand: false,
-                tooltip_text: _("Choose from a variety of icons")
             });
             menuButtonIconButton.connect('clicked', () => {
                 let dialog = new ArcMenuIconsDialogWindow(this._settings, this);
@@ -1881,7 +1858,6 @@ var ButtonAppearancePage = GObject.registerClass(
 
             this.resetButton = new Gtk.Button({
                 label: _("Restore Defaults"),
-                tooltip_text: _("Restore the default settings on this page"),
                 halign: Gtk.Align.START,
                 hexpand: true,
                 valign: Gtk.Align.END,
@@ -2021,7 +1997,6 @@ var ButtonAppearancePage = GObject.registerClass(
             let colorSwitch = new Gtk.Switch({ 
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
-                tooltip_text: _("Override Theme Color"),
                 active: this._settings.get_boolean(params.settingOverrideName)
             });
             colorSwitch.connect("notify::active", (widget)=> {
@@ -2404,7 +2379,6 @@ var MenuLayoutPage = GObject.registerClass(
                 icon_name: 'go-next-symbolic',
                 halign: Gtk.Align.END
             });
-            currentLayoutFrame._listBox.tooltip_text = _("Click to tweak the current layout");
             currentLayoutFrame._listBox.connect('row-activated', () => {
                 this.displayLayoutTweaksPage();
             });
@@ -2581,7 +2555,6 @@ var MenuThemePage = GObject.registerClass(
             let overrideArcMenuSwitch = new Gtk.Switch({ 
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
-                tooltip_text: _("Override the ArcMenu extension theme")
             });
             overrideArcMenuSwitch.set_active(this._settings.get_boolean('enable-custom-arc-menu'));
             overrideArcMenuSwitch.connect('notify::active', (widget) => {
@@ -2799,6 +2772,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.heightValue = this._settings.get_int('menu-height');
         this.rightPanelWidth = this._settings.get_int('right-panel-width');
         this.menuWidth = this._settings.get_int('menu-width');
+        this.forcedMenuLocation = this._settings.get_enum('force-menu-location');
         this.separatorColor = this._settings.get_string('separator-color');
         this.verticalSeparator = this._settings.get_boolean('vert-separator');
         this.largeIcons = this._settings.get_boolean('enable-large-icons');
@@ -2841,7 +2815,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
                 page_increment: 10,
                 page_size: 0
             }),
-            tooltip_text: _("Adjust the menu height") + "\n" +_("Certain menu layouts only"),
             digits: 0,
             round_digits: 0,
             hexpand: true,
@@ -2889,7 +2862,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             adjustment: new Gtk.Adjustment({
                 lower: 175, upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
             }),
-            tooltip_text: _("Adjust the left-panel width") + "\n" +_("Certain menu layouts only"),
             digits: 0,round_digits: 0,hexpand: true,
             value_pos: Gtk.PositionType.RIGHT
         });
@@ -2935,7 +2907,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             adjustment: new Gtk.Adjustment({
                 lower: 200,upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
             }),
-            tooltip_text: _("Adjust the right-panel width") + "\n" +_("Certain menu layouts only"),
             digits: 0,round_digits: 0,hexpand: true,
             value_pos: Gtk.PositionType.RIGHT
         });
@@ -2971,6 +2942,32 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         generalSettingsFrame.add(rightPanelWidthRow);
         this.mainBox.add(generalSettingsFrame);
 
+        let menuLocationFrame = new PW.FrameBox();
+        let menuLocationRow = new PW.FrameBoxRow();
+        let menuLocationLabel = new Gtk.Label({
+            label: _('Override Menu Location'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+         });   
+        let menuLocationCombo = new Gtk.ComboBoxText({ 
+            halign: Gtk.Align.END,
+        });
+        menuLocationCombo.append_text(_("Off"));
+        menuLocationCombo.append_text(_("Top Centered"));
+        menuLocationCombo.append_text(_("Bottom Centered"));
+        menuLocationCombo.set_active(this._settings.get_enum('force-menu-location'));
+        menuLocationCombo.connect('changed', (widget) => {
+            this.forcedMenuLocation = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        menuLocationRow.add(menuLocationLabel);
+        menuLocationRow.add(menuLocationCombo);
+        menuLocationFrame.add(menuLocationRow);
+        this.mainBox.add(menuLocationFrame);
+
         let miscSettingsFrame = new PW.FrameBox();
         let largeIconsRow = new PW.FrameBoxRow();
         let largeIconsLabel = new Gtk.Label({
@@ -2982,7 +2979,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
          });   
         let largeIconsSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Enable large application icons") + "\n" +_("Certain menu layouts only"),
         });
         largeIconsSwitch.set_active(this.largeIcons);
         largeIconsSwitch.connect('notify::active', (widget) => {
@@ -3004,7 +3000,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
          });   
         let subMenusSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Show nested menus in categories") + "\n" +_("Certain menu layouts only"),
         });
         subMenusSwitch.set_active(this.subMenus);
         subMenusSwitch.connect('notify::active', (widget) => {
@@ -3028,7 +3023,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         let tooltipSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Disable all tooltips in ArcMenu") 
         });
         tooltipSwitch.set_active(this.disableTooltips);
         tooltipSwitch.connect('notify::active', (widget) => {
@@ -3053,7 +3047,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
          });   
         let vertSeparatorSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Enable a Vertical Separator") + "\n" +_("Certain menu layouts only"),
         });
         vertSeparatorSwitch.set_active(this.verticalSeparator);
         vertSeparatorSwitch.connect('notify::active', (widget) => { 
@@ -3075,7 +3068,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         let colorChooser = new Gtk.ColorButton({
             use_alpha:true,
-            tooltip_text: _("Change the color of all separators")
         });     
         let color = new Gdk.RGBA();
         color.parse(this.separatorColor);
@@ -3101,7 +3093,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         let recentAppsSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Disable Recently Installed Apps Indicator") 
         });
         recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
         recentAppsSwitch.connect('notify::active', (widget) => {
@@ -3125,7 +3116,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         let clearRecentAppsButton = new Gtk.Button({ 
             halign: Gtk.Align.END,
             label: _("Clear All"),
-            tooltip_text: _('Clear all applications marked "New"') 
         });
         let sensitive = this._settings.get_strv('recently-installed-apps').length > 0;
         clearRecentAppsButton.set_sensitive(sensitive);
@@ -3148,7 +3138,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
-            tooltip_text: _("Restore the default settings on this page")
         });
         this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         this.resetButton.connect('clicked', ()=> {
@@ -3161,9 +3150,11 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.subMenus = this._settings.get_default_value('enable-sub-menus').unpack();
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
             this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
+            this.forcedMenuLocation = this._settings.get_default_value('force-menu-location').unpack();
             hscale.set_value(this.heightValue);
             menuWidthScale.set_value(this.menuWidth);
             rightPanelWidthScale.set_value(this.rightPanelWidth);
+            menuLocationCombo.set_active(this.forcedMenuLocation);
             subMenusSwitch.set_active(this.subMenus);
             vertSeparatorSwitch.set_active(this.verticalSeparator);
             largeIconsSwitch.set_active(this.largeIcons);
@@ -3185,6 +3176,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this._settings.set_int('menu-height', this.heightValue);
             this._settings.set_int('right-panel-width', this.rightPanelWidth);
             this._settings.set_int('menu-width', this.menuWidth);
+            this._settings.set_enum('force-menu-location', this.forcedMenuLocation);
             this._settings.set_string('separator-color', this.separatorColor);
             this._settings.set_boolean('vert-separator', this.verticalSeparator);
             this._settings.set_boolean('enable-large-icons', this.largeIcons);
@@ -3208,6 +3200,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.disableRecentApps !== this._settings.get_default_value('disable-recently-installed-apps').unpack() ||
             this.heightValue !== this._settings.get_default_value('menu-height').unpack() ||
             this.rightPanelWidth !== this._settings.get_default_value('right-panel-width').unpack() ||
+            this.forcedMenuLocation !== this._settings.get_default_value('force-menu-location').unpack() ||
             this.menuWidth !== this._settings.get_default_value('menu-width').unpack() ||
             this.separatorColor !== this._settings.get_default_value('separator-color').unpack() ||
             this.verticalSeparator !== this._settings.get_default_value('vert-separator').unpack() ||
@@ -3262,7 +3255,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
          });   
         let disableCategoryArrowSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Disable the arrow on category menu items") + "\n" +_("Certain menu layouts only"),
         });
         disableCategoryArrowSwitch.set_active(this.disableCategoryArrow);
         disableCategoryArrowSwitch.connect('notify::active', (widget) => {
@@ -3286,7 +3278,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
 
         let searchStyleSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Disable the border on the searchbox")
         });
         searchStyleSwitch.set_active(this._settings.get_boolean('disable-searchbox-border'));
         searchStyleSwitch.connect('notify::active', (widget) => {
@@ -3310,7 +3301,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
 
         let tweakStyleSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Disable current theme menu arrow pointer")
         });
         tweakStyleSwitch.set_active(this._settings.get_boolean('remove-menu-arrow'));
         tweakStyleSwitch.connect('notify::active', (widget) => {
@@ -3334,7 +3324,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
 
         let fadeEffectSwitch = new Gtk.Switch({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Disable all ScrollView fade effects")
         });
         fadeEffectSwitch.set_active(this._settings.get_boolean('disable-scrollview-fade-effect'));
         fadeEffectSwitch.connect('notify::active', (widget) => {
@@ -3443,7 +3432,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         });
         let appIndicatorColorChooser = new Gtk.ColorButton({
             use_alpha: true,
-            tooltip_text: _("Change the color of the 'recently installed application' category indicator")
         });     
         let color = new Gdk.RGBA();
         color.parse(this.indicatorColor);
@@ -3467,7 +3455,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         });
         let appIndicatorTextColorChooser = new Gtk.ColorButton({
             use_alpha: true,
-            tooltip_text: _("Change the background color of the 'recently installed application' indicator label")
         });     
         color = new Gdk.RGBA();
         color.parse(this.indicatorTextColor);
@@ -3497,7 +3484,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             digits: 0,round_digits: 0,hexpand: true,
             value_pos: Gtk.PositionType.RIGHT,
             draw_value: true,
-            tooltip_text: _("Offset ArcMenu by 1px") +'\n' + _("Useful if you notice a 1px gap or overlap between ArcMenu and the panel")
         });
         gapAdjustmentScale.connect('format-value', (scale, value) => { return value.toString() + ' px'; });
         gapAdjustmentScale.set_value(this.gapAdjustment);
@@ -3535,7 +3521,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         });
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
-            tooltip_text: _("Restore the default settings on this page")
         });
         this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         this.resetButton.connect('clicked', ()=> {
@@ -3637,7 +3622,6 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
 
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
-            tooltip_text: _("Restore the default settings on this page")
         });
         this.saveButton = new Gtk.Button({
             label: _("Apply"),
@@ -3737,7 +3721,6 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
             let modifyButton = new Gtk.Switch({
                 valign: Gtk.Align.CENTER,
                 margin_start: 10,
-                tooltip_text: _('Enable/Disble')
             });
             
             modifyButton.set_active(frameRow._shouldShow);
@@ -4589,7 +4572,6 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             this._parentMainBox.buttonRow = buttonRow;
             let resetButton = new Gtk.Button({
                 label: _("Restore Defaults"),
-                tooltip_text: _("Restore the default settings on this page"),
                 valign: Gtk.Align.END,
                 vexpand: false
             });   
@@ -4738,7 +4720,6 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
 
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
-            tooltip_text: _("Restore the default settings on this page")
         });
         this.saveButton = new Gtk.Button({
             label: _("Apply"),
@@ -4758,7 +4739,6 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
         });
         let addPinnedAppsButton = new PW.Button({
             icon_name: 'list-add-symbolic',
-            tooltip_text: _("Browse a list of all default User Directories to add to your Directories Shortcuts")
         });
         addPinnedAppsButton.connect('clicked', ()=> {
             let dialog = new AddAppsToPinnedListWindow(this._settings, this, Constants.DiaglogType.DIRECTORIES);
@@ -4794,7 +4774,6 @@ var MenuSettingsShortcutDirectoriesPage = GObject.registerClass(
         });
         let addCustomAppButton = new PW.Button({
             icon_name: 'list-add-symbolic',
-            tooltip_text: _("Create a custom shortcut to add to your Directories Shortcuts")
         });
         addCustomAppButton.connect('clicked', ()=> {
             let dialog = new AddCustomLinkDialogWindow(this._settings, this, Constants.DiaglogType.DIRECTORIES);
@@ -4973,7 +4952,6 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
 
         this.resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
-            tooltip_text: _("Restore the default settings on this page")
         });  
         this.saveButton = new Gtk.Button({
             label: _("Apply"),
@@ -4993,7 +4971,6 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         });
         let addPinnedAppsButton = new PW.Button({
             icon_name: 'list-add-symbolic',
-            tooltip_text: _("Browse a list of all applications to add to your Application Shortcuts")
         });
         addPinnedAppsButton.connect('clicked', ()=> {
             let dialog = new AddAppsToPinnedListWindow(this._settings, this, Constants.DiaglogType.APPLICATIONS);
@@ -5029,7 +5006,6 @@ var MenuSettingsShortcutApplicationsPage = GObject.registerClass(
         });
         let addCustomAppButton = new PW.Button({
             icon_name: 'list-add-symbolic',
-            tooltip_text: _("Create a custom shortcut to add to your Application Shortcuts")
         });
         addCustomAppButton.connect('clicked', ()=> {
             let dialog = new AddCustomLinkDialogWindow(this._settings, this, Constants.DiaglogType.APPLICATIONS);
@@ -5203,7 +5179,6 @@ var MenuSettingsPowerOptionsPage = GObject.registerClass(
     
             this.resetButton = new Gtk.Button({
                 label: _("Restore Defaults"),
-                tooltip_text: _("Restore the default settings on this page")
             });
             this.saveButton = new Gtk.Button({
                 label: _("Apply"),
@@ -5303,7 +5278,6 @@ var MenuSettingsPowerOptionsPage = GObject.registerClass(
                 let modifyButton = new Gtk.Switch({
                     valign: Gtk.Align.CENTER,
                     margin_start: 10,
-                    tooltip_text: _('Enable/Disble')
                 });
                 
                 modifyButton.set_active(frameRow._shouldShow);
@@ -5380,7 +5354,6 @@ var MiscPage = GObject.registerClass(
                 label: _("Import from File"),
                 hexpand: true,
                 vexpand: true,
-                tooltip_text: _("Import ArcMenu settings from a file")  
             });
             importButton.connect('clicked', ()=> {
                 this._showFileChooser(
@@ -5416,7 +5389,6 @@ var MiscPage = GObject.registerClass(
                 label: _("Export to File"),
                 hexpand: true,
                 vexpand: true,
-                tooltip_text: _("Export and save all your ArcMenu settings to a file")  
             });
             exportButton.connect('clicked', ()=> {
                 this._showFileChooser(
@@ -5469,7 +5441,6 @@ var MiscPage = GObject.registerClass(
                 label: _("Import Theme Preset"),
                 hexpand: true,
                 vexpand: true,
-                tooltip_text: _("Import ArcMenu Theme Presets from a file")  
             });
             importColorPresetButton.connect('clicked', ()=> {
                 this._showFileChooser(
@@ -5512,7 +5483,6 @@ var MiscPage = GObject.registerClass(
                 label: _("Export Theme Preset"),
                 hexpand: true,
                 vexpand: true,
-                tooltip_text: _("Export and save your ArcMenu Theme Presets to a file")  
             });
             exportColorPresetButton.connect('clicked', ()=> {
                 let dialog = new ExportColorThemeDialogWindow(this._settings, this);
@@ -5617,7 +5587,6 @@ var MiscPage = GObject.registerClass(
                 vexpand: true,
                 hexpand: false,
                 label: _("Reset all Settings"),
-                tooltip_text: _('Reset all ArcMenu Settings to Default') 
             });
             let context = resetSettingsButton.get_style_context();
             context.add_class('suggested-action');
@@ -5875,7 +5844,6 @@ var AboutPage = GObject.registerClass(
             let donateLinkButton = new Gtk.LinkButton({
                 child: donateImage,
                 uri: 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Donate+to+support+my+work&currency_code=USD&source=url',
-                tooltip_text: _("Donate to the ArcMenu Project")
             });
 
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path + '/media/icons/prefs_icons/patreon-icon.svg', 150, 50);
@@ -5885,7 +5853,6 @@ var AboutPage = GObject.registerClass(
             let patreonLinkButton = new Gtk.LinkButton({
                 child: patreonImage,
                 uri: 'https://www.patreon.com/ArcMenu',
-                tooltip_text: _("Become a Patron of the ArcMenu Project")
             });
 
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path + '/media/icons/prefs_icons/gitlab-icon.svg', 150, 50);
@@ -5896,7 +5863,6 @@ var AboutPage = GObject.registerClass(
             let projectLinkButton = new Gtk.LinkButton({
                 child: gitlabImage,
                 uri: projectUrl,
-                tooltip_text: _("ArcMenu GitLab")
             });
             
             linksBox.add(projectLinkButton);
