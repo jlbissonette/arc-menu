@@ -112,6 +112,12 @@ var CaretPosition = {
     MIDDLE: 2,
 };
 
+var ForcedMenuLocation = {
+    OFF: 0,
+    TOP_CENTERED: 1,
+    BOTTOM_CENTERED: 2,
+}
+
 var MenuItemType = {
     BUTTON: 0,
     MENU_ITEM: 1

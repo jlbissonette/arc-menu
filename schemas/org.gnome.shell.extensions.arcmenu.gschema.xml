@@ -23,6 +23,11 @@
         <value value='19' nick='Launcher'/>
         <value value='20' nick='Eleven'/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.forcemenulocation'>
+        <value value='0' nick='Off'/>
+        <value value='1' nick='TopCentered'/>
+        <value value='2' nick='BottomCentered'/>
+    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>
         <value value='1' nick='Super_L'/>
@@ -88,6 +93,11 @@
       <default>'Default'</default>
       <summary>menu layout</summary>
       <description>Menu Layout</description>
+    </key>
+    <key name="force-menu-location" enum="org.gnome.shell.extensions.arcmenu.forcemenulocation">
+      <default>'Off'</default>
+      <summary>Force the menu to a specific location</summary>
+      <description>Force the menu to a specific location</description>
     </key>
     <key type="b" name="disable-hotkey-onkeyrelease">
       <default>false</default>
