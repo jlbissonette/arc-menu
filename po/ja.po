@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-02 18:48-0400\n"
-"PO-Revision-Date: 2020-12-06 21:00+0900\n"
+"PO-Revision-Date: 2021-08-17 12:05+0900\n"
 "Last-Translator: Yamada Hayao <hayao@fascode.net>\n"
 "Language-Team: Japanese <>\n"
 "Language: ja\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0\n"
 
 #: menuWidgets.js:163
 msgid "Open Folder Location"
@@ -176,7 +176,7 @@ msgstr "新規"
 
 #: menuWidgets.js:2913 prefs.js:303
 msgid "Type to search…"
-msgstr "入力して検索"
+msgstr "入力して検索..."
 
 #: menuWidgets.js:3089 menulayouts/plasma.js:141 prefs.js:6050
 msgid "Applications"
@@ -192,7 +192,7 @@ msgstr "ArcMenu"
 
 #: menuWidgets.js:3416
 msgid "Add world clocks…"
-msgstr "世界時計を追加する"
+msgstr "世界時計を追加する..."
 
 #: menuWidgets.js:3417
 msgid "World Clocks"
@@ -204,7 +204,7 @@ msgstr "天気"
 
 #: menuWidgets.js:3645
 msgid "Select a location…"
-msgstr "地域を選択"
+msgstr "地域を選択..."
 
 #: menuWidgets.js:3658
 msgid "Loading…"
@@ -236,7 +236,7 @@ msgstr "コンピュータ"
 #: placeDisplay.js:321
 #, javascript-format
 msgid "Ejecting drive “%s” failed:"
-msgstr "\"%s\" の取り出しに失敗しました"
+msgstr "\"%s\" の取り出しに失敗しました:"
 
 #: placeDisplay.js:447 menulayouts/ubuntudash.js:234
 #: menulayouts/baseMenuLayout.js:348 menulayouts/baseMenuLayout.js:388
@@ -282,15 +282,15 @@ msgstr "Plasma"
 
 #: constants.js:306
 msgid "tognee Menu"
-msgstr "togbee"
+msgstr "tognee メニュー"
 
 #: constants.js:307
 msgid "Insider Menu"
-msgstr "Insider"
+msgstr "Insider メニュー"
 
 #: constants.js:308
 msgid "Redmond Menu Style"
-msgstr "Redmond Menu"
+msgstr "Redmon dメニュー"
 
 #: constants.js:309
 msgid "Windows 10 Style"
@@ -298,7 +298,7 @@ msgstr "Windows 10"
 
 #: constants.js:312
 msgid "Elementary Menu Style"
-msgstr "Elementary Menu"
+msgstr "Elementary メニュー"
 
 #: constants.js:313
 msgid "Chromebook Style"
@@ -367,56 +367,57 @@ msgid ""
 "Simple layouts are designed for mouse based devices and contain simplistic "
 "menu elements."
 msgstr ""
+"シンプルなメニューで構成され、マウスベースのデバイス用に設計されています"
 
 #: constants.js:339
 msgid "Launcher"
-msgstr ""
+msgstr "ランチャー"
 
 #: constants.js:340
 msgid ""
 "Launcher layouts are well suited for keyboard driven devices and provide the "
 "user with quick and simple menu elements."
-msgstr ""
+msgstr "キーボードベースのデバイス用に設計されているシンプルなメニューです"
 
 #: constants.js:341
 msgid "Alternative"
-msgstr ""
+msgstr "新しいメニュー"
 
 #: constants.js:342
 msgid ""
 "Alternative layouts have an unconventional style that provide a unique user "
 "experience."
-msgstr ""
+msgstr "新しいメニューは今までにない新しい独自のレイアウトです"
 
 #: prefsWidgets.js:321
 msgid "Included Layouts"
-msgstr ""
+msgstr "含まれているレイアウト"
 
 #: prefsWidgets.js:342 prefs.js:2704
 msgid "Menu Layouts"
-msgstr ""
+msgstr "メニューレイアウト"
 
 #: prefsWidgets.js:368
 msgid "Browse all"
-msgstr ""
+msgstr "参照"
 
 #: prefsWidgets.js:374
 msgid "Information"
-msgstr ""
+msgstr "情報"
 
 #: search.js:870
 msgid "Searching..."
-msgstr ""
+msgstr "検索中..."
 
 #: search.js:872
 msgid "No results."
-msgstr ""
+msgstr "見つかりませんでした。"
 
 #: search.js:1052
 #, javascript-format
 msgid "%d more"
 msgid_plural "%d more"
-msgstr[0] ""
+msgstr[0] "%d 以上"
 
 #: menulayouts/redmond.js:174 menulayouts/plasma.js:180
 #: menulayouts/ubuntudash.js:196 menulayouts/ubuntudash.js:240
@@ -424,217 +425,217 @@ msgstr[0] ""
 #: menulayouts/raven.js:178 menulayouts/arcmenu.js:182
 #: menulayouts/tognee.js:155 menulayouts/windows.js:146 menulayouts/mint.js:226
 msgid "Software"
-msgstr ""
+msgstr "ソフトウェア"
 
 #: menulayouts/redmond.js:174 menulayouts/plasma.js:180
 #: menulayouts/ubuntudash.js:196 menulayouts/raven.js:178
 #: menulayouts/arcmenu.js:182 menulayouts/tognee.js:155
 #: menulayouts/windows.js:146 prefs.js:2406 prefs.js:2424 prefs.js:2454
 msgid "Tweaks"
-msgstr ""
+msgstr "調整"
 
 #: menulayouts/plasma.js:276 menulayouts/windows.js:331
 msgid "Application Shortcuts"
-msgstr ""
+msgstr "アプリケーションショートカット"
 
 #: menulayouts/plasma.js:280 menulayouts/windows.js:335
 msgid "Places"
-msgstr ""
+msgstr "場所"
 
 #: menulayouts/plasma.js:291 menulayouts/windows.js:192 prefs.js:5383
 msgid "Bookmarks"
-msgstr ""
+msgstr "ブックマーク"
 
 #: menulayouts/plasma.js:299 menulayouts/windows.js:200
 msgid "Devices"
-msgstr ""
+msgstr "デバイス"
 
 #: menulayouts/plasma.js:307 menulayouts/baseMenuLayout.js:348
 #: menulayouts/baseMenuLayout.js:404 menulayouts/windows.js:208
 msgid "Network"
-msgstr ""
+msgstr "ネットワーク"
 
 #: menulayouts/plasma.js:341 menulayouts/windows.js:247
 msgid "Session"
-msgstr ""
+msgstr "セッション"
 
 #: menulayouts/plasma.js:350 menulayouts/windows.js:256
 msgid "System"
-msgstr ""
+msgstr "システム"
 
 #: menulayouts/plasma.js:357 menulayouts/windows.js:262
 msgid "Restart..."
-msgstr ""
+msgstr "再起動..."
 
 #: menulayouts/plasma.js:361 menulayouts/windows.js:266
 msgid "Power Off..."
-msgstr ""
+msgstr "シャットダウン..."
 
 #: menulayouts/ubuntudash.js:235 menulayouts/baseMenuLayout.js:348
 #: menulayouts/windows.js:71 menulayouts/mint.js:228 menulayouts/insider.js:70
 #: menulayouts/insider.js:213
 msgid "Documents"
-msgstr ""
+msgstr "ドキュメント"
 
 #: menulayouts/ubuntudash.js:236 menulayouts/baseMenuLayout.js:348
 msgid "Downloads"
-msgstr ""
+msgstr "ダウンロード"
 
 #: menulayouts/ubuntudash.js:244 menulayouts/mint.js:230
 msgid "Files"
-msgstr ""
+msgstr "ファイル"
 
 #: menulayouts/ubuntudash.js:439 menulayouts/raven.js:314 prefs.js:6042
 msgid "Shortcuts"
-msgstr ""
+msgstr "ショートカット"
 
 #: menulayouts/baseMenuLayout.js:348
 msgid "Music"
-msgstr ""
+msgstr "音楽"
 
 #: menulayouts/baseMenuLayout.js:348
 msgid "Pictures"
-msgstr ""
+msgstr "ピクチャ"
 
 #: menulayouts/baseMenuLayout.js:348
 msgid "Videos"
-msgstr ""
+msgstr "ビデオ"
 
 #: menulayouts/tweaks/tweaks.js:93
 msgid "Category Activation"
-msgstr ""
+msgstr "カテゴリーを有効化"
 
 #: menulayouts/tweaks/tweaks.js:99
 msgid "Mouse Click"
-msgstr ""
+msgstr "マウスのクリック"
 
 #: menulayouts/tweaks/tweaks.js:100
 msgid "Mouse Hover"
-msgstr ""
+msgstr "マウスのホバー"
 
 #: menulayouts/tweaks/tweaks.js:119
 msgid "Avatar Icon Shape"
-msgstr ""
+msgstr "アバターの形"
 
 #: menulayouts/tweaks/tweaks.js:124
 msgid "Circular"
-msgstr ""
+msgstr "円形"
 
 #: menulayouts/tweaks/tweaks.js:125
 msgid "Square"
-msgstr ""
+msgstr "四角"
 
 #: menulayouts/tweaks/tweaks.js:140 menulayouts/tweaks/tweaks.js:218
 msgid "Searchbar Location"
-msgstr ""
+msgstr "検索バーの場所"
 
 #: menulayouts/tweaks/tweaks.js:146 menulayouts/tweaks/tweaks.js:224
 msgid "Bottom"
-msgstr ""
+msgstr "下部"
 
 #: menulayouts/tweaks/tweaks.js:147 menulayouts/tweaks/tweaks.js:225
 #: menulayouts/tweaks/tweaks.js:417
 msgid "Top"
-msgstr ""
+msgstr "上部"
 
 #: menulayouts/tweaks/tweaks.js:160
 msgid "Flip Layout Horizontally"
-msgstr ""
+msgstr "レイアウトを水平方向に反転"
 
 #: menulayouts/tweaks/tweaks.js:177
 msgid "Disable User Avatar"
-msgstr ""
+msgstr "アバターを無効化"
 
 #: menulayouts/tweaks/tweaks.js:195
 msgid "Show Applications Grid"
-msgstr ""
+msgstr "グリッドを表示"
 
 #: menulayouts/tweaks/tweaks.js:237
 msgid "Activate on Hover"
-msgstr ""
+msgstr "ホバーでアクティブ"
 
 #: menulayouts/tweaks/tweaks.js:253
 msgid "Show Application Descriptions"
-msgstr ""
+msgstr "アプリケーションの説明を表示"
 
 #: menulayouts/tweaks/tweaks.js:269
 msgid "Selected Button Border Color"
-msgstr ""
+msgstr "選択されたボタンの下線の色"
 
 #: menulayouts/tweaks/tweaks.js:287
 msgid "Selected Button Background Color"
-msgstr ""
+msgstr "選択されたボタンの背景色"
 
 #: menulayouts/tweaks/tweaks.js:306 prefs.js:2065 prefs.js:3135 prefs.js:3461
 #: prefs.js:3553 prefs.js:4556 prefs.js:4774 prefs.js:5056
 msgid "Restore Defaults"
-msgstr ""
+msgstr "デフォルトに戻す"
 
 #: menulayouts/tweaks/tweaks.js:344 menulayouts/tweaks/tweaks.js:511
 #: menulayouts/tweaks/tweaks.js:652
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: menulayouts/tweaks/tweaks.js:365
 msgid "Brisk Menu Shortcuts"
-msgstr ""
+msgstr "Briskメニューのショートカット"
 
 #: menulayouts/tweaks/tweaks.js:393
 msgid "Enable Activities Overview Shortcut"
-msgstr ""
+msgstr "アクティビティショートカットを有効化"
 
 #: menulayouts/tweaks/tweaks.js:412
 msgid "KRunner Position"
-msgstr ""
+msgstr "KRunnerの配置"
 
 #: menulayouts/tweaks/tweaks.js:418
 msgid "Centered"
-msgstr ""
+msgstr "中央"
 
 #: menulayouts/tweaks/tweaks.js:429 menulayouts/tweaks/tweaks.js:611
 msgid "Show Extra Large Icons with App Descriptions"
-msgstr ""
+msgstr "アプリの説明付きの大きいアイコンを表示する"
 
 #: menulayouts/tweaks/tweaks.js:450 prefs.js:813 prefs.js:6026
 msgid "General"
-msgstr ""
+msgstr "一般"
 
 #: menulayouts/tweaks/tweaks.js:453
 msgid "Buttons"
-msgstr ""
+msgstr "ボタン"
 
 #: menulayouts/tweaks/tweaks.js:461 menulayouts/tweaks/tweaks.js:590
 #: menulayouts/tweaks/tweaks.js:914 menulayouts/tweaks/tweaks.js:944
 msgid "Default Screen"
-msgstr ""
+msgstr "デフォルトの画面"
 
 #: menulayouts/tweaks/tweaks.js:482 prefs.js:3280
 msgid "Disable Menu Arrow"
-msgstr ""
+msgstr "メニューの印を無効化"
 
 #: menulayouts/tweaks/tweaks.js:490 prefs.js:3288
 msgid "Disable current theme menu arrow pointer"
-msgstr ""
+msgstr "現在のテーマのアローポインターを無効化"
 
 #: menulayouts/tweaks/tweaks.js:532
 msgid "Ubuntu Dash Buttons"
-msgstr ""
+msgstr "Ubutnu Dash ボタン"
 
 #: menulayouts/tweaks/tweaks.js:541
 msgid "Button Separator Position"
-msgstr ""
+msgstr "セパレータの位置"
 
 #: menulayouts/tweaks/tweaks.js:550 menulayouts/tweaks/tweaks.js:685
 msgid "Separator Position"
-msgstr ""
+msgstr "セパレータの位置"
 
 #: menulayouts/tweaks/tweaks.js:569 menulayouts/tweaks/tweaks.js:704
 msgid "Adjust the position of the separator in the button panel"
-msgstr ""
+msgstr "ボタンパネルのセパレーターの位置を調整"
 
 #: menulayouts/tweaks/tweaks.js:640
 msgid "Mint Menu Shortcuts"
-msgstr ""
+msgstr "Mint メニューショートカット"
 
 #: menulayouts/tweaks/tweaks.js:676
 msgid "Shortcut Separator Position"
@@ -770,7 +771,7 @@ msgstr ""
 
 #: prefs.js:725
 msgid "Icon:"
-msgstr ""
+msgstr "アイコン:"
 
 #: prefs.js:738
 msgid "Please select an image icon"
@@ -854,7 +855,7 @@ msgstr ""
 
 #: prefs.js:951
 msgid "None"
-msgstr ""
+msgstr "なし"
 
 #: prefs.js:956
 msgid "Clear ArcMenu hotkey, use GNOME default"
@@ -862,7 +863,7 @@ msgstr ""
 
 #: prefs.js:1018
 msgid "Current Hotkey"
-msgstr ""
+msgstr "現在のホットキー"
 
 #: prefs.js:1027
 msgid "Current custom hotkey"
@@ -886,79 +887,79 @@ msgstr ""
 
 #: prefs.js:1080
 msgid "Dash to Dock"
-msgstr ""
+msgstr "Dash to Dock"
 
 #: prefs.js:1084
 msgid "Ubuntu Dock"
-msgstr ""
+msgstr "Ubuntu Dock"
 
 #: prefs.js:1087
 msgid "Main Panel"
-msgstr ""
+msgstr "メインパネル"
 
 #: prefs.js:1088
 msgid "Dash to Panel"
-msgstr ""
+msgstr "Dash to Panel"
 
 #: prefs.js:1142
 msgid "Disable Activities Button"
-msgstr ""
+msgstr "アクティビティボタンを無効化"
 
 #: prefs.js:1143
 msgid "Dash to Dock extension not running!"
-msgstr ""
+msgstr "Dash to Dockが動いていません"
 
 #: prefs.js:1143
 msgid "Enable Dash to Dock for this feature to work."
-msgstr ""
+msgstr "この機能を使うにはDash to Dockを有効化してください"
 
 #: prefs.js:1151
 msgid "Disable Activities Button in panel"
-msgstr ""
+msgstr "パネルアクティビティボタンを無効化"
 
 #: prefs.js:1180
 msgid "Dash to Panel currently enabled!"
-msgstr ""
+msgstr "Dash to Panelが有効化されました"
 
 #: prefs.js:1180
 msgid "Disable Dash to Panel for this feature to work."
-msgstr ""
+msgstr "この機能を使うにはDash to Dockを無効化してください"
 
 #: prefs.js:1181
 msgid "Dash to Panel extension not running!"
-msgstr ""
+msgstr "Dash to PAnelが動いていません"
 
 #: prefs.js:1181
 msgid "Enable Dash to Panel for this feature to work."
-msgstr ""
+msgstr "この機能を使うにはDash to Panelを有効化してください"
 
 #: prefs.js:1202
 msgid "Position in Dash to Panel"
-msgstr ""
+msgstr "Dash to Panelの位置"
 
 #: prefs.js:1202
 msgid "Position in Main Panel"
-msgstr ""
+msgstr "メインパネルの位置"
 
 #: prefs.js:1209
 msgid "Left"
-msgstr ""
+msgstr "左"
 
 #: prefs.js:1210
 msgid "Position ArcMenu on the Left side of Dash to Panel"
-msgstr ""
+msgstr "ArcMenuをDash to Panelの左に表示"
 
 #: prefs.js:1211
 msgid "Position ArcMenu on the Left side of the Main Panel"
-msgstr ""
+msgstr "ArcMenuをメインパネルの左に表示"
 
 #: prefs.js:1214
 msgid "Center"
-msgstr ""
+msgstr "中央"
 
 #: prefs.js:1216
 msgid "Position ArcMenu in the Center of Dash to Panel"
-msgstr ""
+msgstr "ArcMenuをDash to Panelの中央に表示"
 
 #: prefs.js:1217
 msgid "Position ArcMenu in the Center of the Main Panel"
@@ -1098,7 +1099,7 @@ msgstr "Alt"
 
 #: prefs.js:1700
 msgid "Menu Button Appearance"
-msgstr ""
+msgstr "メニューボタンの見た目"
 
 #: prefs.js:1710
 msgid "Appearance"
@@ -1122,165 +1123,167 @@ msgstr "テキストとアイコン"
 
 #: prefs.js:1720
 msgid "Hidden"
-msgstr ""
+msgstr "隠す"
 
 #: prefs.js:1744
 msgid "Show Arrow"
-msgstr ""
+msgstr "印を表示する"
 
 #: prefs.js:1784
 msgid "Restore Activities Button"
-msgstr ""
+msgstr "アクティビティボタンを戻す"
 
 #: prefs.js:1792
 msgid "Restore Activities Button in panel"
-msgstr ""
+msgstr "アクティビティボタンをパネルに戻す"
 
 #: prefs.js:1804
 msgid "Icon Appearance"
-msgstr ""
+msgstr "アイコンの見た目"
 
 #: prefs.js:1824
 msgid "Browse Icons"
-msgstr ""
+msgstr "参照"
 
 #: prefs.js:1830
 msgid "Choose from a variety of icons"
-msgstr ""
+msgstr "様々なアイコンから選択"
 
 #: prefs.js:1849
 msgid "Icon Size"
-msgstr ""
+msgstr "アイコンサイズ"
 
 #: prefs.js:1881
 msgid "Icon Padding"
-msgstr ""
+msgstr "アイコンの空白"
 
 #: prefs.js:1912
 msgid "Menu Button Colors"
-msgstr ""
+msgstr "メニューボタンの色"
 
 #: prefs.js:1922
 msgid "Color"
-msgstr ""
+msgstr "色"
 
 #: prefs.js:1939
 msgid "Change the color of the Menu Button"
-msgstr ""
+msgstr "メニューボタンの色を変える"
 
 #: prefs.js:1939 prefs.js:1973 prefs.js:2007
 msgid ""
 "Icon color options will only work with files ending with \"-symbolic.svg\""
 msgstr ""
+"アイコンカラーのオプションは \"-symbolic.svg\"で終わるファイルでのみ動作しま"
+"す"
 
 #: prefs.js:1956
 msgid "Hover Color"
-msgstr ""
+msgstr "ホバー時の色"
 
 #: prefs.js:1973
 msgid "Change the hover color of the Menu Button"
-msgstr ""
+msgstr "メニューボタンにホバー時の色を変える"
 
 #: prefs.js:1990
 msgid "Active Color"
-msgstr ""
+msgstr "アクティブな色"
 
 #: prefs.js:2007
 msgid "Change the active color of the Menu Button"
-msgstr ""
+msgstr "メニューボタンのアクティブ時の色を変える"
 
 #: prefs.js:2024
 msgid "Hover Background Color"
-msgstr ""
+msgstr "ホバー時の背景色"
 
 #: prefs.js:2044
 msgid "Active Background Color"
-msgstr ""
+msgstr "アクティブな背景色"
 
 #: prefs.js:2126 prefs.js:2232
 msgid "ArcMenu Icons"
-msgstr ""
+msgstr "ArcMenu アイコン"
 
 #: prefs.js:2202
 msgid "Browse for a Custom Icon"
-msgstr ""
+msgstr "その他のアイコンを参照"
 
 #: prefs.js:2211
 msgid "Select an Icon"
-msgstr ""
+msgstr "アイコンを選択"
 
 #: prefs.js:2233
 msgid "Distro Icons"
-msgstr ""
+msgstr "ディストリビューション アイコン"
 
 #: prefs.js:2234
 msgid "Custom Icon"
-msgstr ""
+msgstr "任意のアイコン"
 
 #: prefs.js:2291
 msgid "Legal disclaimer for Distro Icons..."
-msgstr ""
+msgstr "ディストリビューションアイコンの免責事項..."
 
 #: prefs.js:2369
 msgid "Current Menu Layout"
-msgstr ""
+msgstr "現在のメニューレイアウト"
 
 #: prefs.js:2375
 msgid "Choose New Layout"
-msgstr ""
+msgstr "新しいレイアウトを選択"
 
 #: prefs.js:2401
 msgid "Tweaks for the current menu layout"
-msgstr ""
+msgstr "現在のメニューレイアウトを調整"
 
 #: prefs.js:2528
 msgid "Enable Custom Menu Theme"
-msgstr ""
+msgstr "カスタムテーマを有効化"
 
 #: prefs.js:2538
 msgid "Override Menu Theme"
-msgstr ""
+msgstr "メニューテーマを上書き"
 
 #: prefs.js:2546
 msgid "Override the ArcMenu extension theme"
-msgstr ""
+msgstr "ArcMenuテーマを上書き"
 
 #: prefs.js:2819
 msgid "Menu Height"
-msgstr ""
+msgstr "メニューの高さ"
 
 #: prefs.js:2833
 msgid "Adjust the menu height"
-msgstr ""
+msgstr "メニューの高さを調整する"
 
 #: prefs.js:2833 prefs.js:2881 prefs.js:2927 prefs.js:2975 prefs.js:2997
 #: prefs.js:3046 prefs.js:3240
 msgid "Certain menu layouts only"
-msgstr ""
+msgstr "特定のメニューレイアウトのみ"
 
 #: prefs.js:2873
 msgid "Left-Panel Width"
-msgstr ""
+msgstr "左パネルの横幅"
 
 #: prefs.js:2881
 msgid "Adjust the left-panel width"
-msgstr ""
+msgstr "左パネルの横幅を調整する"
 
 #: prefs.js:2919
 msgid "Right-Panel Width"
-msgstr ""
+msgstr "右パネルの横幅"
 
 #: prefs.js:2927
 msgid "Adjust the right-panel width"
-msgstr ""
+msgstr "右パネルの横幅を調整する"
 
 #: prefs.js:2967
 msgid "Large Application Icons"
-msgstr ""
+msgstr "大きいアプリアイコン"
 
 #: prefs.js:2975
 msgid "Enable large application icons"
-msgstr ""
+msgstr "大きいアプリアイコンを有効化"
 
 #: prefs.js:2989
 msgid "Category Sub Menus"
@@ -1399,7 +1402,7 @@ msgstr ""
 
 #: prefs.js:3643
 msgid "Enable/Disble"
-msgstr ""
+msgstr "有効/無効"
 
 #: prefs.js:3698
 msgid "Color Theme Name"
@@ -1587,11 +1590,11 @@ msgstr "設定をエクスポート"
 
 #: prefs.js:5525
 msgid "Export or Import Menu Theme Presets"
-msgstr ""
+msgstr "テーマプリセットのエクスポートとインポート"
 
 #: prefs.js:5525
 msgid "Menu theme presets are located in the \"Menu Theme\" section"
-msgstr ""
+msgstr "メニューテーマのプリセットは「メニューテーマ」セクションにあります"
 
 #: prefs.js:5538 prefs.js:5545
 msgid "Import Theme Preset"
@@ -1599,11 +1602,11 @@ msgstr "テーマプリセットをインポート"
 
 #: prefs.js:5541
 msgid "Import ArcMenu Theme Presets from a file"
-msgstr ""
+msgstr "ファイルからArcMenu テーマをインポート"
 
 #: prefs.js:5581 prefs.js:5593
 msgid "Export Theme Preset"
-msgstr ""
+msgstr "テーマプリセットをエクスポート"
 
 #: prefs.js:5584
 msgid "Export and save your ArcMenu Theme Presets to a file"
@@ -1615,7 +1618,7 @@ msgstr "ArcMenuのバージョン"
 
 #: prefs.js:5725
 msgid "Git Commit"
-msgstr ""
+msgstr "Git コミット"
 
 #: prefs.js:5745
 msgid "GNOME Version"
@@ -1627,51 +1630,51 @@ msgstr "OS"
 
 #: prefs.js:5795
 msgid "Session Type"
-msgstr ""
+msgstr "セッションタイプ"
 
 #: prefs.js:5826
 msgid "A Dynamic, Traditional, Modern Menu for GNOME"
-msgstr ""
+msgstr "Gnomeのためのダイナミック、伝統的、モダンなメニュー"
 
 #: prefs.js:5850
 msgid "Donate to the ArcMenu Project"
-msgstr ""
+msgstr "ArcMenuプロジェクトに寄付する"
 
 #: prefs.js:5868 menuButton.js:720
 msgid "ArcMenu GitLab Page"
-msgstr ""
+msgstr "ArchMenu GitLab"
 
 #: prefs.js:5891
 msgid "Developers"
-msgstr ""
+msgstr "開発者"
 
 #: prefs.js:5893
 msgid "Translators"
-msgstr ""
+msgstr "翻訳者"
 
 #: prefs.js:5895
 msgid "Contributors"
-msgstr ""
+msgstr "貢献者"
 
 #: prefs.js:5897
 msgid "Artwork"
-msgstr ""
+msgstr "アートワーク"
 
 #: prefs.js:6028
 msgid "Menu Layout"
-msgstr ""
+msgstr "メニューレイアウト"
 
 #: prefs.js:6029
 msgid "Menu Theme"
-msgstr ""
+msgstr "メニューテーマ"
 
 #: prefs.js:6030 prefs.js:6039
 msgid "Menu Settings"
-msgstr ""
+msgstr "メニュー設定"
 
 #: prefs.js:6032
 msgid "Button Appearance"
-msgstr ""
+msgstr "ボタンの外見"
 
 #: prefs.js:6035
 msgid "About"
@@ -1683,31 +1686,31 @@ msgstr ""
 
 #: prefs.js:6049
 msgid "Directories"
-msgstr ""
+msgstr "ディレクトリ"
 
 #: prefs.js:6051
 msgid "Session Buttons"
-msgstr ""
+msgstr "設定ボタン"
 
 #: prefs.js:6052
 msgid "Extra Shortcuts"
-msgstr ""
+msgstr "追加のショートカット"
 
 #: prefs.js:6063
 msgid "Reset all..."
-msgstr ""
+msgstr "全てリセット..."
 
 #: prefs.js:6065
 msgid "Reset all ArcMenu Settings to Default"
-msgstr ""
+msgstr "全てのArcMenuの設定をデフォルトに戻す"
 
 #: prefs.js:6071
 msgid "Restore Default Settings?"
-msgstr ""
+msgstr "デフォルトの設定を復元しますか？"
 
 #: prefs.js:6071
 msgid "All ArcMenu settings will be reset to the default value."
-msgstr ""
+msgstr "全ての設定はデフォルトの値にリセットされます"
 
 #: prefs.js:6156
 msgid "Error - Invalid Shortcut"
