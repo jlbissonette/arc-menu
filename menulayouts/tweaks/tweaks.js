@@ -501,7 +501,7 @@ var TweaksPage = GObject.registerClass({
         let runnerMenuTweaksFrame = new PW.FrameBox();
         let runnerPositionRow = new PW.FrameBoxRow();
         let runnerPositionLabel = new Gtk.Label({
-            label: _('Runner Position'),
+            label: _('Position'),
             xalign:0,
             hexpand: true,
         });   
@@ -515,24 +515,138 @@ var TweaksPage = GObject.registerClass({
         runnerPositionRow.add(runnerPositionLabel);
         runnerPositionRow.add(runnerPositionCombo);
         runnerMenuTweaksFrame.add(runnerPositionRow);
-        
-        let showMoreDetailsRow = new PW.FrameBoxRow();
-        let showMoreDetailsLabel = new Gtk.Label({
-            label: _("Show Extra Large Icons with App Descriptions"),
+
+        let runnerWidthRow = new PW.FrameBoxRow();
+        let runnerWidthLabel = new Gtk.Label({
+            label: _("Width"),
+            use_markup: true,
+            hexpand: true,
+            xalign: 0
+        });
+        let runnerWidthScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 300,
+                upper: 1000,
+                step_increment: 1,
+                page_increment: 1,
+                page_size: 0
+            }),
+            digits: 0,
+            round_digits: 0,
+            hexpand: true,
+            draw_value: true,
+            value_pos: Gtk.PositionType.RIGHT
+        });
+        runnerWidthScale.add_mark(500, Gtk.PositionType.TOP, _("Default"));
+        runnerWidthScale.set_value(this._settings.get_int('runner-menu-width'));
+        runnerWidthScale.connect('value-changed', (widget) => {
+            this._settings.set_int('runner-menu-width', widget.get_value());
+        });
+        runnerWidthRow.add(runnerWidthLabel);
+        runnerWidthRow.add(runnerWidthScale);
+        runnerMenuTweaksFrame.add(runnerWidthRow);
+
+        let runnerHeightRow = new PW.FrameBoxRow();
+        let runnerHeightLabel = new Gtk.Label({
+            label: _("Height"),
+            use_markup: true,
+            hexpand: true,
+            xalign: 0
+        });
+        let runnerHeightScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 300,
+                upper: 1000,
+                step_increment: 1,
+                page_increment: 1,
+                page_size: 0
+            }),
+            digits: 0,
+            round_digits: 0,
+            hexpand: true,
+            draw_value: true,
+            value_pos: Gtk.PositionType.RIGHT
+        });
+        runnerHeightScale.add_mark(400, Gtk.PositionType.TOP, _("Default"));
+        runnerHeightScale.set_value(this._settings.get_int('runner-menu-height'));
+        runnerHeightScale.connect('value-changed', (widget) => {
+            this._settings.set_int('runner-menu-height', widget.get_value());
+        });
+
+        runnerHeightRow.add(runnerHeightLabel);
+        runnerHeightRow.add(runnerHeightScale);
+        runnerMenuTweaksFrame.add(runnerHeightRow);
+
+        let runnerFontSizeRow = new PW.FrameBoxRow();
+        let runnerFontSizeLabel = new Gtk.Label({
+            label: _("Font Size"),
+            hexpand: true,
+            use_markup: true,
+            xalign: 0
+        });
+        let runnerFontSizeScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 0,
+                upper: 30,
+                step_increment: 1,
+                page_increment: 1,
+                page_size: 0
+            }),
+            digits: 0,
+            round_digits: 0,
+            hexpand: true,
+            draw_value: true,
+            value_pos: Gtk.PositionType.RIGHT
+        });
+
+        runnerFontSizeScale.add_mark(0, Gtk.PositionType.TOP, _("Default"));
+        runnerFontSizeScale.set_value(this._settings.get_int('runner-font-size'));
+        runnerFontSizeScale.connect('value-changed', (widget) => {
+            this._settings.set_int('runner-font-size', widget.get_value());
+        });
+        runnerFontSizeRow.add(runnerFontSizeLabel);
+        runnerFontSizeRow.add(runnerFontSizeScale);
+        runnerMenuTweaksFrame.add(runnerFontSizeRow);
+
+        let frequentAppsRow = new PW.FrameBoxRow();
+        let frequentAppsLabel = new Gtk.Label({
+            label: _("Show Frequent Apps"),
             use_markup: true,
             xalign: 0,
             hexpand: true
         });
+        
+        let frequentAppsSwitch = new Gtk.Switch();
+        if(this._settings.get_boolean('runner-show-frequent-apps'))
+            frequentAppsSwitch.set_active(true);
+        frequentAppsSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('runner-show-frequent-apps', widget.get_active());
+        });   
+        frequentAppsRow.add(frequentAppsLabel);
+        frequentAppsRow.add(frequentAppsSwitch);
+        runnerMenuTweaksFrame.add(frequentAppsRow);
 
-        let showMoreDetailsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
-        showMoreDetailsSwitch.set_active(this._settings.get_boolean('apps-show-extra-details'));
-        showMoreDetailsSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('apps-show-extra-details', widget.get_active());
+        let inheritThemeGapRow = new PW.FrameBoxRow();
+        let inheritThemeGapLabel = new Gtk.Label({
+            label: _("Inherit Shell Theme Popup Gap"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
         });
+        
+        let inheritThemeGapSwitch = new Gtk.Switch();
+        if(this._settings.get_boolean('runner-use-theme-gap'))
+            inheritThemeGapSwitch.set_active(true);
+        inheritThemeGapSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('runner-use-theme-gap', widget.get_active());
+        });   
+        inheritThemeGapRow.add(inheritThemeGapLabel);
+        inheritThemeGapRow.add(inheritThemeGapSwitch);
+        runnerMenuTweaksFrame.add(inheritThemeGapRow);
 
-        showMoreDetailsRow.add(showMoreDetailsLabel);
-        showMoreDetailsRow.add(showMoreDetailsSwitch);
-        runnerMenuTweaksFrame.add(showMoreDetailsRow);
         this.mainBox.add(runnerMenuTweaksFrame);
     }
     _loadUnityTweaks(){
@@ -663,27 +777,6 @@ var TweaksPage = GObject.registerClass({
         homeScreenRow.add(homeScreenCombo);
         generalTweaksFrame.add(homeScreenRow);
         this.mainBox.add(generalTweaksFrame);
-
-        let showMoreDetailsFrame = new PW.FrameBox();
-        let showMoreDetailsRow = new PW.FrameBoxRow();
-        let showMoreDetailsLabel = new Gtk.Label({
-            label: _("Show Extra Large Icons with App Descriptions"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-
-        let showMoreDetailsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
-        showMoreDetailsSwitch.set_active(this._settings.get_boolean('apps-show-extra-details'));
-        showMoreDetailsSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('apps-show-extra-details', widget.get_active());
-        });
-
-        showMoreDetailsRow.add(showMoreDetailsLabel);
-        showMoreDetailsRow.add(showMoreDetailsSwitch);
-        showMoreDetailsFrame.add(showMoreDetailsRow);
-        if(this._settings.get_enum('menu-layout') === Constants.MenuLayout.RAVEN)
-            this.mainBox.add(showMoreDetailsFrame);
 
         let widgetFrame =  this._createWidgetsRows(Constants.MenuLayout.RAVEN);
         this.mainBox.add(widgetFrame);

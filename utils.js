@@ -24,6 +24,58 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Constants = Me.imports.constants;
 const {Gio, GLib} = imports.gi;
 
+const PowerManagerInterface = `<node>
+  <interface name="org.freedesktop.login1.Manager">
+    <method name="HybridSleep">
+      <arg type="b" direction="in"/>
+    </method>
+    <method name="CanHybridSleep">
+      <arg type="s" direction="out"/>
+    </method>
+    <method name="Hibernate">
+      <arg type="b" direction="in"/>
+    </method>
+    <method name="CanHibernate">
+      <arg type="s" direction="out"/>
+    </method>
+  </interface>
+</node>`;
+const PowerManager = Gio.DBusProxy.makeProxyWrapper(PowerManagerInterface);
+
+function canHybridSleep(){
+    let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+    proxy.CanHybridSleepRemote((result, error) => {
+        if(!error && result[0] === 'yes')
+            return true;
+        else
+            return false;
+    });
+}
+
+function activateHybridSleep(){
+    if(canHybridSleep())
+        proxy.HybridSleepRemote(true);
+    else
+        imports.ui.main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
+}
+
+function canHibernate(){
+    let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+    proxy.CanHibernateRemote((result, error) => {
+        if(!error && result[0] === 'yes')
+            return true;
+        else
+            return false;
+    });
+}
+
+function activateHibernate(){
+    if(canHibernate())
+        proxy.HibernateRemote(true);
+    else
+        imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+}
+
 function getMenuLayout(button, layout){
     let MenuLayout = Me.imports.menulayouts;
     switch(layout){
@@ -65,6 +117,10 @@ function getMenuLayout(button, layout){
             return new MenuLayout.plasma.createMenu(button);
         case Constants.MenuLayout.WINDOWS:
             return new MenuLayout.windows.createMenu(button);
+        case Constants.MenuLayout.LAUNCHER:
+            return new MenuLayout.launcher.createMenu(button);
+        case Constants.MenuLayout.ELEVEN:
+            return new MenuLayout.eleven.createMenu(button);
         default:
             return new MenuLayout.arcmenu.createMenu(button);    
     }
@@ -105,7 +161,8 @@ function convertToGridLayout(item){
     let icon = item._icon ? item._icon : item._iconBin;
 
     item.vertical = true;
-    item.remove_child(item._ornamentLabel);
+    if(item._ornamentLabel)
+        item.remove_child(item._ornamentLabel);
 
     item.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
     item.label.x_align = item.label.y_align = Clutter.ActorAlign.CENTER;
@@ -116,7 +173,6 @@ function convertToGridLayout(item){
 
     if(item._settings.get_boolean('multi-lined-labels'))
         item.label.get_clutter_text().set_line_wrap(true);
-    
 
     if(item._indicator){
         item.remove_child(item._indicator);
@@ -448,20 +504,6 @@ function modifyColorLuminance(colorString, luminanceFactor, modifyAlpha){
 }
 
 function createStylesheet(settings){
-    //Added "Active Item Foreground Color" setting in v46. To update older color themes,
-    //add a preset color based on "Menu Foreground Color' into existing array.
-    //Old aray length was 12, New array length is 13
-    let all_color_themes = settings.get_value('color-themes').deep_unpack();
-    let changesMade = false;
-    for(let i = 0; i < all_color_themes.length; i++){
-        if(all_color_themes[i].length === 12){
-            all_color_themes[i].splice(5, 0, modifyColorLuminance(all_color_themes[i][2], 0.15));
-            changesMade = true;
-        }
-    }
-    if(changesMade)
-        settings.set_value('color-themes',new GLib.Variant('aas', all_color_themes));
-
     let customarcMenu = settings.get_boolean('enable-custom-arc-menu');
     let separatorColor = settings.get_string('separator-color');
     let menuColor = settings.get_string('menu-color');
@@ -518,6 +560,7 @@ function createStylesheet(settings){
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
         +".arc-menu-status-text{\ncolor:" + menuForegroundColor + ";\nfont-size:" + fontSize + "pt;\n}\n\n"                                                     
         +".search-statustext{\nfont-size:11pt;\n}\n\n"    
+        +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;\n text-align: center;\n border-radius: 12px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +".left-scroll-area{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
@@ -529,9 +572,15 @@ function createStylesheet(settings){
                             +"color:" + menuForegroundColor + ";\nbackground-color:" + menuColor + ";\n}\n\n"
         +".arc-search-entry:focus{\nborder-color:" + highlightColor + ";\nborder-width: 1px;\nbox-shadow: inset 0 0 0 1px " + modifyColorLuminance(highlightColor, 0.05) + ";\n}\n\n"
         +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.3) + ";\n}\n\n"
-                
+        +"#ArcSearchEntry{\nmin-height: 0px;\nborder-radius: 4px;\npadding: 7px 9px;\n}\n\n"
+        +"#ArcSearchEntryRound{\nmin-height: 0px;\nborder-radius: 18px;\npadding: 7px 12px;\n}\n\n"       
         + menuButtonStyle
         
+                
+        +"#arc-menu-launcher-button{\nmax-width: 90px;\nborder-radius: 0px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\nborder-color: transparent;\nborder-bottom-width: 3px;\n}\n\n"
+        +"#arc-menu-launcher-button.active-item, #arc-menu-launcher-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
+            +"\nborder-color: " + plasmaSelectedItemColor + ";\nborder-bottom-width: 3px;\n}\n\n"
+
         +"#arc-menu-plasma-button{\nwidth: 90px;\n height: 65px;\nborder-radius: 4px;\n text-align: center;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
         +"#arc-menu-plasma-button:active-item, .arc-menu-plasma-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             + plasmaButtonStyle + "\nborder-color: " + plasmaSelectedItemColor + ";\n}\n\n"

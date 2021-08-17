@@ -66,33 +66,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let settingsButton = new MW.SettingsButton(this);
         this.actionsBox.add(settingsButton.actor);
 
-        if(this._settings.get_boolean('show-logout-button')){
-            let logout = new MW.LogoutButton( this);
-            this.actionsBox.add(logout.actor);
-        }  
-        if(this._settings.get_boolean('show-lock-button')){
-            let lock = new MW.LockButton( this);
-            this.actionsBox.add(lock.actor);
-        }
-        if(this._settings.get_boolean('show-suspend-button')){
-            let suspend = new MW.SuspendButton( this);
-            this.actionsBox.add(suspend.actor);
-        }
-        if(this._settings.get_boolean('show-restart-button')){
-            let restart = new MW.RestartButton(this);
-            this.actionsBox.add(restart.actor);
-        }
-        if(this._settings.get_boolean('show-power-button')){
-            let power = new MW.PowerButton( this);
-            this.actionsBox.add(power.actor);
+        let powerOptions = this._settings.get_value("power-options").deep_unpack();
+        for(let i = 0; i < powerOptions.length; i++){
+            let powerType = powerOptions[i][0];
+            let shouldShow = powerOptions[i][1];
+            if(shouldShow){
+                let powerButton = new MW.PowerButton(this, powerType);
+                this.actionsBox.add(powerButton);
+            }
         }
            
         this.searchBox = new MW.SearchBox(this);
-        this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.actor.style ="margin: 10px; padding-top: 0.0em; padding-bottom: 0.5em;padding-left: 0.4em;padding-right: 0.4em;";
+            this.searchBox.style = "margin: 10px 10px 5px 10px;";
             this.mainBox.add(this.searchBox.actor);
         }
         else{
@@ -123,7 +112,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'small-vfade'
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         }); 
         let rightPanelWidth = this._settings.get_int('right-panel-width');
         rightPanelWidth += 45;
@@ -150,7 +139,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'apps-menu small-vfade left-scroll-area',
+            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
 
@@ -158,7 +147,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.actor.style = "margin: 10px 10px 0px 10px; padding-left: 0.4em;padding-right: 0.4em;";
+            this.searchBox.style = "margin: 10px 10px 0px 10px;";
             this.mainBox.add(this.searchBox.actor);
         }
         this.loadPinnedApps();

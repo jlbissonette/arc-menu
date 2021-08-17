@@ -34,7 +34,6 @@ const MenuLayouts = Me.imports.menulayouts;
 const MW = Me.imports.menuWidgets;
 const PlaceDisplay = Me.imports.placeDisplay;
 const PopupMenu = imports.ui.popupMenu;
-const SystemActions = imports.misc.systemActions;
 const Utils =  Me.imports.utils;
 
 //This class handles the core functionality of all the menu layouts.
@@ -54,7 +53,6 @@ var BaseLayout = class {
         this._focusChild = null;
         this.shouldLoadPinnedApps = true;
         this.hasPinnedApps = false;
-        this.systemActions = new SystemActions.getDefault();
 
         if(this.layoutProperties.Search)
             this.searchResults = new ArcSearch.SearchResults(this);
@@ -81,6 +79,7 @@ var BaseLayout = class {
     }
 
     createLayout(){
+        this.disableFadeEffect = this._settings.get_boolean('disable-scrollview-fade-effect');
         this.activeCategoryType = -1;
         let layout = new Clutter.GridLayout({ 
             orientation: Clutter.Orientation.VERTICAL,
@@ -165,12 +164,12 @@ var BaseLayout = class {
             this.searchBox.updateStyle(this._settings.get_boolean('disable-searchbox-border'))
             customStyle ? this.searchResults.setStyle('arc-menu-status-text') : this.searchResults.setStyle(''); 
             if(customStyle){
-                this.searchBox._stEntry.remove_style_class_name('default-search-entry');
-                this.searchBox._stEntry.add_style_class_name('arc-search-entry');
+                this.searchBox.remove_style_class_name('default-search-entry');
+                this.searchBox.add_style_class_name('arc-search-entry');
             }
             else{
-                this.searchBox._stEntry.remove_style_class_name('arc-search-entry');
-                this.searchBox._stEntry.add_style_class_name('default-search-entry');
+                this.searchBox.remove_style_class_name('arc-search-entry');
+                this.searchBox.add_style_class_name('default-search-entry');
             } 
         }
         if(this.actionsBox){
@@ -478,7 +477,7 @@ var BaseLayout = class {
             placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
         }
         else if(command === "ArcMenu_Network"){
-            placeInfo = new PlaceDisplay.PlaceInfo('network',Gio.File.new_for_uri('network:///'), _('Network'),'network-workgroup-symbolic');
+            placeInfo = new PlaceDisplay.PlaceInfo('network', Gio.File.new_for_uri('network:///'), _('Network'),'network-workgroup-symbolic');
             placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
         }
         else if(command === "ArcMenu_Software"){
@@ -490,7 +489,7 @@ var BaseLayout = class {
             placeMenuItem = new ShortcutMenuItemClass(this, _("Trash"), '', "ArcMenu_Trash", Constants.AppDisplayType.LIST);
         }
         else if(command === Constants.ArcMenuSettingsCommand || command === "ArcMenu_Suspend" || command === "ArcMenu_LogOut" || command === "ArcMenu_PowerOff"
-            || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || app){
+            || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || command === "ArcMenu_HybridSleep" || command === "ArcMenu_Hibernate" || app){
 
                 placeMenuItem = new ShortcutMenuItemClass(this, menuItemArray[0], menuItemArray[1], menuItemArray[2], Constants.AppDisplayType.LIST);
         }
@@ -516,7 +515,7 @@ var BaseLayout = class {
         }
         else{
             let path = command;
-            placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]), (menuItemArray[1] !== "ArcMenu_Folder") ? menuItemArray[1] : null);
+            placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]), (menuItemArray[1] !== "ArcMenu_Folder") ? Gio.icon_new_for_string(menuItemArray[1]) : null);
             placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
         }
         return placeMenuItem;
@@ -773,19 +772,55 @@ var BaseLayout = class {
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
     }
 
+    get activeMenuItem() {
+        return this._activeMenuItem;
+    }
+
+    set activeMenuItem(item) {
+        let itemChanged = item !== this._activeMenuItem;
+        if(itemChanged){
+            this._activeMenuItem = item;
+            if(this.layout === Constants.MenuLayout.LAUNCHER)
+                this.createActiveSearchItemPanel(item);
+        }
+    }
+    
     _onSearchBoxKeyPress(searchBox, event) {
         let symbol = event.get_key_symbol();
-        if (!searchBox.isEmpty() && searchBox.hasKeyFocus()) {
-            if (symbol == Clutter.Up) {
-                this.searchResults.highlightDefault(false);
+        switch (symbol) {
+            case Clutter.KEY_Up:
+            case Clutter.KEY_Down:
+            case Clutter.KEY_Left:
+            case Clutter.KEY_Right:
+                let direction;
+                if (symbol === Clutter.KEY_Down || symbol === Clutter.KEY_Up)
+                    return Clutter.EVENT_PROPAGATE;
+                if (symbol === Clutter.KEY_Right)
+                    direction = St.DirectionType.RIGHT;
+                if (symbol === Clutter.KEY_Left)
+                    direction = St.DirectionType.LEFT;
+
+                let cursorPosition = this.searchBox.clutter_text.get_cursor_position();
+
+                if(cursorPosition === Constants.CaretPosition.END && symbol === Clutter.KEY_Right)
+                    cursorPosition = Constants.CaretPosition.END;
+                else if(cursorPosition === Constants.CaretPosition.START && symbol === Clutter.KEY_Left)
+                    cursorPosition = Constants.CaretPosition.START;
+                else
+                    cursorPosition = Constants.CaretPosition.MIDDLE;
+
+                if(cursorPosition === Constants.CaretPosition.END){
+                    this.searchResults.highlightDefault(false);
+                    return this.mainBox.navigate_focus(this.activeMenuItem, direction, false);
+                }
+                else if(cursorPosition === Constants.CaretPosition.START){
+                    this.searchResults.highlightDefault(false);
+                    return this.mainBox.navigate_focus(this.activeMenuItem, direction, false);
+                }
                 return Clutter.EVENT_PROPAGATE;
-            }
-            else if (symbol == Clutter.Down) {
-                this.searchResults.highlightDefault(false);
+            default:
                 return Clutter.EVENT_PROPAGATE;
-            }
         }
-        return Clutter.EVENT_PROPAGATE;
     }
 
     _onSearchBoxKeyFocusIn(searchBox) {
@@ -844,10 +879,10 @@ var BaseLayout = class {
                 if (symbol === Clutter.KEY_Left)
                     direction = St.DirectionType.LEFT;
 
-                if(this.layoutProperties.Search && this.searchBox.hasKeyFocus() && this.searchResults.getTopResult() && this.searchResults.actor.get_parent() && this.searchResults._highlightDefault){
+                if(this.layoutProperties.Search && this.searchBox.hasKeyFocus() && this.searchResults.hasActiveResult() && this.searchResults.actor.get_parent()){
                     this.searchResults.highlightDefault(false);
                     this.searchResults.getTopResult().actor.grab_key_focus();
-                    return actor.navigate_focus(global.stage.key_focus, direction, false);      
+                    return actor.navigate_focus(global.stage.key_focus, direction, false);  
                 }
                 else if(global.stage.key_focus === this.mainBox || (this.layoutProperties.Search && global.stage.key_focus === this.searchBox.actor)){
                     this.activeMenuItem.actor.grab_key_focus();
@@ -970,7 +1005,7 @@ var BaseLayout = class {
     }
 
     _createScrollBox(params){
-        let scrollBox = new MW.ScrollView(params);           
+        let scrollBox = new MW.ScrollView(params);    
         let panAction = new Clutter.PanAction({ interpolate: false });
         panAction.connect('pan', (action) => {
             this._blockActivateEvent = true;

@@ -335,6 +335,12 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
         this.connect("drag-motion", (widget)=> {
             let listBox = widget.get_parent();
             if(listBox.dragLeave){
+                listBox.drag_highlight_row(widget);
+                listBox.dragLeave = false;
+                
+                if(!scrolledWindow)
+                    return true;
+
                 let alloc = widget.get_allocation();
 
                 let height = alloc.height;
@@ -348,8 +354,6 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
                 else if((widgetLoc - (height * 2)) < value)
                     scrolledWindow.vadjustment.value -= height;
 
-                listBox.drag_highlight_row(widget);
-                listBox.dragLeave = false;
             }
         });
 
@@ -430,7 +434,6 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             let modifyButton = new Gtk.Switch({
                 valign: Gtk.Align.CENTER,
                 margin_start: 10,
-                tooltip_text: _('Enable/Disble'),
                 active: this.switchActive
             });
             grid.insert_column(0);
@@ -502,7 +505,6 @@ var EditEntriesBox = GObject.registerClass({
         if(params.changeButton){
             changeButton = new Button({
                 icon_name: 'text-editor-symbolic',
-                tooltip_text: _("Change")
             });
             changeButton.connect('clicked', () => {
                 editPopover.popdown();

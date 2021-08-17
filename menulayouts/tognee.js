@@ -52,10 +52,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
         // Search Box
         this.searchBox = new MW.SearchBox(this);
-        this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
-        this.searchBox._stEntry.style = "min-height: 0px; border-radius: 18px; padding: 7px 12px;"; // Make it round
+        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this.searchBox.name = "ArcSearchEntryRound"; // Make it round
 
         //subMainBox stores left and right box
         this.subMainBox = new St.BoxLayout({
@@ -81,14 +81,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'apps-menu small-vfade left-scroll-area',
+            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true,
             reactive:true
         });
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.actor.style = (horizonalFlip ? "margin: 0px 10px 0px 15px;" : "margin: 0px 15px 0px 10px;") + "padding: 0em 0em 0.75em 0em;" ;
+            this.searchBox.style = (horizonalFlip ? "margin: 0px 10px 15px 15px;" : "margin: 0px 15px 15px 10px;");
             this.appBox.add(this.searchBox.actor);
         }
         this.appBox.add(this.applicationsScrollBox);
@@ -105,7 +105,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add(this.backButton.actor);
         this.appBox.add(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.actor.style = (horizonalFlip ? "margin: 0px 10px 0px 15px;" : "margin: 0px 15px 0px 10px;") + "padding: 0.75em 0em 0.25em 0em;";
+            this.searchBox.style = (horizonalFlip ? "margin: 15px 10px 0px 15px;" : "margin: 15px 15px 0px 10px;");
             this.appBox.add(this.searchBox.actor);
         }
         
@@ -134,7 +134,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.FILL,
             overlay_scrollbars: true,
-            style_class: 'small-vfade'
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });    
         this.shortcutsScrollBox.set_policy(St.PolicyType.EXTERNAL, St.PolicyType.EXTERNAL);
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);

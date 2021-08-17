@@ -20,6 +20,13 @@
         <value value='16' nick='Tognee'/>
         <value value='17' nick='Plasma'/>
         <value value='18' nick='Windows'/>
+        <value value='19' nick='Launcher'/>
+        <value value='20' nick='Eleven'/>
+    </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.forcemenulocation'>
+        <value value='0' nick='Off'/>
+        <value value='1' nick='TopCentered'/>
+        <value value='2' nick='BottomCentered'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>
@@ -87,10 +94,25 @@
       <summary>menu layout</summary>
       <description>Menu Layout</description>
     </key>
+    <key name="force-menu-location" enum="org.gnome.shell.extensions.arcmenu.forcemenulocation">
+      <default>'Off'</default>
+      <summary>Force the menu to a specific location</summary>
+      <description>Force the menu to a specific location</description>
+    </key>
     <key type="b" name="disable-hotkey-onkeyrelease">
       <default>false</default>
       <summary>disable hotkey on key release</summary>
       <description>disable hotkey on key release.</description>
+    </key>
+    <key type="i" name="settings-width">
+      <default>875</default>
+      <summary>ArcMenu Settings Width</summary>
+      <description>ArcMenu Settings Width.</description>
+    </key>
+    <key type="i" name="settings-height">
+      <default>725</default>
+      <summary>ArcMenu Settings Height</summary>
+      <description>ArcMenu Settings Height.</description>
     </key>
     <key type="ab" name="available-placement">
       <default>[true, false, false]</default>
@@ -132,10 +154,20 @@
       <summary>disable the arrows on category menu items</summary>
       <description>disable the arrows on category menu items</description>
     </key>
+    <key type="b" name="disable-scrollview-fade-effect">
+      <default>false</default>
+      <summary>disable the fade effect on scrollviews</summary>
+      <description>ddisable the fade effect on scrollviews (may help improve performace)</description>
+    </key>
     <key type="b" name="apps-show-extra-details">
       <default>false</default>
       <summary>Show a larger icon and extra app details</summary>
       <description>Show a larger icon and extra app details.</description>
+    </key>
+    <key type="b" name="show-search-result-details">
+      <default>false</default>
+      <summary>Show search result description label</summary>
+      <description>Show search result description label.</description>
     </key>
     <key type="b" name="activate-on-hover">
       <default>false</default>
@@ -241,6 +273,31 @@
       <default>true</default>
       <summary>Plasma Menu Hover to activate item</summary>
       <description>Plasma Menu Hover to activate item.</description>
+    </key>
+    <key type="b" name="runner-show-frequent-apps">
+      <default>false</default>
+      <summary>Runner layout - show frequent apps</summary>
+      <description>Runner layout - show frequent apps</description>
+    </key>
+    <key type="b" name="runner-use-theme-gap">
+      <default>false</default>
+      <summary>Runner layout - use current shell theme gap</summary>
+      <description>Runner layout - use current shell theme gap</description>
+    </key>
+    <key type="i" name="runner-menu-height">
+      <default>400</default>
+      <summary>Runner layout - menu height</summary>
+      <description>Runner layout - menu height</description>
+    </key>
+    <key type="i" name="runner-menu-width">
+      <default>500</default>
+      <summary>Runner layout - menu width</summary>
+      <description>Runner layout - menu width</description>
+    </key>
+    <key type="i" name="runner-font-size">
+      <default>0</default>
+      <summary>Runner layout - font size</summary>
+      <description>Runner layout - font size</description>
     </key>
     <key type="b" name="reload-theme">
       <default>false</default>
@@ -357,30 +414,10 @@
       <summary>Show Bookmarks</summary>
       <description>Show Bookmarks.</description>
     </key>
-    <key type="b" name="show-logout-button">
-      <default>true</default>
-      <summary>Show logout button</summary>
-      <description>Show logout button.</description>
-    </key>
-    <key type="b" name="show-lock-button">
-      <default>true</default>
-      <summary>Show lock button</summary>
-      <description>Show lock button.</description>
-    </key>
-    <key type="b" name="show-suspend-button">
-      <default>false</default>
-      <summary>Show suspend button</summary>
-      <description>Show suspend button.</description>
-    </key>
-    <key type="b" name="show-restart-button">
-      <default>true</default>
-      <summary>Show restart button</summary>
-      <description>Show restart button.</description>
-    </key>
-    <key type="b" name="show-power-button">
-      <default>true</default>
-      <summary>Show power button</summary>
-      <description>Show power button.</description>
+    <key name="power-options" type="a(ib)">
+      <default>[(0, true), (1, true), (2, true), (3, true), (4, false), (5, false), (6, false)]</default>
+      <summary>Power Options</summary>
+      <description>See Constants.js PowerOptions</description>
     </key>
     <key type="b" name="multi-monitor">
       <default>false</default>

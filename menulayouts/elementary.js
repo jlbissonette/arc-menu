@@ -41,6 +41,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
+            ListSearchResults_IconSize: 32,
             IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true
         });
@@ -48,12 +49,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     createLayout(){
         super.createLayout();
         this.searchBox = new MW.SearchBox(this);
-        this.searchBox._stEntry.style = "min-height: 0px; border-radius: 18px; padding: 7px 12px;";
-        this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this.searchBox.name = "ArcSearchEntryRound";
+        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.actor.style = "margin: 10px; padding-top: 0.0em; padding-bottom: 0.5em;padding-left: 0.4em;padding-right: 0.4em;";
+            this.searchBox.style = "margin: 0px 10px 10px 10px;";
             this.mainBox.add(this.searchBox.actor);
         }
 
@@ -76,7 +77,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             x_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'apps-menu vfade',
+            style_class:  this.disableFadeEffect ? '' : 'vfade',
             reactive:true
         });  
         this.applicationsScrollBox.style = "width:750px;";   
@@ -84,7 +85,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.subMainBox.add(this.applicationsScrollBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.actor.style = "margin: 10px 10px 0px 10px; padding-left: 0.4em;padding-right: 0.4em;";
+            this.searchBox.style = "margin: 10px 10px 0px 10px;"
             this.mainBox.add(this.searchBox.actor);
         }
 

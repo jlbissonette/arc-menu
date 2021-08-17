@@ -142,24 +142,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.updateHeight();
         });
 
-        this._appList = this.listAllApps();
-        //Update Categories on 'installed-changed' event-------------------------------------
-        this._installedChangedId = appSys.connect('installed-changed', () => {
-            this._newAppList = this.listAllApps();
-
-            //Filter to find if a new application has been installed
-            let newApps = this._newAppList.filter(app => !this._appList.includes(app));
-
-            //A New Application has been installed
-            //Save it in settings
-            if(newApps.length){
-                let recentApps = this._settings.get_strv('recently-installed-apps');
-                let newRecentApps = [...new Set(recentApps.concat(newApps))];
-                this._settings.set_strv('recently-installed-apps', newRecentApps);
-            }
-            
-            this._appList = this._newAppList;
-        });
+        this.initiateRecentlyInstalledApps();
         this.setMenuPositionAlignment();
 
         //Create Basic Layout
@@ -207,6 +190,35 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         }
     }
 
+    initiateRecentlyInstalledApps(){
+        if(this._installedChangedId){
+            appSys.disconnect(this._installedChangedId);
+            this._installedChangedId = null;
+        }
+
+        if(this._settings.get_boolean('disable-recently-installed-apps'))
+            return;
+
+        this._appList = this.listAllApps();
+        //Update Categories on 'installed-changed' event-------------------------------------
+        this._installedChangedId = appSys.connect('installed-changed', () => {
+            this._newAppList = this.listAllApps();
+
+            //Filter to find if a new application has been installed
+            let newApps = this._newAppList.filter(app => !this._appList.includes(app));
+
+            //A New Application has been installed
+            //Save it in settings
+            if(newApps.length){
+                let recentApps = this._settings.get_strv('recently-installed-apps');
+                let newRecentApps = [...new Set(recentApps.concat(newApps))];
+                this._settings.set_strv('recently-installed-apps', newRecentApps);
+            }
+            
+            this._appList = this._newAppList;
+        });
+    }
+
     listAllApps(){
         let appList = appSys.get_installed().filter(appInfo => {
             try {
@@ -220,6 +232,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     }
 
     createMenuLayout(){
+        this.arcMenu.actor.style = null;
         this.section = new PopupMenu.PopupMenuSection();
         this.arcMenu.addMenuItem(this.section);            
         this.mainBox = new St.BoxLayout({
@@ -245,6 +258,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
         this.setMenuPositionAlignment();
         this.updateStyle();
+        this.forceMenuLocation();
     }
 
     setMenuPositionAlignment(){
@@ -315,7 +329,58 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if(setAlignment)
             this.setMenuPositionAlignment();     
     }
+
+    forceMenuLocation(){
+        let layout = this._settings.get_enum('menu-layout');
+        let forcedMenuLocation = this._settings.get_enum('force-menu-location');
+        if(layout === Constants.MenuLayout.RUNNER || layout === Constants.MenuLayout.RAVEN)
+            return;
+
+        if(forcedMenuLocation === Constants.ForcedMenuLocation.OFF){
+            this.arcMenu.sourceActor = this;
+            this.arcMenu.focusActor = this;
+            this.arcMenu._boxPointer.setPosition(this, 0.5);
+            this.setMenuPositionAlignment();
+            this._forcedMenuLocation = false;
+            return;
+        }
+
+        if(!this.rise){
+            let themeNode = this.arcMenu.actor.get_theme_node();
+            this.rise = themeNode.get_length('-arrow-rise');
+        }
+
+        if(!this.dummyWidget){
+            this.dummyWidget = new St.Widget({ width: 0, height: 0, opacity: 0 });
+            Main.uiGroup.add_actor(this.dummyWidget);
+        }
+
+        if(!this._forcedMenuLocation){
+            this.arcMenu.sourceActor = this.dummyWidget;
+            this.arcMenu.focusActor = this.dummyWidget;
+            this.arcMenu._boxPointer.setPosition(this.dummyWidget, 0.5);
+
+            this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px;";
+            this.arcMenu._boxPointer.setSourceAlignment(0.5);
+            this.arcMenu._arrowAlignment = 0.5;
+            this._forcedMenuLocation = true;
+        }
+
+        let monitorIndex = Main.layoutManager.findIndexForActor(this);
+        let rect = Main.layoutManager.getWorkAreaForMonitor(monitorIndex);
+
+        //Position the runner menu in the center of the current monitor, at top of screen.
+        let positionX = Math.round(rect.x + (rect.width / 2));
+        let positionY;
+        if(forcedMenuLocation === Constants.ForcedMenuLocation.TOP_CENTERED)
+            positionY = rect.y + this.rise;
+        else if(forcedMenuLocation === Constants.ForcedMenuLocation.BOTTOM_CENTERED)
+            positionY = rect.y + rect.height - this.rise;
+        this.dummyWidget.set_position(positionX, positionY);
+    }
+
     updateStyle(){
+        let forcedMenuLocation = this._settings.get_enum('force-menu-location');
         let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow');   
         let layout = this._settings.get_enum('menu-layout');
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
@@ -333,7 +398,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px; -boxpointer-gap: " + gapAdjustment + "px;";
             this.arcMenu.box.style = "margin:0px;";
         }  
-        else if(layout != Constants.MenuLayout.RAVEN){
+        else if(layout !== Constants.MenuLayout.RAVEN && forcedMenuLocation === Constants.ForcedMenuLocation.OFF){
             this.arcMenu.actor.style = "-boxpointer-gap: " + gapAdjustment + "px;";
             this.arcMenu.box.style = null;
         }
@@ -379,7 +444,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.contextMenuManager.activeMenu.toggle();
         if(this.subMenuManager.activeMenu)
             this.subMenuManager.activeMenu.toggle();
-
+        this.forceMenuLocation();
         let layout = this._settings.get_enum('menu-layout');
         if(layout === Constants.MenuLayout.GNOME_OVERVIEW){
             if(this._settings.get_boolean('gnome-dash-show-applications') && !Main.overview.visible){
@@ -507,6 +572,8 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;
         }
+        if(this.dummyWidget)
+            this.dummyWidget.destroy();
         if(this.arcMenu){
             this.arcMenu.destroy();
         }
@@ -627,6 +694,12 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 
     _onOpenStateChanged(menu, open) {
         if(open){
+            //Avoid Super L hotkey conflicts with Pop Shell extension by 
+            //setting 'overlay-key' mode  to  Shell.ActionMode.ALL.
+            let hotKeyPos = this._settings.get_enum('menu-hotkey');
+            if(hotKeyPos === Constants.HotKey.SUPER_L)
+                Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
+
             if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
                 this.menuButtonWidget.setActiveStylePseudoClass(true);
                 this.add_style_pseudo_class('active');

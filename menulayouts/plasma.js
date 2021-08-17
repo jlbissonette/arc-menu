@@ -92,16 +92,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.topBox.add(this.rightTopBox);
 
         this.searchBarLocation = this._settings.get_enum('searchbar-default-top-location');
-        this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
 
         //Applications Box - Contains Favorites, Categories or programs
         this.applicationsScrollBox = this._createScrollBox({
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'small-vfade',
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive:true,
             style: "width:450px;"
@@ -157,7 +157,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoryHeader = new MW.PlasmaCategoryHeader(this);
 
         if(this.searchBarLocation === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.actor.style = "padding-top: 3px; padding-bottom: 6px; padding-left: 1em; padding-right: 0.25em; margin-right: .5em;";
+            this.searchBox.style = "margin: 3px 10px 5px 10px;";
             this.topBox.style = 'padding-top: 0.5em;'
             
             this.navigateBoxContainer.add(this.navigateBox);
@@ -171,7 +171,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add(this.topBox);
         }
         else if(this.searchBarLocation === Constants.SearchbarLocation.TOP){
-            this.searchBox.actor.style = "margin: 0px 10px 5px 10px; padding-top: 3px; padding-bottom: 0.5em;padding-left: 0.4em;padding-right: 0.4em;";
+            this.searchBox.style = "margin: 3px 10px 10px 10px;";
             
             this.mainBox.add(this.topBox);
             this.mainBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
@@ -221,6 +221,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadCategories();
         this.setDefaultMenuView(); 
         this.updateIcons();
+    }
+
+    setFrequentAppsList(categoryMenuItem){
+        categoryMenuItem.appList = [];
+        let mostUsed = Shell.AppUsage.get_default().get_most_used();
+        for (let i = 0; i < mostUsed.length; i++) {
+            if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
+                categoryMenuItem.appList.push(mostUsed[i]);
+                let item = this.applicationsMap.get(mostUsed[i]);
+                if (!item) {
+                    item = new MW.ApplicationMenuItem(this, mostUsed[i], this.layoutProperties.AppType);
+                    item.forceLargeIcon(25);
+                    this.applicationsMap.set(mostUsed[i], item);
+                }
+            }
+        }
     }
 
     updateIcons(){
@@ -350,28 +366,46 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     displayPowerItems(){
+        let needsSeparator = false;
         this._clearActorsFromBox(this.applicationsBox);
         this.applicationsBox.add(this.createLabelRow(_("Session")));
         if(!this.lock)
-            this.lock = new MW.PlasmaPowerItem(this, Constants.PowerType.LOCK, _("Lock"), 'changes-prevent-symbolic');
+            this.lock = new MW.PowerMenuItem(this, Constants.PowerType.LOCK);
         this.applicationsBox.add(this.lock);
 
         if(!this.logOut)
-            this.logOut = new MW.PlasmaPowerItem(this, Constants.PowerType.LOGOUT, _("Log Out"), 'application-exit-symbolic');
+            this.logOut = new MW.PowerMenuItem(this, Constants.PowerType.LOGOUT);
         this.applicationsBox.add(this.logOut);
         
         this.applicationsBox.add(this.createLabelRow(_("System")));
 
+        if(Utils.canHybridSleep()){
+            if(!this.sleep)
+                this.sleep = new MW.PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
+            this.applicationsBox.add(this.sleep);
+            needsSeparator = true;
+        }
+
+        if(Utils.canHibernate()){
+            if(!this.hibernate)
+                this.hibernate = new MW.PowerMenuItem(this, Constants.PowerType.HIBERNATE);
+            this.applicationsBox.add(this.hibernate);
+            needsSeparator = true;
+        }
+
+        if(needsSeparator)
+            this.applicationsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+
         if(!this.suspend)
-            this.suspend = new MW.PlasmaPowerItem(this, Constants.PowerType.SUSPEND, _("Suspend"), 'media-playback-pause-symbolic');
+            this.suspend = new MW.PowerMenuItem(this, Constants.PowerType.SUSPEND);
         this.applicationsBox.add(this.suspend);
 
         if(!this.restart)
-            this.restart = new MW.PlasmaPowerItem(this, Constants.PowerType.RESTART, _("Restart..."), Me.path + Constants.RestartIcon.PATH);
+            this.restart = new MW.PowerMenuItem(this, Constants.PowerType.RESTART);
         this.applicationsBox.add(this.restart);
 
         if(!this.powerOff)
-            this.powerOff = new MW.PlasmaPowerItem(this, Constants.PowerType.POWEROFF, _("Power Off..."), 'system-shutdown-symbolic');
+            this.powerOff = new MW.PowerMenuItem(this, Constants.PowerType.POWER_OFF);
         this.applicationsBox.add(this.powerOff);
     }
 
@@ -424,34 +458,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._insertCategoryHeader();
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES; 
         this.categoryHeader.setActiveCategory(this.activeCategory);
-    }
-
-    displayFrequentApps(){
-        this._clearActorsFromBox();
-        let mostUsed = Shell.AppUsage.get_default().get_most_used();
-        let appList = [];
-        for (let i = 0; i < mostUsed.length; i++) {
-            if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
-                let item = new MW.ApplicationMenuItem(this, mostUsed[i]);
-                item.forceLargeIcon();
-                appList.push(item);
-            }
-        }
-        let activeMenuItemSet = false;
-        for (let i = 0; i < appList.length; i++) {
-            let item = appList[i];
-            if(item.actor.get_parent())
-                item.actor.get_parent().remove_actor(item.actor);
-            if (!item.actor.get_parent()) 
-                this.applicationsBox.add_actor(item.actor);
-            if(!activeMenuItemSet){
-                activeMenuItemSet = true;  
-                this.activeMenuItem = item;
-                if(this.arcMenu.isOpen){
-                    this.mainBox.grab_key_focus();
-                }
-            }    
-        }
     }
 
     _onSearchBoxChanged(searchBox, searchString){  

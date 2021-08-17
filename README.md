@@ -206,7 +206,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 -----
 
-**- @[Nilvus](https://gitlab.com/Nilvus) - French** | **- @[Etamuk](https://gitlab.com/Etamuk) - German** | **- @[alex4401](https://gitlab.com/alex4401) - Polish** | **- @[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **- @[sigbjokj](https://gitlab.com/sigbjokj) - Norwegian** |
+**- @[Nilvus](https://gitlab.com/Nilvus) - French** | **- @[Etamuk](https://gitlab.com/Etamuk) - German** | **- @[alex4401](https://gitlab.com/alex4401) - Polish** | **- @[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **- @[sigbjokj](https://gitlab.com/sigbjokj), @[sssandum](https://gitlab.com/sssandum) - Norwegian** |
 
 -----
 
@@ -218,11 +218,15 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 -----
 
- **- @[Vombato](https://gitlab.com/Vombato) @[matguidi](https://gitlab.com/matguidi) - Italian** | **- @[skygmin](https://gitlab.com/skygmin) - Simplified Chinese** | **- @[vinno97](https://gitlab.com/vinno97) - Dutch** | **- @[artnay](https://gitlab.com/artnay) - Finnish** |  **- @[rimasx](https://gitlab.com/rimasx) - Estonian** |
+ **- @[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian** | **- @[skygmin](https://gitlab.com/skygmin) - Simplified Chinese** | **-@[Vistaus](https://gitlab.com/Vistaus), @[vinno97](https://gitlab.com/vinno97) - Dutch** | **- @[artnay](https://gitlab.com/artnay) - Finnish** |  **- @[rimasx](https://gitlab.com/rimasx) - Estonian** |
  
 -----
 
- **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** | **- @[prescott66](https://gitlab.com/prescott66) - Slovak** | **- @[Mejans](https://gitlab.com/Mejans) - Occitan** | **- @[UtsushimiNeneka](https://gitlab.com/UtsushimiNeneka) - Korean**
+ **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** | **- @[prescott66](https://gitlab.com/prescott66) - Slovak** | **- @[Mejans](https://gitlab.com/Mejans) - Occitan** | **- @[UtsushimiNeneka](https://gitlab.com/UtsushimiNeneka) - Korean** |
+
+-----
+
+ **- @[sayuri](https://gitlab.com/sayuri-) - Sinhalese** | **- @[Latgardi](https://gitlab.com/Latgardi) - Belarusian** |
 
 </p>
 </details>

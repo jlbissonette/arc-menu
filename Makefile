@@ -4,7 +4,7 @@ UUID = arcmenu@arcmenu.com
 BASE_MODULES = COPYING extension.js helper.js metadata.json README.md utils.js 
 EXTRA_MODULES = constants.js controller.js menuButton.js menuWidgets.js placeDisplay.js prefs.js prefsWidgets.js search.js
 
-MENU_LAYOUTS = arcmenu.js baseMenuLayout.js brisk.js budgie.js chromebook.js elementary.js gnomemenu.js insider.js mint.js plasma.js raven.js redmond.js runner.js simple.js simple2.js tognee.js unity.js whisker.js windows.js
+MENU_LAYOUTS = arcmenu.js baseMenuLayout.js brisk.js budgie.js chromebook.js elementary.js eleven.js gnomemenu.js insider.js launcher.js mint.js plasma.js raven.js redmond.js runner.js simple.js simple2.js tognee.js unity.js whisker.js windows.js
 MENU_TWEAKS = menulayouts/tweaks/tweaks.js
 
 TOLOCALIZE = $(EXTRA_MODULES) $(addprefix menulayouts/, $(MENU_LAYOUTS)) $(MENU_TWEAKS)

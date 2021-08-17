@@ -44,6 +44,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 0,
             RowSpacing: 0,
             IconGridSize: 36,
+            ListSearchResults_IconSize: 24,
             IconGridStyle: 'SmallIconGrid',
             VerticalMainBox: false
         });
@@ -97,7 +98,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'vfade',
+            style_class: this.disableFadeEffect ? '' : 'vfade',
             style: "padding: 0px 12px;"
         });
 
@@ -120,11 +121,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         layout.hookup_style(this.pinnedAppsGrid);
 
         this.searchBox = new MW.SearchBox(this);
-        this.searchBox._stEntry.style = "min-height: 0px; border-radius: 18px; padding: 7px 12px;";
-        this.searchBox.actor.style ="margin: 0px 10px 0px 10px;padding-top: 15px; padding-left: 0.4em;padding-right: 0.4em;";
-        this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this.searchBox.name = "ArcSearchEntryRound";
+        this.searchBox.style = "margin: 15px 10px 0px 10px;";
+        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         
         this.applicationsBox = new St.BoxLayout({
             vertical: true
@@ -136,8 +137,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'small-vfade left-scroll-area'
-        }); 
+            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+        });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
@@ -273,10 +274,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'small-vfade',
             overlay_scrollbars: true,
-            reactive:true
-        });   
+            reactive:true,
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
+        });
         
         this.leftPanelPopup.add(this.computerScrollBox);
        

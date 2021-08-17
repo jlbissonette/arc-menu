@@ -32,7 +32,8 @@ var SearchbarLocation = {
 
 var AppDisplayType = {
     LIST: 0,
-    GRID: 1
+    GRID: 1,
+    SEARCH: 2,
 }
 
 var CategoryType = {
@@ -102,7 +103,20 @@ var SeparatorStyle = {
     LONG: 1,
     SHORT: 2,
     MAX: 3,
+    MEDIUM: 4,
 };
+
+var CaretPosition = {
+    END: -1,
+    START: 0,
+    MIDDLE: 2,
+};
+
+var ForcedMenuLocation = {
+    OFF: 0,
+    TOP_CENTERED: 1,
+    BOTTOM_CENTERED: 2,
+}
 
 var MenuItemType = {
     BUTTON: 0,
@@ -165,12 +179,28 @@ var MenuIcon = {
 };
 
 var PowerType = {
-    POWEROFF: 1,
-    LOCK: 2,
-    LOGOUT: 3,
+    LOGOUT: 0,
+    LOCK: 1,
+    RESTART: 2,
+    POWER_OFF: 3,
     SUSPEND: 4,
-    RESTART: 5
+    HYBRID_SLEEP: 5,
+    HIBERNATE: 6,
 };
+
+var SleepIcon = {
+    PATH: '/media/icons/menu_icons/sleep-symbolic.svg'
+};
+
+var PowerOptions = [
+    { TYPE: PowerType.LOGOUT, IMAGE: 'application-exit-symbolic', TITLE: _("Log Out") },
+    { TYPE: PowerType.LOCK, IMAGE: 'changes-prevent-symbolic', TITLE: _("Lock") },
+    { TYPE: PowerType.RESTART, IMAGE: 'system-reboot-symbolic', TITLE: _("Restart") },
+    { TYPE: PowerType.POWER_OFF, IMAGE: 'system-shutdown-symbolic', TITLE: _("Power Off") },
+    { TYPE: PowerType.SUSPEND, IMAGE: 'media-playback-pause-symbolic', TITLE: _("Suspend") },
+    { TYPE: PowerType.HYBRID_SLEEP, IMAGE: Me.path + SleepIcon.PATH, TITLE: _("Hybrid Sleep") },
+    { TYPE: PowerType.HIBERNATE, IMAGE: 'document-save-symbolic', TITLE: _("Hibernate") },
+];
 
 var MenuIcons = [
     { PATH: '/media/icons/menu_button_icons/icons/arcmenu-logo-symbolic.svg'},
@@ -285,7 +315,9 @@ var MenuLayout = {
     RAVEN: 15,
     TOGNEE: 16,
     PLASMA: 17,
-    WINDOWS: 18
+    WINDOWS: 18,
+    LAUNCHER: 19,
+    ELEVEN: 20,
 };
 
 var TraditionalMenus = [   
@@ -302,13 +334,15 @@ var ModernMenus = [
     { IMAGE: 'tognee-layout-symbolic', TITLE: _('tognee'), LAYOUT: MenuLayout.TOGNEE},
     { IMAGE: 'insider-layout-symbolic', TITLE: _('Insider'), LAYOUT: MenuLayout.INSIDER},
     { IMAGE: 'redmond-layout-symbolic', TITLE: _('Redmond'), LAYOUT: MenuLayout.REDMOND},
-    { IMAGE: 'windows-layout-symbolic', TITLE: _('Windows'), LAYOUT: MenuLayout.WINDOWS}];
+    { IMAGE: 'windows-layout-symbolic', TITLE: _('Windows'), LAYOUT: MenuLayout.WINDOWS},
+    { IMAGE: 'eleven-layout-symbolic', TITLE: _('Eleven'), LAYOUT: MenuLayout.ELEVEN}];
 
 var TouchMenus = [   
     { IMAGE: 'elementary-layout-symbolic', TITLE: _('Elementary'), LAYOUT: MenuLayout.ELEMENTARY},
     { IMAGE: 'chromebook-layout-symbolic', TITLE: _('Chromebook'), LAYOUT: MenuLayout.CHROMEBOOK}];
 
-var LauncherMenus = [   
+var LauncherMenus = [
+    { IMAGE: 'launcher-layout-symbolic', TITLE: _('Launcher'), LAYOUT: MenuLayout.LAUNCHER},
     { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
     { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 
@@ -331,10 +365,6 @@ var MenuStyles = {
 };
 
 var ArcMenuSettingsCommand = 'gnome-extensions prefs arcmenu@arcmenu.com';
-
-var RestartIcon = {
-    PATH: '/media/icons/menu_icons/restart-symbolic.svg'
-};
 
 var HamburgerIcon = {
     PATH: '/media/icons/menu_icons/hamburger-symbolic.svg'

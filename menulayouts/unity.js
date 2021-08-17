@@ -43,6 +43,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
+            ListSearchResults_IconSize: 32,
             IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true,
         });
@@ -91,11 +92,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add(this.subMainBox);
 
         this.searchBox = new MW.SearchBox(this);
-        this.searchBox._stEntry.style = "min-height: 0px; min-height: 0px; border-radius: 18px; padding: 7px 12px;";
-        this.searchBox.actor.style ="margin: 0px 10px 10px 10px;padding-top: 4px; padding-bottom: 0.0em;padding-left: 0.4em;padding-right: 0.4em;";
-        this._searchBoxChangedId = this.searchBox.connect('changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('key-press-event', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this.searchBox.name = "ArcSearchEntryRound";
+        this.searchBox.style = "margin: 4px 10px 0px 10px;";
+        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.topBox.add(this.searchBox.actor);
         this.topBox.add(this.categoriesTopBox);
 
@@ -110,23 +111,26 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'vfade'
+            style_class: this.disableFadeEffect ? '' : 'vfade',
         });   
         this.applicationsScrollBox.style = "width:750px;";    
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
 
         this.arcMenu.box.style = "padding-bottom:0px;";
-      
+
+        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(186, 196,201, 0.1) ; padding: 5px 5px;"+
+                                            "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
+        this.themeNodeBorderRadius = "";
         this.actionsContainerBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.END,
-            vertical: false
+            vertical: false,
+            style: this.actionsContainerBoxStyle + this.themeNodeBorderRadius
         });
-        this.actionsContainerBox.style = "margin: 0px; spacing: 0px;background-color:rgba(186, 196,201, 0.1) ; padding: 5px 5px;"+
-                                    "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
+
         this.subMainBox.add(this.actionsContainerBox);
         
         this.actionsBox = new St.BoxLayout({
@@ -272,7 +276,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'small-vfade',
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive:true
         });        
@@ -337,6 +341,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let customStyle=this._settings.get_boolean('enable-custom-arc-menu');
         let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow'); 
        
+        let themeNode = this.arcMenu.actor.get_theme_node();
+        let borderRadius = themeNode.get_length('-arrow-border-radius');
+        this.themeNodeBorderRadius = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
+        this.actionsContainerBox.style = this.actionsContainerBoxStyle + this.themeNodeBorderRadius;
+
         let actor = this.categoriesButton.actor;
         customStyle ? actor.add_style_class_name('arc-menu-action') : actor.remove_style_class_name('arc-menu-action');
 
