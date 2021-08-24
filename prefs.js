@@ -1309,7 +1309,7 @@ var ModifyHotCornerDialogWindow = GObject.registerClass(
             });
             hotCornerActionCombo.append_text(_("GNOME Default"));
             hotCornerActionCombo.append_text(_("Disabled"));
-            hotCornerActionCombo.append_text(_("Toggle ArcMenu"));
+            hotCornerActionCombo.append_text(_("Open ArcMenu"));
             hotCornerActionCombo.append_text(_("Custom"));
             
             let customHotCornerFrame = new PW.FrameBox();

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 19:28-0400\n"
-"PO-Revision-Date: 2021-08-25 03:30+1000\n"
+"PO-Revision-Date: 2021-08-25 08:50+1000\n"
 "Last-Translator: Ser82-png>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -807,11 +807,11 @@ msgstr "Настройки Panel и Dock"
 
 #: prefs.js:817
 msgid "Activities Hot Corner Options"
-msgstr "Варианты действий в \"Активном углу\""
+msgstr "Варианты действия в \"Активном углу\""
 
 #: prefs.js:827 prefs.js:1285
 msgid "Modify Activities Hot Corner"
-msgstr "Изменить поведение \"Активного угла\""
+msgstr "Изменить действие в \"Активном углу\""
 
 #: prefs.js:864
 msgid "Hotkey activation"
@@ -934,7 +934,7 @@ msgid "Disabled"
 msgstr "Отключено"
 
 #: prefs.js:1303
-msgid "Toggle ArcMenu"
+msgid "Open ArcMenu"
 msgstr "Открыть ArcMenu"
 
 #: prefs.js:1304
@@ -943,7 +943,7 @@ msgstr "Другое"
 
 #: prefs.js:1310
 msgid "Custom Activities Hot Corner Action"
-msgstr "Пользовательское поведение для \"Активного угла\""
+msgstr "Пользовательское действие для \"Активного угла\""
 
 #: prefs.js:1310
 msgid "Choose from a list of preset commands or use your own terminal command"
@@ -1573,6 +1573,9 @@ msgstr "Отключить активный индикатор"
 
 msgid "Launch using Dedicated Graphics Card"
 msgstr "Запустить, используя дискретную видеокарту"
+
+#~ msgid "Toggle ArcMenu"
+#~ msgstr "Открыть ArcMenu"
 
 #~ msgid "Brisk Menu Style"
 #~ msgstr "Стиль меню Brisk"
