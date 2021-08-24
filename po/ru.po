@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 19:28-0400\n"
-"PO-Revision-Date: 2021-08-25 03:07+1000\n"
+"PO-Revision-Date: 2021-08-25 03:13+1000\n"
 "Last-Translator: Ser82-png>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -1298,7 +1298,7 @@ msgstr "Управлять предустановками"
 
 #: prefs.js:4074 prefs.js:5427
 msgid "Menu Theme Presets"
-msgstr "Предустановки тем меню"
+msgstr "Предустановки темы меню"
 
 #: prefs.js:4084
 msgid "Current Menu Theme Preset"
@@ -1398,15 +1398,15 @@ msgstr "Экспортировать или импортировать пред�
 
 #: prefs.js:5439
 msgid "Menu theme presets are located in the \"Menu Theme\" section"
-msgstr "Предустановки тем расположены во вкладке \"Тема меню\""
+msgstr "Предустановки темы расположены во вкладке \"Тема меню\""
 
 #: prefs.js:5449 prefs.js:5455
 msgid "Import Theme Preset"
-msgstr "Импортировать предустановки тем"
+msgstr "Импортировать предустановки темы"
 
 #: prefs.js:5491 prefs.js:5502
 msgid "Export Theme Preset"
-msgstr "Экспортировать предустановки тем"
+msgstr "Экспортировать предустановки темы"
 
 #: prefs.js:5534
 msgid "ArcMenu Settings Window Size"
