@@ -931,7 +931,7 @@ msgid "Disabled"
 msgstr ""
 
 #: prefs.js:1303
-msgid "Toggle ArcMenu"
+msgid "Open ArcMenu"
 msgstr ""
 
 #: prefs.js:1304
