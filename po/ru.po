@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 19:28-0400\n"
-"PO-Revision-Date: 2021-08-25 00:05+1000\n"
+"PO-Revision-Date: 2021-08-25 03:07+1000\n"
 "Last-Translator: Ser82-png>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -513,7 +513,7 @@ msgstr "Домашний экран"
 
 #: menulayouts/tweaks/tweaks.js:703
 msgid "Unity Layout Buttons"
-msgstr "Кнопки Unity компоновки"
+msgstr "Кнопки компоновки Unity"
 
 #: menulayouts/tweaks/tweaks.js:712
 msgid "Button Separator Position"
@@ -807,11 +807,11 @@ msgstr "Настройки Panel и Dock"
 
 #: prefs.js:817
 msgid "Activities Hot Corner Options"
-msgstr "Параметры поведения \"Активного угла\""
+msgstr "Варианты действий в \"Активном углу\""
 
 #: prefs.js:827 prefs.js:1285
 msgid "Modify Activities Hot Corner"
-msgstr "Изменить поведение \"Активного угла\""
+msgstr "Модифицировать \"Активный угол\""
 
 #: prefs.js:864
 msgid "Hotkey activation"
@@ -923,7 +923,7 @@ msgstr "Отображать Arc Menu на всех мониторах"
 
 #: prefs.js:1293
 msgid "Activities Hot Corner Action"
-msgstr "Поведение \"Активного угла\""
+msgstr "Действие в \"Активном углу\""
 
 #: prefs.js:1301
 msgid "GNOME Default"
@@ -943,7 +943,7 @@ msgstr "Другое"
 
 #: prefs.js:1310
 msgid "Custom Activities Hot Corner Action"
-msgstr "Пользовательские настройки \"Активного угла\""
+msgstr "Пользовательское поведение для \"Активного угла\""
 
 #: prefs.js:1310
 msgid "Choose from a list of preset commands or use your own terminal command"
@@ -1294,23 +1294,23 @@ msgstr "Выбрать всё"
 
 #: prefs.js:3913 prefs.js:4189
 msgid "Manage Presets"
-msgstr "Управлять шаблонами"
+msgstr "Управлять предустановками"
 
 #: prefs.js:4074 prefs.js:5427
 msgid "Menu Theme Presets"
-msgstr "Шаблоны тем меню"
+msgstr "Предустановки тем меню"
 
 #: prefs.js:4084
 msgid "Current Menu Theme Preset"
-msgstr "Шаблон текущей темы меню"
+msgstr "Предустановки текущей темы меню"
 
 #: prefs.js:4104
 msgid "Save as Preset"
-msgstr "Сохранить как шаблон"
+msgstr "Сохранить как предустановку"
 
 #: prefs.js:4205
 msgid "Browse Presets"
-msgstr "Просмотр шаблонов"
+msgstr "Просмотр предустановок"
 
 #: prefs.js:4254
 msgid "Theme Settings"
@@ -1394,19 +1394,19 @@ msgstr "Экспортировать настройки"
 
 #: prefs.js:5438
 msgid "Export or Import Menu Theme Presets"
-msgstr "Экспортировать или импортировать шаблоны темы"
+msgstr "Экспортировать или импортировать предустановки темы"
 
 #: prefs.js:5439
 msgid "Menu theme presets are located in the \"Menu Theme\" section"
-msgstr "Шаблоны тем расположены во вкладке \"Тема меню\""
+msgstr "Предустановки тем расположены во вкладке \"Тема меню\""
 
 #: prefs.js:5449 prefs.js:5455
 msgid "Import Theme Preset"
-msgstr "Импортировать шаблоны тем"
+msgstr "Импортировать предустановки тем"
 
 #: prefs.js:5491 prefs.js:5502
 msgid "Export Theme Preset"
-msgstr "Экспортировать шаблоны тем"
+msgstr "Экспортировать предустановки тем"
 
 #: prefs.js:5534
 msgid "ArcMenu Settings Window Size"
