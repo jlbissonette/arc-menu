@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 19:28-0400\n"
-"PO-Revision-Date: 2021-08-22 12:31+1000\n"
+"PO-Revision-Date: 2021-08-25 08:50+1000\n"
 "Last-Translator: Ser82-png>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -84,7 +84,7 @@ msgstr "Спящий режим"
 
 #: constants.js:324 menuWidgets.js:3275 prefs.js:5822
 msgid "ArcMenu"
-msgstr "Arc Menu"
+msgstr "ArcMenu"
 
 #: constants.js:325
 msgid "Brisk"
@@ -337,7 +337,7 @@ msgstr "Файлы"
 
 #: menulayouts/plasma.js:153 menuWidgets.js:1303
 msgid "Leave"
-msgstr ""
+msgstr "Покинуть"
 
 #: menulayouts/plasma.js:305 menulayouts/windows.js:289 prefs.js:6020
 msgid "Application Shortcuts"
@@ -420,7 +420,7 @@ msgstr "Отключить аватар пользователя"
 
 #: menulayouts/tweaks/tweaks.js:249
 msgid "Show Applications Grid"
-msgstr "Показать сетку приложений"
+msgstr "Показывать сетку приложений"
 
 #: menulayouts/tweaks/tweaks.js:269
 msgid "Disable Frequent Apps"
@@ -478,7 +478,7 @@ msgstr "В центре"
 
 #: menulayouts/tweaks/tweaks.js:519
 msgid "Width"
-msgstr ""
+msgstr "Ширина"
 
 #: menulayouts/tweaks/tweaks.js:539 menulayouts/tweaks/tweaks.js:570
 #: menulayouts/tweaks/tweaks.js:603 prefs.js:1744
@@ -486,10 +486,8 @@ msgid "Default"
 msgstr "По умолчанию"
 
 #: menulayouts/tweaks/tweaks.js:550
-#, fuzzy
-#| msgid "Right"
 msgid "Height"
-msgstr "Справа"
+msgstr "Высота"
 
 #: menulayouts/tweaks/tweaks.js:582 prefs.js:4317
 msgid "Font Size"
@@ -515,7 +513,7 @@ msgstr "Домашний экран"
 
 #: menulayouts/tweaks/tweaks.js:703
 msgid "Unity Layout Buttons"
-msgstr "Кнопки Unity компоновки"
+msgstr "Кнопки компоновки Unity"
 
 #: menulayouts/tweaks/tweaks.js:712
 msgid "Button Separator Position"
@@ -620,7 +618,7 @@ msgstr "Добавить в избранное"
 
 #: menuWidgets.js:273 menuWidgets.js:335
 msgid "Unpin from ArcMenu"
-msgstr "Открепить из Arc Menu"
+msgstr "Открепить из ArcMenu"
 
 #: menuWidgets.js:286
 msgid "Pin to ArcMenu"
@@ -809,11 +807,11 @@ msgstr "Настройки Panel и Dock"
 
 #: prefs.js:817
 msgid "Activities Hot Corner Options"
-msgstr "Параметры горячего угла"
+msgstr "Варианты действия в \"Активном углу\""
 
 #: prefs.js:827 prefs.js:1285
 msgid "Modify Activities Hot Corner"
-msgstr "Изменить горячий угол активностей"
+msgstr "Изменить действие в \"Активном углу\""
 
 #: prefs.js:864
 msgid "Hotkey activation"
@@ -833,7 +831,7 @@ msgstr "Настройка горячих клавиш"
 
 #: prefs.js:899
 msgid "Choose a Hotkey for ArcMenu"
-msgstr "Выбор горячих клавиши для Arc Menu"
+msgstr "Выбрать горячие клавиши для ArcMenu"
 
 #: prefs.js:908
 msgid "Left Super Key"
@@ -857,7 +855,7 @@ msgstr "Изменить горячие клавиши"
 
 #: prefs.js:1037
 msgid "Display ArcMenu On"
-msgstr "Отображать значок Arc Menu"
+msgstr "Отображать значок ArcMenu"
 
 #: prefs.js:1047
 msgid "Dash to Dock"
@@ -885,7 +883,7 @@ msgstr "Включите Dash to Dock для работы этой функци�
 
 #: prefs.js:1072
 msgid "Show Activities Button"
-msgstr "Показывать активную кнопку"
+msgstr "Показывать кнопку \"Обзор\""
 
 #: prefs.js:1106
 msgid "Main Panel not found!"
@@ -925,7 +923,7 @@ msgstr "Отображать Arc Menu на всех мониторах"
 
 #: prefs.js:1293
 msgid "Activities Hot Corner Action"
-msgstr "Действие горячего угла активностей"
+msgstr "Действие в \"Активном углу\""
 
 #: prefs.js:1301
 msgid "GNOME Default"
@@ -936,8 +934,8 @@ msgid "Disabled"
 msgstr "Отключено"
 
 #: prefs.js:1303
-msgid "Toggle ArcMenu"
-msgstr "Переключить Arc Menu"
+msgid "Open ArcMenu"
+msgstr "Открыть ArcMenu"
 
 #: prefs.js:1304
 msgid "Custom"
@@ -945,7 +943,7 @@ msgstr "Другое"
 
 #: prefs.js:1310
 msgid "Custom Activities Hot Corner Action"
-msgstr "Пользовательское действие горячего угла активностей"
+msgstr "Пользовательское действие для \"Активного угла\""
 
 #: prefs.js:1310
 msgid "Choose from a list of preset commands or use your own terminal command"
@@ -1141,7 +1139,7 @@ msgstr "Изменить тему Arc Menu"
 #: prefs.js:2705 prefsWidgets.js:769
 #, javascript-format
 msgid "%s Menu Layouts"
-msgstr "%s компоновка меню"
+msgstr "%s компоновки меню"
 
 #: prefs.js:2798
 msgid "Menu Height"
@@ -1296,23 +1294,23 @@ msgstr "Выбрать всё"
 
 #: prefs.js:3913 prefs.js:4189
 msgid "Manage Presets"
-msgstr "Управлять пресетами"
+msgstr "Управлять предустановками"
 
 #: prefs.js:4074 prefs.js:5427
 msgid "Menu Theme Presets"
-msgstr "Пресеты тем меню"
+msgstr "Предустановки темы меню"
 
 #: prefs.js:4084
 msgid "Current Menu Theme Preset"
-msgstr "Пресеты текущей темы меню"
+msgstr "Предустановки текущей темы меню"
 
 #: prefs.js:4104
 msgid "Save as Preset"
-msgstr "Сохранить как пресет"
+msgstr "Сохранить как предустановку"
 
 #: prefs.js:4205
 msgid "Browse Presets"
-msgstr "Просмотр пресетов"
+msgstr "Просмотр предустановок"
 
 #: prefs.js:4254
 msgid "Theme Settings"
@@ -1396,19 +1394,19 @@ msgstr "Экспортировать настройки"
 
 #: prefs.js:5438
 msgid "Export or Import Menu Theme Presets"
-msgstr "Экспортировать или импортировать пресеты темы"
+msgstr "Экспортировать или импортировать предустановки темы"
 
 #: prefs.js:5439
 msgid "Menu theme presets are located in the \"Menu Theme\" section"
-msgstr "Пресеты тем расположены во вкладке \"Тема меню\""
+msgstr "Предустановки темы расположены во вкладке \"Тема меню\""
 
 #: prefs.js:5449 prefs.js:5455
 msgid "Import Theme Preset"
-msgstr "Импортировать пресет темы"
+msgstr "Импортировать предустановки темы"
 
 #: prefs.js:5491 prefs.js:5502
 msgid "Export Theme Preset"
-msgstr "Экспортировать пресет темы"
+msgstr "Экспортировать предустановки темы"
 
 #: prefs.js:5534
 msgid "ArcMenu Settings Window Size"
@@ -1575,6 +1573,9 @@ msgstr "Отключить активный индикатор"
 
 msgid "Launch using Dedicated Graphics Card"
 msgstr "Запустить, используя дискретную видеокарту"
+
+#~ msgid "Toggle ArcMenu"
+#~ msgstr "Открыть ArcMenu"
 
 #~ msgid "Brisk Menu Style"
 #~ msgstr "Стиль меню Brisk"
