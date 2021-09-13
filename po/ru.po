@@ -10,8 +10,8 @@ msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-08-16 19:28-0400\n"
-"PO-Revision-Date: 2021-08-25 08:50+1000\n"
-"Last-Translator: Ser82-png>\n"
+"PO-Revision-Date: 2021-09-13 22:35+1000\n"
+"Last-Translator: Ser82-png\n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -196,7 +196,7 @@ msgstr "Быстрые ссылки на настройки:"
 
 #: menuButton.js:831
 msgid "Change Menu Layout"
-msgstr "Изменить оформление меню"
+msgstr "Изменить компоновку меню"
 
 #: menuButton.js:832
 msgid "Modify Pinned Apps"
@@ -208,11 +208,11 @@ msgstr "Изменить ярлыки"
 
 #: menuButton.js:834
 msgid "Layout Tweaks"
-msgstr "Настойки компоновки"
+msgstr "Настройки компоновки"
 
 #: menuButton.js:835 prefs.js:6010
 msgid "Button Appearance"
-msgstr "Внешний вид кнопок"
+msgstr "Внешний вид кнопки"
 
 #: menuButton.js:841 prefs.js:6012
 msgid "About"
@@ -1021,7 +1021,7 @@ msgstr "Новая горячая клавиша"
 
 #: prefs.js:1652
 msgid "Menu Button Appearance"
-msgstr "Внешний вид значка Arc Menu"
+msgstr "Внешний вид кнопки меню"
 
 #: prefs.js:1662
 msgid "Appearance"
