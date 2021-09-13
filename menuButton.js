@@ -141,6 +141,10 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this._monitorsChangedId = Main.layoutManager.connect('monitors-changed', () => {
             this.updateHeight();
         });
+        
+        this._startupCompleteId = Main.layoutManager.connect('startup-complete', () => {
+            this.updateHeight();
+        });
 
         this.initiateRecentlyInstalledApps();
         this.setMenuPositionAlignment();
@@ -243,22 +247,13 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             y_align: Clutter.ActorAlign.FILL
         });        
         this.mainBox._delegate = this.mainBox;
-
-        let monitorIndex = Main.layoutManager.findIndexForActor(this);
-        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
-        let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(monitorIndex);
-        let height = Math.round(this._settings.get_int('menu-height') / scaleFactor);
-
-        if(height > monitorWorkArea.height){
-            height = (monitorWorkArea.height * 8) / 10;
-        }
-
-        this.mainBox.style = `height: ${height}px`;
         this.section.actor.add_actor(this.mainBox);
+
         this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
         this.setMenuPositionAlignment();
         this.updateStyle();
         this.forceMenuLocation();
+        this.updateHeight();
     }
 
     setMenuPositionAlignment(){
@@ -520,8 +515,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         
         if(!(layout == Constants.MenuLayout.SIMPLE || layout == Constants.MenuLayout.SIMPLE_2 || layout == Constants.MenuLayout.RUNNER) && this.MenuLayout)
             this.mainBox.style = `height: ${height}px`;
-        
-        this.reload();
     }
 
     _onDestroy(){
@@ -532,6 +525,10 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if (this._monitorsChangedId){
             Main.layoutManager.disconnect(this._monitorsChangedId);
             this._monitorsChangedId = null;
+        }
+        if (this._startupCompleteId){
+            Main.layoutManager.disconnect(this._startupCompleteId);
+            this._startupCompleteId = null;
         }
         if(this.reloadID){
             GLib.source_remove(this.reloadID);
