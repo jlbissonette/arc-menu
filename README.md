@@ -210,7 +210,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 -----
 
- **- @[Ivan](https://gitlab.com/vantu5z) - Russian** | **- @[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **- @[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **- @[jordim](https://gitlab.com/jordim) - Catalan** | **- @[aylinux](https://gitlab.com/aylinux) - Turkish** |
+ **- @[Ivan](https://gitlab.com/vantu5z), @[Ser82-png](https://gitlab.com/Ser82-png) - Russian** | **- @[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **- @[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **- @[jordim](https://gitlab.com/jordim) - Catalan** | **- @[aylinux](https://gitlab.com/aylinux) - Turkish** |
  
 -----
 
@@ -222,7 +222,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
  
 -----
 
- **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** | **- @[prescott66](https://gitlab.com/prescott66) - Slovak** | **- @[Mejans](https://gitlab.com/Mejans) - Occitan** | **- @[UtsushimiNeneka](https://gitlab.com/UtsushimiNeneka) - Korean** |
+ **- @[stevendobay](https://gitlab.com/stevendobay) - Hungarian** | **- @[omeritzics](https://gitlab.com/omeritzics) - Hebrew** | **- @[prescott66](https://gitlab.com/prescott66) - Slovak** | **- @[Mejans](https://gitlab.com/Mejans) - Occitan** | **- @[KuroeHanako](https://gitlab.com/KuroeHanako) - Korean** |
 
 -----
 
