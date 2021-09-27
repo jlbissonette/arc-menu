@@ -42,38 +42,52 @@ const PowerManagerInterface = `<node>
 </node>`;
 const PowerManager = Gio.DBusProxy.makeProxyWrapper(PowerManagerInterface);
 
-function canHybridSleep(){
-    let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
-    proxy.CanHybridSleepRemote((result, error) => {
-        if(!error && result[0] === 'yes')
-            return true;
-        else
-            return false;
-    });
-}
-
-function activateHybridSleep(){
-    if(canHybridSleep())
-        proxy.HybridSleepRemote(true);
-    else
-        imports.ui.main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
-}
-
-function canHibernate(){
-    let proxy = PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+function canHibernate(asyncCallback){
+    let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
     proxy.CanHibernateRemote((result, error) => {
-        if(!error && result[0] === 'yes')
-            return true;
-        else
-            return false;
+        if(error)
+            asyncCallback(false, false);
+        else{
+            let needsAuth = result[0] === 'challenge';
+            let canHibernate = needsAuth || result[0] === 'yes';
+            asyncCallback(canHibernate, needsAuth);
+        }
     });
 }
 
 function activateHibernate(){
-    if(canHibernate())
-        proxy.HibernateRemote(true);
-    else
-        imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+    let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+    proxy.CanHibernateRemote((result, error) => {
+        if(error)
+            imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+        else{
+            proxy.HibernateRemote(true);
+        }
+    });
+}
+
+function canHybridSleep(asyncCallback){
+    let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+    proxy.CanHybridSleepRemote((result, error) => {
+        if(error)
+            asyncCallback(false, false);
+        else{
+            let needsAuth = result[0] === 'challenge';
+            let canHybridSleep = needsAuth || result[0] === 'yes';
+            asyncCallback(canHybridSleep, needsAuth);
+        }
+    });
+}
+
+function activateHybridSleep(){
+    let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
+    proxy.CanHybridSleepRemote((result, error) => {
+        if(error)
+            imports.ui.main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
+        else{
+            proxy.HybridSleepRemote(true);
+        }
+    });
 }
 
 function getMenuLayout(button, layout){

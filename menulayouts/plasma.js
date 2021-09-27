@@ -379,19 +379,23 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         this.applicationsBox.add(this.createLabelRow(_("System")));
 
-        if(Utils.canHybridSleep()){
-            if(!this.sleep)
-                this.sleep = new MW.PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
-            this.applicationsBox.add(this.sleep);
-            needsSeparator = true;
-        }
+        Utils.canHybridSleep((canHybridSleep, needsAuth) => {
+            if(canHybridSleep){
+                if(!this.sleep)
+                    this.sleep = new MW.PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
+                this.applicationsBox.add(this.sleep);
+                needsSeparator = true;
+            }
+        });
 
-        if(Utils.canHibernate()){
-            if(!this.hibernate)
-                this.hibernate = new MW.PowerMenuItem(this, Constants.PowerType.HIBERNATE);
-            this.applicationsBox.add(this.hibernate);
-            needsSeparator = true;
-        }
+        Utils.canHibernate((canHibernate, needsAuth) => {
+            if(canHibernate){
+                if(!this.hibernate)
+                    this.hibernate = new MW.PowerMenuItem(this, Constants.PowerType.HIBERNATE);
+                this.applicationsBox.add(this.hibernate);
+                needsSeparator = true;
+            }
+        });
 
         if(needsSeparator)
             this.applicationsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
