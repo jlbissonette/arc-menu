@@ -5846,15 +5846,6 @@ var AboutPage = GObject.registerClass(
                 uri: 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Donate+to+support+my+work&currency_code=USD&source=url',
             });
 
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path + '/media/icons/prefs_icons/patreon-icon.svg', 150, 50);
-            let patreonImage =  new Gtk.Image({
-                pixbuf: pixbuf
-            });
-            let patreonLinkButton = new Gtk.LinkButton({
-                child: patreonImage,
-                uri: 'https://www.patreon.com/ArcMenu',
-            });
-
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path + '/media/icons/prefs_icons/gitlab-icon.svg', 150, 50);
             let gitlabImage = new Gtk.Image({
                 pixbuf: pixbuf
@@ -5866,7 +5857,6 @@ var AboutPage = GObject.registerClass(
             });
             
             linksBox.add(projectLinkButton);
-            linksBox.add(patreonLinkButton);
             linksBox.add(donateLinkButton);
 
             this.creditsScrollWindow = new Gtk.ScrolledWindow({
@@ -5887,8 +5877,6 @@ var AboutPage = GObject.registerClass(
             this.creditsFrame.append_page(contributorsPage );
             let artworkPage = new PW.NotebookPage(_("Artwork"));
             this.creditsFrame.append_page(artworkPage);
-            let patronsPage = new PW.NotebookPage(_("Patrons"));
-            this.creditsFrame.append_page(patronsPage);
             this.creditsScrollWindow.add_with_viewport(this.creditsFrame);
   	        let creditsLabel = new Gtk.Label({
 		        label: _(Constants.DEVELOPERS),
@@ -5925,14 +5913,6 @@ var AboutPage = GObject.registerClass(
                 wrap: true
             });
             artworkPage.add(creditsLabel);
-            creditsLabel = new Gtk.Label({
-		        label: _(Constants.PATRONS),
-		        use_markup: true,
-		        halign: Gtk.Align.START,
-                hexpand: false,
-                vexpand: false,
-            });
-            patronsPage.add(creditsLabel);
 
             arcMenuImageBox.add(arcMenuLabel);
             arcMenuImageBox.add(projectDescriptionLabel);
