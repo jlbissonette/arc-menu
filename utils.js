@@ -58,7 +58,7 @@ function canHibernate(asyncCallback){
 function activateHibernate(){
     let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
     proxy.CanHibernateRemote((result, error) => {
-        if(error)
+        if(error || result[0] !== 'yes')
             imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
         else{
             proxy.HibernateRemote(true);
@@ -82,7 +82,7 @@ function canHybridSleep(asyncCallback){
 function activateHybridSleep(){
     let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
     proxy.CanHybridSleepRemote((result, error) => {
-        if(error)
+        if(error || result[0] !== 'yes')
             imports.ui.main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
         else{
             proxy.HybridSleepRemote(true);
