@@ -81,22 +81,20 @@ var TweaksPage = GObject.registerClass({
                 valign: Gtk.Align.FILL
         });
 
-        this.add(this.headerBox);
-        this.mainScrollWindow.add_with_viewport(this.mainBox);
+        this.append(this.headerBox);
+        this.mainScrollWindow.set_child(this.mainBox);
         this.mainScrollWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        this.add(this.mainScrollWindow);
+        this.append(this.mainScrollWindow);
         this._createLayout();
-        this.mainBox.show_all();
     }
 
     setActiveLayoutName(layoutName){
         this.layoutNameLabel.label = "<b>" + _(layoutName) + "</b>";
-        let children = this.mainBox.get_children();
+        let children = [...this.mainBox];
         for(let child of children){
             this.mainBox.remove(child);
         }         
         this._createLayout();
-        this.mainBox.show_all();
     }
 
     _createLayout() {    
@@ -261,7 +259,7 @@ var TweaksPage = GObject.registerClass({
         appsGridRow.add(appsGridLabel);
         appsGridRow.add(appsGridSwitch);
         gnomeOverviewTweaksFrame.add(appsGridRow);
-        this.mainBox.add(gnomeOverviewTweaksFrame);
+        this.mainBox.append(gnomeOverviewTweaksFrame);
     }
 
     _loadWindowsTweaks(){
@@ -298,7 +296,7 @@ var TweaksPage = GObject.registerClass({
         pinnedAppsRow.add(pinnedAppsSwitch);
         windowsTweaksFrame.add(pinnedAppsRow);
 
-        this.mainBox.add(windowsTweaksFrame);
+        this.mainBox.append(windowsTweaksFrame);
     }
 
     _loadPlasmaMenuTweaks(){
@@ -393,7 +391,7 @@ var TweaksPage = GObject.registerClass({
         backgroundColorRow.add(backgroundColorChooser);
         plasmaMenuTweaksFrame.add(backgroundColorRow);
 
-        this.mainBox.add(plasmaMenuTweaksFrame);
+        this.mainBox.append(plasmaMenuTweaksFrame);
 
         let resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
@@ -421,7 +419,7 @@ var TweaksPage = GObject.registerClass({
             this._settings.reset('apps-show-extra-details');
             this._settings.set_boolean('reload-theme', true);
         });
-        this.mainBox.add(resetButton);
+        this.mainBox.append(resetButton);
     }
     _loadBriskMenuTweaks(){
         let briskMenuTweaksFrame = new PW.FrameBox();
@@ -451,7 +449,7 @@ var TweaksPage = GObject.registerClass({
         savePinnedAppsButton.set_sensitive(false);
         
         this._loadPinnedApps(this._settings.get_strv('brisk-shortcuts-list'), pinnedAppsFrame, savePinnedAppsButton, pinnedAppsScrollWindow);
-        pinnedAppsScrollWindow.add_with_viewport(pinnedAppsFrame);
+        pinnedAppsScrollWindow.set_child(pinnedAppsFrame);
 
         let pinnedAppsHeaderLabel = new Gtk.Label({
             label: "<b>" + _("Brisk Menu Shortcuts") + "</b>",
@@ -459,20 +457,20 @@ var TweaksPage = GObject.registerClass({
             xalign: 0
         });
 
-        this.mainBox.add(briskMenuTweaksFrame);
-        this.mainBox.add(pinnedAppsHeaderLabel);
-        this.mainBox.add(pinnedAppsScrollWindow);
-        this.mainBox.add(savePinnedAppsButton);
+        this.mainBox.append(briskMenuTweaksFrame);
+        this.mainBox.append(pinnedAppsHeaderLabel);
+        this.mainBox.append(pinnedAppsScrollWindow);
+        this.mainBox.append(savePinnedAppsButton);
     }
     _loadChromebookTweaks(){
         let chromeBookTweaksFrame = new PW.FrameBox();
         chromeBookTweaksFrame.add(this._createSearchBarLocationRow());
-        this.mainBox.add(chromeBookTweaksFrame);
+        this.mainBox.append(chromeBookTweaksFrame);
     }
     _loadElementaryTweaks(){
         let elementaryTweaksFrame = new PW.FrameBox();
         elementaryTweaksFrame.add(this._createSearchBarLocationRow());
-        this.mainBox.add(elementaryTweaksFrame);
+        this.mainBox.append(elementaryTweaksFrame);
     }
     _loadBudgieMenuTweaks(){
         let budgieMenuTweaksFrame = new PW.FrameBox();
@@ -495,7 +493,7 @@ var TweaksPage = GObject.registerClass({
         enableActivitiesRow.add(enableActivitiesSwitch);
         budgieMenuTweaksFrame.add(enableActivitiesRow);
 
-        this.mainBox.add(budgieMenuTweaksFrame);
+        this.mainBox.append(budgieMenuTweaksFrame);
     }
     _loadRunnerMenuTweaks(){
         let runnerMenuTweaksFrame = new PW.FrameBox();
@@ -647,11 +645,10 @@ var TweaksPage = GObject.registerClass({
         inheritThemeGapRow.add(inheritThemeGapSwitch);
         runnerMenuTweaksFrame.add(inheritThemeGapRow);
 
-        this.mainBox.add(runnerMenuTweaksFrame);
+        this.mainBox.append(runnerMenuTweaksFrame);
     }
     _loadUnityTweaks(){
         let pinnedAppsFrame = new PW.FrameBox();
-
         let generalTweaksFrame = new PW.FrameBox();
         let homeScreenRow = new PW.FrameBoxRow();
         let homeScreenLabel = new Gtk.Label({
@@ -671,17 +668,17 @@ var TweaksPage = GObject.registerClass({
         homeScreenRow.add(homeScreenLabel);
         homeScreenRow.add(homeScreenCombo);
         generalTweaksFrame.add(homeScreenRow);
-        this.mainBox.add(generalTweaksFrame);
+        this.mainBox.append(generalTweaksFrame);
 
-        let widgetFrame =  this._createWidgetsRows(Constants.MenuLayout.UNITY);
-        this.mainBox.add(widgetFrame);
+        let widgetFrame = this._createWidgetsRows(Constants.MenuLayout.UNITY);
+        this.mainBox.append(widgetFrame);
 
         let pinnedAppsScrollWindow = new Gtk.ScrolledWindow({
             vexpand: true,
             valign: Gtk.Align.FILL
         });
-        pinnedAppsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
         pinnedAppsScrollWindow.set_min_content_height(400);
+        pinnedAppsScrollWindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC);
 
         let savePinnedAppsButton = new Gtk.Button({
             label: _("Save"),
@@ -700,23 +697,23 @@ var TweaksPage = GObject.registerClass({
         savePinnedAppsButton.set_sensitive(false);
         
         this._loadPinnedApps(this._settings.get_strv('unity-pinned-app-list'), pinnedAppsFrame, savePinnedAppsButton, pinnedAppsScrollWindow);
-        pinnedAppsScrollWindow.add_with_viewport(pinnedAppsFrame);
+        pinnedAppsScrollWindow.set_child(pinnedAppsFrame);
 
         let pinnedAppsHeaderLabel = new Gtk.Label({
             label: "<b>" + _("Unity Layout Buttons") + "</b>",
             use_markup: true,
             xalign: 0
         });
-        this.mainBox.add(pinnedAppsHeaderLabel);
-        this.mainBox.add(pinnedAppsScrollWindow);
-        this.mainBox.add(savePinnedAppsButton);
+        this.mainBox.append(pinnedAppsHeaderLabel);
+        this.mainBox.append(pinnedAppsScrollWindow);
+        this.mainBox.append(savePinnedAppsButton);
 
         let pinnedAppsSeparatorHeaderLabel = new Gtk.Label({
             label: "<b>" + _("Button Separator Position") + "</b>",
             use_markup: true,
             xalign: 0
         });
-        this.mainBox.add(pinnedAppsSeparatorHeaderLabel);
+        this.mainBox.append(pinnedAppsSeparatorHeaderLabel);
 
         let pinnedAppsSeparatorFrame = new PW.FrameBox();
         let pinnedAppsSeparatorRow = new PW.FrameBoxRow();
@@ -744,17 +741,17 @@ var TweaksPage = GObject.registerClass({
             let dialog = new PW.MessageDialog({
                 text: _('Adjust the position of the separator in the button panel'),
                 buttons: Gtk.ButtonsType.OK,
-                transient_for: this.get_toplevel()
+                transient_for: this.get_root()
             });
             dialog.connect ('response', ()=> dialog.destroy());
-            dialog.show_all();
+            dialog.show();
         });
 
         pinnedAppsSeparatorRow.add(pinnedAppsSeparatorLabel);
         pinnedAppsSeparatorRow.add(pinnedAppsSeparatorScale);
         pinnedAppsSeparatorRow.add(infoButton);
         pinnedAppsSeparatorFrame.add(pinnedAppsSeparatorRow);
-        this.mainBox.add(pinnedAppsSeparatorFrame);
+        this.mainBox.append(pinnedAppsSeparatorFrame);
     }
     _loadRavenTweaks(){
         let generalTweaksFrame = new PW.FrameBox();
@@ -776,24 +773,24 @@ var TweaksPage = GObject.registerClass({
         homeScreenRow.add(homeScreenLabel);
         homeScreenRow.add(homeScreenCombo);
         generalTweaksFrame.add(homeScreenRow);
-        this.mainBox.add(generalTweaksFrame);
+        this.mainBox.append(generalTweaksFrame);
 
         let widgetFrame =  this._createWidgetsRows(Constants.MenuLayout.RAVEN);
-        this.mainBox.add(widgetFrame);
+        this.mainBox.append(widgetFrame);
     }
     _loadMintMenuTweaks(){
         let mintMenuTweaksFrame = new PW.FrameBox();
         mintMenuTweaksFrame.add(this._createActivateOnHoverRow());
         mintMenuTweaksFrame.add(this._createSearchBarLocationRow());
         mintMenuTweaksFrame.add(this._createFlipHorizontalRow());
-        this.mainBox.add(mintMenuTweaksFrame);
+        this.mainBox.append(mintMenuTweaksFrame);
 
         let pinnedAppsHeaderLabel = new Gtk.Label({
             label: "<b>" + _("Mint Layout Shortcuts") + "</b>",
             use_markup: true,
             xalign: 0
         });
-        this.mainBox.add(pinnedAppsHeaderLabel);
+        this.mainBox.append(pinnedAppsHeaderLabel);
 
         let pinnedAppsFrame = new PW.FrameBox();
         let pinnedAppsScrollWindow = new Gtk.ScrolledWindow();
@@ -816,17 +813,17 @@ var TweaksPage = GObject.registerClass({
         savePinnedAppsButton.set_sensitive(false);
         
         this._loadPinnedApps(this._settings.get_strv('mint-pinned-app-list'), pinnedAppsFrame, savePinnedAppsButton, pinnedAppsScrollWindow);
-        pinnedAppsScrollWindow.add_with_viewport(pinnedAppsFrame);
-        this.mainBox.add(pinnedAppsScrollWindow);
+        pinnedAppsScrollWindow.set_child(pinnedAppsFrame);
+        this.mainBox.append(pinnedAppsScrollWindow);
 
-        this.mainBox.add(savePinnedAppsButton);
+        this.mainBox.append(savePinnedAppsButton);
 
         let pinnedAppsSeparatorHeaderLabel = new Gtk.Label({
             label: "<b>" + _("Shortcut Separator Position") + "</b>",
             use_markup: true,
             xalign: 0
         });
-        this.mainBox.add(pinnedAppsSeparatorHeaderLabel);
+        this.mainBox.append(pinnedAppsSeparatorHeaderLabel);
 
         let pinnedAppsSeparatorFrame = new PW.FrameBox();
         let pinnedAppsSeparatorRow = new PW.FrameBoxRow();
@@ -854,17 +851,17 @@ var TweaksPage = GObject.registerClass({
             let dialog = new PW.MessageDialog({
                 text: _('Adjust the position of the separator in the button panel'),
                 buttons: Gtk.ButtonsType.OK,
-                transient_for: this.get_toplevel()
+                transient_for: this.get_root()
             });
             dialog.connect ('response', ()=> dialog.destroy());
-            dialog.show_all();
+            dialog.show();
         });
 
         pinnedAppsSeparatorRow.add(pinnedAppsSeparatorLabel);
         pinnedAppsSeparatorRow.add(pinnedAppsSeparatorScale);
         pinnedAppsSeparatorRow.add(infoButton);
         pinnedAppsSeparatorFrame.add(pinnedAppsSeparatorRow);
-        this.mainBox.add(pinnedAppsSeparatorFrame);
+        this.mainBox.append(pinnedAppsSeparatorFrame);
     }
     _loadPinnedApps(array,frame, savePinnedAppsButton, scrollWindow) {
         for(let i = 0; i < array.length; i += 3) {
@@ -894,8 +891,8 @@ var TweaksPage = GObject.registerClass({
                 gicon: Gio.icon_new_for_string("drag-symbolic"),
                 pixel_size: 12
             });
-            arcMenuImageBox.add(dragImage);
-            arcMenuImageBox.add(arcMenuImage);
+            arcMenuImageBox.append(dragImage);
+            arcMenuImageBox.append(arcMenuImage);
             frameRow.add(arcMenuImageBox);
 
             let frameLabel = new Gtk.Label({
@@ -919,7 +916,7 @@ var TweaksPage = GObject.registerClass({
 
             buttonBox.connect('change', ()=> {
                 let dialog = new Prefs.AddAppsToPinnedListWindow(this._settings, this, Constants.DiaglogType.OTHER);
-                dialog.show_all();
+                dialog.show();
                 dialog.connect('response', ()=> { 
                     if(dialog.get_response()) {
                         let newPinnedApps = dialog.get_newPinnedAppsArray();
@@ -934,7 +931,7 @@ var TweaksPage = GObject.registerClass({
                         let icon = Prefs.getIconPath(newPinnedApps);
                         arcMenuImage.gicon = Gio.icon_new_for_string(iconString ? iconString : icon);
                         dialog.destroy();
-                        frame.show_all();
+                        frame.show();
                         savePinnedAppsButton.set_sensitive(true);
                     }
                     else
@@ -945,7 +942,7 @@ var TweaksPage = GObject.registerClass({
             buttonBox.connect('modify', ()=> {
                 let appArray = [frameRow._name,frameRow._icon,frameRow._cmd];
                 let dialog = new Prefs.AddCustomLinkDialogWindow(this._settings, this, Constants.DiaglogType.OTHER, true, appArray);
-                dialog.show_all();
+                dialog.show();
                 dialog.connect('response', ()=> { 
                     if(dialog.get_response()) {
                         let newPinnedApps = dialog.get_newPinnedAppsArray();
@@ -959,7 +956,7 @@ var TweaksPage = GObject.registerClass({
                         }
                         arcMenuImage.gicon = Gio.icon_new_for_string(iconString ? iconString : frameRow._icon);
                         dialog.destroy();
-                        frame.show_all();
+                        frame.show();
                         savePinnedAppsButton.set_sensitive(true);
                     }
                     else
@@ -977,7 +974,7 @@ var TweaksPage = GObject.registerClass({
         whiskerMenuTweaksFrame.add(this._createAvatarShapeRow());
         whiskerMenuTweaksFrame.add(this._createSearchBarLocationRow());
         whiskerMenuTweaksFrame.add(this._createFlipHorizontalRow());
-        this.mainBox.add(whiskerMenuTweaksFrame);
+        this.mainBox.append(whiskerMenuTweaksFrame);
     }
     _loadRedmondMenuTweaks(){
         let redmondMenuTweaksFrame = new PW.FrameBox();
@@ -1025,26 +1022,26 @@ var TweaksPage = GObject.registerClass({
         bookmarksRow.add(bookmarksButton);
 
         placesFrame.add(bookmarksRow); 
-        this.mainBox.add(redmondMenuTweaksFrame);  
-        this.mainBox.add(new Gtk.Label({
+        this.mainBox.append(redmondMenuTweaksFrame);  
+        this.mainBox.append(new Gtk.Label({
             label: "<b>" + _("Extra Shortcuts") + "</b>",
             use_markup: true,
             xalign: 0,
             hexpand: true
         }));
-        this.mainBox.add(placesFrame);
+        this.mainBox.append(placesFrame);
 
     }
     _loadInsiderMenuTweaks(){
         let insiderMenuTweaksFrame = new PW.FrameBox();
         insiderMenuTweaksFrame.add(this._createAvatarShapeRow());
-        this.mainBox.add(insiderMenuTweaksFrame);
+        this.mainBox.append(insiderMenuTweaksFrame);
     }
     _loadGnomeMenuTweaks(){
         let gnomeMenuTweaksFrame = new PW.FrameBox();
         gnomeMenuTweaksFrame.add(this._createActivateOnHoverRow());
         gnomeMenuTweaksFrame.add(this._createFlipHorizontalRow());
-        this.mainBox.add(gnomeMenuTweaksFrame);
+        this.mainBox.append(gnomeMenuTweaksFrame);
     }
     _loadPlaceHolderTweaks(){
         let placeHolderFrame = new PW.FrameBox();
@@ -1057,7 +1054,7 @@ var TweaksPage = GObject.registerClass({
         });
         placeHolderRow.add(placeHolderLabel);
         placeHolderFrame.add(placeHolderRow);
-        this.mainBox.add(placeHolderFrame);
+        this.mainBox.append(placeHolderFrame);
     }
     _loadTogneeMenuTweaks(){
         let togneeMenuTweaksFrame = new PW.FrameBox();
@@ -1085,7 +1082,7 @@ var TweaksPage = GObject.registerClass({
         togneeMenuTweaksFrame.add(defaultLeftBoxRow);
         togneeMenuTweaksFrame.add(this._createSearchBarLocationRow(searchBarBottomDefault));
         togneeMenuTweaksFrame.add(this._createFlipHorizontalRow());
-        this.mainBox.add(togneeMenuTweaksFrame);
+        this.mainBox.append(togneeMenuTweaksFrame);
     }
     _loadArcMenuTweaks(){
         let arcMenuTweaksFrame = new PW.FrameBox();
@@ -1156,14 +1153,14 @@ var TweaksPage = GObject.registerClass({
         bookmarksRow.add(bookmarksButton);
 
         placesFrame.add(bookmarksRow);   
-        this.mainBox.add(arcMenuTweaksFrame);
-        this.mainBox.add(new Gtk.Label({
+        this.mainBox.append(arcMenuTweaksFrame);
+        this.mainBox.append(new Gtk.Label({
             label: "<b>" + _("Extra Shortcuts") + "</b>",
             use_markup: true,
             xalign: 0,
             hexpand: true
         }));
-        this.mainBox.add(placesFrame);
+        this.mainBox.append(placesFrame);
     }
     _createWidgetsRows(layout){
         let weatherWidgetSetting = 'enable-weather-widget-raven';

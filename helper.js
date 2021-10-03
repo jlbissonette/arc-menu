@@ -252,7 +252,7 @@ var HotCornerManager = class {
                     else if(hotCornerAction == Constants.HotCornerAction.CUSTOM){
                         let cmd = this._settings.get_string('custom-hot-corner-cmd');
                         if(cmd == "ArcMenu_ShowAllApplications")
-                            Main.overview.viewSelector._toggleAppsPage();
+                            Main.overview._overview._controls._toggleAppsPage();
                         else if(cmd == "ArcMenu_RunCommand")
                             Main.openRunDialog();
                         else

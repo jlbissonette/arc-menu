@@ -75,14 +75,14 @@ var Button = GObject.registerClass(class Arc_Menu_Button extends Gtk.Button {
             orientation: Gtk.Orientation.HORIZONTAL,
             spacing: 5
         });
-        this.add(this.box);
+        this.set_child(this.box);
 
         if (this._params.icon_name) {
             let image = new Gtk.Image({
                 icon_name: this._params.icon_name,
                 halign: Gtk.Align.CENTER
             });
-            this.box.add(image);
+            this.box.append(image);
         }
         if (this._params.tooltip_text){
             this.set_tooltip_text(this._params.tooltip_text);
@@ -94,11 +94,9 @@ var Button = GObject.registerClass(class Arc_Menu_Button extends Gtk.Button {
                 xalign: 0
             });
             if(this._params.icon_first)
-                this.box.add(label);
-            else{
-                this.box.add(label);
-                this.box.reorder_child(label, 0);
-            }
+                this.box.append(label);
+            else
+                this.box.prepend(label);
         }
     }
 });
@@ -107,7 +105,7 @@ var DialogWindow = GObject.registerClass(class Arc_Menu_DialogWindow extends Gtk
     _init(title, parent) {
         super._init({
             title: title,
-            transient_for: parent.get_toplevel(),
+            transient_for: parent.get_root(),
             modal: true
         });
         let vbox = new Gtk.Box({
@@ -121,7 +119,7 @@ var DialogWindow = GObject.registerClass(class Arc_Menu_DialogWindow extends Gtk
             hexpand: true,
             halign: Gtk.Align.FILL
         });
-        this.get_content_area().add(vbox);
+        vbox.insert_after(this.get_content_area(), null);
         this._createLayout(vbox);
     }
 
@@ -148,7 +146,7 @@ var MessageDialog = GObject.registerClass(class Arc_Menu_MessageDialog extends G
             hexpand: false,
             halign: Gtk.Align.CENTER
         });
-        this.get_content_area().add(this.grid);
+        this.grid.insert_after(this.get_content_area(), null);
         let text = new Gtk.Label({
             label: "<b>" + _(params.text) + "</b>",
             use_markup: true,
@@ -186,17 +184,16 @@ var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.count = 0;
         this.children = [];
-        Gtk.Frame.prototype.add.call(this, this._listBox);
+        Gtk.Frame.prototype.set_child.call(this, this._listBox);
     }
 
     add(boxRow) {
-        this._listBox.add(boxRow);
+        this._listBox.append(boxRow);
         this.children.push(boxRow);
         this.count++;
     }
-    show_all() {
-        this._listBox.show_all();
-        super.show_all();
+    show() {
+        this._listBox.show();
     }
     length() {
         return this._listBox.length;
@@ -214,7 +211,7 @@ var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
             let child = this._listBox.get_row_at_index(i);
             if(child) this.remove(child);
         }
-        this._listBox.show_all();
+        this._listBox.show();
     }
     remove_all_children() {
         for(let i = 0; i < this.children.length; i++){
@@ -223,7 +220,7 @@ var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
         }
         this.children = [];
         this.count = 0;
-        this._listBox.show_all();
+        this._listBox.show();
     }
     get_index(index){
         return this._listBox.get_row_at_index(index);
@@ -250,7 +247,7 @@ var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.L
             row_spacing: 20
         });
         this.x = 0;
-        Gtk.ListBoxRow.prototype.add.call(this, this._grid);
+        Gtk.ListBoxRow.prototype.set_child.call(this, this._grid);
     }
 
     add(widget) {
@@ -266,7 +263,6 @@ var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.L
 
 var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow extends Gtk.ListBoxRow {
     _init(scrolledWindow) {
-        this.moveIndex = 0;
         super._init();
 
         this._grid = new Gtk.Grid({
@@ -279,113 +275,105 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             row_spacing: 20
         });
 
-        this._eventBox = new Gtk.EventBox({visible: true});
-        this.connect('button-press-event', (actor, event) => {return true;});
+        let dragSource = new Gtk.DragSource({ 
+            actions: Gdk.DragAction.MOVE
+        });
+        this.add_controller(dragSource);
 
-        this._eventBox.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, null, Gdk.DragAction.MOVE);
-        let targets = new Gtk.TargetList(null);
-        targets.add(Gdk.atom_intern('GTK_LIST_BOX_ROW', false), Gtk.TargetFlags.SAME_APP, 0);
-        this._eventBox.drag_source_set_target_list(targets);
-        this.drag_dest_set(Gtk.DestDefaults.ALL, null, Gdk.DragAction.MOVE);
-        this.drag_dest_set_target_list(targets);
+        let dropTarget = new Gtk.DropTargetAsync({ 
+            actions: Gdk.DragAction.MOVE
+        });
+        this.add_controller(dropTarget);
 
-
-        this._eventBox.connect('button-press-event', (actor, event) => {return false;});
-        this._eventBox.connect('enter-notify-event', (actor, event) => {return false;});
-        this._eventBox.connect('leave-notify-event', (actor, event) => {return false;});
-        this._eventBox.connect('button-release-event', (actor, event) => {return false;});
-        
-        this._eventBox.add(this._grid);
         this.x = 0;
-        Gtk.ListBoxRow.prototype.add.call(this, this._eventBox);
-        this._eventBox.connect("drag-begin", (widget, context) => {
+        Gtk.ListBoxRow.prototype.set_child.call(this, this._grid);
+        dragSource.connect("drag-begin", (self, gdkDrag) => {
             //get listbox parent
-            let parent = widget.get_parent();
-            let listBox = parent.get_parent();
-            listBox.dragLeave = true;
+            let listBox = self.get_widget().get_parent();
             //get widgets parent - the listBoxDragRow
-            listBox.dragRow = parent;
-            //create a new copy drag row 
-            let alloc = this.get_allocation();
-            let window = widget.get_window();
-            let [_window, x, y] = window.get_device_position(context.get_device());
-            let dragWidget = this.createDragRow(alloc);
+            listBox.dragRow = this;
+
+            let alloc = self.get_widget().get_allocation();
+            let dragWidget = self.get_widget().createDragRow(alloc);
             listBox.dragWidget = dragWidget;
-            Gtk.drag_set_icon_widget(context, dragWidget, x, y);
+
+            let icon = Gtk.DragIcon.get_for_drag(gdkDrag);
+            icon.set_child(dragWidget);
+
+            gdkDrag.set_hotspot(listBox.dragX, listBox.dragY);
         });
 
-        this.connect("drag-leave", (widget)=> {
+        dragSource.connect("prepare", (self, x, y) => {
+            //get listbox parent
             this.set_state_flags(Gtk.StateFlags.NORMAL, true);
-            let listBox = widget.get_parent();
-            listBox.drag_unhighlight_row();
-            listBox.dragLeave = true;
+            let listBox = self.get_widget().get_parent();
+            //store drag start cursor location
+            listBox.dragX = x;
+            listBox.dragY = y;
+            return new Gdk.ContentProvider(Arc_Menu_FrameBoxDragRow);    
         });
 
-        this._eventBox.connect("drag-end", (widget, context)=> {
-            let parent = widget.get_parent();
-            let listBox = parent.get_parent();
-            listBox.drag_unhighlight_row();
-            if(listBox.dragWidget){
-                listBox.dragWidget.hide();
-                listBox.dragWidget.destroy();
-                listBox.dragWidget = null;
-            }
-        });
-
-        this.connect("drag-motion", (widget)=> {
-            let listBox = widget.get_parent();
-            if(listBox.dragLeave){
-                listBox.drag_highlight_row(widget);
-                listBox.dragLeave = false;
-                
-                if(!scrolledWindow)
-                    return true;
-
-                let alloc = widget.get_allocation();
-
-                let height = alloc.height;
-                alloc = scrolledWindow.get_allocation();
-                let scrollHeight = alloc.height;
-                let widgetLoc = widget.get_index() * height;
-                let value = scrolledWindow.vadjustment.value;
-                
-                if((widgetLoc + (height * 4)) > (value + scrollHeight))
-                    scrolledWindow.vadjustment.value += height;
-                else if((widgetLoc - (height * 2)) < value)
-                    scrolledWindow.vadjustment.value -= height;
-
-            }
-        });
-
-        this._eventBox.connect("drag-failed", (widget, context, result)=> {
-            let parent = widget.get_parent();
-            let listBox = parent.get_parent();
-            listBox.dragWidget.hide();
-            listBox.dragWidget.destroy();
+        dragSource.connect("drag-end", (self, gdkDrag, deleteData)=> {
+            deleteData = true;
+            let listBox = self.get_widget().get_parent();
             listBox.dragWidget = null;
-            return true;
+            listBox.drag_unhighlight_row();
         });
-        
-        this.connect("drag-drop", (widget, context, x, y, selection, info, time)=> {
-            //get listbox parent 
+
+        dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time)=> {
+            let listBox = self.get_widget().get_parent();
+            let widget = self.get_widget();
+
+            listBox.startIndex = widget.get_index();
+            listBox.drag_highlight_row(widget);
+           
+            if(!scrolledWindow)
+                return true;
+            
+            let height = widget.get_height();
+            let scrollHeight = scrolledWindow.get_height();
+            let widgetLoc = widget.get_index() * height;
+            let value = scrolledWindow.vadjustment.value;
+            
+            if((widgetLoc + (height * 4)) > (value + scrollHeight))
+                scrolledWindow.vadjustment.value += height;
+            else if((widgetLoc - (height * 2)) < value)
+                scrolledWindow.vadjustment.value -= height;
+        });
+
+        dropTarget.connect("drag-leave", (self, gdkDrop, x, y, selection, info, time)=> {
+            let listBox = self.get_widget().get_parent();
+            listBox.drag_unhighlight_row();
+        });
+
+        dropTarget.connect("drop", (self, gdkDrop, x, y, selection, info, time)=> {
+            //get listbox parent
             let listBox = this.get_parent();
-            let index = widget.get_index();
+            let index = this.get_index();
+            if(index === listBox.dragRow.get_index()){
+                gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
+                    gdkDrop.finish(Gdk.DragAction.MOVE);
+                });
+                return true;
+            }
             listBox.remove(listBox.dragRow);
-            listBox.show_all();
+            listBox.show();
             listBox.insert(listBox.dragRow, index);
-            listBox.show_all();
-            this.resetButton ? this.resetButton.set_sensitive(true) : null;
+            this.resetButton?.set_sensitive(true);
             this.saveButton.set_sensitive(true);
-            Gtk.drag_finish(context, true, Gdk.DragAction.MOVE, time);
+            gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
+                gdkDrop.finish(Gdk.DragAction.MOVE);
+            });
+            return true;
         });
     }
 
     createDragRow(alloc){
         let dragWidget = new Gtk.ListBox();
+        dragWidget.set_size_request(alloc.width, alloc.height);
 
         let dragRow = new FrameBoxRow();
-        dragRow.set_size_request(alloc.width, alloc.height);
-        dragWidget.add(dragRow);
+        dragWidget.append(dragRow);
         dragWidget.drag_highlight_row(dragRow);
 
         let image = new Gtk.Image( {
@@ -404,8 +392,8 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             pixel_size: 12
         });
 
-        imageBox.add(dragImage);
-        imageBox.add(image);
+        imageBox.append(dragImage);
+        imageBox.append(image);
 
         dragRow.add(imageBox);
 
@@ -423,10 +411,8 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             hexpand: false,
             column_spacing: 10
         })
-        let editButton = new Gtk.Button({
-            image:  new Gtk.Image({
-                icon_name: 'view-more-symbolic'
-            }),
+        let editButton = new Button({
+            icon_name: 'view-more-symbolic'
         });
         grid.attach(editButton, 0, 0, 1, 1);
 
@@ -451,8 +437,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             grid.attach(editButton, 0, 0, 1, 1);
         }
         dragRow.add(grid);
-
-        dragWidget.show_all();
+        
         return dragWidget;
     }
 
@@ -494,7 +479,7 @@ var EditEntriesBox = GObject.registerClass({
         if(params.modifyButton){
             modifyButton = new Gtk.Button({
                 label: _("Modify"),
-                relief: Gtk.ReliefStyle.NONE
+                has_frame: false
             });
             modifyButton.connect('clicked', () => {
                 editPopover.popdown();
@@ -513,13 +498,8 @@ var EditEntriesBox = GObject.registerClass({
         }
 
         let editButton = new Gtk.MenuButton({
-            image:  new Gtk.Image({
-                icon_name: 'view-more-symbolic'
-            }),
-            popover: editPopover
-        });
-        editButton.connect("clicked", ()=>{
-            editPopover.show_all();
+            icon_name: 'view-more-symbolic',
+            popover: editPopover,
         });
 
         this.attach(editButton, 0, 0, 1, 1);
@@ -528,11 +508,11 @@ var EditEntriesBox = GObject.registerClass({
             orientation: Gtk.Orientation.VERTICAL
         });
 
-        editPopover.add(editPopoverBox);
+        editPopover.set_child(editPopoverBox);
 
         let moveUpButton = new Gtk.Button({
             label: _("Move Up"),
-            relief: Gtk.ReliefStyle.NONE
+            has_frame: false
         });
         moveUpButton.connect('clicked', ()=> {
             this.emit('move-up');
@@ -541,14 +521,14 @@ var EditEntriesBox = GObject.registerClass({
                 frame.remove(frameRow);
                 frame.insert(frameRow, index - 1);
             }
-            frame.show_all();
+            frame.show();
             buttons.forEach(button => button.set_sensitive(true));
             editPopover.popdown();
         });
 
         let moveDownButton = new Gtk.Button({
             label: _("Move Down"),
-            relief: Gtk.ReliefStyle.NONE
+            has_frame: false
         });
         moveDownButton.connect('clicked', ()=> {
             this.emit('move-down');
@@ -557,7 +537,7 @@ var EditEntriesBox = GObject.registerClass({
               frame.remove(frameRow);
               frame.insert(frameRow, index + 1);
             }
-            frame.show_all();
+            frame.show();
             buttons.forEach(button => button.set_sensitive(true));
             editPopover.popdown();
         });
@@ -565,12 +545,12 @@ var EditEntriesBox = GObject.registerClass({
         if(params.deleteButton){
             deleteButton = new Gtk.Button({
                 label: _("Delete"),
-                relief: Gtk.ReliefStyle.NONE
+                has_frame: false,
             });
             deleteButton.connect('clicked', ()=> {
                 this.emit('delete');
                 frame.remove(frameRow);
-                frame.show_all();
+                frame.show();
                 buttons.forEach(button => button.set_sensitive(true));
                 editPopover.popdown();
             });
@@ -584,16 +564,16 @@ var EditEntriesBox = GObject.registerClass({
         }
 
         if(params.modifyButton){
-            editPopoverBox.add(modifyButton);
-            editPopoverBox.add(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+            editPopoverBox.append(modifyButton);
+            editPopoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
         }
 
-        editPopoverBox.add(moveUpButton);
-        editPopoverBox.add(moveDownButton);
+        editPopoverBox.append(moveUpButton);
+        editPopoverBox.append(moveDownButton);
 
         if(params.deleteButton){
-            editPopoverBox.add(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
-            editPopoverBox.add(deleteButton);
+            editPopoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+            editPopoverBox.append(deleteButton);
         }
     }
 });
@@ -613,7 +593,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
                 if(row.nextPage){
                     if(widget.backButton.get_parent())
                         widget.leftHeaderBox.remove(widget.backButton);
-                    widget.leftHeaderBox.add(widget.backButton);
+                    widget.leftHeaderBox.prepend(widget.backButton);
                     this.settingsListStack.set_visible_child_name(row.nextPage);
                     this.settingsListStack.get_child_by_name(row.nextPage).listBox.selectFirstRow();
                 }
@@ -624,7 +604,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
             vexpand: true
         });
         this.scrollWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        this.scrollWindow.add_with_viewport(this);
+        this.scrollWindow.set_child(this);
         this.scrollWindow.listBox = this;
     }
 
@@ -646,7 +626,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
 
     addRow(name, translateableName, iconName, nextPage){
         let row1 = new Gtk.ListBoxRow();
-        this.add(row1);
+        this.append(row1);
 
         let row = new Gtk.Grid({
             margin_top: 12,
@@ -655,7 +635,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
             margin_end: 12, 
             column_spacing: 10
         });
-        row1.add(row);
+        row1.set_child(row);
         row1.stackName = name;
         row1.translateableName = translateableName;
         
@@ -686,7 +666,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
             for(let i = 0; i < indexArray.length; i++){
                 if(_row.get_index() === indexArray[i]){
                     let sep = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL);
-                    sep.show_all();
+                    sep.show();
                     _row.set_header(sep);
                     
                 }
@@ -757,7 +737,7 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
 
         this.box._grid.attach(this._image, 0, 0, 1, 1);
         this.box._grid.attach(this._label, 0, 1, 1, 1);
-        this._listBox.add(this.box);
+        this._listBox.append(this.box);
     }
 });
 
@@ -807,6 +787,6 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
         this.box._grid.attach(titleLabel, 1, 0, 1, 1);
         this.box._grid.attach(goNextImage, 2, 0, 1, 2);
         
-        this._listBox.add(this.box);
+        this._listBox.append(this.box);
    }
 });

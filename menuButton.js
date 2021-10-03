@@ -439,15 +439,13 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.contextMenuManager.activeMenu.toggle();
         if(this.subMenuManager.activeMenu)
             this.subMenuManager.activeMenu.toggle();
+
         this.forceMenuLocation();
         let layout = this._settings.get_enum('menu-layout');
         if(layout === Constants.MenuLayout.GNOME_OVERVIEW){
-            if(this._settings.get_boolean('gnome-dash-show-applications') && !Main.overview.visible){
-                Main.overview.viewSelector._showAppsButton.checked = true;
-                Main.overview.toggle();
+            if(this._settings.get_boolean('gnome-dash-show-applications')){
+                Main.overview._overview._controls._toggleAppsPage();
             }
-            else if(this._settings.get_boolean('gnome-dash-show-applications') && Main.overview.visible && !Main.overview.viewSelector._showAppsButton.checked)
-                Main.overview.viewSelector._showAppsButton.checked = true;
             else
                 Main.overview.toggle();
         }

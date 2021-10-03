@@ -43,21 +43,8 @@ const { loadInterfaceXML } = imports.misc.fileUtils;
 const ClocksIntegrationIface = loadInterfaceXML('org.gnome.Shell.ClocksIntegration');
 const ClocksProxy = Gio.DBusProxy.makeProxyWrapper(ClocksIntegrationIface);
 
-const SWITCHEROO_BUS_NAME = 'net.hadess.SwitcherooControl';
-const SWITCHEROO_OBJECT_PATH = '/net/hadess/SwitcherooControl';
-
-const SwitcherooProxyInterface = '<node> \
-<interface name="net.hadess.SwitcherooControl"> \
-  <property name="HasDualGpu" type="b" access="read"/> \
-  <property name="NumGPUs" type="u" access="read"/> \
-  <property name="GPUs" type="aa{sv}" access="read"/> \
-</interface> \
-</node>';
-
 Gio._promisify(Gio._LocalFilePrototype, 'query_info_async', 'query_info_finish');
 Gio._promisify(Gio._LocalFilePrototype, 'set_attributes_async', 'set_attributes_finish');
-
-const SwitcherooProxy = Gio.DBusProxy.makeProxyWrapper(SwitcherooProxyInterface);
 
 const LARGE_ICON_SIZE = 34;
 const MEDIUM_ICON_SIZE = 25;
@@ -102,13 +89,9 @@ var ApplicationContextItems = GObject.registerClass({
         this.layout = this._settings.get_enum('menu-layout');
 
         this.discreteGpuAvailable = false;
-        Gio.DBus.system.watch_name(SWITCHEROO_BUS_NAME,
-            Gio.BusNameWatcherFlags.NONE,
-            this._switcherooProxyAppeared.bind(this),
-            () => {
-                this._switcherooProxy = null;
-                this._updateDiscreteGpuAvailable();
-            });
+        this._switcherooNotifyId = global.connect('notify::switcheroo-control',
+            () => this._updateDiscreteGpuAvailable());
+        this._updateDiscreteGpuAvailable();
     }
 
     set path(path){
@@ -116,21 +99,13 @@ var ApplicationContextItems = GObject.registerClass({
     }
     
     _updateDiscreteGpuAvailable() {
-        if (!this._switcherooProxy)
+        this._switcherooProxy = global.get_switcheroo_control();
+        if (this._switcherooProxy) {
+            let prop = this._switcherooProxy.get_cached_property('HasDualGpu');
+            this.discreteGpuAvailable = prop?.unpack() ?? false;
+        } else {
             this.discreteGpuAvailable = false;
-        else
-            this.discreteGpuAvailable = this._switcherooProxy.HasDualGpu;
-    }
-
-    _switcherooProxyAppeared() {
-        this._switcherooProxy = new SwitcherooProxy(Gio.DBus.system, SWITCHEROO_BUS_NAME, SWITCHEROO_OBJECT_PATH,
-            (proxy, error) => {
-                if (error) {
-                    log(error.message);
-                    return;
-                }
-                this._updateDiscreteGpuAvailable();
-            });
+        }
     }
 
     closeMenus(){
@@ -180,12 +155,19 @@ var ApplicationContextItems = GObject.registerClass({
                         this._app.open_new_window(-1);
                     });  
                 }
-                if (this.discreteGpuAvailable && this._app.state == Shell.AppState.STOPPED &&
-                    !actions.includes('activate-discrete-gpu')) {
-                    this._onDiscreteGpuMenuItem = this._appendMenuItem(_("Launch using Dedicated Graphics Card"));
-                    this._onDiscreteGpuMenuItem.connect('activate', () => {
+                if (this.discreteGpuAvailable && this._app.state == Shell.AppState.STOPPED) {
+                    const appPrefersNonDefaultGPU = this.appInfo.get_boolean('PrefersNonDefaultGPU');
+                    const gpuPref = appPrefersNonDefaultGPU
+                        ? Shell.AppLaunchGpu.DEFAULT
+                        : Shell.AppLaunchGpu.DISCRETE;
+            
+                    this._onGpuMenuItem = this._appendMenuItem(appPrefersNonDefaultGPU
+                        ? _('Launch using Integrated Graphics Card')
+                        : _('Launch using Discrete Graphics Card'));
+    
+                    this._onGpuMenuItem.connect('activate', () => {
                         this.closeMenus();
-                        this._app.launch(0, -1, true);
+                        this._app.launch(0, -1, gpuPref);
                     });
                 }
     
@@ -1266,7 +1248,7 @@ var ShortcutButtonItem = GObject.registerClass(class Arc_Menu_ShortcutButtonItem
         else if(this._command === "ArcMenu_RunCommand")
             Main.openRunDialog();
         else if(this._command === "ArcMenu_ShowAllApplications")
-            Main.overview.viewSelector._toggleAppsPage();
+            Main.overview._overview._controls._toggleAppsPage();
         else
             Util.spawnCommandLine(this._command);   
     }
@@ -1932,7 +1914,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
         else if(this._command === "ArcMenu_RunCommand")
             Main.openRunDialog();
         else if(this._command === "ArcMenu_ShowAllApplications")
-            Main.overview.viewSelector._toggleAppsPage();
+            Main.overview._overview._controls._toggleAppsPage();
         else if(this._app)
             this._app.open_new_window(-1);
         else
@@ -2305,7 +2287,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
         if(this._app)
             this._app.open_new_window(-1);
         else if(this._command === "ArcMenu_ShowAllApplications")
-            Main.overview.viewSelector._toggleAppsPage();
+            Main.overview._overview._controls._toggleAppsPage();
         else
             Util.spawnCommandLine(this._command);
 

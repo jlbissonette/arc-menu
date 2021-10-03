@@ -182,11 +182,18 @@ function convertToGridLayout(item){
     item.label.x_align = item.label.y_align = Clutter.ActorAlign.CENTER;
     item.label.y_expand = true;
 
-    icon.x_align = icon.y_align = Clutter.ActorAlign.CENTER;
+    icon.y_align = Clutter.ActorAlign.CENTER;
     icon.y_expand = true;
+    if(item._settings.get_boolean('multi-lined-labels')){
+        icon.y_align = Clutter.ActorAlign.TOP;
+        icon.y_expand = false;
 
-    if(item._settings.get_boolean('multi-lined-labels'))
-        item.label.get_clutter_text().set_line_wrap(true);
+        let clutterText = item.label.get_clutter_text();
+        clutterText.set({
+            line_wrap: true,
+            line_wrap_mode: imports.gi.Pango.WrapMode.WORD_CHAR,
+        });
+    }
 
     if(item._indicator){
         item.remove_child(item._indicator);
@@ -289,11 +296,14 @@ function findSoftwareManager(){
     return softwareManager;
 }
 
-var ScrollViewShader = `uniform sampler2D tex;
+var ScrollViewShader = `
+uniform sampler2D tex;
 uniform float height;
 uniform float width;
-uniform float vfade_offset;
-uniform float hfade_offset;
+uniform float fade_offset_top;
+uniform float fade_offset_bottom;
+uniform float fade_offset_left;
+uniform float fade_offset_right;
 uniform bool  fade_edges_top;
 uniform bool  fade_edges_right;
 uniform bool  fade_edges_bottom;
@@ -310,27 +320,28 @@ void main ()
     float x = width * cogl_tex_coord_in[0].x;
 
     if (x > fade_area_topleft[0] && x < fade_area_bottomright[0] &&
-        y > fade_area_topleft[1] && y < fade_area_bottomright[1]) {
+        y > fade_area_topleft[1] && y < fade_area_bottomright[1])
+    {
         float ratio = 1.0;
-        float fade_bottom_start = fade_area_bottomright[1] - vfade_offset;
-        float fade_right_start = fade_area_bottomright[0] - hfade_offset;
-        bool fade_top = y < vfade_offset && fade_edges_top;
+        float fade_top_start = fade_area_topleft[1] + fade_offset_top;
+        float fade_left_start = fade_area_topleft[0] + fade_offset_left;
+        float fade_bottom_start = fade_area_bottomright[1] - fade_offset_bottom;
+        float fade_right_start = fade_area_bottomright[0] - fade_offset_right;
+        bool fade_top = y < fade_top_start && fade_edges_top;
         bool fade_bottom = y > fade_bottom_start && fade_edges_bottom;
-        bool fade_left = x < hfade_offset && fade_edges_left;
+        bool fade_left = x < fade_left_start && fade_edges_left;
         bool fade_right = x > fade_right_start && fade_edges_right;
 
-        float vfade_scale = height / vfade_offset;
         if (fade_top) {
-            ratio *= y / vfade_offset;
+            ratio *= (fade_area_topleft[1] - y) / (fade_area_topleft[1] - fade_top_start);
         }
 
         if (fade_bottom) {
             ratio *= (fade_area_bottomright[1] - y) / (fade_area_bottomright[1] - fade_bottom_start);
         }
 
-        float hfade_scale = width / hfade_offset;
         if (fade_left) {
-            ratio *= x / hfade_offset;
+            ratio *= (fade_area_topleft[0] - x) / (fade_area_topleft[0] - fade_left_start);
         }
 
         if (fade_right) {
@@ -339,7 +350,8 @@ void main ()
 
         cogl_color_out *= ratio;
     }
-}`;
+}
+`;
 
 function createXpmImage(color1, color2, color3, color4){
     let width = 42;
@@ -379,7 +391,7 @@ function ensureActorVisibleInScrollView(actor) {
     let offset = 0;
     let vfade = parent.get_effect("fade");
     if (vfade)
-        offset = vfade.vfade_offset;
+        offset = vfade.fade_margins.top;
 
     if (y1 < value + offset)
         value = Math.max(0, y1 - offset);
@@ -545,7 +557,6 @@ function createStylesheet(settings){
     let plasmaSelectedItemColor = settings.get_string('plasma-selected-color');
     let plasmaSelectedItemBackgroundColor = settings.get_string('plasma-selected-background-color');
     let plasmaSearchBarTop = settings.get_enum('searchbar-default-top-location');
-    let disableMenuButtonActiveIndicator = settings.get_boolean('disable-menu-button-active-indicator');
     let tooltipStyle;
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
@@ -566,9 +577,9 @@ function createStylesheet(settings){
     if(settings.get_boolean('override-menu-button-active-color'))
         menuButtonStyle += ".arc-menu-icon:active, .arc-menu-text:active, .arc-menu-arrow:active{\ncolor: " + menuButtonActiveColor + ";\n}\n\n";
     if(settings.get_boolean('override-menu-button-active-background-color'))
-    menuButtonStyle += ".arc-menu-panel-menu:active{\nbackground-color: " + menuButtonActiveBackgroundcolor + ";\n" + (disableMenuButtonActiveIndicator ? "box-shadow: none;\n" : '') + "}\n\n";
-    else
-        menuButtonStyle += ".arc-menu-panel-menu:active{\n" + (disableMenuButtonActiveIndicator ? "box-shadow: none;\n" : '') + "}\n\n"
+        menuButtonStyle += ".arc-menu-panel-menu:active{\nbackground-color: " + menuButtonActiveBackgroundcolor + ";\n}\n\n";
+    if(settings.get_boolean('menu-button-disable-rounded-corners'))
+        menuButtonStyle += ".arc-menu-panel-menu{\nborder-radius: 0px;\nborder: 1px solid transparent;\n}\n\n";
 
 
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
@@ -609,7 +620,7 @@ function createStylesheet(settings){
         +".arc-menu-action{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 1px;\n"
                             +"border-color: transparent;\n}\n\n"
         +".arc-menu-action:hover, .arc-menu-action:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\nborder-width: 1px;\n"
-                                +"box-shadow: 0px 1px 1px " + modifyColorLuminance(menuColor, -0.05) + ";\nborder-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
+                                +"box-shadow: 0px 0px 1px " + modifyColorLuminance(menuColor, -0.05) + ";\nborder-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
         +".arc-menu-action:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\nborder-width: 1px;\n"
                                 +"border-color:" + modifyColorLuminance(menuColor, -0.1) + ";\n}\n\n"
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"

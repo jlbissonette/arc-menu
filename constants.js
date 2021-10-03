@@ -395,7 +395,7 @@ var TRANSLATORS = '<b>Thank you to all translators!</b>\n\n' +
 var CONTRIBUTORS = '<b>Thank you to all who contributed to, and/or helped, the developement of ArcMenu!</b>'
                     +'\n\n<b>For a list of all contributors please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
 var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
-                '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';     
+                '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
         
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +

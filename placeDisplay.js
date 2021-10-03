@@ -20,10 +20,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * 
- * 
  * Credits: This file leverages the work from places-menu extension 
  * (https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/tree/master/extensions/places-menu)
  * and Dash to Dock extension 'location.js' file to implement a trash shortcut
+ * (https://github.com/micheleg/dash-to-dock/blob/master/locations.js)
  */
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
