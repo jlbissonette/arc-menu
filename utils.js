@@ -182,11 +182,18 @@ function convertToGridLayout(item){
     item.label.x_align = item.label.y_align = Clutter.ActorAlign.CENTER;
     item.label.y_expand = true;
 
-    icon.x_align = icon.y_align = Clutter.ActorAlign.CENTER;
+    icon.y_align = Clutter.ActorAlign.CENTER;
     icon.y_expand = true;
+    if(item._settings.get_boolean('multi-lined-labels')){
+        icon.y_align = Clutter.ActorAlign.TOP;
+        icon.y_expand = false;
 
-    if(item._settings.get_boolean('multi-lined-labels'))
-        item.label.get_clutter_text().set_line_wrap(true);
+        let clutterText = item.label.get_clutter_text();
+        clutterText.set({
+            line_wrap: true,
+            line_wrap_mode: imports.gi.Pango.WrapMode.WORD_CHAR,
+        });
+    }
 
     if(item._indicator){
         item.remove_child(item._indicator);
