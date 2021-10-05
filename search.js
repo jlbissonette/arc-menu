@@ -74,6 +74,9 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
             this._highlightTerms();
         }
 
+        if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions)
+            this.label.text = this.metaInfo['name'] + " " + this.metaInfo['description'];
+
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
 
