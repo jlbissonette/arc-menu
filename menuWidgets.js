@@ -1365,7 +1365,7 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends Sessi
 
         Utils.canHybridSleep((canHybridSleep, needsAuth) => {
             if(canHybridSleep){
-                let sleepItem = new PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
+                let sleepItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.HYBRID_SLEEP);
                 sleepItem._icon.icon_size = 16;
                 box.insert_child_at_index(sleepItem, 4);
             }
@@ -1373,7 +1373,7 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends Sessi
 
         Utils.canHibernate((canHibernate, needsAuth) => {
             if(canHibernate){
-                let hibernateItem = new PowerMenuItem(this, Constants.PowerType.HIBERNATE);
+                let hibernateItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.HIBERNATE);
                 hibernateItem._icon.icon_size = 16;
                 box.insert_child_at_index(hibernateItem, 5);
             }
