@@ -467,8 +467,11 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 }
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
-                if(this.dash.getDockState() === 0)
+                if(this.dash.getDockState() === 0){
+                    this.dash.dash.requiresVisibility = true;
                     this.dash._animateIn(0, 0);
+                }
+                    
                 else if(!this.dash.visible && !this.arcMenu.isOpen){
                     this.dash.visible = true;
                     this.dtdNeedsHiding = true;
@@ -703,8 +706,8 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                     Main.panel.menuManager.activeMenu.toggle();
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
-                this.dash._fixedIsEnabled = true;
-                this.dash._autohideIsEnabled = false;
+                this.dtdNeedsHiding = true;
+                this.dash.dash.requiresVisibility = true;
                 this.dash._updateDashVisibility();
                 this.menuButtonWidget.actor.add_style_pseudo_class('selected');
                 this.menuButtonWidget._icon.add_style_pseudo_class('active');
@@ -733,7 +736,8 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){
                     this.menuButtonWidget.actor.remove_style_pseudo_class('selected');
                     if(this.dtdNeedsHiding){
-                        this.dash.visible = false;
+                        this.dash.dash.requiresVisibility = false;
+                        this.dash._updateDashVisibility();
                         this.dtdNeedsHiding = false;
                     }
                     else{
