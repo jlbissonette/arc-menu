@@ -5363,14 +5363,14 @@ var MiscPage = GObject.registerClass(
                 hexpand: true,
                 vexpand: true,
             });
-            importButton.connect('clicked', ()=> {
+           importButton.connect('clicked', ()=> {
                 this._showFileChooser(
                     _('Import settings'),
                     { action: Gtk.FileChooserAction.OPEN },
                     "_Open",
                     filename => {
                         let settingsFile = Gio.File.new_for_path(filename);
-                        let [ , pid, stdin, stdout, stderr] = 
+                        let [ success_, pid, stdin, stdout, stderr] = 
                             GLib.spawn_async_with_pipes(
                                 null,
                                 ['dconf', 'load', SCHEMA_PATH],
@@ -5378,16 +5378,10 @@ var MiscPage = GObject.registerClass(
                                 GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
                                 null
                             );
-            
+                        
                         stdin = new Gio.UnixOutputStream({ fd: stdin, close_fd: true });
                         GLib.close(stdout);
                         GLib.close(stderr);
-                                            
-                        let [ , , , retCode] = GLib.spawn_command_line_sync(GSET + ' -d ' + Me.uuid);
-                                            
-                        if (retCode == 0) {
-                            GLib.child_watch_add(GLib.PRIORITY_DEFAULT, pid, () => GLib.spawn_command_line_sync(GSET + ' -e ' + Me.uuid));
-                        }
     
                         stdin.splice(settingsFile.read(null), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE | Gio.OutputStreamSpliceFlags.CLOSE_TARGET, null);
                     }
