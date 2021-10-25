@@ -20,8 +20,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-const Me = imports.misc.extensionUtils.getCurrentExtension();
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, GObject, Shell, St} = imports.gi;
 const appSys = Shell.AppSystem.get_default();
@@ -468,13 +468,8 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
                 if(this.dash.getDockState() === 0){
-                    this.dash.dash.requiresVisibility = true;
+                    this.dash._removeAnimations();
                     this.dash._animateIn(0, 0);
-                }
-                    
-                else if(!this.dash.visible && !this.arcMenu.isOpen){
-                    this.dash.visible = true;
-                    this.dtdNeedsHiding = true;
                 }
             }
             this.arcMenu.toggle();
@@ -706,9 +701,8 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                     Main.panel.menuManager.activeMenu.toggle();
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
-                this.dtdNeedsHiding = true;
-                this.dash.dash.requiresVisibility = true;
-                this.dash._updateDashVisibility();
+                this.dash._autohideIsEnabled = false;
+                this.dash._intellihideIsEnabled = false;
                 this.menuButtonWidget.actor.add_style_pseudo_class('selected');
                 this.menuButtonWidget._icon.add_style_pseudo_class('active');
             }
@@ -734,16 +728,13 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
                 if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){
+                    let dtdSettings = ExtensionUtils.getSettings('org.gnome.shell.extensions.dash-to-dock');
                     this.menuButtonWidget.actor.remove_style_pseudo_class('selected');
-                    if(this.dtdNeedsHiding){
-                        this.dash.dash.requiresVisibility = false;
-                        this.dash._updateDashVisibility();
-                        this.dtdNeedsHiding = false;
-                    }
-                    else{
-                        this.dash._updateVisibilityMode();
-                        this.dash._updateDashVisibility();
-                    }
+                    this.dash._autohideIsEnabled = dtdSettings.get_boolean('autohide');
+                    this.dash._intellihideIsEnabled = dtdSettings.get_boolean('intellihide');
+                    this.dash.dash.requiresVisibility = false;
+                    this.dash._updateDashVisibility();
+
                     if(!this.menuButtonWidget.actor.hover)
                         this.menuButtonWidget._icon.remove_style_pseudo_class('active');
                 }
