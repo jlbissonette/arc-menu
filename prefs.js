@@ -3474,7 +3474,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         let gapAdjustmentScale = new Gtk.Scale({
             orientation: Gtk.Orientation.HORIZONTAL,
             adjustment: new Gtk.Adjustment({
-                lower: -1, upper: 1, step_increment: 1, page_increment: 1, page_size: 0
+                lower: -1, upper: 20, step_increment: 1, page_increment: 1, page_size: 0
             }),
             digits: 0,round_digits: 0,hexpand: true,
             value_pos: Gtk.PositionType.RIGHT,
@@ -3495,8 +3495,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             });
         gapAdjustmentInfoButton.connect('clicked', ()=> {
             let dialog = new PW.MessageDialog({
-                text: _("Offset ArcMenu by 1px"),
-                secondaryText: _('Useful if you notice a 1px gap or overlap between ArcMenu and the panel'),
+                text: _("Adjust the gap between the ArcMenu button and the menu."),
                 buttons: Gtk.ButtonsType.OK,
                 transient_for: this.get_root()
             });
@@ -5363,7 +5362,7 @@ var MiscPage = GObject.registerClass(
                 hexpand: true,
                 vexpand: true,
             });
-           importButton.connect('clicked', ()=> {
+            importButton.connect('clicked', ()=> {
                 this._showFileChooser(
                     _('Import settings'),
                     { action: Gtk.FileChooserAction.OPEN },
