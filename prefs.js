@@ -1927,7 +1927,7 @@ var ButtonAppearancePage = GObject.registerClass(
             this.menuButtonIconColorFrame.add(roundedCornersRow);
 
             let menuButtonBorderRadiusRow = new PW.FrameBoxRow();
-            let borderRadius = this._settings.get_double('menu-button-border-radius');
+            let borderRadius = this._settings.get_int('menu-button-border-radius');
             let menuButtonBorderRadiusLabel = new Gtk.Label({
                 label: _('Border Radius'),
                 use_markup: true,
@@ -2084,7 +2084,7 @@ var ButtonAppearancePage = GObject.registerClass(
                 this._settings.get_boolean('override-menu-button-hover-background-color') ||
                 this._settings.get_boolean('override-menu-button-active-background-color') ||
                 this._settings.get_boolean('menu-button-override-border-radius') ||
-                this._settings.get_boolean('menu-button-border-radius') != 0)
+                this._settings.get_int('menu-button-border-radius') != 0)
                     return true;
             else
                 return false;
