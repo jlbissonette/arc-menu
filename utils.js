@@ -557,6 +557,7 @@ function createStylesheet(settings){
     let plasmaSelectedItemColor = settings.get_string('plasma-selected-color');
     let plasmaSelectedItemBackgroundColor = settings.get_string('plasma-selected-background-color');
     let plasmaSearchBarTop = settings.get_enum('searchbar-default-top-location');
+    let menuButtonBorderRadius = settings.get_int('menu-button-border-radius');
     let tooltipStyle;
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
@@ -578,8 +579,12 @@ function createStylesheet(settings){
         menuButtonStyle += ".arc-menu-icon:active, .arc-menu-text:active, .arc-menu-arrow:active{\ncolor: " + menuButtonActiveColor + ";\n}\n\n";
     if(settings.get_boolean('override-menu-button-active-background-color'))
         menuButtonStyle += ".arc-menu-panel-menu:active{\nbackground-color: " + menuButtonActiveBackgroundcolor + ";\n}\n\n";
-    if(settings.get_boolean('menu-button-disable-rounded-corners'))
-        menuButtonStyle += ".arc-menu-panel-menu{\nborder-radius: 0px;\nborder: 1px solid transparent;\n}\n\n";
+    if(settings.get_boolean('menu-button-override-border-radius')){
+        let border = menuButtonBorderRadius === 0 ? 1 : 3;
+        
+        menuButtonStyle += ".arc-menu-panel-menu{\nborder-radius: " + menuButtonBorderRadius + "px;\nborder: " + border + "px solid transparent;\n}\n\n";
+    }
+        
 
 
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"

@@ -1905,25 +1905,64 @@ var ButtonAppearancePage = GObject.registerClass(
             let roundedCornersRow = new PW.FrameBoxRow();
         
             let roundedCornersLabel = new Gtk.Label({
-                label: _("Disable Rounded Corners"),
+                label: _("Override Border Radius"),
                 xalign:0,
                 hexpand: true,
             });
             let roundedCornersSwitch = new Gtk.Switch({ 
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
-                active: this._settings.get_boolean('menu-button-disable-rounded-corners')
+                active: this._settings.get_boolean('menu-button-override-border-radius')
             });
             roundedCornersSwitch.connect("notify::active", (widget)=> {
                 this.resetButton.set_sensitive(true);
-                this._settings.set_boolean('menu-button-disable-rounded-corners', widget.get_active())
+                this._settings.set_boolean('menu-button-override-border-radius', widget.get_active())
                 this._settings.set_boolean('reload-theme', true);
+                menuButtonBorderRadiusRow.set_sensitive(widget.get_active());
             });
 
             roundedCornersRow.add(roundedCornersLabel);
             roundedCornersRow.add(roundedCornersSwitch);
 
             this.menuButtonIconColorFrame.add(roundedCornersRow);
+
+            let menuButtonBorderRadiusRow = new PW.FrameBoxRow();
+            let borderRadius = this._settings.get_double('menu-button-border-radius');
+            let menuButtonBorderRadiusLabel = new Gtk.Label({
+                label: _('Border Radius'),
+                use_markup: true,
+                xalign: 0,
+                hexpand: true
+            });
+            let menuButtonBorderRadiusScale = new Gtk.Scale({
+                orientation: Gtk.Orientation.HORIZONTAL,
+                adjustment: new Gtk.Adjustment({
+                    lower: 0,
+                    upper: 99,
+                    step_increment: 1,
+                    page_increment: 1,
+                    page_size: 0
+                }),
+                digits: 0,
+                round_digits: 0,
+                hexpand: true,
+                draw_value: true,
+                value_pos: Gtk.PositionType.RIGHT
+            });
+            menuButtonBorderRadiusScale.set_format_value_func( (scale, value) => {
+                return "\t" + value + "px";
+            });
+            menuButtonBorderRadiusScale.set_value(borderRadius);
+            menuButtonBorderRadiusScale.connect('value-changed', () => {
+                this.resetButton.set_sensitive(true); 
+                this._settings.set_int('menu-button-border-radius', menuButtonBorderRadiusScale.get_value());
+                this._settings.set_boolean('reload-theme', true);
+            });
+
+            menuButtonBorderRadiusRow.add(menuButtonBorderRadiusLabel);
+            menuButtonBorderRadiusRow.add(menuButtonBorderRadiusScale);
+            menuButtonBorderRadiusRow.set_sensitive(this._settings.get_boolean('menu-button-override-border-radius'));
+            this.menuButtonIconColorFrame.add(menuButtonBorderRadiusRow);
 
             vbox.append(this.menuButtonIconColorFrame);
 
@@ -1950,6 +1989,7 @@ var ButtonAppearancePage = GObject.registerClass(
                 menuButtonHoverBackgroundcolorSwitch.set_active(false);
                 menuButtonActiveBackgroundcolorSwitch.set_active(false);
                 roundedCornersSwitch.set_active(false);
+                menuButtonBorderRadiusScale.set_value(0);
                 this._settings.reset('menu-button-icon');
                 this._settings.reset('arc-menu-icon');
                 this._settings.reset('distro-icon');
@@ -1964,7 +2004,8 @@ var ButtonAppearancePage = GObject.registerClass(
                 this._settings.reset('override-menu-button-hover-background-color');
                 this._settings.reset('override-menu-button-active-background-color');
                 this._settings.reset('override-menu-button-color');
-                this._settings.reset('menu-button-disable-rounded-corners');
+                this._settings.reset('menu-button-override-border-radius');
+                this._settings.reset('menu-button-border-radius');
                 this._settings.set_boolean('reload-theme', true);
   
                 this.resetButton.set_sensitive(false);        
@@ -2042,7 +2083,8 @@ var ButtonAppearancePage = GObject.registerClass(
                 this._settings.get_boolean('override-menu-button-active-color') ||
                 this._settings.get_boolean('override-menu-button-hover-background-color') ||
                 this._settings.get_boolean('override-menu-button-active-background-color') ||
-                this._settings.get_boolean('menu-button-disable-rounded-corners'))
+                this._settings.get_boolean('menu-button-override-border-radius') ||
+                this._settings.get_boolean('menu-button-border-radius') != 0)
                     return true;
             else
                 return false;
