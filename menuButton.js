@@ -732,7 +732,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                     this.menuButtonWidget.actor.remove_style_pseudo_class('selected');
                     this.dash._autohideIsEnabled = dtdSettings.get_boolean('autohide');
                     this.dash._intellihideIsEnabled = dtdSettings.get_boolean('intellihide');
-                    this.dash.dash.requiresVisibility = false;
+                    this.dash._box.sync_hover();
                     this.dash._updateDashVisibility();
 
                     if(!this.menuButtonWidget.actor.hover)
