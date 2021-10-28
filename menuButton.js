@@ -728,7 +728,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
                 if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){
-                    let dtdSettings = Utils.getSettings('org.gnome.shell.extensions.dash-to-dock', DASH_TO_PANEL_UUID);
+                    let dtdSettings = Utils.getSettings('org.gnome.shell.extensions.dash-to-dock', DASH_TO_DOCK_UUID);
                     if(dtdSettings){
                         this.dash._autohideIsEnabled = dtdSettings.get_boolean('autohide');
                         this.dash._intellihideIsEnabled = dtdSettings.get_boolean('intellihide');
