@@ -1938,7 +1938,7 @@ var ButtonAppearancePage = GObject.registerClass(
                 orientation: Gtk.Orientation.HORIZONTAL,
                 adjustment: new Gtk.Adjustment({
                     lower: 0,
-                    upper: 99,
+                    upper: 20,
                     step_increment: 1,
                     page_increment: 1,
                     page_size: 0
