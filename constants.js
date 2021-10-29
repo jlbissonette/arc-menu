@@ -335,7 +335,7 @@ var ModernMenus = [
     { IMAGE: 'insider-layout-symbolic', TITLE: _('Insider'), LAYOUT: MenuLayout.INSIDER},
     { IMAGE: 'redmond-layout-symbolic', TITLE: _('Redmond'), LAYOUT: MenuLayout.REDMOND},
     { IMAGE: 'windows-layout-symbolic', TITLE: _('Windows'), LAYOUT: MenuLayout.WINDOWS},
-    { IMAGE: 'eleven-layout-symbolic', TITLE: _('Eleven'), LAYOUT: MenuLayout.ELEVEN}];
+    { IMAGE: 'eleven-layout-symbolic', TITLE: _('11'), LAYOUT: MenuLayout.ELEVEN}];
 
 var TouchMenus = [   
     { IMAGE: 'elementary-layout-symbolic', TITLE: _('Elementary'), LAYOUT: MenuLayout.ELEMENTARY},
