@@ -128,7 +128,7 @@ msgid "Windows"
 msgstr ""
 
 #: constants.js:338
-msgid "Eleven"
+msgid "11"
 msgstr ""
 
 #: constants.js:341
