@@ -324,11 +324,8 @@ var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase
         });
 
         if(this.searchType === Constants.AppDisplayType.GRID){
-            let spacing;
-            if(this.layout === Constants.MenuLayout.ELEMENTARY || this.layout === Constants.MenuLayout.UNITY)
-                spacing = 15;
-            else 
-                spacing = 10;
+            let spacing = this._menuLayout.layoutProperties.ColumnSpacing;
+
             this._grid.style = "padding: 0px 10px 10px 10px; spacing: " + spacing + "px;";   
             this._resultDisplayBin.x_align = Clutter.ActorAlign.CENTER;
         }

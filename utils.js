@@ -593,6 +593,7 @@ function createStylesheet(settings){
         +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;\n text-align: center;\n border-radius: 12px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +"#ElevenIconGrid{\nwidth: 90px;\n height: 75px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +".left-scroll-area{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
         +".left-scroll-area-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"   
         +".left-box{\nwidth:" + leftPanelWidth + "px;\n}\n\n"

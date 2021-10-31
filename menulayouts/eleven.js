@@ -40,11 +40,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             AppType: Constants.AppDisplayType.LIST,
             SearchType: Constants.AppDisplayType.GRID,
             GridColumns: 6,
-            ColumnSpacing: 10,
-            RowSpacing: 10,
-            IconGridSize: 38,
-            ListSearchResults_IconSize: 38,
-            IconGridStyle: 'SmallIconGrid',
+            ColumnSpacing: 0,
+            RowSpacing: 0,
+            IconGridSize: 34,
+            ListSearchResults_IconSize: 34,
+            IconGridStyle: 'ElevenIconGrid',
             VerticalMainBox: true,
         });
     }
@@ -70,15 +70,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add(this.subMainBox);
 
         this.searchBox = new MW.SearchBox(this);
-        this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 5px 25px 10px 25px;";
         this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
         this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
         this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.topBox.add(this.searchBox.actor);
+        this.mainBox.insert_child_at_index(this.topBox, 0);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
+            x_expand: true,
+            y_expand: true,
+            x_align: Clutter.ActorAlign.FILL,
+            y_align: Clutter.ActorAlign.FILL,
             style: "padding-bottom: 10px;"
         });
         this.applicationsScrollBox = this._createScrollBox({
@@ -87,9 +91,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
+            overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'vfade',
         });   
-        this.applicationsScrollBox.style = "width:700px;";    
+        this.applicationsScrollBox.style = "width: 640px;";    
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
 
@@ -146,9 +151,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsBox.add(this.shortcutsGrid);
 
         this.user = new MW.UserMenuItem(this);
-        this.user.x_expand = false;
-        this.user.x_align = Clutter.ActorAlign.CENTER;
-        this.user.style = "width: 250px; margin: 0px 115px 0px 10px;"
+        this.user.x_expand = true;
+        this.user.x_align = Clutter.ActorAlign.FILL;
+        this.user.style = "margin: 0px 75px 0px 0px;"
         this.actionsBox.add(this.user.actor);
 
         let path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
@@ -197,7 +202,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadFrequentApps(){
-        let labelRow = this.createLabelRow(_("Frequent Apps"));
+        let labelRow = this.createLabelRow(_("Frequent"));
         this.applicationsBox.add(labelRow);
         let mostUsed = Shell.AppUsage.get_default().get_most_used();
         this.appShortcuts = [];
@@ -212,10 +217,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
     
     setDefaultMenuView(){
-        this.setGridLayout(Constants.AppDisplayType.GRID, 6, 10);
+        this.setGridLayout(Constants.AppDisplayType.GRID, 6, 0);
         super.setDefaultMenuView();
         this.loadFrequentApps();
-        this.activeCategory = _("Pinned Apps");
+        this.activeCategory = _("Pinned");
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
         this.displayPinnedApps();
     }
@@ -262,7 +267,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     setGridLayout(appType, columns, spacing){
         this.applicationsGrid.x_align = appType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
-        this.applicationsGrid.style = appType === Constants.AppDisplayType.LIST ? 'padding: 0px 10px 0px 25px;' : null;
+        this.applicationsGrid.style = appType === Constants.AppDisplayType.LIST ? 'padding: 0px 15px 0px 15px;' : null;
         this.applicationsGrid.layout_manager.column_spacing = spacing;
         this.applicationsGrid.layout_manager.row_spacing = spacing;
         this.layoutProperties.GridColumns = columns;
@@ -278,14 +283,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayPinnedApps() {
         this._clearActorsFromBox(this.applicationsBox);
-        this.activeCategory = _("Pinned Apps");
+        this.activeCategory = _("Pinned");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
 
         if(this.appShortcuts.length > 0){
-            this.activeCategory = _("Frequent Apps");
-            this.setGridLayout(Constants.AppDisplayType.GRID, 2, 10);
+            this.activeCategory = _("Frequent");
+            this.setGridLayout(Constants.AppDisplayType.GRID, 2, 0);
             this._displayAppList(this.appShortcuts, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
-            this.setGridLayout(Constants.AppDisplayType.GRID, 6, 10);
+            this.setGridLayout(Constants.AppDisplayType.GRID, 6, 0);
         }
 
         if(!this.applicationsBox.contains(this.shortcutsBox))
@@ -312,21 +317,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             label.style = 'padding: 0px 30px 0px 15px;';
             label.label.style = 'font-weight: bold; padding: 15px 0px;';
             label.add(new MW.BackButton(this));
-            this.mainBox.insert_child_at_index(this.allAppsLabel, 0);        
+            this.mainBox.insert_child_at_index(this.allAppsLabel, 1);        
         }      
-    }
-
-    _onSearchBoxChanged(searchBox, searchString) {        
-        if(searchBox.isEmpty()){
-            if(this.mainBox.contains(this.topBox))
-                this.mainBox.remove_actor(this.topBox);
-        }    
-        else{
-            if(!this.mainBox.contains(this.topBox))
-                this.mainBox.insert_child_at_index(this.topBox, 0);
-        }
-            
-        super._onSearchBoxChanged(searchBox, searchString);
     }
 
     destroy(isReload){        
