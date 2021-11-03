@@ -838,7 +838,7 @@ var Tooltip = class Arc_Menu_Tooltip{
       
         if(title){
             this.titleLabel = new St.Label({
-                text: title,
+                text: _(title),
                 style: description ? "font-weight: bold;" : null,
                 y_align: Clutter.ActorAlign.CENTER
             });
