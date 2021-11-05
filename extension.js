@@ -92,18 +92,17 @@ function enable() {
         }
         if ((extension.uuid === "dash-to-dock@micxgx.gmail.com" || extension.uuid === "ubuntu-dock@ubuntu.com")) {
             _disconnectDtdSignals();
-            let state = extension.state === 1 ? true : false;
-            setAvaliablePlacement(Constants.ArcMenuPlacement.DASH, state);
             let arcMenuPlacement = settings.get_enum('arc-menu-placement');
-            if(extension.state === 1){
-                if(arcMenuPlacement == Constants.ArcMenuPlacement.DASH){
-                    for (let i = settingsControllers.length - 1; i >= 0; --i) {
-                        let sc = settingsControllers[i];
-                        _disableButton(sc, 1);
-                    }
-                    _enableButtons();
-                    _connectDtdSignals();
+            if(_getDockExtensions() === undefined)
+                setAvaliablePlacement(Constants.ArcMenuPlacement.DASH, false);
+            else if(arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
+                setAvaliablePlacement(Constants.ArcMenuPlacement.DASH, true)
+                for (let i = settingsControllers.length - 1; i >= 0; --i) {
+                    let sc = settingsControllers[i];
+                    _disableButton(sc, 1);
                 }
+                _enableButtons();
+                _connectDtdSignals();
             }
         }
     });
@@ -206,7 +205,7 @@ function _getDockExtensions(){
     let ubuntuDash = Main.extensionManager.lookup("ubuntu-dock@ubuntu.com");
     let dock;
     if(dashToDock && dashToDock.stateObj && dashToDock.stateObj.dockManager){
-        dock = dashToDock; 
+        dock = dashToDock;
     }
     if(ubuntuDash && ubuntuDash.stateObj && ubuntuDash.stateObj.dockManager){
         dock = ubuntuDash; 
