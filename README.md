@@ -158,15 +158,13 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 -----
 
 <details>
-<summary><b>Top Project Contributors</b></summary>
+<summary><b>Former Project Developers</b></summary>
 
 <p>
 
-### Top Project Contributors
+### @[AndyC](https://gitlab.com/LinxGem33) - **Founder of ArcMenu and previous project maintainer**
 
-#### @[lexruee](https://github.com/lexruee) - **Project Contributor** - UI/UX Designer | - @[Thomas Ingvarsson](https://gitlab.com/tingvarsson) - **Project Contributor** - Developer
-
-#### @[charlesg99](https://github.com/charlesg99) - **Project Contributor** - Developer 
+#### @[lexruee](https://github.com/lexruee) - **UI/UX Designer** | - @[Thomas Ingvarsson](https://gitlab.com/tingvarsson) -  **Developer**
 
 -----
 
@@ -178,12 +176,15 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 <p>
 
-### Pull Requests
 <p> <a name="pullrequests"></a>
 
 ### Thanks to the following people for contributing via pull requests:
 
-**@[fishears](https://github.com/fishears/Arc-Menu)** | **@[JasonLG1979](https://github.com/JasonLG1979)** | **@[itmitica](https://github.com/itmitica)** | **@[vikaig](https://gitlab.com/vikaig)** | **@[MagneFire](https://gitlab.com/MagneFire)** | **@[tognee](https://gitlab.com/tognee)** | **@[hlechner](https://gitlab.com/hlechner)** | **@[vanillajonathan](https://gitlab.com/vanillajonathan)** | **@[epskampie](https://gitlab.com/epskampie)** | **@[GnomeBook](https://gitlab.com/GnomeBook)**
+**@[fishears](https://github.com/fishears/Arc-Menu)** | **@[JasonLG1979](https://github.com/JasonLG1979)** | **@[itmitica](https://github.com/itmitica)** | **@[vikaig](https://gitlab.com/vikaig)** | **@[MagneFire](https://gitlab.com/MagneFire)**
+
+**@[tognee](https://gitlab.com/tognee)** | **@[hlechner](https://gitlab.com/hlechner)** | **@[vanillajonathan](https://gitlab.com/vanillajonathan)** | **@[epskampie](https://gitlab.com/epskampie)** | **@[GnomeBook](https://gitlab.com/GnomeBook)** 
+
+**@[charlesg99](https://github.com/charlesg99)** | **@[harshadgavali](https://gitlab.com/harshadgavali)** | **@[O. Giesmann ](https://gitlab.com/Etamuk)**
 
 -----
 
