@@ -37,6 +37,8 @@ const Signals = imports.signals;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
+const { OpenWindowSearchProvider } = Me.imports.searchProviders.openWindows;
+
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
 var MAX_LIST_SEARCH_RESULTS_ROWS = 6;
@@ -253,8 +255,10 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
 
         this.providerInfo = new ArcSearchProviderInfo(provider, this._menuLayout);
         this.providerInfo.connect('activate', () => {
-            provider.launchSearch(this._terms);
-            this._menuLayout.arcMenu.toggle();
+            if (provider.canLaunchSearch) {
+                provider.launchSearch(this._terms);
+                this._menuLayout.arcMenu.toggle();
+            }
         });
 
         this._container.add(this.providerInfo.actor);
@@ -483,6 +487,7 @@ var SearchResults = class Arc_Menu_SearchResults {
             this._unregisterProvider(provider);
         });
 
+        this._registerProvider(new OpenWindowSearchProvider());
         RemoteSearch.loadRemoteSearchProviders(this._searchSettings, providers => {
             providers.forEach(this._registerProvider.bind(this));
         });

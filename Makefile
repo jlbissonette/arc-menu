@@ -8,7 +8,7 @@ MENU_LAYOUTS = arcmenu.js baseMenuLayout.js brisk.js budgie.js chromebook.js ele
 MENU_TWEAKS = menulayouts/tweaks/tweaks.js
 
 TOLOCALIZE = $(EXTRA_MODULES) $(addprefix menulayouts/, $(MENU_LAYOUTS)) $(MENU_TWEAKS)
-EXTRA_DIRECTORIES = media menulayouts
+EXTRA_DIRECTORIES = media menulayouts searchProviders
 MSGSRC = $(wildcard po/*.po)
 ifeq ($(strip $(DESTDIR)),)
 	INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
