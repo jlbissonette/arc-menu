@@ -13,7 +13,7 @@ function createIcon(app, size) {
         : new St.Icon({ icon_name: 'icon-missing', icon_size: size });
 }
 
-const OpenWindowSearchProvider = class {
+var OpenWindowSearchProvider = class {
     constructor() {
         this.id = 'arcmenu.open-windows';
         this.isRemoteProvider = true;
@@ -36,7 +36,7 @@ const OpenWindowSearchProvider = class {
             return aw ? {
                 id: winId,
                 name: aw.window.title,
-                description: `App '${aw.app.get_name()}' on workspace ${aw.window.get_workspace().index() + 1}`,
+                description: _("'%s' on Workspace %d").format(aw.app.get_name(), aw.window.get_workspace().index() + 1),
                 createIcon: (size) => createIcon(aw.app, size),
             } : undefined;
         }).filter(m => m !== undefined);

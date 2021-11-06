@@ -371,7 +371,8 @@ var SearchResults = class Arc_Menu_SearchResults {
         this._menuLayout = menuLayout;
         let layoutProperties = this._menuLayout.layoutProperties;
         this.searchType = this._menuLayout.layoutProperties.SearchType;
-        this.layout = this._menuLayout._settings.get_enum('menu-layout');
+        this._settings = this._menuLayout._settings;
+        this.layout = this._settings.get_enum('menu-layout');
 
         this.actor = new St.BoxLayout({ 
             vertical: true,
@@ -480,6 +481,7 @@ var SearchResults = class Arc_Menu_SearchResults {
         });
         this.actor.destroy();
     }
+
     _reloadRemoteProviders() {
         this._oldProviders = null;
         let remoteProviders = this._providers.filter(p => p.isRemoteProvider);
@@ -487,7 +489,9 @@ var SearchResults = class Arc_Menu_SearchResults {
             this._unregisterProvider(provider);
         });
 
-        this._registerProvider(new OpenWindowSearchProvider());
+        if(this._settings.get_boolean('search-provider-open-windows'))
+            this._registerProvider(new OpenWindowSearchProvider());
+
         RemoteSearch.loadRemoteSearchProviders(this._searchSettings, providers => {
             providers.forEach(this._registerProvider.bind(this));
         });

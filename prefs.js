@@ -3279,7 +3279,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         this.disableSearchStyle = this._settings.get_boolean('disable-searchbox-border');
         this.alphabetizeAllPrograms = this._settings.get_boolean('alphabetize-all-programs')
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
-        this.searchResultsDetails = this._settings.get_boolean('show-search-result-details');
 
         let disableCategoryArrowFrame = new PW.FrameBox();
         let disableCategoryArrowRow = new PW.FrameBoxRow();
@@ -3372,26 +3371,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         fadeEffectRow.add(fadeEffectSwitch);
         fadeEffectFrame.add(fadeEffectRow);
         this.mainBox.append(fadeEffectFrame);
-
-        let descriptionsFrame = new PW.FrameBox();
-        let descriptionsRow = new PW.FrameBoxRow();
-        let descriptionsLabel = new Gtk.Label({
-            label: _("Search Results - Show Descriptions"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let descriptionsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
-        descriptionsSwitch.set_active(this.searchResultsDetails);
-        descriptionsSwitch.connect('notify::active', (widget) => {
-            this.searchResultsDetails = widget.get_active();
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-        descriptionsRow.add(descriptionsLabel);
-        descriptionsRow.add(descriptionsSwitch);
-        descriptionsFrame.add(descriptionsRow);
-        this.mainBox.append(descriptionsFrame);
 
         let alphabetizeAllProgramsFrame = new PW.FrameBox();
         let alphabetizeAllProgramsRow = new PW.FrameBoxRow();
@@ -3570,7 +3549,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.disableSearchStyle = this._settings.get_default_value('disable-searchbox-border').unpack();
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
             this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
-            this.searchResultsDetails = this._settings.get_default_value('show-search-result-details').unpack();
             this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
             gapAdjustmentScale.set_value(this.gapAdjustment);
@@ -3578,7 +3556,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             searchStyleSwitch.set_active(this.disableSearchStyle); 
             tweakStyleSwitch.set_active(this.removeMenuArrow);
             multiLinedLabelSwitch.set_active(this.multiLinedLabels);
-            descriptionsSwitch.set_active(this.searchResultsDetails);
             let color = new Gdk.RGBA();
             color.parse(this.indicatorColor);
             appIndicatorColorChooser.set_rgba(color);
@@ -3603,7 +3580,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this._settings.set_boolean('disable-searchbox-border', this.disableSearchStyle);
             this._settings.set_boolean('alphabetize-all-programs', this.alphabetizeAllPrograms);
             this._settings.set_boolean('multi-lined-labels', this.multiLinedLabels);
-            this._settings.set_boolean('show-search-result-details', this.searchResultsDetails);
             this._settings.set_boolean('disable-scrollview-fade-effect', this.disableFadeEffect);
             this._settings.set_boolean('reload-theme', true);
             this.saveButton.set_sensitive(false);
@@ -3627,8 +3603,133 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.disableSearchStyle !== this._settings.get_default_value('disable-searchbox-border').unpack()||
             this.alphabetizeAllPrograms !== this._settings.get_default_value('alphabetize-all-programs').unpack()||
             this.multiLinedLabels !== this._settings.get_default_value('multi-lined-labels').unpack() ||
-            this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack()) ||
-            this.disableFadeEffect !== this._settings.get_default_value('disable-scrollview-fade-effect').unpack() ? true : false;
+            this.disableFadeEffect !== this._settings.get_default_value('disable-scrollview-fade-effect').unpack()) ? true : false;
+    }
+});
+
+var MenuSettingsSearchOptionsPage = GObject.registerClass(
+    class Arc_Menu_MenuSettingsSearchOptionsPage extends Gtk.Box {
+    _init(settings) {
+        super._init({
+            orientation: Gtk.Orientation.VERTICAL,
+        });
+
+        this.scrollBox = new Gtk.ScrolledWindow();
+        this.scrollBox.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+
+        this.mainBox = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            margin_top: 24,
+            margin_bottom: 24,
+            margin_start: 24,
+            margin_end: 24,
+            spacing: 20,
+            vexpand: true,
+            valign: Gtk.Align.FILL
+        });
+
+        this.scrollBox.set_child(this.mainBox);
+        this.append(this.scrollBox);
+        this._settings = settings;
+        this.searchResultsDetails = this._settings.get_boolean('show-search-result-details');
+        this.openWindowsSearchProvider = this._settings.get_boolean('search-provider-open-windows');
+
+        let searchProvidersFrame = new PW.FrameBox();
+        let searchProvidersLabel = new Gtk.Label({
+            label: "<b>" + _("Search Providers") + "</b>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+        });
+        this.mainBox.append(searchProvidersLabel);
+        let openWindowsRow = new PW.FrameBoxRow();
+        let openWindowsLabel = new Gtk.Label({
+            label: _("Open Windows"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let openWindowsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
+        openWindowsSwitch.set_active(this.openWindowsSearchProvider);
+        openWindowsSwitch.connect('notify::active', (widget) => {
+            this.openWindowsSearchProvider = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        openWindowsRow.add(openWindowsLabel);
+        openWindowsRow.add(openWindowsSwitch);
+        searchProvidersFrame.add(openWindowsRow);
+        this.mainBox.append(searchProvidersFrame);
+
+        let descriptionsFrame = new PW.FrameBox();
+        let descriptionsRow = new PW.FrameBoxRow();
+        let searchResultsLabel = new Gtk.Label({
+            label: "<b>" + _("Search Results") + "</b>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+        });
+        this.mainBox.append(searchResultsLabel);
+        let descriptionsLabel = new Gtk.Label({
+            label: _("Show Descriptions"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let descriptionsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
+        descriptionsSwitch.set_active(this.searchResultsDetails);
+        descriptionsSwitch.connect('notify::active', (widget) => {
+            this.searchResultsDetails = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        descriptionsRow.add(descriptionsLabel);
+        descriptionsRow.add(descriptionsSwitch);
+        descriptionsFrame.add(descriptionsRow);
+        this.mainBox.append(descriptionsFrame);
+
+        let buttonRow = new Gtk.Box({
+            valign: Gtk.Align.END,
+            margin_top: 6,
+            margin_bottom: 6,
+            margin_start: 24,
+            margin_end: 24,
+        });
+        this.resetButton = new Gtk.Button({
+            label: _("Restore Defaults"),
+        });
+        this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
+        this.resetButton.connect('clicked', ()=> {
+            this.searchResultsDetails = this._settings.get_default_value('show-search-result-details').unpack();
+            this.openWindowsSearchProvider = this._settings.get_default_value('search-provider-open-windows').unpack();
+            descriptionsSwitch.set_active(this.searchResultsDetails);
+            openWindowsSwitch.set_active(this.openWindowsSearchProvider);
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(false);
+        });
+
+        this.saveButton = new Gtk.Button({
+            label: _("Apply"),
+            hexpand: true
+        });
+        this.saveButton.connect('clicked', ()=> {
+            this._settings.set_boolean('show-search-result-details', this.searchResultsDetails);
+            this._settings.set_boolean('search-provider-open-windows', this.openWindowsSearchProvider);
+            this.saveButton.set_sensitive(false);
+            this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
+        }); 
+        this.saveButton.set_halign(Gtk.Align.END);
+        this.saveButton.set_sensitive(false);
+
+        buttonRow.append(this.resetButton);
+        buttonRow.append(this.saveButton);
+        this.append(buttonRow);
+    }
+
+    checkIfResetButtonSensitive(){
+        return (
+            this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack() ||
+            this.openWindowsSearchProvider !== this._settings.get_default_value('search-provider-open-windows').unpack()) ? true : false;
     }
 });
 
@@ -6036,9 +6137,10 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box {
         menuSettingsStackListBox.addRow("MenuSettingsShortcutDirectories", _("Directory Shortcuts"), 'folder-documents-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsShortcutApplications", _("Application Shortcuts"), 'preferences-desktop-apps-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsPowerOptions", _("Power Options"), 'gnome-power-manager-symbolic');
+        menuSettingsStackListBox.addRow("MenuSettingsSearchOptions", _("Search Options"), 'preferences-system-search-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsCategories", _("Extra Categories"), 'categories-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), 'fine-tune-symbolic');
-        menuSettingsStackListBox.setSeparatorIndices([1, 4, 6]);
+        menuSettingsStackListBox.setSeparatorIndices([1, 4, 7]);
  
         this.settingsListStack.add_named(mainStackBox, "Main");
         this.settingsListStack.add_named(menuSettingsListBox, "MenuSettings");
@@ -6076,6 +6178,7 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box {
         this.settingsFrameStack.add_named(new MenuSettingsShortcutDirectoriesPage(this._settings), "MenuSettingsShortcutDirectories");
         this.settingsFrameStack.add_named(new MenuSettingsShortcutApplicationsPage(this._settings), "MenuSettingsShortcutApplications");
         this.settingsFrameStack.add_named(new MenuSettingsPowerOptionsPage(this._settings), "MenuSettingsPowerOptions");
+        this.settingsFrameStack.add_named(new MenuSettingsSearchOptionsPage(this._settings), "MenuSettingsSearchOptions");
         this.settingsFrameStack.add_named(new MenuSettingsCategoriesPage(this._settings), "MenuSettingsCategories");
         this.settingsFrameStack.add_named(new MenuSettingsFineTunePage(this._settings), "MenuSettingsFineTune");
         this.settingsFrameStack.add_named(new ButtonAppearancePage(this._settings), "ButtonAppearance");

@@ -169,6 +169,11 @@
       <summary>Show search result description label</summary>
       <description>Show search result description label.</description>
     </key>
+    <key type="b" name="search-provider-open-windows">
+      <default>true</default>
+      <summary>Show custom search provider - open windows</summary>
+      <description>Show custom search provider - open windows.</description>
+    </key>
     <key type="b" name="activate-on-hover">
       <default>false</default>
       <summary>Activate Categories on Hover</summary>
