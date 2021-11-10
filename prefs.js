@@ -861,7 +861,7 @@ var GeneralPage = GObject.registerClass(
 
             let keyReleaseRow = new PW.FrameBoxRow();
             let keyReleaseLabel = new Gtk.Label({
-                label: _("Hotkey activation"),
+                label: _("Hotkey Activation"),
                 use_markup: true,
                 xalign: 0,
                 hexpand: true
@@ -885,6 +885,24 @@ var GeneralPage = GObject.registerClass(
             keyReleaseRow.add(keyReleaseLabel);
             keyReleaseRow.add(keyReleaseCombo);
 
+            let arcMenuPrimaryMonitorRow = new PW.FrameBoxRow();
+            let arcMenuPrimaryMonitorLabel = new Gtk.Label({
+                label: _("Open on Primary Monitor"),
+                use_markup: true,
+                xalign: 0,
+                hexpand: true
+            });
+            let arcMenuPrimaryMonitorSwitch = new Gtk.Switch({ 
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+            });
+            arcMenuPrimaryMonitorSwitch.set_active(this._settings.get_boolean('hotkey-open-primary-monitor'));
+            arcMenuPrimaryMonitorSwitch.connect('notify::active', (widget) => {
+                this._settings.set_boolean('hotkey-open-primary-monitor', widget.get_active());
+            });
+            arcMenuPrimaryMonitorRow.add(arcMenuPrimaryMonitorLabel);
+            arcMenuPrimaryMonitorRow.add(arcMenuPrimaryMonitorSwitch);
+
             let menuHotkeyHeader = new Gtk.Label({
                 label: "<b>" + _("Hotkey Options") + "</b>",
                 use_markup: true,
@@ -896,7 +914,7 @@ var GeneralPage = GObject.registerClass(
             this.menuKeybindingFrame = new PW.FrameBox();
             let menuHotkeyLabelRow = new PW.FrameBoxRow();
             let menuHotkeyLabel = new Gtk.Label({
-                label: _("Choose a Hotkey for ArcMenu"),
+                label: _("ArcMenu Hotkey"),
                 use_markup: true,
                 xalign: 0,
                 hexpand: true
@@ -952,6 +970,7 @@ var GeneralPage = GObject.registerClass(
                 if(leftButton.get_active()){
                     if(this.menuKeybindingFrame.count > 2)
                         this.menuKeybindingFrame.removeChildrenAfterIndex(1);
+                    this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);    
                     this._settings.set_enum('menu-hotkey', 1);
                 }    
             });
@@ -959,6 +978,7 @@ var GeneralPage = GObject.registerClass(
                 if(rightButton.get_active()){
                     if(this.menuKeybindingFrame.count > 2)
                         this.menuKeybindingFrame.removeChildrenAfterIndex(1);
+                    this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
                     this.menuKeybindingFrame.add(keyReleaseRow);
                     this.menuKeybindingFrame.show();
                     this._settings.set_enum('menu-hotkey', 2);
@@ -968,6 +988,7 @@ var GeneralPage = GObject.registerClass(
                 if(customButton.get_active()){
                     if(this.menuKeybindingFrame.count > 2)
                         this.menuKeybindingFrame.removeChildrenAfterIndex(1);
+                    this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
                     this.menuKeybindingFrame.add(menuKeybindingRow);
                     this.menuKeybindingFrame.add(keyReleaseRow);
                     this.menuKeybindingFrame.show();
@@ -1023,11 +1044,17 @@ var GeneralPage = GObject.registerClass(
                     }
                 }); 
             });
-            if(this._settings.get_enum('menu-hotkey')==2)
+
+            if(this._settings.get_enum('menu-hotkey') === 1)
+                this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
+            if(this._settings.get_enum('menu-hotkey') === 2){
+                this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
                 this.menuKeybindingFrame.add(keyReleaseRow);
-            if(this._settings.get_enum('menu-hotkey')==3 ){
+            }
+            if(this._settings.get_enum('menu-hotkey') === 3){
+                this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
+                this.menuKeybindingFrame.add(keyReleaseRow);
                 this.menuKeybindingFrame.add(menuKeybindingRow);
-                this.menuKeybindingFrame.add(keyReleaseRow);
             }
             this.mainBox.append(this.menuKeybindingFrame);
         }
