@@ -387,6 +387,16 @@ var BaseLayout = class {
         let activeMenuItemSet = false;
         for(let i = 0; i < this._recentFiles.length; i++){
             let file = Gio.File.new_for_uri(this._recentFiles[i].get_uri()).get_path();
+
+            //In some edge-case instances, file will be null, causing a critical GJS error
+            //for example: an FTP mount with a file added, and the mount removed the
+            //recent files entry remains in the list and this.createMenuItem throws an error.
+            //
+            //Skip the file if it contains a null path
+            if(file == null){
+                continue;
+            }
+
             let name = this._recentFiles[i].get_display_name();
             let icon = Gio.content_type_get_symbolic_icon(this._recentFiles[i].get_mime_type()).to_string();
             let placeMenuItem = this.createMenuItem([name, icon, file], Constants.MenuItemType.MENU_ITEM);
