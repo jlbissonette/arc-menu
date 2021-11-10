@@ -186,8 +186,6 @@ var MenuSettingsController = class {
 
     toggleMenus(){
         if(global.dashToPanel || this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
-            this.currentMonitor = Main.layoutManager.currentMonitor;
-            //close current menus that are open on monitors other than current monitor
             const MultipleArcMenus = this._settingsControllers.length > 1;
             const ShowArcMenuOnPrimaryMonitor = this._settings.get_boolean('hotkey-open-primary-monitor');
             if(MultipleArcMenus && ShowArcMenuOnPrimaryMonitor)
