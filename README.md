@@ -191,7 +191,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 ### Bug Fixes:
 <p> <a name="bugfixes"></a>
 
-**@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee/Arc-Menu)**
+**@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee/Arc-Menu)** | **@[aleayr ](https://gitlab.com/aleayr)**
 
 -----
 
