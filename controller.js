@@ -185,32 +185,35 @@ var MenuSettingsController = class {
 
     toggleMenus(){
         if(global.dashToPanel || this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
-            this.currentMonitor = Main.layoutManager.currentMonitor;
-            //close current menus that are open on monitors other than current monitor
-            if(this._settingsControllers.length > 1){
-                for (let i = 0; i < this._settingsControllers.length; i++) {
-                    let actor = this._settingsControllers[i]._menuButton.menuButtonWidget.actor;
-                    let monitorForActor = Main.layoutManager.findMonitorForActor(actor);
-                    if(this.currentMonitor == monitorForActor){
-                        this.currentMonitorIndex = i;
-                    }
-                    else{
-                        if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
-                            this._settingsControllers[i]._menuButton.toggleMenu();
-                        if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
-                            this._settingsControllers[i]._menuButton.toggleArcMenuContextMenu();
-                    }
-                } 
-                //open the current monitors menu
-                this._settingsControllers[this.currentMonitorIndex]._menuButton.toggleMenu();
+            const MultipleArcMenus = this._settingsControllers.length > 1;
+            const ShowArcMenuOnPrimaryMonitor = this._settings.get_boolean('hotkey-open-primary-monitor');
+            if(MultipleArcMenus && ShowArcMenuOnPrimaryMonitor)
+                this._toggleMenuOnMonitor(Main.layoutManager.primaryMonitor);
+            else if(MultipleArcMenus && !ShowArcMenuOnPrimaryMonitor)
+                this._toggleMenuOnMonitor(Main.layoutManager.currentMonitor);
+            else
+                this._menuButton.toggleMenu();
+        }
+        else
+            this._menuButton.toggleMenu();
+    }
+
+    _toggleMenuOnMonitor(monitor){
+        for (let i = 0; i < this._settingsControllers.length; i++) {
+            let actor = this._settingsControllers[i]._menuButton.menuButtonWidget.actor;
+            let monitorForActor = Main.layoutManager.findMonitorForActor(actor);
+            if(monitor == monitorForActor){
+                this.currentMonitorIndex = i;
             }
             else{
-                this._menuButton.toggleMenu();
+                if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
+                    this._settingsControllers[i]._menuButton.toggleMenu();
+                if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
+                    this._settingsControllers[i]._menuButton.toggleArcMenuContextMenu();
             }
-        }
-        else {
-            this._menuButton.toggleMenu();
-        }
+        } 
+        //open the current monitors menu
+        this._settingsControllers[this.currentMonitorIndex]._menuButton.toggleMenu();
     }
 
     _reloadExtension(){
