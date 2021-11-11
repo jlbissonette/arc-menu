@@ -136,6 +136,17 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         }
     }
 
+    /**
+     * if button is hidden, menu should appear on current monitor, unless preference is to always show on primary monitor
+     * @returns index of monitor where menu should appear
+     */
+    _getMonitorIndexForPlacement() {
+        if (this._settings.get_enum('menu-button-appearance') === Constants.MenuButtonAppearance.NONE)
+            return this._settings.get_boolean('hotkey-open-primary-monitor') ? Main.layoutManager.primaryMonitor.index : Main.layoutManager.currentMonitor.index;
+        else
+            return Main.layoutManager.findIndexForActor(this.menuButton);
+    }
+
     updateLocation(){
         if(!this.rise){
             let themeNode = this.arcMenu.actor.get_theme_node();
@@ -145,8 +156,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.arcMenu._boxPointer.setSourceAlignment(0.5);
         this.arcMenu._arrowAlignment = 0.5;
         
-        let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
-        let rect = Main.layoutManager.getWorkAreaForMonitor(monitorIndex);
+        let rect = Main.layoutManager.getWorkAreaForMonitor(this._getMonitorIndexForPlacement());
 
         //Position the runner menu in the center of the current monitor, at top of screen.
         let positionX = Math.round(rect.x + (rect.width / 2));
