@@ -287,10 +287,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.displayPinnedApps();
     }
 
-    displayAllApps(){
+    displayAllApps(showBackButton = true){
         super.displayAllApps();
-        this.backButton.actor.show();
-        this.viewProgramsButton.actor.hide();  
+        this.viewProgramsButton.actor.hide();
+
+        if(showBackButton)
+            this.backButton.actor.show();
+        else
+            this.backButton.actor.hide();
     }
 
     displayCategories(){
@@ -311,15 +315,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     setDefaultMenuView(){
         super.setDefaultMenuView();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
+
+        this.backButton.actor.hide();
+        this.viewProgramsButton.actor.show();
+
         if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS)
             this.displayPinnedApps();
         else if(defaultMenuView === Constants.DefaultMenuView.CATEGORIES_LIST)
             this.displayCategories();
         else if(defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS)
             this.displayFrequentApps();
-        
-        this.backButton.actor.hide();
-        this.viewProgramsButton.actor.show();
+        else if(defaultMenuView === Constants.DefaultMenuView.ALL_PROGRAMS)
+            this.displayAllApps(false);
     }
 
     displayCategoryAppList(appList, category){

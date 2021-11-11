@@ -1100,6 +1100,7 @@ var TweaksPage = GObject.registerClass({
         defaultLeftBoxCombo.append_text(_("Pinned Apps"));
         defaultLeftBoxCombo.append_text(_("Categories List"));
         defaultLeftBoxCombo.append_text(_("Frequent Apps"));
+        defaultLeftBoxCombo.append_text(_("All Programs"));
         defaultLeftBoxCombo.set_active(this._settings.get_enum('default-menu-view'));
         defaultLeftBoxCombo.connect('changed', (widget) => {
             this._settings.set_enum('default-menu-view', widget.get_active());
