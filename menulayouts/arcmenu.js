@@ -359,6 +359,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
     }
 
+    displayRecentFiles(){
+        this.backButton.actor.show();
+        this.viewProgramsButton.actor.hide();
+        super.displayRecentFiles();
+    }
+
     _onSearchBoxChanged(searchBox, searchString){  
         super._onSearchBoxChanged(searchBox, searchString);  
         if(!searchBox.isEmpty()){  
