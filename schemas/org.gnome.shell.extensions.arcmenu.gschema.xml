@@ -64,6 +64,7 @@
         <value value="0" nick="Pinned_Apps"/>
         <value value="1" nick="Categories_List"/>
         <value value="2" nick="Frequent_Apps"/>
+        <value value="3" nick="All_Programs"/>
     </enum>
         <enum id='org.gnome.shell.extensions.arcmenu.default-menu-view-tognee'>
         <value value="0" nick="Categories_List"/>

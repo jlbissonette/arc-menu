@@ -52,7 +52,8 @@ var CategoryType = {
 var DefaultMenuView = {
     PINNED_APPS: 0,
     CATEGORIES_LIST: 1,
-    FREQUENT_APPS: 2
+    FREQUENT_APPS: 2,
+    ALL_PROGRAMS: 3
 }
 
 var PrefsVisiblePage = {
