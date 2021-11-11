@@ -184,7 +184,7 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 
 **@[tognee](https://gitlab.com/tognee)** | **@[hlechner](https://gitlab.com/hlechner)** | **@[vanillajonathan](https://gitlab.com/vanillajonathan)** | **@[epskampie](https://gitlab.com/epskampie)** | **@[GnomeBook](https://gitlab.com/GnomeBook)** 
 
-**@[charlesg99](https://github.com/charlesg99)** | **@[harshadgavali](https://gitlab.com/harshadgavali)** | **@[O. Giesmann ](https://gitlab.com/Etamuk)**
+**@[charlesg99](https://github.com/charlesg99)** | **@[harshadgavali](https://gitlab.com/harshadgavali)** | **@[O. Giesmann ](https://gitlab.com/Etamuk)** | **@[aleayr ](https://gitlab.com/aleayr)**
 
 -----
 
