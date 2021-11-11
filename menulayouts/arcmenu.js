@@ -276,13 +276,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.viewProgramsButton.actor.show();
             this.backButton.actor.hide();
         }
-        else if (defaultMenuView === Constants.DefaultMenuView.CATEGORIES_LIST){
+        else if(defaultMenuView === Constants.DefaultMenuView.CATEGORIES_LIST){
             this.viewProgramsButton.actor.hide();
             this.backButton.actor.show();
         }
-        else if (defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS){
-            this.viewProgramsButton.actor.show();
-            this.backButton.actor.hide();
+        else if(defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS){
+            this.viewProgramsButton.actor.hide();
+            this.backButton.actor.show();
         }
         super.displayPinnedApps();
     }
@@ -315,9 +315,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     setDefaultMenuView(){
         super.setDefaultMenuView();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
-
-        this.backButton.actor.hide();
-        this.viewProgramsButton.actor.show();
 
         if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS)
             this.displayPinnedApps();

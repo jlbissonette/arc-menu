@@ -1749,16 +1749,11 @@ var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends Arc
         this.add_actor(backLabel);
     }
     activate(event) {
-        let defaultMenuView = this._settings.get_enum('default-menu-view');
         if(this._layout === Constants.MenuLayout.ARCMENU){
+            let defaultMenuView = this._settings.get_enum('default-menu-view');
             if(this._menuLayout.activeCategoryType === Constants.CategoryType.SEARCH_RESULTS || this._menuLayout.activeCategoryType === Constants.CategoryType.ALL_PROGRAMS_BUTTON){ 
                 this._menuLayout.resetSearch();
-                if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS)
-                    this._menuLayout.displayPinnedApps();
-                else if(defaultMenuView === Constants.DefaultMenuView.CATEGORIES_LIST)
-                    this._menuLayout.displayCategories();
-                else if(defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS)
-                    this._menuLayout.displayFrequentApps();
+                this._menuLayout.setDefaultMenuView();
             }
             else if(this._menuLayout.activeCategoryType === Constants.CategoryType.CATEGORIES_LIST && defaultMenuView === Constants.DefaultMenuView.PINNED_APPS)
                 this._menuLayout.displayPinnedApps();

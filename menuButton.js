@@ -545,7 +545,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if (this.tooltipHidingID) {
             GLib.source_remove(this.tooltipHidingID);
             this.tooltipHidingID = null;
-        }   
+        }
         if(this.MenuLayout)
             this.MenuLayout.destroy();
 
@@ -565,14 +565,12 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;
         }
+        if(this.arcMenu)
+            this.arcMenu.destroy();
+        if(this.arcMenuContextMenu)
+            this.arcMenuContextMenu.destroy();
         if(this.dummyWidget)
             this.dummyWidget.destroy();
-        if(this.arcMenu){
-            this.arcMenu.destroy();
-        }
-        if(this.arcMenuContextMenu){
-            this.arcMenuContextMenu.destroy();
-        }
         super._onDestroy();
     }
 
