@@ -3661,17 +3661,10 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this.searchResultsDetails = this._settings.get_boolean('show-search-result-details');
         this.openWindowsSearchProvider = this._settings.get_boolean('search-provider-open-windows');
 
-        let searchProvidersFrame = new PW.FrameBox();
-        let searchProvidersLabel = new Gtk.Label({
-            label: "<b>" + _("Search Providers") + "</b>",
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-        });
-        this.mainBox.append(searchProvidersLabel);
+        let searchOptionsFrame = new PW.FrameBox();
         let openWindowsRow = new PW.FrameBoxRow();
         let openWindowsLabel = new Gtk.Label({
-            label: _("Open Windows"),
+            label: _("Search for open windows across all workspaces"),
             use_markup: true,
             xalign: 0,
             hexpand: true
@@ -3685,20 +3678,11 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         });
         openWindowsRow.add(openWindowsLabel);
         openWindowsRow.add(openWindowsSwitch);
-        searchProvidersFrame.add(openWindowsRow);
-        this.mainBox.append(searchProvidersFrame);
+        searchOptionsFrame.add(openWindowsRow);
 
-        let descriptionsFrame = new PW.FrameBox();
         let descriptionsRow = new PW.FrameBoxRow();
-        let searchResultsLabel = new Gtk.Label({
-            label: "<b>" + _("Search Results") + "</b>",
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-        });
-        this.mainBox.append(searchResultsLabel);
         let descriptionsLabel = new Gtk.Label({
-            label: _("Show Descriptions"),
+            label: _("Show descriptions of search results"),
             use_markup: true,
             xalign: 0,
             hexpand: true
@@ -3712,8 +3696,8 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         });
         descriptionsRow.add(descriptionsLabel);
         descriptionsRow.add(descriptionsSwitch);
-        descriptionsFrame.add(descriptionsRow);
-        this.mainBox.append(descriptionsFrame);
+        searchOptionsFrame.add(descriptionsRow);
+        this.mainBox.append(searchOptionsFrame);
 
         let buttonRow = new Gtk.Box({
             valign: Gtk.Align.END,
