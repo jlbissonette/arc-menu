@@ -3669,6 +3669,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             xalign: 0,
             hexpand: true
         });
+
         let openWindowsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
         openWindowsSwitch.set_active(this.openWindowsSearchProvider);
         openWindowsSwitch.connect('notify::active', (widget) => {
