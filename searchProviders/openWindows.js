@@ -35,11 +35,11 @@ var OpenWindowSearchProvider = class {
             const aw = this._getAppWindow(winId);
             return aw ? {
                 id: winId,
-                name: aw.window.title,
+                name: aw.window.title ?? aw.app.get_name(),
                 description: _("'%s' on Workspace %d").format(aw.app.get_name(), aw.window.get_workspace().index() + 1),
                 createIcon: (size) => createIcon(aw.app, size),
             } : undefined;
-        }).filter(m => m !== undefined);
+        }).filter(m => m?.name !== undefined && m?.name !== null);
 
         callback(metas);
     }
@@ -77,9 +77,10 @@ var OpenWindowSearchProvider = class {
     _getFilteredWindowIds(terms, appWindows) {
         terms = terms.map(term => term.toLowerCase());
         appWindows = appWindows.filter(aw => {
-            const title = aw.window.title.toLowerCase();
-            const appName = aw.app.get_name().toLowerCase();
-            return terms.some(term => title.includes(term) || appName.includes(term));
+            const title = aw.window.title?.toLowerCase();
+            const appName = aw.app.get_name()?.toLowerCase();
+            const appDescription = aw.app.get_description()?.toLowerCase();
+            return terms.some(term => title?.includes(term) || appName?.includes(term) || appDescription?.includes(term));
         });
 
         return appWindows.map(aw => aw.window.get_id().toString());
