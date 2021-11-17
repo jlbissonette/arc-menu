@@ -50,6 +50,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.tooltipShowing = false;
         this.tooltipHidingID = null;
         this.tooltipShowingID = null;
+        this.dtpNeedsRelease = false;
 
         let menuManagerParent;
         if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL)
@@ -454,7 +455,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 this.MenuLayout.updateLocation();
             if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
                 if(this.dtpPanel && !this.arcMenu.isOpen){
-                    if(this.dtpPanel.intellihide && this.dtpPanel.intellihide.enabled)
+                    if(this.dtpPanel.intellihide?.enabled)
                         this.dtpPanel.intellihide._revealPanel(true);
                     else if(!this.dtpPanel.panelBox.visible){
                         this.dtpPanel.panelBox.visible = true;
@@ -697,6 +698,11 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 
                 if(Main.panel.menuManager && Main.panel.menuManager.activeMenu)
                     Main.panel.menuManager.activeMenu.toggle();
+
+                if(this.dtpPanel && !this.dtpNeedsRelease){
+                    this.dtpNeedsRelease = true;
+                    this.dtpPanel.intellihide?.disable();
+                }
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
                 this.dash._autohideIsEnabled = false;
@@ -707,19 +713,19 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         }      
         else{ 
             if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
-                if(this.dtpPanel && this.dtpNeedsRelease){
-                    this.dtpNeedsRelease = false;
-                    this.dtpPanel.intellihide ? this.dtpPanel.intellihide.release(2) : null;
-                }
-                if(this.dtpPanel && this.dtpNeedsHiding){
-                    this.dtpNeedsHiding = false;
-                    this.dtpPanel.panelBox.visible = false;
-                }
-                if(this.mainPanelNeedsHiding){
-                    Main.layoutManager.panelBox.visible = false;
-                    this.mainPanelNeedsHiding = false;
-                }
                 if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){
+                    if(this.dtpPanel && this.dtpNeedsRelease){
+                        this.dtpNeedsRelease = false;
+                        this.dtpPanel.intellihide?.enable();
+                    }
+                    if(this.dtpPanel && this.dtpNeedsHiding){
+                        this.dtpNeedsHiding = false;
+                        this.dtpPanel.panelBox.visible = false;
+                    }
+                    if(this.mainPanelNeedsHiding){
+                        Main.layoutManager.panelBox.visible = false;
+                        this.mainPanelNeedsHiding = false;
+                    }
                     this.menuButtonWidget.setActiveStylePseudoClass(false);
                     this.remove_style_pseudo_class('active');
                 }
@@ -756,10 +762,6 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
     }
 
     open(animation){
-        if(this._menuButton.dtpPanel && !this._menuButton.dtpNeedsRelease && this._menuButton.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
-            this._menuButton.dtpNeedsRelease = true;
-            this._menuButton.dtpPanel.intellihide ? this._menuButton.dtpPanel.intellihide.revealAndHold(2) : null;
-        }
         this._onOpenEvent();
         super.open(animation);
     }
@@ -832,14 +834,6 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         this.addMenuItem(item);
 
         this.addMenuItem(this.createQuickLinkItem(_("About"), Constants.PrefsVisiblePage.ABOUT));
-    }
-
-    open(animation){
-        if(this._menuButton.dtpPanel && !this._menuButton.dtpNeedsRelease && this._menuButton.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
-            this._menuButton.dtpNeedsRelease = true;
-            this._menuButton.dtpPanel.intellihide ? this._menuButton.dtpPanel.intellihide.revealAndHold(2) : null;
-        }
-        super.open(animation);
     }
 
     addExtensionSettings(arcMenuPlacement){
