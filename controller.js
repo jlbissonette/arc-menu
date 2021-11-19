@@ -38,6 +38,8 @@ var MenuSettingsController = class {
         this.panel = panel;
         this.arcMenuPlacement = arcMenuPlacement;
 
+        global.toggleArcMenu = () => this.toggleMenus();
+
         this.updateThemeID = GLib.timeout_add(0, 100, () => {
             Utils.createStylesheet(this._settings);
             Main.loadTheme();
@@ -639,6 +641,7 @@ var MenuSettingsController = class {
         }
         this._settings = null;
         this._activitiesButton = null;
-    this._menuButton = null;
+        this._menuButton = null;
+        delete global.toggleArcMenu;
   }
 };
