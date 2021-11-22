@@ -714,7 +714,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         else{ 
             if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
                 if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){
-                    if(this.dtpPanel && this.dtpNeedsRelease){
+                    if(this.dtpPanel && this.dtpNeedsRelease && !this.dtpNeedsHiding){
                         this.dtpNeedsRelease = false;
                         this.dtpPanel.intellihide?.enable();
                     }
