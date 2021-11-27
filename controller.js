@@ -48,7 +48,7 @@ var MenuSettingsController = class {
         });
         this.currentMonitorIndex = 0;
         this._activitiesButton = Main.panel.statusArea.activities;
-        this.enableHotkey = panelIndex === 0 ? true : false;
+        this.isPrimary = panelIndex === 0 ? true : false;
 
         if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL) {
             this._menuButton = new MenuButton.MenuButton(settings, this.arcMenuPlacement, panel);
@@ -59,17 +59,22 @@ var MenuSettingsController = class {
         }
 
         this._settingsControllers = settingsControllers
-        if(this.enableHotkey){
+
+        if(this.isPrimary){
             this._menuHotKeybinder = new Helper.MenuHotKeybinder(() => this._onHotkey());
             this._keybindingManager = new Helper.KeybindingManager(this._settings); 
+            this._hotCornerManager = new Helper.HotCornerManager(this._settings,() => this.toggleMenus());
         }
         this._applySettings();
     }
 
     // Load and apply the settings from the arc-menu settings
     _applySettings() {
-        if(this.enableHotkey)
+        if(this.isPrimary){
+            this._updateHotCornerManager();
             this._updateHotKeyBinder();
+        }
+            
         this._setButtonAppearance();
         this._setButtonText();
         this._setButtonIcon();
@@ -80,6 +85,7 @@ var MenuSettingsController = class {
     // Bind the callbacks for handling the settings changes to the event signals
     bindSettingsChanges() {
         this.settingsChangeIds = [
+            this._settings.connect('changed::hot-corners', this._updateHotCornerManager.bind(this)),
             this._settings.connect('changed::menu-hotkey', this._updateHotKeyBinder.bind(this)),
             this._settings.connect('changed::position-in-panel', this._setButtonPosition.bind(this)),
             this._settings.connect('changed::menu-position-alignment', this._setMenuPositionAlignment.bind(this)),
@@ -251,8 +257,26 @@ var MenuSettingsController = class {
         }
     }
 
+    _updateHotCornerManager() {
+        if (this.isPrimary) {
+            let hotCornerAction = this._settings.get_enum('hot-corners');
+            if (hotCornerAction === Constants.HotCornerAction.DEFAULT) {
+                this._hotCornerManager.restoreDefaultHotCorners();
+            } 
+            else if(hotCornerAction === Constants.HotCornerAction.DISABLED) {
+                this._hotCornerManager.disableHotCorners();
+            }
+            else if(hotCornerAction === Constants.HotCornerAction.TOGGLE_ARCMENU) {
+                this._hotCornerManager.modifyHotCorners();
+            }
+            else if(hotCornerAction === Constants.HotCornerAction.CUSTOM) {
+                this._hotCornerManager.modifyHotCorners();
+            }
+        }
+    }
+
     _updateHotKeyBinder() {
-        if (this.enableHotkey) {
+        if (this.isPrimary) {
             let hotkeySettingsKey = 'menu-keybinding-text';
             let menuKeyBinding = '';
             let hotKeyPos = this._settings.get_enum('menu-hotkey');
@@ -614,10 +638,11 @@ var MenuSettingsController = class {
             this._disableButton();
         }
 
-        if(this.enableHotkey){
+        if(this.isPrimary){
             this.disconnectKeyRelease();
             this._menuHotKeybinder.destroy();
             this._keybindingManager.destroy();
+            this._hotCornerManager.destroy();
         }
         this._settings = null;
         this._activitiesButton = null;

@@ -139,6 +139,13 @@ var HotKey = {
     2: SUPER_R,
 };
 
+var HotCornerAction = {
+    DEFAULT: 0,
+    DISABLED: 1,
+    TOGGLE_ARCMENU: 2,
+    CUSTOM: 3
+}
+
 var SECTIONS = [
     'devices',
     'network',
