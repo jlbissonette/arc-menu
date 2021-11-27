@@ -241,20 +241,26 @@ function _enableButtons() {
         }
     }
     else{
-        let panelArray = global.dashToPanel ? global.dashToPanel.panels.map(pw => pw) : [Main.panel];
+        let isDtPLoaded = false;
+        let panelArray = [Main.panel];
+        if(global.dashToPanel && global.dashToPanel.panels){
+            panelArray = global.dashToPanel.panels.map(pw => pw);
+            isDtPLoaded = true;
+        }
+
         let iterLength = multiMonitor ? panelArray.length : 1;
         for(var index = 0; index < iterLength; index++){
-            let panel = global.dashToPanel ? panelArray[index].panel : panelArray[index];
+            let panel = isDtPLoaded ? panelArray[index].panel : panelArray[index];
             let panelParent = panelArray[index];
 
-            let isPrimaryStandAlone = global.dashToPanel ? ('isPrimary' in panelParent && panelParent.isPrimary) && panelParent.isStandalone : false;
+            let isPrimaryStandAlone = isDtPLoaded ? ('isPrimary' in panelParent && panelParent.isPrimary) && panelParent.isStandalone : false;
 
             if(arcMenuPlacement === Constants.ArcMenuPlacement.PANEL && isPrimaryStandAlone){
                 avaliablePlacementArray[Constants.ArcMenuPlacement.PANEL] = true;
                 panel = Main.panel;
             }
 
-            if(global.dashToPanel)
+            if(isDtPLoaded)
                 avaliablePlacementArray[Constants.ArcMenuPlacement.DTP] = true;
             else
                 avaliablePlacementArray[Constants.ArcMenuPlacement.PANEL] = true;
@@ -267,7 +273,7 @@ function _enableButtons() {
             let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, 
                                                                             index, Constants.ArcMenuPlacement.PANEL);
             
-            if (global.dashToPanel) {
+            if (isDtPLoaded) {
                 panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController, 1) : null);
             }
     

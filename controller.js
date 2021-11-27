@@ -59,7 +59,6 @@ var MenuSettingsController = class {
         }
 
         this._settingsControllers = settingsControllers
-        this._hotCornerManager = new Helper.HotCornerManager(this._settings,() => this.toggleMenus());
         if(this.enableHotkey){
             this._menuHotKeybinder = new Helper.MenuHotKeybinder(() => this._onHotkey());
             this._keybindingManager = new Helper.KeybindingManager(this._settings); 
@@ -69,7 +68,6 @@ var MenuSettingsController = class {
 
     // Load and apply the settings from the arc-menu settings
     _applySettings() {
-        this._updateHotCornerManager();
         if(this.enableHotkey)
             this._updateHotKeyBinder();
         this._setButtonAppearance();
@@ -82,7 +80,6 @@ var MenuSettingsController = class {
     // Bind the callbacks for handling the settings changes to the event signals
     bindSettingsChanges() {
         this.settingsChangeIds = [
-            this._settings.connect('changed::hot-corners', this._updateHotCornerManager.bind(this)),
             this._settings.connect('changed::menu-hotkey', this._updateHotKeyBinder.bind(this)),
             this._settings.connect('changed::position-in-panel', this._setButtonPosition.bind(this)),
             this._settings.connect('changed::menu-position-alignment', this._setMenuPositionAlignment.bind(this)),
@@ -251,22 +248,6 @@ var MenuSettingsController = class {
         if(layout == Constants.MenuLayout.UNITY || layout == Constants.MenuLayout.MINT || layout == Constants.MenuLayout.BRISK){
             if(this._menuButton.shouldLoadPinnedApps())
                 this._menuButton.loadExtraPinnedApps();
-        }
-    }
-
-    _updateHotCornerManager() {
-        let hotCornerAction = this._settings.get_enum('hot-corners');
-        if (hotCornerAction == Constants.HotCornerAction.DEFAULT) {
-            this._hotCornerManager.restoreDefaultHotCorners();
-        } 
-        else if(hotCornerAction == Constants.HotCornerAction.DISABLED) {
-            this._hotCornerManager.disableHotCorners();
-        }
-        else if(hotCornerAction == Constants.HotCornerAction.TOGGLE_ARCMENU) {
-            this._hotCornerManager.modifyHotCorners();
-        }
-        else if(hotCornerAction == Constants.HotCornerAction.CUSTOM) {
-            this._hotCornerManager.modifyHotCorners();
         }
     }
 
@@ -600,7 +581,6 @@ var MenuSettingsController = class {
             this.updateThemeID = null;
         }
         this.settingsChangeIds.forEach(id => this._settings.disconnect(id));
-        this._hotCornerManager.destroy();
         
         if(this.arcMenuPlacement == Constants.ArcMenuPlacement.DASH){
             if(this.panel._allDocks[this.dashIndex] && this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled){

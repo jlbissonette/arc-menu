@@ -78,12 +78,6 @@
         <value value="0" nick="Bottom"/>
         <value value="1" nick="Top"/>
     </enum>
-    <enum id='org.gnome.shell.extensions.arcmenu.hot-corners'>
-        <value value="0" nick="Default"/>
-        <value value="1" nick="Disabled"/>
-        <value value="2" nick="ToggleArcMenu"/>
-        <value value="3" nick="Custom"/>
-    </enum>
   <schema path="/org/gnome/shell/extensions/arcmenu/" id="org.gnome.shell.extensions.arcmenu">
     <key type="i" name="menu-position-alignment">
       <default>50</default>
@@ -435,25 +429,10 @@
       <summary>Display on all monitors</summary>
       <description>Display the menu on all monitors when using Dash to Panel.</description>
     </key>
-    <key name="hot-corners" enum="org.gnome.shell.extensions.arcmenu.hot-corners">
-      <default>'Default'</default>
-      <summary>Activities hotcorner action</summary>
-      <description>Activities hotcorner action.</description>
-    </key>
-    <key type="b" name="override-hot-corners">
-      <default>false</default>
-      <summary>Override action of activities hot corner</summary>
-      <description>Override action of activities hot corner.</description>
-    </key>
     <key type="b" name="show-activities-button">
       <default>false</default>
       <summary>Show/Hide Activities Button in panel</summary>
       <description>Show/Hide Activities Button in panel.</description>
-    </key>
-    <key type="s" name="custom-hot-corner-cmd">
-      <default>"sh -c 'notify-send \"$(date)\"'"</default>
-      <summary>Custom hot corner terminal command</summary>
-      <description>Custom hot corner terminal command.</description>
     </key>
     <key name="menu-hotkey" enum="org.gnome.shell.extensions.arcmenu.menu-hotkey">
       <default>'Undefined'</default>

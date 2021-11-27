@@ -186,7 +186,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             let side = Utils.getDashToPanelPosition(this.extensionSettingsItem, monitorIndex);
             this.updateArrowSide(side);
         });
-        if(global.dashToPanel){
+        if(global.dashToPanel && global.dashToPanel.panels){
             global.dashToPanel.panels.forEach(p => {
                 if(p.panel === this._panel){
                     this.dtpPanel = p;
@@ -700,8 +700,10 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                     Main.panel.menuManager.activeMenu.toggle();
 
                 if(this.dtpPanel && !this.dtpNeedsRelease){
-                    this.dtpNeedsRelease = true;
-                    this.dtpPanel.intellihide?.disable();
+                    if(this.dtpPanel.intellihide?.enabled){
+                        this.dtpNeedsRelease = true;
+                        this.dtpPanel.intellihide.disable();
+                    }
                 }
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
