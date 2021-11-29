@@ -39,6 +39,10 @@
         <value value="1" nick="Center"/>
         <value value="2" nick="Right"/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.raven-position'>
+        <value value="0" nick="Left"/>
+        <value value="1" nick="Right"/>
+    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-button-appearance'>
         <value value="0" nick="Icon"/>
         <value value="1" nick="Text"/>
@@ -129,6 +133,11 @@
       <default>"Panel"</default>
       <summary>Embed ArcMenu button into Dash instead of panel</summary>
       <description>Embed ArcMenu button into Dash instead of panel</description>
+    </key>
+    <key name="raven-position" enum="org.gnome.shell.extensions.arcmenu.raven-position">
+      <default>'Left'</default>
+      <summary>Raven layout position. 'Left' or 'Right' side of screen</summary>
+      <description>Raven layout position. 'Left' or 'Right' side of screen.</description>
     </key>
     <key type="b" name="enable-weather-widget-raven">
       <default>true</default>

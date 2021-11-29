@@ -50,14 +50,32 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
     createLayout(){
         super.createLayout();
+
+        this.ravenPositionChangedID = this._settings.connect('changed::raven-position', () => this._updatePosition());
+
+        this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
+        Main.uiGroup.add_actor(this.dummyCursor);
+        this.updateLocation();
+
+        //store old ArcMenu variables
+        this.oldSourceActor = this.arcMenu.sourceActor;
+        this.oldFocusActor = this.arcMenu.focusActor;
+        this.oldArrowAlignment = this.arcMenu.actor._arrowAlignment;
+
+        this.arcMenu.sourceActor = this.dummyCursor;
+        this.arcMenu.focusActor = this.dummyCursor;
+        this.arcMenu._boxPointer.setPosition(this.dummyCursor, 0);
+        this.arcMenu.close();
+        this.arcMenu._boxPointer.hide();
+
         let homeScreen = this._settings.get_boolean('enable-unity-homescreen');
         if(homeScreen)
             this.activeCategory = _("Pinned Apps");
         else
             this.activeCategory = _("All Programs");
 
-        this.arcMenu.actor.style = "-arrow-base:0px;-arrow-rise:0px; -boxpointer-gap: 0px;"; 
-        this.arcMenu.box.style = "padding-bottom:0px; padding-top:0px; margin:0px;";
+        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px"; 
+        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
         this.actionsBoxContainer = new St.BoxLayout({
             x_expand: false,
             y_expand: true,
@@ -75,9 +93,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.actionsBoxContainer.add(this.actionsBox);
         this.actionsBox.style = "spacing: 5px;";
-        this.actionsBoxContainer.style = "margin: 0px 0px 0px 0px; spacing: 10px;background-color:rgba(186, 196,201, 0.1) ; padding: 5px 5px;"+
-                                "border-color:rgba(186, 196,201, 0.2) ; border-right-width: 1px;";
-        this.mainBox.add(this.actionsBoxContainer);
+        this.actionsBoxContainerStyle =  "margin: 0px 0px 0px 0px; spacing: 10px; background-color: rgba(186, 196,201, 0.1); padding: 5px 5px;"+
+                                         "border-color: rgba(186, 196,201, 0.2);";
+        
 
         this.topBox = new St.BoxLayout({
             x_expand: true,
@@ -96,6 +114,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.subMainBox.add(this.topBox);
         this.mainBox.add(this.subMainBox);
+
         this.searchBox = new MW.SearchBox(this);
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 25px 10px 10px 10px;";
@@ -109,7 +128,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true,
             style: "padding-bottom: 10px;"
         });
-
 
         this.applicationsScrollBox = this._createScrollBox({
             x_expand: false,
@@ -175,22 +193,51 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.AppDisplayType.GRID);
             this.appShortcuts.push(shortcutMenuItem);
         }
-
+        this._updatePosition();
         this.loadPinnedApps();
         this.loadCategories();
         this.displayCategories();
         this.setDefaultMenuView();
     }
 
-    updateLocation(){       
+    _updatePosition(){
+        let ravenPosition = this._settings.get_enum('raven-position');
+        if(this.mainBox.contains(this.actionsBoxContainer)){
+            this.mainBox.remove_actor(this.actionsBoxContainer);
+        }
+        if(ravenPosition === Constants.RavenPosition.LEFT){
+            this.mainBox.insert_child_at_index(this.actionsBoxContainer, 0);
+            this.actionsBoxContainer.style = "border-right-width: 1px;" + this.actionsBoxContainerStyle;
+        }
+        else if(ravenPosition === Constants.RavenPosition.RIGHT){
+            this.mainBox.insert_child_at_index(this.actionsBoxContainer, 1);
+            this.actionsBoxContainer.style = "border-left-width: 1px;" + this.actionsBoxContainerStyle;
+        }
+    }
+
+    updateLocation(){     
+        let ravenPosition = this._settings.get_enum('raven-position');
+        
+        let alignment = ravenPosition === Constants.RavenPosition.LEFT ? 0 : 1;
+        this.arcMenu._boxPointer.setSourceAlignment(alignment);
+        this.arcMenu._arrowAlignment = alignment;
+        
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
-        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(monitorIndex);
 
+        let positionX = ravenPosition === Constants.RavenPosition.LEFT ? monitorWorkArea.x : monitorWorkArea.x + monitorWorkArea.width;
+        let positionY = this.arcMenu._arrowSide === St.Side.BOTTOM ? monitorWorkArea.y + monitorWorkArea.height : monitorWorkArea.y;
+        
+        this.dummyCursor.set_position(positionX, positionY);        
+        
+        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         let screenHeight = monitorWorkArea.height;   
      
-        let height =  Math.round(screenHeight / scaleFactor);
-        this.mainBox.style = `height: ${height}px`;
+        let themeNode = this.arcMenu.actor.get_theme_node();
+        let borderWidth = themeNode.get_length('-arrow-border-width');
+
+        let height = Math.round(screenHeight / scaleFactor) - (borderWidth * 2);
+        this.mainBox.style = `height: ${height}px;`;
     }
 
     setDefaultMenuView(){
@@ -217,8 +264,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         customStyle ? this._clocksItem.add_style_class_name('arc-menu-action') : this._clocksItem.remove_style_class_name('arc-menu-action');
         customStyle ? this._weatherItem.add_style_class_name('arc-menu-action') : this._weatherItem.remove_style_class_name('arc-menu-action');
 
-        this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px; -boxpointer-gap: " + gapAdjustment + "px;";
-        this.arcMenu.box.style = "padding-bottom:0px; padding-top:0px; margin:0px;";
+        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px;";
+        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
         for(let categoryMenuItem of this.categoryDirectories.values()){
             categoryMenuItem.updateStyle();	 
         }    
@@ -323,10 +370,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._clocksItem.destroy();
         if(this._weatherItem)
             this._weatherItem.destroy();
-        
-        this.arcMenu.box.style = null;
+
+        if(this.ravenPositionChangedID){
+            this._settings.disconnect(this.ravenPositionChangedID);
+            this.ravenPositionChangedID = null;
+        }
+
         this.arcMenu.actor.style = null;
-            
+        this.arcMenu.box.style = null;
+        this.arcMenu.sourceActor = this.oldSourceActor;
+        this.arcMenu.focusActor = this.oldFocusActor;
+        this.arcMenu._boxPointer.setPosition(this.oldSourceActor, this.oldArrowAlignment);
+        this.arcMenu.close();
+        this.arcMenu._boxPointer.hide();
+        Main.uiGroup.remove_actor(this.dummyCursor);
+        this.dummyCursor.destroy();
+
         super.destroy(isReload);
     }
 }

@@ -775,7 +775,25 @@ var TweaksPage = GObject.registerClass({
         generalTweaksFrame.add(homeScreenRow);
         this.mainBox.append(generalTweaksFrame);
 
-        let widgetFrame =  this._createWidgetsRows(Constants.MenuLayout.RAVEN);
+        let ravenPositionRow = new PW.FrameBoxRow();
+        let ravenPositionLabel = new Gtk.Label({
+            label: _('Position on Monitor'),
+            xalign:0,
+            hexpand: true,
+        });   
+        let ravenPositionCombo = new Gtk.ComboBoxText({ halign: Gtk.Align.END });
+        ravenPositionCombo.append_text(_("Left"));
+        ravenPositionCombo.append_text(_("Right"));
+        let ravenPosition = this._settings.get_enum('raven-position');
+        ravenPositionCombo.set_active(ravenPosition);
+        ravenPositionCombo.connect('changed', (widget) => {
+            this._settings.set_enum('raven-position', widget.get_active());
+        });
+        ravenPositionRow.add(ravenPositionLabel);
+        ravenPositionRow.add(ravenPositionCombo);
+        generalTweaksFrame.add(ravenPositionRow);
+
+        let widgetFrame = this._createWidgetsRows(Constants.MenuLayout.RAVEN);
         this.mainBox.append(widgetFrame);
     }
     _loadMintMenuTweaks(){

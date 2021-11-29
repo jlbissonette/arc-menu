@@ -158,6 +158,11 @@ var MenuPosition = {
     RIGHT: 2
 };
 
+var RavenPosition = {
+    LEFT: 0,
+    RIGHT: 1
+};
+
 var DiaglogType = {
     DEFAULT: 0,
     OTHER: 1,
