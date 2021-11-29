@@ -459,7 +459,7 @@ function getDashToPanelPosition(settings, index){
     else if (side === 'LEFT')
         return imports.gi.St.Side.LEFT;
     else
-        return imports.gi.St.Side.TOP;
+        return imports.gi.St.Side.BOTTOM;
 }
 
 function getStylesheet(){
@@ -477,6 +477,10 @@ function getStylesheet(){
 function rgbStringToHex(colorString) {
     let [r, g, b, a_] = parseRgbString(colorString)
     return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function clutterColorToRGBA(color) {
+    return "rgba(" + color.red + "," + color.green + "," + color.blue + "," + color.alpha + ")";
 }
 
 function parseRgbString(colorString){

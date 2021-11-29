@@ -312,47 +312,49 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
         this.extrasMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.extrasMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
+        this.extrasMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
         this.extrasButton.tooltip.hide();
+
         let themeNode = this.arcMenu.actor.get_theme_node();
-        let rise = themeNode.get_length('-arrow-rise');
         let backgroundColor = themeNode.get_color('-arrow-background-color');
-        let shadeColor;
-        let drawBoxshadow = true;
-        if(backgroundColor.alpha ==0 || !backgroundColor || backgroundColor === Clutter.Color.TRANSPARENT){
-            backgroundColor = themeNode.get_color('background-color');
-            if(backgroundColor.alpha==0 || !backgroundColor || backgroundColor === Clutter.Color.TRANSPARENT){
-                    drawBoxshadow = false;
-            }
-                
-        }
-        let styleProperties;
-        if(drawBoxshadow){
-            shadeColor = backgroundColor.shade(.35);
-            backgroundColor = "rgba("+backgroundColor.red+","+backgroundColor.green+","+backgroundColor.blue+","+backgroundColor.alpha+")";
-            shadeColor ="rgba("+shadeColor.red+","+shadeColor.green+","+shadeColor.blue+","+shadeColor.alpha+")";
-            styleProperties = "box-shadow: 3px 0px 8px 0px "+shadeColor+";background-color: "+backgroundColor+";";
-        }
-
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
-        this.extrasMenu.actor.style = "-boxpointer-gap: 0px; -arrow-border-color:transparent; -arrow-border-width:0px; width: 250px;"
-                                            +"-arrow-base:0px;-arrow-rise:0px; -arrow-background-color:transparent;"
-                                            +" border-radius: "+borderRadius+"px;" + styleProperties;
-
-        let base = themeNode.get_length('-arrow-base');
         let borderWidth = themeNode.get_length('-arrow-border-width');
+        let borderRadius = themeNode.get_length('-arrow-border-radius');
+
+        let drawBoxShadow = true;
+        if(backgroundColor?.alpha === 0){
+            backgroundColor = themeNode.get_color('background-color');
+            if(backgroundColor?.alpha === 0){
+                drawBoxShadow = false;
+            }
+        }
+
+        let styleProperties, shadowColor;
+        if(drawBoxShadow){
+            shadowColor = backgroundColor.shade(.35);
+            backgroundColor = Utils.clutterColorToRGBA(backgroundColor);
+            shadowColor = Utils.clutterColorToRGBA(shadowColor);
+            styleProperties = "box-shadow: 2px 2px 2px " + shadowColor + "; background-color: " + backgroundColor + ";";
+        }
+
+        this.extrasMenu.actor.style = "-boxpointer-gap: 0px; -arrow-border-color: transparent; -arrow-border-width: 0px; width: 250px;"
+                                            +"-arrow-base:0px; -arrow-rise: 0px; -arrow-background-color: transparent;"
+                                            +"border-radius: " + borderRadius + "px;" + styleProperties;
 
         this.arcMenu.actor.get_allocation_box();
         let [x, y] = this.arcMenu.actor.get_transformed_position();
+        let rise = themeNode.get_length('-arrow-rise');
+    
         if(this.arcMenu._arrowSide === St.Side.TOP)
             y += rise + 1;
         else 
             y += 1;
+
         if(this.arcMenu._arrowSide === St.Side.LEFT)
             x = x + (borderRadius * 2) + rise + 1;
         else
             x = x + (borderRadius * 2);
-        this.dummyCursor.set_position(Math.round(x+borderWidth), Math.round(y+borderWidth));
+
+        this.dummyCursor.set_position(Math.round(x + borderWidth), Math.round(y + borderWidth));
         this.extrasMenu.toggle();
     }
     

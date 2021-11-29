@@ -1582,7 +1582,11 @@ var PlasmaCategoryHeader = GObject.registerClass(class Arc_Menu_PlasmaCategoryHe
     _init(menuLayout) {
         super._init({ 
             style_class: "popup-menu-item",
-            style: 'padding: 0px; margin: 0px;'
+            style: 'padding: 0px; margin: 0px;',
+            reactive: true,
+            track_hover:true,
+            can_focus: true,
+            accessible_role: Atk.Role.MENU_ITEM 
         });
         this._menuLayout = menuLayout;
         this._layout = this._menuLayout.layout;
@@ -1601,7 +1605,7 @@ var PlasmaCategoryHeader = GObject.registerClass(class Arc_Menu_PlasmaCategoryHe
             y_align: Clutter.ActorAlign.CENTER,
             style: 'font-weight: bold'
         });
-        this.backButton.style = 'spacing: 6px; padding: 4px; margin: 0px;';
+       
         this.backButton.add_actor(this.label);
 
         this.add_actor(this.backButton);
