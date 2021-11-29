@@ -395,7 +395,6 @@ var TweaksPage = GObject.registerClass({
 
         let resetButton = new Gtk.Button({
             label: _("Restore Defaults"),
-            tooltip_text: _("Restore the default settings on this page"),
             halign: Gtk.Align.START,
             hexpand: true
         });
@@ -652,7 +651,7 @@ var TweaksPage = GObject.registerClass({
         let generalTweaksFrame = new PW.FrameBox();
         let homeScreenRow = new PW.FrameBoxRow();
         let homeScreenLabel = new Gtk.Label({
-            label: _('Default Screen'),
+            label: _('Default View'),
             xalign:0,
             hexpand: true,
         });   
@@ -757,7 +756,7 @@ var TweaksPage = GObject.registerClass({
         let generalTweaksFrame = new PW.FrameBox();
         let homeScreenRow = new PW.FrameBoxRow();
         let homeScreenLabel = new Gtk.Label({
-            label: _('Default Screen'),
+            label: _('Default View'),
             xalign:0,
             hexpand: true,
         });   
@@ -1011,7 +1010,7 @@ var TweaksPage = GObject.registerClass({
             hexpand: true
         });
         
-        let externalDeviceButton = new Gtk.Switch({tooltip_text:_("Show all connected external devices in ArcMenu")});
+        let externalDeviceButton = new Gtk.Switch();
         if(this._settings.get_boolean('show-external-devices'))
             externalDeviceButton.set_active(true);
         externalDeviceButton.connect('notify::active', (widget) => {
@@ -1030,7 +1029,7 @@ var TweaksPage = GObject.registerClass({
             hexpand: true
         });
         
-        let bookmarksButton = new Gtk.Switch({tooltip_text:_("Show all Nautilus bookmarks in ArcMenu")});
+        let bookmarksButton = new Gtk.Switch();
         if(this._settings.get_boolean('show-bookmarks'))
             bookmarksButton.set_active(true);
         bookmarksButton.connect('notify::active', (widget) => {
@@ -1079,14 +1078,13 @@ var TweaksPage = GObject.registerClass({
         let searchBarBottomDefault = true;
         let defaultLeftBoxRow = new PW.FrameBoxRow();
         let defaultLeftBoxLabel = new Gtk.Label({
-            label: _("Default Screen"),
+            label: _("Default View"),
             use_markup: true,
             xalign: 0,
             hexpand: true
         });
         let defaultLeftBoxCombo = new Gtk.ComboBoxText({ 
-            halign: Gtk.Align.END,
-            tooltip_text: _("Choose the default screen for tognee Layout") 
+            halign: Gtk.Align.END
         });
         defaultLeftBoxCombo.append_text(_("Categories List"));
         defaultLeftBoxCombo.append_text(_("All Programs"));
@@ -1106,14 +1104,13 @@ var TweaksPage = GObject.registerClass({
         let arcMenuTweaksFrame = new PW.FrameBox();
         let defaultLeftBoxRow = new PW.FrameBoxRow();
         let defaultLeftBoxLabel = new Gtk.Label({
-            label: _("Default Screen"),
+            label: _("Default View"),
             use_markup: true,
             xalign: 0,
             hexpand: true
         });
         let defaultLeftBoxCombo = new Gtk.ComboBoxText({ 
             halign: Gtk.Align.END,
-            tooltip_text: _("Choose the default screen for ArcMenu") 
         });
         defaultLeftBoxCombo.append_text(_("Pinned Apps"));
         defaultLeftBoxCombo.append_text(_("Categories List"));
@@ -1143,7 +1140,7 @@ var TweaksPage = GObject.registerClass({
             hexpand: true
         });
         
-        let externalDeviceButton = new Gtk.Switch({tooltip_text:_("Show all connected external devices in ArcMenu")});
+        let externalDeviceButton = new Gtk.Switch();
         if(this._settings.get_boolean('show-external-devices'))
             externalDeviceButton.set_active(true);
         externalDeviceButton.connect('notify::active', (widget) => {
@@ -1162,7 +1159,7 @@ var TweaksPage = GObject.registerClass({
             hexpand: true
         });
         
-        let bookmarksButton = new Gtk.Switch({tooltip_text:_("Show all Nautilus bookmarks in ArcMenu")});
+        let bookmarksButton = new Gtk.Switch();
         if(this._settings.get_boolean('show-bookmarks'))
             bookmarksButton.set_active(true);
         bookmarksButton.connect('notify::active', (widget) => {
