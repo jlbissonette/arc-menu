@@ -2314,7 +2314,10 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             }
         }
 
-        this._iconBin = new St.Bin();
+        this._iconBin = new St.Bin({
+            x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER
+        });
         this.add_child(this._iconBin);
         this.label = new St.Label({
             text: this._app ? this._app.get_name() : this.metaInfo['name'],

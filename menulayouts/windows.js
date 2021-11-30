@@ -333,7 +333,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             shadowColor = backgroundColor.shade(.35);
             backgroundColor = Utils.clutterColorToRGBA(backgroundColor);
             shadowColor = Utils.clutterColorToRGBA(shadowColor);
-            styleProperties = "box-shadow: 2px 2px 2px " + shadowColor + "; background-color: " + backgroundColor + ";";
+            styleProperties = "box-shadow: 3px 0px 2px " + shadowColor + "; background-color: " + backgroundColor + ";";
         }
 
         this.extrasMenu.actor.style = "-boxpointer-gap: 0px; -arrow-border-color: transparent; -arrow-border-width: 0px; width: 250px;"
