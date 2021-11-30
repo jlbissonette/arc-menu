@@ -132,13 +132,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsScrollBox.add_actor( this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
-        this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
         
         this.loadPinnedApps();
         this.loadCategories();
 
         this._createPinnedAppsMenu();
         this.setDefaultMenuView();
+        this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
     }
 
     loadPinnedApps(){
@@ -290,6 +290,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.applicationsBox.add(this.applicationsGrid);
         let appsScrollBoxAdj = this.pinnedAppsScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
+        this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
     }
 
     _reload() {
