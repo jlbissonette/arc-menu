@@ -37,11 +37,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton,{
             Search: true,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            AppDisplayType: Constants.AppDisplayType.LIST,
+            SearchDisplayType: Constants.AppDisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
+            IconSize: 24,
+            SearchResults_List_IconSize: 24,
             VerticalMainBox: true
         });
     }
@@ -101,7 +103,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: this.disableFadeEffect ? '' : 'small-vfade',
+            style_class: this.disableFadeEffect ? 'margin-box' : 'margin-box small-vfade',
             overlay_scrollbars: true,
             reactive:true,
             style: "width:450px;"
@@ -155,6 +157,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.grid.layout_manager.attach(this.leaveButton, 3, 0, 1, 1);
 
         this.categoryHeader = new MW.PlasmaCategoryHeader(this);
+        this.categoryHeader.add_style_class_name('margin-box');
 
         if(this.searchBarLocation === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 3px 10px 5px 10px;";
@@ -231,8 +234,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 categoryMenuItem.appList.push(mostUsed[i]);
                 let item = this.applicationsMap.get(mostUsed[i]);
                 if (!item) {
-                    item = new MW.ApplicationMenuItem(this, mostUsed[i], this.layoutProperties.AppType);
-                    item.forceLargeIcon(25);
+                    item = new MW.ApplicationMenuItem(this, mostUsed[i], this.layoutProperties.AppDisplayType);
                     this.applicationsMap.set(mostUsed[i], item);
                 }
             }
@@ -241,17 +243,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     updateIcons(){
         let iconSize = 25;
-        this.applicationsMap.forEach((value,key,map)=>{
-            map.get(key).forceLargeIcon(iconSize);
-        });
-        let categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.PINNED_APPS);
-        if(categoryMenuItem){
-            for(let menuItem of categoryMenuItem.appList){
-                menuItem._icon.icon_size = iconSize;
-            }
-        }
-        if(this.layoutProperties.Search)
-            this.searchResults._reset(); 
         for(let i = 0; i < this.applicationShortcuts.length; i++){
             this.applicationShortcuts[i]._icon.icon_size = iconSize;
         }

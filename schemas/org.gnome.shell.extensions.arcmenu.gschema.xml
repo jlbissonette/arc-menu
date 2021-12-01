@@ -22,6 +22,7 @@
         <value value='18' nick='Windows'/>
         <value value='19' nick='Launcher'/>
         <value value='20' nick='Eleven'/>
+        <value value='21' nick='AZ'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.forcemenulocation'>
         <value value='0' nick='Off'/>
@@ -620,8 +621,12 @@
       <description>List of recently installed apps</description>
     </key>
     <key name="pinned-app-list" type="as">
-      <default>["ArcMenu_WebBrowser","WebBrowser", "WebBrowser","Terminal", "", "org.gnome.Terminal.desktop",
-                "ArcMenu Settings", "ArcMenu_ArcMenuIcon", "gnome-extensions prefs arcmenu@arcmenu.com"]</default>
+      <default> [ "ArcMenu_WebBrowser","WebBrowser", "WebBrowser",
+                  "Files", "", "org.gnome.Nautilus.desktop",
+                  "Terminal", "", "org.gnome.Terminal.desktop",
+                  "ArcMenu Settings", "ArcMenu_ArcMenuIcon", "gnome-extensions prefs arcmenu@arcmenu.com"
+                ]
+      </default>
       <summary>List of Apps Pinned to Menu</summary>
       <description>List of Apps Pinned to Menu</description>
     </key>

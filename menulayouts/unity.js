@@ -37,13 +37,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.GRID,
-            SearchType: Constants.AppDisplayType.GRID,
+            AppDisplayType: Constants.AppDisplayType.GRID,
+            SearchDisplayType: Constants.AppDisplayType.GRID,
             GridColumns: 6,
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
-            ListSearchResults_IconSize: 32,
+            SearchResults_List_IconSize: 32,
             IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true,
         });
@@ -62,7 +62,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: false,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
-            vertical: false
+            vertical: false,
+            style: 'padding-bottom: 10px;'
         });
 
         this.categoriesTopBox = new St.BoxLayout({
@@ -73,7 +74,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true
         });
 
-        this.categoriesTopBox.style = "padding: 0px 15px 0px 0px; margin-bottom: 10px;";
+        this.categoriesTopBox.style = "padding-right:15px;";
         this.mainBox.add(this.topBox);
         this.categoriesButton = new MW.CategoriesButton(this);
         this.categoriesButton.actor.x_expand = false;
@@ -93,7 +94,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.searchBox = new MW.SearchBox(this);
         this.searchBox.name = "ArcSearchEntryRound";
-        this.searchBox.style = "margin: 4px 10px 0px 10px;";
+        this.searchBox.style = "margin: 0px 15px 0px 15px;";
         this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
         this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
         this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
@@ -216,7 +217,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.CENTER,
             vertical: false
         });
-        this.actionsBox.style = "spacing: 10px;";
+        this.actionsBox.style = "spacing: 10px; padding: 5px 0px;";
         this.actionsContainerBox.add(this.actionsBox);
 
         super.loadExtraPinnedApps(this._settings.get_strv('unity-pinned-app-list'), this._settings.get_int('unity-separator-index'));
@@ -250,10 +251,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesMenu.blockSourceEvents = true;
         this.categoriesMenu.connect('open-state-changed', (menu, open) => {
             if(!open){
+                this.categoriesButton.remove_style_pseudo_class("active");
                 this.categoriesButton.fake_release();
                 this.categoriesButton.set_hover(false);
             }
             else{
+                this.categoriesButton.add_style_pseudo_class("active");
                 if(this.menuButton.tooltipShowingID){
                     GLib.source_remove(this.menuButton.tooltipShowingID);
                     this.menuButton.tooltipShowingID = null;
@@ -283,7 +286,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leftPanelPopup.add(this.categoriesScrollBox);
        
         this.categoriesBox = new St.BoxLayout({
-            vertical: true
+            vertical: true,
+            style_class: 'margin-box'
         });     
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         this.categoriesScrollBox.clip_to_allocation = true;

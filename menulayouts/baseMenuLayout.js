@@ -88,7 +88,7 @@ var BaseLayout = class {
         });
         this.applicationsGrid = new St.Widget({ 
             x_expand: true,
-            x_align: this.layoutProperties.AppType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
+            x_align: this.layoutProperties.AppDisplayType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
             layout_manager: layout 
         });
         layout.hookup_style(this.applicationsGrid);
@@ -192,7 +192,7 @@ var BaseLayout = class {
                 let dir = iter.get_directory();                  
                 if (!dir.get_is_nodisplay()) {
                     let categoryId = dir.get_menu_id();
-                    let categoryMenuItem = new categoryWidget(this, dir, this.layoutProperties.AppType);
+                    let categoryMenuItem = new categoryWidget(this, dir, this.layoutProperties.AppDisplayType);
                     this.categoryDirectories.set(categoryId, categoryMenuItem);
                     let foundRecentlyInstallApp = this._loadCategory(categoryId, dir);
                     categoryMenuItem.setRecentlyInstalledIndicator(foundRecentlyInstallApp);
@@ -264,7 +264,7 @@ var BaseLayout = class {
                 if (app.get_app_info().should_show()){
                     let item = this.applicationsMap.get(app);
                     if (!item) {
-                        item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.AppType);
+                        item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.AppDisplayType);
                     }
                     let disabled = this._settings.get_boolean("disable-recently-installed-apps")
                     if(!disabled && item.isRecentlyInstalled)
@@ -282,7 +282,7 @@ var BaseLayout = class {
             else if (nextType == GMenu.TreeItemType.DIRECTORY) {
                 let subdir = iter.get_directory();
                 if (!subdir.get_is_nodisplay()){
-                    if(this._settings.get_boolean('enable-sub-menus') && this.layoutProperties.AppType === Constants.AppDisplayType.LIST && !isLayoutSimple2){
+                    if(this._settings.get_boolean('enable-sub-menus') && this.layoutProperties.AppDisplayType === Constants.AppDisplayType.LIST && !isLayoutSimple2){
                         let submenuItem = this.applicationsMap.get(subdir);
                         if (!submenuItem) {
                             submenuItem = new MW.CategorySubMenuItem(this, subdir);
@@ -460,8 +460,6 @@ var BaseLayout = class {
             let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i + 1], pinnedApps[i + 2]], Constants.MenuItemType.BUTTON);
             if(customStyle) 
                 placeMenuItem.actor.add_style_class_name('arc-menu-action');
-            if(this.layout === Constants.MenuLayout.MINT)
-                placeMenuItem.actor.style = 'min-height: 20px;';
             placeMenuItem.actor.x_expand = false;
             placeMenuItem.actor.y_expand = false;
             placeMenuItem.actor.y_align = Clutter.ActorAlign.CENTER;
@@ -538,7 +536,7 @@ var BaseLayout = class {
         for(let i = 0; i < pinnedApps.length; i += 3){
             if(i === 0 && pinnedApps[0] === "ArcMenu_WebBrowser")
                 this._updatePinnedAppsWebBrowser(pinnedApps);
-            let pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2], this.layoutProperties.AppType);
+            let pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2], this.layoutProperties.AppDisplayType);
             pinnedAppsMenuItem.connect('saveSettings', ()=> {
                 let array = [];
                 for(let i = 0; i < this.pinnedAppsArray.length; i++){
@@ -697,7 +695,7 @@ var BaseLayout = class {
         let left = 0;
         let activeMenuItemSet = false;
         let currentCharacter;
-        let alphabetizeAllPrograms = this._settings.get_boolean("alphabetize-all-programs") && this.layoutProperties.AppType === Constants.AppDisplayType.LIST;
+        let alphabetizeAllPrograms = this._settings.get_boolean("alphabetize-all-programs") && this.layoutProperties.AppDisplayType === Constants.AppDisplayType.LIST;
         let rtl = this.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
 
         for (let i = 0; i < apps.length; i++) {
@@ -713,7 +711,7 @@ var BaseLayout = class {
             else{
                 item = this.applicationsMap.get(app);
                 if (!item) {
-                    item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.AppType);
+                    item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.AppDisplayType);
                     this.applicationsMap.set(app, item);
                 }
             }

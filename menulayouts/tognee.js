@@ -39,8 +39,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton,{
             Search: true,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            AppDisplayType: Constants.AppDisplayType.LIST,
+            SearchDisplayType: Constants.AppDisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -73,7 +73,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             vertical: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'left-box'
+            style_class: 'left-box margin-box'
         });
 
         //Applications Box - Contains Favorites, Categories or programs
@@ -88,7 +88,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = (horizonalFlip ? "margin: 0px 10px 15px 15px;" : "margin: 0px 15px 15px 10px;");
+            this.searchBox.style = "margin: 0px 10px 15px 10px;";
             this.appBox.add(this.searchBox.actor);
         }
         this.appBox.add(this.applicationsScrollBox);
@@ -105,7 +105,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add(this.backButton.actor);
         this.appBox.add(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = (horizonalFlip ? "margin: 15px 10px 0px 15px;" : "margin: 15px 15px 0px 10px;");
+            this.searchBox.style = "margin: 15px 10px 0px 10px;";
             this.appBox.add(this.searchBox.actor);
         }
         
@@ -113,7 +113,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         // Contains some useful shortcuts
         this.quickBox = new St.BoxLayout({
             vertical: true,
-            style: horizonalFlip ? "margin-right: 10px; margin-left: 5px;" : "margin-right: 5px; margin-left: 10px;"
+            style: horizonalFlip ? "margin-right: 10px; margin-left: 0px;" : "margin-right: 0px; margin-left: 10px;"
         });
 
         this.subMainBox.add(horizonalFlip ? this.appBox : this.quickBox);  
@@ -125,7 +125,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.shortcutsBox = new St.BoxLayout({
             vertical: true,
-            style: "spacing: 3px; padding-bottom: 5px;"
+            style: "spacing: 5px; padding-bottom: 5px;"
         });
 
         this.shortcutsScrollBox = this._createScrollBox({
@@ -190,7 +190,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _updateButtonSize(button){
-        button.actor.style = "border-radius: 22px; padding: 10px; min-height: 16px;";
+        button.actor.style = "min-height: 12px;";
         button.actor.x_expand = false;
         button.actor.x_align = Clutter.ActorAlign.CENTER;
     }

@@ -37,13 +37,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton,{
             Search: true,
-            AppType: Constants.AppDisplayType.GRID,
-            SearchType: Constants.AppDisplayType.GRID,
+            AppDisplayType: Constants.AppDisplayType.GRID,
+            SearchDisplayType: Constants.AppDisplayType.GRID,
             GridColumns: 4,
             ColumnSpacing: 10,
             RowSpacing: 10,
             IconGridSize: 36,
-            ListSearchResults_IconSize: 24,
+            SearchResults_List_IconSize: 24,
             IconGridStyle: 'SmallIconGrid',
             VerticalMainBox: false
         });
@@ -93,7 +93,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             y_expand: true,
             vertical: true,
-            style_class: 'right-box'
+            style_class: 'right-box margin-box'
         });
 
         this.placesShortcuts = false;
@@ -172,27 +172,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             if(shortcutMenuItem.shouldShow)
                 this.shortcutsBox.add(shortcutMenuItem.actor);
         }
-        this.actionsScrollBox = new St.ScrollView({
-            x_expand: true,
-            y_expand: true,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.END,
-            hscrollbar_policy: St.PolicyType.AUTOMATIC,
-            vscrollbar_policy: St.PolicyType.AUTOMATIC,
-            clip_to_allocation: true,
-            overlay_scrollbars: true,
-            style_class: 'hfade'
-        });
 
         //create new section for Power, Lock, Logout, Suspend Buttons
         this.actionsBox = new St.BoxLayout({
             vertical: false,
             x_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.END,
             style: "spacing: 6px;"
         });	
-
-        this.actionsScrollBox.add_actor(this.actionsBox);  
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();
         for(let i = 0; i < powerOptions.length; i++){
@@ -203,7 +192,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 this.actionsBox.add(powerButton);
             }
         } 
-        this.rightBox.add(this.actionsScrollBox);
+        this.rightBox.add(this.actionsBox);
         
         let rightPanelWidth = this._settings.get_int('right-panel-width');
         this.rightBox.style = "width: " + rightPanelWidth + "px;";
@@ -213,6 +202,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add(horizonalFlip ? this.rightBox : this.subMainBox);
         this.mainBox.add(this._createVerticalSeparator());
         this.mainBox.add(horizonalFlip ? this.subMainBox: this.rightBox);  
+        horizonalFlip ? this.rightBox.style += "margin-right: 0px" : this.rightBox.style += "margin-left: 0px"
 
         this.loadCategories();
         this.setDefaultMenuView();

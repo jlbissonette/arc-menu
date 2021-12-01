@@ -37,8 +37,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            AppDisplayType: Constants.AppDisplayType.LIST,
+            SearchDisplayType: Constants.AppDisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -65,7 +65,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.FILL
+            y_align: Clutter.ActorAlign.FILL,
+            style_class: 'margin-box'
         });
         this.mainBox.add(this.subMainBox);
 

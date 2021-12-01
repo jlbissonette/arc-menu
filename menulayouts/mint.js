@@ -37,8 +37,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            AppDisplayType: Constants.AppDisplayType.LIST,
+            SearchDisplayType: Constants.AppDisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -63,14 +63,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
         
-        this.actionsScrollBox.style = "width: 62px; margin: 10px 20px; background-color:rgba(186, 196,201, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 5px;";
+        this.actionsScrollBox.style = "width: 62px; margin: 0px 10px 10px 20px; background-color:rgba(186, 196,201, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 5px;";
         this.actionsBox.style = "margin: 0px; spacing: 10px; padding: 21px 0px;";
         //check if custom ArcMenu is enabled
         if( this._settings.get_boolean('enable-custom-arc-menu'))
             this.actionsBox.add_style_class_name('arc-menu');
 
         this.mainBox.add(this.actionsScrollBox);
-        this.rightMenuBox= new St.BoxLayout({ 
+        this.rightMenuBox = new St.BoxLayout({ 
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
@@ -83,18 +83,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
         this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 10px 20px 10px 0px;";
+            this.searchBox.style = "margin: 0px 20px 10px 8px;";
             this.rightMenuBox.add(this.searchBox.actor);
         }
         else
             this.rightMenuBox.style = "margin-top: 10px;";
         
         //Sub Main Box -- stores left and right box
-        this.subMainBox= new St.BoxLayout({
+        this.subMainBox = new St.BoxLayout({
             vertical: false,
             x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.FILL
+            y_align: Clutter.ActorAlign.FILL,
+            style_class: 'margin-box'
         });
         this.rightMenuBox.add(this.subMainBox);
 

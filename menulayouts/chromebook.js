@@ -35,13 +35,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.GRID,
-            SearchType: Constants.AppDisplayType.GRID,
+            AppDisplayType: Constants.AppDisplayType.GRID,
+            SearchDisplayType: Constants.AppDisplayType.GRID,
             GridColumns: 4,
             ColumnSpacing: 10,
             RowSpacing: 10,
             IconGridSize: 36,
-            ListSearchResults_IconSize: 24,
+            SearchResults_List_IconSize: 24,
             IconGridStyle: 'SmallIconGrid',
             VerticalMainBox: true
         });

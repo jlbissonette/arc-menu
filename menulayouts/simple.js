@@ -36,8 +36,8 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: false,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            AppDisplayType: Constants.AppDisplayType.LIST,
+            SearchDisplayType: Constants.AppDisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -47,6 +47,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     createLayout(){
         super.createLayout();
         this.mainBox.style = null;
+        this.mainBox.style_class = 'margin-box';
         this.section = this.menuButton.section;
         let actors = this.section.actor.get_children();
         for (let i = 0; i < actors.length; i++) {

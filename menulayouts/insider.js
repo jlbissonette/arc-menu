@@ -37,14 +37,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.GRID,
-            SearchType: Constants.AppDisplayType.GRID,
+            AppDisplayType: Constants.AppDisplayType.GRID,
+            SearchDisplayType: Constants.AppDisplayType.GRID,
             GridColumns: 5,
             ColumnSpacing: 10,
             RowSpacing: 10,
-            IconGridSize: 36,
             PinnedAppsColumns: 1,
-            ListSearchResults_IconSize: 24,
+            IconGridSize: 36,
+            IconSize: 28,
+            SearchResults_App_IconSize: 36,
+            SearchResults_List_IconSize: 28,
             IconGridStyle: 'SmallIconGrid',
             VerticalMainBox: false
         });
@@ -133,6 +135,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor( this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
         
+        
         this.loadPinnedApps();
         this.loadCategories();
 
@@ -142,15 +145,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadPinnedApps(){
-        this.layoutProperties.AppType = Constants.AppDisplayType.LIST;
+        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
         super.loadPinnedApps();
-        this.layoutProperties.AppType = Constants.AppDisplayType.GRID;
+        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.GRID;
     }
 
     _createPinnedAppsMenu(){
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_actor(this.dummyCursor);
         this.pinnedAppsMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
+        this.pinnedAppsMenu.blockSourceEvents = true;
         this.pinnedAppsMenu.connect('open-state-changed', (menu, open) => {
             if(!open){
                 this.pinnedAppsButton.fake_release();
@@ -172,7 +176,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.pinnedAppsMenu.addMenuItem(this.section);  
         
         this.leftPanelPopup = new St.BoxLayout({
-            vertical: true
+            vertical: true,
+            style_class: 'margin-box'
         });   
         this.leftPanelPopup._delegate = this.leftPanelPopup;
         let headerBox = new St.BoxLayout({

@@ -38,13 +38,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            SearchType: Constants.AppDisplayType.LIST,
-            AppType: Constants.AppDisplayType.LIST,
+            SearchDisplayType: Constants.AppDisplayType.LIST,
+            AppDisplayType: Constants.AppDisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
             IconGridSize: 36,
-            ListSearchResults_IconSize: 24,
+            IconSize: 24,
+            SearchResults_App_IconSize: 36,
+            SearchResults_List_IconSize: 24,
             IconGridStyle: 'SmallIconGrid',
             VerticalMainBox: false
         });
@@ -89,7 +91,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            vertical: true
+            vertical: true,
+            style_class: 'margin-box'
         });
         this.mainBox.add(this.subMainBox);
 
@@ -186,9 +189,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadPinnedApps(){
-        this.layoutProperties.AppType = Constants.AppDisplayType.GRID;
+        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.GRID;
         super.loadPinnedApps();
-        this.layoutProperties.AppType = Constants.AppDisplayType.LIST;
+        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
     }
 
     _createPlaces(id) {
@@ -253,7 +256,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.extrasMenu.addMenuItem(this.section);  
         
         this.leftPanelPopup = new St.BoxLayout({
-            vertical: true
+            vertical: true,
+            style_class: 'margin-box'
         });   
         this.leftPanelPopup._delegate = this.leftPanelPopup;
         let headerBox = new St.BoxLayout({
@@ -390,14 +394,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.frequentAppsList = [];
             for (let i = 0; i < mostUsed.length; i++) {
                 if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
-                    let item = new MW.ApplicationMenuItem(this, mostUsed[i]);
+                    let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.AppDisplayType.LIST);
                     this.frequentAppsList.push(item);
                 }
             }
-    
+            const MaxItems = 8;
             if(this.frequentAppsList.length > 0){
                 this.applicationsBox.add_actor(label.actor);
-                for (let i = 0; i < this.frequentAppsList.length; i++) {
+                for (let i = 0; i < this.frequentAppsList.length && i < MaxItems; i++) {
                     let item = this.frequentAppsList[i];
                     if(item.actor.get_parent())
                         item.actor.get_parent().remove_actor(item.actor);
@@ -416,7 +420,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         appList.sort((a, b) => {
             return a.get_name().toLowerCase() > b.get_name().toLowerCase();
         });
-        this.layoutProperties.AppType = Constants.AppDisplayType.LIST;
+        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
         this.layoutProperties.GridColumns = 1;
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
 

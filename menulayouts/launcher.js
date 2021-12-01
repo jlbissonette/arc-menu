@@ -41,12 +41,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            SearchType: Constants.AppDisplayType.LIST,
-            AppType: Constants.AppDisplayType.GRID,
+            SearchDisplayType: Constants.AppDisplayType.LIST,
+            AppDisplayType: Constants.AppDisplayType.GRID,
             GridColumns: 6,
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
+            IconSize: 28,
+            SearchResults_List_IconSize: 28,
             IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true
         });
@@ -70,7 +72,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            vertical: false
+            vertical: false,
+            style_class: 'margin-box'
         });
         this.mainBox.add(this.subMainBox);
         this.searchBox = new MW.SearchBox(this);
