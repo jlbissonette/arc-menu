@@ -1051,7 +1051,6 @@ var SessionButton = GObject.registerClass(
         if(icon_name)
             this._icon.fallback_icon_name = icon_name;
         this.set_child(this._icon);
-        this.connect('key-focus-in', this._onKeyFocusIn.bind(this));
         this.connect('destroy', () => this.needsDestroy = false);
     }
 
@@ -1059,10 +1058,16 @@ var SessionButton = GObject.registerClass(
         return this;
     }
 
-    _onKeyFocusIn(){
+    vfunc_key_focus_in(){
         if(!this.actor.hover)
             this._menuLayout._keyFocusIn(this.actor);
         this.active = true;
+        super.vfunc_key_focus_in();
+    }
+
+    vfunc_key_focus_out() {
+        this.active = false
+        super.vfunc_key_focus_out();
     }
 
     vfunc_button_press_event(buttonEvent) {
@@ -1651,7 +1656,7 @@ var PlasmaCategoryHeader = GObject.registerClass(class Arc_Menu_PlasmaCategoryHe
 var AllAppsButton = GObject.registerClass(class Arc_Menu_AllAppsButton extends St.Button{
     _init(menuLayout) {
         super._init({
-            style_class: 'arc-menu-eject-button',
+            style_class: 'button arc-menu-eject-button',
             x_expand: true,
             x_align: Clutter.ActorAlign.END,
             y_expand: false,
@@ -1696,7 +1701,7 @@ var AllAppsButton = GObject.registerClass(class Arc_Menu_AllAppsButton extends S
 var BackButton = GObject.registerClass(class Arc_Menu_BackButton extends St.Button{
     _init(menuLayout) {
         super._init({
-            style_class: 'arc-menu-eject-button',
+            style_class: 'button arc-menu-eject-button',
             x_expand: true,
             x_align: Clutter.ActorAlign.END,
             y_expand: false,

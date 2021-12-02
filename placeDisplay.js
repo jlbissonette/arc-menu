@@ -59,26 +59,29 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
             gicon: info.icon,
             icon_size: SMALL_ICON_SIZE
         });
-        this.add_child(this._icon);
+        this.add_actor(this._icon);
         this.label = new St.Label({ text: info.name, 
-                                    x_expand: false,
+                                    x_expand: true,
                                     y_expand: true,
                                     x_align: Clutter.ActorAlign.FILL,
                                     y_align: Clutter.ActorAlign.CENTER });
         
-        this.add_child(this.label);
+        this.add_actor(this.label);
 
         if (info.isRemovable()) {
+            this.style = "padding-right: 10px;";
             this._ejectIcon = new St.Icon({
                 icon_name: 'media-eject-symbolic',
-                style_class: 'popup-menu-icon'
+                style_class: 'popup-menu-icon',
+                icon_size: SMALL_ICON_SIZE,
+
             });
             this._ejectButton = new St.Button({ 
                 child: this._ejectIcon,
-                style_class: 'arc-menu-eject-button'
+                style_class: 'button arc-menu-eject-button',
             });
             this._ejectButton.connect('clicked', info.eject.bind(info));
-            this.add_child(this._ejectButton);
+            this.add_actor(this._ejectButton);
         }
 
         this._changedId = info.connect('changed',

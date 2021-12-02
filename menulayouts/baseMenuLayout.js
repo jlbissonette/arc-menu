@@ -400,6 +400,7 @@ var BaseLayout = class {
             let name = this._recentFiles[i].get_display_name();
             let icon = Gio.content_type_get_symbolic_icon(this._recentFiles[i].get_mime_type()).to_string();
             let placeMenuItem = this.createMenuItem([name, icon, file], Constants.MenuItemType.MENU_ITEM);
+            placeMenuItem.style = "padding-right: 10px;";
             placeMenuItem.description = this._recentFiles[i].get_uri_display().replace(homeRegExp, '~');
             placeMenuItem._updateIcon();
             placeMenuItem.fileUri = this._recentFiles[i].get_uri();

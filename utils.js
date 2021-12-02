@@ -626,10 +626,9 @@ function createStylesheet(settings){
 
         +"StScrollView .small-vfade{\n-st-vfade-offset: 44px;\n}\n\n"
 
-        +".arc-menu-eject-button{\n-st-icon-style: symbolic;\nbackground-color: transparent;\nmin-width: 16px;\nmin-height: 0px;\nborder-radius: 8px;\npadding: 0px 13px;\n}\n\n"
-        +".arc-menu-eject-button:hover{\nbackground-color: rgba(186, 196,201, 0.1);\n}\n\n"
+        +".arc-menu-eject-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 0px 8px;\n}\n\n"
 
-        +".arc-menu-button{\n-st-icon-style: symbolic;\nbox-shadow: none;\nborder-width: 1px;\nmin-height: 12px;\nmin-width: 16px;\nborder-radius: 8px;\npadding: 6px 10px;\n}\n\n"
+        +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nmin-height: 12px;\nmin-width: 16px;\nborder-radius: 8px;\npadding: 6px 10px;\n}\n\n"
 
         +".arc-menu-action{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 1px;\n"
                             +"border-color: transparent;\n}\n\n"
