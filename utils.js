@@ -620,7 +620,7 @@ function createStylesheet(settings){
         +"#arc-menu-launcher-button.active-item, #arc-menu-launcher-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             +"\nborder-color: " + plasmaSelectedItemColor + ";\nborder-bottom-width: 3px;\n}\n\n"
 
-        +"#arc-menu-plasma-button{\nwidth: 90px;\n height: 65px;\nborder-radius: 4px;\n text-align: center;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
+        +"#arc-menu-plasma-button{\nwidth: 90px;\n height: 65px;\nborder-radius: 8px;\n text-align: center;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
         +"#arc-menu-plasma-button:active-item, .arc-menu-plasma-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             + plasmaButtonStyle + "\nborder-color: " + plasmaSelectedItemColor + ";\n}\n\n"
 
@@ -628,14 +628,11 @@ function createStylesheet(settings){
 
         +".arc-menu-eject-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 0px 8px;\n}\n\n"
 
-        +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nmin-height: 12px;\nmin-width: 16px;\nborder-radius: 8px;\npadding: 6px 10px;\n}\n\n"
+        +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nmin-height: 12px;\nmin-width: 12px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
 
-        +".arc-menu-action{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 1px;\n"
-                            +"border-color: transparent;\n}\n\n"
-        +".arc-menu-action:hover, .arc-menu-action:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\nborder-width: 1px;\n"
-                                +";\nborder-color:" + modifyColorLuminance(menuColor, -0.1) + ";\n}\n\n"
-        +".arc-menu-action:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\nborder-width: 1px;\n"
-                                +"border-color:" + modifyColorLuminance(menuColor, -0.1) + ";\n}\n\n"
+        +".arc-menu-action{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 0px\n}\n\n"
+        +".arc-menu-action:hover, .arc-menu-action:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\n}\n\n"
+        +".arc-menu-action:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\n}\n\n"
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"
 

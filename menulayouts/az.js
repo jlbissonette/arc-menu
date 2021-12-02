@@ -135,7 +135,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.user = new MW.UserMenuItem(this);
         this.user.x_expand = true;
         this.user.x_align = Clutter.ActorAlign.FILL;
-        this.user.style = "margin: 0px 0px 0px 0px;"
+        this.user.style = "margin: 0px 45px 0px 0px;"
         this.actionsBox.add(this.user.actor);
 
 
@@ -144,13 +144,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.actionsBox.add_actor(filesButton.actor);
 
         let settingsButton = new MW.SettingsButton(this);
-        settingsButton.actor.expand = false;
-        settingsButton.actor.margin = 5;
         this.actionsBox.add(settingsButton.actor);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.leaveButton.actor.expand = false;
-        this.leaveButton.actor.margin = 5;
         this.actionsBox.add(this.leaveButton.actor);
 
         this.loadPinnedApps();
@@ -197,7 +193,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     updateStyle(){
         super.updateStyle();
-       
+        
         let themeNode = this.arcMenu.actor.get_theme_node();
         let borderRadius = themeNode.get_length('-arrow-border-radius');
         const RoundBottomBorder = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
@@ -205,6 +201,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + RoundBottomBorder;
         this.topBox.style = this.topBoxStyle + RoundTopBorder;
         this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
+        this._updateHeaderLabelButtonStyle();
+    }
+
+    _updateHeaderLabelButtonStyle(){
+        if(!this.headerLabelButton)
+            return;
+        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
+        customStyle ? this.headerLabelButton.add_style_class_name('arc-menu-action') : this.headerLabelButton.remove_style_class_name('arc-menu-action');
     }
 
     setGridLayout(appType, columns, spacing, setStyle = true){
@@ -243,13 +247,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.headerLabel.label.y_align = Clutter.ActorAlign.CENTER;
         this.headerLabel.style = 'padding: 0px 15px 10px 15px;'
         this.subMainBox.insert_child_at_index(this.headerLabel, 1);
-
+        
         if(category === Constants.CategoryType.PINNED_APPS){
-            this.headerLabel.add(new MW.AllAppsButton(this));
+            this.headerLabel.add(this.headerLabelButton = new MW.AllAppsButton(this));
         }
         else if(category === Constants.CategoryType.ALL_PROGRAMS){
-            this.headerLabel.add(new MW.BackButton(this));     
-        }      
+            this.headerLabel.add(this.headerLabelButton = new MW.BackButton(this));   
+        }
+        this._updateHeaderLabelButtonStyle();
     }
 
     _onSearchBoxChanged(searchBox, searchString){

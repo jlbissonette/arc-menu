@@ -172,13 +172,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         let settingsButton = new MW.SettingsButton(this);
-        settingsButton.actor.expand = false;
-        settingsButton.actor.margin = 5;
         this.actionsBox.add(settingsButton.actor);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.leaveButton.actor.expand = false;
-        this.leaveButton.actor.margin = 5;
         this.actionsBox.add(this.leaveButton.actor);
 
         this.loadPinnedApps();
@@ -270,6 +266,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.arcMenu.box.style = "padding-bottom:0px; margin:0px;";
         else
             this.arcMenu.box.style = "padding-bottom:0px;";
+
+        this._updateHeaderLabelButtonStyle();
+    }
+
+    _updateHeaderLabelButtonStyle(){
+        if(!this.headerLabelButton)
+            return;
+        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
+        customStyle ? this.headerLabelButton.add_style_class_name('arc-menu-action') : this.headerLabelButton.remove_style_class_name('arc-menu-action');
     }
 
     setGridLayout(appType, columns, spacing, setStyle = true){
@@ -316,7 +321,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(category === Constants.CategoryType.PINNED_APPS){
             label.style = 'padding: 0px 25px;'
             label.label.style = 'font-weight: bold; padding: 15px 0px;';
-            label.add(new MW.AllAppsButton(this));
+            label.add(this.headerLabelButton = new MW.AllAppsButton(this));
             this.applicationsBox.insert_child_at_index(label, 0);
         }
         else if(category === Constants.CategoryType.HOME_SCREEN){
@@ -328,9 +333,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.allAppsLabel = label;
             label.style = 'padding: 0px 25px;'
             label.label.style = 'font-weight: bold; padding: 15px 0px;';
-            label.add(new MW.BackButton(this));
+            label.add(this.headerLabelButton = new MW.BackButton(this));
             this.mainBox.insert_child_at_index(this.allAppsLabel, 1);        
-        }      
+        }
+        this._updateHeaderLabelButtonStyle();
     }
 
     _onSearchBoxChanged(searchBox, searchString){

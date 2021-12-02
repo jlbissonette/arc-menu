@@ -85,7 +85,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.subMainBox.add(this.applicationsScrollBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 10px 5px 10px;";
+            this.searchBox.style = "margin: 10px 10px 0px 10px;";
             this.subMainBox.add(this.searchBox.actor);
         }
             

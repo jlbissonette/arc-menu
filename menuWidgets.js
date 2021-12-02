@@ -1656,12 +1656,12 @@ var PlasmaCategoryHeader = GObject.registerClass(class Arc_Menu_PlasmaCategoryHe
 var AllAppsButton = GObject.registerClass(class Arc_Menu_AllAppsButton extends St.Button{
     _init(menuLayout) {
         super._init({
-            style_class: 'button arc-menu-eject-button',
+            style_class: 'button arc-menu-button',
             x_expand: true,
             x_align: Clutter.ActorAlign.END,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
-            style: 'min-height: 30px;'
+            style: 'min-height: 28px; padding: 0px 8px;'
         });
         this._menuLayout = menuLayout;
         this._layout = this._menuLayout.layout;
@@ -1701,12 +1701,12 @@ var AllAppsButton = GObject.registerClass(class Arc_Menu_AllAppsButton extends S
 var BackButton = GObject.registerClass(class Arc_Menu_BackButton extends St.Button{
     _init(menuLayout) {
         super._init({
-            style_class: 'button arc-menu-eject-button',
+            style_class: 'button arc-menu-button',
             x_expand: true,
             x_align: Clutter.ActorAlign.END,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
-            style: 'min-height: 30px;'
+            style: 'min-height: 28px; padding: 0px 8px;'
         });
         this._menuLayout = menuLayout;
         this._layout = this._menuLayout.layout;
