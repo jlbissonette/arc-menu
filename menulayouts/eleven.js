@@ -185,6 +185,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
         this.loadCategories();
         this.setDefaultMenuView();
+
+        this.disableFrequentAppsID = this._settings.connect("changed::eleven-disable-frequent-apps", () => this.setDefaultMenuView());
     }
 
     loadPinnedApps(){
@@ -193,10 +195,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadFrequentApps(){
+        this.frequentAppsList = [];
+
+        if(this._settings.get_boolean("eleven-disable-frequent-apps"))
+            return;
+
         let labelRow = this.createLabelRow(_("Frequent"));
         this.applicationsBox.add(labelRow);
         let mostUsed = Shell.AppUsage.get_default().get_most_used();
-        this.frequentAppsList = [];
 
         if(mostUsed.length < 1)
             return;
@@ -289,15 +295,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeCategory = _("Pinned");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
 
-        if(this.frequentAppsList.length > 0){
+        if(this.frequentAppsList.length > 0 && !this._settings.get_boolean("eleven-disable-frequent-apps")){
             this.activeCategory = _("Frequent");
             this.setGridLayout(Constants.AppDisplayType.GRID, 2, 0);
             this._displayAppList(this.frequentAppsList, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
             this.setGridLayout(Constants.AppDisplayType.GRID, 6, 0);
+            if(!this.applicationsBox.contains(this.shortcutsBox))
+                this.applicationsBox.add(this.shortcutsBox);
         }
-
-        if(!this.applicationsBox.contains(this.shortcutsBox))
-            this.applicationsBox.add(this.shortcutsBox);
+        else if(this.applicationsBox.contains(this.shortcutsBox)){
+            this.applicationsBox.remove_actor(this.shortcutsBox);
+        }
     }
 
     _displayAppList(apps, category, grid){      
@@ -333,6 +341,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     destroy(isReload){        
         this.arcMenu.box.style = null;
         this.arcMenu.actor.style = null;
+
+        if(this.disableFrequentAppsID){
+            this._settings.disconnect(this.disableFrequentAppsID);
+            this.disableFrequentAppsID = null;
+        }
 
         super.destroy(isReload);
     }

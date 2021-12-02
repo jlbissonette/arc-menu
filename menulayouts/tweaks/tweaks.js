@@ -137,6 +137,8 @@ var TweaksPage = GObject.registerClass({
             this._loadPlasmaMenuTweaks();
         else if(menuLayout == Constants.MenuLayout.WINDOWS)
             this._loadWindowsTweaks();
+        else if(menuLayout == Constants.MenuLayout.ELEVEN)
+            this._loadElevenTweaks();
         else
             this._loadPlaceHolderTweaks();
     }
@@ -240,6 +242,26 @@ var TweaksPage = GObject.registerClass({
         disableAvatarRow.add(disableAvatarLabel);
         disableAvatarRow.add(disableAvatarSwitch);
         return disableAvatarRow;
+    }
+
+    _loadElevenTweaks(){
+        let elevenTweaksFrame = new PW.FrameBox();
+        let disableFrequentAppsRow = new PW.FrameBoxRow();
+        let disableFrequentAppsLabel = new Gtk.Label({
+            label: _("Disable Frequent Apps"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let disableFrequentAppsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
+        disableFrequentAppsSwitch.set_active(this._settings.get_boolean('eleven-disable-frequent-apps'));
+        disableFrequentAppsSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('eleven-disable-frequent-apps', widget.get_active());
+        });
+        disableFrequentAppsRow.add(disableFrequentAppsLabel);
+        disableFrequentAppsRow.add(disableFrequentAppsSwitch);
+        elevenTweaksFrame.add(disableFrequentAppsRow);
+        this.mainBox.append(elevenTweaksFrame);
     }
 
     _loadGnomeOverviewTweaks(){

@@ -320,6 +320,11 @@
       <summary>Runner layout - font size</summary>
       <description>Runner layout - font size</description>
     </key>
+    <key type="b" name="eleven-disable-frequent-apps">
+      <default>false</default>
+      <summary>Eleven Layout - disable frequent apps</summary>
+      <description>Eleven Layout - disable frequent apps</description>
+    </key>
     <key type="b" name="reload-theme">
       <default>false</default>
       <summary>Used to reload theme</summary>
