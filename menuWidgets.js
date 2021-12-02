@@ -1825,6 +1825,7 @@ var ViewAllPrograms = GObject.registerClass(class Arc_Menu_ViewAllPrograms exten
 var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, name, icon, command, appType) {
         super._init(menuLayout);
+        this.add_style_class_name('symbolic-icons');
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
         this._command = command;
@@ -2502,6 +2503,7 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
     _init(menuLayout, category) {
         super._init(menuLayout);
         this.appList = [];
+        this.add_style_class_name('symbolic-icons');
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
         this._layout = this._settings.get_enum('menu-layout');

@@ -461,6 +461,8 @@ var BaseLayout = class {
             let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i + 1], pinnedApps[i + 2]], Constants.MenuItemType.BUTTON);
             if(customStyle) 
                 placeMenuItem.actor.add_style_class_name('arcmenu-custom-button');
+            if(this.layout === Constants.MenuLayout.MINT)
+                placeMenuItem.style = 'min-height: 22px;';
             placeMenuItem.actor.x_expand = false;
             placeMenuItem.actor.y_expand = false;
             placeMenuItem.actor.y_align = Clutter.ActorAlign.CENTER;

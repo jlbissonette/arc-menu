@@ -612,7 +612,7 @@ function createStylesheet(settings){
         +"#ArcSearchEntry{\nmin-height: 0px;\nborder-radius: 8px;\nborder-width: 1px;\npadding: 7px 9px;\n}\n\n"
         +"#ArcSearchEntryRound{\nmin-height: 0px;\nborder-radius: 18px;\nborder-width: 1px;\npadding: 7px 12px;\n}\n\n"       
         + menuButtonStyle
-        
+        +".symbolic-icons{\n-st-icon-style: symbolic;\n}\n\n"
         +".arcmenu-menu-item{\nborder-radius: 8px;\n}\n\n"     
         +".margin-box{\nmargin: 0px 4px;\n}\n\n" 
         +"#arc-menu-launcher-button{\nmax-width: 90px;\nborder-radius: 0px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\nborder-color: transparent;\nborder-bottom-width: 3px;\n}\n\n"
@@ -627,7 +627,7 @@ function createStylesheet(settings){
 
         +".arc-menu-eject-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 0px 8px;\n}\n\n"
 
-        +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nmin-height: 12px;\nmin-width: 12px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
+        +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nmin-height: 16px;\nmin-width: 16px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
 
         +".arcmenu-custom-button{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 0px\n}\n\n"
         +".arcmenu-custom-button:hover, .arcmenu-custom-button:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\n}\n\n"
