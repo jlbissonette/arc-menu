@@ -62,7 +62,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.FILL
+            y_align: Clutter.ActorAlign.FILL,
+            style_class: 'margin-box'
         });
         this.mainBox.add(this.subMainBox);
 
@@ -73,7 +74,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             vertical: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'left-box margin-box'
+            style_class: 'left-box'
         });
 
         //Applications Box - Contains Favorites, Categories or programs
@@ -113,7 +114,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         // Contains some useful shortcuts
         this.quickBox = new St.BoxLayout({
             vertical: true,
-            style: horizonalFlip ? "margin-right: 10px; margin-left: 0px;" : "margin-right: 0px; margin-left: 10px;"
+            style: horizonalFlip ? "margin-right: 6px; margin-left: 0px;" : "margin-right: 0px; margin-left: 6px;"
         });
 
         this.subMainBox.add(horizonalFlip ? this.appBox : this.quickBox);  
@@ -154,7 +155,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
             let shortcutButtonItem = new MW.ShortcutButtonItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2]);
-            this._updateButtonSize(shortcutButtonItem);
             if(shortcutButtonItem.shouldShow)
                 this.shortcutsBox.add(shortcutButtonItem.actor);
         }
@@ -178,7 +178,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         
         let leaveButton = new MW.LeaveButton(this);
-        this._updateButtonSize(leaveButton);
         this.actionsBox.add(leaveButton.actor); 
 
         this.actionsBox.insert_child_at_index(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT), 0);
@@ -187,12 +186,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadPinnedApps();
         this.loadCategories();
         this.setDefaultMenuView();
-    }
-
-    _updateButtonSize(button){
-        button.actor.style = "min-height: 12px;";
-        button.actor.x_expand = false;
-        button.actor.x_align = Clutter.ActorAlign.CENTER;
     }
 
     updateStyle(){
@@ -217,7 +210,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         for (let i = 0; i < directoryShortcuts.length; i++) {
             let directory = directoryShortcuts[i];
             let placeMenuItem = this.createMenuItem(directory, Constants.MenuItemType.BUTTON);
-            this._updateButtonSize(placeMenuItem);
             this.shortcutsBox.add_actor(placeMenuItem.actor);
         }
     }
