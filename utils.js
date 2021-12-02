@@ -567,11 +567,11 @@ function createStylesheet(settings){
     let tooltipStyle;
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
-        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 4px;\nbox-shadow:0 0 0 1px " + modifyColorLuminance(menuColor, 0.10) + ";\nfont-size:" + fontSize + "pt;\npadding: 2px 5px;\nmin-height: 0px;"
+        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 0 0 1px " + modifyColorLuminance(menuColor, 0.10) + ";\nfont-size:" + fontSize + "pt;\npadding: 3px 8px;\nmin-height: 0px;"
                         + "\ncolor:" + menuForegroundColor+ ";\nbackground-color:" + modifyColorLuminance(menuColor, 0.05) + ";\nmax-width:550px;\n}\n\n"; 
     }
     else
-        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 4px;\npadding: 2px 5px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
+        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\npadding: 3px 8px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
     
     let menuButtonStyle = '';
     if(settings.get_boolean('override-menu-button-color'))
@@ -587,7 +587,6 @@ function createStylesheet(settings){
         menuButtonStyle += ".arc-menu-panel-menu:active{\nbackground-color: " + menuButtonActiveBackgroundcolor + ";\n}\n\n";
     if(settings.get_boolean('menu-button-override-border-radius')){
         let border = menuButtonBorderRadius === 0 ? 1 : 3;
-        
         menuButtonStyle += ".arc-menu-panel-menu{\nborder-radius: " + menuButtonBorderRadius + "px;\nborder: " + border + "px solid transparent;\n}\n\n";
     }
         
@@ -607,7 +606,7 @@ function createStylesheet(settings){
         +".vert-sep{\nwidth:11px;\n}\n\n"
         +".default-search-entry{\nmax-width: 17.667em;\n}\n\n"
         +".arc-search-entry{\nmax-width: 17.667em;\nfont-size:" + fontSize + "pt;\nborder-color:" + separatorColor + ";\nborder-width: 1px;\n"
-                            +"color:" + menuForegroundColor + ";\nbackground-color:" + menuColor + ";\n}\n\n"
+                            +"color:" + menuForegroundColor + ";\nbackground-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
         +".arc-search-entry:focus{\nborder-color:" + highlightColor + ";\nborder-width: 1px;\nbox-shadow: inset 0 0 0 1px " + modifyColorLuminance(highlightColor, 0.05) + ";\n}\n\n"
         +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.3) + ";\n}\n\n"
         +"#ArcSearchEntry{\nmin-height: 0px;\nborder-radius: 8px;\nborder-width: 1px;\npadding: 7px 9px;\n}\n\n"
@@ -630,9 +629,10 @@ function createStylesheet(settings){
 
         +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nmin-height: 12px;\nmin-width: 12px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
 
-        +".arc-menu-action{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 0px\n}\n\n"
-        +".arc-menu-action:hover, .arc-menu-action:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\n}\n\n"
-        +".arc-menu-action:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\n}\n\n"
+        +".arcmenu-custom-button{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 0px\n}\n\n"
+        +".arcmenu-custom-button:hover, .arcmenu-custom-button:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\n}\n\n"
+        +".arcmenu-custom-button:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\n}\n\n"
+
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"
 
@@ -641,9 +641,11 @@ function createStylesheet(settings){
         +".arc-menu{\n-boxpointer-gap: " + gapAdjustment + "px;\nmin-width: 15em;\ncolor: #D3DAE3;\nborder-image: none;\n"
                         +"box-shadow: none;\nfont-size:" + fontSize + "pt;\n}\n\n"
         +".arc-menu .popup-sub-menu{\npadding-bottom: 1px;\nbackground-color: " + modifyColorLuminance(menuColor, 0.04) + ";\n}\n\n"
-        +".arc-menu .popup-menu-item{\npadding: 6px; spacing: 6px; \nborder: none;\ncolor:" + menuForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item{\nspacing: 6px; \nborder: none;\ncolor:" + menuForegroundColor + ";\n}\n\n"
         +".arc-menu .popup-menu-item:ltr{\npadding-right:1.75em;\npadding-left: 0;\n}\n\n.arc-menu .popup-menu-item:rtl\n{\npadding-right: 0;\npadding-left:1.75em;\n}\n\n"
-        +".arc-menu .popup-menu-item:checked, .arc-menu .popup-menu-item:active, .arc-menu .popup-menu-item.selected{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n" 
+        +".arc-menu .popup-menu-item:active{\nbackground-color:" + modifyColorLuminance(highlightColor, -0.07) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item.selected{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item:checked{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
         +".arc-menu .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0.15) + ";\n}\n\n"
         +".arc-menu-boxpointer{ \n-arrow-border-radius:" + cornerRadius + "px;\n"
                                 +"-arrow-background-color:" + menuColor + ";\n"
@@ -653,31 +655,9 @@ function createStylesheet(settings){
                                 +"-arrow-rise:" + menuArrowSize + "px;\n}\n\n"
         +".arc-menu .popup-menu-content{\npadding: 16px 0px;\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nbox-shadow: 0;\n}\n\n"
 
-        +".arc-menu-sep{\nheight: 1px;\nmargin: 5px 20px;\nbackground-color: transparent;\nborder-bottom-style: solid;"
-                            +"\nborder-color:" + separatorColor + ";\nborder-bottom-width: 1px;\n}\n\n"
+        +".arcmenu-separator{\nheight: 1px;\nmargin: 0px 20px;\nbackground-color:" + separatorColor + ";\n}\n\n"
 
-        +".menu-user-avatar{\nbackground-size: contain;\nborder-radius: " + avatarRadius + "px;\n}\n\n"
-
-        +".arc-right-click{\nmax-width:350px;\nmin-width: 15em;\ncolor: #D3DAE3;\nborder-image: none;\nfont-size:" + fontSize + "pt;\nmargin:0px;\npadding:0px;"
-                            +"box-shadow: none;\nspacing:0px;\n}\n\n"
-        +".arc-right-click .popup-sub-menu{\npadding-bottom: 1px;\nbackground-color: #3a393b;\nbox-shadow: inset 0 -1px 0px #323233;\n}\n\n"
-        +".arc-right-click .popup-menu-content{\npadding: 3px 0px;\n}\n\n"
-        +".arc-right-click .popup-menu-item{\nspacing: 12px; \nborder: 0;\ncolor:" + menuForegroundColor + ";\n}\n\n" 
-        +".arc-right-click .popup-menu-item:ltr{\npadding: .4em 1.75em .4em 0em;\n}\n\n.arc-right-click .popup-menu-item:rtl{\npadding: .4em 0em .4em 1.75em;\n}\n\n"
-        +".arc-right-click .popup-menu-item:checked{\nbackground-color:" + modifyColorLuminance(highlightColor, 0.08) + ";\ncolor: " + highlightForegroundColor + ";\n}\n\n"
-        +".arc-right-click .popup-menu-item.selected, .arc-right-click .popup-menu-item:active{"
-                                +"\nbackground-color:" + modifyColorLuminance(highlightColor, 0.05) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n" 
-        +".arc-right-click .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0.15) + ";\n}\n\n"
-        +".arc-right-click-boxpointer{ \n-arrow-border-radius:" + cornerRadius + "px;\n"
-                                        +"-arrow-background-color:" + modifyColorLuminance(menuColor, 0.05) + ";\n"
-                                        +"-arrow-border-color:" + modifyColorLuminance(menuColor, 0.10) + ";\n"
-                                        +"-arrow-border-width:" + (borderSize > 1 ? borderSize : 1) + "px;\n"
-                                        +"-arrow-base:" + menuMargin + "px;\n"
-                                        +"-arrow-rise:" + menuArrowSize + "px;\n}\n\n"
-        +".arc-right-click .popup-menu-content{\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nbox-shadow: 0;\n}\n\n"
-        
-        +".app-right-click-sep {\nheight: 1px;\nmargin: 2px 35px 3px 35px;\nbackground-color: transparent;\nborder-bottom-style: solid;"
-                                    +"\nborder-color:" + separatorColor + ";\nborder-bottom-width: 1px;\n}\n";
+        +".menu-user-avatar{\nbackground-size: contain;\nborder-radius: " + avatarRadius + "px;\n}\n\n";
     
     let stylesheet = getStylesheet();
     if(stylesheet){

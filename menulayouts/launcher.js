@@ -344,8 +344,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     toggleMoreProvidersMenu(){
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        this.moreProvidersMenu.actor.style_class = customStyle ? 'arc-right-click-boxpointer': 'popup-menu-boxpointer';
-        this.moreProvidersMenu.actor.add_style_class_name( customStyle ? 'arc-right-click' : 'popup-menu');
+        this.moreProvidersMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
+        this.moreProvidersMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
 
         this.moreProvidersMenu.toggle();
     }

@@ -162,7 +162,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.sessionBox){
             this.sessionBox.get_children().forEach((actor) => {
                 if(actor instanceof St.Button){
-                    customStyle ? actor.add_style_class_name('arc-menu-action') : actor.remove_style_class_name('arc-menu-action');
+                    customStyle ? actor.add_style_class_name('arcmenu-custom-button') : actor.remove_style_class_name('arcmenu-custom-button');
                 }
             });
         }

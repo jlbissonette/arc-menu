@@ -208,7 +208,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(!this.headerLabelButton)
             return;
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        customStyle ? this.headerLabelButton.add_style_class_name('arc-menu-action') : this.headerLabelButton.remove_style_class_name('arc-menu-action');
+        customStyle ? this.headerLabelButton.add_style_class_name('arcmenu-custom-button') : this.headerLabelButton.remove_style_class_name('arcmenu-custom-button');
     }
 
     setGridLayout(appType, columns, spacing, setStyle = true){

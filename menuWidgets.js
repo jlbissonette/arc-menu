@@ -80,6 +80,7 @@ var ApplicationContextItems = GObject.registerClass({
             vertical: true,
             x_expand: true,
             y_expand: true,
+            style_class: 'margin-box',
         });
         this._menuLayout = menuLayout;
         this._settings = menuLayout._settings;
@@ -472,8 +473,8 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
     rebuildItems(){
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
         if(customStyle){
-            this.actor.style_class = 'arc-right-click-boxpointer';
-            this.actor.add_style_class_name('arc-right-click');
+            this.actor.style_class = 'arc-menu-boxpointer';
+            this.actor.add_style_class_name('arc-menu');
         }
         else{
             this.actor.style_class = 'popup-menu-boxpointer';
@@ -573,6 +574,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         if(activeChanged){
             this._active = active;
             if(active){
+                this.remove_style_class_name('selected');
                 this.add_style_pseudo_class('active');
                 this._menuLayout.activeMenuItem = this;
                 if(this.can_focus)
@@ -2281,7 +2283,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
             style_class: 'popup-menu-icon',
             icon_size: this._icon.icon_size
         });
-        customStyle ? icon.add_style_class_name('arc-menu-action') : icon.remove_style_class_name('arc-menu-action');
+        customStyle ? icon.add_style_class_name('arcmenu-custom-button') : icon.remove_style_class_name('arcmenu-custom-button');
         return icon;
     }
 

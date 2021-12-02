@@ -59,6 +59,10 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
             gicon: info.icon,
             icon_size: SMALL_ICON_SIZE
         });
+        this._settings = this._menuLayout._settings;
+        
+        this._customArcMenuStyleChangedId = this._settings.connect("changed::enable-custom-arc-menu", () => this._customArcMenuStyleChanged());
+
         this.add_actor(this._icon);
         this.label = new St.Label({ text: info.name, 
                                     x_expand: true,
@@ -91,10 +95,16 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
                 this._info.disconnect(this._changedId);
                 this._changedId = 0;
             }
+
+            if(this._customArcMenuStyleChangedId){
+                this._settings.disconnect(this._customArcMenuStyleChangedId);
+                this._customArcMenuStyleChangedId = null;
+            }
         });
         let layout = this._menuLayout._settings.get_enum('menu-layout');  
         if(layout === Constants.MenuLayout.PLASMA)
             this._updateIcon();
+        this._customArcMenuStyleChanged();
     }
    
     _updateIcon(){
@@ -108,6 +118,14 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
         super.activate(event);
     }
 
+    _customArcMenuStyleChanged(){
+        if(!this._ejectButton)
+            return;
+
+        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
+        customStyle ? this._ejectButton.add_style_class_name('arcmenu-custom-button') : this._ejectButton.remove_style_class_name('arcmenu-custom-button');
+    }
+    
     _propertiesChanged(info) {
         this._icon.gicon = info.icon;
         this.label.text = info.name;

@@ -175,7 +175,7 @@ var BaseLayout = class {
         if(this.actionsBox){
             this.actionsBox.get_children().forEach((actor) => {
                 if(actor instanceof St.Button){
-                    customStyle ? actor.add_style_class_name('arc-menu-action') : actor.remove_style_class_name('arc-menu-action');
+                    customStyle ? actor.add_style_class_name('arcmenu-custom-button') : actor.remove_style_class_name('arcmenu-custom-button');
                 }
             });
         }
@@ -405,7 +405,7 @@ var BaseLayout = class {
             placeMenuItem._updateIcon();
             placeMenuItem.fileUri = this._recentFiles[i].get_uri();
             placeMenuItem._removeBtn = new St.Button({
-                style_class: this._settings.get_boolean('enable-custom-arc-menu') ? 'arc-menu-action button' : 'button',
+                style_class: this._settings.get_boolean('enable-custom-arc-menu') ? 'arcmenu-custom-button button' : 'button',
                 style: 'padding: 0px 8px;',
                 x_expand: true,
                 x_align: Clutter.ActorAlign.END
@@ -460,7 +460,7 @@ var BaseLayout = class {
                 this._addSeparator();
             let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i + 1], pinnedApps[i + 2]], Constants.MenuItemType.BUTTON);
             if(customStyle) 
-                placeMenuItem.actor.add_style_class_name('arc-menu-action');
+                placeMenuItem.actor.add_style_class_name('arcmenu-custom-button');
             placeMenuItem.actor.x_expand = false;
             placeMenuItem.actor.y_expand = false;
             placeMenuItem.actor.y_align = Clutter.ActorAlign.CENTER;

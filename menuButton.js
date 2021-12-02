@@ -820,13 +820,14 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         this.addMenuItem(this.createQuickLinkItem(_("ArcMenu Settings"), Constants.PrefsVisiblePage.MAIN));
 
         let item = new PopupMenu.PopupSeparatorMenuItem();
-        item._separator.style_class = 'arc-menu-sep';
+        item._separator.style_class = 'arcmenu-separator';
         this.addMenuItem(item);
 
         item = new PopupMenu.PopupMenuItem(_("Settings Quick Links:"), { 
             activate: false,
             reactive: false
         });
+        item.add_style_class_name("margin-box arcmenu-menu-item");
         this.addMenuItem(item);
 
         this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
@@ -836,7 +837,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         this.addMenuItem(this.createQuickLinkItem(_("Button Appearance"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
 
         item = new PopupMenu.PopupSeparatorMenuItem();
-        item._separator.style_class = 'arc-menu-sep';
+        item._separator.style_class = 'arcmenu-separator';
         this.addMenuItem(item);
 
         this.addMenuItem(this.createQuickLinkItem(_("About"), Constants.PrefsVisiblePage.ABOUT));
@@ -863,6 +864,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
             }
 
             let item = new PopupMenu.PopupMenuItem(_(extensionName));
+            item.add_style_class_name("margin-box arcmenu-menu-item");
             item.connect('activate', ()=>{
                 Util.spawnCommandLine(extensionCommand);
             });
@@ -878,7 +880,8 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
     }
 
     createQuickLinkItem(title, prefsVisiblePage){
-        let item = new PopupMenu.PopupMenuItem(_(title));    
+        let item = new PopupMenu.PopupMenuItem(_(title));
+        item.add_style_class_name("margin-box arcmenu-menu-item");
         item.connect('activate', ()=>{
             this._settings.set_int('prefs-visible-page', prefsVisiblePage);
             Util.spawnCommandLine(Constants.ArcMenuSettingsCommand);

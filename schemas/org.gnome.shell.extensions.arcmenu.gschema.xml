@@ -336,27 +336,27 @@
       <description>Enable a vertical separator.</description>
     </key>
     <key type="s" name="separator-color">
-      <default>"rgb(63,62,64)"</default>
+      <default>"rgb(32,32,32)"</default>
       <summary>Separator Color</summary>
       <description>Separator Color.</description>
     </key>
     <key type="s" name="menu-color">
-      <default>"rgba(28, 28, 28, 0.98)"</default>
+      <default>"rgba(53,53,53,0.987)"</default>
       <summary>Menu Background Color</summary>
       <description>Menu Background Color.</description>
     </key>
     <key type="s" name="menu-foreground-color">
-      <default>"rgba(211, 218, 227, 1)"</default>
+      <default>"rgb(223,223,223)"</default>
       <summary>Menu Foreground Color</summary>
       <description>Menu Foreground Color.</description>
     </key>  
     <key type="s" name="border-color">
-      <default>"rgb(63,62,64)"</default>
+      <default>"rgb(32,32,32)"</default>
       <summary>Border Color</summary>
       <description>Border Color.</description>
     </key>
     <key type="s" name="highlight-color">
-      <default>"rgba(238, 238, 236, 0.1)"</default>
+      <default>"rgb(21,83,158)"</default>
       <summary>Highlight/Active Menu Item Background Color</summary>
       <description>Highlight/Active Menu Item Background Color.</description>
     </key>
@@ -371,22 +371,22 @@
       <description>Menu font size.</description>
     </key>
     <key type="i" name="menu-border-size">
-      <default>0</default>
+      <default>1</default>
       <summary>Menu border size</summary>
       <description>Menu border size.</description>
     </key>
     <key type="i" name="menu-corner-radius">
-      <default>0</default>
+      <default>5</default>
       <summary>Menu corner radius</summary>
       <description>Menu corner radius.</description>
     </key>
     <key type="i" name="menu-margin">
-      <default>0</default>
+      <default>24</default>
       <summary>Menu margin</summary>
       <description>Menu margin.</description>
     </key>
     <key type="i" name="menu-arrow-size">
-      <default>0</default>
+      <default>12</default>
       <summary>Menu arrow size</summary>
       <description>Menu arrow size.</description>
     </key>
@@ -679,7 +679,8 @@
       <description>Index of Mint Layout Pinned App Separator, 0 = none</description>
     </key>
     <key name="color-themes" type="aas">
-      <default>[['ArcMenu Theme', 'rgba(28, 28, 28, 0.98)', 'rgba(211, 218, 227, 1)', 'rgb(63,62,64)', 'rgba(238, 238, 236, 0.1)', 'rgba(255,255,255,1)', 'rgb(63,62,64)', '9', '0', '0', '0', '0', 'false'], 
+      <default>[['ArcMenu Style', 'rgba(53,53,53,0.987)', 'rgb(223,223,223)', 'rgb(32,32,32)', 'rgb(21,83,158)', 'rgba(255,255,255,1)', 'rgb(32,32,32)', '9', '1', '5', '12', '24', 'false'],
+      ['Simply Dark', 'rgba(28, 28, 28, 0.98)', 'rgba(211, 218, 227, 1)', 'rgb(63,62,64)', 'rgba(238, 238, 236, 0.1)', 'rgba(255,255,255,1)', 'rgb(63,62,64)', '9', '0', '0', '0', '0', 'false'],
       ['Dark Blue Theme', 'rgb(25,31,34)', 'rgb(189,230,251)', 'rgb(41,50,55)', 'rgb(41,50,55)', 'rgba(255,255,255,1)', 'rgb(41,50,55)', '9', '1', '5', '12', '24', 'true'], 
       ['Light Blue Theme', 'rgb(255,255,255)', 'rgb(51,51,51)', 'rgb(235,235,235)', 'rgba(189,230,251,0.9)', 'rgba(89,89,89,1)', 'rgba(189,230,251,0.9)', '9', '1', '5', '12', '24', 'true']]</default>
       <summary>List of color-themes</summary>

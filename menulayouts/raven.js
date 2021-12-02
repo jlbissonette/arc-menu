@@ -261,8 +261,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
         let gapAdjustment = this._settings.get_int('gap-adjustment');
 
-        customStyle ? this._clocksItem.add_style_class_name('arc-menu-action') : this._clocksItem.remove_style_class_name('arc-menu-action');
-        customStyle ? this._weatherItem.add_style_class_name('arc-menu-action') : this._weatherItem.remove_style_class_name('arc-menu-action');
+        customStyle ? this._clocksItem.add_style_class_name('arcmenu-custom-button') : this._clocksItem.remove_style_class_name('arcmenu-custom-button');
+        customStyle ? this._weatherItem.add_style_class_name('arcmenu-custom-button') : this._weatherItem.remove_style_class_name('arcmenu-custom-button');
 
         this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px;";
         this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";

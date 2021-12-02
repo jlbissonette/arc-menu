@@ -308,8 +308,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         appsScrollBoxAdj.set_value(0);
 
         let customStyle=this._settings.get_boolean('enable-custom-arc-menu');
-        this.categoriesMenu.actor.style_class = customStyle ? 'arc-right-click-boxpointer': 'popup-menu-boxpointer';
-        this.categoriesMenu.actor.add_style_class_name( customStyle ? 'arc-right-click' : 'popup-menu');
+        this.categoriesMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
+        this.categoriesMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
         this.categoriesButton.tooltip.hide();
 
         this.categoriesMenu.toggle();
@@ -351,10 +351,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + this.themeNodeBorderRadius;
 
         let actor = this.categoriesButton.actor;
-        customStyle ? actor.add_style_class_name('arc-menu-action') : actor.remove_style_class_name('arc-menu-action');
+        customStyle ? actor.add_style_class_name('arcmenu-custom-button') : actor.remove_style_class_name('arcmenu-custom-button');
 
-        customStyle ? this._clocksItem.add_style_class_name('arc-menu-action') : this._clocksItem.remove_style_class_name('arc-menu-action');
-        customStyle ? this._weatherItem.add_style_class_name('arc-menu-action') : this._weatherItem.remove_style_class_name('arc-menu-action');
+        customStyle ? this._clocksItem.add_style_class_name('arcmenu-custom-button') : this._clocksItem.remove_style_class_name('arcmenu-custom-button');
+        customStyle ? this._weatherItem.add_style_class_name('arcmenu-custom-button') : this._weatherItem.remove_style_class_name('arcmenu-custom-button');
         
         if(removeMenuArrow)
             this.arcMenu.box.style = "padding-bottom:0px; margin:0px;";

@@ -194,7 +194,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         super.updateStyle();
         this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px;";
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        customStyle ? this.runnerTweaksButton.actor.add_style_class_name('arc-menu-action') : this.runnerTweaksButton.actor.remove_style_class_name('arc-menu-action');
+        customStyle ? this.runnerTweaksButton.actor.add_style_class_name('arcmenu-custom-button') : this.runnerTweaksButton.actor.remove_style_class_name('arcmenu-custom-button');
     }
 
     updateSearch(){

@@ -192,12 +192,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
 
         if(this.user)
-            customStyle ? this.user.actor.add_style_class_name('arc-menu-action') : this.user.actor.remove_style_class_name('arc-menu-action');
+            customStyle ? this.user.actor.add_style_class_name('arcmenu-custom-button') : this.user.actor.remove_style_class_name('arcmenu-custom-button');
 
         if(this.shortcutsBox){
             this.shortcutsBox.get_children().forEach((actor) => {
                 if(actor instanceof St.Button){
-                    customStyle ? actor.add_style_class_name('arc-menu-action') : actor.remove_style_class_name('arc-menu-action');
+                    customStyle ? actor.add_style_class_name('arcmenu-custom-button') : actor.remove_style_class_name('arcmenu-custom-button');
                 }
             });
         }

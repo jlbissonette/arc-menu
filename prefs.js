@@ -4737,18 +4737,19 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             });   
             resetButton.set_sensitive( this.checkIfResetButtonSensitive());
             resetButton.connect('clicked', ()=> {
-                this.separatorColor = "rgb(63,62,64)";
-                this.verticalSeparator = false;
-                this.menuColor = "rgba(28, 28, 28, 0.98)";
-                this.menuForegroundColor = "rgba(211, 218, 227, 1)";
-                this.borderColor = "rgb(63,62,64)";
-                this.highlightColor = "rgba(238, 238, 236, 0.1)";
-                this.highlightForegroundColor = "rgba(255,255,255,1)";
-                this.fontSize = 9;
-                this.borderSize = 0;
-                this.cornerRadius = 0;
-                this.menuMargin = 0;
-                this.menuArrowSize = 0;
+                this.separatorColor = this._settings.get_default_value('separator-color').unpack();
+                this.verticalSeparator = this._settings.get_default_value('vert-separator').unpack();               
+                this.menuColor = this._settings.get_default_value('menu-color').unpack();
+                this.menuForegroundColor = this._settings.get_default_value('menu-foreground-color').unpack();
+                this.borderColor = this._settings.get_default_value('border-color').unpack();
+                this.highlightColor = this._settings.get_default_value('highlight-color').unpack();
+                this.highlightForegroundColor = this._settings.get_default_value('highlight-foreground-color').unpack();
+                this.fontSize = this._settings.get_default_value('menu-font-size').unpack();
+                this.borderSize = this._settings.get_default_value('menu-border-size').unpack();
+                this.cornerRadius = this._settings.get_default_value('menu-corner-radius').unpack();
+                this.menuMargin = this._settings.get_default_value('menu-margin').unpack();
+                this.menuArrowSize = this._settings.get_default_value('menu-arrow-size').unpack();
+
                 color.parse(this.menuColor);
                 menuBackgroudColorChooser.set_rgba(color);
 
@@ -4829,18 +4830,19 @@ var OverrideArcMenuThemeWindow = GObject.registerClass({
             } 
         }
         checkIfResetButtonSensitive(){
-            return (this.menuColor != "rgba(28, 28, 28, 0.98)"||
-            this.menuForegroundColor != "rgba(211, 218, 227, 1)"||
-            this.borderColor != "rgb(63,62,64)"||
-            this.highlightColor != "rgba(238, 238, 236, 0.1)"||
-            this.highlightForegroundColor != "rgba(255,255,255,1)"||
-            this.fontSize != 9||
-            this.borderSize != 0||
-            this.cornerRadius != 0||
-            this.menuMargin != 0||
-            this.menuArrowSize != 0 ||
-            this.verticalSeparator != false ||
-            this.separatorColor != "rgb(63,62,64)") ? true : false
+            return (
+                this.separatorColor !== this._settings.get_default_value('separator-color').unpack() ||
+                this.verticalSeparator !== this._settings.get_default_value('vert-separator').unpack() ||               
+                this.menuColor !== this._settings.get_default_value('menu-color').unpack() ||
+                this.menuForegroundColor !== this._settings.get_default_value('menu-foreground-color').unpack() ||
+                this.borderColor !== this._settings.get_default_value('border-color').unpack() ||
+                this.highlightColor !== this._settings.get_default_value('highlight-color').unpack() ||
+                this.highlightForegroundColor !== this._settings.get_default_value('highlight-foreground-color').unpack() ||
+                this.fontSize !== this._settings.get_default_value('menu-font-size').unpack() ||
+                this.borderSize !== this._settings.get_default_value('menu-border-size').unpack() ||
+                this.cornerRadius !== this._settings.get_default_value('menu-corner-radius').unpack() ||
+                this.menuMargin !== this._settings.get_default_value('menu-margin').unpack() ||
+                this.menuArrowSize !== this._settings.get_default_value('menu-arrow-size').unpack()) ? true : false;
         }
 });
 
