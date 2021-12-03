@@ -30,10 +30,10 @@ var SearchbarLocation = {
     TOP: 1
 }
 
-var AppDisplayType = {
+var DisplayType = {
     LIST: 0,
     GRID: 1,
-    SEARCH: 2,
+    BUTTON: 2,
 }
 
 var CategoryType = {
@@ -118,11 +118,6 @@ var ForcedMenuLocation = {
     TOP_CENTERED: 1,
     BOTTOM_CENTERED: 2,
 }
-
-var MenuItemType = {
-    BUTTON: 0,
-    MENU_ITEM: 1
-};
 
 var SUPER_L = 'Super_L';
 var SUPER_R = 'Super_R';

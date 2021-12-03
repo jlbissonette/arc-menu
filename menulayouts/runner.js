@@ -36,8 +36,8 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton,{
             Search: true,
-            AppDisplayType: Constants.AppDisplayType.LIST,
-            SearchDisplayType: Constants.AppDisplayType.LIST,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -118,7 +118,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         let appList = [];
         for (let i = 0; i < mostUsed.length; i++) {
             if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
-                let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.AppDisplayType.LIST);
+                let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.DisplayType.LIST);
                 appList.push(item);
             }
         }

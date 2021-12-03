@@ -39,8 +39,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton,{
             Search: true,
-            AppDisplayType: Constants.AppDisplayType.LIST,
-            SearchDisplayType: Constants.AppDisplayType.LIST,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -192,7 +192,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let directoryShortcuts = this._settings.get_value('directory-shortcuts-list').deep_unpack();
         for (let i = 0; i < directoryShortcuts.length; i++) {
             let directory = directoryShortcuts[i];
-            let placeMenuItem = this.createMenuItem(directory, Constants.MenuItemType.BUTTON);
+            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.BUTTON);
             this.shortcutsBox.add_actor(placeMenuItem.actor);
         }
     }
@@ -207,7 +207,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let categoryEnum = extraCategories[i][0];
             let shouldShow = extraCategories[i][1];
             if(shouldShow){
-                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum);
+                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.LIST);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
             }
         }

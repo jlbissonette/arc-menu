@@ -64,17 +64,19 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
         this.add_actor(this._icon);
         this.label = new St.Label({ text: info.name, 
                                     x_expand: true,
-                                    y_expand: true,
+                                    y_expand: false,
                                     x_align: Clutter.ActorAlign.FILL,
                                     y_align: Clutter.ActorAlign.CENTER });
         
         this.add_actor(this.label);
 
         if (info.isRemovable()) {
-            this.style = "padding-right: 10px;";
+            this.style = "padding-right: 15px;";
             this._ejectButton = new MW.ArcMenuButtonItem(this._menuLayout, null, 'media-eject-symbolic');
             this._ejectButton.add_style_class_name("arcmenu-small-button")
             this._ejectButton.setIconSize(14);
+            this._ejectButton.x_align = Clutter.ActorAlign.END;
+            this._ejectButton.x_expand = true;
             this._ejectButton.connect('activate', info.eject.bind(info));
             this.add_actor(this._ejectButton);
         }

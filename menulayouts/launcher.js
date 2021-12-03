@@ -41,8 +41,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            SearchDisplayType: Constants.AppDisplayType.LIST,
-            AppDisplayType: Constants.AppDisplayType.GRID,
+            SearchDisplayType: Constants.DisplayType.LIST,
+            DisplayType: Constants.DisplayType.GRID,
             GridColumns: 6,
             ColumnSpacing: 15,
             RowSpacing: 15,
@@ -146,7 +146,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     loadCategories(){
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();
-        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.FREQUENT_APPS);
+        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.FREQUENT_APPS, Constants.DisplayType.LIST);
         this.categoryDirectories.set(Constants.CategoryType.FREQUENT_APPS, categoryMenuItem);
 
         super.loadCategories();
@@ -432,7 +432,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let app = activeResult.app ? activeResult.app : null;
         let path = activeResult._path ? activeResult._path : null;
 
-        this.activeResultMenuItem = new MW.ApplicationMenuItem(this, app, Constants.AppDisplayType.GRID, activeResult.metaInfo);
+        this.activeResultMenuItem = new MW.ApplicationMenuItem(this, app, Constants.DisplayType.GRID, activeResult.metaInfo);
         this.activeResultMenuItem.name = "ExtraLargeIconGrid";
         this.activeResultMenuItem.provider = activeResult.provider;
         this.activeResultMenuItem.resultsView = activeResult.resultsView;

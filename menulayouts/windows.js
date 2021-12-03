@@ -38,8 +38,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            SearchDisplayType: Constants.AppDisplayType.LIST,
-            AppDisplayType: Constants.AppDisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.LIST,
+            DisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -75,7 +75,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let path = GLib.get_user_special_dir(imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS);
         if (path != null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
-            let placeMenuItem = new MW.PlaceButtonItem(this, placeInfo);
+            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
             this.actionsBox.add_actor(placeMenuItem.actor);
         }
         let settingsButton = new MW.SettingsButton(this);
@@ -153,7 +153,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationShortcuts = [];
         for(let i = 0; i < applicationShortcutsList.length; i++){
             let applicationName = applicationShortcutsList[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcutsList[i][1], applicationShortcutsList[i][2], Constants.AppDisplayType.LIST);
+            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcutsList[i][1], applicationShortcutsList[i][2], Constants.DisplayType.LIST);
             if(shortcutMenuItem.shouldShow)
                 this.applicationShortcuts.push(shortcutMenuItem.actor);
         }
@@ -189,9 +189,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadPinnedApps(){
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.GRID;
+        this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
     }
 
     _createPlaces(id) {
@@ -200,7 +200,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'bookmarks' && places.length > 0){
             this._sections[id].add_actor(this.createLabelRow(_("Bookmarks")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_actor(item); 
             } 
         }
@@ -208,7 +208,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'devices' && places.length > 0){
             this._sections[id].add_actor(this.createLabelRow(_("Devices")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_actor(item); 
             }
         }
@@ -216,7 +216,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'network' && places.length > 0){
             this._sections[id].add_actor(this.createLabelRow(_("Network")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_actor(item); 
             }
         }
@@ -226,7 +226,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.directoryShortcuts = [];
         for (let i = 0; i < directoryShortcutsList.length; i++) {
             let directory = directoryShortcutsList[i];
-            let placeMenuItem = this.createMenuItem(directory, Constants.MenuItemType.MENU_ITEM);         
+            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST);         
             this.directoryShortcuts.push(placeMenuItem);
         }
     }
@@ -393,7 +393,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.frequentAppsList = [];
             for (let i = 0; i < mostUsed.length; i++) {
                 if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
-                    let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.AppDisplayType.LIST);
+                    let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.DisplayType.LIST);
                     this.frequentAppsList.push(item);
                 }
             }
@@ -419,7 +419,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         appList.sort((a, b) => {
             return a.get_name().toLowerCase() > b.get_name().toLowerCase();
         });
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.layoutProperties.GridColumns = 1;
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
 

@@ -37,8 +37,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppDisplayType: Constants.AppDisplayType.GRID,
-            SearchDisplayType: Constants.AppDisplayType.GRID,
+            DisplayType: Constants.DisplayType.GRID,
+            SearchDisplayType: Constants.DisplayType.GRID,
             GridColumns: 5,
             ColumnSpacing: 10,
             RowSpacing: 10,
@@ -73,7 +73,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let path = GLib.get_user_special_dir(imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS);
         if (path != null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
-            let placeMenuItem = new MW.PlaceButtonItem(this, placeInfo);
+            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
             this.actionsBox.add_actor(placeMenuItem.actor);
         }
         let settingsButton = new MW.SettingsButton(this);
@@ -145,9 +145,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadPinnedApps(){
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         super.loadPinnedApps();
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.GRID;
+        this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
     }
 
     _createPinnedAppsMenu(){

@@ -2841,6 +2841,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.subMenus = this._settings.get_boolean('enable-sub-menus');
         this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
         this.disableTooltips = this._settings.get_boolean('disable-tooltips');
+        this.appDescriptions = this._settings.get_boolean('apps-show-extra-details');
 
         let generalSettingsFrame = new PW.FrameBox();
         //find the greatest screen height of all monitors
@@ -3053,6 +3054,24 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         largeIconsRow.add(largeIconsSwitch);             
         miscSettingsFrame.add(largeIconsRow);
 
+        let appDescriptionsRow = new PW.FrameBoxRow();
+        let appDescriptionsLabel = new Gtk.Label({
+            label: _("Show Application Descriptions"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let appDescriptionsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
+        appDescriptionsSwitch.set_active(this.appDescriptions);
+        appDescriptionsSwitch.connect('notify::active', (widget) => {
+            this.appDescriptions = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        appDescriptionsRow.add(appDescriptionsLabel);
+        appDescriptionsRow.add(appDescriptionsSwitch);
+        miscSettingsFrame.add(appDescriptionsRow);
+
         let subMenusRow = new PW.FrameBoxRow();
         let subMenusLabel = new Gtk.Label({
             label: _('Category Sub Menus'),
@@ -3213,6 +3232,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.subMenus = this._settings.get_default_value('enable-sub-menus').unpack();
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
             this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
+            this.appDescriptions = this._settings.get_default_value('apps-show-extra-details').unpack();
             this.forcedMenuLocation = this._settings.get_default_value('force-menu-location').unpack();
             hscale.set_value(this.heightValue);
             menuWidthScale.set_value(this.menuWidth);
@@ -3221,6 +3241,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             vertSeparatorSwitch.set_active(this.verticalSeparator);
             largeIconsSwitch.set_active(this.largeIcons);
             tooltipSwitch.set_active(this.disableTooltips);
+            appDescriptionsSwitch.set_active(this.appDescriptions);
             color = new Gdk.RGBA();
             color.parse(this.separatorColor);
             colorChooser.set_rgba(color);   
@@ -3247,6 +3268,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this._settings.set_boolean('disable-recently-installed-apps', this.disableRecentApps);
             this._settings.set_boolean('disable-tooltips', this.disableTooltips);
             this._settings.set_boolean('reload-theme', true);
+            this._settings.set_boolean('apps-show-extra-details', this.appDescriptions);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         }); 
@@ -3268,7 +3290,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.separatorColor !== this._settings.get_default_value('separator-color').unpack() ||
             this.verticalSeparator !== this._settings.get_default_value('vert-separator').unpack() ||
             this.largeIcons !== this._settings.get_default_value('enable-large-icons').unpack() ||
-            this.subMenus !== this._settings.get_default_value('enable-sub-menus').unpack()) ? true : false
+            this.subMenus !== this._settings.get_default_value('enable-sub-menus').unpack() ||
+            this.appDescriptions !== this._settings.get_default_value('apps-show-extra-details').unpack()) ? true : false
     }
 });
 

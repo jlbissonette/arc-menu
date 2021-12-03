@@ -37,15 +37,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppDisplayType: Constants.AppDisplayType.GRID,
-            SearchDisplayType: Constants.AppDisplayType.GRID,
+            DisplayType: Constants.DisplayType.GRID,
+            SearchDisplayType: Constants.DisplayType.GRID,
             GridColumns: 4,
             ColumnSpacing: 10,
             RowSpacing: 10,
             IconGridSize: 36,
+            IconSize: 32,
             SearchResults_List_IconSize: 32,
             IconGridStyle: 'SmallIconGrid',
-            VerticalMainBox: false
+            VerticalMainBox: false,
+            SupportsCategoryOnHover: true
         });
     }
     createLayout(){
@@ -188,7 +190,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.AppDisplayType.GRID);
+            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.GRID);
             this.appShortcuts.push(shortcutMenuItem);
         }
         this._updatePosition();
@@ -252,6 +254,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.displayAllApps(isGridLayout);   
             this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
         }
+        this.activeMenuItem = this.categoryDirectories.values().next().value;
+        this.activeMenuItem.active = true;
     }
 
     updateStyle(){
@@ -259,9 +263,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px;";
         this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
-        for(let categoryMenuItem of this.categoryDirectories.values()){
-            categoryMenuItem.updateStyle();	 
-        }    
         this.updateLocation();
     }
 
@@ -272,7 +273,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     loadCategories() {
         this.categoryDirectories = null;
         this.categoryDirectories = new Map(); 
-        let categoryMenuItem = new MW.CategoryMenuButton(this, Constants.CategoryType.HOME_SCREEN);
+        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.HOME_SCREEN, Constants.DisplayType.BUTTON);
         this.categoryDirectories.set(Constants.CategoryType.HOME_SCREEN, categoryMenuItem);
         this.hasPinnedApps = true;
 
@@ -284,12 +285,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             if(categoryEnum == Constants.CategoryType.PINNED_APPS)
                 shouldShow = false;
             if(shouldShow){
-                let categoryMenuItem = new MW.CategoryMenuButton(this, categoryEnum);
+                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.BUTTON);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
             }
         }
 
-        super.loadCategories(MW.CategoryMenuButton);
+        super.loadCategories(Constants.DisplayType.BUTTON);
     }
 
     displayCategories(){
@@ -327,8 +328,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.displayRecentFiles();
         let label = this._createHeaderLabel(_("Recent Files"));
         label.remove_actor(label._ornamentLabel);
+        label.actor.style = "padding-left: 10px;";
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
+        this.applicationsBox.add_style_class_name('margin-box');
     }
 
     displayCategoryAppList(appList, category){
@@ -340,6 +343,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.subMainBox.contains(this.weatherBox)){
             this.subMainBox.remove_actor(this.weatherBox);
         }
+
+        this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);
     }
 

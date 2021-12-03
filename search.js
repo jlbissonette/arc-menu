@@ -48,7 +48,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         let menulayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']);
 
-        super._init(menulayout, app, Constants.AppDisplayType.LIST, metaInfo)
+        super._init(menulayout, app, Constants.DisplayType.LIST, metaInfo)
 
         this.app = app;
         let layoutProperties = this._menuLayout.layoutProperties;
@@ -93,8 +93,8 @@ var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult exten
     _init(provider, metaInfo, resultsView) {
         let menulayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']) || appSys.lookup_app(provider.id);
-        let appDisplayType = menulayout.layoutProperties.SearchDisplayType;
-        super._init(menulayout, app, appDisplayType, metaInfo);
+        let displayType = menulayout.layoutProperties.SearchDisplayType;
+        super._init(menulayout, app, displayType, metaInfo);
         this.app = app;
         this.provider = provider;
         this.metaInfo = metaInfo;
@@ -243,7 +243,7 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
             x_expand: true,
             y_expand: true,
         });
-        if(this.searchType === Constants.AppDisplayType.GRID){
+        if(this.searchType === Constants.DisplayType.GRID){
             this._container.style = "padding: 0px 4px";   
         }
         this.providerInfo = new ArcSearchProviderInfo(provider, this._menuLayout);
@@ -316,17 +316,17 @@ var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase
 
         let layout = new Clutter.GridLayout({ 
             orientation: Clutter.Orientation.VERTICAL,
-            column_spacing: this.searchType === Constants.AppDisplayType.GRID ? this.layoutProperties.ColumnSpacing : 0,
-            row_spacing: this.searchType === Constants.AppDisplayType.GRID ? this.layoutProperties.RowSpacing : 0,
+            column_spacing: this.searchType === Constants.DisplayType.GRID ? this.layoutProperties.ColumnSpacing : 0,
+            row_spacing: this.searchType === Constants.DisplayType.GRID ? this.layoutProperties.RowSpacing : 0,
         });
         this._grid = new St.Widget({ 
             x_expand: true,
-            x_align: this.searchType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
+            x_align: this.searchType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
             layout_manager: layout 
         });
         layout.hookup_style(this._grid);
 
-        if(this.searchType === Constants.AppDisplayType.GRID){
+        if(this.searchType === Constants.DisplayType.GRID){
             let spacing = this.layoutProperties.ColumnSpacing;
 
             this._grid.style = "padding: 0px 10px 10px 10px; spacing: " + spacing + "px;";   
@@ -338,7 +338,7 @@ var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase
 
     _getMaxDisplayedResults() {
         let maxDisplayedResults;
-        if(this.searchType === Constants.AppDisplayType.GRID)
+        if(this.searchType === Constants.DisplayType.GRID)
             maxDisplayedResults = this.layoutProperties.GridColumns
         else 
             maxDisplayedResults = MAX_SEARCH_RESULTS;
@@ -357,7 +357,7 @@ var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase
     }
 
     _addItem(display) {
-        const GridColumns = this.searchType === Constants.AppDisplayType.LIST ? 1 : this.layoutProperties.GridColumns;
+        const GridColumns = this.searchType === Constants.DisplayType.LIST ? 1 : this.layoutProperties.GridColumns;
         if(!this.rtl && (this.itemCount % GridColumns === 0)){
             this.gridTop++;
             this.gridLeft = 0;

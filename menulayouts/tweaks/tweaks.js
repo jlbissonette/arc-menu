@@ -361,22 +361,6 @@ var TweaksPage = GObject.registerClass({
         hoverRow.add(hoverSwitch);
         plasmaMenuTweaksFrame.add(hoverRow);
 
-        let descriptionsRow = new PW.FrameBoxRow();
-        let descriptionsLabel = new Gtk.Label({
-            label: _("Show Application Descriptions"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let descriptionsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
-        descriptionsSwitch.set_active(this._settings.get_boolean('apps-show-extra-details'));
-        descriptionsSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('apps-show-extra-details', widget.get_active());
-        });
-        descriptionsRow.add(descriptionsLabel);
-        descriptionsRow.add(descriptionsSwitch);
-        plasmaMenuTweaksFrame.add(descriptionsRow);
-
         let foregroundColorRow = new PW.FrameBoxRow();
         let foregroundColorLabel = new Gtk.Label({
             label: _('Selected Button Border Color'),
@@ -813,7 +797,7 @@ var TweaksPage = GObject.registerClass({
         ravenPositionRow.add(ravenPositionLabel);
         ravenPositionRow.add(ravenPositionCombo);
         generalTweaksFrame.add(ravenPositionRow);
-
+        generalTweaksFrame.add(this._createActivateOnHoverRow());
         let widgetFrame = this._createWidgetsRows(Constants.MenuLayout.RAVEN);
         this.mainBox.append(widgetFrame);
     }

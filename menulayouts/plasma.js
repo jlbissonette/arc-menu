@@ -37,8 +37,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton,{
             Search: true,
-            AppDisplayType: Constants.AppDisplayType.LIST,
-            SearchDisplayType: Constants.AppDisplayType.LIST,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -191,7 +191,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationShortcuts = [];
         for(let i = 0; i < applicationShortcutsList.length; i++){
             let applicationName = applicationShortcutsList[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcutsList[i][1], applicationShortcutsList[i][2], Constants.AppDisplayType.LIST);
+            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcutsList[i][1], applicationShortcutsList[i][2], Constants.DisplayType.LIST);
             if(shortcutMenuItem.shouldShow)
                 this.applicationShortcuts.push(shortcutMenuItem.actor);
         }
@@ -234,7 +234,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 categoryMenuItem.appList.push(mostUsed[i]);
                 let item = this.applicationsMap.get(mostUsed[i]);
                 if (!item) {
-                    item = new MW.ApplicationMenuItem(this, mostUsed[i], this.layoutProperties.AppDisplayType);
+                    item = new MW.ApplicationMenuItem(this, mostUsed[i], this.layoutProperties.DisplayType);
                     this.applicationsMap.set(mostUsed[i], item);
                 }
             }
@@ -283,7 +283,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             if(categoryEnum === Constants.CategoryType.PINNED_APPS)
                 shouldShow = false;
             if(shouldShow){
-                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum);
+                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.LIST);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
             }
         }        
@@ -310,7 +310,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'bookmarks' && places.length > 0){
             this._sections[id].add_actor(this.createLabelRow(_("Bookmarks")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_actor(item); 
             } 
         }
@@ -318,7 +318,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'devices' && places.length > 0){
             this._sections[id].add_actor(this.createLabelRow(_("Devices")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_actor(item); 
             }
         }
@@ -326,7 +326,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'network' && places.length > 0){
             this._sections[id].add_actor(this.createLabelRow(_("Network")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_actor(item); 
             }
         }
@@ -351,7 +351,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.directoryShortcuts = [];
         for (let i = 0; i < directoryShortcutsList.length; i++) {
             let directory = directoryShortcutsList[i];
-            let placeMenuItem = this.createMenuItem(directory, Constants.MenuItemType.MENU_ITEM);
+            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST);
             this.directoryShortcuts.push(placeMenuItem);
         }
     }

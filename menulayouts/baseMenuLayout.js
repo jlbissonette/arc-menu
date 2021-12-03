@@ -88,7 +88,7 @@ var BaseLayout = class {
         });
         this.applicationsGrid = new St.Widget({ 
             x_expand: true,
-            x_align: this.layoutProperties.AppDisplayType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
+            x_align: this.layoutProperties.DisplayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
             layout_manager: layout 
         });
         layout.hookup_style(this.applicationsGrid);
@@ -174,7 +174,7 @@ var BaseLayout = class {
         }
     }
 
-    loadCategories(categoryWidget = MW.CategoryMenuItem){  
+    loadCategories(displayType = Constants.DisplayType.LIST){  
         this.applicationsMap = new Map();    
         this._tree.load_sync();
         let root = this._tree.get_root_directory();
@@ -185,7 +185,7 @@ var BaseLayout = class {
                 let dir = iter.get_directory();                  
                 if (!dir.get_is_nodisplay()) {
                     let categoryId = dir.get_menu_id();
-                    let categoryMenuItem = new categoryWidget(this, dir, this.layoutProperties.AppDisplayType);
+                    let categoryMenuItem = new MW.CategoryMenuItem(this, dir, displayType);
                     this.categoryDirectories.set(categoryId, categoryMenuItem);
                     let foundRecentlyInstallApp = this._loadCategory(categoryId, dir);
                     categoryMenuItem.setRecentlyInstalledIndicator(foundRecentlyInstallApp);
@@ -257,7 +257,7 @@ var BaseLayout = class {
                 if (app.get_app_info().should_show()){
                     let item = this.applicationsMap.get(app);
                     if (!item) {
-                        item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.AppDisplayType);
+                        item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.DisplayType);
                     }
                     let disabled = this._settings.get_boolean("disable-recently-installed-apps")
                     if(!disabled && item.isRecentlyInstalled)
@@ -275,7 +275,7 @@ var BaseLayout = class {
             else if (nextType == GMenu.TreeItemType.DIRECTORY) {
                 let subdir = iter.get_directory();
                 if (!subdir.get_is_nodisplay()){
-                    if(this._settings.get_boolean('enable-sub-menus') && this.layoutProperties.AppDisplayType === Constants.AppDisplayType.LIST && !isLayoutSimple2){
+                    if(this._settings.get_boolean('enable-sub-menus') && this.layoutProperties.DisplayType === Constants.DisplayType.LIST && !isLayoutSimple2){
                         let submenuItem = this.applicationsMap.get(subdir);
                         if (!submenuItem) {
                             submenuItem = new MW.CategorySubMenuItem(this, subdir);
@@ -392,8 +392,8 @@ var BaseLayout = class {
 
             let name = this._recentFiles[i].get_display_name();
             let icon = Gio.content_type_get_symbolic_icon(this._recentFiles[i].get_mime_type()).to_string();
-            let placeMenuItem = this.createMenuItem([name, icon, file], Constants.MenuItemType.MENU_ITEM);
-            placeMenuItem.style = "padding-right: 10px;";
+            let placeMenuItem = this.createMenuItem([name, icon, file], Constants.DisplayType.LIST);
+            placeMenuItem.style = "padding-right: 15px;";
             placeMenuItem.description = this._recentFiles[i].get_uri_display().replace(homeRegExp, '~');
             placeMenuItem._updateIcon();
             placeMenuItem.fileUri = this._recentFiles[i].get_uri();
@@ -427,7 +427,7 @@ var BaseLayout = class {
         let directoryShortcuts = this._settings.get_value('directory-shortcuts-list').deep_unpack();
         for (let i = 0; i < directoryShortcuts.length; i++) {
             let directory = directoryShortcuts[i];
-            let placeMenuItem = this.createMenuItem(directory, Constants.MenuItemType.MENU_ITEM);
+            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST);
             if(placeMenuItem)
                 this.shortcutsBox.add_actor(placeMenuItem.actor);
         }
@@ -443,7 +443,7 @@ var BaseLayout = class {
         for(let i = 0;i < pinnedApps.length; i += 3){
             if(i === separatorIndex * 3 && i !== 0)
                 this._addSeparator();
-            let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i + 1], pinnedApps[i + 2]], Constants.MenuItemType.BUTTON);
+            let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i + 1], pinnedApps[i + 2]], Constants.DisplayType.BUTTON);
             if(this.layout === Constants.MenuLayout.MINT)
                 placeMenuItem.style = 'min-height: 22px;';
             placeMenuItem.actor.x_expand = false;
@@ -454,38 +454,36 @@ var BaseLayout = class {
         }  
     }
 
-    createMenuItem(menuItemArray, menuItemType){
+    createMenuItem(menuItemArray, displayType){
         let placeInfo, placeMenuItem;
         let command = menuItemArray[2];
         let app = Shell.AppSystem.get_default().lookup_app(command);
-        let ShortcutMenuItemClass = menuItemType === Constants.MenuItemType.MENU_ITEM ? MW.ShortcutMenuItem : MW.ShortcutButtonItem;
-        let PlaceMenuItemClass = menuItemType === Constants.MenuItemType.MENU_ITEM ? MW.PlaceMenuItem : MW.PlaceButtonItem;
 
         if(command === "ArcMenu_Home"){
             let homePath = GLib.get_home_dir();
             placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(homePath), _("Home"));
-            placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
         }
         else if(command === "ArcMenu_Computer"){
             placeInfo = new PlaceDisplay.RootInfo();
-            placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
         }
         else if(command === "ArcMenu_Network"){
             placeInfo = new PlaceDisplay.PlaceInfo('network', Gio.File.new_for_uri('network:///'), _('Network'),'network-workgroup-symbolic');
-            placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
         }
         else if(command === "ArcMenu_Software"){
             let software = Utils.findSoftwareManager();
             if(software)
-                placeMenuItem = new ShortcutMenuItemClass(this, _("Software"), 'system-software-install-symbolic', software, Constants.AppDisplayType.LIST);
+                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', software, displayType);
         }
         else if(command === "ArcMenu_Trash"){
-            placeMenuItem = new ShortcutMenuItemClass(this, _("Trash"), '', "ArcMenu_Trash", Constants.AppDisplayType.LIST);
+            placeMenuItem = new MW.ShortcutMenuItem(this, _("Trash"), '', "ArcMenu_Trash", displayType);
         }
         else if(command === Constants.ArcMenuSettingsCommand || command === "ArcMenu_Suspend" || command === "ArcMenu_LogOut" || command === "ArcMenu_PowerOff"
             || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || command === "ArcMenu_HybridSleep" || command === "ArcMenu_Hibernate" || app){
 
-                placeMenuItem = new ShortcutMenuItemClass(this, menuItemArray[0], menuItemArray[1], menuItemArray[2], Constants.AppDisplayType.LIST);
+                placeMenuItem = new MW.ShortcutMenuItem(this, menuItemArray[0], menuItemArray[1], menuItemArray[2], displayType);
         }
         else if(command.startsWith("ArcMenu_")){
             let path = command.replace("ArcMenu_",'');
@@ -504,13 +502,13 @@ var BaseLayout = class {
             path = GLib.get_user_special_dir(path);
             if (path !== null){
                 placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]));
-                placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
+                placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
             }
         }
         else{
             let path = command;
             placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]), (menuItemArray[1] !== "ArcMenu_Folder") ? Gio.icon_new_for_string(menuItemArray[1]) : null);
-            placeMenuItem = new PlaceMenuItemClass(this, placeInfo);
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
         }
         return placeMenuItem;
     }
@@ -522,7 +520,7 @@ var BaseLayout = class {
         for(let i = 0; i < pinnedApps.length; i += 3){
             if(i === 0 && pinnedApps[0] === "ArcMenu_WebBrowser")
                 this._updatePinnedAppsWebBrowser(pinnedApps);
-            let pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2], this.layoutProperties.AppDisplayType);
+            let pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2], this.layoutProperties.DisplayType);
             pinnedAppsMenuItem.connect('saveSettings', ()=> {
                 let array = [];
                 for(let i = 0; i < this.pinnedAppsArray.length; i++){
@@ -681,7 +679,7 @@ var BaseLayout = class {
         let left = 0;
         let activeMenuItemSet = false;
         let currentCharacter;
-        let alphabetizeAllPrograms = this._settings.get_boolean("alphabetize-all-programs") && this.layoutProperties.AppDisplayType === Constants.AppDisplayType.LIST;
+        let alphabetizeAllPrograms = this._settings.get_boolean("alphabetize-all-programs") && this.layoutProperties.DisplayType === Constants.DisplayType.LIST;
         let rtl = this.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
 
         for (let i = 0; i < apps.length; i++) {
@@ -697,7 +695,7 @@ var BaseLayout = class {
             else{
                 item = this.applicationsMap.get(app);
                 if (!item) {
-                    item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.AppDisplayType);
+                    item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.DisplayType);
                     this.applicationsMap.set(app, item);
                 }
             }

@@ -37,8 +37,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppDisplayType: Constants.AppDisplayType.LIST,
-            SearchDisplayType: Constants.AppDisplayType.GRID,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.GRID,
             GridColumns: 6,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -160,14 +160,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
         if (path !== null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Downloads"));
-            let placeMenuItem = new MW.PlaceButtonItem(this, placeInfo);
+            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
             this.actionsBox.add_actor(placeMenuItem.actor);
         }
 
         path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
         if (path !== null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
-            let placeMenuItem = new MW.PlaceButtonItem(this, placeInfo);
+            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
             this.actionsBox.add_actor(placeMenuItem.actor);
         }
 
@@ -182,7 +182,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.frequentAppsHeader = this._createNavigationButtons(_("Frequent"), null);
 
         this.loadPinnedApps();
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.loadCategories();
         this.setDefaultMenuView();
 
@@ -190,7 +190,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadPinnedApps(){
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.GRID;
+        this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
     }
 
@@ -209,7 +209,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         for (let i = 0; i < mostUsed.length; i++) {
             if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
-                let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.AppDisplayType.LIST);
+                let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.DisplayType.LIST);
                 this.frequentAppsList.push(item);
             }
         }
@@ -220,7 +220,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
     
     setDefaultMenuView(){
-        this.setGridLayout(Constants.AppDisplayType.GRID, 6, 0);
+        this.setGridLayout(Constants.DisplayType.GRID, 6, 0);
         super.setDefaultMenuView();
         this.loadFrequentApps();
         this.activeCategory = _("Pinned");
@@ -236,7 +236,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeCategory = _("All Apps");
         this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
         
-        this.setGridLayout(Constants.AppDisplayType.LIST, 1, 5);
+        this.setGridLayout(Constants.DisplayType.LIST, 1, 5);
         let appList = [];
         this.applicationsMap.forEach((value,key,map) => {
             appList.push(key);
@@ -246,7 +246,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this._clearActorsFromBox();
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
-        this.setGridLayout(Constants.AppDisplayType.GRID, 6, 0, false);
+        this.setGridLayout(Constants.DisplayType.GRID, 6, 0, false);
     }
 
     reload() {
@@ -269,15 +269,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.arcMenu.box.style = "padding-bottom:0px;";
     }
 
-    setGridLayout(appType, columns, spacing, setStyle = true){
+    setGridLayout(displayType, columns, spacing, setStyle = true){
         if(setStyle){
-            this.applicationsGrid.x_align = appType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
-            appType === Constants.AppDisplayType.LIST ? this.applicationsBox.add_style_class_name('margin-box') : this.applicationsBox.remove_style_class_name('margin-box');
+            this.applicationsGrid.x_align = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
+            displayType === Constants.DisplayType.LIST ? this.applicationsBox.add_style_class_name('margin-box') : this.applicationsBox.remove_style_class_name('margin-box');
         }
         this.applicationsGrid.layout_manager.column_spacing = spacing;
         this.applicationsGrid.layout_manager.row_spacing = spacing;
         this.layoutProperties.GridColumns = columns;
-        this.layoutProperties.AppDisplayType = appType;
+        this.layoutProperties.DisplayType = displayType;
     }
 
     loadCategories() {
@@ -294,9 +294,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this.frequentAppsList.length > 0 && !this._settings.get_boolean("eleven-disable-frequent-apps")){
             this.activeCategory = _("Frequent");
-            this.setGridLayout(Constants.AppDisplayType.GRID, 2, 0);
+            this.setGridLayout(Constants.DisplayType.GRID, 2, 0);
             this._displayAppList(this.frequentAppsList, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
-            this.setGridLayout(Constants.AppDisplayType.GRID, 6, 0);
+            this.setGridLayout(Constants.DisplayType.GRID, 6, 0);
             if(!this.applicationsBox.contains(this.shortcutsBox))
                 this.applicationsBox.add(this.shortcutsBox);
         }

@@ -417,11 +417,11 @@ function getArraysEqual(a, b) {
         return a === b;
 }
 
-function createTooltip(button, widget, titleLabel, description){
+function createTooltip(button, widget, titleLabel, description, displayType){
     let lbl = titleLabel.clutter_text;
     lbl.get_allocation_box();
     let isEllipsized = lbl.get_layout().is_ellipsized();
-    if(isEllipsized || description){
+    if(!displayType && (isEllipsized || description)){
         let titleText, descriptionText;
         if(isEllipsized && description){
             titleText = titleLabel.text.replace(/\n/g, " ");
@@ -433,7 +433,13 @@ function createTooltip(button, widget, titleLabel, description){
             descriptionText = description;
         widget.tooltip = new Me.imports.menuWidgets.Tooltip(button, widget.actor, titleText, descriptionText);
         widget.tooltip._onHover();
-    } 
+    }
+    else if(displayType === Constants.DisplayType.BUTTON){
+        let titleText = titleLabel.text.replace(/\n/g, " ");
+        widget.tooltip = new Me.imports.menuWidgets.Tooltip(button, widget.actor, titleText, null);
+        widget.tooltip.location = Constants.TooltipLocation.TOP_CENTERED;
+        widget.tooltip._onHover();
+    }
 }
 
 function getDashToPanelPosition(settings, index){

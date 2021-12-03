@@ -37,8 +37,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(mainButton) {
         super(mainButton, {
             Search: true,
-            AppDisplayType: Constants.AppDisplayType.LIST,
-            SearchDisplayType: Constants.AppDisplayType.GRID,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.GRID,
             GridColumns: 4,
             ColumnSpacing: 4,
             RowSpacing: 4,
@@ -139,7 +139,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsBox.add(this.user.actor);
 
 
-        let filesButton = new MW.ShortcutButtonItem(this, _("Files"), "system-file-manager", "org.gnome.Nautilus.desktop");
+        let filesButton = new MW.ShortcutMenuItem(this, _("Files"), "system-file-manager", "org.gnome.Nautilus.desktop", Constants.DisplayType.BUTTON);
         if(filesButton.shouldShow)
             this.actionsBox.add_actor(filesButton.actor);
 
@@ -153,7 +153,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton)
 
         this.loadPinnedApps();
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.loadCategories();
         this.setDefaultMenuView();
     }
@@ -161,12 +161,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadPinnedApps(){
         this.layoutProperties.IconGridSize = 42;
-        this.layoutProperties.AppDisplayType = Constants.AppDisplayType.GRID;
+        this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
     }
     
     setDefaultMenuView(){
-        this.setGridLayout(Constants.AppDisplayType.GRID, 4, 4);
+        this.setGridLayout(Constants.DisplayType.GRID, 4, 4);
         super.setDefaultMenuView();
         this.activeCategory = _("Pinned");
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
@@ -177,7 +177,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeCategory = _("All Apps");
         this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
 
-        this.setGridLayout(Constants.AppDisplayType.LIST, 1, 3);
+        this.setGridLayout(Constants.DisplayType.LIST, 1, 3);
         let appList = [];
         this.applicationsMap.forEach((value,key,map) => {
             appList.push(key);
@@ -187,7 +187,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this._clearActorsFromBox();
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
-        this.setGridLayout(Constants.AppDisplayType.GRID, 4, 4, false);
+        this.setGridLayout(Constants.DisplayType.GRID, 4, 4, false);
     }
 
     reload() {
@@ -206,16 +206,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
     }
 
-    setGridLayout(appType, columns, spacing, setStyle = true){
+    setGridLayout(displayType, columns, spacing, setStyle = true){
         if(setStyle){
-            this.applicationsGrid.x_align = appType === Constants.AppDisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
-            appType === Constants.AppDisplayType.LIST ? this.applicationsBox.add_style_class_name('margin-box') : this.applicationsBox.remove_style_class_name('margin-box');
+            this.applicationsGrid.x_align = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
+            displayType === Constants.DisplayType.LIST ? this.applicationsBox.add_style_class_name('margin-box') : this.applicationsBox.remove_style_class_name('margin-box');
         }
 
         this.applicationsGrid.layout_manager.column_spacing = spacing;
         this.applicationsGrid.layout_manager.row_spacing = spacing;
         this.layoutProperties.GridColumns = columns;
-        this.layoutProperties.AppDisplayType = appType;
+        this.layoutProperties.DisplayType = displayType;
     }
 
     loadCategories() {
