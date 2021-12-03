@@ -149,6 +149,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leaveButton = new MW.LeaveButton(this);
         this.actionsBox.add(this.leaveButton.actor);
 
+        this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton)
+        this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton)
+
         this.loadPinnedApps();
         this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
         this.loadCategories();
@@ -201,14 +204,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + RoundBottomBorder;
         this.topBox.style = this.topBoxStyle + RoundTopBorder;
         this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
-        this._updateHeaderLabelButtonStyle();
-    }
-
-    _updateHeaderLabelButtonStyle(){
-        if(!this.headerLabelButton)
-            return;
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        customStyle ? this.headerLabelButton.add_style_class_name('arcmenu-custom-button') : this.headerLabelButton.remove_style_class_name('arcmenu-custom-button');
     }
 
     setGridLayout(appType, columns, spacing, setStyle = true){
@@ -240,30 +235,36 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _displayAppList(apps, category, grid){      
         super._displayAppList(apps, category, grid);
 
-        this.headerLabel?.destroy();
+        this._hideNavigationButtons();
 
-        this.headerLabel = this.createLabelRow(this.activeCategory);
-        this.headerLabel.remove_actor(this.headerLabel._ornamentLabel);
-        this.headerLabel.label.y_align = Clutter.ActorAlign.CENTER;
-        this.headerLabel.style = 'padding: 0px 15px 10px 15px;'
-        this.subMainBox.insert_child_at_index(this.headerLabel, 1);
-        
         if(category === Constants.CategoryType.PINNED_APPS){
-            this.headerLabel.add(this.headerLabelButton = new MW.AllAppsButton(this));
+            this.subMainBox.insert_child_at_index(this.allAppsButton, 1);
         }
         else if(category === Constants.CategoryType.ALL_PROGRAMS){
-            this.headerLabel.add(this.headerLabelButton = new MW.BackButton(this));   
+            this.subMainBox.insert_child_at_index(this.backButton, 1);
         }
-        this._updateHeaderLabelButtonStyle();
+    }
+
+    _hideNavigationButtons(){
+        if(this.subMainBox.contains(this.backButton))
+            this.subMainBox.remove_actor(this.backButton);
+        if(this.subMainBox.contains(this.allAppsButton))
+            this.subMainBox.remove_actor(this.allAppsButton);
+    }
+
+    _createNavigationButtons(buttonTitle, ButtonClass){
+        let navButton = this.createLabelRow(buttonTitle);
+        navButton.remove_actor(navButton._ornamentLabel);
+        navButton.label.y_align = Clutter.ActorAlign.CENTER;
+        navButton.style = 'padding: 0px 15px 10px 15px;'
+        navButton.add(new ButtonClass(this));
+        return navButton;
     }
 
     _onSearchBoxChanged(searchBox, searchString){
         this.applicationsBox.remove_style_class_name('margin-box');
-        if(!searchBox.isEmpty()){
-            if(this.headerLabel && this.subMainBox.contains(this.headerLabel)){
-                this.subMainBox.remove_actor(this.headerLabel);
-            }
-        }
+        if(!searchBox.isEmpty())
+            this._hideNavigationButtons();
         super._onSearchBoxChanged(searchBox, searchString);       
     }
 

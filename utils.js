@@ -628,10 +628,7 @@ function createStylesheet(settings){
         +".arc-menu-eject-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 0px 8px;\n}\n\n"
 
         +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nmin-height: 16px;\nmin-width: 16px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
-
-        +".arcmenu-custom-button{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 0px\n}\n\n"
-        +".arcmenu-custom-button:hover, .arcmenu-custom-button:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\n}\n\n"
-        +".arcmenu-custom-button:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\n}\n\n"
+        +".arcmenu-small-button{\n-st-icon-style: symbolic;\nmin-height: 7px;\nmin-width: 7px;\npadding: 3px 8px;\n}\n\n"
 
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"
@@ -642,7 +639,6 @@ function createStylesheet(settings){
                         +"box-shadow: none;\nfont-size:" + fontSize + "pt;\n}\n\n"
         +".arc-menu .popup-sub-menu{\npadding-bottom: 1px;\nbackground-color: " + modifyColorLuminance(menuColor, 0.04) + ";\n}\n\n"
         +".arc-menu .popup-menu-item{\nspacing: 6px; \nborder: none;\ncolor:" + menuForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item:ltr{\npadding-right:1.75em;\npadding-left: 0;\n}\n\n.arc-menu .popup-menu-item:rtl\n{\npadding-right: 0;\npadding-left:1.75em;\n}\n\n"
         +".arc-menu .popup-menu-item:active{\nbackground-color:" + modifyColorLuminance(highlightColor, -0.07) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
         +".arc-menu .popup-menu-item.selected{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
         +".arc-menu .popup-menu-item:checked{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"

@@ -237,7 +237,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.extrasMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
         this.extrasMenu.connect('open-state-changed', (menu, open) => {
             if(!open){
-                this.extrasButton.fake_release();
                 this.extrasButton.set_hover(false);
             }
             else{

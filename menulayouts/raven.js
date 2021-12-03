@@ -150,14 +150,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true
         });
         this.weatherBox.style = "width:410px;"; 
-        this._weatherItem = new MW.WeatherSection();
+        this._weatherItem = new MW.WeatherSection(this);
         this._weatherItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
-        this._weatherItem.connect("clicked", ()=> this.arcMenu.close());
-        this._clocksItem = new MW.WorldClocksSection();
+        this._clocksItem = new MW.WorldClocksSection(this);
         this._clocksItem.x_expand = true;
         this._clocksItem.x_align = Clutter.ActorAlign.FILL;
         this._clocksItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
-        this._clocksItem.connect("clicked", ()=> this.arcMenu.close());
 
         this.weatherBox.add(this._clocksItem);
         this.weatherBox.add(this._weatherItem);
@@ -258,11 +256,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     updateStyle(){
         super.updateStyle();
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        let gapAdjustment = this._settings.get_int('gap-adjustment');
-
-        customStyle ? this._clocksItem.add_style_class_name('arcmenu-custom-button') : this._clocksItem.remove_style_class_name('arcmenu-custom-button');
-        customStyle ? this._weatherItem.add_style_class_name('arcmenu-custom-button') : this._weatherItem.remove_style_class_name('arcmenu-custom-button');
 
         this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px;";
         this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";

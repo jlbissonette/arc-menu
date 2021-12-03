@@ -157,18 +157,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.setDefaultMenuView();
     }
 
-    updateStyle(){
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        if(this.sessionBox){
-            this.sessionBox.get_children().forEach((actor) => {
-                if(actor instanceof St.Button){
-                    customStyle ? actor.add_style_class_name('arcmenu-custom-button') : actor.remove_style_class_name('arcmenu-custom-button');
-                }
-            });
-        }
-        super.updateStyle();
-    }
-
     loadExtraPinnedApps(){
         this.actionsBox.destroy_all_children();
         this.actionsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));

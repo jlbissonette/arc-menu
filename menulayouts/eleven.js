@@ -177,6 +177,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leaveButton = new MW.LeaveButton(this);
         this.actionsBox.add(this.leaveButton.actor);
 
+        this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton);
+        this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
+        this.frequentAppsHeader = this._createNavigationButtons(_("Frequent"), null);
+
         this.loadPinnedApps();
         this.layoutProperties.AppDisplayType = Constants.AppDisplayType.LIST;
         this.loadCategories();
@@ -225,9 +229,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _clearActorsFromBox(box){
-        if(this.allAppsLabel && this.mainBox.contains(this.allAppsLabel)){
-            this.mainBox.remove_actor(this.allAppsLabel);
-        }
         super._clearActorsFromBox(box);
     }
 
@@ -266,15 +267,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.arcMenu.box.style = "padding-bottom:0px; margin:0px;";
         else
             this.arcMenu.box.style = "padding-bottom:0px;";
-
-        this._updateHeaderLabelButtonStyle();
-    }
-
-    _updateHeaderLabelButtonStyle(){
-        if(!this.headerLabelButton)
-            return;
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        customStyle ? this.headerLabelButton.add_style_class_name('arcmenu-custom-button') : this.headerLabelButton.remove_style_class_name('arcmenu-custom-button');
     }
 
     setGridLayout(appType, columns, spacing, setStyle = true){
@@ -315,32 +307,40 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _displayAppList(apps, category, grid){      
         super._displayAppList(apps, category, grid);
-        let label = this.createLabelRow(this.activeCategory);
-        label.remove_actor(label._ornamentLabel);
+
+        this._hideNavigationButtons();
         
         if(category === Constants.CategoryType.PINNED_APPS){
-            label.style = 'padding: 0px 25px;'
-            label.label.style = 'font-weight: bold; padding: 15px 0px;';
-            label.add(this.headerLabelButton = new MW.AllAppsButton(this));
-            this.applicationsBox.insert_child_at_index(label, 0);
+            this.applicationsBox.insert_child_at_index(this.allAppsButton, 0);
         }
         else if(category === Constants.CategoryType.HOME_SCREEN){
-            label.style = 'padding: 0px 25px;'
-            label.label.style = 'font-weight: bold; padding: 15px 0px;';
-            this.applicationsBox.insert_child_at_index(label, 2);
+            this.applicationsBox.insert_child_at_index(this.frequentAppsHeader, 2);
         }
         else if(category === Constants.CategoryType.ALL_PROGRAMS){
-            this.allAppsLabel = label;
-            label.style = 'padding: 0px 25px;'
-            label.label.style = 'font-weight: bold; padding: 15px 0px;';
-            label.add(this.headerLabelButton = new MW.BackButton(this));
-            this.mainBox.insert_child_at_index(this.allAppsLabel, 1);        
+            this.mainBox.insert_child_at_index(this.backButton, 1);        
         }
-        this._updateHeaderLabelButtonStyle();
+    }
+
+    _hideNavigationButtons(){
+        if(this.mainBox.contains(this.backButton))
+            this.mainBox.remove_actor(this.backButton);
+    }
+
+    _createNavigationButtons(buttonTitle, ButtonClass){
+        let navButton = this.createLabelRow(buttonTitle);
+        navButton.remove_actor(navButton._ornamentLabel);
+        navButton.label.y_align = Clutter.ActorAlign.CENTER;
+        navButton.label.style = 'padding: 15px 0px;';
+        navButton.style = 'padding: 0px 25px;'
+        if(ButtonClass)
+            navButton.add(new ButtonClass(this));
+        return navButton;
     }
 
     _onSearchBoxChanged(searchBox, searchString){
         this.applicationsBox.remove_style_class_name('margin-box');
+        if(!searchBox.isEmpty())
+            this._hideNavigationButtons();
         super._onSearchBoxChanged(searchBox, searchString);       
     }
 

@@ -157,12 +157,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         
         this.widgetBox.style = "margin: 0px; spacing: 10px; padding: 10px 50px;";   
-        this._weatherItem = new MW.WeatherSection();
+        this._weatherItem = new MW.WeatherSection(this);
         this._weatherItem.style = "border-radius:4px; width: 350px; padding: 10px; margin: 0px";
-        this._weatherItem.connect("clicked", ()=> this.arcMenu.close());
-        this._clocksItem = new MW.WorldClocksSection();
+        this._clocksItem = new MW.WorldClocksSection(this);
         this._clocksItem.style = "border-radius:4px; padding: 10px; margin: 0px";
-        this._clocksItem.connect("clicked", ()=> this.arcMenu.close());
 
         this.appShortcuts = [];
         this.shortcutsBox = new St.BoxLayout({
@@ -250,13 +248,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesMenu = new PopupMenu.PopupMenu(this.categoriesButton.actor, 0.5, St.Side.TOP);
         this.categoriesMenu.blockSourceEvents = true;
         this.categoriesMenu.connect('open-state-changed', (menu, open) => {
-            if(!open){
-                this.categoriesButton.remove_style_pseudo_class("active");
-                this.categoriesButton.fake_release();
-                this.categoriesButton.set_hover(false);
-            }
-            else{
-                this.categoriesButton.add_style_pseudo_class("active");
+            if(open){
                 if(this.menuButton.tooltipShowingID){
                     GLib.source_remove(this.menuButton.tooltipShowingID);
                     this.menuButton.tooltipShowingID = null;
@@ -349,12 +341,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let borderRadius = themeNode.get_length('-arrow-border-radius');
         this.themeNodeBorderRadius = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + this.themeNodeBorderRadius;
-
-        let actor = this.categoriesButton.actor;
-        customStyle ? actor.add_style_class_name('arcmenu-custom-button') : actor.remove_style_class_name('arcmenu-custom-button');
-
-        customStyle ? this._clocksItem.add_style_class_name('arcmenu-custom-button') : this._clocksItem.remove_style_class_name('arcmenu-custom-button');
-        customStyle ? this._weatherItem.add_style_class_name('arcmenu-custom-button') : this._weatherItem.remove_style_class_name('arcmenu-custom-button');
         
         if(removeMenuArrow)
             this.arcMenu.box.style = "padding-bottom:0px; margin:0px;";

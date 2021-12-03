@@ -157,7 +157,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.pinnedAppsMenu.blockSourceEvents = true;
         this.pinnedAppsMenu.connect('open-state-changed', (menu, open) => {
             if(!open){
-                this.pinnedAppsButton.fake_release();
                 this.pinnedAppsButton.set_hover(false);
             }
             else{

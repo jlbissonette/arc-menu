@@ -172,13 +172,6 @@ var BaseLayout = class {
                 this.searchBox.add_style_class_name('default-search-entry');
             } 
         }
-        if(this.actionsBox){
-            this.actionsBox.get_children().forEach((actor) => {
-                if(actor instanceof St.Button){
-                    customStyle ? actor.add_style_class_name('arcmenu-custom-button') : actor.remove_style_class_name('arcmenu-custom-button');
-                }
-            });
-        }
     }
 
     loadCategories(categoryWidget = MW.CategoryMenuItem){  
@@ -404,18 +397,12 @@ var BaseLayout = class {
             placeMenuItem.description = this._recentFiles[i].get_uri_display().replace(homeRegExp, '~');
             placeMenuItem._updateIcon();
             placeMenuItem.fileUri = this._recentFiles[i].get_uri();
-            placeMenuItem._removeBtn = new St.Button({
-                style_class: this._settings.get_boolean('enable-custom-arc-menu') ? 'arcmenu-custom-button button' : 'button',
-                style: 'padding: 0px 8px;',
-                x_expand: true,
-                x_align: Clutter.ActorAlign.END
-            });
-            placeMenuItem._removeBtn.child = new St.Icon({
-                icon_name: 'edit-delete-symbolic',
-                style_class: 'popup-menu-icon',
-                icon_size: 16
-            });
-            placeMenuItem._removeBtn.connect('clicked', () =>  {
+            placeMenuItem._removeBtn = new MW.ArcMenuButtonItem(this, null, 'edit-delete-symbolic');
+            placeMenuItem._removeBtn.x_align = Clutter.ActorAlign.END;
+            placeMenuItem._removeBtn.x_expand = true;
+            placeMenuItem._removeBtn.add_style_class_name("arcmenu-small-button");
+            placeMenuItem._removeBtn.setIconSize(14);
+            placeMenuItem._removeBtn.connect('activate', () =>  {
                 try {
                     this.recentManager.remove_item(placeMenuItem.fileUri);
                     box.remove_actor(placeMenuItem);
@@ -452,15 +439,11 @@ var BaseLayout = class {
         if(!pinnedApps.length || !Array.isArray(pinnedApps)){
             pinnedApps = this._createExtraPinnedAppsList();
         }
-        
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
 
         for(let i = 0;i < pinnedApps.length; i += 3){
             if(i === separatorIndex * 3 && i !== 0)
                 this._addSeparator();
             let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i + 1], pinnedApps[i + 2]], Constants.MenuItemType.BUTTON);
-            if(customStyle) 
-                placeMenuItem.actor.add_style_class_name('arcmenu-custom-button');
             if(this.layout === Constants.MenuLayout.MINT)
                 placeMenuItem.style = 'min-height: 22px;';
             placeMenuItem.actor.x_expand = false;
