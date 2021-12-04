@@ -185,7 +185,13 @@ var BaseLayout = class {
                 let dir = iter.get_directory();                  
                 if (!dir.get_is_nodisplay()) {
                     let categoryId = dir.get_menu_id();
-                    let categoryMenuItem = new MW.CategoryMenuItem(this, dir, displayType);
+                    let categoryMenuItem;
+                    if(displayType === Constants.DisplayType.SIMPLE_CATEGORY)
+                        categoryMenuItem = new MW.SimpleMenuItem(this, dir);
+                    else if(displayType === Constants.DisplayType.SUBMENU_CATEGORY)
+                        categoryMenuItem = new MW.CategorySubMenuItem(this, dir);
+                    else
+                        categoryMenuItem = new MW.CategoryMenuItem(this, dir, displayType);
                     this.categoryDirectories.set(categoryId, categoryMenuItem);
                     let foundRecentlyInstallApp = this._loadCategory(categoryId, dir);
                     categoryMenuItem.setRecentlyInstalledIndicator(foundRecentlyInstallApp);

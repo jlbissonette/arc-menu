@@ -43,6 +43,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
+            IconSize: 32,
             SearchResults_List_IconSize: 32,
             IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true,
@@ -408,6 +409,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let label = this._createHeaderLabel(_("Recent Files"));
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
+        this.applicationsBox.add_style_class_name('margin-box');
     }
 
     displayCategoryAppList(appList, category){
@@ -421,6 +423,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.subMainBox.contains(this.widgetBox)){
             this.subMainBox.remove_actor(this.widgetBox);
         }
+        this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);
     }
 

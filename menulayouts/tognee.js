@@ -154,9 +154,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
-            let shortcutButtonItem = new MW.ShortcutButtonItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2]);
-            if(shortcutButtonItem.shouldShow)
-                this.shortcutsBox.add(shortcutButtonItem.actor);
+            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.BUTTON);
+            if(shortcutMenuItem.shouldShow)
+                this.shortcutsBox.add(shortcutMenuItem.actor);
         }
         
         // Bottom Section for Power etc...

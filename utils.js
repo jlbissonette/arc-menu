@@ -421,7 +421,7 @@ function createTooltip(button, widget, titleLabel, description, displayType){
     let lbl = titleLabel.clutter_text;
     lbl.get_allocation_box();
     let isEllipsized = lbl.get_layout().is_ellipsized();
-    if(!displayType && (isEllipsized || description)){
+    if(displayType !== Constants.DisplayType.BUTTON && (isEllipsized || description)){
         let titleText, descriptionText;
         if(isEllipsized && description){
             titleText = titleLabel.text.replace(/\n/g, " ");

@@ -406,7 +406,6 @@ var ApplicationContextItems = GObject.registerClass({
 var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends PopupMenu.PopupMenu {
     constructor(actor, app, menuLayout){
         super(actor, 0.0, St.Side.TOP);
-        this.box.add_style_class_name('margin-box');
         this._menuLayout = menuLayout;
         this._settings = menuLayout._settings;
         this._menuButton = menuLayout.menuButton;
@@ -616,7 +615,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             let description = this.description;
             if(this._app)
                 description = this._app.get_description();
-            Utils.createTooltip(this._menuLayout, this, this.label, description, this._displayType);
+            Utils.createTooltip(this._menuLayout, this, this.label, description, this._displayType ? this._displayType : -1);
         }
     }
 
@@ -1365,7 +1364,7 @@ var PlasmaMenuItem = GObject.registerClass(class Arc_Menu_PlasmaMenuItem extends
     _onHover(){
         if(this.tooltip === undefined && this.actor.hover && this.label){
             let description = null;
-            Utils.createTooltip(this._menuLayout, this, this.label, description);
+            Utils.createTooltip(this._menuLayout, this, this.label, description, Constants.DisplayType.LIST);
         }
         let shouldHover = this._settings.get_boolean('plasma-enable-hover');
         if(shouldHover && this.actor.hover && !this.isActive){
@@ -1957,7 +1956,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
             if(this._displayType === Constants.DisplayType.GRID)
                 this.contextMenu.centerBoxPointerPosition();
         }
-        if(this.tooltip!=undefined)
+        if(this.tooltip !== undefined)
             this.tooltip.hide();
         if(!this.contextMenu.isOpen)
             this.contextMenu.rebuildItems();
@@ -2421,7 +2420,7 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
             }
 
             if (this._isInTriangle(event.get_coords())){
-                if(this._menuLayout.activeCategory !== this._name && this._menuLayout.navigatingCategory === this)
+                if(this._menuLayout.activeCategoryType !== this._category && this._menuLayout.navigatingCategory === this)
                     this.activate(Clutter.get_current_event());
                 return true;
             }

@@ -85,7 +85,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
         }        
 
-        super.loadCategories(MW.CategorySubMenuItem);
+        super.loadCategories(Constants.DisplayType.SUBMENU_CATEGORY);
 
         for(let categoryMenuItem of this.categoryDirectories.values()){
             categoryMenuItem._setParent(this.arcMenu);  

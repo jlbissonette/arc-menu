@@ -34,6 +34,8 @@ var DisplayType = {
     LIST: 0,
     GRID: 1,
     BUTTON: 2,
+    SIMPLE_CATEGORY: 3,
+    SUBMENU_CATEGORY: 4,
 }
 
 var CategoryType = {

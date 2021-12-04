@@ -91,7 +91,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             }
         }        
         
-        super.loadCategories(MW.SimpleMenuItem);
+        super.loadCategories(Constants.DisplayType.SIMPLE_CATEGORY);
     }
     
     displayCategories(){

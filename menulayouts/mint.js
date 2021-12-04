@@ -63,8 +63,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
         
-        this.actionsScrollBox.style = "width: 62px; margin: 0px 10px 10px 20px; background-color:rgba(186, 196,201, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 5px;";
-        this.actionsBox.style = "margin: 0px; spacing: 10px; padding: 21px 0px;";
+        this.actionsScrollBox.style = "padding: 21px 0px; width: 62px; margin: 0px 10px 10px 20px; background-color:rgba(186, 196,201, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 5px;";
+        this.actionsBox.style = "spacing: 10px;";
         //check if custom ArcMenu is enabled
         if( this._settings.get_boolean('enable-custom-arc-menu'))
             this.actionsBox.add_style_class_name('arc-menu');
