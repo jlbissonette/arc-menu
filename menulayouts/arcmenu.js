@@ -42,7 +42,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
 
@@ -133,7 +138,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.softwareShortcuts = false;
 
         if(!this._settings.get_boolean('disable-user-avatar')){
-            this.user = new MW.UserMenuItem(this);
+            this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
             this.rightBox.add(this.user.actor);
             this.rightBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
         }
@@ -227,9 +232,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let rightPanelWidth = this._settings.get_int('right-panel-width');
         this.rightBox.style = "width: " + rightPanelWidth + "px;";
         this.shortcutsScrollBox.style = "width: " + rightPanelWidth + "px;";
-        
-        this.loadPinnedApps();
+
         this.loadCategories();
+        this.loadPinnedApps();
+ 
         this.setDefaultMenuView(); 
     }
 
@@ -332,8 +338,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let appList = [];
         for (let i = 0; i < mostUsed.length; i++) {
             if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
-                let item = new MW.ApplicationMenuItem(this, mostUsed[i]);
-                item.forceLargeIcon();
+                let isContainedInCategory = false;
+                let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.DisplayType.LIST, null, isContainedInCategory);
                 appList.push(item);
             }
         }

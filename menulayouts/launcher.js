@@ -47,10 +47,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
-            IconSize: 28,
-            SearchResults_List_IconSize: 28,
             IconGridStyle: 'LargeIconGrid',
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.LARGE_ICON_SIZE,
         });
     }
     createLayout(){     
@@ -439,10 +442,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeResultMenuItem._path = path;
         this.activeResultMenuItem.x_expand = false;
         this.activeResultMenuItem.x_align = Clutter.ActorAlign.CENTER;
-        this.activeResultMenuItem.forceLargeIcon(76);
+        let iconSize = 76;
+        let icon = activeResult.metaInfo ?activeResult.metaInfo['createIcon'](iconSize) : app.create_icon_texture(iconSize);
+        this.activeResultMenuItem._iconBin.set_child(icon);
         if(!this.activeResultMenuItem._iconBin.get_child()){
             let icon = new St.Icon({ 
-                icon_size: 76,
+                icon_size: iconSize,
                 gicon: activeResult.provider.appInfo.get_icon()
             });
             this.activeResultMenuItem._iconBin.set_child(icon);

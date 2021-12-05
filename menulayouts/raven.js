@@ -43,11 +43,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 10,
             RowSpacing: 10,
             IconGridSize: 36,
-            IconSize: 32,
-            SearchResults_List_IconSize: 32,
             IconGridStyle: 'SmallIconGrid',
             VerticalMainBox: false,
-            SupportsCategoryOnHover: true
+            SupportsCategoryOnHover: true,
+            DefaultCategoryIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){
@@ -194,8 +197,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.appShortcuts.push(shortcutMenuItem);
         }
         this._updatePosition();
-        this.loadPinnedApps();
         this.loadCategories();
+        this.loadPinnedApps();
+
         this.displayCategories();
         this.setDefaultMenuView();
     }

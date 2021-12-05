@@ -43,7 +43,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 0,
             RowSpacing: 0,
             SupportsCategoryOnHover: true,
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){
@@ -143,8 +148,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add(this.searchBox.actor); 
         }
         
-        this.loadPinnedApps();
         this.loadCategories();
+        this.loadPinnedApps();
         this.displayCategories();
         this.setDefaultMenuView(); 
     }

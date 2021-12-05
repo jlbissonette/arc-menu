@@ -43,11 +43,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 0,
             RowSpacing: 0,
             IconGridSize: 34,
-            IconSize: 28,
-            SearchResults_App_IconSize: 34,
-            SearchResults_List_IconSize: 28,
             IconGridStyle: 'ElevenIconGrid',
             VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.LARGE_ICON_SIZE,
         });
     }
 
@@ -151,7 +153,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         layout.hookup_style(this.shortcutsGrid);
         this.shortcutsBox.add(this.shortcutsGrid);
 
-        this.user = new MW.UserMenuItem(this);
+        this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
         this.user.x_expand = true;
         this.user.x_align = Clutter.ActorAlign.FILL;
         this.user.style = "margin: 0px 75px 0px 0px;"
@@ -160,14 +162,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
         if (path !== null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Downloads"));
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
+            let isContainedInCategory = false;
+            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
             this.actionsBox.add_actor(placeMenuItem.actor);
         }
 
         path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
         if (path !== null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
+            let isContainedInCategory = false;
+            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
             this.actionsBox.add_actor(placeMenuItem.actor);
         }
 
@@ -181,15 +185,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
         this.frequentAppsHeader = this._createNavigationButtons(_("Frequent"), null);
 
-        this.loadPinnedApps();
         this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.loadCategories();
+        this.loadPinnedApps();
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
+
         this.setDefaultMenuView();
 
         this.disableFrequentAppsID = this._settings.connect("changed::eleven-disable-frequent-apps", () => this.setDefaultMenuView());
     }
 
     loadPinnedApps(){
+        this.layoutProperties.IconGridSize = 34;
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
     }
@@ -347,7 +354,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     destroy(isReload){        
         this.arcMenu.box.style = null;
         this.arcMenu.actor.style = null;
-
+        this.backButton.destroy();
+        this.allAppsButton.destroy();
         if(this.disableFrequentAppsID){
             this._settings.disconnect(this.disableFrequentAppsID);
             this.disableFrequentAppsID = null;

@@ -43,10 +43,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
-            IconSize: 32,
-            SearchResults_List_IconSize: 32,
             IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
 
@@ -64,25 +67,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
             vertical: false,
-            style: 'padding-bottom: 10px;'
+            style: 'padding-bottom: 10px; padding-right: 15px;'
         });
 
-        this.categoriesTopBox = new St.BoxLayout({
-            x_expand: false,
-            y_expand: false,
-            x_align: Clutter.ActorAlign.START,
-            y_align: Clutter.ActorAlign.CENTER,
-            vertical: true
-        });
 
-        this.categoriesTopBox.style = "padding-right:15px;";
         this.mainBox.add(this.topBox);
         this.categoriesButton = new MW.CategoriesButton(this);
-        this.categoriesButton.actor.x_expand = false;
-        this.categoriesButton.actor.y_expand = false;
-        this.categoriesButton.actor.y_align = Clutter.ActorAlign.CENTER;
-        this.categoriesButton.actor.x_align = Clutter.ActorAlign.END;
-        this.categoriesTopBox.add(this.categoriesButton.actor);
         
         this.subMainBox= new St.BoxLayout({
             x_expand: true,
@@ -94,13 +84,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add(this.subMainBox);
 
         this.searchBox = new MW.SearchBox(this);
+        this.searchBox.actor.y_align = Clutter.ActorAlign.CENTER;
+        this.searchBox.actor.y_expand = true;
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 15px 0px 15px;";
         this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
         this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
         this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.topBox.add(this.searchBox.actor);
-        this.topBox.add(this.categoriesTopBox);
+        this.topBox.add(this.categoriesButton.actor);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
@@ -191,11 +183,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.GRID);
+            let isContainedInCategory = false;
+            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.GRID, isContainedInCategory);
             this.appShortcuts.push(shortcutMenuItem);
         }
-        this.loadPinnedApps();
         this.loadCategories();
+        this.loadPinnedApps();
         this._createCategoriesMenu();
         this.loadExtraPinnedApps();
 

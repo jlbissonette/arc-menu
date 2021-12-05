@@ -41,7 +41,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 0,
             RowSpacing: 0,
             SupportsCategoryOnHover: true,
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){
@@ -57,8 +62,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsBox.style = "spacing: 6px; margin: 0px 10px;";
         this.mainBox.add(this.actionsBox);
 
-        let userAvatarSize = 28;
-        this.user = new MW.UserMenuItem(this, userAvatarSize);
+        this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
         this.user.actor.x_expand = true;
         this.user.actor.x_align = Clutter.ActorAlign.FILL;
         this.actionsBox.add(this.user.actor);
@@ -151,8 +155,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style = "margin: 10px 10px 0px 10px;";
             this.mainBox.add(this.searchBox.actor);
         }
-        this.loadPinnedApps();
         this.loadCategories();
+        this.loadPinnedApps();
+
         this.displayCategories();
         this.setDefaultMenuView();
     }

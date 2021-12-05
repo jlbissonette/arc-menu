@@ -121,6 +121,25 @@ var ForcedMenuLocation = {
     BOTTOM_CENTERED: 2,
 }
 
+var IconSize = {
+    DEFAULT: 0,
+    EXTRA_SMALL: 1,
+    SMALL: 2,
+    MEDIUM: 3,
+    LARGE: 4,
+    EXTRA_LARGE: 5,
+}
+
+//var SMALL_ICON_SIZE = 16;
+//var MEDIUM_ICON_SIZE = 25;
+//var LARGE_ICON_SIZE = 36;
+
+var EXTRA_SMALL_ICON_SIZE = 16;
+var SMALL_ICON_SIZE = 20;
+var MEDIUM_ICON_SIZE = 25;
+var LARGE_ICON_SIZE = 30;
+var EXTRA_LARGE_ICON_SIZE = 35;
+
 var SUPER_L = 'Super_L';
 var SUPER_R = 'Super_R';
 var EMPTY_STRING = '';

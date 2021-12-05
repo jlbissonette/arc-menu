@@ -232,9 +232,6 @@ var BaseLayout = class {
         if(categoryMenuItem){
             this.hasPinnedApps = true;
             categoryMenuItem.appList = categoryMenuItem.appList.concat(this.pinnedAppsArray);
-            for(let menuItem of categoryMenuItem.appList){
-                menuItem._updateIcon();
-            }
         }
         categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.RECENT_FILES);
         if(categoryMenuItem){
@@ -263,7 +260,8 @@ var BaseLayout = class {
                 if (app.get_app_info().should_show()){
                     let item = this.applicationsMap.get(app);
                     if (!item) {
-                        item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.DisplayType);
+                        let isContainedInCategory = true;
+                        item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.DisplayType, null, isContainedInCategory);
                     }
                     let disabled = this._settings.get_boolean("disable-recently-installed-apps")
                     if(!disabled && item.isRecentlyInstalled)
@@ -398,10 +396,10 @@ var BaseLayout = class {
 
             let name = this._recentFiles[i].get_display_name();
             let icon = Gio.content_type_get_symbolic_icon(this._recentFiles[i].get_mime_type()).to_string();
-            let placeMenuItem = this.createMenuItem([name, icon, file], Constants.DisplayType.LIST);
+            let isContainedInCategory = true;
+            let placeMenuItem = this.createMenuItem([name, icon, file], Constants.DisplayType.LIST, isContainedInCategory);
             placeMenuItem.style = "padding-right: 15px;";
             placeMenuItem.description = this._recentFiles[i].get_uri_display().replace(homeRegExp, '~');
-            placeMenuItem._updateIcon();
             placeMenuItem.fileUri = this._recentFiles[i].get_uri();
             placeMenuItem._removeBtn = new MW.ArcMenuButtonItem(this, null, 'edit-delete-symbolic');
             placeMenuItem._removeBtn.x_align = Clutter.ActorAlign.END;
@@ -433,7 +431,8 @@ var BaseLayout = class {
         let directoryShortcuts = this._settings.get_value('directory-shortcuts-list').deep_unpack();
         for (let i = 0; i < directoryShortcuts.length; i++) {
             let directory = directoryShortcuts[i];
-            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST);
+            let isContainedInCategory = false;
+            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST, isContainedInCategory);
             if(placeMenuItem)
                 this.shortcutsBox.add_actor(placeMenuItem.actor);
         }
@@ -449,9 +448,8 @@ var BaseLayout = class {
         for(let i = 0;i < pinnedApps.length; i += 3){
             if(i === separatorIndex * 3 && i !== 0)
                 this._addSeparator();
-            let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i + 1], pinnedApps[i + 2]], Constants.DisplayType.BUTTON);
-            if(this.layout === Constants.MenuLayout.MINT)
-                placeMenuItem.style = 'min-height: 22px;';
+            let isContainedInCategory = false;
+            let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2]], Constants.DisplayType.BUTTON, isContainedInCategory);
             placeMenuItem.actor.x_expand = false;
             placeMenuItem.actor.y_expand = false;
             placeMenuItem.actor.y_align = Clutter.ActorAlign.CENTER;
@@ -460,7 +458,7 @@ var BaseLayout = class {
         }  
     }
 
-    createMenuItem(menuItemArray, displayType){
+    createMenuItem(menuItemArray, displayType, isContainedInCategory){
         let placeInfo, placeMenuItem;
         let command = menuItemArray[2];
         let app = Shell.AppSystem.get_default().lookup_app(command);
@@ -468,28 +466,28 @@ var BaseLayout = class {
         if(command === "ArcMenu_Home"){
             let homePath = GLib.get_home_dir();
             placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(homePath), _("Home"));
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
         }
         else if(command === "ArcMenu_Computer"){
             placeInfo = new PlaceDisplay.RootInfo();
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
         }
         else if(command === "ArcMenu_Network"){
             placeInfo = new PlaceDisplay.PlaceInfo('network', Gio.File.new_for_uri('network:///'), _('Network'),'network-workgroup-symbolic');
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
         }
         else if(command === "ArcMenu_Software"){
             let software = Utils.findSoftwareManager();
             if(software)
-                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', software, displayType);
+                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', software, displayType, isContainedInCategory);
         }
         else if(command === "ArcMenu_Trash"){
-            placeMenuItem = new MW.ShortcutMenuItem(this, _("Trash"), '', "ArcMenu_Trash", displayType);
+            placeMenuItem = new MW.ShortcutMenuItem(this, _("Trash"), '', "ArcMenu_Trash", displayType, isContainedInCategory);
         }
         else if(command === Constants.ArcMenuSettingsCommand || command === "ArcMenu_Suspend" || command === "ArcMenu_LogOut" || command === "ArcMenu_PowerOff"
             || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || command === "ArcMenu_HybridSleep" || command === "ArcMenu_Hibernate" || app){
 
-                placeMenuItem = new MW.ShortcutMenuItem(this, menuItemArray[0], menuItemArray[1], menuItemArray[2], displayType);
+                placeMenuItem = new MW.ShortcutMenuItem(this, menuItemArray[0], menuItemArray[1], menuItemArray[2], displayType, isContainedInCategory);
         }
         else if(command.startsWith("ArcMenu_")){
             let path = command.replace("ArcMenu_",'');
@@ -508,25 +506,31 @@ var BaseLayout = class {
             path = GLib.get_user_special_dir(path);
             if (path !== null){
                 placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]));
-                placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
+                placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
             }
         }
         else{
             let path = command;
             placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]), (menuItemArray[1] !== "ArcMenu_Folder") ? Gio.icon_new_for_string(menuItemArray[1]) : null);
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType);
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
         }
         return placeMenuItem;
     }
 
     loadPinnedApps(){
         let pinnedApps = this._settings.get_strv('pinned-app-list');
+
         this.pinnedAppsArray = null;
         this.pinnedAppsArray = [];
+
+        let categoryMenuItem = this.categoryDirectories ? this.categoryDirectories.get(Constants.CategoryType.PINNED_APPS) : null;
+        let isContainedInCategory = categoryMenuItem ? true : false;
+
         for(let i = 0; i < pinnedApps.length; i += 3){
             if(i === 0 && pinnedApps[0] === "ArcMenu_WebBrowser")
                 this._updatePinnedAppsWebBrowser(pinnedApps);
-            let pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2], this.layoutProperties.DisplayType);
+
+            let pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2], this.layoutProperties.DisplayType, isContainedInCategory);
             pinnedAppsMenuItem.connect('saveSettings', ()=> {
                 let array = [];
                 for(let i = 0; i < this.pinnedAppsArray.length; i++){
@@ -538,14 +542,11 @@ var BaseLayout = class {
             });
             this.pinnedAppsArray.push(pinnedAppsMenuItem);
         }  
-        let categoryMenuItem = this.categoryDirectories ? this.categoryDirectories.get(Constants.CategoryType.PINNED_APPS) : null;
+
         if(categoryMenuItem){
             categoryMenuItem.appList = null;
             categoryMenuItem.appList = [];
             categoryMenuItem.appList = categoryMenuItem.appList.concat(this.pinnedAppsArray);
-            for(let menuItem of categoryMenuItem.appList){
-                menuItem._updateIcon();
-            }
         } 
     }
 

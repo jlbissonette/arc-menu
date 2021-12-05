@@ -43,11 +43,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 4,
             RowSpacing: 4,
             IconGridSize: 42,
-            IconSize: 28,
-            SearchResults_App_IconSize: 42,
-            SearchResults_List_IconSize: 28,
             IconGridStyle: 'AZIconGrid',
             VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
 
@@ -132,7 +134,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.actionsContainerBox.add(this.actionsBox);
 
-        this.user = new MW.UserMenuItem(this);
+        this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
         this.user.x_expand = true;
         this.user.x_align = Clutter.ActorAlign.FILL;
         this.user.style = "margin: 0px 45px 0px 0px;"
@@ -152,9 +154,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton)
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton)
 
-        this.loadPinnedApps();
         this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.loadCategories();
+        this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
+        this.loadPinnedApps();
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.setDefaultMenuView();
     }
 
@@ -271,7 +275,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     destroy(isReload){        
         this.arcMenu.box.style = null;
         this.arcMenu.actor.style = null;
-
+        this.backButton.destroy();
+        this.allAppsButton.destroy();
         super.destroy(isReload);
     }
 }

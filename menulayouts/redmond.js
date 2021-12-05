@@ -43,9 +43,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 10,
             RowSpacing: 10,
             IconGridSize: 36,
-            SearchResults_List_IconSize: 24,
             IconGridStyle: 'SmallIconGrid',
-            VerticalMainBox: false
+            VerticalMainBox: false,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){
@@ -103,7 +107,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.softwareShortcuts = false;
 
         if(!this._settings.get_boolean('disable-user-avatar')){
-            this.user = new MW.UserMenuItem(this);
+            this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
             this.rightBox.add(this.user.actor);
             this.rightBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
         }

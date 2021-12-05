@@ -89,6 +89,14 @@
         <value value="2" nick="ToggleArcMenu"/>
         <value value="3" nick="Custom"/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.icon-sizes'>
+        <value value="0" nick="Default"/>
+        <value value="1" nick="ExtraSmall"/>
+        <value value="2" nick="Small"/>
+        <value value="3" nick="Medium"/>
+        <value value="4" nick="Large"/>
+        <value value="5" nick="Extralarge"/>
+    </enum>
   <schema path="/org/gnome/shell/extensions/arcmenu/" id="org.gnome.shell.extensions.arcmenu">
     <key type="i" name="menu-position-alignment">
       <default>50</default>
@@ -514,6 +522,26 @@
       <default>false</default>
       <summary>Enables the default menu button arrow.</summary>
       <description>Enables the default menu button arrow.</description>
+    </key>
+    <key name="menu-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of the menu items icon.</summary>
+      <description>Size of the menu items icon. Includes all application items, category items, search results.</description>
+    </key>
+    <key name="button-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of the button items in ArcMenu.</summary>
+      <description>Size of the button items in ArcMenu. Includes all buttons inside the menu</description>
+    </key>
+    <key name="misc-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of misc items in ArcMenu.</summary>
+      <description>Size of misc items in ArcMenu. Includes searchbox icons, back menu item, all applications menu item, usermenu item.</description>
+    </key>
+    <key name="quicklinks-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of quicklink items in ArcMenu.</summary>
+      <description>Size of quicklink items in ArcMenu. Includes places, shortcuts, external devices, bookmarks.</description>
     </key>
     <key type="b" name="enable-large-icons">
       <default>false</default>

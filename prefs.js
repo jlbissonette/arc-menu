@@ -2837,7 +2837,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.forcedMenuLocation = this._settings.get_enum('force-menu-location');
         this.separatorColor = this._settings.get_string('separator-color');
         this.verticalSeparator = this._settings.get_boolean('vert-separator');
-        this.largeIcons = this._settings.get_boolean('enable-large-icons');
         this.subMenus = this._settings.get_boolean('enable-sub-menus');
         this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
         this.disableTooltips = this._settings.get_boolean('disable-tooltips');
@@ -3032,28 +3031,31 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         menuLocationFrame.add(menuLocationRow);
         this.mainBox.append(menuLocationFrame);
 
-        let miscSettingsFrame = new PW.FrameBox();
-        let largeIconsRow = new PW.FrameBoxRow();
-        let largeIconsLabel = new Gtk.Label({
-            label: _('Large Application Icons'),
+        let iconsSizeFrame = new PW.FrameBox();
+
+        let menuItemSizeHeaderRow = new PW.FrameBoxRow();
+        let menuItemSizeHeaderLabel = new Gtk.Label({
+            label: _("Menu Items Icon Size:"),
             use_markup: true,
             xalign: 0,
             hexpand: true,
             selectable: false
-         });   
-        let largeIconsSwitch = new Gtk.Switch({ 
-            halign: Gtk.Align.END,
         });
-        largeIconsSwitch.set_active(this.largeIcons);
-        largeIconsSwitch.connect('notify::active', (widget) => {
-             this.largeIcons = widget.get_active();
-             this.saveButton.set_sensitive(true);
-             this.resetButton.set_sensitive(true);
-        });
-        largeIconsRow.add(largeIconsLabel);            
-        largeIconsRow.add(largeIconsSwitch);             
-        miscSettingsFrame.add(largeIconsRow);
+        menuItemSizeHeaderRow.add(menuItemSizeHeaderLabel);
+        iconsSizeFrame.add(menuItemSizeHeaderRow);
 
+        [this.menuItemIconSizeCombo, this.menuItemIconSizeRow] = this.createIconSizeRow(_("Categories &amp; Applications"), this._settings.get_enum('menu-item-icon-size'));
+        iconsSizeFrame.add(this.menuItemIconSizeRow);
+        [this.buttonIconSizeCombo, this.buttonIconSizeRow] = this.createIconSizeRow(_("Buttons"), this._settings.get_enum('button-item-icon-size'));
+        iconsSizeFrame.add(this.buttonIconSizeRow);
+        [this.quicklinksIconSizeCombo, this.quicklinksIconSizeRow] = this.createIconSizeRow(_("Quick Links"), this._settings.get_enum('quicklinks-item-icon-size'));
+        iconsSizeFrame.add(this.quicklinksIconSizeRow);
+        [this.miscIconSizeCombo, this.miscIconSizeRow] = this.createIconSizeRow(_("Misc"), this._settings.get_enum('misc-item-icon-size'));
+        iconsSizeFrame.add(this.miscIconSizeRow);
+  
+        this.mainBox.append(iconsSizeFrame);
+
+        let miscSettingsFrame = new PW.FrameBox();
         let appDescriptionsRow = new PW.FrameBoxRow();
         let appDescriptionsLabel = new Gtk.Label({
             label: _("Show Application Descriptions"),
@@ -3228,18 +3230,20 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.menuWidth = this._settings.get_default_value('menu-width').unpack();
             this.separatorColor = this._settings.get_default_value('separator-color').unpack();
             this.verticalSeparator = this._settings.get_default_value('vert-separator').unpack();
-            this.largeIcons = this._settings.get_default_value('enable-large-icons').unpack();
             this.subMenus = this._settings.get_default_value('enable-sub-menus').unpack();
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
             this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
             this.appDescriptions = this._settings.get_default_value('apps-show-extra-details').unpack();
-            this.forcedMenuLocation = this._settings.get_default_value('force-menu-location').unpack();
+            this.forcedMenuLocation = 0;
             hscale.set_value(this.heightValue);
             menuWidthScale.set_value(this.menuWidth);
             rightPanelWidthScale.set_value(this.rightPanelWidth);
             subMenusSwitch.set_active(this.subMenus);
             vertSeparatorSwitch.set_active(this.verticalSeparator);
-            largeIconsSwitch.set_active(this.largeIcons);
+            this.menuItemIconSizeCombo.set_active(0);
+            this.buttonIconSizeCombo.set_active(0);
+            this.quicklinksIconSizeCombo.set_active(0);
+            this.miscIconSizeCombo.set_active(0);
             tooltipSwitch.set_active(this.disableTooltips);
             appDescriptionsSwitch.set_active(this.appDescriptions);
             color = new Gdk.RGBA();
@@ -3263,7 +3267,10 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this._settings.set_enum('force-menu-location', this.forcedMenuLocation);
             this._settings.set_string('separator-color', this.separatorColor);
             this._settings.set_boolean('vert-separator', this.verticalSeparator);
-            this._settings.set_boolean('enable-large-icons', this.largeIcons);
+            this._settings.set_enum('menu-item-icon-size', this.menuItemIconSizeCombo.get_active());
+            this._settings.set_enum('button-item-icon-size', this.buttonIconSizeCombo.get_active());
+            this._settings.set_enum('quicklinks-item-icon-size', this.quicklinksIconSizeCombo.get_active());
+            this._settings.set_enum('misc-item-icon-size', this.miscIconSizeCombo.get_active());
             this._settings.set_boolean('enable-sub-menus', this.subMenus);
             this._settings.set_boolean('disable-recently-installed-apps', this.disableRecentApps);
             this._settings.set_boolean('disable-tooltips', this.disableTooltips);
@@ -3280,16 +3287,49 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.append(buttonRow);
     }
 
+    createIconSizeRow(title, iconSizeEnum){
+        let iconsSizeRow = new PW.FrameBoxRow();
+        iconsSizeRow._grid.margin_start = 25;
+        iconsSizeRow._grid.margin_end = 25;
+        let iconsSizeLabel = new Gtk.Label({
+            label: _(title),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+         });   
+        let iconSizeCombo = new Gtk.ComboBoxText({ 
+            halign: Gtk.Align.END,
+        });
+        iconSizeCombo.append("Default", _("Default"));
+        iconSizeCombo.append("ExtraSmall", _("Extra Small"));
+        iconSizeCombo.append("Small", _("Small"));
+        iconSizeCombo.append("Medium", _("Medium"));
+        iconSizeCombo.append("Large", _("Large"));
+        iconSizeCombo.append("ExtraLarge", _("Extra Large"));
+        iconSizeCombo.set_active(iconSizeEnum);
+        iconSizeCombo.connect('changed', (widget) => {
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        iconsSizeRow.add(iconsSizeLabel);
+        iconsSizeRow.add(iconSizeCombo);
+        return [iconSizeCombo, iconsSizeRow];
+    }
+
     checkIfResetButtonSensitive(){
         return (this.disableTooltips !== this._settings.get_default_value('disable-tooltips').unpack() ||
             this.disableRecentApps !== this._settings.get_default_value('disable-recently-installed-apps').unpack() ||
             this.heightValue !== this._settings.get_default_value('menu-height').unpack() ||
             this.rightPanelWidth !== this._settings.get_default_value('right-panel-width').unpack() ||
             this.menuWidth !== this._settings.get_default_value('menu-width').unpack() ||
-            this.forcedMenuLocation !== this._settings.get_default_value('force-menu-location').unpack() ||
+            this.forcedMenuLocation !== 0 ||
             this.separatorColor !== this._settings.get_default_value('separator-color').unpack() ||
             this.verticalSeparator !== this._settings.get_default_value('vert-separator').unpack() ||
-            this.largeIcons !== this._settings.get_default_value('enable-large-icons').unpack() ||
+            this.menuItemIconSizeCombo.get_active() !== 0 ||
+            this.buttonIconSizeCombo.get_active() !== 0 ||
+            this.quicklinksIconSizeCombo.get_active() !== 0 ||
+            this.miscIconSizeCombo.get_active() !== 0 ||
             this.subMenus !== this._settings.get_default_value('enable-sub-menus').unpack() ||
             this.appDescriptions !== this._settings.get_default_value('apps-show-extra-details').unpack()) ? true : false
     }

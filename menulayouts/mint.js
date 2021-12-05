@@ -43,7 +43,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 0,
             RowSpacing: 0,
             SupportsCategoryOnHover: true,
-            VerticalMainBox: false
+            VerticalMainBox: false,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){
@@ -155,9 +160,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style = "margin: 10px 20px 10px 8px;";
             this.rightMenuBox.add(this.searchBox.actor);
         }
+        this.loadCategories();
         this.loadPinnedApps();
         this.loadExtraPinnedApps();
-        this.loadCategories();
         this.displayCategories();
         this.setDefaultMenuView(); 
     }

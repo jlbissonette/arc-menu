@@ -44,11 +44,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             RowSpacing: 10,
             PinnedAppsColumns: 1,
             IconGridSize: 36,
-            IconSize: 28,
-            SearchResults_App_IconSize: 36,
-            SearchResults_List_IconSize: 28,
             IconGridStyle: 'SmallIconGrid',
-            VerticalMainBox: false
+            VerticalMainBox: false,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){  
@@ -68,7 +70,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.pinnedAppsButton.actor.y_align= Clutter.ActorAlign.START;
         this.pinnedAppsButton.actor.margin = 5;
         this.actionsBox.add(this.pinnedAppsButton.actor);
-        let userButton = new MW.CurrentUserButton(this);
+        let userButton = new MW.UserMenuItem(this, Constants.DisplayType.BUTTON);
         this.actionsBox.add(userButton.actor);
         let path = GLib.get_user_special_dir(imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS);
         if (path != null){
@@ -100,14 +102,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             vertical: false,
         })
-        this.user = new MW.UserMenuIcon(this, 55);
+        this.user = new MW.UserMenuIcon(this, 55, true);
         this.user.actor.x_align = Clutter.ActorAlign.CENTER;
         this.user.actor.y_align = Clutter.ActorAlign.CENTER;
-        this.user.userNameLabel.x_align = Clutter.ActorAlign.CENTER;
-        this.user.userNameLabel.y_align = Clutter.ActorAlign.CENTER;
-        this.user.userNameLabel.style = "margin-left: 10px;"
+        this.user.label.x_align = Clutter.ActorAlign.CENTER;
+        this.user.label.style = "margin-left: 10px;"
         userMenuBox.add(this.user.actor);
-        userMenuBox.add(this.user.userNameLabel);
+        userMenuBox.add(this.user.label);
         this.subMainBox.add(userMenuBox);
 
         this.searchBox = new MW.SearchBox(this);
@@ -135,9 +136,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor( this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
         
-        
-        this.loadPinnedApps();
         this.loadCategories();
+        this.loadPinnedApps();
 
         this._createPinnedAppsMenu();
         this.setDefaultMenuView();

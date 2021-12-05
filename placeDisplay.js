@@ -37,6 +37,7 @@ const MW = Me.imports.menuWidgets;
 const PopupMenu = imports.ui.popupMenu;
 const ShellMountOperation = imports.ui.shellMountOperation;
 const Signals = imports.signals;
+const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
 const BACKGROUND_SCHEMA = 'org.gnome.desktop.background';
@@ -47,19 +48,21 @@ const Hostname1Iface = '<node> \
 </node>';
 const Hostname1 = Gio.DBusProxy.makeProxyWrapper(Hostname1Iface);
 
-const MEDIUM_ICON_SIZE = 25;
-const SMALL_ICON_SIZE = 16;
-
 var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends MW.ArcMenuPopupBaseMenuItem{
     _init(menuLayout, info) {
         super._init(menuLayout);
         this._info = info;
         this._menuLayout = menuLayout;
+        this._settings = this._menuLayout._settings;
+
+        const IconSizeEnum = this._settings.get_enum('quicklinks-item-icon-size');
+        let defaultIconSize = this._menuLayout.layoutProperties.DefaultQuickLinksIconSize;
+        let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+
         this._icon = new St.Icon({
             gicon: info.icon,
-            icon_size: SMALL_ICON_SIZE
+            icon_size: iconSize
         });
-        this._settings = this._menuLayout._settings;
 
         this.add_actor(this._icon);
         this.label = new St.Label({ text: info.name, 
@@ -89,14 +92,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
                 this._changedId = 0;
             }
         });
-        let layout = this._menuLayout._settings.get_enum('menu-layout');  
-        if(layout === Constants.MenuLayout.PLASMA)
-            this._updateIcon();
-    }
-   
-    _updateIcon(){
-        let largeIcons = this._menuLayout._settings.get_boolean('enable-large-icons');
-        this._icon.icon_size = largeIcons ? MEDIUM_ICON_SIZE : SMALL_ICON_SIZE;
+
     }
 
     activate(event) {
@@ -745,7 +741,7 @@ var Trash = class Arc_Menu_Trash {
             this._menuItem._app = this._trashApp;
             if(this._menuItem.contextMenu)
                 this._menuItem.contextMenu._app = this._trashApp;
-            let trashIcon = this._trashApp.create_icon_texture(MEDIUM_ICON_SIZE);
+            let trashIcon = this._trashApp.create_icon_texture(Constants.MEDIUM_ICON_SIZE);
             if(this._menuItem._icon && trashIcon)
                 this._menuItem._icon.gicon = trashIcon.gicon;
 

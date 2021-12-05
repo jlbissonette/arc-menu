@@ -210,6 +210,30 @@ function convertToGridLayout(item){
         icon.icon_size = item._menuLayout.layoutProperties.IconGridSize;
 }
 
+function getIconSize(iconSizeEnum, defaultIconSize){
+    const IconSizeEnum = iconSizeEnum;
+    let iconSize = defaultIconSize;
+    if(IconSizeEnum === Constants.IconSize.DEFAULT)
+        iconSize = defaultIconSize;
+    else if(IconSizeEnum === Constants.IconSize.EXTRA_SMALL){
+        iconSize = Constants.EXTRA_SMALL_ICON_SIZE;
+    }
+    else if(IconSizeEnum === Constants.IconSize.SMALL){
+        iconSize = Constants.SMALL_ICON_SIZE;
+    }
+    else if(IconSizeEnum === Constants.IconSize.MEDIUM){
+        iconSize = Constants.MEDIUM_ICON_SIZE;
+    }
+    else if(IconSizeEnum === Constants.IconSize.LARGE){
+        iconSize = Constants.LARGE_ICON_SIZE;
+    }
+    else if(IconSizeEnum === Constants.IconSize.EXTRA_LARGE){
+        iconSize = Constants.EXTRA_LARGE_ICON_SIZE;
+    }
+
+    return iconSize;
+}
+
 function getCategoryDetails(currentCategory){
     let name, gicon, iconName, fallbackIconName;
     let categoryMatchFound = false;
@@ -604,7 +628,7 @@ function createStylesheet(settings){
         +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +"#ElevenIconGrid{\nwidth: 90px;\n height: 75px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +"#ElevenIconGrid{\nwidth: 92px;\n height: 78px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#AZIconGrid{\nwidth: 95px;\n height: 85px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +".left-scroll-area{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
         +".left-scroll-area-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"   
@@ -633,8 +657,8 @@ function createStylesheet(settings){
 
         +".arc-menu-eject-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 0px 8px;\n}\n\n"
 
-        +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nmin-height: 16px;\nmin-width: 16px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
-        +".arcmenu-small-button{\n-st-icon-style: symbolic;\nmin-height: 7px;\nmin-width: 7px;\npadding: 3px 8px;\n}\n\n"
+        +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
+        +".arcmenu-small-button{\n-st-icon-style: symbolic;\npadding: 3px 8px;\n}\n\n"
 
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"

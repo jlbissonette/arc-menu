@@ -44,11 +44,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 0,
             RowSpacing: 0,
             IconGridSize: 36,
-            IconSize: 24,
-            SearchResults_App_IconSize: 36,
-            SearchResults_List_IconSize: 24,
             IconGridStyle: 'SmallIconGrid',
-            VerticalMainBox: false
+            VerticalMainBox: false,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){     
@@ -66,25 +68,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.extrasButton = new MW.ExtrasButton(this);
         this.extrasButton.actor.y_expand = true;
         this.extrasButton.actor.y_align= Clutter.ActorAlign.START;
-        this.extrasButton.actor.margin = 5;
         this.actionsBox.add(this.extrasButton.actor);
-        let userButton = new MW.CurrentUserButton(this);
-        userButton.actor.expand = false;
-        userButton.actor.margin = 5;
+        let userButton = new MW.UserMenuItem(this, Constants.DisplayType.BUTTON);
         this.actionsBox.add(userButton.actor);
         let path = GLib.get_user_special_dir(imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS);
         if (path != null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
+            let isContainedInCategory = false;
+            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
             this.actionsBox.add_actor(placeMenuItem.actor);
         }
         let settingsButton = new MW.SettingsButton(this);
-        settingsButton.actor.expand = false;
-        settingsButton.actor.margin = 5;
         this.actionsBox.add(settingsButton.actor);
         this.leaveButton = new MW.LeaveButton(this);
-        this.leaveButton.actor.expand = false;
-        this.leaveButton.actor.margin = 5;
         this.actionsBox.add(this.leaveButton.actor);
 
         this.subMainBox = new St.BoxLayout({
@@ -181,8 +177,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.externalDevicesBox.add(this._sections[id]);
         }
 
-        this.loadPinnedApps();
         this.loadCategories();
+        this.loadPinnedApps();
 
         this._createExtrasMenu();
         this.setDefaultMenuView();
@@ -226,7 +222,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.directoryShortcuts = [];
         for (let i = 0; i < directoryShortcutsList.length; i++) {
             let directory = directoryShortcutsList[i];
-            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST);         
+            let isContainedInCategory = false;
+            let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST, isContainedInCategory);         
             this.directoryShortcuts.push(placeMenuItem);
         }
     }

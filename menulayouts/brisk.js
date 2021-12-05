@@ -42,7 +42,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 0,
             RowSpacing: 0,
             SupportsCategoryOnHover: true,
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){
@@ -150,8 +155,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add(this.searchBox.actor); 
         }
 
-        this.loadPinnedApps();
         this.loadCategories();
+        this.loadPinnedApps();
+
         this.loadExtraPinnedApps();
         this.displayCategories();
         this.setDefaultMenuView();
@@ -163,9 +169,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let pinnedApps = this._settings.get_strv('brisk-shortcuts-list');
 
         for(let i = 0;i < pinnedApps.length; i += 3){
-            let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST);     
+            let isContainedInCategory = false;
+            let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);     
             if(placeMenuItem){
-                placeMenuItem.setIconSizeLarge();
                 this.actionsBox.add(placeMenuItem.actor);
             }
         }
