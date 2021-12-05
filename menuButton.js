@@ -667,6 +667,22 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             }
         }      
         else{ 
+            if(!this.arcMenu.isOpen){
+                if (this.tooltipShowingID) {
+                    GLib.source_remove(this.tooltipShowingID);
+                    this.tooltipShowingID = null;
+                }     
+                this.tooltipShowing = false;
+                if(this.activeTooltip){
+                    this.activeTooltip.hide();
+                }
+                    
+
+                if (this.tooltipHidingID) {
+                    GLib.source_remove(this.tooltipHidingID);
+                    this.tooltipHidingID = null;
+                }
+            }
             if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
                 if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){
                     if(this.dtpPanel && this.dtpNeedsRelease && !this.dtpNeedsHiding){
@@ -780,9 +796,8 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         this.addMenuItem(item);
 
         this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
-        this.addMenuItem(this.createQuickLinkItem(_("Modify Pinned Apps"), Constants.PrefsVisiblePage.PINNED_APPS));
-        this.addMenuItem(this.createQuickLinkItem(_("Modify Shortcuts"), Constants.PrefsVisiblePage.SHORTCUTS));
         this.addMenuItem(this.createQuickLinkItem(_("Layout Tweaks"), Constants.PrefsVisiblePage.LAYOUT_TWEAKS));
+        this.addMenuItem(this.createQuickLinkItem(_("Customize Menu"), Constants.PrefsVisiblePage.CUSTOMIZE_MENU));
         this.addMenuItem(this.createQuickLinkItem(_("Button Appearance"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
 
         item = new PopupMenu.PopupSeparatorMenuItem();

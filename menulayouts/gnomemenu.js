@@ -132,6 +132,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.setDefaultMenuView();
         this.categoryDirectories.values().next().value.displayAppList();
         this.activeMenuItem = this.categoryDirectories.values().next().value;
+        if(this.arcMenu.isOpen)
+            this.activeMenuItem.active = true;
     }
 
     reload() {

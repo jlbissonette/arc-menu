@@ -259,6 +259,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
         }
         this.activeMenuItem = this.categoryDirectories.values().next().value;
+        if(this.arcMenu.isOpen)
+            this.activeMenuItem.active = true;
     }
 
     updateStyle(){

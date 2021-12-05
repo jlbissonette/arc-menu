@@ -46,7 +46,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true,
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
-            DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_LARGE_ICON_SIZE,
             DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultButtonsIconSize: Constants.SMALL_ICON_SIZE,
             DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,

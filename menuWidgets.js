@@ -419,6 +419,8 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
         this.box.add_actor(this.contextMenuItems);
         this.sourceActor = actor;
         this.sourceActor.connect("destroy", ()=> {
+            if(this.isOpen)
+                this.close();
             Main.uiGroup.remove_actor(this.actor);
             this.contextMenuItems.destroy();
             this.destroy();
@@ -1757,7 +1759,9 @@ var UserMenuIcon = class Arc_Menu_UserMenuIcon{
         this.actor = new St.Bin({ 
             style_class: 'menu-user-avatar user-icon',
             track_hover: true,
-            reactive: true
+            reactive: true,
+            x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER
         });
 
         this.label = new St.Label({
@@ -2336,6 +2340,7 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
     }
 
     displayAppList(){
+        this._menuLayout.searchBox?.clearWithoutSearchChangeEvent();
         this._menuLayout.activeCategory = this._name;
         Utils.activateCategory(this._category, this._menuLayout, this, null);
     }
@@ -2812,6 +2817,7 @@ var SearchBox = GObject.registerClass({
         });
         this.searchResults = menuLayout.searchResults;
         this._settings = menuLayout._settings;
+        this.triggerSearchChangeEvent = true;
 
         const IconSizeEnum = this._settings.get_enum('misc-item-icon-size');
         let iconSize = Utils.getIconSize(IconSizeEnum, Constants.EXTRA_SMALL_ICON_SIZE);
@@ -2862,6 +2868,12 @@ var SearchBox = GObject.registerClass({
         this.set_text(text);
     }
 
+    clearWithoutSearchChangeEvent(){
+        this.triggerSearchChangeEvent = false;
+        this.set_text('');
+        this.triggerSearchChangeEvent = true;
+    }
+
     hasKeyFocus() {
         return this.contains(global.stage.get_key_focus());
     }
@@ -2889,8 +2901,9 @@ var SearchBox = GObject.registerClass({
             this.remove_style_pseudo_class('focus');
             this.set_secondary_icon(null);
         }
-            
-        this.emit('search-changed', searchString);
+
+        if(this.triggerSearchChangeEvent)
+            this.emit('search-changed', searchString);
     }
 
     _onKeyPress(actor, event) {

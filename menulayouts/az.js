@@ -46,7 +46,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             IconGridStyle: 'AZIconGrid',
             VerticalMainBox: true,
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
-            DefaultApplicationIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
             DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
@@ -137,7 +137,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
         this.user.x_expand = true;
         this.user.x_align = Clutter.ActorAlign.FILL;
-        this.user.style = "margin: 0px 45px 0px 0px;"
         this.actionsBox.add(this.user.actor);
 
 

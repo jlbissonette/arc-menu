@@ -6269,15 +6269,9 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box {
             if(this.backButton.get_parent())
                 this.leftHeaderBox.remove(this.backButton);
         }
-        else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.PINNED_APPS){
+        else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.CUSTOMIZE_MENU){
             this.settingsListStack.set_visible_child_name("MenuSettings");
-            this.settingsListStack.get_child_by_name('MenuSettings').listBox.selectRowAtIndex(1);
-            if(!this.backButton.get_parent())
-                this.leftHeaderBox.append(this.backButton);
-        }
-        else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.SHORTCUTS){
-            this.settingsListStack.set_visible_child_name("MenuSettings");
-            this.settingsListStack.get_child_by_name('MenuSettings').listBox.selectRowAtIndex(3);
+            this.settingsListStack.get_child_by_name('MenuSettings').listBox.selectRowAtIndex(0);
             if(!this.backButton.get_parent())
                 this.leftHeaderBox.append(this.backButton);
         }

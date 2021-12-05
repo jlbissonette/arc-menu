@@ -60,12 +60,11 @@ var DefaultMenuView = {
 
 var PrefsVisiblePage = {
     MAIN: 0,
-    PINNED_APPS: 1,
-    SHORTCUTS: 2,
-    MENU_LAYOUT: 3,
-    BUTTON_APPEARANCE: 4,
-    LAYOUT_TWEAKS: 5,
-    ABOUT: 6
+    MENU_LAYOUT: 1,
+    BUTTON_APPEARANCE: 2,
+    LAYOUT_TWEAKS: 3,
+    ABOUT: 4,
+    CUSTOMIZE_MENU: 5
 }
 
 var DefaultMenuViewTognee = {
