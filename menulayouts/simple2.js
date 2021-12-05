@@ -106,9 +106,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;
                 this.activeMenuItem = categoryMenuItem;
-                if(this.arcMenu.isOpen){
-                    this.mainBox.grab_key_focus();
-                }
             }	 
         }
     }

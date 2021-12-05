@@ -535,6 +535,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         this._delegate = this;
         this.needsDestroy = true;
         this._menuLayout = menuLayout;
+        this.arcMenu = this._menuLayout.arcMenu;
         this.shouldShow = true;
         this._parent = null;
         this._active = false;
@@ -559,6 +560,15 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         if(params.hover)   
             this.actor.connect('notify::hover', this._onHover.bind(this));
         this.actor.connect('destroy', this._onDestroy.bind(this));
+
+        this.arcMenuOpenStateChangeID = this.arcMenu.connect('open-state-changed', (menu, open) =>{
+            if(!open){
+                if(this._popupTimeoutId){
+                    GLib.source_remove(this._popupTimeoutId);
+                    this._popupTimeoutId = null;
+                }
+            }  
+        });
     }
 
     get actor() {
@@ -634,7 +644,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
 
     vfunc_button_release_event(){
         if(!this.needsDestroy)
-            return;
+            return Clutter.EVENT_STOP;
         let event = Clutter.get_current_event();
         if(event.get_button() == 1 && !this._menuLayout._blockActivateEvent && this.pressed){
             this.pressed = false;
@@ -717,6 +727,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         }
         return Clutter.EVENT_PROPAGATE;
     }
+
     contextMenuTimeOut(){
         this._popupTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 600, () => {
             this.pressed = false;
@@ -728,8 +739,13 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             return GLib.SOURCE_REMOVE;
         });
     }
+
     _onDestroy(){
-        this.needsDestroy = false; 
+        this.needsDestroy = false;
+        if(this.arcMenuOpenStateChangeID){
+            this.arcMenu.disconnect(this.arcMenuOpenStateChangeID);
+            this.arcMenuOpenStateChangeID = null;
+        }
     }
 });
 
@@ -1489,7 +1505,6 @@ var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends Arc
         if(this._layout === Constants.MenuLayout.ARCMENU){
             let defaultMenuView = this._settings.get_enum('default-menu-view');
             if(this._menuLayout.activeCategoryType === Constants.CategoryType.SEARCH_RESULTS || this._menuLayout.activeCategoryType === Constants.CategoryType.ALL_PROGRAMS_BUTTON){ 
-                this._menuLayout.resetSearch();
                 this._menuLayout.setDefaultMenuView();
             }
             else if(this._menuLayout.activeCategoryType === Constants.CategoryType.CATEGORIES_LIST && defaultMenuView === Constants.DefaultMenuView.PINNED_APPS)
@@ -2208,10 +2223,6 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         this._menuLayout.arcMenu.toggle();
         super.activate(event);
     }
-
-    grabKeyFocus() {
-        this.actor.grab_key_focus();
-    }
 });
 
 // Menu Category item class
@@ -2849,10 +2860,6 @@ var SearchBox = GObject.registerClass({
 
     setText(text) {
         this.set_text(text);
-    }
-
-    grabKeyFocus() {
-        this.grab_key_focus();
     }
 
     hasKeyFocus() {

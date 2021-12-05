@@ -3035,7 +3035,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         let menuItemSizeHeaderRow = new PW.FrameBoxRow();
         let menuItemSizeHeaderLabel = new Gtk.Label({
-            label: _("Menu Items Icon Size:"),
+            label: _("Menu Items Icon Size"),
             use_markup: true,
             xalign: 0,
             hexpand: true,

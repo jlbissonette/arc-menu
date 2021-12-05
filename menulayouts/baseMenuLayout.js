@@ -94,11 +94,6 @@ var BaseLayout = class {
         layout.hookup_style(this.applicationsGrid);
     }
 
-    resetSearch(){
-        this.searchBox.clear();
-        this.setDefaultMenuView();  
-    }
-
     setDefaultMenuView(){
         if(this.layoutProperties.Search){
             this.searchBox.clear();
@@ -329,9 +324,6 @@ var BaseLayout = class {
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;
                 this.activeMenuItem = categoryMenuItem;
-                if(this.arcMenu.isOpen){
-                    this.mainBox.grab_key_focus();
-                }
             }	 
         }
     }
@@ -406,8 +398,6 @@ var BaseLayout = class {
             if(!activeMenuItemSet){
                 this.activeMenuItem = placeMenuItem;
                 activeMenuItemSet = true;
-                if(this.arcMenu.isOpen)
-                    this.mainBox.grab_key_focus();
             }
         }
     }
@@ -623,8 +613,6 @@ var BaseLayout = class {
         this.activeMenuItem = category;
         if(setActive && this.arcMenu.isOpen)
             this.activeMenuItem.actor.grab_key_focus();
-        else if(this.arcMenu.isOpen)
-            this.mainBox.grab_key_focus();
     }
 
     setFrequentAppsList(categoryMenuItem){
@@ -733,16 +721,11 @@ var BaseLayout = class {
                 if(!activeMenuItemSet && grid === this.applicationsGrid){
                     this.activeMenuItem = item;
                     activeMenuItemSet = true;
-                    if(this.arcMenu.isOpen)
-                        this.mainBox.grab_key_focus();
                 }
             }
         }
         if(this.applicationsBox && !this.applicationsBox.contains(this.applicationsGrid))
             this.applicationsBox.add(this.applicationsGrid);
-            
-        if(this.arcMenu.isOpen)
-            this.mainBox.grab_key_focus();
     }
 
     displayAllApps(){
@@ -835,7 +818,7 @@ var BaseLayout = class {
     _onMainBoxKeyPress(actor, event) {
         if (event.has_control_modifier()) {
             if(this.searchBox)
-                this.searchBox.grabKeyFocus();
+                this.searchBox.grab_key_focus();
             return Clutter.EVENT_PROPAGATE;
         }
 
@@ -845,7 +828,7 @@ var BaseLayout = class {
         switch (symbol) {
             case Clutter.KEY_BackSpace:
                 if(this.searchBox && !this.searchBox.hasKeyFocus() && !this.searchBox.isEmpty()){
-                    this.searchBox.grabKeyFocus();
+                    this.searchBox.grab_key_focus();
                     let newText = this.searchBox.getText().slice(0, -1);
                     this.searchBox.setText(newText);
                 }
@@ -882,7 +865,7 @@ var BaseLayout = class {
                 return Clutter.EVENT_PROPAGATE;
             default:
                 if (key.length != 0 && this.searchBox) {
-                    this.searchBox.grabKeyFocus();
+                    this.searchBox.grab_key_focus();
                     let newText = this.searchBox.getText() + key;
                     this.searchBox.setText(newText);
                 }

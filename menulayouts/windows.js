@@ -446,7 +446,5 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.HOME_SCREEN, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
             this.pinnedAppsBox.add(this.pinnedAppsGrid);
-        if(this.arcMenu.isOpen)
-            this.mainBox.grab_key_focus();
     }
 }

@@ -401,15 +401,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if(this.MenuLayout)
             this.MenuLayout.updateStyle();   
     }
-    updateSearch(){
-        if(this.MenuLayout)
-            this.MenuLayout.updateSearch();
-    }
-    setSensitive(sensitive) {
-        this.reactive = sensitive;
-        this.can_focus = sensitive;
-        this.track_hover = sensitive;
-    }
+
     vfunc_event(event){
         if (event.type() === Clutter.EventType.BUTTON_PRESS){   
             if(event.get_button() == 1){   
@@ -450,11 +442,11 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             else
                 Main.overview.toggle();
         }
-        else{
+        else if(!this.arcMenu.isOpen){
             if(layout === Constants.MenuLayout.RUNNER || layout === Constants.MenuLayout.RAVEN)
                 this.MenuLayout.updateLocation();
             if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
-                if(this.dtpPanel && !this.arcMenu.isOpen){
+                if(this.dtpPanel){
                     if(this.dtpPanel.intellihide?.enabled)
                         this.dtpPanel.intellihide._revealPanel(true);
                     else if(!this.dtpPanel.panelBox.visible){
@@ -462,7 +454,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                         this.dtpNeedsHiding = true;
                     }
                 }
-                else if(this._panel === Main.panel && !Main.layoutManager.panelBox.visible && !this.arcMenu.isOpen){
+                else if(this._panel === Main.panel && !Main.layoutManager.panelBox.visible){
                     Main.layoutManager.panelBox.visible = true;
                     this.mainPanelNeedsHiding = true;
                 }
@@ -480,7 +472,9 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 else
                     this.mainBox.grab_key_focus();
             }
-
+        }
+        else if(this.arcMenu.isOpen){
+            this.arcMenu.toggle();
         }
     }
 
@@ -611,21 +605,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.MenuLayout.updateLocation();
     }
 
-    _loadCategories(){
-        if(this.MenuLayout)
-            this.MenuLayout.loadCategories();
-    }
-
-    _clearApplicationsBox() {
-        if(this.MenuLayout)
-            this.MenuLayout.clearApplicationsBox();
-    }
-
-    _displayCategories() {
-        if(this.MenuLayout)
-            this.MenuLayout.displayCategories();
-    }
-
     displayPinnedApps() {
         if(this.MenuLayout)
             this.MenuLayout.displayPinnedApps();
@@ -634,26 +613,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     loadPinnedApps() {
         if(this.MenuLayout)
             this.MenuLayout.loadPinnedApps();
-    }
-
-    _displayAllApps() {
-        if(this.MenuLayout)
-            this.MenuLayout.displayAllApps();
-    }
-
-    selectCategory(dir) {
-        if(this.MenuLayout)
-            this.MenuLayout.selectCategory(dir);
-    }
-
-    _setActiveCategory(){
-        if(this.MenuLayout)
-            this.MenuLayout.setActiveCategory();
-    }
-
-    scrollToButton(button){
-        if(this.MenuLayout)
-            this.MenuLayout.scrollToButton(button);
     }
 
     reload(){
@@ -671,11 +630,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     shouldLoadPinnedApps(){
         if(this.MenuLayout)
             return this.MenuLayout.shouldLoadPinnedApps;
-    }
-
-    resetSearch(){
-        if(this.MenuLayout)
-            this.MenuLayout.resetSearch();
     }
 
     setDefaultMenuView(){
