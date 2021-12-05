@@ -372,14 +372,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         appsScrollBoxAdj.set_value(0);
     }
 
-    updateIcons(){
-        for(let i = 0; i < this.frequentAppsList.length; i++){
-            let item = this.frequentAppsList[i];
-            item._updateIcon();
-        };
-        super.updateIcons();
-    }
-
     displayAllApps(){
         this._clearActorsFromBox();
         let label = this._createHeaderLabel(_("Frequent"));

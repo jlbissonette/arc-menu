@@ -94,20 +94,6 @@ var BaseLayout = class {
         layout.hookup_style(this.applicationsGrid);
     }
 
-    updateIcons(){
-        this.applicationsMap.forEach((value,key,map)=>{
-            map.get(key)._updateIcon();
-        });
-        let categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.PINNED_APPS);
-        if(categoryMenuItem){
-            for(let menuItem of categoryMenuItem.appList){
-                menuItem._updateIcon();
-            }
-        }
-        if(this.layoutProperties.Search)
-            this.searchResults._reset(); 
-    }
-
     resetSearch(){
         this.searchBox.clear();
         this.setDefaultMenuView();  

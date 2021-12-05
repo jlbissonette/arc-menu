@@ -1899,20 +1899,6 @@ var PinnedAppsMenuItem = GObject.registerClass({
         this.setShouldShow();
     }
 
-    _updateIcons(){
-        let iconSize;
-        if(this._displayType === Constants.DisplayType.GRID){
-            iconSize = this._menuLayout.layoutProperties.IconGridSize;
-        }
-        else if(this._displayType === Constants.DisplayType.LIST){
-            const IconSizeEnum = this._settings.get_enum('menu-item-icon-size');
-            const LayoutProps = this._menuLayout.layoutProperties;
-            let defaultIconSize = this.isContainedInCategory ? LayoutProps.DefaultApplicationIconSize : LayoutProps.DefaultPinnedIconSize;
-            iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
-        }
-        this._icon.icon_size = iconSize; 
-    }
-
     popupContextMenu(){
         if(this.contextMenu == undefined){
             let app = this._app ? this._app : this._command;
@@ -2134,8 +2120,21 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         }
         if(this._displayType === Constants.DisplayType.GRID)
             Utils.convertToGridLayout(this);
+            
+        let iconSize;
+        if(this._displayType === Constants.DisplayType.GRID){
+            iconSize = this._menuLayout.layoutProperties.IconGridSize;
+            this._iconBin.x_align = Clutter.ActorAlign.CENTER;
+        }
+        else if(this._displayType === Constants.DisplayType.LIST){             
+            const IconSizeEnum = this._settings.get_enum('menu-item-icon-size');
+            const LayoutProps = this._menuLayout.layoutProperties;
+            let defaultIconSize = this.isContainedInCategory || this.isSearchResult ? LayoutProps.DefaultApplicationIconSize : LayoutProps.DefaultPinnedIconSize;
+            iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+        }
+        let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
+        this._iconBin.set_child(icon);
 
-        this._updateIcon();
         this.connect("notify::hover", () => this.removeIndicator());
         this.connect("key-focus-in", () => this.removeIndicator());
     }
@@ -2173,9 +2172,11 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             this.contextMenu.rebuildItems();
         this.contextMenu.toggle();
     }  
+
     get_app_id() {
         return this._app.get_id();
     }
+
     _createIcon(iconSize) {
         return this._app.create_icon_texture(iconSize);
     }
@@ -2211,23 +2212,6 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
     grabKeyFocus() {
         this.actor.grab_key_focus();
     }
-
-    _updateIcon() {
-        let iconSize;
-        if(this._displayType === Constants.DisplayType.GRID){
-            iconSize = this._menuLayout.layoutProperties.IconGridSize;
-            this._iconBin.x_align = Clutter.ActorAlign.CENTER;
-        }
-        else if(this._displayType === Constants.DisplayType.LIST){             
-            const IconSizeEnum = this._settings.get_enum('menu-item-icon-size');
-            const LayoutProps = this._menuLayout.layoutProperties;
-            let defaultIconSize = this.isContainedInCategory || this.isSearchResult ? LayoutProps.DefaultApplicationIconSize : LayoutProps.DefaultPinnedIconSize;
-            iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
-        }
-        let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
-        this._iconBin.set_child(icon);
-    }
-
 });
 
 // Menu Category item class
@@ -2586,7 +2570,6 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
         panAction.connect('gesture-end', (action) => this._menuLayout.onPanEnd(action, this.menu.actor));
         this.menu.actor.add_action(panAction);
         
-        this._updateIcon();
         this.menu.actor.style = 'max-height: 250px;';
         this.menu.actor.overlay_scrollbars = true;
         this.menu.actor.style_class = 'popup-sub-menu ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade');
@@ -2628,16 +2611,6 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
             this._menuLayout.activeMenuItem = this;
         else if(this._menuLayout.arcMenu.isOpen)
             this._menuLayout.activeMenuItem = null;
-    }
-
-    _updateIcon() {
-        let largeIcons = this._settings.get_boolean('enable-large-icons');
-        if(this._settings.get_enum('menu-layout') !== Constants.MenuLayout.SIMPLE_2){
-            this.applicationsMap.forEach((value,key,map)=>{
-                map.get(key)._updateIcon();
-            });
-            this.icon.icon_size = largeIcons ? Constants.MEDIUM_ICON_SIZE : Constants.EXTRA_SMALL_ICON_SIZE;
-        } 
     }
 
     forceLargeIcon(size){

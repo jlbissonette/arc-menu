@@ -543,11 +543,6 @@
       <summary>Size of quicklink items in ArcMenu.</summary>
       <description>Size of quicklink items in ArcMenu. Includes places, shortcuts, external devices, bookmarks.</description>
     </key>
-    <key type="b" name="enable-large-icons">
-      <default>false</default>
-      <summary>Enables large icons for applications.</summary>
-      <description>Enables large icons for applications and search results.</description>
-    </key>
     <key type="s" name="custom-menu-button-text">
       <default>'Applications'</default>
       <summary>Text of the menu button.</summary>

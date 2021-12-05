@@ -180,10 +180,6 @@ var MenuSettingsController = class {
         this._menuButton.updateLocation();
     }
 
-    updateIcons(){
-        this._menuButton.updateIcons();
-    }
-
     _updateMenuLayout(){
         this._menuButton.updateMenuLayout();
     }

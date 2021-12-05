@@ -190,10 +190,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.topBox.style = `width: ${this._runnerWidth}px;`;
         this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
     }
-    
-    updateIcons(){
-        this.searchResults._reset();
-    }
 
     updateStyle(){
         super.updateStyle();
