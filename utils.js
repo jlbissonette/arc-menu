@@ -322,63 +322,6 @@ function findSoftwareManager(){
     return softwareManager;
 }
 
-var ScrollViewShader = `
-uniform sampler2D tex;
-uniform float height;
-uniform float width;
-uniform float fade_offset_top;
-uniform float fade_offset_bottom;
-uniform float fade_offset_left;
-uniform float fade_offset_right;
-uniform bool  fade_edges_top;
-uniform bool  fade_edges_right;
-uniform bool  fade_edges_bottom;
-uniform bool  fade_edges_left;
-
-uniform vec2 fade_area_topleft;
-uniform vec2 fade_area_bottomright;
-
-void main ()
-{
-    cogl_color_out = cogl_color_in * texture2D (tex, vec2 (cogl_tex_coord_in[0].xy));
-
-    float y = height * cogl_tex_coord_in[0].y;
-    float x = width * cogl_tex_coord_in[0].x;
-
-    if (x > fade_area_topleft[0] && x < fade_area_bottomright[0] &&
-        y > fade_area_topleft[1] && y < fade_area_bottomright[1])
-    {
-        float ratio = 1.0;
-        float fade_top_start = fade_area_topleft[1] + fade_offset_top;
-        float fade_left_start = fade_area_topleft[0] + fade_offset_left;
-        float fade_bottom_start = fade_area_bottomright[1] - fade_offset_bottom;
-        float fade_right_start = fade_area_bottomright[0] - fade_offset_right;
-        bool fade_top = y < fade_top_start && fade_edges_top;
-        bool fade_bottom = y > fade_bottom_start && fade_edges_bottom;
-        bool fade_left = x < fade_left_start && fade_edges_left;
-        bool fade_right = x > fade_right_start && fade_edges_right;
-
-        if (fade_top) {
-            ratio *= (fade_area_topleft[1] - y) / (fade_area_topleft[1] - fade_top_start);
-        }
-
-        if (fade_bottom) {
-            ratio *= (fade_area_bottomright[1] - y) / (fade_area_bottomright[1] - fade_bottom_start);
-        }
-
-        if (fade_left) {
-            ratio *= (fade_area_topleft[0] - x) / (fade_area_topleft[0] - fade_left_start);
-        }
-
-        if (fade_right) {
-            ratio *= (fade_area_bottomright[0] - x) / (fade_area_bottomright[0] - fade_right_start);
-        }
-
-        cogl_color_out *= ratio;
-    }
-}
-`;
-
 function createXpmImage(color1, color2, color3, color4){
     let width = 42;
     let height = 14;
@@ -512,7 +455,7 @@ function rgbStringToHex(colorString) {
 }
 
 function clutterColorToRGBA(color) {
-    return "rgba(" + color.red + "," + color.green + "," + color.blue + "," + color.alpha + ")";
+    return `rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha})`;
 }
 
 function parseRgbString(colorString){
@@ -534,35 +477,28 @@ function parseRgbString(colorString){
     return [r, g, b, a];
 }
 
-function modifyColorLuminance(colorString, luminanceFactor, modifyAlpha){
+function modifyColorLuminance(colorString, luminanceFactor, overrideAlpha){
     let Clutter = imports.gi.Clutter;
     let color = Clutter.color_from_string(colorString)[1];
     let [hue, lum, sat] = color.to_hls();
     let modifiedLum = lum;
 
-    if(luminanceFactor >= 0)
-        modifiedLum += luminanceFactor;
+    if(lum >= .85) //if lum is too light, force darken
+        modifiedLum = Math.min((1 - Math.abs(luminanceFactor)) * modifiedLum, 1);
+    else if(lum <= .15) //if lum is too dark, force lighten
+        modifiedLum = Math.max((1 - Math.abs(luminanceFactor)) * modifiedLum, 0);
+    else if(luminanceFactor >= 0) //otherwise, darken or lighten based on luminanceFactor
+        modifiedLum = Math.min((1 + luminanceFactor) * modifiedLum, 1);
     else
-        modifiedLum -= Math.abs(luminanceFactor);
-
-    //Reverse the darken/lighten effect if luminance out of range
-    if(modifiedLum >= 1 || modifiedLum < 0){
-        modifiedLum = lum;
-        if(luminanceFactor < 0)
-            modifiedLum += Math.abs(luminanceFactor);
-        else
-            modifiedLum -= luminanceFactor; 
-    }
+        modifiedLum = Math.max((1 + luminanceFactor) * modifiedLum, 0);
    
-    let alpha = Math.round((color.alpha / 255) * 100) / 100;
-    if(modifyAlpha){
-        alpha = Math.round((color.alpha / 255) * 100) / 100;
-        alpha = alpha * (1 - modifyAlpha);
-    }
+    let alpha = (color.alpha / 255).toPrecision(3);
+    if(overrideAlpha)
+        alpha = overrideAlpha;
 
     let modifiedColor = Clutter.color_from_hls(hue, modifiedLum, sat);
 
-    return "rgba("+modifiedColor.red+","+modifiedColor.green+","+modifiedColor.blue+","+alpha+")";
+    return `rgba(${modifiedColor.red}, ${modifiedColor.green}, ${modifiedColor.blue}, ${alpha})`
 }
 
 function createStylesheet(settings){
@@ -594,11 +530,12 @@ function createStylesheet(settings){
     let plasmaSelectedItemBackgroundColor = settings.get_string('plasma-selected-background-color');
     let plasmaSearchBarTop = settings.get_enum('searchbar-default-top-location');
     let menuButtonBorderRadius = settings.get_int('menu-button-border-radius');
-    let tooltipStyle;
+    let tooltipStyle, separatorColorStyle;
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
-        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 0 0 1px " + modifyColorLuminance(menuColor, 0.10) + ";\nfont-size:" + fontSize + "pt;\npadding: 3px 8px;\nmin-height: 0px;"
-                        + "\ncolor:" + menuForegroundColor+ ";\nbackground-color:" + modifyColorLuminance(menuColor, 0.05) + ";\nmax-width:550px;\n}\n\n"; 
+        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 0 1px 0px " + separatorColor + ";\nfont-size:" + fontSize + "pt;\npadding: 3px 8px;\nmin-height: 0px;"
+                        + "\ncolor:" + menuForegroundColor+ ";\nbackground-color:" + modifyColorLuminance(menuColor, 0.05, 1) + ";\nmax-width:550px;\n}\n\n"; 
+        separatorColorStyle = ".separator-color-style{\nbackground-color: " + separatorColor + ";\n}\n\n"
     }
     else
         tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\npadding: 3px 8px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
@@ -619,8 +556,6 @@ function createStylesheet(settings){
         let border = menuButtonBorderRadius === 0 ? 1 : 3;
         menuButtonStyle += ".arc-menu-panel-menu{\nborder-radius: " + menuButtonBorderRadius + "px;\nborder: " + border + "px solid transparent;\n}\n\n";
     }
-        
-
 
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
         +".arc-menu-status-text{\ncolor:" + menuForegroundColor + ";\nfont-size:" + fontSize + "pt;\n}\n\n"                                                     
@@ -633,12 +568,11 @@ function createStylesheet(settings){
         +".left-scroll-area{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
         +".left-scroll-area-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"   
         +".left-box{\nwidth:" + leftPanelWidth + "px;\n}\n\n"
-        +".vert-sep{\nwidth:11px;\n}\n\n"
         +".default-search-entry{\nmax-width: 17.667em;\n}\n\n"
         +".arc-search-entry{\nmax-width: 17.667em;\nfont-size:" + fontSize + "pt;\nborder-color:" + separatorColor + ";\nborder-width: 1px;\n"
-                            +"color:" + menuForegroundColor + ";\nbackground-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
+                            +"color:" + menuForegroundColor + ";\nbackground-color:" + modifyColorLuminance(menuColor, -0.1, 1) + ";\n}\n\n"
         +".arc-search-entry:focus{\nborder-color:" + highlightColor + ";\nborder-width: 1px;\nbox-shadow: inset 0 0 0 1px " + modifyColorLuminance(highlightColor, 0.05) + ";\n}\n\n"
-        +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.3) + ";\n}\n\n"
+        +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.6) + ";\n}\n\n"
         +"#ArcSearchEntry{\nmin-height: 0px;\nborder-radius: 8px;\nborder-width: 1px;\npadding: 7px 9px;\n}\n\n"
         +"#ArcSearchEntryRound{\nmin-height: 0px;\nborder-radius: 18px;\nborder-width: 1px;\npadding: 7px 12px;\n}\n\n"       
         + menuButtonStyle
@@ -669,10 +603,10 @@ function createStylesheet(settings){
                         +"box-shadow: none;\nfont-size:" + fontSize + "pt;\n}\n\n"
         +".arc-menu .popup-sub-menu{\npadding-bottom: 1px;\nbackground-color: " + modifyColorLuminance(menuColor, 0.04) + ";\n}\n\n"
         +".arc-menu .popup-menu-item{\nspacing: 6px; \nborder: none;\ncolor:" + menuForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item:active{\nbackground-color:" + modifyColorLuminance(highlightColor, -0.07) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item:active{\nbackground-color:" + modifyColorLuminance(highlightColor, -0.15) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
         +".arc-menu .popup-menu-item.selected{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
         +".arc-menu .popup-menu-item:checked{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0.15) + ";\n}\n\n"
+        +".arc-menu .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0, 0.6) + ";\n}\n\n"
         +".arc-menu-boxpointer{ \n-arrow-border-radius:" + cornerRadius + "px;\n"
                                 +"-arrow-background-color:" + menuColor + ";\n"
                                 +"-arrow-border-color:" + borderColor + ";\n"
@@ -681,8 +615,8 @@ function createStylesheet(settings){
                                 +"-arrow-rise:" + menuArrowSize + "px;\n}\n\n"
         +".arc-menu .popup-menu-content{\npadding: 16px 0px;\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nbox-shadow: 0;\n}\n\n"
 
-        +".arcmenu-separator{\nheight: 1px;\nmargin: 0px 20px;\nbackground-color:" + separatorColor + ";\n}\n\n"
-
+        +".arcmenu-separator{\npadding: 0px;\nheight: 1px;\nmargin: 0px 20px;\n}\n\n"
+        + separatorColorStyle
         +".menu-user-avatar{\nbackground-size: contain;\nborder-radius: " + avatarRadius + "px;\n}\n\n";
     
     let stylesheet = getStylesheet();

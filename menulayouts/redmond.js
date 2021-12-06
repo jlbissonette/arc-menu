@@ -109,7 +109,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(!this._settings.get_boolean('disable-user-avatar')){
             this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
             this.rightBox.add(this.user.actor);
-            this.rightBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
+            this.rightBox.add(separator);
         }
         
         this.shortcutsBox = new St.BoxLayout({
@@ -141,7 +142,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.placesShortcuts && (this._settings.get_boolean('show-external-devices') || this.softwareShortcuts || this._settings.get_boolean('show-bookmarks'))  )
             shouldDraw=true;  
         if(shouldDraw){
-            this.shortcutsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
+            this.shortcutsBox.add(separator);
         }
 
         //External Devices and Bookmarks Shortcuts
@@ -204,7 +206,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.mainBox.add(horizonalFlip ? this.rightBox : this.subMainBox);
-        this.mainBox.add(this._createVerticalSeparator());
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.mainBox.add(verticalSeparator);
         this.mainBox.add(horizonalFlip ? this.subMainBox: this.rightBox);  
         horizonalFlip ? this.rightBox.style += "margin-right: 0px" : this.rightBox.style += "margin-left: 0px"
 

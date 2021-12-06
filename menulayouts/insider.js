@@ -191,7 +191,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.backButton = new MW.BackMenuItem(this);
         this.backButton.connect("activate", () => this.togglePinnedAppsMenu());
         headerBox.add(this.backButton.actor);
-        headerBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        headerBox.add(separator);
         headerBox.add(this.createLabelRow(_("Pinned Apps")));
 
         this.pinnedAppsScrollBox = this._createScrollBox({

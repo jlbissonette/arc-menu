@@ -166,12 +166,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.topBox.style = 'padding-top: 0.5em;'
             
             this.navigateBoxContainer.add(this.navigateBox);
-            this.navigateBoxContainer.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+            this.navigateBoxContainer.add(separator);
             this.navigateBoxContainer.y_expand = false;
             this.navigateBoxContainer.y_align = Clutter.ActorAlign.START;
             this.mainBox.add(this.navigateBoxContainer);
             this.mainBox.add(this.applicationsScrollBox);
-            this.mainBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
+            separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+            this.mainBox.add(separator);
 
             this.mainBox.add(this.topBox);
         }
@@ -179,11 +181,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style = "margin: 3px 10px 10px 10px;";
             
             this.mainBox.add(this.topBox);
-            this.mainBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+            this.mainBox.add(separator);
             this.mainBox.add(this.applicationsScrollBox);
             this.navigateBoxContainer.y_expand = true;
             this.navigateBoxContainer.y_align = Clutter.ActorAlign.END;
-            this.navigateBoxContainer.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
+            separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+            this.navigateBoxContainer.add(separator);
             this.navigateBoxContainer.add(this.navigateBox);
             this.mainBox.add(this.navigateBoxContainer);
         }
@@ -316,16 +320,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
         }
     }   
-
-    createLabelRow(title){
-        let labelRow = new PopupMenu.PopupMenuItem(_(title), {
-            hover: false,
-            can_focus: false
-        });  
-        labelRow.actor.add_style_pseudo_class = () => { return false;};
-        labelRow.label.style = 'font-weight: bold;';
-        return labelRow;
-    }
 
     displayPinnedApps(){
         this.activeCategoryType = Constants.CategoryType.PINNED_APPS;

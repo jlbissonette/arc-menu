@@ -125,7 +125,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.subMainBox.add(horizonalFlip ? this.appBox : this.quickBox);  
-        this.subMainBox.add(this._createVerticalSeparator());
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.subMainBox.add(verticalSeparator);
         this.subMainBox.add(horizonalFlip ? this.quickBox : this.appBox);
 
         this.placesShortcuts= this._settings.get_value('directory-shortcuts-list').deep_unpack().length>0;
@@ -156,9 +157,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._displayPlaces();
 
         //check to see if should draw separator
-        if(this.placesShortcuts && this.softwareShortcuts)
-            this.shortcutsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
-        
+        if(this.placesShortcuts && this.softwareShortcuts){
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG, Constants.SeparatorAlignment.HORIZONTAL);
+            this.shortcutsBox.add(separator);
+        }
 
         //Add Application Shortcuts to menu (Software, Settings, Tweaks, Terminal)
         let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
@@ -191,8 +193,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         let leaveButton = new MW.LeaveButton(this);
         this.actionsBox.add(leaveButton.actor); 
-
-        this.actionsBox.insert_child_at_index(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT), 0);
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG, Constants.SeparatorAlignment.HORIZONTAL);
+        this.actionsBox.insert_child_at_index(separator, 0);
         this.quickBox.add(this.actionsScrollBox);
 
         this.loadCategories();

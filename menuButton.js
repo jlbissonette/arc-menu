@@ -676,7 +676,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 if(this.activeTooltip){
                     this.activeTooltip.hide();
                 }
-                    
 
                 if (this.tooltipHidingID) {
                     GLib.source_remove(this.tooltipHidingID);
@@ -784,11 +783,10 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
 
         this.addMenuItem(this.createQuickLinkItem(_("ArcMenu Settings"), Constants.PrefsVisiblePage.MAIN));
 
-        let item = new PopupMenu.PopupSeparatorMenuItem();
-        item._separator.style_class = 'arcmenu-separator';
-        this.addMenuItem(item);
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
+        this.addMenuItem(separator);
 
-        item = new PopupMenu.PopupMenuItem(_("Settings Quick Links:"), { 
+        let item = new PopupMenu.PopupMenuItem(_("Settings Quick Links:"), { 
             activate: false,
             reactive: false
         });
@@ -800,9 +798,8 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         this.addMenuItem(this.createQuickLinkItem(_("Customize Menu"), Constants.PrefsVisiblePage.CUSTOMIZE_MENU));
         this.addMenuItem(this.createQuickLinkItem(_("Button Appearance"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
 
-        item = new PopupMenu.PopupSeparatorMenuItem();
-        item._separator.style_class = 'arcmenu-separator';
-        this.addMenuItem(item);
+        separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
+        this.addMenuItem(separator);
 
         this.addMenuItem(this.createQuickLinkItem(_("About"), Constants.PrefsVisiblePage.ABOUT));
     }

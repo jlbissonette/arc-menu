@@ -3,10 +3,10 @@
  *
  * ArcMenu Lead Developer and Maintainer
  * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
+ *
  * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
  * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
@@ -101,11 +101,12 @@ var SeparatorAlignment = {
 };
 
 var SeparatorStyle = {
-    NORMAL: 0,
-    LONG: 1,
-    SHORT: 2,
+    SHORT: 0,
+    MEDIUM: 1,
+    LONG: 2,
     MAX: 3,
-    MEDIUM: 4,
+    HEADER_LABEL: 4,
+    NORMAL: 5,
 };
 
 var CaretPosition = {
@@ -138,6 +139,7 @@ var SMALL_ICON_SIZE = 20;
 var MEDIUM_ICON_SIZE = 25;
 var LARGE_ICON_SIZE = 30;
 var EXTRA_LARGE_ICON_SIZE = 35;
+var MISC_ICON_SIZE = 24;
 
 var SUPER_L = 'Super_L';
 var SUPER_R = 'Super_R';
@@ -193,7 +195,7 @@ var MenuButtonAppearance = {
     NONE: 4
 };
 
-var MenuIcon = { 
+var MenuIcon = {
     ARC_MENU: 0,
     DISTRO_ICON: 1,
     CUSTOM: 2
@@ -342,7 +344,7 @@ var MenuLayout = {
     AZ: 21,
 };
 
-var TraditionalMenus = [   
+var TraditionalMenus = [
     { IMAGE: 'arcmenu-layout-symbolic', TITLE: _('ArcMenu'), LAYOUT: MenuLayout.ARCMENU},
     { IMAGE: 'brisk-layout-symbolic', TITLE: _('Brisk'), LAYOUT: MenuLayout.BRISK},
     { IMAGE: 'whisker-layout-symbolic', TITLE: _('Whisker'), LAYOUT: MenuLayout.WHISKER},
@@ -360,7 +362,7 @@ var ModernMenus = [
     { IMAGE: 'eleven-layout-symbolic', TITLE: _('11'), LAYOUT: MenuLayout.ELEVEN},
     { IMAGE: 'az-layout-symbolic', TITLE: _('a.z.'), LAYOUT: MenuLayout.AZ}];
 
-var TouchMenus = [   
+var TouchMenus = [
     { IMAGE: 'elementary-layout-symbolic', TITLE: _('Elementary'), LAYOUT: MenuLayout.ELEMENTARY},
     { IMAGE: 'chromebook-layout-symbolic', TITLE: _('Chromebook'), LAYOUT: MenuLayout.CHROMEBOOK}];
 
@@ -369,15 +371,15 @@ var LauncherMenus = [
     { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
     { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 
-var SimpleMenus = [   
+var SimpleMenus = [
     { IMAGE: 'simple-layout-symbolic', TITLE: _('Simple'), LAYOUT: MenuLayout.SIMPLE},
     { IMAGE: 'simple2-layout-symbolic', TITLE: _('Simple 2'), LAYOUT: MenuLayout.SIMPLE_2}];
 
-var AlternativeMenus = [   
+var AlternativeMenus = [
     { IMAGE: 'raven-layout-symbolic', TITLE: _('Raven'), LAYOUT: MenuLayout.RAVEN}];
 
 var MenuStyles = {
-    STYLES: [ 
+    STYLES: [
         { IMAGE: 'traditional-category-symbolic', TITLE: _("Traditional"), MENU_TYPE: TraditionalMenus },
         { IMAGE: 'modern-category-symbolic', TITLE: _("Modern"), MENU_TYPE: ModernMenus },
         { IMAGE: 'touch-category-symbolic', TITLE: _("Touch"), MENU_TYPE: TouchMenus },
@@ -419,7 +421,7 @@ var CONTRIBUTORS = '<b>Thank you to all who contributed to, and/or helped, the d
                     +'\n\n<b>For a list of all contributors please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
 var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
                 '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
-        
+
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +
     'See the <a href="https://gnu.org/licenses/old-licenses/gpl-2.0.html">' +

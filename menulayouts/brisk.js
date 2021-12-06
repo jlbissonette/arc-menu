@@ -104,7 +104,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
-        this.subMainBox.add(this._createVerticalSeparator());
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.subMainBox.add(verticalSeparator);
         this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
@@ -165,7 +166,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadExtraPinnedApps(){
         this.actionsBox.destroy_all_children();
-        this.actionsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        this.actionsBox.add(separator);
         let pinnedApps = this._settings.get_strv('brisk-shortcuts-list');
 
         for(let i = 0;i < pinnedApps.length; i += 3){
@@ -175,7 +177,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 this.actionsBox.add(placeMenuItem.actor);
             }
         }
-        this.actionsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));  
+        separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        this.actionsBox.add(separator);  
     }
 
     setDefaultMenuView(){

@@ -46,7 +46,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             VerticalMainBox: true,
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
             DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
-            DefaultQuickLinksIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.SMALL_ICON_SIZE,
             DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
@@ -60,9 +60,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 0px 10px 10px 10px;";
             this.mainBox.add(this.searchBox.actor);
-            let horizontalSep = this._createHorizontalSeparator(Constants.SeparatorStyle.MAX);
-            horizontalSep.style = "margin-bottom: 6px;";
-            this.mainBox.add(horizontalSep);
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+            separator.style += "margin-bottom: 6px;";
+            this.mainBox.add(separator);
         }
         
         //Sub Main Box -- stores left and right box
@@ -113,7 +113,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
-        this.subMainBox.add(this._createVerticalSeparator());
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.subMainBox.add(verticalSeparator);
         this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
@@ -141,9 +142,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            let horizontalSep = this._createHorizontalSeparator(Constants.SeparatorStyle.MAX);
-            horizontalSep.style = "margin-top: 6px;";
-            this.mainBox.add(horizontalSep);
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+            separator.style += "margin-top: 6px;";
+            this.mainBox.add(separator);
             this.searchBox.style = "margin: 10px 10px 0px 10px;";
             this.mainBox.add(this.searchBox.actor); 
         }

@@ -196,7 +196,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _addSeparator(){
-        this.actionsBox.add(this._createVerticalSeparator(Constants.SeparatorStyle.SHORT));
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.actionsBox.add(verticalSeparator);
     }
 
     loadExtraPinnedApps(){
@@ -399,7 +400,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayRecentFiles(){
         super.displayRecentFiles();
-        let label = this._createHeaderLabel(_("Recent Files"));
+        let label = this._createLabelWithSeparator(_("Recent Files"));
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
         this.applicationsBox.add_style_class_name('margin-box');
@@ -423,7 +424,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _displayAppList(apps, category, grid){      
         super._displayAppList(apps, category, grid);
 
-        let label = this._createHeaderLabel(this.activeCategory);
+        let label = this._createLabelWithSeparator(this.activeCategory);
         if(grid === this.applicationsGrid)
             this.applicationsBox.insert_child_at_index(label.actor, 0);
         else

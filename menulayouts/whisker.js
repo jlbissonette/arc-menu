@@ -89,8 +89,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add(this.searchBox.actor);
         }
         else{
-            let horizontalSep = this._createHorizontalSeparator(Constants.SeparatorStyle.LONG);
-            this.mainBox.add(horizontalSep);
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+            this.mainBox.add(separator);
         }
 
         //Sub Main Box -- stores left and right box
@@ -137,7 +137,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
-        this.subMainBox.add(this._createVerticalSeparator());
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.subMainBox.add(verticalSeparator);
         this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({

@@ -268,7 +268,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.backButton = new MW.BackMenuItem(this);
         this.backButton.connect("activate", () => this.toggleExtrasMenu());
         headerBox.add(this.backButton.actor);
-        headerBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        headerBox.add(separator);
 
         this.computerScrollBox = this._createScrollBox({
             x_expand: true, 
@@ -374,7 +375,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayAllApps(){
         this._clearActorsFromBox();
-        let label = this._createHeaderLabel(_("Frequent"));
+        let label = this._createLabelWithSeparator(_("Frequent"));
         let activeMenuItemSet = false;
 
         if(!this._settings.get_boolean('windows-disable-frequent-apps')){

@@ -58,7 +58,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.ravenPositionChangedID = this._settings.connect('changed::raven-position', () => this._updatePosition());
 
-        this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
+        this.dummyCursor = new St.Widget({ width: 1, height: 0, opacity: 0});
         Main.uiGroup.add_actor(this.dummyCursor);
         this.updateLocation();
 
@@ -229,11 +229,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
         let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(monitorIndex);
 
-        let positionX = ravenPosition === Constants.RavenPosition.LEFT ? monitorWorkArea.x : monitorWorkArea.x + monitorWorkArea.width;
+        let positionX = ravenPosition === Constants.RavenPosition.LEFT ? monitorWorkArea.x : monitorWorkArea.x + monitorWorkArea.width - 1;
         let positionY = this.arcMenu._arrowSide === St.Side.BOTTOM ? monitorWorkArea.y + monitorWorkArea.height : monitorWorkArea.y;
         
-        this.dummyCursor.set_position(positionX, positionY);        
-        
+        this.dummyCursor.set_position(positionX, positionY);
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         let screenHeight = monitorWorkArea.height;   
      
@@ -331,8 +330,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayRecentFiles(){
         super.displayRecentFiles();
-        let label = this._createHeaderLabel(_("Recent Files"));
-        label.remove_actor(label._ornamentLabel);
+        let label = this._createLabelWithSeparator(_("Recent Files"));
         label.actor.style = "padding-left: 10px;";
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
@@ -355,8 +353,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _displayAppList(apps, category, grid){      
         super._displayAppList(apps, category, grid);
-        let label = this._createHeaderLabel(this.activeCategory);
-        label.remove_actor(label._ornamentLabel);
+        let label = this._createLabelWithSeparator(this.activeCategory);
 
         if(grid === this.applicationsGrid){
             label.actor.style = "padding-left: 10px;";

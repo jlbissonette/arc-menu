@@ -140,7 +140,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
-        this.subMainBox.add(this._createVerticalSeparator());
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.subMainBox.add(verticalSeparator);
         this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
@@ -168,7 +169,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _addSeparator(){
-        this.actionsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        this.actionsBox.add(separator);
     }    
 
     setDefaultMenuView(){

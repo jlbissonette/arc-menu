@@ -102,9 +102,6 @@ var BaseLayout = class {
 
         this._clearActorsFromBox();
         this.resetScrollBarPosition();
-
-        if(this.vertSep)
-            this.vertSep.queue_repaint(); 
     }
 
     resetScrollBarPosition(){
@@ -555,7 +552,8 @@ var BaseLayout = class {
     }
 
     placesAddSeparator(id){
-        this._sections[id].add_actor(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));  
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
+        this._sections[id].add_actor(separator);  
     }
 
     _redisplayPlaces(id) {
@@ -698,7 +696,7 @@ var BaseLayout = class {
                     if(currentCharacter !== app.get_name().charAt(0).toLowerCase()){
                         currentCharacter = app.get_name().charAt(0).toLowerCase();
 
-                        let label = this._createHeaderLabel(currentCharacter.toUpperCase());
+                        let label = this._createLabelWithSeparator(currentCharacter.toUpperCase());
                         grid.layout_manager.attach(label, left, top, 1, 1);
                         top++;
                     }
@@ -973,7 +971,7 @@ var BaseLayout = class {
     }
 
     _createScrollBox(params){
-        let scrollBox = new MW.ScrollView(params);    
+        let scrollBox = new St.ScrollView(params);    
         let panAction = new Clutter.PanAction({ interpolate: false });
         panAction.connect('pan', (action) => {
             this._blockActivateEvent = true;
@@ -989,15 +987,9 @@ var BaseLayout = class {
         return scrollBox;
     }
 
-    _createHeaderLabel(headerLabel){
-        let label = new PopupMenu.PopupMenuItem(_(headerLabel), {
-            hover: false,
-            can_focus: false
-        });
-        label.actor.add_style_pseudo_class = () => { return false;};
-        label.actor.add(this._createHorizontalSeparator(Constants.SeparatorStyle.LONG));
-        label.actor.style = 'font-weight: bold;'
-        return label;
+    _createLabelWithSeparator(headerLabel){
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.HEADER_LABEL, Constants.SeparatorAlignment.HORIZONTAL, headerLabel);
+        return separator;
     }
 
     createLabelRow(title){
@@ -1029,28 +1021,5 @@ var BaseLayout = class {
         let adjustment = scrollbox.get_vscroll_bar().get_adjustment();
         let endPanValue = adjustment.value + velocity * 2;
         adjustment.value = endPanValue;
-    }
-
-    _createHorizontalSeparator(style){
-        let alignment = Constants.SeparatorAlignment.HORIZONTAL;
-        let hSep = new MW.SeparatorDrawingArea(this._settings, alignment, style,{
-            x_expand: true,
-            y_expand: false,
-            y_align: Clutter.ActorAlign.END
-        });
-        hSep.queue_repaint();
-        return hSep;
-    }
-
-    _createVerticalSeparator(style){    
-        let alignment = Constants.SeparatorAlignment.VERTICAL;
-        style = style ? style : Constants.SeparatorStyle.NORMAL;
-        this.vertSep = new MW.SeparatorDrawingArea(this._settings, alignment, style,{
-            x_expand: true,
-            y_expand: true,
-            style_class: 'vert-sep'
-        });
-        this.vertSep.queue_repaint();
-        return this.vertSep;
     }
 };
