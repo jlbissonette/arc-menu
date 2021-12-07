@@ -200,7 +200,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadCategories();
         this.loadPinnedApps();
 
-        this.displayCategories();
         this.setDefaultMenuView();
     }
 
@@ -295,6 +294,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         super.loadCategories(Constants.DisplayType.BUTTON);
+        this.displayCategories();
     }
 
     displayCategories(){
@@ -331,7 +331,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayRecentFiles(){
         super.displayRecentFiles();
         let label = this._createLabelWithSeparator(_("Recent Files"));
-        label.actor.style = "padding-left: 10px;";
+        label.actor.style += "padding-left: 10px;";
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
         this.applicationsBox.add_style_class_name('margin-box');
@@ -356,11 +356,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let label = this._createLabelWithSeparator(this.activeCategory);
 
         if(grid === this.applicationsGrid){
-            label.actor.style = "padding-left: 10px;";
+            label.actor.style += "padding-left: 10px;";
             this.applicationsBox.insert_child_at_index(label.actor, 0);
         }
         else{
-            label.actor.style = "padding-left: 10px; padding-top: 20px;";
+            label.actor.style += "padding-left: 10px; padding-top: 20px;";
             this.applicationsBox.insert_child_at_index(label.actor, 2);
         }
     }

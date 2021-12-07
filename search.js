@@ -62,30 +62,32 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         if(this.provider.id === 'org.gnome.Nautilus.desktop')
             this._path = this.metaInfo['description'];
 
-        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
-        if (this.metaInfo['description'] && showSearchResultDescriptions) {
-            this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
-            this._highlightTerms();
-        }
+        this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
+        this._highlightTerms();
 
         if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions)
             this.label.text = this.metaInfo['name'] + " " + this.metaInfo['description'];
 
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
-
-        this.connect('destroy', this._onDestroy.bind(this));
     }
 
     _highlightTerms() {
-        let markup = this.resultsView.highlightTerms(this.metaInfo['description'].split('\n')[0]);
-        this.descriptionLabel.clutter_text.set_markup(markup);
+        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
+        if(this.descriptionLabel && showSearchResultDescriptions){
+            let descriptionMarkup = this.resultsView.highlightTerms(this.metaInfo['description'].split('\n')[0]);
+            this.descriptionLabel.clutter_text.set_markup(descriptionMarkup);
+        }
+        let labelMarkup = this.resultsView.highlightTerms(this.label.text.split('\n')[0]);
+        this.label.clutter_text.set_markup(labelMarkup);
     }
 
     _onDestroy() {
-        if (this._termsChangedId)
+        if (this._termsChangedId) {
             this.resultsView.disconnect(this._termsChangedId);
-        this._termsChangedId = null;
+            this._termsChangedId = null;
+        }
+        super._onDestroy();
     }
 });
 
@@ -102,6 +104,28 @@ var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult exten
 
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
+
+        this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
+        this._highlightTerms();
+    }
+
+    _highlightTerms() {
+        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
+        if(this.descriptionLabel && showSearchResultDescriptions){
+            let descriptionMarkup = this.resultsView.highlightTerms(this.descriptionLabel.text.split('\n')[0]);
+            this.descriptionLabel.clutter_text.set_markup(descriptionMarkup);
+        }
+
+        let labelMarkup = this.resultsView.highlightTerms(this.label.text.split('\n')[0]);
+        this.label.clutter_text.set_markup(labelMarkup);
+    }
+
+    _onDestroy() {
+        if (this._termsChangedId) {
+            this.resultsView.disconnect(this._termsChangedId);
+            this._termsChangedId = null;
+        }
+        super._onDestroy();
     }
 });
 
@@ -235,7 +259,7 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
         this.searchType = this._menuLayout.layoutProperties.SearchDisplayType;
         this._settings = this._menuLayout._settings;
         this.layout = this._settings.get_enum('menu-layout');
-
+        
         this._container = new St.BoxLayout({
             vertical: true,
             x_align: Clutter.ActorAlign.FILL,
@@ -283,6 +307,7 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
         return super._createResultDisplay(meta, this.resultsView) ||
                new ListSearchResult(this.provider, meta, this.resultsView);
     }
+
     _addItem(display) {
         this._content.add_actor(display);
     }
@@ -382,6 +407,7 @@ var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase
         else
             return null;
     }
+
     destroy(){
         this._resultDisplayBin.destroy();
         this._resultDisplayBin = null;
@@ -464,7 +490,6 @@ var SearchResults = class Arc_Menu_SearchResults {
         if(this._statusText){
             this._statusText.style_class = style;
         }
-            
     }
 
     destroy(){
@@ -619,9 +644,17 @@ var SearchResults = class Arc_Menu_SearchResults {
         if (this._searchTimeoutId == 0)
             this._searchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, this._onSearchTimeout.bind(this));
 
-        let escapedTerms = this._terms.map(term => Shell.util_regex_escape(term));
-        this._highlightRegex = new RegExp('(%s)'.format(escapedTerms.join('|')), 'gi');
         this.emit('terms-changed');
+
+        const escapedTerms = terms
+            .map(term => Shell.util_regex_escape(term))
+            .filter(term => term.length > 0);
+
+        if (escapedTerms.length === 0)
+            return;
+
+        this._highlightRegex = new RegExp('(%s)'.format(
+            escapedTerms.join('|')), 'gi');
     }
 
     _ensureProviderDisplay(provider) {
@@ -747,14 +780,28 @@ var SearchResults = class Arc_Menu_SearchResults {
         return (this._defaultResult ? true : false) && this._highlightDefault;
     }
 
-    highlightTerms(description) {
-        if (!description)
-            return '';
-
+    highlightTerms(text) {
         if (!this._highlightRegex)
-            return description;
+            return GLib.markup_escape_text(text, -1);
 
-        return description.replace(this._highlightRegex, '<b>$1</b>');
+        let escaped = [];
+        let lastMatchEnd = 0;
+        let match;
+        while ((match = this._highlightRegex.exec(text))) {
+            if (match.index > lastMatchEnd) {
+                let unmatched = GLib.markup_escape_text(
+                    text.slice(lastMatchEnd, match.index), -1);
+                escaped.push(unmatched);
+            }
+            let matched = GLib.markup_escape_text(match[0], -1);
+            escaped.push('<b>%s</b>'.format(matched));
+            lastMatchEnd = match.index + match[0].length;
+        }
+        let unmatched = GLib.markup_escape_text(
+            text.slice(lastMatchEnd), -1);
+        escaped.push(unmatched);
+
+        return escaped.join('');
     }
 };
 Signals.addSignalMethods(SearchResults.prototype);

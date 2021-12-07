@@ -55,16 +55,11 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
 
-        const IconSizeEnum = this._settings.get_enum('quicklinks-item-icon-size');
-        let defaultIconSize = this._menuLayout.layoutProperties.DefaultQuickLinksIconSize;
-        let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+        this._iconBin = new St.Bin();
+        this.add_child(this._iconBin);
 
-        this._icon = new St.Icon({
-            gicon: info.icon,
-            icon_size: iconSize
-        });
+        this._updateIcon();
 
-        this.add_actor(this._icon);
         this.label = new St.Label({ text: info.name, 
                                     x_expand: true,
                                     y_expand: false,
@@ -95,6 +90,17 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
 
     }
 
+    createIcon(){
+        const IconSizeEnum = this._settings.get_enum('quicklinks-item-icon-size');
+        let defaultIconSize = this._menuLayout.layoutProperties.DefaultQuickLinksIconSize;
+        let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+
+        return new St.Icon({
+            gicon: this._info.icon,
+            icon_size: iconSize
+        });
+    }
+
     activate(event) {
         this._info.launch(event.get_time());
         this._menuLayout.arcMenu.toggle();
@@ -102,7 +108,8 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
     }
 
     _propertiesChanged(info) {
-        this._icon.gicon = info.icon;
+        this._info = info;
+        this._iconBin.set_child(this.createIcon());
         this.label.text = info.name;
     }
 });
@@ -742,9 +749,9 @@ var Trash = class Arc_Menu_Trash {
             if(this._menuItem.contextMenu)
                 this._menuItem.contextMenu._app = this._trashApp;
             let trashIcon = this._trashApp.create_icon_texture(Constants.MEDIUM_ICON_SIZE);
-            if(this._menuItem._icon && trashIcon)
-                this._menuItem._icon.gicon = trashIcon.gicon;
-
+            if(this._menuItem._iconBin && trashIcon)
+                this._menuItem.iconName = trashIcon.gicon.to_string();
+            this._menuItem._updateIcon();
             this.emit('changed');
         }
     }

@@ -530,7 +530,7 @@ function createStylesheet(settings){
     let plasmaSelectedItemBackgroundColor = settings.get_string('plasma-selected-background-color');
     let plasmaSearchBarTop = settings.get_enum('searchbar-default-top-location');
     let menuButtonBorderRadius = settings.get_int('menu-button-border-radius');
-    let tooltipStyle, separatorColorStyle;
+    let tooltipStyle, separatorColorStyle = "\n";
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
         tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 0 1px 0px " + separatorColor + ";\nfont-size:" + fontSize + "pt;\npadding: 3px 8px;\nmin-height: 0px;"

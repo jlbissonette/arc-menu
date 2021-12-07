@@ -291,6 +291,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.applicationsBox.add(this.directoryShortcuts[i]);
         }
         this.applicationsBox.add(this.externalDevicesBox);
+        this.activeMenuItem = this.applicationShortcuts[0];
     }
 
     _createPlaces(id) {
@@ -370,6 +371,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.applicationsBox.insert_child_at_index(this.hibernate, 5);
         this.applicationsBox.add(this.restart);
         this.applicationsBox.add(this.powerOff);
+        this.activeMenuItem = this.lock;
     }
 
     displayCategories(){

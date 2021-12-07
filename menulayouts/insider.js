@@ -155,22 +155,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         Main.uiGroup.add_actor(this.dummyCursor);
         this.pinnedAppsMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
         this.pinnedAppsMenu.blockSourceEvents = true;
-        this.pinnedAppsMenu.connect('open-state-changed', (menu, open) => {
-            if(!open){
-                this.pinnedAppsButton.set_hover(false);
-            }
-            else{
-                if(this.menuButton.tooltipShowingID){
-                    GLib.source_remove(this.menuButton.tooltipShowingID);
-                    this.menuButton.tooltipShowingID = null;
-                    this.menuButton.tooltipShowing = false;
-                }
-                if(this.pinnedAppsButton.tooltip){
-                    this.pinnedAppsButton.tooltip.hide();
-                    this.menuButton.tooltipShowing = false;
-                }
-            }
-        });
         this.section = new PopupMenu.PopupMenuSection();
         this.pinnedAppsMenu.addMenuItem(this.section);  
         
@@ -233,6 +217,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMenuManager.addMenu(this.pinnedAppsMenu);
         this.pinnedAppsMenu.actor.hide();
         Main.uiGroup.add_actor(this.pinnedAppsMenu.actor);
+        this.pinnedAppsMenu.connect('open-state-changed', (menu, open) => {
+            if(open){
+                if(this.menuButton.tooltipShowingID){
+                    GLib.source_remove(this.menuButton.tooltipShowingID);
+                    this.menuButton.tooltipShowingID = null;
+                    this.menuButton.tooltipShowing = false;
+                }
+                if(this.pinnedAppsButton.tooltip){
+                    this.pinnedAppsButton.tooltip.hide();
+                    this.menuButton.tooltipShowing = false;
+                }
+            }
+        });
     }
 
     togglePinnedAppsMenu(){
@@ -285,6 +282,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.dummyCursor.set_position(Math.round(x + borderWidth), Math.round(y + borderWidth));
         this.pinnedAppsMenu.toggle();
+        if(this.pinnedAppsMenu.isOpen){
+            this.activeMenuItem = this.backButton;
+            this.backButton.grab_key_focus();
+        }
     }
     
     setDefaultMenuView(){

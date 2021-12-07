@@ -60,9 +60,7 @@ var BaseLayout = class {
         this._mainBoxKeyPressId = this.mainBox.connect('key-press-event', this._onMainBoxKeyPress.bind(this));
         
         this._tree = new GMenu.Tree({ menu_basename: 'applications.menu' });
-        this._treeChangedId = this._tree.connect('changed', () => {
-            this.needsReload = true;
-        });
+        this._treeChangedId = this._tree.connect('changed', () => this.reloadApplications());
 
         this._gnomeFavoritesReloadID = AppFavorites.getAppFavorites().connect('changed', () => {
             if(this.categoryDirectories){
@@ -123,6 +121,25 @@ var BaseLayout = class {
             appsScrollBoxAdj = this.actionsScrollBox.get_vscroll_bar().get_adjustment();
             appsScrollBoxAdj.set_value(0);
         }
+    }
+
+    reloadApplications(){
+        if(this.applicationsMap){
+            this.applicationsMap.forEach((value,key,map)=>{
+                value.destroy();
+            });
+            this.applicationsMap = null;
+        }
+
+        if(this.categoryDirectories){
+            this.categoryDirectories.forEach((value,key,map)=>{
+                value.destroy();
+            });
+            this.categoryDirectories = null;    
+        }
+
+        this.loadCategories();
+        this.setDefaultMenuView();
     }
 
     reload(){
@@ -320,9 +337,10 @@ var BaseLayout = class {
             categoriesBox.add_actor(categoryMenuItem.actor);	
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;
-                this.activeMenuItem = categoryMenuItem;
+                this._activeMenuItem = categoryMenuItem;
             }	 
         }
+        this.activeMenuItem = this._activeMenuItem;
     }
 
     _loadGnomeFavorites(categoryMenuItem){
@@ -393,10 +411,11 @@ var BaseLayout = class {
             placeMenuItem.add(placeMenuItem._removeBtn);
             box.add_actor(placeMenuItem);
             if(!activeMenuItemSet){
-                this.activeMenuItem = placeMenuItem;
+                this._activeMenuItem = placeMenuItem;
                 activeMenuItemSet = true;
             }
         }
+        this.activeMenuItem = this._activeMenuItem;
     }
 
     _displayPlaces() {
@@ -609,8 +628,6 @@ var BaseLayout = class {
 
     setActiveCategory(category, setActive = true){
         this.activeMenuItem = category;
-        if(setActive && this.arcMenu.isOpen)
-            this.activeMenuItem.actor.grab_key_focus();
     }
 
     setFrequentAppsList(categoryMenuItem){
@@ -717,13 +734,15 @@ var BaseLayout = class {
                 count++;
     
                 if(!activeMenuItemSet && grid === this.applicationsGrid){
-                    this.activeMenuItem = item;
+                    this._activeMenuItem = item;
                     activeMenuItemSet = true;
                 }
             }
         }
         if(this.applicationsBox && !this.applicationsBox.contains(this.applicationsGrid))
             this.applicationsBox.add(this.applicationsGrid);
+
+        this.activeMenuItem = this._activeMenuItem;
     }
 
     displayAllApps(){
@@ -743,9 +762,13 @@ var BaseLayout = class {
     }
 
     set activeMenuItem(item) {
+        this._activeMenuItem = item;
+        if(!item)
+            return;
         let itemChanged = item !== this._activeMenuItem;
+        if(this.arcMenu.isOpen)
+            item.grab_key_focus();
         if(itemChanged){
-            this._activeMenuItem = item;
             if(this.layout === Constants.MenuLayout.LAUNCHER)
                 this.createActiveSearchItemPanel(item);
         }
@@ -871,34 +894,18 @@ var BaseLayout = class {
         return Clutter.EVENT_PROPAGATE;
     }
 
-    destroy(isReload){
+    destroy(){
+        this.isRunning = false;
+
+        if (this._treeChangedId) {
+            this._tree.disconnect(this._treeChangedId);
+            this._treeChangedId = null;
+            this._tree = null;
+        }
+
         if(this.applicationsBox){
             if(this.applicationsBox.contains(this.applicationsGrid))
                 this.applicationsBox.remove_child(this.applicationsGrid);
-        }
-
-        if(this.applicationsMap){
-            this.applicationsMap.forEach((value,key,map)=>{
-                if(value && value.needsDestroy)
-                    value.destroy();
-            });
-            this.applicationsMap = null;
-        }
-
-        if(this.categoryDirectories){
-            this.categoryDirectories.forEach((value,key,map)=>{
-                if(value && value.needsDestroy)
-                    value.destroy();
-            });
-            this.categoryDirectories = null;    
-        }
-
-        if(this.pinnedAppsArray){
-            for(let i = 0; i < this.pinnedAppsArray.length; i++){
-                if(this.pinnedAppsArray[i] && this.pinnedAppsArray[i].needsDestroy)
-                    this.pinnedAppsArray[i].destroy();
-            }
-            this.pinnedAppsArray = null;
         }
         
         if(this.network){
@@ -948,23 +955,36 @@ var BaseLayout = class {
             this.searchResults.destroy();
         }
 
-        if(!isReload){
-            if (this._mainBoxKeyPressId > 0) {
-                this.mainBox.disconnect(this._mainBoxKeyPressId);
-                this._mainBoxKeyPressId = 0;
-            }
+     
+        if (this._mainBoxKeyPressId) {
+            this.mainBox.disconnect(this._mainBoxKeyPressId);
+            this._mainBoxKeyPressId = null;
+        }
 
-            if (this._treeChangedId > 0) {
-                this._tree.disconnect(this._treeChangedId);
-                this._treeChangedId = 0;
-                this._tree = null;
-            }
-            if(this._gnomeFavoritesReloadID){
-                AppFavorites.getAppFavorites().disconnect(this._gnomeFavoritesReloadID);
-                this._gnomeFavoritesReloadID = null;
-            }
+        if(this._gnomeFavoritesReloadID){
+            AppFavorites.getAppFavorites().disconnect(this._gnomeFavoritesReloadID);
+            this._gnomeFavoritesReloadID = null;
+        }
 
-            this.isRunning = false;
+        if(this.applicationsMap){
+            this.applicationsMap.forEach((value,key,map)=>{
+                value.destroy();
+            });
+            this.applicationsMap = null;
+        }
+
+        if(this.categoryDirectories){
+            this.categoryDirectories.forEach((value,key,map)=>{
+                value.destroy();
+            });
+            this.categoryDirectories = null;    
+        }
+
+        if(this.pinnedAppsArray){
+            for(let i = 0; i < this.pinnedAppsArray.length; i++){
+                this.pinnedAppsArray[i].destroy();
+            }
+            this.pinnedAppsArray = null;
         }
 
         this.mainBox.destroy_all_children();

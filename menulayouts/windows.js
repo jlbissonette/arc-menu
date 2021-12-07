@@ -357,6 +357,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.dummyCursor.set_position(Math.round(x + borderWidth), Math.round(y + borderWidth));
         this.extrasMenu.toggle();
+        if(this.extrasMenu.isOpen){
+            this.activeMenuItem = this.backButton;
+            this.backButton.grab_key_focus();
+        }
     }
     
     setDefaultMenuView(){

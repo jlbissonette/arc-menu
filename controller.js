@@ -116,7 +116,6 @@ var MenuSettingsController = class {
             this._settings.connect('changed::searchbar-default-bottom-location', this._reload.bind(this)),
             this._settings.connect('changed::searchbar-default-top-location', this._plasmaMenuReloadExtension.bind(this)),
             this._settings.connect('changed::searchbar-default-top-location', this._reload.bind(this)),
-            this._settings.connect('changed::recently-installed-apps', this._reload.bind(this)),
             this._settings.connect('changed::multi-lined-labels', this._reload.bind(this)),
             this._settings.connect('changed::apps-show-extra-details', this._reload.bind(this)),
             this._settings.connect('changed::show-search-result-details', this._reload.bind(this)),

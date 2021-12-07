@@ -138,7 +138,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             });
         }
 
-        this._iconThemeChangedId = St.TextureCache.get_default().connect('icon-theme-changed', this.reload.bind(this));
         this._monitorsChangedId = Main.layoutManager.connect('monitors-changed', () => {
             this.updateHeight();
         });
@@ -151,7 +150,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.setMenuPositionAlignment();
 
         //Create Basic Layout
-        this.createLayoutID = GLib.timeout_add(0, 100, () => {
+        this.createLayoutID = GLib.timeout_add(0, 500, () => {
             this.createMenuLayout();
             this.createLayoutID = null;
             return GLib.SOURCE_REMOVE;
@@ -218,6 +217,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 let recentApps = this._settings.get_strv('recently-installed-apps');
                 let newRecentApps = [...new Set(recentApps.concat(newApps))];
                 this._settings.set_strv('recently-installed-apps', newRecentApps);
+                this.MenuLayout.reloadApplications();
             }
             
             this._appList = this._newAppList;
@@ -237,7 +237,9 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     }
 
     createMenuLayout(){
+        this._forcedMenuLocation = false;
         this.arcMenu.actor.style = null;
+        this.arcMenu.removeAll();
         this.section = new PopupMenu.PopupMenuSection();
         this.arcMenu.addMenuItem(this.section);            
         this.mainBox = new St.BoxLayout({
@@ -255,6 +257,36 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.updateStyle();
         this.forceMenuLocation();
         this.updateHeight();
+
+        if(this.arcMenu.isOpen){
+            if(this.MenuLayout.activeMenuItem)
+                this.MenuLayout.activeMenuItem.active = true;
+            else
+                this.mainBox.grab_key_focus();
+        }
+    }
+
+    reloadMenuLayout(){
+        this._forcedMenuLocation = false;
+
+        this.MenuLayout.destroy();
+        this.MenuLayout = null;
+        
+        this.arcMenu.actor.style = null;
+
+        this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
+    
+        this.setMenuPositionAlignment();
+        this.updateStyle();
+        this.forceMenuLocation();
+        this.updateHeight();
+
+        if(this.arcMenu.isOpen){
+            if(this.MenuLayout.activeMenuItem)
+                this.MenuLayout.activeMenuItem.active = true;
+            else
+                this.mainBox.grab_key_focus();
+        }
     }
 
     setMenuPositionAlignment(){
@@ -466,8 +498,8 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 }
             }
             this.arcMenu.toggle();
-            if(this.arcMenu.isOpen){
-                if(this.MenuLayout?.layoutProperties.SupportsCategoryOnHover && this.MenuLayout?.activeMenuItem)
+            if(this.arcMenu.isOpen && this.MenuLayout){
+                if(this.MenuLayout.activeMenuItem)
                     this.MenuLayout.activeMenuItem.active = true;
                 else
                     this.mainBox.grab_key_focus();
@@ -587,7 +619,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.MenuLayout.destroy();
             this.MenuLayout = null;
         }
-        this.arcMenu.removeAll();
         this.updateMenuLayoutID = GLib.timeout_add(0, 100, () => {
             this.createMenuLayout();
             this.updateMenuLayoutID = null;
@@ -617,13 +648,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 
     reload(){
         if(this.MenuLayout){
-            if(this.arcMenu.isOpen){
-                this.MenuLayout.needsReload = true;
-            }
-            else{
-                this.MenuLayout.needsReload = false;
-                this.MenuLayout.reload();
-            }
+            this.reloadMenuLayout();
         }
     }
 
@@ -746,18 +771,10 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
 
     _onOpenEvent(){
         this._menuButton.arcMenu.actor._muteInput = false;
-        if(this._menuButton.MenuLayout && this._menuButton.MenuLayout.needsReload){
-            this._menuButton.MenuLayout.reload();
-            this._menuButton.MenuLayout.needsReload = false;
-        } 
     }
 
     _onCloseEvent(){
         if(this._menuButton.MenuLayout && this._menuButton.MenuLayout.isRunning){
-            if(this._menuButton.MenuLayout.needsReload){
-                this._menuButton.MenuLayout.reload();
-                this._menuButton.MenuLayout.needsReload = false;
-            }
             this._menuButton.setDefaultMenuView();
         }
     }

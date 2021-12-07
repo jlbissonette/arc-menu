@@ -52,7 +52,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
 
     createLayout(){
         super.createLayout();
-
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_actor(this.dummyCursor);
         this.updateLocation();
@@ -65,8 +64,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.sourceActor = this.dummyCursor;
         this.arcMenu.focusActor = this.dummyCursor;
         this.arcMenu._boxPointer.setPosition(this.dummyCursor, 0.5);
-        this.arcMenu.close();
-        this.arcMenu._boxPointer.hide();
 
         this.topBox = new St.BoxLayout({
             x_expand: true,
@@ -107,11 +104,14 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.setDefaultMenuView();
+        this.isDestroyed = false;
+        this.activeMenuItem = null;
     }
 
     setDefaultMenuView(){
         super.setDefaultMenuView();
         this._clearActorsFromBox();
+        this.activeMenuItem = null;
         if(this._settings.get_boolean("runner-show-frequent-apps"))
             this.displayFrequentApps();
     }
@@ -153,6 +153,8 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     }
 
     updateLocation(){
+        if(this.isDestroyed)
+            return;
         if(!this.rise){
             let themeNode = this.arcMenu.actor.get_theme_node();
             this.rise = themeNode.get_length('-arrow-rise');
@@ -201,12 +203,11 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     }
 
     destroy(isReload){
+        this.isDestroyed = true;
         this.arcMenu.actor.style = null;
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;
         this.arcMenu._boxPointer.setPosition(this.oldSourceActor, this.oldArrowAlignment);
-        this.arcMenu.close();
-        this.arcMenu._boxPointer.hide();
         Main.uiGroup.remove_actor(this.dummyCursor);
         this.dummyCursor.destroy();
         super.destroy(isReload);
