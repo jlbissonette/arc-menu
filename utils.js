@@ -533,12 +533,13 @@ function createStylesheet(settings){
     let plasmaSelectedItemBackgroundColor = settings.get_string('plasma-selected-background-color');
     let plasmaSearchBarTop = settings.get_enum('searchbar-default-top-location');
     let menuButtonBorderRadius = settings.get_int('menu-button-border-radius');
-    let tooltipStyle, separatorColorStyle = "\n";
+    let tooltipStyle, separatorColorStyle = "\n", smallButtonHoverStyle = "\n";
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
         tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 0 1px 0px " + separatorColor + ";\nfont-size:" + fontSize + "pt;\npadding: 3px 8px;\nmin-height: 0px;"
                         + "\ncolor:" + menuForegroundColor+ ";\nbackground-color:" + modifyColorLuminance(menuColor, 0.05, 1) + ";\nmax-width:550px;\n}\n\n"; 
-        separatorColorStyle = ".separator-color-style{\nbackground-color: " + separatorColor + ";\n}\n\n"
+        separatorColorStyle = ".separator-color-style{\nbackground-color: " + separatorColor + ";\n}\n\n";
+        smallButtonHoverStyle = ".arc-menu .popup-menu-item .arcmenu-small-button.selected{\nbackground-color: " + modifyColorLuminance(highlightColor, -0.25) + "\n}\n\n";
     }
     else
         tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\npadding: 3px 8px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
@@ -594,10 +595,9 @@ function createStylesheet(settings){
 
         +"StScrollView .small-vfade{\n-st-vfade-offset: 44px;\n}\n\n"
 
-        +".arc-menu-eject-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 0px 8px;\n}\n\n"
-
         +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
-        +".arcmenu-small-button{\n-st-icon-style: symbolic;\npadding: 3px 8px;\n}\n\n"
+        +".arcmenu-small-button{\n-st-icon-style: symbolic;\nborder-radius: 8px;\npadding: 3px 8px;\n}\n\n"
+        +smallButtonHoverStyle
 
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"

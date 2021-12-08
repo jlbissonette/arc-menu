@@ -590,7 +590,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     set hovered(hover) {
         let hoverChanged = hover != this.hovered;
         if(hoverChanged){
-            if(hover){
+            let isActiveStyle = this.get_style_pseudo_class()?.includes('active')
+            if(hover && !isActiveStyle){
                 this.add_style_class_name('selected');
             }
             else{

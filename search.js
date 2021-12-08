@@ -764,13 +764,12 @@ var SearchResults = GObject.registerClass({
     }
 
     _setSelected(result, selected) {
-        if (!result || result === undefined || result === null)
+        if(!result || result === undefined || result === null)
             return;
-        if (selected) {
+        if(selected)
             result.add_style_pseudo_class('active');
-        } else {
+        else
             result.remove_style_pseudo_class('active');
-        }
     }
 
     hasActiveResult(){
