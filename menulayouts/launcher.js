@@ -407,7 +407,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.activeResult === this.searchResults.getTopResult())
             return;           
         
-        this.activeResult = this._activeMenuItem = this.searchResults.getTopResult();
+        this.activeResult = this.searchResults.getTopResult();
         if(!this.activeResult || this.activeResult === null){
             this.activeProvider.grab_key_focus();
             return;

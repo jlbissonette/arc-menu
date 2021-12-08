@@ -150,7 +150,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.setMenuPositionAlignment();
 
         //Create Basic Layout
-        this.createLayoutID = GLib.timeout_add(0, 500, () => {
+        this.createLayoutID = GLib.timeout_add(0, 100, () => {
             this.createMenuLayout();
             this.createLayoutID = null;
             return GLib.SOURCE_REMOVE;

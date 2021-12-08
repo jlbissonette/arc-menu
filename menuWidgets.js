@@ -1774,7 +1774,6 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
             this._app.open_new_window(-1);
         else
             Util.spawnCommandLine(this._command);
-        super.activate(event);
     }
 });
 
@@ -2273,7 +2272,8 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         this.contextMenu.toggle();
     }
 
-    activateSearchResult(provider, metaInfo, terms){
+    activateSearchResult(provider, metaInfo, terms, event){
+        this._menuLayout.arcMenu.toggle();
         if(provider.activateResult){
             provider.activateResult(metaInfo.id, terms);
             if (metaInfo.clipboardText)
@@ -2292,8 +2292,10 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
     activate(event) {
         this.removeIndicator();
 
-        if(this.metaInfo)
-            this.activateSearchResult(this.provider, this.metaInfo, this.resultsView.terms);
+        if(this.metaInfo){
+            this.activateSearchResult(this.provider, this.metaInfo, this.resultsView.terms, event);
+            return Clutter.EVENT_STOP;
+        }
         else
             this._app.open_new_window(-1);
 

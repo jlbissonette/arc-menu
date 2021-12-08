@@ -337,10 +337,10 @@ var BaseLayout = class {
             categoriesBox.add_actor(categoryMenuItem.actor);	
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;
-                this._activeMenuItem = categoryMenuItem;
+                this._futureActiveItem = categoryMenuItem;
             }	 
         }
-        this.activeMenuItem = this._activeMenuItem;
+        this.activeMenuItem = this._futureActiveItem;
     }
 
     _loadGnomeFavorites(categoryMenuItem){
@@ -411,11 +411,11 @@ var BaseLayout = class {
             placeMenuItem.add(placeMenuItem._removeBtn);
             box.add_actor(placeMenuItem);
             if(!activeMenuItemSet){
-                this._activeMenuItem = placeMenuItem;
+                this._futureActiveItem = placeMenuItem;
                 activeMenuItemSet = true;
             }
         }
-        this.activeMenuItem = this._activeMenuItem;
+        this.activeMenuItem = this._futureActiveItem;
     }
 
     _displayPlaces() {
@@ -734,7 +734,7 @@ var BaseLayout = class {
                 count++;
     
                 if(!activeMenuItemSet && grid === this.applicationsGrid){
-                    this._activeMenuItem = item;
+                    this._futureActiveItem = item;
                     activeMenuItemSet = true;
                 }
             }
@@ -742,7 +742,7 @@ var BaseLayout = class {
         if(this.applicationsBox && !this.applicationsBox.contains(this.applicationsGrid))
             this.applicationsBox.add(this.applicationsGrid);
 
-        this.activeMenuItem = this._activeMenuItem;
+        this.activeMenuItem = this._futureActiveItem;
     }
 
     displayAllApps(){
@@ -762,13 +762,11 @@ var BaseLayout = class {
     }
 
     set activeMenuItem(item) {
-        this._activeMenuItem = item;
-        if(!item)
-            return;
         let itemChanged = item !== this._activeMenuItem;
-        if(this.arcMenu.isOpen)
-            item.grab_key_focus();
         if(itemChanged){
+            this._activeMenuItem = item;
+            if(this.arcMenu.isOpen)
+                this._activeMenuItem.grab_key_focus();
             if(this.layout === Constants.MenuLayout.LAUNCHER)
                 this.createActiveSearchItemPanel(item);
         }
