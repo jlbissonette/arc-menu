@@ -90,7 +90,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 15px 10px;";
+            this.searchBox.style = "margin: 0px 10px 10px 10px;";
             this.appBox.add(this.searchBox.actor);
         }
         this.appBox.add(this.applicationsScrollBox);
@@ -104,10 +104,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END
         });
         this.backButton = new MW.BackMenuItem(this);
+        this.navigateBox.add(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL));
         this.navigateBox.add(this.backButton.actor);
         this.appBox.add(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 15px 10px 0px 10px;";
+            this.searchBox.style = "margin: 10px 10px 0px 10px;";
             this.appBox.add(this.searchBox.actor);
         }
         
@@ -229,18 +230,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayPinnedApps(){
         super.displayPinnedApps();
         this.activeCategoryType = Constants.CategoryType.PINNED_APPS;
-        this.backButton.actor.show();
+        this.navigateBox.show();
     }
 
     displayAllApps(){
-        this.backButton.actor.hide();
+        this.navigateBox.hide();
         super.displayAllApps()
     }
 
     displayCategories(){
         super.displayCategories();
         this.activeCategoryType = Constants.CategoryType.CATEGORIES_LIST;
-        this.backButton.actor.hide();
+        this.navigateBox.hide();
     }
 
     setDefaultMenuView(){
@@ -256,19 +257,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayCategoryAppList(appList, category){
         super.displayCategoryAppList(appList, category);
         this.activeCategoryType = Constants.CategoryType.CATEGORY_APP_LIST;
-        this.backButton.actor.show();
+        this.navigateBox.show();
     }
 
     displayRecentFiles(){
         super.displayRecentFiles();
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES; 
-        this.backButton.actor.show();
+        this.navigateBox.show();
     }
 
     _onSearchBoxChanged(searchBox, searchString){  
         super._onSearchBoxChanged(searchBox, searchString);  
-        if(!searchBox.isEmpty()){  
-            this.backButton.actor.hide();
+        if(searchBox.isEmpty()){  
+            this.navigateBox.hide();  
+        }            
+        else if(!searchBox.isEmpty()){  
+            this.navigateBox.show();
             this.activeCategoryType = Constants.CategoryType.SEARCH_RESULTS;   
         }            
     }

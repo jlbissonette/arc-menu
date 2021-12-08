@@ -64,6 +64,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
         this._highlightTerms();
 
+        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
         if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions)
             this.label.text = this.metaInfo['name'] + " " + this.metaInfo['description'];
 
@@ -642,7 +643,7 @@ var SearchResults = GObject.registerClass({
         if (this._searchTimeoutId === null)
             this._searchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, this._onSearchTimeout.bind(this));
 
-        this.emit('terms-changed');
+        
 
         const escapedTerms = terms
             .map(term => Shell.util_regex_escape(term))
@@ -653,6 +654,8 @@ var SearchResults = GObject.registerClass({
 
         this._highlightRegex = new RegExp('(%s)'.format(
             escapedTerms.join('|')), 'gi');
+
+        this.emit('terms-changed');
     }
 
     _ensureProviderDisplay(provider) {

@@ -812,10 +812,6 @@ var BaseLayout = class {
     }
 
     _onSearchBoxChanged(searchBox, searchString) {
-        searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
-        if (searchString === '')
-            searchString = [];
-   
         if(searchBox.isEmpty()){
             this.searchResults.hide();
             this.setDefaultMenuView();
@@ -826,6 +822,7 @@ var BaseLayout = class {
             appsScrollBoxAdj.set_value(0);
             this.applicationsBox.add(this.searchResults);
             this.searchResults.show();
+            searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
             this.searchResults.setTerms(searchString.split(/\s+/));
             this.searchResults.highlightDefault(true);
         }            	

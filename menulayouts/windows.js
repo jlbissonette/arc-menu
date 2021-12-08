@@ -376,7 +376,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayAllApps(){
         this._clearActorsFromBox();
         let label = this._createLabelWithSeparator(_("Frequent"));
-        let activeMenuItemSet = false;
+        this.activeMenuItemSet = false;
 
         if(!this._settings.get_boolean('windows-disable-frequent-apps')){
             let mostUsed = Shell.AppUsage.get_default().get_most_used();
@@ -396,8 +396,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                         item.actor.get_parent().remove_actor(item.actor);
                     if (!item.actor.get_parent()) 
                         this.applicationsBox.add_actor(item.actor);
-                    if(!activeMenuItemSet)
-                        activeMenuItemSet = item;
+                    if(!this.activeMenuItemSet){
+                        this._frequentActiveItem = item;
+                        this.activeMenuItemSet = true;
+                    }
                 }
             }
         }
@@ -413,8 +415,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.layoutProperties.GridColumns = 1;
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
 
-        if(activeMenuItemSet)
-            this.activeMenuItem = activeMenuItemSet;
+        if(this.activeMenuItemSet)
+            this.activeMenuItem = this._frequentActiveItem;
     }
 
     loadCategories() {
@@ -439,5 +441,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.HOME_SCREEN, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
             this.pinnedAppsBox.add(this.pinnedAppsGrid);
+        
+        if(this.activeMenuItemSet)
+            this.activeMenuItem = this._frequentActiveItem;
     }
 }
