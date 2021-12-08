@@ -71,11 +71,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             vertical: false
         });
 
-        this.searchBox = new MW.SearchBox(this);
         this.searchBox.style = "margin: 5px 10px 5px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.runnerTweaksButton = new MW.RunnerTweaksButton(this);
         this.runnerTweaksButton.actor.x_expand = false;
         this.runnerTweaksButton.actor.y_expand = false;
@@ -103,15 +99,13 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             style_class: 'margin-box'
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.setDefaultMenuView();
-        this.isDestroyed = false;
         this.activeMenuItem = null;
+        this.setDefaultMenuView();
     }
 
     setDefaultMenuView(){
-        super.setDefaultMenuView();
-        this._clearActorsFromBox();
         this.activeMenuItem = null;
+        super.setDefaultMenuView();
         if(this._settings.get_boolean("runner-show-frequent-apps"))
             this.displayFrequentApps();
     }
@@ -136,9 +130,10 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
                 this.applicationsBox.add_actor(item.actor);
             if(!activeMenuItemSet){
                 activeMenuItemSet = true;  
-                this.activeMenuItem = item;
+                this._futureActiveItem = item;
             }    
         }
+        this.activeMenuItem = this._futureActiveItem;
     }
 
     /**
@@ -153,8 +148,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     }
 
     updateLocation(){
-        if(this.isDestroyed)
-            return;
         if(!this.rise){
             let themeNode = this.arcMenu.actor.get_theme_node();
             this.rise = themeNode.get_length('-arrow-rise');
@@ -203,7 +196,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     }
 
     destroy(isReload){
-        this.isDestroyed = true;
         this.arcMenu.actor.style = null;
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;

@@ -516,6 +516,9 @@ function createStylesheet(settings){
     let menuArrowSize = settings.get_int('menu-arrow-size');
     let leftPanelWidth = settings.get_int('menu-width');
     let leftPanelWidthSmall = settings.get_int('menu-width') - 85;
+    let rightPanelWidth = settings.get_int('right-panel-width');
+    let rightPanelWidthPlus45 = settings.get_int('right-panel-width') + 45;
+    let rightPanelWidthPlus70 = settings.get_int('right-panel-width') + 70;
     let avatarStyle =  settings.get_enum('avatar-style');
     let avatarRadius = avatarStyle == 0 ? 999 : 0;
     let menuButtonColor = settings.get_string('menu-button-color');
@@ -565,9 +568,11 @@ function createStylesheet(settings){
         +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#ElevenIconGrid{\nwidth: 92px;\n height: 78px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
         +"#AZIconGrid{\nwidth: 95px;\n height: 85px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +".left-scroll-area{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
-        +".left-scroll-area-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"   
-        +".left-box{\nwidth:" + leftPanelWidth + "px;\n}\n\n"
+        +".left-panel{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
+        +".left-panel-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"
+        +".right-panel{\nwidth:" + rightPanelWidth + "px;\n}\n\n"   
+        +".right-panel-plus45{\nwidth:" + rightPanelWidthPlus45 + "px;\n}\n\n"   
+        +".right-panel-plus70{\nwidth:" + rightPanelWidthPlus70 + "px;\n}\n\n"   
         +".default-search-entry{\nmax-width: 17.667em;\n}\n\n"
         +".arc-search-entry{\nmax-width: 17.667em;\nfont-size:" + fontSize + "pt;\nborder-color:" + separatorColor + ";\nborder-width: 1px;\n"
                             +"color:" + menuForegroundColor + ";\nbackground-color:" + modifyColorLuminance(menuColor, -0.1, 1) + ";\n}\n\n"

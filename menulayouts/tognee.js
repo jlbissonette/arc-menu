@@ -55,12 +55,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     createLayout(){
         super.createLayout();
-        // Search Box
-        this.searchBox = new MW.SearchBox(this);
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
-        this.searchBox.name = "ArcSearchEntryRound"; // Make it round
+
+        this.searchBox.name = "ArcSearchEntryRound";
 
         //subMainBox stores left and right box
         this.subMainBox = new St.BoxLayout({
@@ -79,7 +75,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             vertical: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'left-box'
+            style_class: 'left-panel'
         });
 
         //Applications Box - Contains Favorites, Categories or programs
@@ -87,7 +83,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true,
             reactive:true
         });

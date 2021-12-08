@@ -515,7 +515,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         this.set_offscreen_redirect(Clutter.OffscreenRedirect.ON_IDLE);
         this.hasContextMenu = false;
         this._delegate = this;
-        this.needsDestroy = true;
         this._menuLayout = menuLayout;
         this.arcMenu = this._menuLayout.arcMenu;
         this.shouldShow = true;
@@ -557,7 +556,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     _updateIcon() {
-        if(!this._iconBin || !this.createIcon || !this.needsDestroy || this.iconThemeChangedId === null)
+        if(!this._iconBin || !this.createIcon || this.iconThemeChangedId === null)
             return;
 
         let icon = this.createIcon();
@@ -569,8 +568,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     set active(active) {
-        if(!this.needsDestroy)
-            return;
         let activeChanged = active != this.active;
         if(activeChanged){
             this._active = active;
@@ -636,8 +633,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     vfunc_button_release_event(){
-        if(!this.needsDestroy)
-            return Clutter.EVENT_STOP;
         let event = Clutter.get_current_event();
         if(event.get_button() == 1 && !this._menuLayout._blockActivateEvent && this.pressed){
             this.pressed = false;
@@ -665,8 +660,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     vfunc_key_focus_out() {
-        if(!this.needsDestroy)
-            return Clutter.EVENT_STOP;
         if(this.contextMenu && this.contextMenu.isOpen){
             return;
         }
@@ -736,7 +729,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     _onDestroy(){
-        this.needsDestroy = false;
         if(this.iconThemeChangedId){
             St.TextureCache.get_default().disconnect(this.iconThemeChangedId);
             this.iconThemeChangedId = null;
@@ -778,7 +770,7 @@ class Arc_Menu_Separator extends PopupMenu.PopupBaseMenuItem {
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
-
+        this.add_child(this._separator);
         if(separatorAlignment === Constants.SeparatorAlignment.HORIZONTAL){
             this.style = "padding: 0px 5px;"
             if(separatorLength === Constants.SeparatorStyle.SHORT)
@@ -794,7 +786,7 @@ class Arc_Menu_Separator extends PopupMenu.PopupBaseMenuItem {
                 this._separator.style = "margin: 0px 20px 0px 10px;";
                 this.style = "padding: 5px 15px;"
             }
-            this.add_child(this._separator);
+            
         }
         else if(separatorAlignment === Constants.SeparatorAlignment.VERTICAL){
             this._syncVisibility();
@@ -821,10 +813,7 @@ class Arc_Menu_Separator extends PopupMenu.PopupBaseMenuItem {
     }
 
     _syncVisibility() {
-        if(this.contains(this._separator))
-            this.remove_actor(this._separator);
-        if(this._settings.get_boolean('vert-separator'))
-            this.insert_child_at_index(this._separator, 0);
+        this._separator.visible = this._settings.get_boolean('vert-separator');
     }
 });
 
@@ -1243,6 +1232,11 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
                 }
             }
         });
+    }
+
+    _onDestroy(){
+        Main.uiGroup.remove_actor(this.leaveMenu.actor);
+        this.leaveMenu.destroy();
     }
 
     activate(event) {
@@ -2114,6 +2108,9 @@ var PinnedAppsMenuItem = GObject.registerClass({
             style_class: 'popup-menu-icon',
             icon_size: this._iconBin.get_child().icon_size
         });
+        let iconColor = this._settings.get_string('menu-foreground-color');
+        if(customStyle)
+            icon.style = `color: ${iconColor};`;
         return icon;
     }
 
@@ -2534,7 +2531,7 @@ var SimpleMenuItem = GObject.registerClass(class Arc_Menu_SimpleMenuItem extends
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-scroll-area ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: 'left-panel ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
         this._menuLayout.subMenuManager.addMenu(this.subMenu);
@@ -2993,10 +2990,13 @@ class Arc_Menu_SearchBox extends St.Entry {
 
     _onTextChanged() {
         let searchString = this.get_text();
-        if(!this.isEmpty())
+        if(!this.isEmpty()){
+            this.add_style_pseudo_class('focus');
             this.set_secondary_icon(this._clearIcon);
+        }
         else{
-            this.remove_style_pseudo_class('focus');
+            if(!this.hasKeyFocus())
+                this.remove_style_pseudo_class('focus');
             this.set_secondary_icon(null);
         }
 
@@ -3020,6 +3020,7 @@ class Arc_Menu_SearchBox extends St.Entry {
     }
 
     _onKeyFocusIn() {
+        this.add_style_pseudo_class('focus');
         this.emit('entry-key-focus-in');
         return Clutter.EVENT_PROPAGATE;
     }

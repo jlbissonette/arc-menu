@@ -774,7 +774,7 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
     }
 
     _onCloseEvent(){
-        if(this._menuButton.MenuLayout && this._menuButton.MenuLayout.isRunning){
+        if(this._menuButton.MenuLayout){
             this._menuButton.setDefaultMenuView();
         }
     }

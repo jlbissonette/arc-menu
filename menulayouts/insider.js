@@ -111,12 +111,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         userMenuBox.add(this.user.label);
         this.subMainBox.add(userMenuBox);
 
-        this.searchBox = new MW.SearchBox(this);
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 15px 10px 10px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.subMainBox.add(this.searchBox.actor);
 
         this.applicationsBox = new St.BoxLayout({
@@ -297,14 +293,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let appsScrollBoxAdj = this.pinnedAppsScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
-    }
-
-    _reload() {
-        super.reload();
-        let themeContext = St.ThemeContext.get_for_stage(global.stage);
-        let scaleFactor = themeContext.scale_factor;
-        let height =  Math.round(this._settings.get_int('menu-height') / scaleFactor);
-        this.leftPanelPopup.style = `height: ${height}px`;  
     }
 
     loadCategories() {

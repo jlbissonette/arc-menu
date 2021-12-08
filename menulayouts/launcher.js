@@ -79,16 +79,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: 'margin-box'
         });
         this.mainBox.add(this.subMainBox);
-        this.searchBox = new MW.SearchBox(this);
+
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
-        this.searchResults.connect('terms-changed', () => {
+        this.searchTermsChangedID = this.searchResults.connect('terms-changed', () => {
             this.searchResultsChangedEvent();
         });
-        this.searchResults.connect('no-results', () => {
+        this.searchNoResultsID = this.searchResults.connect('no-results', () => {
             if(this.subMainBox.contains(this.searchResultDetailsScrollBox))
                 this.subMainBox.remove_child(this.searchResultDetailsScrollBox);
         })
@@ -252,7 +249,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
                 let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
                 appsScrollBoxAdj.set_value(0);
-                this.applicationsBox.add(this.searchResults.actor);
+                this.applicationsBox.add(this.searchResults);
                 this.searchResults.setTerms(searchString.split(/\s+/));
                 this.searchResults.highlightDefault(true);
                 this.activeProvider.grab_key_focus();
@@ -381,13 +378,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.arcMenu.box.style = "padding-top: 0px;";
     }
 
-    _reload() {
-        super.reload();
-        let themeContext = St.ThemeContext.get_for_stage(global.stage);
-        let scaleFactor = themeContext.scale_factor;
-        let height =  Math.round(this._settings.get_int('menu-height') / scaleFactor);
-    }
-    
     _clearActorsFromBox(box){
         super._clearActorsFromBox(box);
     }
@@ -456,8 +446,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.searchResultDetailsBox.add_actor(searchResultContextItems);
     }
 
-    destroy(isReload){       
+    destroy(isReload){
         this.arcMenu.box.style = null;
+
+        if(this.searchTermsChangedID){
+            this.searchResults.disconnect(this.searchTermsChangedID);
+            this.searchTermsChangedID = null;
+        }
+        
+        if(this.searchNoResultsID){
+            this.searchResults.disconnect(this.searchNoResultsID);
+            this.searchNoResultsID = null;
+        }
 
         super.destroy(isReload);
     }

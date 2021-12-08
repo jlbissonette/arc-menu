@@ -120,12 +120,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMainBox.add(this.topBox);
         this.mainBox.add(this.subMainBox);
 
-        this.searchBox = new MW.SearchBox(this);
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 25px 10px 10px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.topBox.add(this.searchBox.actor);
 
         this.applicationsBox = new St.BoxLayout({

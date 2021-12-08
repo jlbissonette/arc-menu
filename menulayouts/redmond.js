@@ -54,12 +54,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
     createLayout(){
         super.createLayout();
-        this.searchBox = new MW.SearchBox(this);
+
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 10px 5px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
 
         this.subMainBox= new St.BoxLayout({
             x_expand: true,
@@ -97,7 +94,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             y_expand: true,
             vertical: true,
-            style_class: 'right-box margin-box'
+            style_class: 'right-panel margin-box'
         });
 
         this.placesShortcuts = false;
@@ -120,7 +117,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: this.disableFadeEffect ? '' : 'vfade',
+            style_class: 'right-panel' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });     
 
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);
@@ -199,10 +196,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
         } 
         this.rightBox.add(this.actionsBox);
-        
-        let rightPanelWidth = this._settings.get_int('right-panel-width');
-        this.rightBox.style = "width: " + rightPanelWidth + "px;";
-        this.shortcutsScrollBox.style = "width: " + rightPanelWidth + "px;";
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.mainBox.add(horizonalFlip ? this.rightBox : this.subMainBox);

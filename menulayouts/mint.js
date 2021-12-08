@@ -83,10 +83,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.mainBox.add(this.rightMenuBox);
 
-        this.searchBox = new MW.SearchBox(this);
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 0px 20px 10px 8px;";
             this.rightMenuBox.add(this.searchBox.actor);
@@ -109,7 +105,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'right-box'
+            style_class: 'right-panel-plus45'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -119,13 +115,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: this.disableFadeEffect ? '' : 'small-vfade',
+            style_class: 'right-panel-plus45' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });   
-
-        let rightPanelWidth = this._settings.get_int('right-panel-width');
-        rightPanelWidth += 45;
-        this.rightBox.style = "width: " + rightPanelWidth + "px;";
-        this.applicationsScrollBox.style = "width: " + rightPanelWidth + "px;";
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.rightBox.add(this.applicationsScrollBox);
@@ -135,7 +126,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'left-box'
+            style_class: 'left-panel'
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -148,7 +139,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
 
@@ -179,14 +170,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeMenuItem = this.categoryDirectories.values().next().value;
         if(this.arcMenu.isOpen)
             this.activeMenuItem.active = true;
-    }
-
-    _reload() {
-        super.reload(); 
-        let rightPanelWidth = this._settings.get_int('right-panel-width');
-        rightPanelWidth += 45;
-        this.rightBox.style = "width: " + rightPanelWidth + "px;";
-        this.applicationsScrollBox.style = "width: " + rightPanelWidth + "px;";
     }
 
     loadCategories() {

@@ -83,14 +83,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.mainBox.add(this.subMainBox);
 
-        this.searchBox = new MW.SearchBox(this);
         this.searchBox.actor.y_align = Clutter.ActorAlign.CENTER;
         this.searchBox.actor.y_expand = true;
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 15px 0px 15px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.topBox.add(this.searchBox.actor);
         this.topBox.add(this.categoriesButton.actor);
 
@@ -316,15 +312,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.displayAllApps(isGridLayout);
             this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
         }
-    }
-
-    reload() {
-        this.shortcutsBox.destroy_all_children();  
-        super.reload();
-        let themeContext = St.ThemeContext.get_for_stage(global.stage);
-        let scaleFactor = themeContext.scale_factor;
-        let height =  Math.round(350 / scaleFactor);
-        this.leftPanelPopup.style = `max-height: ${height}px`;   
     }
 
     updateStyle(){

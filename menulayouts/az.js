@@ -78,11 +78,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.mainBox.add(this.subMainBox);
 
-        this.searchBox = new MW.SearchBox(this);
         this.searchBox.style = "margin: 5px 15px 5px 15px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.topBox.add(this.searchBox.actor);
         this.subMainBox.add(this.topBox);
 
@@ -191,10 +187,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._clearActorsFromBox();
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
         this.setGridLayout(Constants.DisplayType.GRID, 4, 4, false);
-    }
-
-    reload() {
-        super.reload();
     }
 
     updateStyle(){

@@ -53,7 +53,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     createLayout(){
         super.createLayout();
-        this.searchBox = new MW.SearchBox(this);
 
         this.topBox = new St.BoxLayout({
             x_expand: true,
@@ -96,9 +95,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.topBox.add(this.rightTopBox);
 
         this.searchBarLocation = this._settings.get_enum('searchbar-default-top-location');
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
 
         //Applications Box - Contains Favorites, Categories or programs
         this.applicationsScrollBox = this._createScrollBox({

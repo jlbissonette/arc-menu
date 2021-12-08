@@ -49,13 +49,17 @@ var BaseLayout = class {
         this.section = menuButton.section;
         this.layout = this._settings.get_enum('menu-layout');
         this.layoutProperties = layoutProperties;
-        this.isRunning = true;
         this._focusChild = null;
         this.shouldLoadPinnedApps = true;
         this.hasPinnedApps = false;
 
-        if(this.layoutProperties.Search)
+        if(this.layoutProperties.Search){
             this.searchResults = new ArcSearch.SearchResults(this);
+            this.searchBox = new MW.SearchBox(this);
+            this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+            this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+            this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        }
 
         this._mainBoxKeyPressId = this.mainBox.connect('key-press-event', this._onMainBoxKeyPress.bind(this));
         
@@ -94,8 +98,8 @@ var BaseLayout = class {
 
     setDefaultMenuView(){
         if(this.layoutProperties.Search){
-            this.searchBox.clear();
-            this.searchResults._reset();
+            this.searchBox.clearWithoutSearchChangeEvent();
+            this.searchResults.setTerms([]);
         }
 
         this._clearActorsFromBox();
@@ -140,17 +144,6 @@ var BaseLayout = class {
 
         this.loadCategories();
         this.setDefaultMenuView();
-    }
-
-    reload(){
-        let isReload = true;
-        this.hasPinnedApps = false;
-        this.destroy(isReload);
-        if(this.layoutProperties.Search){
-            this.searchResults = new ArcSearch.SearchResults(this);    
-        }
-        this.createLayout();
-        this.updateStyle();
     }
 
     updateStyle(){
@@ -333,13 +326,15 @@ var BaseLayout = class {
         this._clearActorsFromBox(categoriesBox);
         
         let isActiveMenuItemSet = false;
+
         for(let categoryMenuItem of this.categoryDirectories.values()){
             categoriesBox.add_actor(categoryMenuItem.actor);	
             if(!isActiveMenuItemSet){
-                isActiveMenuItemSet = true;
                 this._futureActiveItem = categoryMenuItem;
+                isActiveMenuItemSet = true;
             }	 
         }
+
         this.activeMenuItem = this._futureActiveItem;
     }
 
@@ -765,7 +760,7 @@ var BaseLayout = class {
         let itemChanged = item !== this._activeMenuItem;
         if(itemChanged){
             this._activeMenuItem = item;
-            if(this.arcMenu.isOpen)
+            if(this.arcMenu.isOpen && this._activeMenuItem)
                 this._activeMenuItem.grab_key_focus();
             if(this.layout === Constants.MenuLayout.LAUNCHER)
                 this.createActiveSearchItemPanel(item);
@@ -816,19 +811,21 @@ var BaseLayout = class {
         }
     }
 
-    _onSearchBoxChanged(searchBox, searchString) {        
-        if(searchBox.isEmpty()){  
-            this.searchResults.setTerms([]);
-            this.setDefaultMenuView();                     	          	
-            this.searchResults.actor.hide();
+    _onSearchBoxChanged(searchBox, searchString) {
+        searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
+        if (searchString === '')
+            searchString = [];
+   
+        if(searchBox.isEmpty()){
+            this.searchResults.hide();
+            this.setDefaultMenuView();
         }            
-        else{         
-            this._clearActorsFromBox(); 
+        else{
+            this._clearActorsFromBox();
             let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
             appsScrollBoxAdj.set_value(0);
-            this.applicationsBox.add(this.searchResults.actor);
-            this.searchResults.actor.show();
-            searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
+            this.applicationsBox.add(this.searchResults);
+            this.searchResults.show();
             this.searchResults.setTerms(searchString.split(/\s+/));
             this.searchResults.highlightDefault(true);
         }            	
@@ -866,7 +863,7 @@ var BaseLayout = class {
                 if (symbol === Clutter.KEY_Left)
                     direction = St.DirectionType.LEFT;
 
-                if(this.layoutProperties.Search && this.searchBox.hasKeyFocus() && this.searchResults.hasActiveResult() && this.searchResults.actor.get_parent()){
+                if(this.layoutProperties.Search && this.searchBox.hasKeyFocus() && this.searchResults.hasActiveResult() && this.searchResults.get_parent()){
                     this.searchResults.highlightDefault(false);
                     this.searchResults.getTopResult().actor.grab_key_focus();
                     return actor.navigate_focus(global.stage.key_focus, direction, false);  
@@ -893,9 +890,7 @@ var BaseLayout = class {
     }
 
     destroy(){
-        this.isRunning = false;
-
-        if (this._treeChangedId) {
+        if(this._treeChangedId){
             this._tree.disconnect(this._treeChangedId);
             this._treeChangedId = null;
             this._tree = null;
@@ -928,32 +923,35 @@ var BaseLayout = class {
             }
             this.placesManager.destroy();
         }
+
         if(this.recentManager){
             if(this._recentFilesChangedID){
                 this.recentManager.disconnect(this._recentFilesChangedID);
                 this._recentFilesChangedID = null;
             }
         }
-        if(this.searchBox){
-            if (this._searchBoxChangedId > 0) {
-                this.searchBox.disconnect(this._searchBoxChangedId);
-                this._searchBoxChangedId = 0;
-            }
-            if (this._searchBoxKeyPressId > 0) {
-                this.searchBox.disconnect(this._searchBoxKeyPressId);
-                this._searchBoxKeyPressId = 0;
-            }
-            if (this._searchBoxKeyFocusInId > 0) {
-                this.searchBox.disconnect(this._searchBoxKeyFocusInId);
-                this._searchBoxKeyFocusInId = 0;
-            }
+
+        if(this._searchBoxChangedId){
+            this.searchBox?.disconnect(this._searchBoxChangedId);
+            this._searchBoxChangedId = null;;
         }
+        if(this._searchBoxKeyPressId){
+            this.searchBox?.disconnect(this._searchBoxKeyPressId);
+            this._searchBoxKeyPressId = null;
+        }
+        if(this._searchBoxKeyFocusInId){
+            this.searchBox?.disconnect(this._searchBoxKeyFocusInId);
+            this._searchBoxKeyFocusInId = null;
+        }
+
+        if(this.searchBox)
+            this.searchBox.destroy();
 
         if(this.searchResults){
             this.searchResults.destroy();
+            this.searchResults = null;
         }
 
-     
         if (this._mainBoxKeyPressId) {
             this.mainBox.disconnect(this._mainBoxKeyPressId);
             this._mainBoxKeyPressId = null;

@@ -122,7 +122,6 @@ var MenuSettingsController = class {
             this._settings.connect('changed::search-provider-open-windows', this._reload.bind(this)),
             this._settings.connect('changed::disable-scrollview-fade-effect', this._reload.bind(this)),
             this._settings.connect('changed::menu-height', this._updateMenuHeight.bind(this)),
-            this._settings.connect('changed::right-panel-width', this._updateMenuHeight.bind(this)),
             this._settings.connect('changed::reload-theme', this._reloadExtension.bind(this)),
             this._settings.connect('changed::pinned-app-list',this._updatePinnedApps.bind(this)),
             this._settings.connect('changed::enable-weather-widget-unity',this._updatePinnedApps.bind(this)),

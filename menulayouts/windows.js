@@ -119,12 +119,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         layout.hookup_style(this.pinnedAppsGrid);
 
-        this.searchBox = new MW.SearchBox(this);
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 15px 10px 0px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         
         this.applicationsBox = new St.BoxLayout({
             vertical: true
@@ -136,7 +132,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
@@ -419,14 +415,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(activeMenuItemSet)
             this.activeMenuItem = activeMenuItemSet;
-    }
-
-    _reload() {
-        super.reload();
-        let themeContext = St.ThemeContext.get_for_stage(global.stage);
-        let scaleFactor = themeContext.scale_factor;
-        let height =  Math.round(this._settings.get_int('menu-height') / scaleFactor);
-        this.leftPanelPopup.style = `height: ${height}px`;  
     }
 
     loadCategories() {

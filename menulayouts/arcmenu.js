@@ -53,10 +53,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     createLayout(){
         super.createLayout();
-        this.searchBox = new MW.SearchBox(this);
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 0px 10px 5px 10px;";
             this.mainBox.add(this.searchBox.actor);
@@ -86,7 +83,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             vertical: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'left-box'
+            style_class: 'left-panel'
         });
 
         //Applications Box - Contains Favorites, Categories or programs
@@ -94,7 +91,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true,
             reactive:true
         });
@@ -124,7 +121,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.rightBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'right-box'
+            style_class: 'right-panel'
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -153,7 +150,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: this.disableFadeEffect ? '' : 'small-vfade',
+            style_class: 'right-panel' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });
 
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);
@@ -232,10 +229,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
         }
         this.rightBox.add(this.actionsBox);
-
-        let rightPanelWidth = this._settings.get_int('right-panel-width');
-        this.rightBox.style = "width: " + rightPanelWidth + "px;";
-        this.shortcutsScrollBox.style = "width: " + rightPanelWidth + "px;";
 
         this.loadCategories();
         this.loadPinnedApps();
