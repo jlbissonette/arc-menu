@@ -87,7 +87,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus70' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: 'right-panel-plus70 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });  
 
         // Disable horizontal scrolling, hide vertical scrollbar, but allow vertical scrolling.

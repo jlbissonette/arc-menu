@@ -74,7 +74,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus45' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: 'right-panel-plus45 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
         }); 
         
         this.applicationsScrollBox.add_actor(this.applicationsBox);

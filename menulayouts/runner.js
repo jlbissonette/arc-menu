@@ -88,7 +88,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             x_align: Clutter.ActorAlign.START,
-            overlay_scrollbars: true,
+            overlay_scrollbars: false,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             reactive:true
         });
@@ -96,7 +96,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ 
             vertical: true,
-            style_class: 'margin-box'
+            style: "margin-left: 16px; margin-right: 4px;"
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.activeMenuItem = null;
