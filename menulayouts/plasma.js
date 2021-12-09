@@ -215,7 +215,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             });	
             this.placeManagerUpdatedID = this.placesManager.connect(`${id}-updated`, () => {
                 this._redisplayPlaces(id);
-                
             });
 
             this._createPlaces(id);
@@ -426,7 +425,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }            
     }
 
-    destroy(isReload){
+    destroy(){
         if(this.sleep)
             this.sleep.destroy();
         if(this.hibernate)
@@ -438,6 +437,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.restart.destroy();
         this.powerOff.destroy();
     
-        super.destroy(isReload);
+        super.destroy();
     }
 }

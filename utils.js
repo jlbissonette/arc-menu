@@ -573,7 +573,7 @@ function createStylesheet(settings){
         +".left-panel-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"
         +".right-panel{\nwidth:" + rightPanelWidth + "px;\n}\n\n"   
         +".right-panel-plus45{\nwidth:" + rightPanelWidthPlus45 + "px;\n}\n\n"   
-        +".right-panel-plus70{\nwidth:" + rightPanelWidthPlus70 + "px;\n}\n\n"   
+        +".right-panel-plus70{\nwidth:" + rightPanelWidthPlus70 + "px;\n}\n\n"
         +".default-search-entry{\nmax-width: 17.667em;\n}\n\n"
         +".arc-search-entry{\nmax-width: 17.667em;\nfont-size:" + fontSize + "pt;\nborder-color:" + separatorColor + ";\nborder-width: 1px;\n"
                             +"color:" + menuForegroundColor + ";\nbackground-color:" + modifyColorLuminance(menuColor, -0.1, 1) + ";\n}\n\n"

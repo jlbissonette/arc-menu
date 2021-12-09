@@ -188,6 +188,11 @@
       <summary>Show a larger icon and extra app details</summary>
       <description>Show a larger icon and extra app details.</description>
     </key>
+    <key type="b" name="highlight-search-result-terms">
+      <default>false</default>
+      <summary>Highlight search results terms</summary>
+      <description>Highlight search results terms.</description>
+    </key>
     <key type="b" name="show-search-result-details">
       <default>false</default>
       <summary>Show search result description label</summary>

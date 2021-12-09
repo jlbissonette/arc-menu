@@ -2992,6 +2992,8 @@ class Arc_Menu_SearchBox extends St.Entry {
     _onTextChanged() {
         let searchString = this.get_text();
         if(!this.isEmpty()){
+            if(!this.hasKeyFocus())
+                this.grab_key_focus();
             this.add_style_pseudo_class('focus');
             this.set_secondary_icon(this._clearIcon);
         }

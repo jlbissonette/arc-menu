@@ -61,8 +61,11 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         if(this.provider.id === 'org.gnome.Nautilus.desktop')
             this._path = this.metaInfo['description'];
 
-        this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
-        this._highlightTerms();
+        let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
+        if(highlightSearchResultTerms){
+            this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
+            this._highlightTerms();
+        }
 
         let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
         if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions)
@@ -105,8 +108,11 @@ var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult exten
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
 
-        this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
-        this._highlightTerms();
+        let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
+        if(highlightSearchResultTerms){
+            this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
+            this._highlightTerms();
+        }
     }
 
     _highlightTerms() {
@@ -270,7 +276,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
         });
 
         if(this.searchType === Constants.DisplayType.GRID){
-            this._container.style = "padding: 0px 4px";   
+            this.add_style_class_name('margin-box');
         }
 
         this.providerInfo = new ArcSearchProviderInfo(provider, this._menuLayout);

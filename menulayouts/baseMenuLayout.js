@@ -919,6 +919,7 @@ var BaseLayout = class {
                 this.placeManagerUpdatedID = null;
             }
             this.placesManager.destroy();
+            this.placesManager = null
         }
 
         if(this.recentManager){

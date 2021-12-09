@@ -3687,6 +3687,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this._settings = settings;
         this.searchResultsDetails = this._settings.get_boolean('show-search-result-details');
         this.openWindowsSearchProvider = this._settings.get_boolean('search-provider-open-windows');
+        this.highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
 
         let searchOptionsFrame = new PW.FrameBox();
         let openWindowsRow = new PW.FrameBoxRow();
@@ -3727,6 +3728,25 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         searchOptionsFrame.add(descriptionsRow);
         this.mainBox.append(searchOptionsFrame);
 
+        let highlightSearchResultRow = new PW.FrameBoxRow();
+        let highlightSearchResultLabel = new Gtk.Label({
+            label: _("Highlight search result terms"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let highlightSearchResultSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
+        highlightSearchResultSwitch.set_active(this.highlightSearchResultTerms);
+        highlightSearchResultSwitch.connect('notify::active', (widget) => {
+            this.highlightSearchResultTerms = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        highlightSearchResultRow.add(highlightSearchResultLabel);
+        highlightSearchResultRow.add(highlightSearchResultSwitch);
+        searchOptionsFrame.add(highlightSearchResultRow);
+        this.mainBox.append(searchOptionsFrame);
+
         let buttonRow = new Gtk.Box({
             valign: Gtk.Align.END,
             margin_top: 6,
@@ -3741,8 +3761,10 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this.resetButton.connect('clicked', ()=> {
             this.searchResultsDetails = this._settings.get_default_value('show-search-result-details').unpack();
             this.openWindowsSearchProvider = this._settings.get_default_value('search-provider-open-windows').unpack();
+            this.highlightSearchResultTerms = this._settings.get_default_value('highlight-search-result-terms').unpack();
             descriptionsSwitch.set_active(this.searchResultsDetails);
             openWindowsSwitch.set_active(this.openWindowsSearchProvider);
+            highlightSearchResultSwitch.set_active(this.highlightSearchResultTerms);
             this.saveButton.set_sensitive(true);
             this.resetButton.set_sensitive(false);
         });
@@ -3754,6 +3776,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this.saveButton.connect('clicked', ()=> {
             this._settings.set_boolean('show-search-result-details', this.searchResultsDetails);
             this._settings.set_boolean('search-provider-open-windows', this.openWindowsSearchProvider);
+            this._settings.set_boolean('highlight-search-result-terms', this.highlightSearchResultTerms);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         });
@@ -3768,7 +3791,8 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
     checkIfResetButtonSensitive(){
         return (
             this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack() ||
-            this.openWindowsSearchProvider !== this._settings.get_default_value('search-provider-open-windows').unpack()) ? true : false;
+            this.openWindowsSearchProvider !== this._settings.get_default_value('search-provider-open-windows').unpack() ||
+            this.highlightSearchResultTerms !== this._settings.get_default_value('highlight-search-result-terms').unpack()) ? true : false;
     }
 });
 
