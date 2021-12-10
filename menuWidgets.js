@@ -27,6 +27,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const {Atk, Clutter, Gio, GLib, GMenu, GObject, Gtk, Shell, St} = imports.gi;
 const AccountsService = imports.gi.AccountsService;
 const AppFavorites = imports.ui.appFavorites;
+const BoxPointer = imports.ui.boxpointer;
 const Constants = Me.imports.constants;
 const Dash = imports.ui.dash;
 const DND = imports.ui.dnd;
@@ -50,7 +51,8 @@ Gio._promisify(Gio._LocalFilePrototype, 'set_attributes_async', 'set_attributes_
 const INDICATOR_ICON_SIZE = 18;
 const USER_AVATAR_SIZE = 28;
 
-function activatePowerOption(powerType){
+function activatePowerOption(powerType, arcMenu){
+    arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
     if(powerType === Constants.PowerType.POWER_OFF)
         SystemActions.activatePowerOff();
     else if(powerType === Constants.PowerType.RESTART)
@@ -541,8 +543,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         if(params.hover)
             this.actor.connect('notify::hover', this._onHover.bind(this));
 
-        this.actor.connect('destroy', this._onDestroy.bind(this));
-
         this.arcMenuOpenStateChangeID = this.arcMenu.connect('open-state-changed', (menu, open) =>{
             if(!open){
                 if(this._popupTimeoutId){
@@ -567,15 +567,20 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         return this;
     }
 
+    get active(){
+        return this._active;
+    }
+
     set active(active) {
+        if(this.isDestroyed)
+            return;
         let activeChanged = active != this.active;
         if(activeChanged){
             this._active = active;
             if(active){
                 this.remove_style_class_name('selected');
                 this.add_style_pseudo_class('active');
-                this._menuLayout.activeMenuItem = this;
-                if(this.arcMenu.isOpen && this.can_focus)
+                if(this.can_focus)
                     this.grab_key_focus();
             }
             else{
@@ -729,7 +734,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         });
     }
 
-    _onDestroy(){
+    destroy(){
+        this.isDestroyed = true;
         if(this.iconThemeChangedId){
             St.TextureCache.get_default().disconnect(this.iconThemeChangedId);
             this.iconThemeChangedId = null;
@@ -738,6 +744,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             this.arcMenu.disconnect(this.arcMenuOpenStateChangeID);
             this.arcMenuOpenStateChangeID = null;
         }
+        super.destroy();
     }
 });
 
@@ -1235,9 +1242,10 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
         });
     }
 
-    _onDestroy(){
+    destroy(){
         Main.uiGroup.remove_actor(this.leaveMenu.actor);
         this.leaveMenu.destroy();
+        super.destroy();
     }
 
     activate(event) {
@@ -1272,8 +1280,7 @@ var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends ArcMe
         this.powerType = powerType;
     }
     activate(event) {
-        super.activate(event);
-        activatePowerOption(this.powerType);
+        activatePowerOption(this.powerType, this._menuLayout.arcMenu);
     }
 });
 
@@ -1313,8 +1320,8 @@ var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends A
     }
 
     activate(event){
-        activatePowerOption(this.powerType);
         super.activate(event);
+        activatePowerOption(this.powerType, this._menuLayout.arcMenu);
     }
 });
 
@@ -1744,31 +1751,34 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
     }
 
     activate(event) {
-        this._menuLayout.arcMenu.toggle();
         if(this._command === "ArcMenu_LogOut")
-            activatePowerOption(Constants.PowerType.LOGOUT);
+            activatePowerOption(Constants.PowerType.LOGOUT, this._menuLayout.arcMenu);
         else if(this._command === "ArcMenu_Lock")
-            activatePowerOption(Constants.PowerType.LOCK);
+            activatePowerOption(Constants.PowerType.LOCK, this._menuLayout.arcMenu);
         else if(this._command === "ArcMenu_PowerOff")
-            activatePowerOption(Constants.PowerType.POWER_OFF);
+            activatePowerOption(Constants.PowerType.POWER_OFF, this._menuLayout.arcMenu);
         else if(this._command === "ArcMenu_Restart")
-            activatePowerOption(Constants.PowerType.RESTART);
+            activatePowerOption(Constants.PowerType.RESTART, this._menuLayout.arcMenu);
         else if(this._command === "ArcMenu_Suspend")
-            activatePowerOption(Constants.PowerType.SUSPEND);
+            activatePowerOption(Constants.PowerType.SUSPEND, this._menuLayout.arcMenu);
         else if(this._command === "ArcMenu_HybridSleep")
-            activatePowerOption(Constants.PowerType.HYBRID_SLEEP);
+            activatePowerOption(Constants.PowerType.HYBRID_SLEEP, this._menuLayout.arcMenu);
         else if(this._command === "ArcMenu_Hibernate")
-            activatePowerOption(Constants.PowerType.HIBERNATE);
-        else if(this._command === "ArcMenu_ActivitiesOverview")
-            Main.overview.show();
-        else if(this._command === "ArcMenu_RunCommand")
-            Main.openRunDialog();
-        else if(this._command === "ArcMenu_ShowAllApplications")
-            Main.overview._overview._controls._toggleAppsPage();
-        else if(this._app)
-            this._app.open_new_window(-1);
-        else
-            Util.spawnCommandLine(this._command);
+            activatePowerOption(Constants.PowerType.HIBERNATE, this._menuLayout.arcMenu);
+        
+        else{
+            this._menuLayout.arcMenu.toggle();
+            if(this._command === "ArcMenu_ActivitiesOverview")
+                Main.overview.show();
+            else if(this._command === "ArcMenu_RunCommand")
+                Main.openRunDialog();
+            else if(this._command === "ArcMenu_ShowAllApplications")
+                Main.overview._overview._controls._toggleAppsPage();
+            else if(this._app)
+                this._app.open_new_window(-1);
+            else
+                Util.spawnCommandLine(this._command);
+        }
     }
 });
 
@@ -2282,8 +2292,10 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
                 let app = Shell.AppSystem.get_default().lookup_app(metaInfo.id);
                 app.open_new_window(-1);
             }
-            else
+            else{
+                this._menuLayout.arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
                 SystemActions.activateAction(metaInfo.id);
+            }   
         }
     }
 
@@ -2301,7 +2313,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         super.activate(event);
     }
 
-    _onDestroy(){
+    destroy(){
         if(this.hoverID){
             this.disconnect(this.hoverID);
             this.hoverID = null;
@@ -2310,7 +2322,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             this.disconnect(this.keyFocusInID);
             this.keyFocusInID = null;
         }
-        super._onDestroy();
+        super.destroy();
     }
 });
 
@@ -2545,7 +2557,6 @@ var SimpleMenuItem = GObject.registerClass(class Arc_Menu_SimpleMenuItem extends
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.section.actor.add_actor(this.applicationsScrollBox);
 
-        this.actor.connect('notify::active',()=> this.setActive(this.actor.active));
         if(this.subMenu._keyPressId)
             this.actor.disconnect(this.subMenu._keyPressId);
         this.applicationsScrollBox.connect("key-press-event",(actor, event)=>{
@@ -2590,11 +2601,6 @@ var SimpleMenuItem = GObject.registerClass(class Arc_Menu_SimpleMenuItem extends
             }
         });
         this.updateStyle();
-    }
-
-    setActive(active){
-        if(this._menuLayout.activeMenuItem != null && this._menuLayout.arcMenu.isOpen)
-            this._menuLayout.activeMenuItem = null;
     }
 
     updateStyle(){
@@ -2686,7 +2692,6 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
         this.menu.actor.overlay_scrollbars = true;
         this.menu.actor.style_class = 'popup-sub-menu ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade');
         this.menu._needsScrollbar = this._needsScrollbar.bind(this);
-        this.actor.connect('notify::active',()=> this.setActive(this.actor.active));
         this.menu.connect('open-state-changed', () => {
             if(!this.menu.isOpen){
                 let scrollbar= this.menu.actor.get_vscroll_bar().get_adjustment();
@@ -2716,13 +2721,6 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
         else if(this._indicator && this.actor.contains(this._indicator)){
             this.actor.remove_child(this._indicator);
         }
-    }
-
-    setActive(active){
-        if(active)
-            this._menuLayout.activeMenuItem = this;
-        else if(this._menuLayout.arcMenu.isOpen)
-            this._menuLayout.activeMenuItem = null;
     }
 
     _needsScrollbar() {
@@ -2813,6 +2811,10 @@ var PlaceInfo = class Arc_Menu_PlaceInfo {
             }
         }
     }
+
+    destroy(){
+
+    }
 };
 Signals.addSignalMethods(PlaceInfo.prototype);
 
@@ -2873,12 +2875,14 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         });
     }
 
-    _onDestroy() {
+    destroy() {
         if (this._changedId) {
             this._info.disconnect(this._changedId);
-            this._changedId = 0;
+            this._changedId = null;
         }
-        super._onDestroy();
+        if(this._info)
+            this._info.destroy();
+        super.destroy();
     }
 
     activate(event) {
@@ -2890,7 +2894,8 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
     _propertiesChanged(info) {
         this._info = info;
         this.createIcon();
-        this.label.text = info.name;
+        if(this.label)
+            this.label.text = info.name;
     }
 });
 
@@ -2938,7 +2943,6 @@ class Arc_Menu_SearchBox extends St.Entry {
         this._keyFocusInId = this._text.connect('key-focus-in', this._onKeyFocusIn.bind(this));
         this._keyFocusInId = this._text.connect('key-focus-out', this._onKeyFocusOut.bind(this));
         this._searchIconClickedId = this.connect('secondary-icon-clicked', () => this.clear());
-        this.connect('destroy', this._onDestroy.bind(this));
     }
 
     updateStyle(removeBorder){
@@ -3028,7 +3032,7 @@ class Arc_Menu_SearchBox extends St.Entry {
         return Clutter.EVENT_PROPAGATE;
     }
 
-    _onDestroy() {
+    destroy() {
         if (this._textChangedId) {
             this._text.disconnect(this._textChangedId);
             this._textChangedId = null;
@@ -3045,6 +3049,7 @@ class Arc_Menu_SearchBox extends St.Entry {
             this.disconnect(this._searchIconClickedId);
             this._searchIconClickedId = null;
         }
+        super.destroy();
     }
 });
 
@@ -3326,7 +3331,7 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
         this._sync();
     }
 
-    _onDestroy(){
+    destroy(){
         if(this.syncID){
             this._appSystem.disconnect(this.syncID);
             this.syncID = null;
@@ -3343,7 +3348,7 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
             this._clock.disconnect(this._clockNotifyId);
             this._clockNotifyId = null;
         }
-        super._onDestroy();
+        super.destroy();
     }
 
     activate(event) {
@@ -3510,13 +3515,13 @@ var WeatherSection = GObject.registerClass(class Arc_Menu_WeatherSection extends
         this._sync();
 
     }
-    _onDestroy(){
+    destroy(){
         if(this.syncID){
             this._weatherClient.disconnect(this.syncID);
             this.syncID = null;
         }
         this._weatherClient = null;
-        super._onDestroy();
+        super.destroy();
     }
     vfunc_map() {
         this._weatherClient.update();
