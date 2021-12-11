@@ -361,7 +361,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
     }
    
-    destroy(isReload){
+    destroy(){
         if(this._clocksItem)
             this._clocksItem.destroy();
         if(this._weatherItem)
@@ -382,6 +382,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         Main.uiGroup.remove_actor(this.dummyCursor);
         this.dummyCursor.destroy();
 
-        super.destroy(isReload);
+        super.destroy();
     }
 }

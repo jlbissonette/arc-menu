@@ -446,7 +446,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.searchResultDetailsBox.add_actor(searchResultContextItems);
     }
 
-    destroy(isReload){
+    destroy(){
         this.arcMenu.box.style = null;
 
         if(this.searchTermsChangedID){
@@ -459,6 +459,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchNoResultsID = null;
         }
 
-        super.destroy(isReload);
+        super.destroy();
     }
 }

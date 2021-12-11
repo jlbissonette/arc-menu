@@ -499,7 +499,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             }
             this.arcMenu.toggle();
             if(this.arcMenu.isOpen && this.MenuLayout){
-                if(this.MenuLayout.activeMenuItem)
+                if(this.MenuLayout.activeMenuItem && this.MenuLayout.layoutProperties.SupportsCategoryOnHover)
                     this.MenuLayout.activeMenuItem.active = true;
                 else
                     this.mainBox.grab_key_focus();
@@ -752,38 +752,24 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
         Main.uiGroup.add_actor(this.actor);
         this.actor.hide();
         this._boxPointer.set_offscreen_redirect(Clutter.OffscreenRedirect.ON_IDLE);
-        this._menuCloseID = this.connect('menu-closed', () => this._onCloseEvent());
-        this.connect('destroy', () => this._onDestroy());
     }
 
-    open(animation){
-        this._onOpenEvent();
-        super.open(animation);
+    open(animate){
+        if(!this.isOpen)
+            this._menuButton.arcMenu.actor._muteInput = false;
+        super.open(animate);
     }
 
-    close(animation){
-        if(this._menuButton.contextMenuManager.activeMenu)
-            this._menuButton.contextMenuManager.activeMenu.toggle();
-        if(this._menuButton.subMenuManager.activeMenu)
-            this._menuButton.subMenuManager.activeMenu.toggle();
-        super.close(animation);
-    }
-
-    _onOpenEvent(){
-        this._menuButton.arcMenu.actor._muteInput = false;
-    }
-
-    _onCloseEvent(){
-        if(this._menuButton.MenuLayout){
+    close(animate){
+        if(this.isOpen){
             this._menuButton.setDefaultMenuView();
+            if(this._menuButton.contextMenuManager.activeMenu)
+                this._menuButton.contextMenuManager.activeMenu.toggle();
+            if(this._menuButton.subMenuManager.activeMenu)
+                this._menuButton.subMenuManager.activeMenu.toggle();
         }
-    }
 
-    _onDestroy(){
-        if(this._menuCloseID){
-            this.disconnect(this._menuCloseID)
-            this._menuCloseID = null;
-        }
+        super.close(animate);
     }
 };
 

@@ -263,11 +263,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super._onSearchBoxChanged(searchBox, searchString);       
     }
 
-    destroy(isReload){        
+    destroy(){        
         this.arcMenu.box.style = null;
         this.arcMenu.actor.style = null;
+        this.leaveButton.destroy();
         this.backButton.destroy();
         this.allAppsButton.destroy();
-        super.destroy(isReload);
+        super.destroy();
     }
 }

@@ -85,12 +85,12 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         this.label.clutter_text.set_markup(labelMarkup);
     }
 
-    _onDestroy() {
+    destroy() {
         if (this._termsChangedId) {
             this.resultsView.disconnect(this._termsChangedId);
             this._termsChangedId = null;
         }
-        super._onDestroy();
+        super.destroy();
     }
 });
 
@@ -126,12 +126,12 @@ var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult exten
         this.label.clutter_text.set_markup(labelMarkup);
     }
 
-    _onDestroy() {
+    destroy() {
         if (this._termsChangedId) {
             this.resultsView.disconnect(this._termsChangedId);
             this._termsChangedId = null;
         }
-        super._onDestroy();
+        super.destroy();
     }
 });
 
@@ -157,11 +157,11 @@ var SearchResultsBase = GObject.registerClass({
         this._clipboard = St.Clipboard.get_default();
 
         this._cancellable = new Gio.Cancellable();
-        this.connect('destroy', this._onDestroy.bind(this));
     }
 
-    _onDestroy() {
+    destroy() {
         this._terms = [];
+        super.destroy();
     }
 
     _createResultDisplay(meta) {
@@ -457,7 +457,7 @@ var SearchResults = GObject.registerClass({
         this.add(this._statusBin);
         this._statusBin.add_actor(this._statusText);
 
-        this._highlightDefault = false;
+        this._highlightDefault = true;
         this._defaultResult = null;
         this._startingSearch = false;
 
@@ -482,7 +482,6 @@ var SearchResults = GObject.registerClass({
         this.installChangedID = appSys.connect('installed-changed', this._reloadRemoteProviders.bind(this));
 
         this._reloadRemoteProviders();
-        this.connect('destroy', this._onDestroy.bind(this));
     }
     
     get terms() {
@@ -495,7 +494,7 @@ var SearchResults = GObject.registerClass({
         }
     }
 
-    _onDestroy(){
+    destroy(){
         this._terms = [];
         this._results = {};
         this._clearDisplay();
@@ -527,6 +526,7 @@ var SearchResults = GObject.registerClass({
             this._unregisterProvider(provider);
         });
         this._content.destroy_all_children();
+        super.destroy();
     }
 
     _reloadRemoteProviders() {
@@ -702,7 +702,7 @@ var SearchResults = GObject.registerClass({
             }
         }
 
-        if (newDefaultResult != this._defaultResult) {
+        if (newDefaultResult !== this._defaultResult) {
             this._setSelected(this._defaultResult, false);
             this._setSelected(newDefaultResult, this._highlightDefault);
 
@@ -773,8 +773,9 @@ var SearchResults = GObject.registerClass({
     }
 
     _setSelected(result, selected) {
-        if(!result || result === undefined || result === null)
+        if(!result)
             return;
+
         if(selected)
             result.add_style_pseudo_class('active');
         else

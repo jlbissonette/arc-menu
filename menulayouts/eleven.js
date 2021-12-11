@@ -343,7 +343,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super._onSearchBoxChanged(searchBox, searchString);       
     }
 
-    destroy(isReload){        
+    destroy(){        
         this.arcMenu.box.style = null;
         this.arcMenu.actor.style = null;
         this.backButton.destroy();
@@ -353,6 +353,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.disableFrequentAppsID = null;
         }
 
-        super.destroy(isReload);
+        super.destroy();
     }
 }

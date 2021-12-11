@@ -199,10 +199,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let pinnedApps = [];
         //Find the Default Web Browser, if found add to pinned apps list, if not found delete the placeholder.
         //Will only run if placeholder is found. Placeholder only found with default settings set.  
-        let [res, stdout, stderr, status] = GLib.spawn_command_line_sync("xdg-settings get default-web-browser");
-        let webBrowser = String.fromCharCode.apply(null, stdout);
-        let browserName = webBrowser.split(".desktop")[0];
-        browserName+=".desktop";
+        let browserName = '';
+        try{
+            //user may not have xdg-utils package installed which will throw error
+            let [res, stdout, stderr, status] = GLib.spawn_command_line_sync("xdg-settings get default-web-browser");
+            let webBrowser = String.fromCharCode(...stdout);
+            browserName = webBrowser.split(".desktop")[0];
+            browserName += ".desktop";
+        } 
+        catch(error){
+            log("ArcMenu Error: Can not find default web browser, removing placeholder pinned app.")
+        }
         this._app = appSys.lookup_app(browserName);
         if(this._app){
             let appIcon = this._app.create_icon_texture(25);
@@ -212,6 +219,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             else if(appIcon.gicon)
                 iconName = appIcon.gicon.to_string();
             pinnedApps.push(this._app.get_name(), iconName, this._app.get_id());
+        }
+        else{
+            pinnedApps.push(_("Home"), "ArcMenu_Home", "ArcMenu_Home");
         }
         pinnedApps.push(_("Terminal"), "utilities-terminal", "org.gnome.Terminal.desktop");
         pinnedApps.push(_("Settings"), "emblem-system-symbolic", "gnome-control-center.desktop");

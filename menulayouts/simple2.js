@@ -167,17 +167,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             box.add(this.applicationsGrid);
     }
 
-    destroy(isReload){
-        let children = this.arcMenu._getMenuItems();
-        for (let i = 0; i < children.length; i++) {
-            let item = children[i];
-            if(item instanceof MW.CategorySubMenuItem){
-                let item = children[i];
-                item.destroy();
-            }
-        }
-
+    destroy(){
         this.arcMenu.actor.style = null;
-        super.destroy(isReload);
+        super.destroy();
     }
 }

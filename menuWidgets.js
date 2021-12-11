@@ -443,8 +443,8 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
     }
 
     open(animate){
-        if(this._menuLayout.searchResults && this._menuLayout.searchResults._highlightDefault)
-            this._menuLayout.searchResults.highlightDefault(false);
+        if(this._menuLayout.searchResults && this.sourceActor !== this._menuLayout.searchResults.getTopResult())
+            this._menuLayout.searchResults.getTopResult()?.remove_style_pseudo_class('active');
         if(this._menuButton.tooltipShowingID){
             GLib.source_remove(this._menuButton.tooltipShowingID);
             this._menuButton.tooltipShowingID = null;
@@ -459,9 +459,15 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
     }
 
     close(animate){
+        super.close(animate);
         if(this.sourceActor instanceof ArcMenuButtonItem)
             this.sourceActor.sync_hover();
-        super.close(animate);
+        else{       
+            this.sourceActor.active = false;
+        }
+        
+        this.sourceActor.sync_hover();
+        this.sourceActor.hovered = this.sourceActor.hover;
     }
 
     rebuildItems(){
@@ -578,6 +584,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         if(activeChanged){
             this._active = active;
             if(active){
+                if(this._menuLayout.activeMenuItem !== this)
+                    this._menuLayout.activeMenuItem = this;
                 this.remove_style_class_name('selected');
                 this.add_style_pseudo_class('active');
                 if(this.can_focus)
@@ -586,7 +594,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             else{
                 this.remove_style_pseudo_class('active');
                 this.remove_style_class_name('selected');
-                this.set_style_pseudo_class(null);
             }
             this.notify('active');
         }
@@ -1129,7 +1136,7 @@ var SettingsButton = GObject.registerClass(class Arc_Menu_SettingsButton extends
 // Runner Layout Tweaks Button
 var RunnerTweaksButton = GObject.registerClass(class Arc_Menu_RunnerTweaksButton extends ArcMenuButtonItem {
     _init(menuLayout) {
-        super._init(menuLayout, _("Configure Runner Layout"), 'emblem-system-symbolic');
+        super._init(menuLayout, _("Configure Runner"), 'emblem-system-symbolic');
         this.tooltip.location = Constants.TooltipLocation.BOTTOM_CENTERED;
     }
     activate(event) {
@@ -2998,6 +3005,8 @@ class Arc_Menu_SearchBox extends St.Entry {
         if(!this.isEmpty()){
             if(!this.hasKeyFocus())
                 this.grab_key_focus();
+            if (!this.searchResults.getTopResult()?.has_style_pseudo_class("active"))
+                this.searchResults.getTopResult()?.add_style_pseudo_class("active")
             this.add_style_pseudo_class('focus');
             this.set_secondary_icon(this._clearIcon);
         }
@@ -3016,7 +3025,7 @@ class Arc_Menu_SearchBox extends St.Entry {
         if (symbol == Clutter.KEY_Return ||
             symbol == Clutter.KEY_KP_Enter) {
             if (!this.isEmpty()) {
-                if (this.searchResults.getTopResult() && this.searchResults._highlightDefault) {
+                if (this.searchResults.getTopResult()) {
                     this.searchResults.getTopResult().activate(event);
                 }
             }

@@ -130,10 +130,9 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
                 this.applicationsBox.add_actor(item.actor);
             if(!activeMenuItemSet){
                 activeMenuItemSet = true;  
-                this._futureActiveItem = item;
+                this.activeMenuItem = item;
             }    
         }
-        this.activeMenuItem = this._futureActiveItem;
     }
 
     /**
@@ -195,13 +194,13 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     loadCategories(){
     }
 
-    destroy(isReload){
+    destroy(){
         this.arcMenu.actor.style = null;
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;
         this.arcMenu._boxPointer.setPosition(this.oldSourceActor, this.oldArrowAlignment);
         Main.uiGroup.remove_actor(this.dummyCursor);
         this.dummyCursor.destroy();
-        super.destroy(isReload);
+        super.destroy();
     }
 }

@@ -418,7 +418,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.applicationsBox.insert_child_at_index(label.actor, 2);
     }
    
-    destroy(isReload){
+    destroy(){
         if(this._clocksItem)
             this._clocksItem.destroy();
         if(this._weatherItem)
@@ -427,6 +427,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.box.style = null;
         this.arcMenu.actor.style = null;
 
-        super.destroy(isReload);
+        super.destroy();
     }
 }

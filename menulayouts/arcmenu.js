@@ -369,11 +369,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
     }
 
-    destroy(isReload){
+    destroy(){
         if(this.buttonPressEventID){
             global.stage.disconnect(this.buttonPressEventID);
             this.buttonPressEventID = null;
         }
-        super.destroy(isReload)
+        super.destroy()
     }
 }

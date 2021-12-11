@@ -58,7 +58,6 @@ var BaseLayout = class {
             this.searchBox = new MW.SearchBox(this);
             this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
             this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-            this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         }
 
         this._mainBoxKeyPressId = this.mainBox.connect('key-press-event', this._onMainBoxKeyPress.bind(this));
@@ -540,11 +539,19 @@ var BaseLayout = class {
     _updatePinnedAppsWebBrowser(pinnedApps){
         //Find the Default Web Browser, if found add to pinned apps list, if not found delete the placeholder.
         //Will only run if placeholder is found. Placeholder only found with default settings set.
-        if(pinnedApps[0] === "ArcMenu_WebBrowser"){     
-            let [res, stdout, stderr, status] = GLib.spawn_command_line_sync("xdg-settings get default-web-browser");
-            let webBrowser = String.fromCharCode.apply(null, stdout);
-            let browserName = webBrowser.split(".desktop")[0];
-            browserName += ".desktop";
+        if(pinnedApps[0] === "ArcMenu_WebBrowser"){   
+            let browserName = '';
+            try{
+                //user may not have xdg-utils package installed which will throw error
+                let [res, stdout, stderr, status] = GLib.spawn_command_line_sync("xdg-settings get default-web-browser");
+                let webBrowser = String.fromCharCode(...stdout);
+                browserName = webBrowser.split(".desktop")[0];
+                browserName += ".desktop";
+            } 
+            catch(error){
+                log("ArcMenu Error: Can not find default web browser, removing placeholder pinned app.")
+            }
+
             this._app = appSys.lookup_app(browserName);
             if(this._app){
                 pinnedApps[0] = this._app.get_name();
@@ -760,13 +767,31 @@ var BaseLayout = class {
         let itemChanged = item !== this._activeMenuItem;
         if(itemChanged){
             this._activeMenuItem = item;
-            if(this.arcMenu.isOpen && this._activeMenuItem)
-                this._activeMenuItem.grab_key_focus();
-            if(this.layout === Constants.MenuLayout.LAUNCHER)
+            if(this.arcMenu.isOpen && item && this.layoutProperties.SupportsCategoryOnHover)
+                item.grab_key_focus();
+            else if(this.arcMenu.isOpen)
+                this.mainBox.grab_key_focus();
+            if(this.layout === Constants.MenuLayout.LAUNCHER && item)
                 this.createActiveSearchItemPanel(item);
         }
     }
-    
+
+    _onSearchBoxChanged(searchBox, searchString) { 
+        if(searchBox.isEmpty()){
+            this.searchResults.hide();
+            this.setDefaultMenuView();
+        }            
+        else{
+            this._clearActorsFromBox();
+            let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
+            appsScrollBoxAdj.set_value(0);
+            this.applicationsBox.add(this.searchResults);
+            this.searchResults.show();
+            searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
+            this.searchResults.setTerms(searchString.split(/\s+/));
+        }            	
+    }
+
     _onSearchBoxKeyPress(searchBox, event) {
         let symbol = event.get_key_symbol();
         switch (symbol) {
@@ -791,41 +816,25 @@ var BaseLayout = class {
                 else
                     cursorPosition = Constants.CaretPosition.MIDDLE;
 
-                if(cursorPosition === Constants.CaretPosition.END){
-                    this.searchResults.highlightDefault(false);
-                    return this.mainBox.navigate_focus(this.activeMenuItem, direction, false);
-                }
-                else if(cursorPosition === Constants.CaretPosition.START){
-                    this.searchResults.highlightDefault(false);
-                    return this.mainBox.navigate_focus(this.activeMenuItem, direction, false);
+                if(cursorPosition === Constants.CaretPosition.END || cursorPosition === Constants.CaretPosition.START){
+                    let navigateActor = this.activeMenuItem;
+                    if(this.searchResults.hasActiveResult()){
+                        navigateActor = this.searchResults.getTopResult();
+                        if(navigateActor.has_style_pseudo_class("active")){
+                            navigateActor.grab_key_focus();
+                            return this.mainBox.navigate_focus(navigateActor, direction, false); 
+                        }
+                        navigateActor.grab_key_focus();
+                        return Clutter.EVENT_STOP;
+                    }
+                    if(!navigateActor)
+                        return Clutter.EVENT_PROPAGATE;
+                    return this.mainBox.navigate_focus(navigateActor, direction, false);
                 }
                 return Clutter.EVENT_PROPAGATE;
             default:
                 return Clutter.EVENT_PROPAGATE;
         }
-    }
-
-    _onSearchBoxKeyFocusIn(searchBox) {
-        if (!searchBox.isEmpty()) {
-            this.searchResults.highlightDefault(false);
-        }
-    }
-
-    _onSearchBoxChanged(searchBox, searchString) {
-        if(searchBox.isEmpty()){
-            this.searchResults.hide();
-            this.setDefaultMenuView();
-        }            
-        else{
-            this._clearActorsFromBox();
-            let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
-            appsScrollBoxAdj.set_value(0);
-            this.applicationsBox.add(this.searchResults);
-            this.searchResults.show();
-            searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
-            this.searchResults.setTerms(searchString.split(/\s+/));
-            this.searchResults.highlightDefault(true);
-        }            	
     }
 
     _onMainBoxKeyPress(actor, event) {
@@ -859,13 +868,16 @@ var BaseLayout = class {
                     direction = St.DirectionType.UP;
                 if (symbol === Clutter.KEY_Left)
                     direction = St.DirectionType.LEFT;
-
+                    
                 if(this.layoutProperties.Search && this.searchBox.hasKeyFocus() && this.searchResults.hasActiveResult() && this.searchResults.get_parent()){
-                    this.searchResults.highlightDefault(false);
+                    if(this.searchResults.getTopResult().has_style_pseudo_class("active")){
+                        this.searchResults.getTopResult().actor.grab_key_focus();
+                        return actor.navigate_focus(global.stage.key_focus, direction, false); 
+                    }
                     this.searchResults.getTopResult().actor.grab_key_focus();
-                    return actor.navigate_focus(global.stage.key_focus, direction, false);  
+                    return Clutter.EVENT_STOP;
                 }
-                else if(global.stage.key_focus === this.mainBox || (this.layoutProperties.Search && global.stage.key_focus === this.searchBox.actor)){
+                else if(global.stage.key_focus === this.mainBox){
                     this.activeMenuItem.actor.grab_key_focus();
                     return Clutter.EVENT_STOP;
                 }
@@ -946,6 +958,7 @@ var BaseLayout = class {
             this.searchBox.destroy();
 
         if(this.searchResults){
+            this.searchResults.setTerms([]);
             this.searchResults.destroy();
             this.searchResults = null;
         }
@@ -960,6 +973,13 @@ var BaseLayout = class {
             this._gnomeFavoritesReloadID = null;
         }
 
+        if(this.pinnedAppsArray){
+            for(let i = 0; i < this.pinnedAppsArray.length; i++){
+                this.pinnedAppsArray[i].destroy();
+            }
+            this.pinnedAppsArray = null;
+        }
+
         if(this.applicationsMap){
             this.applicationsMap.forEach((value,key,map)=>{
                 value.destroy();
@@ -972,13 +992,6 @@ var BaseLayout = class {
                 value.destroy();
             });
             this.categoryDirectories = null;    
-        }
-
-        if(this.pinnedAppsArray){
-            for(let i = 0; i < this.pinnedAppsArray.length; i++){
-                this.pinnedAppsArray[i].destroy();
-            }
-            this.pinnedAppsArray = null;
         }
 
         this.mainBox.destroy_all_children();
