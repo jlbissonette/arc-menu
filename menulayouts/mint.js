@@ -155,7 +155,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadCategories();
         this.loadPinnedApps();
         this.loadExtraPinnedApps();
-        this.displayCategories();
+
         this.setDefaultMenuView(); 
     }
 
@@ -166,6 +166,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     setDefaultMenuView(){
         super.setDefaultMenuView();
+        this.displayCategories();
         this.categoryDirectories.values().next().value.displayAppList();
         this.activeMenuItem = this.categoryDirectories.values().next().value;
         if(this.arcMenu.isOpen)

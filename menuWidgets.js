@@ -1416,6 +1416,7 @@ var PlasmaMenuItem = GObject.registerClass(class Arc_Menu_PlasmaMenuItem extends
     }
 
     activate(event){
+        this._menuLayout.searchBox.clearWithoutSearchChangeEvent();
         this._menuLayout.clearActiveItem();
         this.setActive(true);
         super.activate(event);
