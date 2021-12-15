@@ -792,23 +792,21 @@ class Arc_Menu_Separator extends PopupMenu.PopupBaseMenuItem {
                 this._separator.style = "margin: 5px 45px;";
             else if(separatorLength === Constants.SeparatorStyle.MEDIUM)
                 this._separator.style = "margin: 5px 15px;";
-            else if(separatorLength === Constants.SeparatorStyle.LONG){
+            else if(separatorLength === Constants.SeparatorStyle.LONG)
                 this._separator.style = "margin: 0px 5px;";
-            }
             else if(separatorLength === Constants.SeparatorStyle.MAX)
                 this._separator.style = "margin: 0px; padding: 0px;";
             else if(separatorLength === Constants.SeparatorStyle.HEADER_LABEL){
                 this._separator.style = "margin: 0px 20px 0px 10px;";
                 this.style = "padding: 5px 15px;"
             }
-            
         }
         else if(separatorAlignment === Constants.SeparatorAlignment.VERTICAL){
             this._syncVisibility();
             this.vertSeparatorChangedID = this._settings.connect('changed::vert-separator', this._syncVisibility.bind(this));
             this.remove_actor(this.label);
             this._separator.style = "margin: 0px; width: 1px; height: -1px;";
-            this.style = "padding: 0px 5px;"
+            this.style = "padding: 0px 4px;"
             this.x_expand = this._separator.x_expand = true;
             this.x_align = this._separator.x_align = Clutter.ActorAlign.CENTER;
             this.y_expand = this._separator.y_expand = true;
@@ -1233,9 +1231,6 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
         Main.uiGroup.add_actor(this.leaveMenu.actor);
         this.leaveMenu.connect('open-state-changed', (menu, open) => {
             if(open){
-                this._menuLayout.activeMenuItem = this.lockItem;
-                this.lockItem.grab_key_focus();
-                this.add_style_pseudo_class("active");
                 if(this.menuButton.tooltipShowingID){
                     GLib.source_remove(this.menuButton.tooltipShowingID);
                     this.menuButton.tooltipShowingID = null;
@@ -1261,11 +1256,6 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
         this.leaveMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
         this.leaveMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
         this.leaveMenu.toggle();
-        if(this.leaveMenu.isOpen){
-            this._menuLayout.activeMenuItem = this.lockItem;
-            this.lockItem.grab_key_focus();
-            this.add_style_pseudo_class("active");
-        }
     }
 });
 
@@ -2022,6 +2012,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
     }
 
    _onDragBegin() {
+        this.isDragging = true;
         if(this._menuButton.tooltipShowingID){
             GLib.source_remove(this._menuButton.tooltipShowingID);
             this._menuButton.tooltipShowingID = null;
@@ -2700,6 +2691,7 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
         this.menu.actor.overlay_scrollbars = true;
         this.menu.actor.style_class = 'popup-sub-menu ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade');
         this.menu._needsScrollbar = this._needsScrollbar.bind(this);
+
         this.menu.connect('open-state-changed', () => {
             if(!this.menu.isOpen){
                 let scrollbar= this.menu.actor.get_vscroll_bar().get_adjustment();

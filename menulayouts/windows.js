@@ -46,11 +46,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             IconGridSize: 36,
             IconGridStyle: 'SmallIconGrid',
             VerticalMainBox: false,
-            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultCategoryIconSize: Constants.LARGE_ICON_SIZE,
             DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
             DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
-            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.LARGE_ICON_SIZE,
         });
     }
     createLayout(){     

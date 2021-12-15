@@ -116,7 +116,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         // Contains some useful shortcuts
         this.quickBox = new St.BoxLayout({
             vertical: true,
-            style: horizonalFlip ? "margin-right: 6px; margin-left: 0px;" : "margin-right: 0px; margin-left: 6px;",
+            style: "margin: 0px 1px;",
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL
         });
