@@ -68,16 +68,16 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.topBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
-            vertical: false
+            vertical: false,
         });
 
-        this.searchBox.style = "margin: 5px 10px 5px 10px;";
+        this.searchBox.style = "margin: 0px 0px 0px 16px;";
         this.runnerTweaksButton = new MW.RunnerTweaksButton(this);
         this.runnerTweaksButton.actor.x_expand = false;
-        this.runnerTweaksButton.actor.y_expand = false;
-        this.runnerTweaksButton.actor.y_align = Clutter.ActorAlign.CENTER;
+        this.runnerTweaksButton.actor.y_expand = true;
+        this.runnerTweaksButton.actor.y_align = this.searchBox.y_align = Clutter.ActorAlign.CENTER;
         this.runnerTweaksButton.actor.x_align = Clutter.ActorAlign.CENTER;
-        this.runnerTweaksButton.actor.style = "margin-right: 10px; padding: 8px;";
+        this.runnerTweaksButton.actor.style = "margin: 0px 6px;";
 
         this.topBox.add(this.searchBox.actor);
         this.topBox.add(this.runnerTweaksButton);
@@ -96,7 +96,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ 
             vertical: true,
-            style: "margin-left: 16px; margin-right: 4px;"
+            style: "margin: 5px 6px 0px 16px;"
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.activeMenuItem = null;
@@ -176,7 +176,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style += `font-size: ${this._runnerFontSize}pt;`
         }
         else{
-            this.searchBox.style = "margin: 5px 10px 5px 10px;";
+            this.searchBox.style = "margin: 0px 0px 0px 16px;";
         }
         this.topBox.style = `width: ${this._runnerWidth}px;`;
         this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
