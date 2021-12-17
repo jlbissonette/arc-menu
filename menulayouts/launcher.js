@@ -82,7 +82,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 10px;";
-        this.searchTermsChangedID = this.searchResults.connect('terms-changed', () => {
+        this.searchTermsChangedID = this.searchResults.connect('have-results', () => {
             this.searchResultsChangedEvent();
         });
         this.searchNoResultsID = this.searchResults.connect('no-results', () => {
@@ -399,7 +399,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         this.activeResult = this.searchResults.getTopResult();
         if(!this.activeResult || this.activeResult === null){
-            this.activeProvider.grab_key_focus();
             return;
         }
 
@@ -414,8 +413,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(!activeResult.provider || activeResult === this.activeResultMenuItem)
             return;
         this.activeCategoryType = -1;
-        this.searchResultDetailsBox.remove_all_children();
-        activeResult.actor.grab_key_focus();
+        this.searchResultDetailsBox.destroy_all_children();
+
         if(!activeResult.metaInfo)
             return;
 
@@ -440,10 +439,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.activeResultMenuItem._iconBin.set_child(icon);
         }
         this.searchResultDetailsBox.add_actor(this.activeResultMenuItem);
-        let searchResultContextItems = new MW.ApplicationContextItems(this.activeResultMenuItem, app, this);
-        searchResultContextItems.path = path;
-        searchResultContextItems.rebuildItems();
-        this.searchResultDetailsBox.add_actor(searchResultContextItems);
+        this.searchResultContextItems = new MW.ApplicationContextItems(this.activeResultMenuItem, app, this);
+        this.searchResultContextItems.path = path;
+        this.searchResultContextItems.rebuildItems();
+        this.searchResultDetailsBox.add_actor(this.searchResultContextItems);
     }
 
     destroy(){

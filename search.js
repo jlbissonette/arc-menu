@@ -419,6 +419,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
 
 var SearchResults = GObject.registerClass({
     Signals: { 'terms-changed': {},
+                'have-results': {},
                 'no-results': {} },
 }, class ArcMenu_SearchResults extends St.BoxLayout {
     _init(menuLayout) {
@@ -724,8 +725,9 @@ var SearchResults = GObject.registerClass({
         });
 
         this._statusBin.visible = !haveResults;
-        this.emit("terms-changed")
-        if (!haveResults) {
+        if (haveResults)
+            this.emit("have-results")
+        else if (!haveResults) {
             if (this.searchInProgress)
                 this._statusText.set_text(_("Searching..."));
             else
