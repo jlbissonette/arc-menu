@@ -859,50 +859,6 @@ var GeneralPage = GObject.registerClass(
             modifyHotCornerFrame.add(modifyHotCornerRow);
             this.mainBox.append(modifyHotCornerFrame);
 
-            let keyReleaseRow = new PW.FrameBoxRow();
-            let keyReleaseLabel = new Gtk.Label({
-                label: _("Hotkey Activation"),
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
-            });
-            let keyReleaseCombo = new Gtk.ComboBoxText({
-                halign: Gtk.Align.END,
-            });
-            keyReleaseCombo.append_text(_("Key Release"));
-            keyReleaseCombo.append_text(_("Key Press"));
-            if(this._settings.get_boolean('disable-hotkey-onkeyrelease'))
-                keyReleaseCombo.set_active(1);
-            else
-                keyReleaseCombo.set_active(0);
-            keyReleaseCombo.connect('changed', (widget) => {
-                if(widget.get_active()==0)
-                    this._settings.set_boolean('disable-hotkey-onkeyrelease',false);
-                if(widget.get_active()==1)
-                    this._settings.set_boolean('disable-hotkey-onkeyrelease',true);
-            });
-
-            keyReleaseRow.add(keyReleaseLabel);
-            keyReleaseRow.add(keyReleaseCombo);
-
-            let arcMenuPrimaryMonitorRow = new PW.FrameBoxRow();
-            let arcMenuPrimaryMonitorLabel = new Gtk.Label({
-                label: _("Open on Primary Monitor"),
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
-            });
-            let arcMenuPrimaryMonitorSwitch = new Gtk.Switch({
-                halign: Gtk.Align.END,
-                valign: Gtk.Align.CENTER,
-            });
-            arcMenuPrimaryMonitorSwitch.set_active(this._settings.get_boolean('hotkey-open-primary-monitor'));
-            arcMenuPrimaryMonitorSwitch.connect('notify::active', (widget) => {
-                this._settings.set_boolean('hotkey-open-primary-monitor', widget.get_active());
-            });
-            arcMenuPrimaryMonitorRow.add(arcMenuPrimaryMonitorLabel);
-            arcMenuPrimaryMonitorRow.add(arcMenuPrimaryMonitorSwitch);
-
             let menuHotkeyHeader = new Gtk.Label({
                 label: "<b>" + _("Hotkey Options") + "</b>",
                 use_markup: true,
@@ -911,100 +867,152 @@ var GeneralPage = GObject.registerClass(
             });
             this.mainBox.append(menuHotkeyHeader);
 
-            this.menuKeybindingFrame = new PW.FrameBox();
-            let menuHotkeyLabelRow = new PW.FrameBoxRow();
-            let menuHotkeyLabel = new Gtk.Label({
-                label: _("ArcMenu Hotkey"),
+            let menuHotKeyFrame = this._createHotkeyFrame(true);
+            this.mainBox.append(menuHotKeyFrame);
+
+            let runnerHeaderLabel = new Gtk.Label({
+                label: "<b>" + _("Standalone Runner Menu") + "</b>",
                 use_markup: true,
                 xalign: 0,
                 hexpand: true
             });
-            menuHotkeyLabelRow.add(menuHotkeyLabel);
+            this.mainBox.append(runnerHeaderLabel);
 
-            let menuHotkeyButtonRow = new PW.FrameBoxRow();
-            let leftButton = new Gtk.ToggleButton({
-                label: _("Left Super Key"),
-                halign: Gtk.Align.CENTER,
-                hexpand: true,
-            });
-            let rightButton = new Gtk.ToggleButton({
-                label: _("Right Super Key"),
-                group: leftButton,
-                halign: Gtk.Align.CENTER,
-                hexpand: true,
-            });
-            let customButton = new Gtk.ToggleButton({
-                label: _("Custom Hotkey"),
-                group: leftButton,
-                halign: Gtk.Align.CENTER,
-                hexpand: true,
-            });
-            this.undefinedButton = new Gtk.ToggleButton({
-                label: _("None"),
-                group: leftButton,
-                halign: Gtk.Align.CENTER,
-                hexpand: true,
-            });
-            switch (this._settings.get_enum('menu-hotkey')) {
-                case 0:
-                    this.undefinedButton.set_active(true);
-                    break;
-                case 1:
-                    leftButton.set_active(true);
-                    break;
-                case 2:
-                    rightButton.set_active(true);
-                    break;
-                case 3:
-                    customButton.set_active(true);
-                    break;
+            let runnerHotkeyFrame = this._createHotkeyFrame(false);
+            this.mainBox.append(runnerHotkeyFrame);
+        }
+
+        _createHotkeyFrame(isMenuHotkey){
+            let hotkeyFrame = new PW.FrameBox();
+            let enableRunnerMenuSwitch, hotkeyEnumSetting, customHotkeySetting;
+            if(isMenuHotkey){
+                hotkeyEnumSetting = 'menu-hotkey';
+                customHotkeySetting = 'toggle-arcmenu';
             }
-            this.undefinedButton.connect('toggled', () => {
-                if(this.undefinedButton.get_active()){
-                    if(this.menuKeybindingFrame.count > 2)
-                        this.menuKeybindingFrame.removeChildrenAfterIndex(1);
-                    this._settings.set_enum('menu-hotkey', 0);
-                }
+            else{
+                hotkeyEnumSetting = 'runner-menu-hotkey';
+                customHotkeySetting = 'toggle-runner-menu';
+                let enableRunnerMenuRow = new PW.FrameBoxRow();
+                let enableRunnerMenuLabel = new Gtk.Label({
+                    label: _("Enable a standalone Runner menu"),
+                    use_markup: true,
+                    xalign: 0,
+                    hexpand: true
+                });
+                enableRunnerMenuSwitch = new Gtk.Switch({
+                    halign: Gtk.Align.END,
+                    valign: Gtk.Align.CENTER,
+                });
+                enableRunnerMenuSwitch.set_active(this._settings.get_boolean('enable-standlone-runner-menu'));
+                enableRunnerMenuSwitch.connect('notify::active', (widget) => {
+                    this._settings.set_boolean('enable-standlone-runner-menu', widget.get_active());
+                    if(!widget.get_active()){
+                        hotkeyFrame.removeChildrenAfterIndex(0);
+                    }
+                    else{
+                        hotkeyFrame.add(hotkeyRow);
+                        if(this._settings.get_enum(hotkeyEnumSetting) === 0)
+                            hotkeyFrame.add(primaryMonitorRow);
+                        if(this._settings.get_enum(hotkeyEnumSetting) === 1){
+                            hotkeyFrame.add(customHotkeyRow);
+                            hotkeyFrame.add(hotkeyActivationRow);
+                            hotkeyFrame.add(primaryMonitorRow);
+                        }
+                    }
+                });
+                enableRunnerMenuRow.add(enableRunnerMenuLabel);
+                enableRunnerMenuRow.add(enableRunnerMenuSwitch);
+                hotkeyFrame.add(enableRunnerMenuRow);
+            }
+
+            let hotkeyActivationRow = new PW.FrameBoxRow();
+            let hotkeyActivationLabel = new Gtk.Label({
+                label: _("Hotkey Activation"),
+                use_markup: true,
+                xalign: 0,
+                hexpand: true
             });
-            leftButton.connect('toggled', () => {
-                if(leftButton.get_active()){
-                    if(this.menuKeybindingFrame.count > 2)
-                        this.menuKeybindingFrame.removeChildrenAfterIndex(1);
-                    this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
-                    this._settings.set_enum('menu-hotkey', 1);
-                }
+            let hotkeyActivationCombo = new Gtk.ComboBoxText({
+                halign: Gtk.Align.END,
             });
-            rightButton.connect('toggled', () => {
-                if(rightButton.get_active()){
-                    if(this.menuKeybindingFrame.count > 2)
-                        this.menuKeybindingFrame.removeChildrenAfterIndex(1);
-                    this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
-                    this.menuKeybindingFrame.add(keyReleaseRow);
-                    this.menuKeybindingFrame.show();
-                    this._settings.set_enum('menu-hotkey', 2);
-                }
-            });
-            customButton.connect('toggled', () => {
-                if(customButton.get_active()){
-                    if(this.menuKeybindingFrame.count > 2)
-                        this.menuKeybindingFrame.removeChildrenAfterIndex(1);
-                    this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
-                    this.menuKeybindingFrame.add(menuKeybindingRow);
-                    this.menuKeybindingFrame.add(keyReleaseRow);
-                    this.menuKeybindingFrame.show();
-                    this._settings.set_enum('menu-hotkey', 3);
-                }
+            hotkeyActivationCombo.append_text(_("Key Release"));
+            hotkeyActivationCombo.append_text(_("Key Press"));
+            if(this._settings.get_boolean('disable-hotkey-onkeyrelease'))
+                hotkeyActivationCombo.set_active(1);
+            else
+                hotkeyActivationCombo.set_active(0);
+            hotkeyActivationCombo.connect('changed', (widget) => {
+                if(widget.get_active() === 0)
+                    this._settings.set_boolean('disable-hotkey-onkeyrelease',false);
+                if(widget.get_active() === 1)
+                    this._settings.set_boolean('disable-hotkey-onkeyrelease',true);
             });
 
-            menuHotkeyButtonRow.add(this.undefinedButton);
-            menuHotkeyButtonRow.add(leftButton);
-            menuHotkeyButtonRow.add(rightButton);
-            menuHotkeyButtonRow.add(customButton);
+            hotkeyActivationRow.add(hotkeyActivationLabel);
+            hotkeyActivationRow.add(hotkeyActivationCombo);
 
-            this.menuKeybindingFrame.add(menuHotkeyLabelRow);
-            this.menuKeybindingFrame.add(menuHotkeyButtonRow);
+            let primaryMonitorRow = new PW.FrameBoxRow();
+            let primaryMonitorLabel = new Gtk.Label({
+                label: _("Open on Primary Monitor"),
+                use_markup: true,
+                xalign: 0,
+                hexpand: true
+            });
+            let primaryMonitorSwitch = new Gtk.Switch({
+                halign: Gtk.Align.END,
+                valign: Gtk.Align.CENTER,
+            });
+            primaryMonitorSwitch.set_active(this._settings.get_boolean('hotkey-open-primary-monitor'));
+            primaryMonitorSwitch.connect('notify::active', (widget) => {
+                this._settings.set_boolean('hotkey-open-primary-monitor', widget.get_active());
+            });
+            primaryMonitorRow.add(primaryMonitorLabel);
+            primaryMonitorRow.add(primaryMonitorSwitch);
 
-            let menuKeybindingRow = new PW.FrameBoxRow();
+            
+            let hotkeyRow = new PW.FrameBoxRow();
+            let hotkeyLabel = new Gtk.Label({
+                label: isMenuHotkey ? _("Menu Hotkey") : _("Runner Hotkey"),
+                use_markup: true,
+                xalign: 0,
+                hexpand: true
+            });
+            hotkeyRow.add(hotkeyLabel);
+
+            let hotkeyCombo = new Gtk.ComboBoxText({
+                halign: Gtk.Align.END,
+            });
+            if(isMenuHotkey)
+                hotkeyCombo.append("NONE", _("None"));
+            hotkeyCombo.append("SUPER_L", _("Left Super Key"));
+            hotkeyCombo.append("CUSTOM", _("Custom Hotkey"));
+            hotkeyCombo.set_active(this._settings.get_enum(hotkeyEnumSetting));
+            hotkeyCombo.connect('changed', (widget) => {
+                let removeIndex = isMenuHotkey ? 0 : 1;
+                if(widget.get_active_id() === "NONE"){
+                    if(hotkeyFrame.count > removeIndex + 1)
+                        hotkeyFrame.removeChildrenAfterIndex(removeIndex);
+                }
+                else if(widget.get_active_id() === "SUPER_L"){
+                    if(hotkeyFrame.count > removeIndex + 1)
+                        hotkeyFrame.removeChildrenAfterIndex(removeIndex);
+                    hotkeyFrame.add(primaryMonitorRow);
+                }
+                else if(widget.get_active_id() === "CUSTOM"){
+                    if(hotkeyFrame.count > removeIndex + 1)
+                        hotkeyFrame.removeChildrenAfterIndex(removeIndex);
+                    hotkeyFrame.add(customHotkeyRow);
+                    hotkeyFrame.add(hotkeyActivationRow);
+                    hotkeyFrame.add(primaryMonitorRow);
+                    hotkeyFrame.show();
+                }
+                this._settings.set_enum(hotkeyEnumSetting, widget.get_active());
+            });
+            hotkeyRow.add(hotkeyCombo);
+            
+            hotkeyFrame.add(hotkeyRow);
+
+            let customHotkeyRow = new PW.FrameBoxRow();
             let currentHotkeyLabel = new Gtk.Label( {
                 label: _("Current Hotkey"),
                 use_markup: true,
@@ -1013,51 +1021,53 @@ var GeneralPage = GObject.registerClass(
             });
 
             let shortcutCell = new Gtk.ShortcutsShortcut({
-                halign: Gtk.Align.CENTER,
+                halign: Gtk.Align.START,
                 hexpand: true,
             });
-            shortcutCell.accelerator = this._settings.get_string('menu-keybinding-text');
+            shortcutCell.accelerator = this._settings.get_strv(customHotkeySetting).toString();
 
             let modifyHotkeyButton = new Gtk.Button({
                 label: _("Modify Hotkey"),
                 halign: Gtk.Align.END,
                 hexpand: false,
             });
-            menuKeybindingRow.add(currentHotkeyLabel);
-            menuKeybindingRow.add(shortcutCell);
-            menuKeybindingRow.add(modifyHotkeyButton);
+            customHotkeyRow.add(currentHotkeyLabel);
+            customHotkeyRow.add(shortcutCell);
+            customHotkeyRow.add(modifyHotkeyButton);
             modifyHotkeyButton.connect('clicked', () => {
                 let dialog = new CustomHotkeyDialogWindow(this._settings, this);
                 dialog.show();
                 dialog.connect('response', () => {
+                    let customHotKeyEnum = isMenuHotkey ? 2 : 1;
                     if(dialog.addResponse) {
-                        this._settings.set_enum('menu-hotkey', 0);
-                        this._settings.set_string('menu-keybinding-text', dialog.resultsText);
-                        this._settings.set_enum('menu-hotkey', 3);
+                        this._settings.set_enum(hotkeyEnumSetting, 0);
+                        this._settings.set_strv(customHotkeySetting, [dialog.resultsText]);
+                        this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
                         shortcutCell.accelerator = dialog.resultsText;
                         dialog.destroy();
                     }
                     else {
-                        shortcutCell.accelerator = this._settings.get_string('menu-keybinding-text');
-                        this._settings.set_enum('menu-hotkey', 3);
+                        shortcutCell.accelerator = this._settings.get_strv(customHotkeySetting).toString();
+                        this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
                         dialog.destroy();
                     }
                 });
             });
 
-            if(this._settings.get_enum('menu-hotkey') === 1)
-                this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
-            if(this._settings.get_enum('menu-hotkey') === 2){
-                this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
-                this.menuKeybindingFrame.add(keyReleaseRow);
+            if(hotkeyCombo.get_active_id() === "SUPER_L"){
+                hotkeyFrame.add(primaryMonitorRow);
             }
-            if(this._settings.get_enum('menu-hotkey') === 3){
-                this.menuKeybindingFrame.add(arcMenuPrimaryMonitorRow);
-                this.menuKeybindingFrame.add(keyReleaseRow);
-                this.menuKeybindingFrame.add(menuKeybindingRow);
+            else if(hotkeyCombo.get_active_id() === "CUSTOM"){
+                hotkeyFrame.add(customHotkeyRow);
+                hotkeyFrame.add(hotkeyActivationRow);
+                hotkeyFrame.add(primaryMonitorRow);
             }
-            this.mainBox.append(this.menuKeybindingFrame);
+
+            if(!isMenuHotkey && !enableRunnerMenuSwitch.get_active())
+                hotkeyFrame.removeChildrenAfterIndex(0);
+            return hotkeyFrame;
         }
+
         _createDisplayOnFrame(menuPlacementFrame, setComboBox){
             let menuPlacementRow = new PW.FrameBoxRow();
             let menuPlacementLabel = new Gtk.Label({
@@ -1157,35 +1167,34 @@ var GeneralPage = GObject.registerClass(
                 hexpand: true
             });
 
-            let menuPositionLeftButton = new Gtk.ToggleButton({
-                label: _('Left'),
-            });
-            let menuPositionCenterButton = new Gtk.ToggleButton({
-                label: _('Center'),
-                group: menuPositionLeftButton,
-            });
-            let menuPositionRightButton = new Gtk.ToggleButton({
-                label: _('Right'),
-                group: menuPositionLeftButton,
+            let menuPositionCombo = new Gtk.ComboBoxText({
+                halign: Gtk.Align.END,
             });
 
-
-            switch (this._settings.get_enum('position-in-panel')) {
-                case Constants.MenuPosition.LEFT:
-                    menuPositionLeftButton.set_active(true);
-                    break;
-                case Constants.MenuPosition.CENTER:
-                    menuPositionCenterButton.set_active(true);
-                    break;
-                case Constants.MenuPosition.RIGHT:
-                    menuPositionRightButton.set_active(true);
-                    break;
-            }
+            menuPositionCombo.append_text(_('Left'));
+            menuPositionCombo.append_text(_('Center'));
+            menuPositionCombo.append_text(_('Right'));
+            menuPositionCombo.set_active(this._settings.get_enum('position-in-panel'));
+            menuPositionCombo.connect('changed', (widget) => {
+                if(widget.get_active() === Constants.MenuPosition.LEFT){
+                    if(menuPlacementFrame.get_index(2) === menuPositionAdjustmentRow)
+                        menuPlacementFrame.remove(menuPositionAdjustmentRow);
+                }
+                else if(widget.get_active() === Constants.MenuPosition.LEFT){
+                    if(menuPlacementFrame.get_index(2) != menuPositionAdjustmentRow){
+                        menuPlacementFrame.insert(menuPositionAdjustmentRow, 2);
+                        menuPlacementFrame.show();
+                    }
+                }
+                else if(widget.get_active() === Constants.MenuPosition.LEFT){
+                    if(menuPlacementFrame.get_index(2) === menuPositionAdjustmentRow)
+                        menuPlacementFrame.remove(menuPositionAdjustmentRow);
+                }
+                this._settings.set_enum('position-in-panel', widget.get_active());
+            });
 
             menuPositionRow.add(menuPositionBoxLabel);
-            menuPositionRow.add(menuPositionLeftButton);
-            menuPositionRow.add(menuPositionCenterButton);
-            menuPositionRow.add(menuPositionRightButton);
+            menuPositionRow.add(menuPositionCombo);
 
             let menuPositionAdjustmentRow = new PW.FrameBoxRow();
             let menuPositionAdjustmentLabel = new Gtk.Label({
@@ -1283,24 +1292,6 @@ var GeneralPage = GObject.registerClass(
             }
             else
                 menuPlacementCombo.set_active(placement);
-
-            menuPositionLeftButton.connect('toggled', () => {
-                this._settings.set_enum('position-in-panel', Constants.MenuPosition.LEFT);
-                if(menuPlacementFrame.get_index(2) === menuPositionAdjustmentRow)
-                    menuPlacementFrame.remove(menuPositionAdjustmentRow);
-            });
-            menuPositionCenterButton.connect('toggled', () => {
-                this._settings.set_enum('position-in-panel', Constants.MenuPosition.CENTER);
-                if(menuPlacementFrame.get_index(2) != menuPositionAdjustmentRow){
-                    menuPlacementFrame.insert(menuPositionAdjustmentRow, 2);
-                    menuPlacementFrame.show();
-                }
-            });
-            menuPositionRightButton.connect('toggled', () => {
-                this._settings.set_enum('position-in-panel', Constants.MenuPosition.RIGHT);
-                if(menuPlacementFrame.get_index(2) === menuPositionAdjustmentRow)
-                    menuPlacementFrame.remove(menuPositionAdjustmentRow);
-            });
         }
 });
 
@@ -2523,9 +2514,21 @@ var MenuLayoutPage = GObject.registerClass(
     }
 
     displayLayoutTweaksPage(){
-        let activeLayoutName = this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout'));
-        this.layoutsTweaksPage.setActiveLayoutName(activeLayoutName)
         this.stack.set_visible_child_name("LayoutsTweaks");
+    }
+
+    displayRunnerTweaksPage(){
+        if(!this.runnerTweaksPage){
+            let activeLayoutName = this.getMenuLayoutTweaksName(Constants.MenuLayout.RUNNER);
+            this.runnerTweaksPage = new LayoutTweaks.tweaks.TweaksPage(this._settings, activeLayoutName);
+            this.stack.add_named(this.runnerTweaksPage, "RunnerTweaks")
+            this.runnerTweaksPage.connect("response", (page, response) => {
+                if(response === -20)
+                    this.stack.set_visible_child_name("LayoutsBox");
+            });
+            this.runnerTweaksPage.setActiveLayout(Constants.MenuLayout.RUNNER);
+        }
+        this.stack.set_visible_child_name("RunnerTweaks");
     }
 
     getMenuLayoutName(index){
@@ -6280,6 +6283,13 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box {
             this.settingsListStack.set_visible_child_name("Main");
             this.settingsListStack.get_child_by_name('Main').listBox.selectRowAtIndex(1);
             this.menuLayoutPage.connect("realize", () => this.menuLayoutPage.displayLayoutTweaksPage());
+            if(this.backButton.get_parent())
+                this.leftHeaderBox.remove(this.backButton);
+        }
+        else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
+            this.settingsListStack.set_visible_child_name("Main");
+            this.settingsListStack.get_child_by_name('Main').listBox.selectRowAtIndex(1);
+            this.menuLayoutPage.connect("realize", () => this.menuLayoutPage.displayRunnerTweaksPage());
             if(this.backButton.get_parent())
                 this.leftHeaderBox.remove(this.backButton);
         }

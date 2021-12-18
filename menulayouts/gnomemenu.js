@@ -32,8 +32,8 @@ const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
 var createMenu = class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton, {
+    constructor(menuButton) {
+        super(menuButton, {
             Search: false,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,

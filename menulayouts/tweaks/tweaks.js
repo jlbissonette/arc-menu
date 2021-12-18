@@ -88,17 +88,18 @@ var TweaksPage = GObject.registerClass({
         this._createLayout();
     }
 
-    setActiveLayoutName(layoutName){
-        this.layoutNameLabel.label = "<b>" + _(layoutName) + "</b>";
+    setActiveLayout(menuLayout){
         let children = [...this.mainBox];
         for(let child of children){
             this.mainBox.remove(child);
         }         
-        this._createLayout();
+        this._createLayout(menuLayout);
     }
 
-    _createLayout() {    
-        let menuLayout = this._settings.get_enum('menu-layout');
+    _createLayout(menuLayout) {
+        if(!menuLayout)
+            menuLayout = this._settings.get_enum('menu-layout');
+
         if(menuLayout == Constants.MenuLayout.ARCMENU)
             this._loadArcMenuTweaks();
         else if(menuLayout == Constants.MenuLayout.BRISK)

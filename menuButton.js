@@ -632,7 +632,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     }
 
     updateLocation(){
-        if(this.MenuLayout)
+        if(this.MenuLayout && this.MenuLayout.updateLocation)
             this.MenuLayout.updateLocation();
     }
 

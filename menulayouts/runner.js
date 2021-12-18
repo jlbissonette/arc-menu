@@ -29,12 +29,13 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
 const MW = Me.imports.menuWidgets;
+const PanelMenu = imports.ui.panelMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
 var createMenu =  class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton,{
+    constructor(menuButton, isStandalone) {
+        super(menuButton, {
             Search: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
@@ -47,6 +48,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultPinnedIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            StandaloneRunner: isStandalone
         });
     }
 
@@ -140,7 +142,10 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
      * @returns index of monitor where menu should appear
      */
     _getMonitorIndexForPlacement() {
-        if (this._settings.get_enum('menu-button-appearance') === Constants.MenuButtonAppearance.NONE)
+        if (this.layoutProperties.StandaloneRunner) {
+            return this._settings.get_boolean('hotkey-open-primary-monitor') ? Main.layoutManager.primaryMonitor.index : Main.layoutManager.currentMonitor.index;
+        }
+        else if (this._settings.get_enum('menu-button-appearance') === Constants.MenuButtonAppearance.NONE)
             return this._settings.get_boolean('hotkey-open-primary-monitor') ? Main.layoutManager.primaryMonitor.index : Main.layoutManager.currentMonitor.index;
         else
             return Main.layoutManager.findIndexForActor(this.menuButton);

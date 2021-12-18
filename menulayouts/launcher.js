@@ -38,8 +38,8 @@ const MORE_PROVIDERS_POP_UP = -1;
 const MAX_VISIBLE_PROVIDERS = 4;
 
 var createMenu = class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton, {
+    constructor(menuButton) {
+        super(menuButton, {
             Search: true,
             SearchDisplayType: Constants.DisplayType.LIST,
             DisplayType: Constants.DisplayType.GRID,

@@ -90,55 +90,55 @@ function activateHybridSleep(){
     });
 }
 
-function getMenuLayout(button, layout){
+function getMenuLayout(menuButton, layout, isStandaloneRunner){
     let MenuLayout = Me.imports.menulayouts;
     switch(layout){
         case Constants.MenuLayout.ARCMENU:
-            return new MenuLayout.arcmenu.createMenu(button);
+            return new MenuLayout.arcmenu.createMenu(menuButton);
         case Constants.MenuLayout.BRISK:
-            return new MenuLayout.brisk.createMenu(button); 
+            return new MenuLayout.brisk.createMenu(menuButton); 
         case Constants.MenuLayout.WHISKER:
-            return new MenuLayout.whisker.createMenu(button); 
+            return new MenuLayout.whisker.createMenu(menuButton); 
         case Constants.MenuLayout.GNOME_MENU:
-            return new MenuLayout.gnomemenu.createMenu(button); 
+            return new MenuLayout.gnomemenu.createMenu(menuButton); 
         case Constants.MenuLayout.MINT:
-            return new MenuLayout.mint.createMenu(button); 
+            return new MenuLayout.mint.createMenu(menuButton); 
         case Constants.MenuLayout.GNOME_OVERVIEW:
             return null;
         case Constants.MenuLayout.ELEMENTARY:
-            return new MenuLayout.elementary.createMenu(button); 
+            return new MenuLayout.elementary.createMenu(menuButton); 
         case Constants.MenuLayout.REDMOND:
-            return new MenuLayout.redmond.createMenu(button); 
+            return new MenuLayout.redmond.createMenu(menuButton); 
         case Constants.MenuLayout.SIMPLE:
-            return new MenuLayout.simple.createMenu(button);  
+            return new MenuLayout.simple.createMenu(menuButton);  
         case Constants.MenuLayout.SIMPLE_2:
-            return new MenuLayout.simple2.createMenu(button);  
+            return new MenuLayout.simple2.createMenu(menuButton);  
         case Constants.MenuLayout.UNITY:
-            return new MenuLayout.unity.createMenu(button); 
+            return new MenuLayout.unity.createMenu(menuButton); 
         case Constants.MenuLayout.BUDGIE:
-            return new MenuLayout.budgie.createMenu(button);
+            return new MenuLayout.budgie.createMenu(menuButton);
         case Constants.MenuLayout.INSIDER:
-            return new MenuLayout.insider.createMenu(button);
+            return new MenuLayout.insider.createMenu(menuButton);
         case Constants.MenuLayout.RUNNER:
-            return new MenuLayout.runner.createMenu(button);
+            return new MenuLayout.runner.createMenu(menuButton, isStandaloneRunner);
         case Constants.MenuLayout.CHROMEBOOK:
-            return new MenuLayout.chromebook.createMenu(button);
+            return new MenuLayout.chromebook.createMenu(menuButton);
         case Constants.MenuLayout.RAVEN:
-            return new MenuLayout.raven.createMenu(button);
+            return new MenuLayout.raven.createMenu(menuButton);
         case Constants.MenuLayout.TOGNEE:
-            return new MenuLayout.tognee.createMenu(button);
+            return new MenuLayout.tognee.createMenu(menuButton);
         case Constants.MenuLayout.PLASMA:
-            return new MenuLayout.plasma.createMenu(button);
+            return new MenuLayout.plasma.createMenu(menuButton);
         case Constants.MenuLayout.WINDOWS:
-            return new MenuLayout.windows.createMenu(button);
+            return new MenuLayout.windows.createMenu(menuButton);
         case Constants.MenuLayout.LAUNCHER:
-            return new MenuLayout.launcher.createMenu(button);
+            return new MenuLayout.launcher.createMenu(menuButton);
         case Constants.MenuLayout.ELEVEN:
-            return new MenuLayout.eleven.createMenu(button);
+            return new MenuLayout.eleven.createMenu(menuButton);
         case Constants.MenuLayout.AZ:
-            return new MenuLayout.az.createMenu(button);
+            return new MenuLayout.az.createMenu(menuButton);
         default:
-            return new MenuLayout.arcmenu.createMenu(button);    
+            return new MenuLayout.arcmenu.createMenu(menuButton);    
     }
 }
 

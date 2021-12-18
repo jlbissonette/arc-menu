@@ -32,8 +32,11 @@
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>
         <value value='1' nick='Super_L'/>
-        <value value='2' nick='Super_R'/>
-        <value value='3' nick='Custom'/>
+        <value value='2' nick='Custom'/>
+    </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.runner-menu-hotkey'>
+        <value value='0' nick='Super_L'/>
+        <value value='1' nick='Custom'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-position'>
         <value value="0" nick="Left"/>
@@ -485,23 +488,28 @@
     </key>
     <key name="menu-hotkey" enum="org.gnome.shell.extensions.arcmenu.menu-hotkey">
       <default>'Undefined'</default>
-      <summary>The menu hotkey to open the ArcMenu.</summary>
-      <description>The menu hotkey to open the ArcMenu.</description>
+      <summary>Set a hotkey to open ArcMenu</summary>
+      <description>Set a hotkey to open ArcMenu.</description>
     </key>
-    <key type="b" name="enable-menu-keybinding">
+    <key name="toggle-arcmenu" type="as">
+      <default>["&lt;Super&gt;x"]</default>
+      <summary>Custom keybind to open ArcMenu</summary>
+      <description>Custom keybind to open ArcMenu.</description>
+    </key>
+    <key type="b" name="enable-standlone-runner-menu">
       <default>false</default>
-      <summary>Enable the keybinding for the ArcMenu.</summary>
-      <description>Enable the keybinding for the ArcMenu.</description>
+      <summary>Enable a standalone Runner menu.</summary>
+      <description>Enable a standalone Runner menu.</description>
     </key>
-    <key type="s" name="menu-keybinding-text">
-      <default>'&lt;Super&gt;x'</default>
-      <summary>Keybinding to open the ArcMenu.</summary>
-      <description>Keybinding to open the ArcMenu..</description>
+    <key name="runner-menu-hotkey" enum="org.gnome.shell.extensions.arcmenu.runner-menu-hotkey">
+      <default>'Custom'</default>
+      <summary>Set a hotkey to open the standalone Runner menu.</summary>
+      <description>Set a hotkey to open the standalone Runner menu.</description>
     </key>
-    <key type="as" name="menu-keybinding">
-      <default><![CDATA[['<Super>x']]]></default>
-      <summary>Keybinding to open the ArcMenu.</summary>
-      <description>Keybinding to open the ArcMenu.</description>
+    <key name="toggle-runner-menu" type="as">
+      <default>["&lt;Alt&gt;1"]</default>
+      <summary>Keybinding to open the standalone runner menu</summary>
+      <description>Keybinding to open the standalone runner menu.</description>
     </key>
     <key name="position-in-panel" enum="org.gnome.shell.extensions.arcmenu.menu-position">
       <default>'Left'</default>

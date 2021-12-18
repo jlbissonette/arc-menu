@@ -64,7 +64,8 @@ var PrefsVisiblePage = {
     BUTTON_APPEARANCE: 2,
     LAYOUT_TWEAKS: 3,
     ABOUT: 4,
-    CUSTOMIZE_MENU: 5
+    CUSTOMIZE_MENU: 5,
+    RUNNER_TWEAKS: 6
 }
 
 var DefaultMenuViewTognee = {
@@ -130,10 +131,6 @@ var IconSize = {
     EXTRA_LARGE: 5,
 }
 
-//var SMALL_ICON_SIZE = 16;
-//var MEDIUM_ICON_SIZE = 25;
-//var LARGE_ICON_SIZE = 36;
-
 var EXTRA_SMALL_ICON_SIZE = 16;
 var SMALL_ICON_SIZE = 20;
 var MEDIUM_ICON_SIZE = 25;
@@ -148,12 +145,16 @@ var EMPTY_STRING = '';
 var HotKey = {
     UNDEFINED: 0,
     SUPER_L: 1,
-    SUPER_R: 2,
-    CUSTOM: 3,
+    CUSTOM: 2,
     // Inverse mapping
     0: EMPTY_STRING,
     1: SUPER_L,
-    2: SUPER_R,
+};
+
+var RunnerHotKey = {
+    SUPER_L: 0,
+    CUSTOM: 1,
+    0: SUPER_L,
 };
 
 var HotCornerAction = {
