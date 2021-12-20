@@ -265,10 +265,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.updateLocation();
     }
 
-    updateSearch(){
-        this.searchResults._reloadRemoteProviders();
-    }
-
     loadCategories() {
         this.categoryDirectories = null;
         this.categoryDirectories = new Map(); 

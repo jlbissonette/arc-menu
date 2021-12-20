@@ -126,6 +126,11 @@
       <summary>show ArcMenu on primary monitor when using hotkey</summary>
       <description>show ArcMenu on primary monitor when using hotkey.</description>
     </key>
+    <key type="b" name="runner-hotkey-open-primary-monitor">
+      <default>false</default>
+      <summary>show standalone Runner menu on primary monitor when using hotkey</summary>
+      <description>show standalone Runner menu monitor when using hotkey.</description>
+    </key>
     <key type="i" name="settings-width">
       <default>875</default>
       <summary>ArcMenu Settings Width</summary>

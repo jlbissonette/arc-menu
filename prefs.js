@@ -884,14 +884,16 @@ var GeneralPage = GObject.registerClass(
 
         _createHotkeyFrame(isMenuHotkey){
             let hotkeyFrame = new PW.FrameBox();
-            let enableRunnerMenuSwitch, hotkeyEnumSetting, customHotkeySetting;
+            let enableRunnerMenuSwitch, hotkeyEnumSetting, customHotkeySetting, primaryMonitorSetting;
             if(isMenuHotkey){
                 hotkeyEnumSetting = 'menu-hotkey';
                 customHotkeySetting = 'toggle-arcmenu';
+                primaryMonitorSetting = 'hotkey-open-primary-monitor';
             }
             else{
                 hotkeyEnumSetting = 'runner-menu-hotkey';
                 customHotkeySetting = 'toggle-runner-menu';
+                primaryMonitorSetting = 'runner-hotkey-open-primary-monitor';
                 let enableRunnerMenuRow = new PW.FrameBoxRow();
                 let enableRunnerMenuLabel = new Gtk.Label({
                     label: _("Enable a standalone Runner menu"),
@@ -962,9 +964,9 @@ var GeneralPage = GObject.registerClass(
                 halign: Gtk.Align.END,
                 valign: Gtk.Align.CENTER,
             });
-            primaryMonitorSwitch.set_active(this._settings.get_boolean('hotkey-open-primary-monitor'));
+            primaryMonitorSwitch.set_active(this._settings.get_boolean(primaryMonitorSetting));
             primaryMonitorSwitch.connect('notify::active', (widget) => {
-                this._settings.set_boolean('hotkey-open-primary-monitor', widget.get_active());
+                this._settings.set_boolean(primaryMonitorSetting, widget.get_active());
             });
             primaryMonitorRow.add(primaryMonitorLabel);
             primaryMonitorRow.add(primaryMonitorSwitch);

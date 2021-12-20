@@ -71,6 +71,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             vertical: false,
+            style: "margin: 5px 0px 0px 0px;"
         });
 
         this.searchBox.style = "margin: 0px 0px 0px 16px;";
@@ -143,7 +144,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
      */
     _getMonitorIndexForPlacement() {
         if (this.layoutProperties.StandaloneRunner) {
-            return this._settings.get_boolean('hotkey-open-primary-monitor') ? Main.layoutManager.primaryMonitor.index : Main.layoutManager.currentMonitor.index;
+            return this._settings.get_boolean('runner-hotkey-open-primary-monitor') ? Main.layoutManager.primaryMonitor.index : Main.layoutManager.currentMonitor.index;
         }
         else if (this._settings.get_enum('menu-button-appearance') === Constants.MenuButtonAppearance.NONE)
             return this._settings.get_boolean('hotkey-open-primary-monitor') ? Main.layoutManager.primaryMonitor.index : Main.layoutManager.currentMonitor.index;
@@ -183,17 +184,13 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         else{
             this.searchBox.style = "margin: 0px 0px 0px 16px;";
         }
-        this.topBox.style = `width: ${this._runnerWidth}px;`;
+        this.topBox.style = `width: ${this._runnerWidth}px; margin: 5px 0px 0px 0px;`;
         this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
     }
 
     updateStyle(){
         super.updateStyle();
         this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px;";
-    }
-
-    updateSearch(){
-        this.searchResults._reloadRemoteProviders();
     }
 
     loadCategories(){
