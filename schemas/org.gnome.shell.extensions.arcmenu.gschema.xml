@@ -596,6 +596,12 @@
       <summary>Menu Button Padding.</summary>
       <description>Menu Button Padding.</description>
     </key>
+    <key type="i" name="menu-button-position-offset">
+      <default>0</default>
+      <summary>Menu button position offset for main panel</summary>
+      <description>Menu button position offset for main panel</description>
+    </key>
+    
     <key type="b" name="menu-button-override-border-radius">
       <default>false</default>
       <summary>Override border radius styling of the menu button</summary>

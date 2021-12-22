@@ -91,6 +91,7 @@ var MenuSettingsController = class {
             this._settings.connect('changed::runner-menu-hotkey', this._updateHotKeyBinder.bind(this)),
             this._settings.connect('changed::enable-standlone-runner-menu', this._updateHotKeyBinder.bind(this)),
             this._settings.connect('changed::position-in-panel', this._setButtonPosition.bind(this)),
+            this._settings.connect('changed::menu-button-position-offset', this._setButtonPosition.bind(this)),
             this._settings.connect('changed::menu-position-alignment', this._setMenuPositionAlignment.bind(this)),
             this._settings.connect('changed::menu-button-appearance', this._setButtonAppearance.bind(this)),
             this._settings.connect('changed::custom-menu-button-text', this._setButtonText.bind(this)),
@@ -521,14 +522,22 @@ var MenuSettingsController = class {
 
     // Get the current position of the menu button and its associated position order
     _getMenuPositionTuple() {
+        let offset = this._settings.get_int('menu-button-position-offset');
         switch (this._settings.get_enum('position-in-panel')) {
             case Constants.MenuPosition.CENTER:
-                return ['center', 0];
+                return ['center', offset];
             case Constants.MenuPosition.RIGHT:
-                return ['right', -1];
+                // if number of childrens in rightBox (without arcmenu)
+                let n_children = Main.panel._rightBox.get_n_children();
+                n_children -= Main.panel.statusArea.ArcMenu !== undefined;
+                // position where icon should go,
+                // offset = 0, icon should be last
+                // offset = 1, icon should be second last
+                const order = Math.clamp(n_children - offset, 0, n_children);
+                return ['right', order];
             case Constants.MenuPosition.LEFT: /* falls through */
             default:
-                return ['left', 0];
+                return ['left', offset];
         }
     }
 
@@ -539,7 +548,9 @@ var MenuSettingsController = class {
         let container = Main.panel.statusArea.activities.container;
         let parent = container.get_parent();
         let index = 0;
-        if(this._settings.get_enum('position-in-panel') === Constants.MenuPosition.LEFT && this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL)
+        if(this._settings.get_enum('position-in-panel') === Constants.MenuPosition.LEFT && 
+            this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL && 
+            this._settings.get_int('menu-button-position-offset') == 0)
             index = 1;
 
         if(showActivities && !isActivitiesButtonPresent){
