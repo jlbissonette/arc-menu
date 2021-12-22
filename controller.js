@@ -328,7 +328,7 @@ var MenuSettingsController = class {
                     this._menuHotKeybinder.enableHotKey(() => this.toggleStandaloneRunner());
                 }
             }
-            else if(!this.runnerMenu){
+            else if(this.runnerMenu){
                 this.runnerMenu.destroy();
                 this.runnerMenu = null;
             }
@@ -359,7 +359,7 @@ var MenuSettingsController = class {
     }
 
     _onHotkeyRelease(callback) {
-        let activeMenu = this._settingsControllers[this.currentMonitorIndex]._menuButton.getActiveMenu() || (this.runnerMenu.arcMenu.isOpen ? this.runnerMenu.arcMenu : null);
+        let activeMenu = this._settingsControllers[this.currentMonitorIndex]._menuButton.getActiveMenu() || ((this.runnerMenu && this.runnerMenu.arcMenu.isOpen) ? this.runnerMenu.arcMenu : null);
         let focusPanel;
 
         if(this.arcMenuPlacement == Constants.ArcMenuPlacement.PANEL)
