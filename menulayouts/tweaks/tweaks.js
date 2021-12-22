@@ -88,7 +88,9 @@ var TweaksPage = GObject.registerClass({
         this._createLayout();
     }
 
-    setActiveLayout(menuLayout){
+    setActiveLayout(menuLayout, layoutName){
+        if(layoutName)
+            this.layoutNameLabel.label = "<b>" + _(layoutName) + "</b>";
         let children = [...this.mainBox];
         for(let child of children){
             this.mainBox.remove(child);

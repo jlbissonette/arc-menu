@@ -2516,6 +2516,8 @@ var MenuLayoutPage = GObject.registerClass(
     }
 
     displayLayoutTweaksPage(){
+        let layoutName = this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout'));
+        this.layoutsTweaksPage.setActiveLayout(this._settings.get_enum('menu-layout'), layoutName);
         this.stack.set_visible_child_name("LayoutsTweaks");
     }
 
