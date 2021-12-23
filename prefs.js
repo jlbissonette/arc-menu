@@ -1700,7 +1700,7 @@ var ButtonAppearancePage = GObject.registerClass(
                 else if(widget.get_active() === Constants.MenuButtonAppearance.ICON){
                     menuButtonAppearanceFrame.add(menuButtonArrowIconBoxRow);
                     menuButtonAppearanceFrame.add(menuButtonPaddingRow);
-                    if (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL)
+                    if (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL || this.arcMenuPlacement === Constants.ArcMenuPlacement.DTP)
                         menuButtonAppearanceFrame.add(menuButtonOffsetRow);
                     menuButtonAppearanceFrame.show();
                 }
@@ -1708,7 +1708,7 @@ var ButtonAppearancePage = GObject.registerClass(
                         widget.get_active() === Constants.MenuButtonAppearance.TEXT){
                     menuButtonAppearanceFrame.add(menuButtonArrowIconBoxRow);
                     menuButtonAppearanceFrame.add(menuButtonPaddingRow);
-                    if (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL)
+                    if (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL || this.arcMenuPlacement === Constants.ArcMenuPlacement.DTP)
                         menuButtonAppearanceFrame.add(menuButtonOffsetRow);
                     menuButtonAppearanceFrame.add(menuButtonCustomTextBoxRow);
                     menuButtonAppearanceFrame.show();
@@ -1791,7 +1791,7 @@ var ButtonAppearancePage = GObject.registerClass(
                 orientation: Gtk.Orientation.HORIZONTAL,
                 adjustment: new Gtk.Adjustment({
                     lower: 0,
-                    upper: 25, // arbitrary value
+                    upper: 10, // arbitrary value
                     step_increment: 1,
                     page_increment: 1,
                     page_size: 0
@@ -1802,10 +1802,9 @@ var ButtonAppearancePage = GObject.registerClass(
                 draw_value: true,
                 value_pos: Gtk.PositionType.RIGHT
             });
-            offsetScale.set_format_value_func( (scale, value) => {
-                return "\t" + value + "px";
-            });
             offsetScale.add_mark(0, Gtk.PositionType.TOP, _("Default")); // offset 0 is default
+            offsetScale.add_mark(1, Gtk.PositionType.TOP, null);
+            offsetScale.add_mark(2, Gtk.PositionType.TOP, null);
             offsetScale.set_value(menuButtonOffset);
             offsetScale.connect('value-changed', () => {
                 this.resetButton.set_sensitive(true);
@@ -1813,7 +1812,8 @@ var ButtonAppearancePage = GObject.registerClass(
             });
             menuButtonOffsetRow.add(menuButtonOffsetLabel);
             menuButtonOffsetRow.add(offsetScale);
-            if(menuButtonAppearanceCombo.get_active() !== Constants.MenuButtonAppearance.NONE && this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL)
+            if(menuButtonAppearanceCombo.get_active() !== Constants.MenuButtonAppearance.NONE && 
+                (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL || this.arcMenuPlacement === Constants.ArcMenuPlacement.DTP))
                 menuButtonAppearanceFrame.add(menuButtonOffsetRow);
             ////////////////////
 

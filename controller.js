@@ -527,7 +527,7 @@ var MenuSettingsController = class {
             case Constants.MenuPosition.CENTER:
                 return ['center', offset];
             case Constants.MenuPosition.RIGHT:
-                // if number of childrens in rightBox (without arcmenu)
+                // get number of childrens in rightBox (without arcmenu)
                 let n_children = Main.panel._rightBox.get_n_children();
                 n_children -= Main.panel.statusArea.ArcMenu !== undefined;
                 // position where icon should go,
