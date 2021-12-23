@@ -98,7 +98,7 @@ var MenuHotKeybinder = class {
                 });
             }
             else
-                global.log("ArcMenu ERROR - Failed to set Super_L hotkey");
+                global.log("ArcMenu Error - Failed to set Super_L hotkey");
         }   
     }
 

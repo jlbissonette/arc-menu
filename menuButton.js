@@ -89,10 +89,11 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.y_expand = false;
         }
         else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
+            this._delegate = this;
             this.menuButtonWidget = new MW.DashMenuButtonWidget(this, this._settings);
             this.dash = this._panel._allDocks[dashIndex];
             this.style_class = 'dash-item-container';
-            this.child = this.menuButtonWidget.icon;
+            this.child = this.menuButtonWidget.actor;
             this.icon = this.menuButtonWidget.icon;
             this.label = this.menuButtonWidget.label;
             this.container.showLabel = () => this.menuButtonWidget.showLabel();
@@ -441,7 +442,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             }    
             else if(event.get_button() == 3){                   
                 this.arcMenuContextMenu.toggle();	                	
-            }    
+            }
         }
         else if(event.type() === Clutter.EventType.TOUCH_BEGIN){         
             this.toggleMenu();       
@@ -685,8 +686,12 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 }
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
-                this.dash._autohideIsEnabled = false;
-                this.dash._intellihideIsEnabled = false;
+                this.menuButtonWidget.hideLabel();
+                if(this.dash._autohideIsEnabled || this.dash._intellihideIsEnabled){
+                    this.dtdNeedsHiding = true;
+                    this.dash._autohideIsEnabled = false;
+                    this.dash._intellihideIsEnabled = false;
+                }
                 this.menuButtonWidget.actor.add_style_pseudo_class('selected');
                 this.menuButtonWidget._icon.add_style_pseudo_class('active');
             }
@@ -727,13 +732,16 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             }
             else if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
                 if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){
-                    let dtdSettings = Utils.getSettings('org.gnome.shell.extensions.dash-to-dock', DASH_TO_DOCK_UUID);
-                    if(dtdSettings){
-                        this.dash._autohideIsEnabled = dtdSettings.get_boolean('autohide');
-                        this.dash._intellihideIsEnabled = dtdSettings.get_boolean('intellihide');
+                    if(this.dtdNeedsHiding){
+                        let dtdSettings = Utils.getSettings('org.gnome.shell.extensions.dash-to-dock', DASH_TO_DOCK_UUID);
+                        if(dtdSettings){
+                            this.dash._autohideIsEnabled = dtdSettings.get_boolean('autohide');
+                            this.dash._intellihideIsEnabled = dtdSettings.get_boolean('intellihide');
+                        }
+                        this.dash._box.sync_hover();
+                        this.dash._updateDashVisibility();
+                        this.dtdNeedsHiding = false;
                     }
-                    this.dash._box.sync_hover();
-                    this.dash._updateDashVisibility();
 
                     this.menuButtonWidget.actor.remove_style_pseudo_class('selected');
                     if(!this.menuButtonWidget.actor.hover)

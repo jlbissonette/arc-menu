@@ -209,7 +209,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             browserName += ".desktop";
         } 
         catch(error){
-            log("ArcMenu Error: Can not find default web browser, removing placeholder pinned app.")
+            global.log("ArcMenu Error - Failed to find default web browser. Removing placeholder pinned app.")
         }
         this._app = appSys.lookup_app(browserName);
         if(this._app){

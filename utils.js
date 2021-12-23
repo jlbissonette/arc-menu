@@ -304,7 +304,7 @@ function getMenuButtonIcon(settings, path){
             return path;
     }
 
-    global.log("ArcMenu - Menu Button Icon Error! Set to System Default.");
+    global.log("ArcMenu Error - Failed to set menu button icon. Set to System Default.");
     return 'start-here-symbolic';
 }
 
@@ -630,9 +630,9 @@ function createStylesheet(settings){
             stylesheet.replace_contents(stylesheetCSS, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
         }
         catch(e){
-            global.log("ArcMenu - Error updating stylesheet! " + e.message);
+            global.log("ArcMenu Error - Failed to update stylesheet. " + e.message);
         }
     }
     else
-        global.log("ArcMenu - Error getting stylesheet!");
+        global.log("ArcMenu Error - Failed to find stylesheet.");
 }

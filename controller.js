@@ -222,13 +222,9 @@ var MenuSettingsController = class {
     }
 
     _toggleMenuOnMonitor(monitor){
+        this.currentMonitorIndex = monitor.index;
         for (let i = 0; i < this._settingsControllers.length; i++) {
-            let actor = this._settingsControllers[i]._menuButton.menuButtonWidget.actor;
-            let monitorForActor = Main.layoutManager.findMonitorForActor(actor);
-            if(monitor == monitorForActor){
-                this.currentMonitorIndex = i;
-            }
-            else{
+            if(this.currentMonitorIndex !== i){
                 if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
                     this._settingsControllers[i]._menuButton.toggleMenu();
                 if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
@@ -521,11 +517,11 @@ var MenuSettingsController = class {
     }
 
     // Get the current position of the menu button and its associated position order
-    _getMenuPositionTuple() {
+    _getMenuPosition() {
         let offset = this._settings.get_int('menu-button-position-offset');
         switch (this._settings.get_enum('position-in-panel')) {
             case Constants.MenuPosition.CENTER:
-                return ['center', offset];
+                return [offset, 'center'];
             case Constants.MenuPosition.RIGHT:
                 // get number of childrens in rightBox (without arcmenu)
                 let n_children = Main.panel._rightBox.get_n_children();
@@ -534,10 +530,10 @@ var MenuSettingsController = class {
                 // offset = 0, icon should be last
                 // offset = 1, icon should be second last
                 const order = Math.clamp(n_children - offset, 0, n_children);
-                return ['right', order];
-            case Constants.MenuPosition.LEFT: /* falls through */
+                return [order, 'right'];
+            case Constants.MenuPosition.LEFT:
             default:
-                return ['left', offset];
+                return [offset, 'left'];
         }
     }
 
@@ -563,7 +559,6 @@ var MenuSettingsController = class {
 
     // Check if the activities button is present on the main panel
     _isActivitiesButtonPresent() {
-        // Thanks to lestcape @github.com for the refinement of this method.
         return (this._activitiesButton &&
             this._activitiesButton.container &&
             Main.panel._leftBox.contains(this._activitiesButton.container));
@@ -581,8 +576,8 @@ var MenuSettingsController = class {
 
     // Add the menu button to the main panel
     _addMenuButtonToMainPanel() {
-        let [menuPosition, order] = this._getMenuPositionTuple();
-        this.panel.addToStatusArea('ArcMenu', this._menuButton, order, menuPosition);
+        let [position, box] = this._getMenuPosition();
+        this.panel.addToStatusArea('ArcMenu', this._menuButton, position, box);
     }
 
     // Remove the menu button from the main panel
@@ -606,49 +601,69 @@ var MenuSettingsController = class {
     }
 
     reEstablishDash(){
-        let container = this.panel._allDocks[this.dashIndex].dash._container;
-        this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled = true;
-        this.oldShowAppsIcon = this.panel._allDocks[this.dashIndex].dash._showAppsIcon;
-        container.remove_actor(this.oldShowAppsIcon);
+        const DashToDock = this.panel._allDocks[this.dashIndex].dash;
+        if(!DashToDock){
+            global.log("ArcMenu Error - Failed to place ArcMenu in Dash-to-Dock");
+            return;
+        }
+            
+        const DashContainer = DashToDock._dashContainer;
+
+        DashToDock.arcMenuEnabled = true;
+        this.oldShowAppsIcon = DashToDock._showAppsIcon;
+
+        DashContainer.remove_actor(DashToDock._showAppsIcon);
+        DashToDock._showAppsIcon = this.menuButtonAdjustedActor;
+        DashContainer.add_actor(DashToDock._showAppsIcon);
 
         this._setButtonIcon();
-        let iconSize = this.panel._allDocks[this.dashIndex].dash.iconSize;
-        this._menuButton.menuButtonWidget.icon.setIconSize(iconSize);
-
-        container.add_actor(this.menuButtonAdjustedActor);
-        this.panel._allDocks[this.dashIndex].dash._showAppsIcon = this.menuButtonAdjustedActor;
-
+        const IconSize = DashToDock.iconSize;
+        this._menuButton.menuButtonWidget.icon.setIconSize(IconSize);
+      
+        DashToDock.updateShowAppsButton();
+        
         this.hoverID = this.menuButtonAdjustedActor.child.connect('notify::hover', () => {
-            this.panel._allDocks[this.dashIndex].dash._syncLabel(this.menuButtonAdjustedActor, null);
+            DashToDock._syncLabel(this.menuButtonAdjustedActor, null);
         });
 
         this.hidingID = Main.overview.connect('hiding', () => {
-            this.panel._allDocks[this.dashIndex].dash._labelShowing = false;
+            DashToDock._labelShowing = false;
             this.menuButtonAdjustedActor.hideLabel();
         });
 
-        this.panel._allDocks[this.dashIndex].dash._queueRedisplay();
-        this.oldDashDestroy = this.panel._allDocks[this.dashIndex].dash.destroy;
-        this.panel._allDocks[this.dashIndex].dash.destroy = ()=> {
-            this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled = false;
-            if(this.hoverID){
-                this.menuButtonAdjustedActor.child.disconnect(this.hoverID);
-                this.hoverID = null;
-            }
-            if(this.hidingID){
-                Main.overview.disconnect(this.hidingID);
-                this.hidingID = null;
-            }
-            
-            let container = this.panel._allDocks[this.dashIndex].dash._container;
-            if(container)
-                container.remove_actor(this.menuButtonAdjustedActor);
-            
-            this.panel._allDocks[this.dashIndex].dash._signalsHandler.destroy();
-        };
+        if(this.isPrimary){
+            this.oldDashOnDestroy = this.panel._deleteDocks;
+            this.panel._deleteDocks = () => {
+                if(this.hoverID){
+                    this.menuButtonAdjustedActor.child.disconnect(this.hoverID);
+                    this.hoverID = null;
+                }
+    
+                if(this.hidingID){
+                    Main.overview.disconnect(this.hidingID);
+                    this.hidingID = null;
+                }
+
+                const AllDocks = this.panel._allDocks;
+
+                if(!AllDocks.length)
+                    return;
+                
+                AllDocks.forEach(dock => {
+                    let dash = dock.dash;
+                    if(dash._dashContainer.contains(dash._showAppsIcon))
+                        dash._dashContainer.remove_actor(dash._showAppsIcon);
+                    dash._showAppsIcon = this.oldShowAppsIcon;
+                    dash._dashContainer.add_actor(dash._showAppsIcon);
+                    dash.arcMenuEnabled = false;
+                });
+
+                this.oldDashOnDestroy.call(this.panel, ...arguments);
+                this.panel._deleteDocks = this.oldDashOnDestroy;
+            };
+        }
     }
 
-    // Disable the menu button
     _disableButton() {
         this._removeMenuButtonFromMainPanel();
         this._addActivitiesButtonToMainPanel();
@@ -659,7 +674,6 @@ var MenuSettingsController = class {
         return this.panel.statusArea['ArcMenu'] !== null;
     }
 
-    // Destroy this object
     destroy() {
         if (this.updateThemeID) {
             GLib.source_remove(this.updateThemeID);
@@ -670,31 +684,37 @@ var MenuSettingsController = class {
         }
         this.settingsChangeIds.forEach(id => this._settings.disconnect(id));
         
-        if(this.arcMenuPlacement == Constants.ArcMenuPlacement.DASH){
-            if(this.panel._allDocks[this.dashIndex] && this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled){
-                if(this.hoverID){
-                    this.menuButtonAdjustedActor.child.disconnect(this.hoverID);
-                    this.hoverID = null;
-                }
-                if(this.hidingID){
-                    Main.overview.disconnect(this.hidingID);
-                    this.hidingID = null;
-                }
-                let parent = this.menuButtonAdjustedActor.get_parent();
-                if(parent)
-                    parent.remove_actor(this.menuButtonAdjustedActor);
-                if(this.panel._allDocks[this.dashIndex]){
-                    this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled = false;
-                    let container = this.panel._allDocks[this.dashIndex].dash._container;
-                    this.panel._allDocks[this.dashIndex].dash._showAppsIcon = this.oldShowAppsIcon;
-                    container.add_actor(this.panel._allDocks[this.dashIndex].dash._showAppsIcon);
-                    this.panel._allDocks[this.dashIndex].dash.destroy = this.oldDashDestroy;
-                    this.panel._allDocks[this.dashIndex].dash._queueRedisplay();
-                }
+        if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
+            if(this.panel === null || this.panel._allDocks.length === 0){
+                this._menuButton.destroy();
             }
-
-            this._addActivitiesButtonToMainPanel();
-            this._menuButton.destroy();
+            else{
+                const DashToDock = this.panel._allDocks[this.dashIndex].dash;
+                const DashContainer = DashToDock._dashContainer;
+                if(this.panel._allDocks[this.dashIndex] && DashToDock && DashToDock.arcMenuEnabled){
+                    if(this.hoverID){
+                        this.menuButtonAdjustedActor.child.disconnect(this.hoverID);
+                        this.hoverID = null;
+                    }
+    
+                    if(this.hidingID){
+                        Main.overview.disconnect(this.hidingID);
+                        this.hidingID = null;
+                    }
+    
+                    if(this.panel._allDocks[this.dashIndex]){
+                        DashToDock.arcMenuEnabled = false;
+                        if(DashContainer.contains(DashToDock._showAppsIcon))
+                            DashContainer.remove_actor(DashToDock._showAppsIcon);
+                        DashToDock._showAppsIcon = this.oldShowAppsIcon;
+                        DashContainer.add_actor(DashToDock._showAppsIcon);
+                        this.panel._deleteDocks = this.oldDashOnDestroy;
+                        DashToDock.updateShowAppsButton();
+                    }
+                }
+                this._addActivitiesButtonToMainPanel();
+                this._menuButton.destroy();
+            }
         }
         else if(this.panel == undefined)
             this._menuButton.destroy();

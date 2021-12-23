@@ -601,7 +601,6 @@
       <summary>Menu button position offset for main panel</summary>
       <description>Menu button position offset for main panel</description>
     </key>
-    
     <key type="b" name="menu-button-override-border-radius">
       <default>false</default>
       <summary>Override border radius styling of the menu button</summary>

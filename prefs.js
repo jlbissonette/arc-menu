@@ -1182,13 +1182,13 @@ var GeneralPage = GObject.registerClass(
                     if(menuPlacementFrame.get_index(2) === menuPositionAdjustmentRow)
                         menuPlacementFrame.remove(menuPositionAdjustmentRow);
                 }
-                else if(widget.get_active() === Constants.MenuPosition.LEFT){
+                else if(widget.get_active() === Constants.MenuPosition.CENTER){
                     if(menuPlacementFrame.get_index(2) != menuPositionAdjustmentRow){
                         menuPlacementFrame.insert(menuPositionAdjustmentRow, 2);
                         menuPlacementFrame.show();
                     }
                 }
-                else if(widget.get_active() === Constants.MenuPosition.LEFT){
+                else if(widget.get_active() === Constants.MenuPosition.RIGHT){
                     if(menuPlacementFrame.get_index(2) === menuPositionAdjustmentRow)
                         menuPlacementFrame.remove(menuPositionAdjustmentRow);
                 }
@@ -2053,6 +2053,7 @@ var ButtonAppearancePage = GObject.registerClass(
                 menuButtonActiveBackgroundcolorSwitch.set_active(false);
                 roundedCornersSwitch.set_active(false);
                 menuButtonBorderRadiusScale.set_value(0);
+                offsetScale.set_value(0);
                 this._settings.reset('menu-button-icon');
                 this._settings.reset('arc-menu-icon');
                 this._settings.reset('distro-icon');
@@ -2069,6 +2070,7 @@ var ButtonAppearancePage = GObject.registerClass(
                 this._settings.reset('override-menu-button-color');
                 this._settings.reset('menu-button-override-border-radius');
                 this._settings.reset('menu-button-border-radius');
+                this._settings.reset('menu-button-position-offset');
                 this._settings.set_boolean('reload-theme', true);
 
                 this.resetButton.set_sensitive(false);
@@ -2147,7 +2149,8 @@ var ButtonAppearancePage = GObject.registerClass(
                 this._settings.get_boolean('override-menu-button-hover-background-color') ||
                 this._settings.get_boolean('override-menu-button-active-background-color') ||
                 this._settings.get_boolean('menu-button-override-border-radius') ||
-                this._settings.get_int('menu-button-border-radius') != 0)
+                this._settings.get_int('menu-button-border-radius') != 0 ||
+                this._settings.get_int('menu-button-position-offset') != 0 )
                     return true;
             else
                 return false;

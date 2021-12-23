@@ -21,7 +21,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Import Libraries
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const {Atk, Clutter, Gio, GLib, GMenu, GObject, Gtk, Shell, St} = imports.gi;
@@ -1866,28 +1865,35 @@ var UserMenuIcon = class Arc_Menu_UserMenuIcon{
             this.label.set_text(this._user.get_real_name());
             if(this.tooltip)
                 this.tooltip.titleLabel.text = this._user.get_real_name();
-            let iconFileName = this._user.get_icon_file();
-            if (iconFileName && !GLib.file_test(iconFileName ,GLib.FileTest.EXISTS))
-                iconFileName = null;
-            if (iconFileName) {
+
+            let iconFile = this._user.get_icon_file();
+            if (iconFile && !GLib.file_test(iconFile ,GLib.FileTest.EXISTS))
+                iconFile = null;
+
+            if (iconFile) {
                 this.actor.child = null;
                 this.actor.add_style_class_name('user-avatar');
-                this.actor.style = 'background-image: url("%s");'.format(iconFileName) + "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
-            } else {
-                this.actor.child = new St.Icon({ icon_name: 'avatar-default-symbolic',
-                                                    icon_size: this.iconSize});
+                this.actor.style = 'background-image: url("%s");'.format(iconFile) + "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
+            } 
+            else {
+                this.actor.style = "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
+                this.actor.child = new St.Icon({ 
+                    icon_name: 'avatar-default-symbolic',
+                    icon_size: this.iconSize,
+                    style: "padding: 5px; width: " + this.iconSize + "px; height: " + this.iconSize + "px;"
+                });
             }
         }
     }
 
     _onDestroy() {
-        if (this._userLoadedId != 0) {
+        if (this._userLoadedId) {
             this._user.disconnect(this._userLoadedId);
-            this._userLoadedId = 0;
+            this._userLoadedId = null;
         }
-        if (this._userChangedId != 0) {
+        if (this._userChangedId) {
             this._user.disconnect(this._userChangedId);
-            this._userChangedId = 0;
+            this._userChangedId = null;
         }
     }
 };
@@ -3179,7 +3185,7 @@ var DashMenuButtonWidget = class Arc_Menu_DashMenuButtonWidget{
             reactive: false
         });
         this.actor._delegate = this;
-        this.icon = new imports.ui.iconGrid.BaseIcon(_("Show Applications"),
+        this.icon = new imports.ui.iconGrid.BaseIcon(_("ArcMenu"),
                                             { setSizeManually: true,
                                             showLabel: false,
                                             createIcon: this._createIcon.bind(this) });
@@ -3190,7 +3196,7 @@ var DashMenuButtonWidget = class Arc_Menu_DashMenuButtonWidget{
             track_hover:true,
             reactive: true
         });
-
+        this.icon._delegate = this.actor;
         this._labelText = _("ArcMenu");
         this.label = new St.Label({ style_class: 'dash-label' });
         this.label.hide();
