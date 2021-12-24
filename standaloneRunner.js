@@ -23,21 +23,14 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const {Clutter, GLib, GObject, Shell, St} = imports.gi;
+const {Clutter, GLib, Shell, St} = imports.gi;
 const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
-const MW = Me.imports.menuWidgets;
-const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
-const Util = imports.misc.util;
 const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
-
-var DASH_TO_PANEL_UUID = 'dash-to-panel@jderose9.github.com';
-var DASH_TO_DOCK_UUID = 'dash-to-dock@micxgx.gmail.com';
-var UBUNTU_DOCK_UUID = 'ubuntu-dock@ubuntu.com';
 
 var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     constructor(settings) {
@@ -50,8 +43,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
 
         this.dummyWidget = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_actor(this.dummyWidget);
-
-        
 
         //Create Main Menus - ArcMenu and arcMenu's context menu
         this.arcMenu = new ArcMenu(this.dummyWidget, 0.5, St.Side.TOP, this);
@@ -86,7 +77,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         //Sub Menu Manager - Control all other popup menus
         this.subMenuManager = new PopupMenu.PopupMenuManager(this.dummyWidget);
         this.subMenuManager._changeMenu = (menu) => {};
-
     }
 
     initiate(){
