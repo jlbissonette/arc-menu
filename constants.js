@@ -318,6 +318,8 @@ var DistroIcons = [
     { PATH: '/media/icons/menu_button_icons/distro_icons/mx-logo-symbolic.svg'},
     { PATH: '/media/icons/menu_button_icons/distro_icons/redhat-logo-symbolic.svg'},
     { PATH: '/media/icons/menu_button_icons/distro_icons/voyager-logo-symbolic.svg'},
+    { PATH: '/media/icons/menu_button_icons/distro_icons/zorin-logo-symbolic.svg'},
+    { PATH: '/media/icons/menu_button_icons/distro_icons/endeavour-logo-symbolic.svg'},
 ]
 
 var MenuLayout = {
@@ -411,8 +413,8 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
                                 '\n\n•   <b>Gentoo Authors©</b> - 2001–2020 Gentoo is a trademark of the Gentoo Foundation, Inc.'+
                                 '\n\n•   <b>Voyager© Linux</b> - name and logo'+
                                 '\n\n•   <b>MX Linux©</b> - 2020 - Linux - is the registered trademark of Linus Torvalds in the U.S. and other countries.'+
-                                '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo';
-
+                                '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo' +
+                                '\n\n•   <b>ZORIN OS</b> - The "Z" logomark is a registered trademark of Zorin Technology Group Ltd. Copyright © 2019 - 2021 Zorin Technology Group Ltd';
 
 var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer\t' +
                 '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a> - <b>(Inactive)</b>\nArcMenu Founder - Former Maintainer - Former Digital Art Designer';
