@@ -34,16 +34,21 @@ const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
 var createMenu = class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton, {
+    constructor(menuButton) {
+        super(menuButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
             SupportsCategoryOnHover: true,
-            VerticalMainBox: false
+            VerticalMainBox: false,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){
@@ -63,14 +68,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
         
-        this.actionsScrollBox.style = "width: 62px; margin: 10px 20px; background-color:rgba(186, 196,201, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 5px;";
-        this.actionsBox.style = "margin: 0px; spacing: 10px; padding: 21px 0px;";
+        this.actionsScrollBox.style = "padding: 21px 0px; width: 62px; margin: 0px 10px 10px 20px; background-color:rgba(186, 196,201, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 5px;";
+        this.actionsBox.style = "spacing: 10px;";
         //check if custom ArcMenu is enabled
         if( this._settings.get_boolean('enable-custom-arc-menu'))
             this.actionsBox.add_style_class_name('arc-menu');
 
         this.mainBox.add(this.actionsScrollBox);
-        this.rightMenuBox= new St.BoxLayout({ 
+        this.rightMenuBox = new St.BoxLayout({ 
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
@@ -78,23 +83,20 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.mainBox.add(this.rightMenuBox);
 
-        this.searchBox = new MW.SearchBox(this);
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 10px 20px 10px 0px;";
+            this.searchBox.style = "margin: 0px 20px 10px 8px;";
             this.rightMenuBox.add(this.searchBox.actor);
         }
         else
             this.rightMenuBox.style = "margin-top: 10px;";
         
         //Sub Main Box -- stores left and right box
-        this.subMainBox= new St.BoxLayout({
+        this.subMainBox = new St.BoxLayout({
             vertical: false,
             x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.FILL
+            y_align: Clutter.ActorAlign.FILL,
+            style_class: 'margin-box'
         });
         this.rightMenuBox.add(this.subMainBox);
 
@@ -103,7 +105,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'right-box'
+            style_class: 'right-panel-plus45'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -113,13 +115,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: this.disableFadeEffect ? '' : 'small-vfade',
+            style_class: 'right-panel-plus45 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });   
-
-        let rightPanelWidth = this._settings.get_int('right-panel-width');
-        rightPanelWidth += 45;
-        this.rightBox.style = "width: " + rightPanelWidth + "px;";
-        this.applicationsScrollBox.style = "width: " + rightPanelWidth + "px;";
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.rightBox.add(this.applicationsScrollBox);
@@ -129,19 +126,20 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'left-box'
+            style_class: 'left-panel'
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
-        this.subMainBox.add(this._createVerticalSeparator());
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.subMainBox.add(verticalSeparator);
         this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
             x_expand: true, 
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-scroll-area ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
 
@@ -151,32 +149,28 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesScrollBox.add_actor( this.categoriesBox);  
         this.categoriesScrollBox.clip_to_allocation = true;
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 20px 10px 0px;";
+            this.searchBox.style = "margin: 10px 20px 10px 8px;";
             this.rightMenuBox.add(this.searchBox.actor);
         }
+        this.loadCategories();
         this.loadPinnedApps();
         this.loadExtraPinnedApps();
-        this.loadCategories();
-        this.displayCategories();
+
         this.setDefaultMenuView(); 
     }
 
     _addSeparator(){
-        this.actionsBox.add(this._createHorizontalSeparator(Constants.SeparatorStyle.SHORT));
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        this.actionsBox.add(separator);
     }    
 
     setDefaultMenuView(){
         super.setDefaultMenuView();
+        this.displayCategories();
         this.categoryDirectories.values().next().value.displayAppList();
         this.activeMenuItem = this.categoryDirectories.values().next().value;
-    }
-
-    _reload() {
-        super.reload(); 
-        let rightPanelWidth = this._settings.get_int('right-panel-width');
-        rightPanelWidth += 45;
-        this.rightBox.style = "width: " + rightPanelWidth + "px;";
-        this.applicationsScrollBox.style = "width: " + rightPanelWidth + "px;";
+        if(this.arcMenu.isOpen)
+            this.activeMenuItem.active = true;
     }
 
     loadCategories() {
@@ -189,7 +183,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let categoryEnum = extraCategories[i][0];
             let shouldShow = extraCategories[i][1];
             if(shouldShow){
-                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum);
+                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.LIST);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
             }
         }
@@ -206,10 +200,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let pinnedApps = [];
         //Find the Default Web Browser, if found add to pinned apps list, if not found delete the placeholder.
         //Will only run if placeholder is found. Placeholder only found with default settings set.  
-        let [res, stdout, stderr, status] = GLib.spawn_command_line_sync("xdg-settings get default-web-browser");
-        let webBrowser = String.fromCharCode.apply(null, stdout);
-        let browserName = webBrowser.split(".desktop")[0];
-        browserName+=".desktop";
+        let browserName = '';
+        try{
+            //user may not have xdg-utils package installed which will throw error
+            let [res, stdout, stderr, status] = GLib.spawn_command_line_sync("xdg-settings get default-web-browser");
+            let webBrowser = String.fromCharCode(...stdout);
+            browserName = webBrowser.split(".desktop")[0];
+            browserName += ".desktop";
+        } 
+        catch(error){
+            global.log("ArcMenu Error - Failed to find default web browser. Removing placeholder pinned app.")
+        }
         this._app = appSys.lookup_app(browserName);
         if(this._app){
             let appIcon = this._app.create_icon_texture(25);
@@ -219,6 +220,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             else if(appIcon.gicon)
                 iconName = appIcon.gicon.to_string();
             pinnedApps.push(this._app.get_name(), iconName, this._app.get_id());
+        }
+        else{
+            pinnedApps.push(_("Home"), "ArcMenu_Home", "ArcMenu_Home");
         }
         pinnedApps.push(_("Terminal"), "utilities-terminal", "org.gnome.Terminal.desktop");
         pinnedApps.push(_("Settings"), "emblem-system-symbolic", "gnome-control-center.desktop");

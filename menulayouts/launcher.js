@@ -38,17 +38,22 @@ const MORE_PROVIDERS_POP_UP = -1;
 const MAX_VISIBLE_PROVIDERS = 4;
 
 var createMenu = class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton, {
+    constructor(menuButton) {
+        super(menuButton, {
             Search: true,
-            SearchType: Constants.AppDisplayType.LIST,
-            AppType: Constants.AppDisplayType.GRID,
+            SearchDisplayType: Constants.DisplayType.LIST,
+            DisplayType: Constants.DisplayType.GRID,
             GridColumns: 6,
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
             IconGridStyle: 'LargeIconGrid',
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.LARGE_ICON_SIZE,
         });
     }
     createLayout(){     
@@ -70,19 +75,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            vertical: false
+            vertical: false,
+            style_class: 'margin-box'
         });
         this.mainBox.add(this.subMainBox);
-        this.searchBox = new MW.SearchBox(this);
+
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
-        this.searchResults.connect('terms-changed', () => {
+        this.searchTermsChangedID = this.searchResults.connect('have-results', () => {
             this.searchResultsChangedEvent();
         });
-        this.searchResults.connect('no-results', () => {
+        this.searchNoResultsID = this.searchResults.connect('no-results', () => {
             if(this.subMainBox.contains(this.searchResultDetailsScrollBox))
                 this.subMainBox.remove_child(this.searchResultDetailsScrollBox);
         })
@@ -143,7 +146,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     loadCategories(){
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();
-        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.FREQUENT_APPS);
+        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.FREQUENT_APPS, Constants.DisplayType.LIST);
         this.categoryDirectories.set(Constants.CategoryType.FREQUENT_APPS, categoryMenuItem);
 
         super.loadCategories();
@@ -246,9 +249,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
                 let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
                 appsScrollBoxAdj.set_value(0);
-                this.applicationsBox.add(this.searchResults.actor);
+                this.applicationsBox.add(this.searchResults);
                 this.searchResults.setTerms(searchString.split(/\s+/));
                 this.searchResults.highlightDefault(true);
+                this.activeProvider.grab_key_focus();
             }
         }
     }
@@ -341,8 +345,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     toggleMoreProvidersMenu(){
         let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        this.moreProvidersMenu.actor.style_class = customStyle ? 'arc-right-click-boxpointer': 'popup-menu-boxpointer';
-        this.moreProvidersMenu.actor.add_style_class_name( customStyle ? 'arc-right-click' : 'popup-menu');
+        this.moreProvidersMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
+        this.moreProvidersMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
 
         this.moreProvidersMenu.toggle();
     }
@@ -374,21 +378,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.arcMenu.box.style = "padding-top: 0px;";
     }
 
-    updateIcons(){
-        for(let i = 0; i < this.frequentAppsList.length; i++){
-            let item = this.frequentAppsList[i];
-            item._updateIcon();
-        };
-        super.updateIcons();
-    }
-
-    _reload() {
-        super.reload();
-        let themeContext = St.ThemeContext.get_for_stage(global.stage);
-        let scaleFactor = themeContext.scale_factor;
-        let height =  Math.round(this._settings.get_int('menu-height') / scaleFactor);
-    }
-    
     _clearActorsFromBox(box){
         super._clearActorsFromBox(box);
     }
@@ -406,22 +395,25 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(!this.subMainBox.contains(this.searchResultDetailsScrollBox))
             this.subMainBox.add_actor(this.searchResultDetailsScrollBox);
         if(this.activeResult === this.searchResults.getTopResult())
-            return;
+            return;           
         
-        this.activeResult = this._activeMenuItem = this.searchResults.getTopResult();
-        if(!this.activeResult)
+        this.activeResult = this.searchResults.getTopResult();
+        if(!this.activeResult || this.activeResult === null){
             return;
+        }
 
         this.createActiveSearchItemPanel(this.searchResults.getTopResult());
     }
 
     createActiveSearchItemPanel(activeResult){
+        if(!activeResult)
+            return;
         if(!this.subMainBox.contains(this.searchResultDetailsScrollBox))
             return;
         if(!activeResult.provider || activeResult === this.activeResultMenuItem)
             return;
         this.activeCategoryType = -1;
-        this.searchResultDetailsBox.remove_all_children();
+        this.searchResultDetailsBox.destroy_all_children();
 
         if(!activeResult.metaInfo)
             return;
@@ -429,31 +421,43 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let app = activeResult.app ? activeResult.app : null;
         let path = activeResult._path ? activeResult._path : null;
 
-        this.activeResultMenuItem = new MW.ApplicationMenuItem(this, app, Constants.AppDisplayType.GRID, activeResult.metaInfo);
+        this.activeResultMenuItem = new MW.ApplicationMenuItem(this, app, Constants.DisplayType.GRID, activeResult.metaInfo);
         this.activeResultMenuItem.name = "ExtraLargeIconGrid";
         this.activeResultMenuItem.provider = activeResult.provider;
         this.activeResultMenuItem.resultsView = activeResult.resultsView;
         this.activeResultMenuItem._path = path;
         this.activeResultMenuItem.x_expand = false;
         this.activeResultMenuItem.x_align = Clutter.ActorAlign.CENTER;
-        this.activeResultMenuItem.forceLargeIcon(76);
+        let iconSize = 76;
+        let icon = activeResult.metaInfo ?activeResult.metaInfo['createIcon'](iconSize) : app.create_icon_texture(iconSize);
+        this.activeResultMenuItem._iconBin.set_child(icon);
         if(!this.activeResultMenuItem._iconBin.get_child()){
             let icon = new St.Icon({ 
-                icon_size: 76,
+                icon_size: iconSize,
                 gicon: activeResult.provider.appInfo.get_icon()
             });
             this.activeResultMenuItem._iconBin.set_child(icon);
         }
         this.searchResultDetailsBox.add_actor(this.activeResultMenuItem);
-        let searchResultContextItems = new MW.ApplicationContextItems(this.activeResultMenuItem, app, this);
-        searchResultContextItems.path = path;
-        searchResultContextItems.rebuildItems();
-        this.searchResultDetailsBox.add_actor(searchResultContextItems);
+        this.searchResultContextItems = new MW.ApplicationContextItems(this.activeResultMenuItem, app, this);
+        this.searchResultContextItems.path = path;
+        this.searchResultContextItems.rebuildItems();
+        this.searchResultDetailsBox.add_actor(this.searchResultContextItems);
     }
 
-    destroy(isReload){       
+    destroy(){
         this.arcMenu.box.style = null;
 
-        super.destroy(isReload);
+        if(this.searchTermsChangedID){
+            this.searchResults.disconnect(this.searchTermsChangedID);
+            this.searchTermsChangedID = null;
+        }
+        
+        if(this.searchNoResultsID){
+            this.searchResults.disconnect(this.searchNoResultsID);
+            this.searchNoResultsID = null;
+        }
+
+        super.destroy();
     }
 }

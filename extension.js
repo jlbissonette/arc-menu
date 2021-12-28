@@ -39,6 +39,7 @@ let settingsControllers;
 let extensionChangedId;
 let dockToggleID;
 let dockExtension;
+let enableTimeoutID;
 
 // Initialize menu language translations
 function init(metadata) {
@@ -47,70 +48,80 @@ function init(metadata) {
 
 // Enable the extension
 function enable() {
-    if (ShellVersion < 3.36) {
-        throw new Error('GNOME Shell version "' + ShellVersion + '" is not supported. Please visit https://extensions.gnome.org/extension/1228/arc-menu/ which supports GNOME Shell versions 3.14 - 3.34');
-    }
+    enableTimeoutID = GLib.timeout_add(0, 300, () => {
 
-    if(imports.gi.Meta.is_wayland_compositor())
-        Me.metadata.isWayland = true;
-    else
-        Me.metadata.isWayland = false;
-    let stylesheet = Utils.getStylesheet();
-        
-    let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
-    if(Me.stylesheet)
-        theme.unload_stylesheet(Me.stylesheet);
-    Me.stylesheet = stylesheet;
-    theme.load_stylesheet(Me.stylesheet);
-
-    settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
-    settings.connect('changed::multi-monitor', () => _onMultiMonitorChange());
-    settings.connect('changed::arc-menu-placement', () => _onArcMenuPlacementChange());
-    settingsControllers = [];
-
-    let avaliablePlacementArray = settings.get_default_value('available-placement').deep_unpack();
-    settings.set_value('available-placement', new GLib.Variant('ab', avaliablePlacementArray));
-
-    _enableButtons();
+        if (ShellVersion < 3.39 && ShellVersion >= 3.36) {
+            throw new Error('ArcMenu v' + Me.metadata.version + ' does not work on GNOME Shell version "' + ShellVersion + '". Please visit https://extensions.gnome.org/extension/3628/arcmenu/ and download ArcMenu v17');
+        }
+        else if (ShellVersion < 3.36) {
+            throw new Error('GNOME Shell version "' + ShellVersion + '" is not supported. Please visit https://extensions.gnome.org/extension/1228/arc-menu/ which supports GNOME Shell versions 3.14 - 3.34');
+        }
     
-    // dash to panel might get enabled after Arc-Menu
-    extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-        if (extension.uuid === 'dash-to-panel@jderose9.github.com') {
-            let state = extension.state === 1 ? true : false;
-            setAvaliablePlacement(Constants.ArcMenuPlacement.DTP, state);
-            let arcMenuPlacement = settings.get_enum('arc-menu-placement');
-            if(extension.state === 1){
+        if(imports.gi.Meta.is_wayland_compositor())
+            Me.metadata.isWayland = true;
+        else
+            Me.metadata.isWayland = false;
+        let stylesheet = Utils.getStylesheet();
+            
+        let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
+        if(Me.stylesheet)
+            theme.unload_stylesheet(Me.stylesheet);
+        Me.stylesheet = stylesheet;
+        theme.load_stylesheet(Me.stylesheet);
+    
+        settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+        settings.connect('changed::multi-monitor', () => _onMultiMonitorChange());
+        settings.connect('changed::arc-menu-placement', () => _onArcMenuPlacementChange());
+        settingsControllers = [];
+    
+        let avaliablePlacementArray = settings.get_default_value('available-placement').deep_unpack();
+        settings.set_value('available-placement', new GLib.Variant('ab', avaliablePlacementArray));
+    
+        _enableButtons();
+        
+        // dash to panel might get enabled after Arc-Menu
+        extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
+            if (extension.uuid === 'dash-to-panel@jderose9.github.com') {
+                let state = extension.state === 1 ? true : false;
+                setAvaliablePlacement(Constants.ArcMenuPlacement.DTP, state);
+                let arcMenuPlacement = settings.get_enum('arc-menu-placement');
+                if(extension.state === 1){
+                    if(_getDockExtensions() === undefined)
+                        setAvaliablePlacement(Constants.ArcMenuPlacement.DASH, false);
+                    if(arcMenuPlacement == Constants.ArcMenuPlacement.DASH && _getDockExtensions() === undefined)
+                        settings.set_enum('arc-menu-placement', Constants.ArcMenuPlacement.PANEL);
+                    else if(arcMenuPlacement == Constants.ArcMenuPlacement.PANEL || arcMenuPlacement == Constants.ArcMenuPlacement.DTP){
+                        _connectDtpSignals();
+                        _enableButtons();
+                    }
+                }
+            }
+            if ((extension.uuid === "dash-to-dock@micxgx.gmail.com" || extension.uuid === "ubuntu-dock@ubuntu.com")) {
+                _disconnectDtdSignals();
+                let arcMenuPlacement = settings.get_enum('arc-menu-placement');
                 if(_getDockExtensions() === undefined)
                     setAvaliablePlacement(Constants.ArcMenuPlacement.DASH, false);
-                if(arcMenuPlacement == Constants.ArcMenuPlacement.DASH && _getDockExtensions() === undefined)
-                    settings.set_enum('arc-menu-placement', Constants.ArcMenuPlacement.PANEL);
-                else if(arcMenuPlacement == Constants.ArcMenuPlacement.PANEL || arcMenuPlacement == Constants.ArcMenuPlacement.DTP){
-                    _connectDtpSignals();
+                else if(arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
+                    setAvaliablePlacement(Constants.ArcMenuPlacement.DASH, true)
+                    for (let i = settingsControllers.length - 1; i >= 0; --i) {
+                        let sc = settingsControllers[i];
+                        _disableButton(sc, 1);
+                    }
                     _enableButtons();
+                    _connectDtdSignals();
                 }
             }
-        }
-        if ((extension.uuid === "dash-to-dock@micxgx.gmail.com" || extension.uuid === "ubuntu-dock@ubuntu.com")) {
-            _disconnectDtdSignals();
-            let arcMenuPlacement = settings.get_enum('arc-menu-placement');
-            if(_getDockExtensions() === undefined)
-                setAvaliablePlacement(Constants.ArcMenuPlacement.DASH, false);
-            else if(arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
-                setAvaliablePlacement(Constants.ArcMenuPlacement.DASH, true)
-                for (let i = settingsControllers.length - 1; i >= 0; --i) {
-                    let sc = settingsControllers[i];
-                    _disableButton(sc, 1);
-                }
-                _enableButtons();
-                _connectDtdSignals();
-            }
-        }
-    });
+        });
+    
+        // listen to dash to panel / dash to dock if they are compatible and already enabled
+        _connectDtdSignals();
+        _connectDtpSignals();
 
-    // listen to dash to panel / dash to dock if they are compatible and already enabled
-    _connectDtdSignals();
-    _connectDtpSignals();
+        enableTimeoutID = null;
+        return GLib.SOURCE_REMOVE;
+    });
 }
+
 function setAvaliablePlacement(placement, state){
     let avaliablePlacementArray = settings.get_value('available-placement').deep_unpack();
     if(avaliablePlacementArray[placement] !== state){
@@ -118,8 +129,13 @@ function setAvaliablePlacement(placement, state){
         settings.set_value('available-placement', new GLib.Variant('ab', avaliablePlacementArray));
     }
 }
-// Disable the extension
+
+
 function disable() {
+    if (enableTimeoutID) {
+        GLib.source_remove(enableTimeoutID);
+        enableTimeoutID = null;
+    }
     if ( extensionChangedId > 0){
         Main.extensionManager.disconnect(extensionChangedId);
         extensionChangedId = 0;

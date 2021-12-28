@@ -34,18 +34,23 @@ const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
 var createMenu = class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton, {
+    constructor(menuButton) {
+        super(menuButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.GRID,
-            SearchType: Constants.AppDisplayType.GRID,
+            DisplayType: Constants.DisplayType.GRID,
+            SearchDisplayType: Constants.DisplayType.GRID,
             GridColumns: 4,
             ColumnSpacing: 10,
             RowSpacing: 10,
             IconGridSize: 36,
-            ListSearchResults_IconSize: 32,
             IconGridStyle: 'SmallIconGrid',
-            VerticalMainBox: false
+            VerticalMainBox: false,
+            SupportsCategoryOnHover: true,
+            DefaultCategoryIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
     createLayout(){
@@ -53,7 +58,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.ravenPositionChangedID = this._settings.connect('changed::raven-position', () => this._updatePosition());
 
-        this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
+        this.dummyCursor = new St.Widget({ width: 1, height: 0, opacity: 0});
         Main.uiGroup.add_actor(this.dummyCursor);
         this.updateLocation();
 
@@ -115,12 +120,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMainBox.add(this.topBox);
         this.mainBox.add(this.subMainBox);
 
-        this.searchBox = new MW.SearchBox(this);
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 25px 10px 10px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
         this.topBox.add(this.searchBox.actor);
 
         this.applicationsBox = new St.BoxLayout({
@@ -150,14 +151,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true
         });
         this.weatherBox.style = "width:410px;"; 
-        this._weatherItem = new MW.WeatherSection();
+        this._weatherItem = new MW.WeatherSection(this);
         this._weatherItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
-        this._weatherItem.connect("clicked", ()=> this.arcMenu.close());
-        this._clocksItem = new MW.WorldClocksSection();
+        this._clocksItem = new MW.WorldClocksSection(this);
         this._clocksItem.x_expand = true;
         this._clocksItem.x_align = Clutter.ActorAlign.FILL;
         this._clocksItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
-        this._clocksItem.connect("clicked", ()=> this.arcMenu.close());
 
         this.weatherBox.add(this._clocksItem);
         this.weatherBox.add(this._weatherItem);
@@ -190,13 +189,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.AppDisplayType.GRID);
+            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.GRID);
             this.appShortcuts.push(shortcutMenuItem);
         }
         this._updatePosition();
-        this.loadPinnedApps();
         this.loadCategories();
-        this.displayCategories();
+        this.loadPinnedApps();
+
         this.setDefaultMenuView();
     }
 
@@ -225,11 +224,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
         let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(monitorIndex);
 
-        let positionX = ravenPosition === Constants.RavenPosition.LEFT ? monitorWorkArea.x : monitorWorkArea.x + monitorWorkArea.width;
+        let positionX = ravenPosition === Constants.RavenPosition.LEFT ? monitorWorkArea.x : monitorWorkArea.x + monitorWorkArea.width - 1;
         let positionY = this.arcMenu._arrowSide === St.Side.BOTTOM ? monitorWorkArea.y + monitorWorkArea.height : monitorWorkArea.y;
         
-        this.dummyCursor.set_position(positionX, positionY);        
-        
+        this.dummyCursor.set_position(positionX, positionY);
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         let screenHeight = monitorWorkArea.height;   
      
@@ -254,32 +252,23 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.displayAllApps(isGridLayout);   
             this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
         }
+        this.activeMenuItem = this.categoryDirectories.values().next().value;
+        if(this.arcMenu.isOpen)
+            this.activeMenuItem.active = true;
     }
 
     updateStyle(){
         super.updateStyle();
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        let gapAdjustment = this._settings.get_int('gap-adjustment');
-
-        customStyle ? this._clocksItem.add_style_class_name('arc-menu-action') : this._clocksItem.remove_style_class_name('arc-menu-action');
-        customStyle ? this._weatherItem.add_style_class_name('arc-menu-action') : this._weatherItem.remove_style_class_name('arc-menu-action');
 
         this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px;";
         this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
-        for(let categoryMenuItem of this.categoryDirectories.values()){
-            categoryMenuItem.updateStyle();	 
-        }    
         this.updateLocation();
-    }
-
-    updateSearch(){
-        this.searchResults._reloadRemoteProviders();
     }
 
     loadCategories() {
         this.categoryDirectories = null;
         this.categoryDirectories = new Map(); 
-        let categoryMenuItem = new MW.CategoryMenuButton(this, Constants.CategoryType.HOME_SCREEN);
+        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.HOME_SCREEN, Constants.DisplayType.BUTTON);
         this.categoryDirectories.set(Constants.CategoryType.HOME_SCREEN, categoryMenuItem);
         this.hasPinnedApps = true;
 
@@ -291,12 +280,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             if(categoryEnum == Constants.CategoryType.PINNED_APPS)
                 shouldShow = false;
             if(shouldShow){
-                let categoryMenuItem = new MW.CategoryMenuButton(this, categoryEnum);
+                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.BUTTON);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
             }
         }
 
-        super.loadCategories(MW.CategoryMenuButton);
+        super.loadCategories(Constants.DisplayType.BUTTON);
+        this.displayCategories();
     }
 
     displayCategories(){
@@ -332,10 +322,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayRecentFiles(){
         super.displayRecentFiles();
-        let label = this._createHeaderLabel(_("Recent Files"));
-        label.remove_actor(label._ornamentLabel);
+        let label = this._createLabelWithSeparator(_("Recent Files"));
+        label.actor.style += "padding-left: 10px;";
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
+        this.applicationsBox.add_style_class_name('margin-box');
     }
 
     displayCategoryAppList(appList, category){
@@ -347,25 +338,26 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.subMainBox.contains(this.weatherBox)){
             this.subMainBox.remove_actor(this.weatherBox);
         }
+
+        this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);
     }
 
     _displayAppList(apps, category, grid){      
         super._displayAppList(apps, category, grid);
-        let label = this._createHeaderLabel(this.activeCategory);
-        label.remove_actor(label._ornamentLabel);
+        let label = this._createLabelWithSeparator(this.activeCategory);
 
         if(grid === this.applicationsGrid){
-            label.actor.style = "padding-left: 10px;";
+            label.actor.style += "padding-left: 10px;";
             this.applicationsBox.insert_child_at_index(label.actor, 0);
         }
         else{
-            label.actor.style = "padding-left: 10px; padding-top: 20px;";
+            label.actor.style += "padding-left: 10px; padding-top: 20px;";
             this.applicationsBox.insert_child_at_index(label.actor, 2);
         }
     }
    
-    destroy(isReload){
+    destroy(){
         if(this._clocksItem)
             this._clocksItem.destroy();
         if(this._weatherItem)
@@ -386,6 +378,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         Main.uiGroup.remove_actor(this.dummyCursor);
         this.dummyCursor.destroy();
 
-        super.destroy(isReload);
+        super.destroy();
     }
 }

@@ -3,10 +3,10 @@
  *
  * ArcMenu Lead Developer and Maintainer
  * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
+ *
  * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
  * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
@@ -30,10 +30,12 @@ var SearchbarLocation = {
     TOP: 1
 }
 
-var AppDisplayType = {
+var DisplayType = {
     LIST: 0,
     GRID: 1,
-    SEARCH: 2,
+    BUTTON: 2,
+    SIMPLE_CATEGORY: 3,
+    SUBMENU_CATEGORY: 4,
 }
 
 var CategoryType = {
@@ -58,12 +60,12 @@ var DefaultMenuView = {
 
 var PrefsVisiblePage = {
     MAIN: 0,
-    PINNED_APPS: 1,
-    SHORTCUTS: 2,
-    MENU_LAYOUT: 3,
-    BUTTON_APPEARANCE: 4,
-    LAYOUT_TWEAKS: 5,
-    ABOUT: 6
+    MENU_LAYOUT: 1,
+    BUTTON_APPEARANCE: 2,
+    LAYOUT_TWEAKS: 3,
+    ABOUT: 4,
+    CUSTOMIZE_MENU: 5,
+    RUNNER_TWEAKS: 6
 }
 
 var DefaultMenuViewTognee = {
@@ -100,11 +102,12 @@ var SeparatorAlignment = {
 };
 
 var SeparatorStyle = {
-    NORMAL: 0,
-    LONG: 1,
-    SHORT: 2,
+    SHORT: 0,
+    MEDIUM: 1,
+    LONG: 2,
     MAX: 3,
-    MEDIUM: 4,
+    HEADER_LABEL: 4,
+    NORMAL: 5,
 };
 
 var CaretPosition = {
@@ -119,10 +122,21 @@ var ForcedMenuLocation = {
     BOTTOM_CENTERED: 2,
 }
 
-var MenuItemType = {
-    BUTTON: 0,
-    MENU_ITEM: 1
-};
+var IconSize = {
+    DEFAULT: 0,
+    EXTRA_SMALL: 1,
+    SMALL: 2,
+    MEDIUM: 3,
+    LARGE: 4,
+    EXTRA_LARGE: 5,
+}
+
+var EXTRA_SMALL_ICON_SIZE = 16;
+var SMALL_ICON_SIZE = 20;
+var MEDIUM_ICON_SIZE = 25;
+var LARGE_ICON_SIZE = 30;
+var EXTRA_LARGE_ICON_SIZE = 35;
+var MISC_ICON_SIZE = 24;
 
 var SUPER_L = 'Super_L';
 var SUPER_R = 'Super_R';
@@ -131,12 +145,16 @@ var EMPTY_STRING = '';
 var HotKey = {
     UNDEFINED: 0,
     SUPER_L: 1,
-    SUPER_R: 2,
-    CUSTOM: 3,
+    CUSTOM: 2,
     // Inverse mapping
     0: EMPTY_STRING,
     1: SUPER_L,
-    2: SUPER_R,
+};
+
+var RunnerHotKey = {
+    SUPER_L: 0,
+    CUSTOM: 1,
+    0: SUPER_L,
 };
 
 var HotCornerAction = {
@@ -178,7 +196,7 @@ var MenuButtonAppearance = {
     NONE: 4
 };
 
-var MenuIcon = { 
+var MenuIcon = {
     ARC_MENU: 0,
     DISTRO_ICON: 1,
     CUSTOM: 2
@@ -300,6 +318,8 @@ var DistroIcons = [
     { PATH: '/media/icons/menu_button_icons/distro_icons/mx-logo-symbolic.svg'},
     { PATH: '/media/icons/menu_button_icons/distro_icons/redhat-logo-symbolic.svg'},
     { PATH: '/media/icons/menu_button_icons/distro_icons/voyager-logo-symbolic.svg'},
+    { PATH: '/media/icons/menu_button_icons/distro_icons/zorin-logo-symbolic.svg'},
+    { PATH: '/media/icons/menu_button_icons/distro_icons/endeavour-logo-symbolic.svg'},
 ]
 
 var MenuLayout = {
@@ -324,9 +344,10 @@ var MenuLayout = {
     WINDOWS: 18,
     LAUNCHER: 19,
     ELEVEN: 20,
+    AZ: 21,
 };
 
-var TraditionalMenus = [   
+var TraditionalMenus = [
     { IMAGE: 'arcmenu-layout-symbolic', TITLE: _('ArcMenu'), LAYOUT: MenuLayout.ARCMENU},
     { IMAGE: 'brisk-layout-symbolic', TITLE: _('Brisk'), LAYOUT: MenuLayout.BRISK},
     { IMAGE: 'whisker-layout-symbolic', TITLE: _('Whisker'), LAYOUT: MenuLayout.WHISKER},
@@ -341,9 +362,10 @@ var ModernMenus = [
     { IMAGE: 'insider-layout-symbolic', TITLE: _('Insider'), LAYOUT: MenuLayout.INSIDER},
     { IMAGE: 'redmond-layout-symbolic', TITLE: _('Redmond'), LAYOUT: MenuLayout.REDMOND},
     { IMAGE: 'windows-layout-symbolic', TITLE: _('Windows'), LAYOUT: MenuLayout.WINDOWS},
-    { IMAGE: 'eleven-layout-symbolic', TITLE: _('11'), LAYOUT: MenuLayout.ELEVEN}];
+    { IMAGE: 'eleven-layout-symbolic', TITLE: _('11'), LAYOUT: MenuLayout.ELEVEN},
+    { IMAGE: 'az-layout-symbolic', TITLE: _('a.z.'), LAYOUT: MenuLayout.AZ}];
 
-var TouchMenus = [   
+var TouchMenus = [
     { IMAGE: 'elementary-layout-symbolic', TITLE: _('Elementary'), LAYOUT: MenuLayout.ELEMENTARY},
     { IMAGE: 'chromebook-layout-symbolic', TITLE: _('Chromebook'), LAYOUT: MenuLayout.CHROMEBOOK}];
 
@@ -352,15 +374,15 @@ var LauncherMenus = [
     { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
     { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 
-var SimpleMenus = [   
+var SimpleMenus = [
     { IMAGE: 'simple-layout-symbolic', TITLE: _('Simple'), LAYOUT: MenuLayout.SIMPLE},
     { IMAGE: 'simple2-layout-symbolic', TITLE: _('Simple 2'), LAYOUT: MenuLayout.SIMPLE_2}];
 
-var AlternativeMenus = [   
+var AlternativeMenus = [
     { IMAGE: 'raven-layout-symbolic', TITLE: _('Raven'), LAYOUT: MenuLayout.RAVEN}];
 
 var MenuStyles = {
-    STYLES: [ 
+    STYLES: [
         { IMAGE: 'traditional-category-symbolic', TITLE: _("Traditional"), MENU_TYPE: TraditionalMenus },
         { IMAGE: 'modern-category-symbolic', TITLE: _("Modern"), MENU_TYPE: ModernMenus },
         { IMAGE: 'touch-category-symbolic', TITLE: _("Touch"), MENU_TYPE: TouchMenus },
@@ -391,8 +413,8 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
                                 '\n\n•   <b>Gentoo Authors©</b> - 2001–2020 Gentoo is a trademark of the Gentoo Foundation, Inc.'+
                                 '\n\n•   <b>Voyager© Linux</b> - name and logo'+
                                 '\n\n•   <b>MX Linux©</b> - 2020 - Linux - is the registered trademark of Linus Torvalds in the U.S. and other countries.'+
-                                '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo';
-
+                                '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo' +
+                                '\n\n•   <b>ZORIN OS</b> - The "Z" logomark is a registered trademark of Zorin Technology Group Ltd. Copyright © 2019 - 2021 Zorin Technology Group Ltd';
 
 var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer\t' +
                 '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a> - <b>(Inactive)</b>\nArcMenu Founder - Former Maintainer - Former Digital Art Designer';
@@ -402,7 +424,7 @@ var CONTRIBUTORS = '<b>Thank you to all who contributed to, and/or helped, the d
                     +'\n\n<b>For a list of all contributors please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
 var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
                 '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
-        
+
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +
     'See the <a href="https://gnu.org/licenses/old-licenses/gpl-2.0.html">' +

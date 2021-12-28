@@ -34,18 +34,22 @@ const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
 var createMenu = class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton, {
+    constructor(menuButton) {
+        super(menuButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.GRID,
-            SearchType: Constants.AppDisplayType.GRID,
+            DisplayType: Constants.DisplayType.GRID,
+            SearchDisplayType: Constants.DisplayType.GRID,
             GridColumns: 6,
             ColumnSpacing: 15,
             RowSpacing: 15,
             IconGridSize: 52,
-            ListSearchResults_IconSize: 32,
             IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_LARGE_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
 
@@ -62,25 +66,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: false,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
-            vertical: false
+            vertical: false,
+            style: 'padding-bottom: 10px; padding-right: 15px;'
         });
 
-        this.categoriesTopBox = new St.BoxLayout({
-            x_expand: false,
-            y_expand: false,
-            x_align: Clutter.ActorAlign.START,
-            y_align: Clutter.ActorAlign.CENTER,
-            vertical: true
-        });
 
-        this.categoriesTopBox.style = "padding: 0px 15px 0px 0px; margin-bottom: 10px;";
         this.mainBox.add(this.topBox);
         this.categoriesButton = new MW.CategoriesButton(this);
-        this.categoriesButton.actor.x_expand = false;
-        this.categoriesButton.actor.y_expand = false;
-        this.categoriesButton.actor.y_align = Clutter.ActorAlign.CENTER;
-        this.categoriesButton.actor.x_align = Clutter.ActorAlign.END;
-        this.categoriesTopBox.add(this.categoriesButton.actor);
         
         this.subMainBox= new St.BoxLayout({
             x_expand: true,
@@ -91,14 +83,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.mainBox.add(this.subMainBox);
 
-        this.searchBox = new MW.SearchBox(this);
+        this.searchBox.actor.y_align = Clutter.ActorAlign.CENTER;
+        this.searchBox.actor.y_expand = true;
         this.searchBox.name = "ArcSearchEntryRound";
-        this.searchBox.style = "margin: 4px 10px 0px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this.searchBox.style = "margin: 0px 15px 0px 15px;";
         this.topBox.add(this.searchBox.actor);
-        this.topBox.add(this.categoriesTopBox);
+        this.topBox.add(this.categoriesButton.actor);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
@@ -156,12 +146,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         
         this.widgetBox.style = "margin: 0px; spacing: 10px; padding: 10px 50px;";   
-        this._weatherItem = new MW.WeatherSection();
+        this._weatherItem = new MW.WeatherSection(this);
         this._weatherItem.style = "border-radius:4px; width: 350px; padding: 10px; margin: 0px";
-        this._weatherItem.connect("clicked", ()=> this.arcMenu.close());
-        this._clocksItem = new MW.WorldClocksSection();
+        this._clocksItem = new MW.WorldClocksSection(this);
         this._clocksItem.style = "border-radius:4px; padding: 10px; margin: 0px";
-        this._clocksItem.connect("clicked", ()=> this.arcMenu.close());
 
         this.appShortcuts = [];
         this.shortcutsBox = new St.BoxLayout({
@@ -191,11 +179,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
         for(let i = 0; i < applicationShortcuts.length; i++){
             let applicationName = applicationShortcuts[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.AppDisplayType.GRID);
+            let isContainedInCategory = false;
+            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.GRID, isContainedInCategory);
             this.appShortcuts.push(shortcutMenuItem);
         }
-        this.loadPinnedApps();
         this.loadCategories();
+        this.loadPinnedApps();
         this._createCategoriesMenu();
         this.loadExtraPinnedApps();
 
@@ -203,7 +192,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _addSeparator(){
-        this.actionsBox.add(this._createVerticalSeparator(Constants.SeparatorStyle.SHORT));
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        this.actionsBox.add(verticalSeparator);
     }
 
     loadExtraPinnedApps(){
@@ -216,7 +206,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.CENTER,
             vertical: false
         });
-        this.actionsBox.style = "spacing: 10px;";
+        this.actionsBox.style = "spacing: 10px; padding: 5px 0px;";
         this.actionsContainerBox.add(this.actionsBox);
 
         super.loadExtraPinnedApps(this._settings.get_strv('unity-pinned-app-list'), this._settings.get_int('unity-separator-index'));
@@ -249,11 +239,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesMenu = new PopupMenu.PopupMenu(this.categoriesButton.actor, 0.5, St.Side.TOP);
         this.categoriesMenu.blockSourceEvents = true;
         this.categoriesMenu.connect('open-state-changed', (menu, open) => {
-            if(!open){
-                this.categoriesButton.fake_release();
-                this.categoriesButton.set_hover(false);
-            }
-            else{
+            if(open){
                 if(this.menuButton.tooltipShowingID){
                     GLib.source_remove(this.menuButton.tooltipShowingID);
                     this.menuButton.tooltipShowingID = null;
@@ -283,7 +269,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leftPanelPopup.add(this.categoriesScrollBox);
        
         this.categoriesBox = new St.BoxLayout({
-            vertical: true
+            vertical: true,
+            style_class: 'margin-box'
         });     
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         this.categoriesScrollBox.clip_to_allocation = true;
@@ -304,8 +291,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         appsScrollBoxAdj.set_value(0);
 
         let customStyle=this._settings.get_boolean('enable-custom-arc-menu');
-        this.categoriesMenu.actor.style_class = customStyle ? 'arc-right-click-boxpointer': 'popup-menu-boxpointer';
-        this.categoriesMenu.actor.add_style_class_name( customStyle ? 'arc-right-click' : 'popup-menu');
+        this.categoriesMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
+        this.categoriesMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
         this.categoriesButton.tooltip.hide();
 
         this.categoriesMenu.toggle();
@@ -327,15 +314,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
     }
 
-    reload() {
-        this.shortcutsBox.destroy_all_children();  
-        super.reload();
-        let themeContext = St.ThemeContext.get_for_stage(global.stage);
-        let scaleFactor = themeContext.scale_factor;
-        let height =  Math.round(350 / scaleFactor);
-        this.leftPanelPopup.style = `max-height: ${height}px`;   
-    }
-
     updateStyle(){
         super.updateStyle();
         let customStyle=this._settings.get_boolean('enable-custom-arc-menu');
@@ -345,12 +323,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let borderRadius = themeNode.get_length('-arrow-border-radius');
         this.themeNodeBorderRadius = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + this.themeNodeBorderRadius;
-
-        let actor = this.categoriesButton.actor;
-        customStyle ? actor.add_style_class_name('arc-menu-action') : actor.remove_style_class_name('arc-menu-action');
-
-        customStyle ? this._clocksItem.add_style_class_name('arc-menu-action') : this._clocksItem.remove_style_class_name('arc-menu-action');
-        customStyle ? this._weatherItem.add_style_class_name('arc-menu-action') : this._weatherItem.remove_style_class_name('arc-menu-action');
         
         if(removeMenuArrow)
             this.arcMenu.box.style = "padding-bottom:0px; margin:0px;";
@@ -361,7 +333,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     loadCategories() {
         this.categoryDirectories = null;
         this.categoryDirectories = new Map(); 
-        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.HOME_SCREEN);
+        let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.HOME_SCREEN, Constants.DisplayType.LIST);
         this.categoryDirectories.set(Constants.CategoryType.HOME_SCREEN, categoryMenuItem);
         this.hasPinnedApps = true;
 
@@ -373,7 +345,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             if(categoryEnum == Constants.CategoryType.PINNED_APPS)
                 shouldShow = false;
             if(shouldShow){
-                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum);
+                let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.LIST);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
             }
         }
@@ -415,9 +387,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayRecentFiles(){
         super.displayRecentFiles();
-        let label = this._createHeaderLabel(_("Recent Files"));
+        let label = this._createLabelWithSeparator(_("Recent Files"));
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
+        this.applicationsBox.add_style_class_name('margin-box');
     }
 
     displayCategoryAppList(appList, category){
@@ -431,20 +404,21 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.subMainBox.contains(this.widgetBox)){
             this.subMainBox.remove_actor(this.widgetBox);
         }
+        this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);
     }
 
     _displayAppList(apps, category, grid){      
         super._displayAppList(apps, category, grid);
 
-        let label = this._createHeaderLabel(this.activeCategory);
+        let label = this._createLabelWithSeparator(this.activeCategory);
         if(grid === this.applicationsGrid)
             this.applicationsBox.insert_child_at_index(label.actor, 0);
         else
             this.applicationsBox.insert_child_at_index(label.actor, 2);
     }
    
-    destroy(isReload){
+    destroy(){
         if(this._clocksItem)
             this._clocksItem.destroy();
         if(this._weatherItem)
@@ -453,6 +427,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.box.style = null;
         this.arcMenu.actor.style = null;
 
-        super.destroy(isReload);
+        super.destroy();
     }
 }

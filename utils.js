@@ -90,53 +90,55 @@ function activateHybridSleep(){
     });
 }
 
-function getMenuLayout(button, layout){
+function getMenuLayout(menuButton, layout, isStandaloneRunner){
     let MenuLayout = Me.imports.menulayouts;
     switch(layout){
         case Constants.MenuLayout.ARCMENU:
-            return new MenuLayout.arcmenu.createMenu(button);
+            return new MenuLayout.arcmenu.createMenu(menuButton);
         case Constants.MenuLayout.BRISK:
-            return new MenuLayout.brisk.createMenu(button); 
+            return new MenuLayout.brisk.createMenu(menuButton); 
         case Constants.MenuLayout.WHISKER:
-            return new MenuLayout.whisker.createMenu(button); 
+            return new MenuLayout.whisker.createMenu(menuButton); 
         case Constants.MenuLayout.GNOME_MENU:
-            return new MenuLayout.gnomemenu.createMenu(button); 
+            return new MenuLayout.gnomemenu.createMenu(menuButton); 
         case Constants.MenuLayout.MINT:
-            return new MenuLayout.mint.createMenu(button); 
+            return new MenuLayout.mint.createMenu(menuButton); 
         case Constants.MenuLayout.GNOME_OVERVIEW:
             return null;
         case Constants.MenuLayout.ELEMENTARY:
-            return new MenuLayout.elementary.createMenu(button); 
+            return new MenuLayout.elementary.createMenu(menuButton); 
         case Constants.MenuLayout.REDMOND:
-            return new MenuLayout.redmond.createMenu(button); 
+            return new MenuLayout.redmond.createMenu(menuButton); 
         case Constants.MenuLayout.SIMPLE:
-            return new MenuLayout.simple.createMenu(button);  
+            return new MenuLayout.simple.createMenu(menuButton);  
         case Constants.MenuLayout.SIMPLE_2:
-            return new MenuLayout.simple2.createMenu(button);  
+            return new MenuLayout.simple2.createMenu(menuButton);  
         case Constants.MenuLayout.UNITY:
-            return new MenuLayout.unity.createMenu(button); 
+            return new MenuLayout.unity.createMenu(menuButton); 
         case Constants.MenuLayout.BUDGIE:
-            return new MenuLayout.budgie.createMenu(button);
+            return new MenuLayout.budgie.createMenu(menuButton);
         case Constants.MenuLayout.INSIDER:
-            return new MenuLayout.insider.createMenu(button);
+            return new MenuLayout.insider.createMenu(menuButton);
         case Constants.MenuLayout.RUNNER:
-            return new MenuLayout.runner.createMenu(button);
+            return new MenuLayout.runner.createMenu(menuButton, isStandaloneRunner);
         case Constants.MenuLayout.CHROMEBOOK:
-            return new MenuLayout.chromebook.createMenu(button);
+            return new MenuLayout.chromebook.createMenu(menuButton);
         case Constants.MenuLayout.RAVEN:
-            return new MenuLayout.raven.createMenu(button);
+            return new MenuLayout.raven.createMenu(menuButton);
         case Constants.MenuLayout.TOGNEE:
-            return new MenuLayout.tognee.createMenu(button);
+            return new MenuLayout.tognee.createMenu(menuButton);
         case Constants.MenuLayout.PLASMA:
-            return new MenuLayout.plasma.createMenu(button);
+            return new MenuLayout.plasma.createMenu(menuButton);
         case Constants.MenuLayout.WINDOWS:
-            return new MenuLayout.windows.createMenu(button);
+            return new MenuLayout.windows.createMenu(menuButton);
         case Constants.MenuLayout.LAUNCHER:
-            return new MenuLayout.launcher.createMenu(button);
+            return new MenuLayout.launcher.createMenu(menuButton);
         case Constants.MenuLayout.ELEVEN:
-            return new MenuLayout.eleven.createMenu(button);
+            return new MenuLayout.eleven.createMenu(menuButton);
+        case Constants.MenuLayout.AZ:
+            return new MenuLayout.az.createMenu(menuButton);
         default:
-            return new MenuLayout.arcmenu.createMenu(button);    
+            return new MenuLayout.arcmenu.createMenu(menuButton);    
     }
 }
 
@@ -206,6 +208,30 @@ function convertToGridLayout(item){
     item.name = item._menuLayout.layoutProperties.IconGridStyle;
     if(item._icon) 
         icon.icon_size = item._menuLayout.layoutProperties.IconGridSize;
+}
+
+function getIconSize(iconSizeEnum, defaultIconSize){
+    const IconSizeEnum = iconSizeEnum;
+    let iconSize = defaultIconSize;
+    if(IconSizeEnum === Constants.IconSize.DEFAULT)
+        iconSize = defaultIconSize;
+    else if(IconSizeEnum === Constants.IconSize.EXTRA_SMALL){
+        iconSize = Constants.EXTRA_SMALL_ICON_SIZE;
+    }
+    else if(IconSizeEnum === Constants.IconSize.SMALL){
+        iconSize = Constants.SMALL_ICON_SIZE;
+    }
+    else if(IconSizeEnum === Constants.IconSize.MEDIUM){
+        iconSize = Constants.MEDIUM_ICON_SIZE;
+    }
+    else if(IconSizeEnum === Constants.IconSize.LARGE){
+        iconSize = Constants.LARGE_ICON_SIZE;
+    }
+    else if(IconSizeEnum === Constants.IconSize.EXTRA_LARGE){
+        iconSize = Constants.EXTRA_LARGE_ICON_SIZE;
+    }
+
+    return iconSize;
 }
 
 function getCategoryDetails(currentCategory){
@@ -278,7 +304,7 @@ function getMenuButtonIcon(settings, path){
             return path;
     }
 
-    global.log("ArcMenu - Menu Button Icon Error! Set to System Default.");
+    global.log("ArcMenu Error - Failed to set menu button icon. Set to System Default.");
     return 'start-here-symbolic';
 }
 
@@ -295,63 +321,6 @@ function findSoftwareManager(){
 
     return softwareManager;
 }
-
-var ScrollViewShader = `
-uniform sampler2D tex;
-uniform float height;
-uniform float width;
-uniform float fade_offset_top;
-uniform float fade_offset_bottom;
-uniform float fade_offset_left;
-uniform float fade_offset_right;
-uniform bool  fade_edges_top;
-uniform bool  fade_edges_right;
-uniform bool  fade_edges_bottom;
-uniform bool  fade_edges_left;
-
-uniform vec2 fade_area_topleft;
-uniform vec2 fade_area_bottomright;
-
-void main ()
-{
-    cogl_color_out = cogl_color_in * texture2D (tex, vec2 (cogl_tex_coord_in[0].xy));
-
-    float y = height * cogl_tex_coord_in[0].y;
-    float x = width * cogl_tex_coord_in[0].x;
-
-    if (x > fade_area_topleft[0] && x < fade_area_bottomright[0] &&
-        y > fade_area_topleft[1] && y < fade_area_bottomright[1])
-    {
-        float ratio = 1.0;
-        float fade_top_start = fade_area_topleft[1] + fade_offset_top;
-        float fade_left_start = fade_area_topleft[0] + fade_offset_left;
-        float fade_bottom_start = fade_area_bottomright[1] - fade_offset_bottom;
-        float fade_right_start = fade_area_bottomright[0] - fade_offset_right;
-        bool fade_top = y < fade_top_start && fade_edges_top;
-        bool fade_bottom = y > fade_bottom_start && fade_edges_bottom;
-        bool fade_left = x < fade_left_start && fade_edges_left;
-        bool fade_right = x > fade_right_start && fade_edges_right;
-
-        if (fade_top) {
-            ratio *= (fade_area_topleft[1] - y) / (fade_area_topleft[1] - fade_top_start);
-        }
-
-        if (fade_bottom) {
-            ratio *= (fade_area_bottomright[1] - y) / (fade_area_bottomright[1] - fade_bottom_start);
-        }
-
-        if (fade_left) {
-            ratio *= (fade_area_topleft[0] - x) / (fade_area_topleft[0] - fade_left_start);
-        }
-
-        if (fade_right) {
-            ratio *= (fade_area_bottomright[0] - x) / (fade_area_bottomright[0] - fade_right_start);
-        }
-
-        cogl_color_out *= ratio;
-    }
-}
-`;
 
 function createXpmImage(color1, color2, color3, color4){
     let width = 42;
@@ -415,11 +384,11 @@ function getArraysEqual(a, b) {
         return a === b;
 }
 
-function createTooltip(button, widget, titleLabel, description){
+function createTooltip(button, widget, titleLabel, description, displayType){
     let lbl = titleLabel.clutter_text;
     lbl.get_allocation_box();
     let isEllipsized = lbl.get_layout().is_ellipsized();
-    if(isEllipsized || description){
+    if(displayType !== Constants.DisplayType.BUTTON && (isEllipsized || description)){
         let titleText, descriptionText;
         if(isEllipsized && description){
             titleText = titleLabel.text.replace(/\n/g, " ");
@@ -431,7 +400,13 @@ function createTooltip(button, widget, titleLabel, description){
             descriptionText = description;
         widget.tooltip = new Me.imports.menuWidgets.Tooltip(button, widget.actor, titleText, descriptionText);
         widget.tooltip._onHover();
-    } 
+    }
+    else if(displayType === Constants.DisplayType.BUTTON){
+        let titleText = titleLabel.text.replace(/\n/g, " ");
+        widget.tooltip = new Me.imports.menuWidgets.Tooltip(button, widget.actor, titleText, null);
+        widget.tooltip.location = Constants.TooltipLocation.TOP_CENTERED;
+        widget.tooltip._onHover();
+    }
 }
 
 function getDashToPanelPosition(settings, index){
@@ -480,7 +455,7 @@ function rgbStringToHex(colorString) {
 }
 
 function clutterColorToRGBA(color) {
-    return "rgba(" + color.red + "," + color.green + "," + color.blue + "," + color.alpha + ")";
+    return `rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha})`;
 }
 
 function parseRgbString(colorString){
@@ -502,35 +477,28 @@ function parseRgbString(colorString){
     return [r, g, b, a];
 }
 
-function modifyColorLuminance(colorString, luminanceFactor, modifyAlpha){
+function modifyColorLuminance(colorString, luminanceFactor, overrideAlpha){
     let Clutter = imports.gi.Clutter;
     let color = Clutter.color_from_string(colorString)[1];
     let [hue, lum, sat] = color.to_hls();
     let modifiedLum = lum;
 
-    if(luminanceFactor >= 0)
-        modifiedLum += luminanceFactor;
+    if(lum >= .85) //if lum is too light, force darken
+        modifiedLum = Math.min((1 - Math.abs(luminanceFactor)) * modifiedLum, 1);
+    else if(lum <= .15) //if lum is too dark, force lighten
+        modifiedLum = Math.max((1 - Math.abs(luminanceFactor)) * modifiedLum, 0);
+    else if(luminanceFactor >= 0) //otherwise, darken or lighten based on luminanceFactor
+        modifiedLum = Math.min((1 + luminanceFactor) * modifiedLum, 1);
     else
-        modifiedLum -= Math.abs(luminanceFactor);
-
-    //Reverse the darken/lighten effect if luminance out of range
-    if(modifiedLum >= 1 || modifiedLum < 0){
-        modifiedLum = lum;
-        if(luminanceFactor < 0)
-            modifiedLum += Math.abs(luminanceFactor);
-        else
-            modifiedLum -= luminanceFactor; 
-    }
+        modifiedLum = Math.max((1 + luminanceFactor) * modifiedLum, 0);
    
-    let alpha = Math.round((color.alpha / 255) * 100) / 100;
-    if(modifyAlpha){
-        alpha = Math.round((color.alpha / 255) * 100) / 100;
-        alpha = alpha * (1 - modifyAlpha);
-    }
+    let alpha = (color.alpha / 255).toPrecision(3);
+    if(overrideAlpha)
+        alpha = overrideAlpha;
 
     let modifiedColor = Clutter.color_from_hls(hue, modifiedLum, sat);
 
-    return "rgba("+modifiedColor.red+","+modifiedColor.green+","+modifiedColor.blue+","+alpha+")";
+    return `rgba(${modifiedColor.red}, ${modifiedColor.green}, ${modifiedColor.blue}, ${alpha})`
 }
 
 function createStylesheet(settings){
@@ -548,6 +516,9 @@ function createStylesheet(settings){
     let menuArrowSize = settings.get_int('menu-arrow-size');
     let leftPanelWidth = settings.get_int('menu-width');
     let leftPanelWidthSmall = settings.get_int('menu-width') - 85;
+    let rightPanelWidth = settings.get_int('right-panel-width');
+    let rightPanelWidthPlus45 = settings.get_int('right-panel-width') + 45;
+    let rightPanelWidthPlus70 = settings.get_int('right-panel-width') + 70;
     let avatarStyle =  settings.get_enum('avatar-style');
     let avatarRadius = avatarStyle == 0 ? 999 : 0;
     let menuButtonColor = settings.get_string('menu-button-color');
@@ -562,14 +533,16 @@ function createStylesheet(settings){
     let plasmaSelectedItemBackgroundColor = settings.get_string('plasma-selected-background-color');
     let plasmaSearchBarTop = settings.get_enum('searchbar-default-top-location');
     let menuButtonBorderRadius = settings.get_int('menu-button-border-radius');
-    let tooltipStyle;
+    let tooltipStyle, separatorColorStyle = "\n", smallButtonHoverStyle = "\n";
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
     if(customarcMenu){
-        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 4px;\nbox-shadow:0 0 0 1px " + modifyColorLuminance(menuColor, 0.10) + ";\nfont-size:" + fontSize + "pt;\npadding: 2px 5px;\nmin-height: 0px;"
-                        + "\ncolor:" + menuForegroundColor+ ";\nbackground-color:" + modifyColorLuminance(menuColor, 0.05) + ";\nmax-width:550px;\n}\n\n"; 
+        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 0 1px 0px " + separatorColor + ";\nfont-size:" + fontSize + "pt;\npadding: 3px 8px;\nmin-height: 0px;"
+                        + "\ncolor:" + menuForegroundColor+ ";\nbackground-color:" + modifyColorLuminance(menuColor, 0.05, 1) + ";\nmax-width:550px;\n}\n\n"; 
+        separatorColorStyle = ".separator-color-style{\nbackground-color: " + separatorColor + ";\n}\n\n";
+        smallButtonHoverStyle = ".arc-menu .popup-menu-item .arcmenu-small-button.selected{\nbackground-color: " + modifyColorLuminance(highlightColor, -0.25) + "\n}\n\n";
     }
     else
-        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 4px;\npadding: 2px 5px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
+        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\npadding: 3px 8px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
     
     let menuButtonStyle = '';
     if(settings.get_boolean('override-menu-button-color'))
@@ -585,54 +558,47 @@ function createStylesheet(settings){
         menuButtonStyle += ".arc-menu-panel-menu:active{\nbackground-color: " + menuButtonActiveBackgroundcolor + ";\n}\n\n";
     if(settings.get_boolean('menu-button-override-border-radius')){
         let border = menuButtonBorderRadius === 0 ? 1 : 3;
-        
         menuButtonStyle += ".arc-menu-panel-menu{\nborder-radius: " + menuButtonBorderRadius + "px;\nborder: " + border + "px solid transparent;\n}\n\n";
     }
-        
-
 
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
         +".arc-menu-status-text{\ncolor:" + menuForegroundColor + ";\nfont-size:" + fontSize + "pt;\n}\n\n"                                                     
         +".search-statustext{\nfont-size:11pt;\n}\n\n"    
-        +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;\n text-align: center;\n border-radius: 12px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +"#ElevenIconGrid{\nwidth: 90px;\n height: 75px;\n text-align: center;\n border-radius: 4px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +".left-scroll-area{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
-        +".left-scroll-area-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"   
-        +".left-box{\nwidth:" + leftPanelWidth + "px;\n}\n\n"
-        +".vert-sep{\nwidth:11px;\n}\n\n"
+        +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +"#ElevenIconGrid{\nwidth: 92px;\n height: 78px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +"#AZIconGrid{\nwidth: 95px;\n height: 85px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +".left-panel{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
+        +".left-panel-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"
+        +".right-panel{\nwidth:" + rightPanelWidth + "px;\n}\n\n"   
+        +".right-panel-plus45{\nwidth:" + rightPanelWidthPlus45 + "px;\n}\n\n"   
+        +".right-panel-plus70{\nwidth:" + rightPanelWidthPlus70 + "px;\n}\n\n"
         +".default-search-entry{\nmax-width: 17.667em;\n}\n\n"
         +".arc-search-entry{\nmax-width: 17.667em;\nfont-size:" + fontSize + "pt;\nborder-color:" + separatorColor + ";\nborder-width: 1px;\n"
-                            +"color:" + menuForegroundColor + ";\nbackground-color:" + menuColor + ";\n}\n\n"
+                            +"color:" + menuForegroundColor + ";\nbackground-color:" + modifyColorLuminance(menuColor, -0.1, 1) + ";\n}\n\n"
         +".arc-search-entry:focus{\nborder-color:" + highlightColor + ";\nborder-width: 1px;\nbox-shadow: inset 0 0 0 1px " + modifyColorLuminance(highlightColor, 0.05) + ";\n}\n\n"
-        +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.3) + ";\n}\n\n"
-        +"#ArcSearchEntry{\nmin-height: 0px;\nborder-radius: 4px;\npadding: 7px 9px;\n}\n\n"
-        +"#ArcSearchEntryRound{\nmin-height: 0px;\nborder-radius: 18px;\npadding: 7px 12px;\n}\n\n"       
+        +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.6) + ";\n}\n\n"
+        +"#ArcSearchEntry{\nmin-height: 0px;\nborder-radius: 8px;\nborder-width: 1px;\npadding: 7px 9px;\n}\n\n"
+        +"#ArcSearchEntryRound{\nmin-height: 0px;\nborder-radius: 18px;\nborder-width: 1px;\npadding: 7px 12px;\n}\n\n"       
         + menuButtonStyle
-        
-                
+        +".symbolic-icons{\n-st-icon-style: symbolic;\n}\n\n"
+        +".arcmenu-menu-item{\nborder-radius: 8px;\n}\n\n"     
+        +".margin-box{\nmargin: 0px 4px;\n}\n\n" 
         +"#arc-menu-launcher-button{\nmax-width: 90px;\nborder-radius: 0px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\nborder-color: transparent;\nborder-bottom-width: 3px;\n}\n\n"
         +"#arc-menu-launcher-button.active-item, #arc-menu-launcher-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             +"\nborder-color: " + plasmaSelectedItemColor + ";\nborder-bottom-width: 3px;\n}\n\n"
 
-        +"#arc-menu-plasma-button{\nwidth: 90px;\n height: 65px;\nborder-radius: 4px;\n text-align: center;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
+        +"#arc-menu-plasma-button{\nwidth: 90px;\n height: 65px;\nborder-radius: 8px;\n text-align: center;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n\n" + plasmaButtonStyle + ";\nborder-color: transparent;\n}\n\n"
         +"#arc-menu-plasma-button:active-item, .arc-menu-plasma-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             + plasmaButtonStyle + "\nborder-color: " + plasmaSelectedItemColor + ";\n}\n\n"
 
         +"StScrollView .small-vfade{\n-st-vfade-offset: 44px;\n}\n\n"
 
-        +".arc-menu-eject-button{\n-st-icon-style: symbolic;\nbackground-color: transparent;\nmin-width: 16px;\nmin-height: 0px;\nborder-radius: 6px;\npadding: 0px 13px;\n}\n\n"
-        +".arc-menu-eject-button:hover{\nbackground-color: rgba(186, 196,201, 0.1);\n}\n\n"
+        +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
+        +".arcmenu-small-button{\n-st-icon-style: symbolic;\nborder-radius: 8px;\npadding: 3px 8px;\n}\n\n"
+        +smallButtonHoverStyle
 
-        +".arc-menu-button{\n-st-icon-style: symbolic;\nmin-height: 0px;\nmin-width: 16px;\nborder-radius: 26px;\npadding: 13px;\n}\n\n"
-
-        +".arc-menu-action{\nmargin: 0px;\nbackground-color: transparent;\nbox-shadow: none;\ncolor:" + menuForegroundColor + ";\nborder-width: 1px;\n"
-                            +"border-color: transparent;\n}\n\n"
-        +".arc-menu-action:hover, .arc-menu-action:focus{\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + highlightColor + ";\nborder-width: 1px;\n"
-                                +"box-shadow: 0px 0px 1px " + modifyColorLuminance(menuColor, -0.05) + ";\nborder-color:" + modifyColorLuminance(menuColor, -0.05) + ";\n}\n\n"
-        +".arc-menu-action:active{\nbox-shadow: none;\ncolor:" + highlightForegroundColor + ";\nbackground-color:" + modifyColorLuminance(highlightColor, -0.1) + ";\nborder-width: 1px;\n"
-                                +"border-color:" + modifyColorLuminance(menuColor, -0.1) + ";\n}\n\n"
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"
 
@@ -641,10 +607,11 @@ function createStylesheet(settings){
         +".arc-menu{\n-boxpointer-gap: " + gapAdjustment + "px;\nmin-width: 15em;\ncolor: #D3DAE3;\nborder-image: none;\n"
                         +"box-shadow: none;\nfont-size:" + fontSize + "pt;\n}\n\n"
         +".arc-menu .popup-sub-menu{\npadding-bottom: 1px;\nbackground-color: " + modifyColorLuminance(menuColor, 0.04) + ";\n}\n\n"
-        +".arc-menu .popup-menu-item{\npadding: 6px; spacing: 6px; \nborder: none;\ncolor:" + menuForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item:ltr{\npadding-right:1.75em;\npadding-left: 0;\n}\n\n.arc-menu .popup-menu-item:rtl\n{\npadding-right: 0;\npadding-left:1.75em;\n}\n\n"
-        +".arc-menu .popup-menu-item:checked, .arc-menu .popup-menu-item:active, .arc-menu .popup-menu-item.selected{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n" 
-        +".arc-menu .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0.15) + ";\n}\n\n"
+        +".arc-menu .popup-menu-item{\nspacing: 6px; \nborder: none;\ncolor:" + menuForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item:active{\nbackground-color:" + modifyColorLuminance(highlightColor, -0.15) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item.selected{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item:checked{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
+        +".arc-menu .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0, 0.6) + ";\n}\n\n"
         +".arc-menu-boxpointer{ \n-arrow-border-radius:" + cornerRadius + "px;\n"
                                 +"-arrow-background-color:" + menuColor + ";\n"
                                 +"-arrow-border-color:" + borderColor + ";\n"
@@ -653,31 +620,9 @@ function createStylesheet(settings){
                                 +"-arrow-rise:" + menuArrowSize + "px;\n}\n\n"
         +".arc-menu .popup-menu-content{\npadding: 16px 0px;\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nbox-shadow: 0;\n}\n\n"
 
-        +".arc-menu-sep{\nheight: 1px;\nmargin: 5px 20px;\nbackground-color: transparent;\nborder-bottom-style: solid;"
-                            +"\nborder-color:" + separatorColor + ";\nborder-bottom-width: 1px;\n}\n\n"
-
-        +".menu-user-avatar{\nbackground-size: contain;\nborder-radius: " + avatarRadius + "px;\n}\n\n"
-
-        +".arc-right-click{\nmax-width:350px;\nmin-width: 15em;\ncolor: #D3DAE3;\nborder-image: none;\nfont-size:" + fontSize + "pt;\nmargin:0px;\npadding:0px;"
-                            +"box-shadow: none;\nspacing:0px;\n}\n\n"
-        +".arc-right-click .popup-sub-menu{\npadding-bottom: 1px;\nbackground-color: #3a393b;\nbox-shadow: inset 0 -1px 0px #323233;\n}\n\n"
-        +".arc-right-click .popup-menu-content{\npadding: 3px 0px;\n}\n\n"
-        +".arc-right-click .popup-menu-item{\nspacing: 12px; \nborder: 0;\ncolor:" + menuForegroundColor + ";\n}\n\n" 
-        +".arc-right-click .popup-menu-item:ltr{\npadding: .4em 1.75em .4em 0em;\n}\n\n.arc-right-click .popup-menu-item:rtl{\npadding: .4em 0em .4em 1.75em;\n}\n\n"
-        +".arc-right-click .popup-menu-item:checked{\nbackground-color:" + modifyColorLuminance(highlightColor, 0.08) + ";\ncolor: " + highlightForegroundColor + ";\n}\n\n"
-        +".arc-right-click .popup-menu-item.selected, .arc-right-click .popup-menu-item:active{"
-                                +"\nbackground-color:" + modifyColorLuminance(highlightColor, 0.05) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n" 
-        +".arc-right-click .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0.15) + ";\n}\n\n"
-        +".arc-right-click-boxpointer{ \n-arrow-border-radius:" + cornerRadius + "px;\n"
-                                        +"-arrow-background-color:" + modifyColorLuminance(menuColor, 0.05) + ";\n"
-                                        +"-arrow-border-color:" + modifyColorLuminance(menuColor, 0.10) + ";\n"
-                                        +"-arrow-border-width:" + (borderSize > 1 ? borderSize : 1) + "px;\n"
-                                        +"-arrow-base:" + menuMargin + "px;\n"
-                                        +"-arrow-rise:" + menuArrowSize + "px;\n}\n\n"
-        +".arc-right-click .popup-menu-content{\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nbox-shadow: 0;\n}\n\n"
-        
-        +".app-right-click-sep {\nheight: 1px;\nmargin: 2px 35px 3px 35px;\nbackground-color: transparent;\nborder-bottom-style: solid;"
-                                    +"\nborder-color:" + separatorColor + ";\nborder-bottom-width: 1px;\n}\n";
+        +".arcmenu-separator{\npadding: 0px;\nheight: 1px;\nmargin: 0px 20px;\n}\n\n"
+        + separatorColorStyle
+        +".menu-user-avatar{\nbackground-size: contain;\nborder-radius: " + avatarRadius + "px;\n}\n\n";
     
     let stylesheet = getStylesheet();
     if(stylesheet){
@@ -685,9 +630,9 @@ function createStylesheet(settings){
             stylesheet.replace_contents(stylesheetCSS, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
         }
         catch(e){
-            global.log("ArcMenu - Error updating stylesheet! " + e.message);
+            global.log("ArcMenu Error - Failed to update stylesheet. " + e.message);
         }
     }
     else
-        global.log("ArcMenu - Error getting stylesheet!");
+        global.log("ArcMenu Error - Failed to find stylesheet.");
 }

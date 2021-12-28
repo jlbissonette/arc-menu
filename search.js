@@ -33,7 +33,6 @@ const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const MW = Me.imports.menuWidgets;
 const PopupMenu = imports.ui.popupMenu;
 const RemoteSearch = imports.ui.remoteSearch;
-const Signals = imports.signals;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
@@ -41,23 +40,18 @@ const { OpenWindowSearchProvider } = Me.imports.searchProviders.openWindows;
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
-var MAX_LIST_SEARCH_RESULTS_ROWS = 6;
-var MAX_APPS_SEARCH_RESULTS_ROWS = 6;
-
-var LARGE_ICON_SIZE = 36;
-var MEDIUM_ICON_SIZE = 25;
-var SMALL_ICON_SIZE = 16;
+var MAX_SEARCH_RESULTS = 5;
 
 var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
         let menulayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']);
 
-        super._init(menulayout, app, Constants.AppDisplayType.SEARCH, metaInfo)
+        super._init(menulayout, app, Constants.DisplayType.LIST, metaInfo)
 
         this.app = app;
         let layoutProperties = this._menuLayout.layoutProperties;
-        this.searchType = layoutProperties.SearchType;
+        this.searchType = layoutProperties.SearchDisplayType;
         this.metaInfo = metaInfo;
         this.provider = provider;
         this._settings = this._menuLayout._settings;
@@ -67,80 +61,107 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         if(this.provider.id === 'org.gnome.Nautilus.desktop')
             this._path = this.metaInfo['description'];
 
-        if(this.searchType === Constants.AppDisplayType.GRID)
-            this.style = "border-radius: 4px;";
-
-        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
-        if (this.metaInfo['description'] && showSearchResultDescriptions) {
+        let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
+        if(highlightSearchResultTerms){
             this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
             this._highlightTerms();
         }
 
+        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
         if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions)
             this.label.text = this.metaInfo['name'] + " " + this.metaInfo['description'];
 
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
-
-        this.connect('destroy', this._onDestroy.bind(this));
     }
 
     _highlightTerms() {
-        let markup = this.resultsView.highlightTerms(this.metaInfo['description'].split('\n')[0]);
-        this.descriptionLabel.clutter_text.set_markup(markup);
+        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
+        if(this.descriptionLabel && showSearchResultDescriptions){
+            let descriptionMarkup = this.resultsView.highlightTerms(this.metaInfo['description'].split('\n')[0]);
+            this.descriptionLabel.clutter_text.set_markup(descriptionMarkup);
+        }
+        let labelMarkup = this.resultsView.highlightTerms(this.label.text.split('\n')[0]);
+        this.label.clutter_text.set_markup(labelMarkup);
     }
 
-    _onDestroy() {
-        if (this._termsChangedId)
+    destroy() {
+        if (this._termsChangedId) {
             this.resultsView.disconnect(this._termsChangedId);
-        this._termsChangedId = null;
+            this._termsChangedId = null;
+        }
+        super.destroy();
     }
 });
 
 var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
+        let menulayout = resultsView._menuLayout;
+        let app = appSys.lookup_app(metaInfo['id']) || appSys.lookup_app(provider.id);
+        let displayType = menulayout.layoutProperties.SearchDisplayType;
+        super._init(menulayout, app, displayType, metaInfo);
+        this.app = app;
         this.provider = provider;
         this.metaInfo = metaInfo;
         this.resultsView = resultsView;
-        let menulayout = resultsView._menuLayout;
-        let app = appSys.lookup_app(metaInfo['id']) || appSys.lookup_app(provider.id);
-        let searchType = menulayout.layoutProperties.SearchType;
-        super._init(menulayout, app, searchType, metaInfo)
-        this.app = app;
-        this.metaInfo = metaInfo;
 
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
+
+        let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
+        if(highlightSearchResultTerms){
+            this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
+            this._highlightTerms();
+        }
+    }
+
+    _highlightTerms() {
+        let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
+        if(this.descriptionLabel && showSearchResultDescriptions){
+            let descriptionMarkup = this.resultsView.highlightTerms(this.descriptionLabel.text.split('\n')[0]);
+            this.descriptionLabel.clutter_text.set_markup(descriptionMarkup);
+        }
+
+        let labelMarkup = this.resultsView.highlightTerms(this.label.text.split('\n')[0]);
+        this.label.clutter_text.set_markup(labelMarkup);
+    }
+
+    destroy() {
+        if (this._termsChangedId) {
+            this.resultsView.disconnect(this._termsChangedId);
+            this._termsChangedId = null;
+        }
+        super.destroy();
     }
 });
 
-var SearchResultsBase = class Arc_Menu_SearchResultsBase{
-    constructor(provider, resultsView) {
+var SearchResultsBase = GObject.registerClass({
+    Signals: { 'terms-changed': {},
+                'no-results': {} },
+}, class ArcMenu_SearchResultsBase extends St.BoxLayout {
+    _init(provider, resultsView) {
+        super._init({ vertical: true });
         this.provider = provider;
         this.resultsView = resultsView;
         this._menuLayout = resultsView._menuLayout;
         this._terms = [];
-
-        this.actor = new St.BoxLayout({ 
-            vertical: true 
-        });
 
         this._resultDisplayBin = new St.Bin({
             x_expand: true,
             y_expand: true
         });
 
-        this.actor.add(this._resultDisplayBin);
+        this.add(this._resultDisplayBin);
 
         this._resultDisplays = {};
         this._clipboard = St.Clipboard.get_default();
 
         this._cancellable = new Gio.Cancellable();
-        this.actor.connect('destroy', this._onDestroy.bind(this));
     }
 
-    _onDestroy() {
+    destroy() {
         this._terms = [];
+        super.destroy();
     }
 
     _createResultDisplay(meta) {
@@ -156,7 +177,7 @@ var SearchResultsBase = class Arc_Menu_SearchResultsBase{
             this._resultDisplays[resultId].destroy();
         this._resultDisplays = {};
         this._clearResultDisplay();
-        this.actor.hide();
+        this.hide();
     }
 
     _setMoreCount(count) {
@@ -206,7 +227,7 @@ var SearchResultsBase = class Arc_Menu_SearchResultsBase{
         this._terms = terms;
         if (providerResults.length == 0) {
             this._clearResultDisplay();
-            this.actor.hide();
+            this.hide();
             callback();
         } else {
             let maxResults = this._getMaxDisplayedResults();
@@ -223,35 +244,40 @@ var SearchResultsBase = class Arc_Menu_SearchResultsBase{
                 // To avoid CSS transitions causing flickering when
                 // the first search result stays the same, we hide the
                 // content while filling in the results.
-                this.actor.hide();
+                this.hide();
                 this._clearResultDisplay();
                 results.forEach(resultId => {
                     this._addItem(this._resultDisplays[resultId]);
                 });
                
                 this._setMoreCount(this.provider.canLaunchSearch ? moreCount : 0);
-                this.actor.show();
+                this.show();
                 callback();
             });
         }
     }
-};
+});
 
-var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBase {
-    constructor(provider, resultsView) {
-        super(provider, resultsView);
+var ListSearchResults = GObject.registerClass(
+class ArcMenu_ListSearchResults extends SearchResultsBase {
+    _init(provider, resultsView) {
+        super._init(provider, resultsView);
         this._menuLayout = resultsView._menuLayout;
-        this.searchType = this._menuLayout.layoutProperties.SearchType;
+        this.searchType = this._menuLayout.layoutProperties.SearchDisplayType;
         this._settings = this._menuLayout._settings;
         this.layout = this._settings.get_enum('menu-layout');
-
+        
         this._container = new St.BoxLayout({
-            vertical: this.searchType === Constants.AppDisplayType.GRID ? false : true,
+            vertical: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             x_expand: true,
             y_expand: true,
         });
+
+        if(this.searchType === Constants.DisplayType.GRID){
+            this.add_style_class_name('margin-box');
+        }
 
         this.providerInfo = new ArcSearchProviderInfo(provider, this._menuLayout);
         this.providerInfo.connect('activate', () => {
@@ -261,7 +287,7 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
             }
         });
 
-        this._container.add(this.providerInfo.actor);
+        this._container.add(this.providerInfo);
 
         this._content = new St.BoxLayout({
             vertical: true,
@@ -269,15 +295,6 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL
         });
-
-        if(this.searchType === Constants.AppDisplayType.GRID){
-            if(this.layout == Constants.MenuLayout.RAVEN)
-                this._container.vertical = true;
-            else{
-                this._content.style = "spacing: 6px;"
-                this._container.style = "padding: 10px 0px; spacing: 6px; margin: 0px 5px;";
-            } 
-        }
 
         this._container.add(this._content);
         this._resultDisplayBin.set_child(this._container);
@@ -288,7 +305,7 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
     }
 
     _getMaxDisplayedResults() {
-        return MAX_LIST_SEARCH_RESULTS_ROWS;
+        return MAX_SEARCH_RESULTS;
     }
 
     _clearResultDisplay() {
@@ -299,7 +316,10 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
         return super._createResultDisplay(meta, this.resultsView) ||
                new ListSearchResult(this.provider, meta, this.resultsView);
     }
+
     _addItem(display) {
+        if(display.get_parent())
+            display.get_parent().remove_actor(display);
         this._content.add_actor(display);
     }
 
@@ -309,26 +329,38 @@ var ListSearchResults = class Arc_Menu_ListSearchResults extends SearchResultsBa
         else
             return null;
     }
-    destroy(){
-        this._resultDisplayBin.destroy();
-        this._resultDisplayBin = null;
-    }
-};
-Signals.addSignalMethods(ListSearchResults.prototype);
-var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase {
-      constructor(provider, resultsView) {
-        super(provider, resultsView);
-        this._parentContainer = resultsView.actor;
+});
+
+var AppSearchResults = GObject.registerClass(
+class ArcMenu_AppSearchResults extends SearchResultsBase {
+    _init(provider, resultsView) {
+        super._init(provider, resultsView);
+        this._parentContainer = resultsView;
         this._menuLayout = resultsView._menuLayout;
-        this.searchType = this._menuLayout.layoutProperties.SearchType;
+        this.layoutProperties = this._menuLayout.layoutProperties;
+        this.searchType = this.layoutProperties.SearchDisplayType;
         this.layout = this._menuLayout._settings.get_enum('menu-layout');
+        
+        this.itemCount = 0;
+        this.gridTop = -1;
+        this.gridLeft = 0;
+        
+        this.rtl = this._menuLayout.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
 
-        this._grid = new St.BoxLayout({
-            vertical: this.searchType === Constants.AppDisplayType.GRID ? false : true 
+        let layout = new Clutter.GridLayout({ 
+            orientation: Clutter.Orientation.VERTICAL,
+            column_spacing: this.searchType === Constants.DisplayType.GRID ? this.layoutProperties.ColumnSpacing : 0,
+            row_spacing: this.searchType === Constants.DisplayType.GRID ? this.layoutProperties.RowSpacing : 0,
         });
+        this._grid = new St.Widget({ 
+            x_expand: true,
+            x_align: this.searchType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
+            layout_manager: layout 
+        });
+        layout.hookup_style(this._grid);
 
-        if(this.searchType === Constants.AppDisplayType.GRID){
-            let spacing = this._menuLayout.layoutProperties.ColumnSpacing;
+        if(this.searchType === Constants.DisplayType.GRID){
+            let spacing = this.layoutProperties.ColumnSpacing;
 
             this._grid.style = "padding: 0px 10px 10px 10px; spacing: " + spacing + "px;";   
             this._resultDisplayBin.x_align = Clutter.ActorAlign.CENTER;
@@ -338,10 +370,18 @@ var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase
     }
 
     _getMaxDisplayedResults() {
-         return MAX_APPS_SEARCH_RESULTS_ROWS;
+        let maxDisplayedResults;
+        if(this.searchType === Constants.DisplayType.GRID)
+            maxDisplayedResults = this.layoutProperties.GridColumns
+        else 
+            maxDisplayedResults = MAX_SEARCH_RESULTS;
+        return maxDisplayedResults;
     }
 
     _clearResultDisplay() {
+        this.itemCount = 0;
+        this.gridTop = -1;
+        this.gridLeft = 0;
         this._grid.remove_all_children();
     }
     
@@ -350,7 +390,23 @@ var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase
     }
 
     _addItem(display) {
-        this._grid.add_actor(display);
+        const GridColumns = this.searchType === Constants.DisplayType.LIST ? 1 : this.layoutProperties.GridColumns;
+        if(!this.rtl && (this.itemCount % GridColumns === 0)){
+            this.gridTop++;
+            this.gridLeft = 0;
+        }
+        else if(this.rtl && (this.gridLeft === 0)){
+            this.gridTop++;
+            this.gridLeft = GridColumns;
+        }
+        this._grid.layout_manager.attach(display, this.gridLeft, this.gridTop, 1, 1);
+        display.gridLocation = [this.gridLeft, this.gridTop];
+        
+        if(!this.rtl)
+            this.gridLeft++;
+        else if(this.rtl)
+            this.gridLeft--;
+        this.itemCount++;
     }
 
     getFirstResult() {
@@ -359,40 +415,33 @@ var AppSearchResults = class Arc_Menu_AppSearchResults extends SearchResultsBase
         else
             return null;
     }
-    destroy(){
-        this._resultDisplayBin.destroy();
-        this._resultDisplayBin = null;
-    }
-};
-Signals.addSignalMethods(AppSearchResults.prototype);
+});
 
-var SearchResults = class Arc_Menu_SearchResults {
-    constructor(menuLayout) {
-        this._menuLayout = menuLayout;
-        let layoutProperties = this._menuLayout.layoutProperties;
-        this.searchType = this._menuLayout.layoutProperties.SearchType;
-        this._settings = this._menuLayout._settings;
-        this.layout = this._settings.get_enum('menu-layout');
-
-        this.actor = new St.BoxLayout({ 
+var SearchResults = GObject.registerClass({
+    Signals: { 'terms-changed': {},
+                'have-results': {},
+                'no-results': {} },
+}, class ArcMenu_SearchResults extends St.BoxLayout {
+    _init(menuLayout) {
+        super._init({
             vertical: true,
-            y_expand: this.searchType === Constants.AppDisplayType.GRID ? false : true,
+            y_expand: true,
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL  
-
         });
-        this.actor._delegate = this.actor;
+        this._menuLayout = menuLayout;
+        let layoutProperties = this._menuLayout.layoutProperties;
+        this.searchType = this._menuLayout.layoutProperties.SearchDisplayType;
+        this._settings = this._menuLayout._settings;
+        this.layout = this._settings.get_enum('menu-layout');
 
         this._content = new St.BoxLayout({
             vertical: true,
             x_align: Clutter.ActorAlign.FILL  
         });
  
-        this.actor.add(this._content);
+        this.add(this._content);
        
-        if(this.searchType === Constants.AppDisplayType.GRID)
-            MAX_APPS_SEARCH_RESULTS_ROWS = layoutProperties.GridColumns;
-
         this._statusText = new St.Label();
         this._statusBin = new St.Bin({ 
             x_align: Clutter.ActorAlign.CENTER,
@@ -406,10 +455,10 @@ var SearchResults = class Arc_Menu_SearchResults {
         else
             this._statusText.style_class = '';
         
-        this.actor.add(this._statusBin);
+        this.add(this._statusBin);
         this._statusBin.add_actor(this._statusText);
 
-        this._highlightDefault = false;
+        this._highlightDefault = true;
         this._defaultResult = null;
         this._startingSearch = false;
 
@@ -426,7 +475,7 @@ var SearchResults = class Arc_Menu_SearchResults {
         this.disablExternalID = this._searchSettings.connect('changed::disable-external', this._reloadRemoteProviders.bind(this));
         this.sortOrderID = this._searchSettings.connect('changed::sort-order', this._reloadRemoteProviders.bind(this));
 
-        this._searchTimeoutId = 0;
+        this._searchTimeoutId = null;
         this._cancellable = new Gio.Cancellable();
 
         this._registerProvider(new AppDisplay.AppSearchProvider());
@@ -440,46 +489,45 @@ var SearchResults = class Arc_Menu_SearchResults {
         return this._terms;
     }
 
-    setMaxDisplayedResults(rows) {
-        MAX_APPS_SEARCH_RESULTS_ROWS = rows;
-    }
-
     setStyle(style){
         if(this._statusText){
             this._statusText.style_class = style;
         }
-            
     }
+
     destroy(){
-        if (this._searchTimeoutId > 0) {
-            GLib.source_remove(this._searchTimeoutId);
-            this._searchTimeoutId = 0;
-        }
-        if(this.disabledID>0){
+        this._terms = [];
+        this._results = {};
+        this._clearDisplay();
+        this._clearSearchTimeout();
+        this._defaultResult = null;
+        this._startingSearch = false;
+        if(this.disabledID){
             this._searchSettings.disconnect(this.disabledID);
-            this.disabledID=0;
+            this.disabledID = null;
         }
-        if(this.enabledID>0){
+        if(this.enabledID){
             this._searchSettings.disconnect(this.enabledID);
-            this.enabledID=0;
+            this.enabledID = null;
         }
-        if(this.disablExternalID>0){
+        if(this.disablExternalID){
             this._searchSettings.disconnect(this.disablExternalID);
-            this.disablExternalID=0;
+            this.disablExternalID = null;
         }
-        if(this.sortOrderID>0){
+        if(this.sortOrderID){
             this._searchSettings.disconnect(this.sortOrderID);
-            this.sortOrderID=0;
+            this.sortOrderID = null;
         }
-        if(this.installChangedID>0){
+        if(this.installChangedID){
             appSys.disconnect(this.installChangedID);
-            this.installChangedID=0;
-        }     
-        this._providers.forEach(provider => {
-            provider.display.clear();
-            provider.display.destroy();
+            this.installChangedID = null;
+        }
+        let remoteProviders = this._providers.filter(p => p.isRemoteProvider);
+        remoteProviders.forEach(provider => {
+            this._unregisterProvider(provider);
         });
-        this.actor.destroy();
+        this._content.destroy_all_children();
+        super.destroy();
     }
 
     _reloadRemoteProviders() {
@@ -508,7 +556,7 @@ var SearchResults = class Arc_Menu_SearchResults {
         this._providers.splice(index, 1);
 
         if (provider.display){
-            provider.display.actor.destroy();
+            provider.display.destroy();
         }
     }
 
@@ -518,9 +566,9 @@ var SearchResults = class Arc_Menu_SearchResults {
     }
 
     _clearSearchTimeout() {
-        if (this._searchTimeoutId > 0) {
+        if (this._searchTimeoutId) {
             GLib.source_remove(this._searchTimeoutId);
-            this._searchTimeoutId = 0;
+            this._searchTimeoutId = null;
         }
     }
 
@@ -566,7 +614,7 @@ var SearchResults = class Arc_Menu_SearchResults {
     }
 
     _onSearchTimeout() {
-        this._searchTimeoutId = 0;
+        this._searchTimeoutId = null;
         this._doSearch();
         return GLib.SOURCE_REMOVE;
     }
@@ -599,11 +647,21 @@ var SearchResults = class Arc_Menu_SearchResults {
         this._isSubSearch = isSubSearch;
         this._updateSearchProgress();
 
-        if (this._searchTimeoutId == 0)
+        if (this._searchTimeoutId === null)
             this._searchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, this._onSearchTimeout.bind(this));
 
-        let escapedTerms = this._terms.map(term => Shell.util_regex_escape(term));
-        this._highlightRegex = new RegExp('(%s)'.format(escapedTerms.join('|')), 'gi');
+        
+
+        const escapedTerms = terms
+            .map(term => Shell.util_regex_escape(term))
+            .filter(term => term.length > 0);
+
+        if (escapedTerms.length === 0)
+            return;
+
+        this._highlightRegex = new RegExp('(%s)'.format(
+            escapedTerms.join('|')), 'gi');
+
         this.emit('terms-changed');
     }
 
@@ -616,8 +674,8 @@ var SearchResults = class Arc_Menu_SearchResults {
             providerDisplay = new ListSearchResults(provider, this);
         else
             providerDisplay = new AppSearchResults(provider, this);
-        providerDisplay.actor.hide();
-        this._content.add(providerDisplay.actor);
+        providerDisplay.hide();
+        this._content.add(providerDisplay);
         provider.display = providerDisplay;
     }
 
@@ -635,7 +693,7 @@ var SearchResults = class Arc_Menu_SearchResults {
             let provider = providers[i];
             let display = provider.display;
 
-            if (!display.actor.visible)
+            if (!display.visible)
                 continue;
 
             let firstResult = display.getFirstResult();
@@ -645,7 +703,7 @@ var SearchResults = class Arc_Menu_SearchResults {
             }
         }
 
-        if (newDefaultResult != this._defaultResult) {
+        if (newDefaultResult !== this._defaultResult) {
             this._setSelected(this._defaultResult, false);
             this._setSelected(newDefaultResult, this._highlightDefault);
 
@@ -667,13 +725,14 @@ var SearchResults = class Arc_Menu_SearchResults {
         });
 
         this._statusBin.visible = !haveResults;
-        this.emit("terms-changed")
-        if (!haveResults) {
-            if (this.searchInProgress) {
+        if (haveResults)
+            this.emit("have-results")
+        else if (!haveResults) {
+            if (this.searchInProgress)
                 this._statusText.set_text(_("Searching..."));
-            } else {
+            else
                 this._statusText.set_text(_("No results."));
-            }
+
             this.emit("no-results")
         }
     }
@@ -716,40 +775,51 @@ var SearchResults = class Arc_Menu_SearchResults {
     }
 
     _setSelected(result, selected) {
-        if (!result || result === undefined || result === null)
+        if(!result)
             return;
-        if (selected) {
-            this._menuLayout.activeMenuItem = result;
+
+        if(selected)
             result.add_style_pseudo_class('active');
-        } else {
+        else
             result.remove_style_pseudo_class('active');
-        }
     }
 
     hasActiveResult(){
         return (this._defaultResult ? true : false) && this._highlightDefault;
     }
 
-    highlightTerms(description) {
-        if (!description)
-            return '';
-
+    highlightTerms(text) {
         if (!this._highlightRegex)
-            return description;
+            return GLib.markup_escape_text(text, -1);
 
-        return description.replace(this._highlightRegex, '<b>$1</b>');
+        let escaped = [];
+        let lastMatchEnd = 0;
+        let match;
+        while ((match = this._highlightRegex.exec(text))) {
+            if (match.index > lastMatchEnd) {
+                let unmatched = GLib.markup_escape_text(
+                    text.slice(lastMatchEnd, match.index), -1);
+                escaped.push(unmatched);
+            }
+            let matched = GLib.markup_escape_text(match[0], -1);
+            escaped.push('<b>%s</b>'.format(matched));
+            lastMatchEnd = match.index + match[0].length;
+        }
+        let unmatched = GLib.markup_escape_text(
+            text.slice(lastMatchEnd), -1);
+        escaped.push(unmatched);
+
+        return escaped.join('');
     }
-};
-Signals.addSignalMethods(SearchResults.prototype);
+});
 
 var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem{
     _init(provider, menuLayout) {
         super._init(menuLayout);
         this.provider = provider;
         this._menuLayout = menuLayout;
-        this.searchType = this._menuLayout.layoutProperties.SearchType;
-        this.layout = this._menuLayout._settings.get_enum('menu-layout');
         this._settings = this._menuLayout._settings;
+
         this.description = this.provider.appInfo.get_description();
         if(this.description)
             this.description = this.description.split('\n')[0];
@@ -761,62 +831,18 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
             style: 'text-align: left;'
         });
 
-        if(this.searchType === Constants.AppDisplayType.GRID){
-            this.actor.y_align = Clutter.ActorAlign.START;
-            this.actor.vertical = false;
-            this.x_expand = false; 
-            this._content = new St.BoxLayout({ 
-                vertical: false,
-                x_align: Clutter.ActorAlign.FILL,
-                y_align: Clutter.ActorAlign.CENTER,
-                x_expand: true,
-                style: "spacing: 5px;"
-            });
-    
-            let icon = new St.Icon({ 
-                icon_size: this._menuLayout.layoutProperties.ListSearchResults_IconSize,
-                gicon: provider.appInfo.get_icon()
-            });
-            this.actor.style = "border-radius:4px; spacing: 0px;";
+        this.label.style = 'font-weight: bold;';
+        this.style = "padding: 10px 0px;";
+        this.add_child(this.label);
 
-            if(this.layout === Constants.MenuLayout.ELEMENTARY || this.layout === Constants.MenuLayout.UNITY){
-                this.actor.style += "width: 190px;";
-                this._content.add_actor(icon);
-            }
-            else if(this.layout === Constants.MenuLayout.RAVEN){
-                this.actor.style += "padding: 15px 0px;";
-                this._content.style = "spacing: 12px;";
-                this.label.style = 'font-weight: bold;';
-            }
-            else{
-                this.actor.style += "width: 150px;";
-                this._content.add_actor(icon);
-            }
-
-            this._content.add_actor(this.label);
-            this.add_child(this._content);
-        }
-        else{
-            this.label.style = 'font-weight: bold;';
-            this.actor.style = "padding: 10px 0px;";
-            this.add_child(this.label);
-        }
         this._moreText = "";
     }
 
     setMoreCount(count) {
         this._moreText = ngettext("%d more", "%d more", count).format(count);
 
-        if(count > 0){
-            if(this.searchType === Constants.AppDisplayType.GRID){
-                if(this.layout === Constants.MenuLayout.RAVEN)
-                    this.label.text = this.provider.appInfo.get_name() + " (" + this._moreText + ")";
-                else
-                    this.label.text = this.provider.appInfo.get_name() + "\n" + this._moreText;
-            }
-            else
-                this.label.text = this.provider.appInfo.get_name() + "  (" + this._moreText + ")";
-        }
+        if(count > 0)
+            this.label.text = this.provider.appInfo.get_name() + "  (" + this._moreText + ")";
         else
             this.label.text = this.provider.appInfo.get_name();
     }

@@ -33,21 +33,27 @@ const PopupMenu = imports.ui.popupMenu;
 const _ = Gettext.gettext;
 
 var createMenu = class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton, {
+    constructor(menuButton) {
+        super(menuButton, {
             Search: false,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
         });
     }
 
     createLayout(){
         super.createLayout();
         this.mainBox.style = null;
+        this.mainBox.style_class = 'margin-box';
         this.loadPinnedApps();
         this.loadCategories();
         this._display(); 
@@ -84,7 +90,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
         }        
 
-        super.loadCategories(MW.CategorySubMenuItem);
+        super.loadCategories(Constants.DisplayType.SUBMENU_CATEGORY);
 
         for(let categoryMenuItem of this.categoryDirectories.values()){
             categoryMenuItem._setParent(this.arcMenu);  
@@ -100,9 +106,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;
                 this.activeMenuItem = categoryMenuItem;
-                if(this.arcMenu.isOpen){
-                    this.mainBox.grab_key_focus();
-                }
             }	 
         }
     }
@@ -164,17 +167,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             box.add(this.applicationsGrid);
     }
 
-    destroy(isReload){
-        let children = this.arcMenu._getMenuItems();
-        for (let i = 0; i < children.length; i++) {
-            let item = children[i];
-            if(item instanceof MW.CategorySubMenuItem){
-                let item = children[i];
-                item.destroy();
-            }
-        }
-
+    destroy(){
         this.arcMenu.actor.style = null;
-        super.destroy(isReload);
+        super.destroy();
     }
 }

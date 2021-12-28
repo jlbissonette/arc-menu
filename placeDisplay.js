@@ -37,6 +37,7 @@ const MW = Me.imports.menuWidgets;
 const PopupMenu = imports.ui.popupMenu;
 const ShellMountOperation = imports.ui.shellMountOperation;
 const Signals = imports.signals;
+const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
 const BACKGROUND_SCHEMA = 'org.gnome.desktop.background';
@@ -47,38 +48,35 @@ const Hostname1Iface = '<node> \
 </node>';
 const Hostname1 = Gio.DBusProxy.makeProxyWrapper(Hostname1Iface);
 
-const MEDIUM_ICON_SIZE = 25;
-const SMALL_ICON_SIZE = 16;
-
 var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends MW.ArcMenuPopupBaseMenuItem{
     _init(menuLayout, info) {
         super._init(menuLayout);
         this._info = info;
         this._menuLayout = menuLayout;
-        this._icon = new St.Icon({
-            gicon: info.icon,
-            icon_size: SMALL_ICON_SIZE
-        });
-        this.add_child(this._icon);
+        this._settings = this._menuLayout._settings;
+
+        this._iconBin = new St.Bin();
+        this.add_child(this._iconBin);
+
+        this._updateIcon();
+
         this.label = new St.Label({ text: info.name, 
-                                    x_expand: false,
-                                    y_expand: true,
+                                    x_expand: true,
+                                    y_expand: false,
                                     x_align: Clutter.ActorAlign.FILL,
                                     y_align: Clutter.ActorAlign.CENTER });
         
-        this.add_child(this.label);
+        this.add_actor(this.label);
 
         if (info.isRemovable()) {
-            this._ejectIcon = new St.Icon({
-                icon_name: 'media-eject-symbolic',
-                style_class: 'popup-menu-icon'
-            });
-            this._ejectButton = new St.Button({ 
-                child: this._ejectIcon,
-                style_class: 'arc-menu-eject-button'
-            });
-            this._ejectButton.connect('clicked', info.eject.bind(info));
-            this.add_child(this._ejectButton);
+            this.style = "padding-right: 15px;";
+            this._ejectButton = new MW.ArcMenuButtonItem(this._menuLayout, null, 'media-eject-symbolic');
+            this._ejectButton.add_style_class_name("arcmenu-small-button")
+            this._ejectButton.setIconSize(14);
+            this._ejectButton.x_align = Clutter.ActorAlign.END;
+            this._ejectButton.x_expand = true;
+            this._ejectButton.connect('activate', info.eject.bind(info));
+            this.add_actor(this._ejectButton);
         }
 
         this._changedId = info.connect('changed',
@@ -89,14 +87,18 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
                 this._changedId = 0;
             }
         });
-        let layout = this._menuLayout._settings.get_enum('menu-layout');  
-        if(layout === Constants.MenuLayout.PLASMA)
-            this._updateIcon();
+
     }
-   
-    _updateIcon(){
-        let largeIcons = this._menuLayout._settings.get_boolean('enable-large-icons');
-        this._icon.icon_size = largeIcons ? MEDIUM_ICON_SIZE : SMALL_ICON_SIZE;
+
+    createIcon(){
+        const IconSizeEnum = this._settings.get_enum('quicklinks-item-icon-size');
+        let defaultIconSize = this._menuLayout.layoutProperties.DefaultQuickLinksIconSize;
+        let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+
+        return new St.Icon({
+            gicon: this._info.icon,
+            icon_size: iconSize
+        });
     }
 
     activate(event) {
@@ -106,7 +108,8 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
     }
 
     _propertiesChanged(info) {
-        this._icon.gicon = info.icon;
+        this._info = info;
+        this._iconBin.set_child(this.createIcon());
         this.label.text = info.name;
     }
 });
@@ -745,10 +748,10 @@ var Trash = class Arc_Menu_Trash {
             this._menuItem._app = this._trashApp;
             if(this._menuItem.contextMenu)
                 this._menuItem.contextMenu._app = this._trashApp;
-            let trashIcon = this._trashApp.create_icon_texture(MEDIUM_ICON_SIZE);
-            if(this._menuItem._icon && trashIcon)
-                this._menuItem._icon.gicon = trashIcon.gicon;
-
+            let trashIcon = this._trashApp.create_icon_texture(Constants.MEDIUM_ICON_SIZE);
+            if(this._menuItem._iconBin && trashIcon)
+                this._menuItem.iconName = trashIcon.gicon.to_string();
+            this._menuItem._updateIcon();
             this.emit('changed');
         }
     }

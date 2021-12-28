@@ -88,17 +88,20 @@ var TweaksPage = GObject.registerClass({
         this._createLayout();
     }
 
-    setActiveLayoutName(layoutName){
-        this.layoutNameLabel.label = "<b>" + _(layoutName) + "</b>";
+    setActiveLayout(menuLayout, layoutName){
+        if(layoutName)
+            this.layoutNameLabel.label = "<b>" + _(layoutName) + "</b>";
         let children = [...this.mainBox];
         for(let child of children){
             this.mainBox.remove(child);
         }         
-        this._createLayout();
+        this._createLayout(menuLayout);
     }
 
-    _createLayout() {    
-        let menuLayout = this._settings.get_enum('menu-layout');
+    _createLayout(menuLayout) {
+        if(!menuLayout)
+            menuLayout = this._settings.get_enum('menu-layout');
+
         if(menuLayout == Constants.MenuLayout.ARCMENU)
             this._loadArcMenuTweaks();
         else if(menuLayout == Constants.MenuLayout.BRISK)
@@ -137,6 +140,8 @@ var TweaksPage = GObject.registerClass({
             this._loadPlasmaMenuTweaks();
         else if(menuLayout == Constants.MenuLayout.WINDOWS)
             this._loadWindowsTweaks();
+        else if(menuLayout == Constants.MenuLayout.ELEVEN)
+            this._loadElevenTweaks();
         else
             this._loadPlaceHolderTweaks();
     }
@@ -242,6 +247,26 @@ var TweaksPage = GObject.registerClass({
         return disableAvatarRow;
     }
 
+    _loadElevenTweaks(){
+        let elevenTweaksFrame = new PW.FrameBox();
+        let disableFrequentAppsRow = new PW.FrameBoxRow();
+        let disableFrequentAppsLabel = new Gtk.Label({
+            label: _("Disable Frequent Apps"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let disableFrequentAppsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
+        disableFrequentAppsSwitch.set_active(this._settings.get_boolean('eleven-disable-frequent-apps'));
+        disableFrequentAppsSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('eleven-disable-frequent-apps', widget.get_active());
+        });
+        disableFrequentAppsRow.add(disableFrequentAppsLabel);
+        disableFrequentAppsRow.add(disableFrequentAppsSwitch);
+        elevenTweaksFrame.add(disableFrequentAppsRow);
+        this.mainBox.append(elevenTweaksFrame);
+    }
+
     _loadGnomeOverviewTweaks(){
         let gnomeOverviewTweaksFrame = new PW.FrameBox();
         let appsGridRow = new PW.FrameBoxRow();
@@ -338,22 +363,6 @@ var TweaksPage = GObject.registerClass({
         hoverRow.add(hoverLabel);
         hoverRow.add(hoverSwitch);
         plasmaMenuTweaksFrame.add(hoverRow);
-
-        let descriptionsRow = new PW.FrameBoxRow();
-        let descriptionsLabel = new Gtk.Label({
-            label: _("Show Application Descriptions"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let descriptionsSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
-        descriptionsSwitch.set_active(this._settings.get_boolean('apps-show-extra-details'));
-        descriptionsSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('apps-show-extra-details', widget.get_active());
-        });
-        descriptionsRow.add(descriptionsLabel);
-        descriptionsRow.add(descriptionsSwitch);
-        plasmaMenuTweaksFrame.add(descriptionsRow);
 
         let foregroundColorRow = new PW.FrameBoxRow();
         let foregroundColorLabel = new Gtk.Label({
@@ -791,7 +800,7 @@ var TweaksPage = GObject.registerClass({
         ravenPositionRow.add(ravenPositionLabel);
         ravenPositionRow.add(ravenPositionCombo);
         generalTweaksFrame.add(ravenPositionRow);
-
+        generalTweaksFrame.add(this._createActivateOnHoverRow());
         let widgetFrame = this._createWidgetsRows(Constants.MenuLayout.RAVEN);
         this.mainBox.append(widgetFrame);
     }

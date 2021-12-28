@@ -22,6 +22,7 @@
         <value value='18' nick='Windows'/>
         <value value='19' nick='Launcher'/>
         <value value='20' nick='Eleven'/>
+        <value value='21' nick='AZ'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.forcemenulocation'>
         <value value='0' nick='Off'/>
@@ -31,8 +32,11 @@
     <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
         <value value='0' nick='Undefined'/>
         <value value='1' nick='Super_L'/>
-        <value value='2' nick='Super_R'/>
-        <value value='3' nick='Custom'/>
+        <value value='2' nick='Custom'/>
+    </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.runner-menu-hotkey'>
+        <value value='0' nick='Super_L'/>
+        <value value='1' nick='Custom'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-position'>
         <value value="0" nick="Left"/>
@@ -88,6 +92,14 @@
         <value value="2" nick="ToggleArcMenu"/>
         <value value="3" nick="Custom"/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.icon-sizes'>
+        <value value="0" nick="Default"/>
+        <value value="1" nick="ExtraSmall"/>
+        <value value="2" nick="Small"/>
+        <value value="3" nick="Medium"/>
+        <value value="4" nick="Large"/>
+        <value value="5" nick="Extralarge"/>
+    </enum>
   <schema path="/org/gnome/shell/extensions/arcmenu/" id="org.gnome.shell.extensions.arcmenu">
     <key type="i" name="menu-position-alignment">
       <default>50</default>
@@ -113,6 +125,11 @@
       <default>false</default>
       <summary>show ArcMenu on primary monitor when using hotkey</summary>
       <description>show ArcMenu on primary monitor when using hotkey.</description>
+    </key>
+    <key type="b" name="runner-hotkey-open-primary-monitor">
+      <default>false</default>
+      <summary>show standalone Runner menu on primary monitor when using hotkey</summary>
+      <description>show standalone Runner menu monitor when using hotkey.</description>
     </key>
     <key type="i" name="settings-width">
       <default>875</default>
@@ -178,6 +195,11 @@
       <default>false</default>
       <summary>Show a larger icon and extra app details</summary>
       <description>Show a larger icon and extra app details.</description>
+    </key>
+    <key type="b" name="highlight-search-result-terms">
+      <default>false</default>
+      <summary>Highlight search results terms</summary>
+      <description>Highlight search results terms.</description>
     </key>
     <key type="b" name="show-search-result-details">
       <default>false</default>
@@ -319,6 +341,11 @@
       <summary>Runner layout - font size</summary>
       <description>Runner layout - font size</description>
     </key>
+    <key type="b" name="eleven-disable-frequent-apps">
+      <default>false</default>
+      <summary>Eleven Layout - disable frequent apps</summary>
+      <description>Eleven Layout - disable frequent apps</description>
+    </key>
     <key type="b" name="reload-theme">
       <default>false</default>
       <summary>Used to reload theme</summary>
@@ -330,27 +357,27 @@
       <description>Enable a vertical separator.</description>
     </key>
     <key type="s" name="separator-color">
-      <default>"rgb(63,62,64)"</default>
+      <default>"rgb(32,32,32)"</default>
       <summary>Separator Color</summary>
       <description>Separator Color.</description>
     </key>
     <key type="s" name="menu-color">
-      <default>"rgba(28, 28, 28, 0.98)"</default>
+      <default>"rgba(53,53,53,0.987)"</default>
       <summary>Menu Background Color</summary>
       <description>Menu Background Color.</description>
     </key>
     <key type="s" name="menu-foreground-color">
-      <default>"rgba(211, 218, 227, 1)"</default>
+      <default>"rgb(223,223,223)"</default>
       <summary>Menu Foreground Color</summary>
       <description>Menu Foreground Color.</description>
     </key>  
     <key type="s" name="border-color">
-      <default>"rgb(63,62,64)"</default>
+      <default>"rgb(32,32,32)"</default>
       <summary>Border Color</summary>
       <description>Border Color.</description>
     </key>
     <key type="s" name="highlight-color">
-      <default>"rgba(238, 238, 236, 0.1)"</default>
+      <default>"rgb(21,83,158)"</default>
       <summary>Highlight/Active Menu Item Background Color</summary>
       <description>Highlight/Active Menu Item Background Color.</description>
     </key>
@@ -365,22 +392,22 @@
       <description>Menu font size.</description>
     </key>
     <key type="i" name="menu-border-size">
-      <default>0</default>
+      <default>1</default>
       <summary>Menu border size</summary>
       <description>Menu border size.</description>
     </key>
     <key type="i" name="menu-corner-radius">
-      <default>0</default>
+      <default>5</default>
       <summary>Menu corner radius</summary>
       <description>Menu corner radius.</description>
     </key>
     <key type="i" name="menu-margin">
-      <default>0</default>
+      <default>24</default>
       <summary>Menu margin</summary>
       <description>Menu margin.</description>
     </key>
     <key type="i" name="menu-arrow-size">
-      <default>0</default>
+      <default>12</default>
       <summary>Menu arrow size</summary>
       <description>Menu arrow size.</description>
     </key>
@@ -466,23 +493,28 @@
     </key>
     <key name="menu-hotkey" enum="org.gnome.shell.extensions.arcmenu.menu-hotkey">
       <default>'Undefined'</default>
-      <summary>The menu hotkey to open the ArcMenu.</summary>
-      <description>The menu hotkey to open the ArcMenu.</description>
+      <summary>Set a hotkey to open ArcMenu</summary>
+      <description>Set a hotkey to open ArcMenu.</description>
     </key>
-    <key type="b" name="enable-menu-keybinding">
+    <key name="toggle-arcmenu" type="as">
+      <default>["&lt;Super&gt;x"]</default>
+      <summary>Custom keybind to open ArcMenu</summary>
+      <description>Custom keybind to open ArcMenu.</description>
+    </key>
+    <key type="b" name="enable-standlone-runner-menu">
       <default>false</default>
-      <summary>Enable the keybinding for the ArcMenu.</summary>
-      <description>Enable the keybinding for the ArcMenu.</description>
+      <summary>Enable a standalone Runner menu.</summary>
+      <description>Enable a standalone Runner menu.</description>
     </key>
-    <key type="s" name="menu-keybinding-text">
-      <default>'&lt;Super&gt;x'</default>
-      <summary>Keybinding to open the ArcMenu.</summary>
-      <description>Keybinding to open the ArcMenu..</description>
+    <key name="runner-menu-hotkey" enum="org.gnome.shell.extensions.arcmenu.runner-menu-hotkey">
+      <default>'Custom'</default>
+      <summary>Set a hotkey to open the standalone Runner menu.</summary>
+      <description>Set a hotkey to open the standalone Runner menu.</description>
     </key>
-    <key type="as" name="menu-keybinding">
-      <default><![CDATA[['<Super>x']]]></default>
-      <summary>Keybinding to open the ArcMenu.</summary>
-      <description>Keybinding to open the ArcMenu.</description>
+    <key name="toggle-runner-menu" type="as">
+      <default>["&lt;Alt&gt;1"]</default>
+      <summary>Keybinding to open the standalone runner menu</summary>
+      <description>Keybinding to open the standalone runner menu.</description>
     </key>
     <key name="position-in-panel" enum="org.gnome.shell.extensions.arcmenu.menu-position">
       <default>'Left'</default>
@@ -509,10 +541,25 @@
       <summary>Enables the default menu button arrow.</summary>
       <description>Enables the default menu button arrow.</description>
     </key>
-    <key type="b" name="enable-large-icons">
-      <default>false</default>
-      <summary>Enables large icons for applications.</summary>
-      <description>Enables large icons for applications and search results.</description>
+    <key name="menu-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of the menu items icon.</summary>
+      <description>Size of the menu items icon. Includes all application items, category items, search results.</description>
+    </key>
+    <key name="button-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of the button items in ArcMenu.</summary>
+      <description>Size of the button items in ArcMenu. Includes all buttons inside the menu</description>
+    </key>
+    <key name="misc-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of misc items in ArcMenu.</summary>
+      <description>Size of misc items in ArcMenu. Includes searchbox icons, back menu item, all applications menu item, usermenu item.</description>
+    </key>
+    <key name="quicklinks-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of quicklink items in ArcMenu.</summary>
+      <description>Size of quicklink items in ArcMenu. Includes places, shortcuts, external devices, bookmarks.</description>
     </key>
     <key type="s" name="custom-menu-button-text">
       <default>'Applications'</default>
@@ -548,6 +595,11 @@
       <default>-1</default>
       <summary>Menu Button Padding.</summary>
       <description>Menu Button Padding.</description>
+    </key>
+    <key type="i" name="menu-button-position-offset">
+      <default>0</default>
+      <summary>Menu button position offset for main panel</summary>
+      <description>Menu button position offset for main panel</description>
     </key>
     <key type="b" name="menu-button-override-border-radius">
       <default>false</default>
@@ -620,8 +672,12 @@
       <description>List of recently installed apps</description>
     </key>
     <key name="pinned-app-list" type="as">
-      <default>["ArcMenu_WebBrowser","WebBrowser", "WebBrowser","Terminal", "", "org.gnome.Terminal.desktop",
-                "ArcMenu Settings", "ArcMenu_ArcMenuIcon", "gnome-extensions prefs arcmenu@arcmenu.com"]</default>
+      <default> [ "ArcMenu_WebBrowser","WebBrowser", "WebBrowser",
+                  "Files", "", "org.gnome.Nautilus.desktop",
+                  "Terminal", "", "org.gnome.Terminal.desktop",
+                  "ArcMenu Settings", "ArcMenu_ArcMenuIcon", "gnome-extensions prefs arcmenu@arcmenu.com"
+                ]
+      </default>
       <summary>List of Apps Pinned to Menu</summary>
       <description>List of Apps Pinned to Menu</description>
     </key>
@@ -669,7 +725,8 @@
       <description>Index of Mint Layout Pinned App Separator, 0 = none</description>
     </key>
     <key name="color-themes" type="aas">
-      <default>[['ArcMenu Theme', 'rgba(28, 28, 28, 0.98)', 'rgba(211, 218, 227, 1)', 'rgb(63,62,64)', 'rgba(238, 238, 236, 0.1)', 'rgba(255,255,255,1)', 'rgb(63,62,64)', '9', '0', '0', '0', '0', 'false'], 
+      <default>[['ArcMenu Style', 'rgba(53,53,53,0.987)', 'rgb(223,223,223)', 'rgb(32,32,32)', 'rgb(21,83,158)', 'rgba(255,255,255,1)', 'rgb(32,32,32)', '9', '1', '5', '12', '24', 'false'],
+      ['Simply Dark', 'rgba(28, 28, 28, 0.98)', 'rgba(211, 218, 227, 1)', 'rgb(63,62,64)', 'rgba(238, 238, 236, 0.1)', 'rgba(255,255,255,1)', 'rgb(63,62,64)', '9', '0', '0', '0', '0', 'false'],
       ['Dark Blue Theme', 'rgb(25,31,34)', 'rgb(189,230,251)', 'rgb(41,50,55)', 'rgb(41,50,55)', 'rgba(255,255,255,1)', 'rgb(41,50,55)', '9', '1', '5', '12', '24', 'true'], 
       ['Light Blue Theme', 'rgb(255,255,255)', 'rgb(51,51,51)', 'rgb(235,235,235)', 'rgba(189,230,251,0.9)', 'rgba(89,89,89,1)', 'rgba(189,230,251,0.9)', '9', '1', '5', '12', '24', 'true']]</default>
       <summary>List of color-themes</summary>

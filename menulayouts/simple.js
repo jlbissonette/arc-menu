@@ -33,20 +33,26 @@ const PopupMenu = imports.ui.popupMenu;
 const _ = Gettext.gettext;
 
 var createMenu =  class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton, {
+    constructor(menuButton) {
+        super(menuButton, {
             Search: false,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
         });
     }
     createLayout(){
         super.createLayout();
         this.mainBox.style = null;
+        this.mainBox.style_class = 'margin-box';
         this.section = this.menuButton.section;
         let actors = this.section.actor.get_children();
         for (let i = 0; i < actors.length; i++) {
@@ -90,7 +96,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             }
         }        
         
-        super.loadCategories(MW.SimpleMenuItem);
+        super.loadCategories(Constants.DisplayType.SIMPLE_CATEGORY);
     }
     
     displayCategories(){

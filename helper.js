@@ -29,20 +29,16 @@ const Main = imports.ui.main;
 const Util = imports.misc.util;
 
 const MUTTER_SCHEMA = 'org.gnome.mutter';
-const WM_KEYBINDINGS_SCHEMA = 'org.gnome.desktop.wm.keybindings';
 
 var MenuHotKeybinder = class {
-    constructor(menuToggler) {
+    constructor() {
         this._settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
-        this._menuToggler = menuToggler;
 
         this.hotKeyEnabled = false;
         this._ignoreHotKeyChangedEvent = false;
 
         this._mutterSettings = new Gio.Settings({ 'schema': MUTTER_SCHEMA });
-        this._wmKeybindings = new Gio.Settings({ 'schema': WM_KEYBINDINGS_SCHEMA });
 
-        this._oldPanelMainMenuKey = this._wmKeybindings.get_value('panel-main-menu');
         this._oldOverlayKey = this._mutterSettings.get_value('overlay-key');
 
         this._overlayKeyChangedID = this._mutterSettings.connect('changed::overlay-key', () => {
@@ -50,27 +46,19 @@ var MenuHotKeybinder = class {
                 this._oldOverlayKey = this._mutterSettings.get_value('overlay-key');
         });
 
-        this._panelMainMenuKeyConnectID = this._wmKeybindings.connect('changed::panel-main-menu', () => {
-            if(!this._ignoreHotKeyChangedEvent)
-                this._oldPanelMainMenuKey = this._wmKeybindings.get_value('panel-main-menu');
-        });
-
         this._mainStartUpComplete = Main.layoutManager.connect('startup-complete', () => this._setHotKey());
     }
 
-    enableHotKey(hotKey){
+    enableHotKey(menuToggler){
+        this._menuToggler = menuToggler;
+
         this._ignoreHotKeyChangedEvent = true;
+        
+        this._mutterSettings.set_string('overlay-key', Constants.SUPER_L);
+        Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
+            Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
 
-        if(hotKey === Constants.SUPER_L){
-            this._mutterSettings.set_string('overlay-key', hotKey);
-            Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
-                Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
-        }
-        else if(hotKey === Constants.SUPER_R){
-            this._wmKeybindings.set_strv('panel-main-menu', [hotKey]);
-        }
-
-        this.hotKeyEnabled =  true;
+        this.hotKeyEnabled = true;
         if(!Main.layoutManager._startingUp)
             this._setHotKey();
         this._ignoreHotKeyChangedEvent = false;
@@ -88,39 +76,29 @@ var MenuHotKeybinder = class {
             this.defaultOverlayKeyID = null;
         }
         Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW);
-        
-        this._wmKeybindings.set_value('panel-main-menu', this._oldPanelMainMenuKey);
-        Main.wm.setCustomKeybindingHandler('panel-main-menu', Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
-                                            Main.sessionMode.hasOverview ? Main.overview.toggle.bind(Main.overview) : null);
+
         this.hotKeyEnabled = false;
         this._ignoreHotKeyChangedEvent = false;
     }
 
     _setHotKey(){
-        let hotKeyPos = this._settings.get_enum('menu-hotkey');
         if(this.hotKeyEnabled){
-            if(hotKeyPos === Constants.HotKey.SUPER_L){
-                Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
-                Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
-    
-                //Find signal ID in Main.js that connects 'overlay-key' to global.display and toggles Main.overview
-                let [bool,signal_id, detail] = GObject.signal_parse_name('overlay-key', global.display, true);
-                this.defaultOverlayKeyID = GObject.signal_handler_find(global.display, GObject.SignalMatchType.ID, signal_id, detail, null, null, null); 
-    
-                //If signal ID found, block it and connect new 'overlay-key' to toggle ArcMenu.
-                if(this.defaultOverlayKeyID){
-                    GObject.signal_handler_block(global.display, this.defaultOverlayKeyID);
-                    this.overlayKeyID = global.display.connect('overlay-key', () => {
-                        this._menuToggler();
-                    });
-                }
-                else
-                    global.log("ArcMenu ERROR - Failed to set Super_L hotkey");
+            Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
+            Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
+
+            //Find signal ID in Main.js that connects 'overlay-key' to global.display and toggles Main.overview
+            let [bool,signal_id, detail] = GObject.signal_parse_name('overlay-key', global.display, true);
+            this.defaultOverlayKeyID = GObject.signal_handler_find(global.display, GObject.SignalMatchType.ID, signal_id, detail, null, null, null); 
+
+            //If signal ID found, block it and connect new 'overlay-key' to toggle ArcMenu.
+            if(this.defaultOverlayKeyID){
+                GObject.signal_handler_block(global.display, this.defaultOverlayKeyID);
+                this.overlayKeyID = global.display.connect('overlay-key', () => {
+                    this._menuToggler();
+                });
             }
-            else if(hotKeyPos === Constants.HotKey.SUPER_R){
-                Main.wm.setCustomKeybindingHandler('panel-main-menu', Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
-                                                    this._menuToggler.bind(this));
-            }
+            else
+                global.log("ArcMenu Error - Failed to set Super_L hotkey");
         }   
     }
 
@@ -128,10 +106,6 @@ var MenuHotKeybinder = class {
         if(this._overlayKeyChangedID){
             this._mutterSettings.disconnect(this._overlayKeyChangedID);
             this._overlayKeyChangedID = null;
-        }
-        if(this._panelMainMenuKeyConnectID){
-            this._wmKeybindings.disconnect(this._panelMainMenuKeyConnectID);
-            this._panelMainMenuKeyConnectID = null;
         }
         this.disableHotKey();
         if (this._mainStartUpComplete) {
@@ -150,30 +124,11 @@ var KeybindingManager = class {
     bind(keybindingNameKey, keybindingValueKey, keybindingHandler) {
         if (!this._keybindings.has(keybindingNameKey)) {
             this._keybindings.set(keybindingNameKey, keybindingValueKey);
-            let keybinding = this._settings.get_string(keybindingNameKey);
-            this._setKeybinding(keybindingNameKey, keybinding);
 
-            Main.wm.addKeybinding(keybindingValueKey, this._settings,
-                Meta.KeyBindingFlags.NONE,
+            Main.wm.addKeybinding(keybindingValueKey, ExtensionUtils.getSettings(),
+                Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
                 Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP,
-                keybindingHandler.bind(this));
-
-            return true;
-        }
-        return false;
-    }
-
-    _setKeybinding(keybindingNameKey, keybinding) {
-        if (this._keybindings.has(keybindingNameKey)) {
-            let keybindingValueKey = this._keybindings.get(keybindingNameKey);
-            let [key, mods] = Gtk.accelerator_parse(keybinding);
-
-            if (Gtk.accelerator_valid(key, mods)) {
-                let shortcut = Gtk.accelerator_name(key, mods);
-                this._settings.set_strv(keybindingValueKey, [shortcut]);
-            } else {
-                this._settings.set_strv(keybindingValueKey, []);
-            }
+                keybindingHandler);
         }
     }
 
@@ -182,17 +137,18 @@ var KeybindingManager = class {
             let keybindingValueKey = this._keybindings.get(keybindingNameKey);
             Main.wm.removeKeybinding(keybindingValueKey);
             this._keybindings.delete(keybindingNameKey);
-            return true;
         }
-        return false;
+    }
+
+    unbindAll() {
+        this._keybindings.forEach((value, key) => {
+            Main.wm.removeKeybinding(value);
+            this._keybindings.delete(key);
+        });
     }
 
     destroy() {
-        let keyIter = this._keybindings.keys();
-        for (let i = 0; i < this._keybindings.size; i++) {
-            let keybindingNameKey = keyIter.next().value;
-            this.unbind(keybindingNameKey);
-        }
+        this.unbindAll();
     }
 };
 

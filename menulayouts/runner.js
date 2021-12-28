@@ -29,25 +29,31 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
 const MW = Me.imports.menuWidgets;
+const PanelMenu = imports.ui.panelMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
 var createMenu =  class extends BaseMenuLayout.BaseLayout{
-    constructor(mainButton) {
-        super(mainButton,{
+    constructor(menuButton, isStandalone) {
+        super(menuButton, {
             Search: true,
-            AppType: Constants.AppDisplayType.LIST,
-            SearchType: Constants.AppDisplayType.LIST,
+            DisplayType: Constants.DisplayType.LIST,
+            SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
-            VerticalMainBox: true
+            VerticalMainBox: true,
+            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            DefaultPinnedIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
+            StandaloneRunner: isStandalone
         });
     }
 
     createLayout(){
         super.createLayout();
-
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_actor(this.dummyCursor);
         this.updateLocation();
@@ -60,26 +66,21 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.sourceActor = this.dummyCursor;
         this.arcMenu.focusActor = this.dummyCursor;
         this.arcMenu._boxPointer.setPosition(this.dummyCursor, 0.5);
-        this.arcMenu.close();
-        this.arcMenu._boxPointer.hide();
 
         this.topBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
-            vertical: false
+            vertical: false,
+            style: "margin: 5px 0px 0px 0px;"
         });
 
-        this.searchBox = new MW.SearchBox(this);
-        this.searchBox.style = "margin: 5px 10px 5px 10px;";
-        this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-        this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        this._searchBoxKeyFocusInId = this.searchBox.connect('entry-key-focus-in', this._onSearchBoxKeyFocusIn.bind(this));
+        this.searchBox.style = "margin: 0px 0px 0px 16px;";
         this.runnerTweaksButton = new MW.RunnerTweaksButton(this);
         this.runnerTweaksButton.actor.x_expand = false;
-        this.runnerTweaksButton.actor.y_expand = false;
-        this.runnerTweaksButton.actor.y_align = Clutter.ActorAlign.CENTER;
+        this.runnerTweaksButton.actor.y_expand = true;
+        this.runnerTweaksButton.actor.y_align = this.searchBox.y_align = Clutter.ActorAlign.CENTER;
         this.runnerTweaksButton.actor.x_align = Clutter.ActorAlign.CENTER;
-        this.runnerTweaksButton.actor.style = "margin-right: 10px; padding: 8px;";
+        this.runnerTweaksButton.actor.style = "margin: 0px 6px;";
 
         this.topBox.add(this.searchBox.actor);
         this.topBox.add(this.runnerTweaksButton);
@@ -90,20 +91,24 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             x_align: Clutter.ActorAlign.START,
-            overlay_scrollbars: true,
+            overlay_scrollbars: false,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             reactive:true
         });
 
         this.mainBox.add(this.applicationsScrollBox);
-        this.applicationsBox = new St.BoxLayout({ vertical: true });
+        this.applicationsBox = new St.BoxLayout({ 
+            vertical: true,
+            style: "margin: 5px 6px 0px 16px;"
+        });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
+        this.activeMenuItem = null;
         this.setDefaultMenuView();
     }
 
     setDefaultMenuView(){
+        this.activeMenuItem = null;
         super.setDefaultMenuView();
-        this._clearActorsFromBox();
         if(this._settings.get_boolean("runner-show-frequent-apps"))
             this.displayFrequentApps();
     }
@@ -115,7 +120,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         let appList = [];
         for (let i = 0; i < mostUsed.length; i++) {
             if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
-                let item = new MW.ApplicationMenuItem(this, mostUsed[i]);
+                let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.DisplayType.LIST);
                 appList.push(item);
             }
         }
@@ -129,9 +134,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             if(!activeMenuItemSet){
                 activeMenuItemSet = true;  
                 this.activeMenuItem = item;
-                if(this.arcMenu.isOpen){
-                    this.mainBox.grab_key_focus();
-                }
             }    
         }
     }
@@ -141,7 +143,10 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
      * @returns index of monitor where menu should appear
      */
     _getMonitorIndexForPlacement() {
-        if (this._settings.get_enum('menu-button-appearance') === Constants.MenuButtonAppearance.NONE)
+        if (this.layoutProperties.StandaloneRunner) {
+            return this._settings.get_boolean('runner-hotkey-open-primary-monitor') ? Main.layoutManager.primaryMonitor.index : Main.layoutManager.currentMonitor.index;
+        }
+        else if (this._settings.get_enum('menu-button-appearance') === Constants.MenuButtonAppearance.NONE)
             return this._settings.get_boolean('hotkey-open-primary-monitor') ? Main.layoutManager.primaryMonitor.index : Main.layoutManager.currentMonitor.index;
         else
             return Main.layoutManager.findIndexForActor(this.menuButton);
@@ -177,39 +182,27 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style += `font-size: ${this._runnerFontSize}pt;`
         }
         else{
-            this.searchBox.style = "margin: 5px 10px 5px 10px;";
+            this.searchBox.style = "margin: 0px 0px 0px 16px;";
         }
-        this.topBox.style = `width: ${this._runnerWidth}px;`;
+        this.topBox.style = `width: ${this._runnerWidth}px; margin: 5px 0px 0px 0px;`;
         this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
-    }
-    
-    updateIcons(){
-        this.searchResults._reset();
     }
 
     updateStyle(){
         super.updateStyle();
         this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px;";
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        customStyle ? this.runnerTweaksButton.actor.add_style_class_name('arc-menu-action') : this.runnerTweaksButton.actor.remove_style_class_name('arc-menu-action');
-    }
-
-    updateSearch(){
-        this.searchResults._reloadRemoteProviders();
     }
 
     loadCategories(){
     }
 
-    destroy(isReload){
+    destroy(){
         this.arcMenu.actor.style = null;
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;
         this.arcMenu._boxPointer.setPosition(this.oldSourceActor, this.oldArrowAlignment);
-        this.arcMenu.close();
-        this.arcMenu._boxPointer.hide();
         Main.uiGroup.remove_actor(this.dummyCursor);
         this.dummyCursor.destroy();
-        super.destroy(isReload);
+        super.destroy();
     }
 }

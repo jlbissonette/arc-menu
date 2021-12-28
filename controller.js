@@ -27,6 +27,7 @@ const Constants = Me.imports.constants;
 const Helper = Me.imports.helper;
 const Main = imports.ui.main;
 const MenuButton = Me.imports.menuButton;
+const {StandaloneRunner} = Me.imports.standaloneRunner;
 const Utils = Me.imports.utils;
 
 
@@ -61,7 +62,7 @@ var MenuSettingsController = class {
         this._settingsControllers = settingsControllers
 
         if(this.isPrimary){
-            this._menuHotKeybinder = new Helper.MenuHotKeybinder(() => this._onHotkey());
+            this._menuHotKeybinder = new Helper.MenuHotKeybinder();
             this._keybindingManager = new Helper.KeybindingManager(this._settings); 
             this._hotCornerManager = new Helper.HotCornerManager(this._settings,() => this.toggleMenus());
         }
@@ -87,7 +88,10 @@ var MenuSettingsController = class {
         this.settingsChangeIds = [
             this._settings.connect('changed::hot-corners', this._updateHotCornerManager.bind(this)),
             this._settings.connect('changed::menu-hotkey', this._updateHotKeyBinder.bind(this)),
+            this._settings.connect('changed::runner-menu-hotkey', this._updateHotKeyBinder.bind(this)),
+            this._settings.connect('changed::enable-standlone-runner-menu', this._updateHotKeyBinder.bind(this)),
             this._settings.connect('changed::position-in-panel', this._setButtonPosition.bind(this)),
+            this._settings.connect('changed::menu-button-position-offset', this._setButtonPosition.bind(this)),
             this._settings.connect('changed::menu-position-alignment', this._setMenuPositionAlignment.bind(this)),
             this._settings.connect('changed::menu-button-appearance', this._setButtonAppearance.bind(this)),
             this._settings.connect('changed::custom-menu-button-text', this._setButtonText.bind(this)),
@@ -116,14 +120,12 @@ var MenuSettingsController = class {
             this._settings.connect('changed::searchbar-default-bottom-location', this._reload.bind(this)),
             this._settings.connect('changed::searchbar-default-top-location', this._plasmaMenuReloadExtension.bind(this)),
             this._settings.connect('changed::searchbar-default-top-location', this._reload.bind(this)),
-            this._settings.connect('changed::recently-installed-apps', this._reload.bind(this)),
             this._settings.connect('changed::multi-lined-labels', this._reload.bind(this)),
             this._settings.connect('changed::apps-show-extra-details', this._reload.bind(this)),
             this._settings.connect('changed::show-search-result-details', this._reload.bind(this)),
             this._settings.connect('changed::search-provider-open-windows', this._reload.bind(this)),
             this._settings.connect('changed::disable-scrollview-fade-effect', this._reload.bind(this)),
             this._settings.connect('changed::menu-height', this._updateMenuHeight.bind(this)),
-            this._settings.connect('changed::right-panel-width', this._updateMenuHeight.bind(this)),
             this._settings.connect('changed::reload-theme', this._reloadExtension.bind(this)),
             this._settings.connect('changed::pinned-app-list',this._updatePinnedApps.bind(this)),
             this._settings.connect('changed::enable-weather-widget-unity',this._updatePinnedApps.bind(this)),
@@ -137,12 +139,15 @@ var MenuSettingsController = class {
             this._settings.connect('changed::unity-separator-index',this._updateExtraPinnedApps.bind(this)),
             this._settings.connect('changed::windows-disable-frequent-apps', this._reload.bind(this)),
             this._settings.connect('changed::windows-disable-pinned-apps', this._reload.bind(this)),
-            this._settings.connect('changed::default-menu-view',this._reload.bind(this)),
+            this._settings.connect('changed::default-menu-view', this._reload.bind(this)),
             this._settings.connect('changed::default-menu-view-tognee',this._reload.bind(this)),
             this._settings.connect('changed::alphabetize-all-programs',this._reload.bind(this)),
             this._settings.connect('changed::enable-unity-homescreen',this._setDefaultMenuView.bind(this)),
             this._settings.connect('changed::menu-layout', this._updateMenuLayout.bind(this)),
-            this._settings.connect('changed::enable-large-icons', this.updateIcons.bind(this)),
+            this._settings.connect('changed::menu-item-icon-size', this._reload.bind(this)),
+            this._settings.connect('changed::button-item-icon-size', this._reload.bind(this)),
+            this._settings.connect('changed::quicklinks-item-icon-size', this._reload.bind(this)),
+            this._settings.connect('changed::misc-item-icon-size', this._reload.bind(this)),
             this._settings.connect('changed::runner-position', this.updateLocation.bind(this)),
             this._settings.connect('changed::runner-show-frequent-apps', this._reload.bind(this)),
             this._settings.connect('changed::enable-sub-menus', this._reload.bind(this)), 
@@ -154,6 +159,8 @@ var MenuSettingsController = class {
 
     _reload(){
         this._menuButton.reload();
+        if(this.runnerMenu)
+            this.runnerMenu.reload();
     }
 
     _forceMenuLocation(){
@@ -163,6 +170,10 @@ var MenuSettingsController = class {
     _initiateRecentlyInstalledApps(){
         this._menuButton.initiateRecentlyInstalledApps();
         this._menuButton.reload();
+        if(this.runnerMenu){
+            this.runnerMenu.initiateRecentlyInstalledApps();
+            this.runnerMenu.reload();
+        } 
     }
 
     _plasmaMenuReloadExtension(){
@@ -175,10 +186,8 @@ var MenuSettingsController = class {
 
     updateLocation(){
         this._menuButton.updateLocation();
-    }
-
-    updateIcons(){
-        this._menuButton.updateIcons();
+        if(this.runnerMenu)
+            this.runnerMenu.updateLocation();
     }
 
     _updateMenuLayout(){
@@ -189,7 +198,15 @@ var MenuSettingsController = class {
         this._menuButton.setDefaultMenuView();
     }
 
+    toggleStandaloneRunner(){
+        this._closeAllArcMenus();
+        if(this.runnerMenu)
+            this.runnerMenu.toggleMenu();
+    }
+
     toggleMenus(){
+        if(this.runnerMenu && this.runnerMenu.arcMenu.isOpen)
+            this.runnerMenu.toggleMenu();
         if(global.dashToPanel || this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
             const MultipleArcMenus = this._settingsControllers.length > 1;
             const ShowArcMenuOnPrimaryMonitor = this._settings.get_boolean('hotkey-open-primary-monitor');
@@ -205,13 +222,9 @@ var MenuSettingsController = class {
     }
 
     _toggleMenuOnMonitor(monitor){
+        this.currentMonitorIndex = monitor.index;
         for (let i = 0; i < this._settingsControllers.length; i++) {
-            let actor = this._settingsControllers[i]._menuButton.menuButtonWidget.actor;
-            let monitorForActor = Main.layoutManager.findMonitorForActor(actor);
-            if(monitor == monitorForActor){
-                this.currentMonitorIndex = i;
-            }
-            else{
+            if(this.currentMonitorIndex !== i){
                 if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
                     this._settingsControllers[i]._menuButton.toggleMenu();
                 if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
@@ -220,6 +233,15 @@ var MenuSettingsController = class {
         } 
         //open the current monitors menu
         this._settingsControllers[this.currentMonitorIndex]._menuButton.toggleMenu();
+    }
+
+    _closeAllArcMenus(){
+        for (let i = 0; i < this._settingsControllers.length; i++) {
+            if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
+                this._settingsControllers[i]._menuButton.toggleMenu();
+            if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
+                this._settingsControllers[i]._menuButton.toggleArcMenuContextMenu();
+        }
     }
 
     _reloadExtension(){
@@ -233,6 +255,8 @@ var MenuSettingsController = class {
 
     _updateStyle() {
         this._menuButton.updateStyle();
+        if(this.runnerMenu)
+            this.runnerMenu.updateStyle();
     }
 
     _updateMenuHeight(){
@@ -277,43 +301,62 @@ var MenuSettingsController = class {
 
     _updateHotKeyBinder() {
         if (this.isPrimary) {
-            let hotkeySettingsKey = 'menu-keybinding-text';
-            let menuKeyBinding = '';
-            let hotKeyPos = this._settings.get_enum('menu-hotkey');
+            const RunnerHotKey = this._settings.get_enum('runner-menu-hotkey');
+            const HotKey = this._settings.get_enum('menu-hotkey');
+            const EnableStandaloneRunnerMenu = this._settings.get_boolean('enable-standlone-runner-menu');
 
-            this._keybindingManager.unbind(hotkeySettingsKey);
+            this._keybindingManager.unbind('ToggleArcMenu');
+            this._keybindingManager.unbind('ToggleRunnerMenu');
             this._menuHotKeybinder.disableHotKey();
-            this._menuKeyBindingKey = 0;
-            
-            if(hotKeyPos === Constants.HotKey.CUSTOM){
-                this._keybindingManager.bind(hotkeySettingsKey, 'menu-keybinding', () => this._onHotkey());
-                menuKeyBinding = this._settings.get_string(hotkeySettingsKey);
-            }
-            else if(hotKeyPos === Constants.HotKey.SUPER_L || hotKeyPos === Constants.HotKey.SUPER_R){
-                let hotKey = Constants.HotKey[hotKeyPos];
-                this._menuHotKeybinder.enableHotKey(hotKey);
-                menuKeyBinding = hotKey;
-            }
-            if(menuKeyBinding){
-                this._menuKeyBindingKey = Gtk.accelerator_parse(menuKeyBinding)[0];
-            }
-        } 
-    }
+            this._menuKeyBindingKey = null;
+            this._runnerKeyBindingKey = null;
 
-    _onHotkey() {
-        let hotKeyPos = this._settings.get_enum('menu-hotkey');
-        if(hotKeyPos === Constants.HotKey.SUPER_L)
-            this.toggleMenus();
-        else{
-            if(this._settings.get_boolean('disable-hotkey-onkeyrelease'))
-                this.toggleMenus();
-            else
-                this._onHotkeyRelease();
+            if(EnableStandaloneRunnerMenu){
+                if(!this.runnerMenu){
+                    this.runnerMenu = new StandaloneRunner(this._settings);
+                    this.runnerMenu.initiate();
+                }
+            
+                if(RunnerHotKey === Constants.RunnerHotKey.CUSTOM){
+                    this._keybindingManager.bind('ToggleRunnerMenu', 'toggle-runner-menu', () => this._onHotkey(() => this.toggleStandaloneRunner()));
+                    this._runnerKeyBindingKey = this._settings.get_strv('toggle-runner-menu').toString();
+                }
+                else if(RunnerHotKey === Constants.RunnerHotKey.SUPER_L){
+                    this._menuHotKeybinder.enableHotKey(() => this.toggleStandaloneRunner());
+                }
+            }
+            else if(this.runnerMenu){
+                this.runnerMenu.destroy();
+                this.runnerMenu = null;
+            }
+
+            if(HotKey === Constants.HotKey.CUSTOM){
+                this._keybindingManager.bind('ToggleArcMenu', 'toggle-arcmenu', () => this._onHotkey(() => this.toggleMenus()));
+                this._menuKeyBindingKey = this._settings.get_strv('toggle-arcmenu').toString();
+            }
+            else if(HotKey === Constants.HotKey.SUPER_L){
+                this._menuHotKeybinder.disableHotKey();
+                this._menuHotKeybinder.enableHotKey(() => this.toggleMenus());
+            }
+
+            if(this._menuKeyBindingKey){
+                this._menuKeyBindingKey = Gtk.accelerator_parse(this._menuKeyBindingKey)[0];
+            }
+            if(this._runnerKeyBindingKey){
+                this._runnerKeyBindingKey = Gtk.accelerator_parse(this._runnerKeyBindingKey)[0];
+            }
         }
     }
 
-    _onHotkeyRelease() {
-        let activeMenu = this._settingsControllers[this.currentMonitorIndex]._menuButton.getActiveMenu();
+    _onHotkey(callback) {
+        if(this._settings.get_boolean('disable-hotkey-onkeyrelease'))
+            callback();
+        else
+            this._onHotkeyRelease(callback);
+    }
+
+    _onHotkeyRelease(callback) {
+        let activeMenu = this._settingsControllers[this.currentMonitorIndex]._menuButton.getActiveMenu() || ((this.runnerMenu && this.runnerMenu.arcMenu.isOpen) ? this.runnerMenu.arcMenu : null);
         let focusPanel;
 
         if(this.arcMenuPlacement == Constants.ArcMenuPlacement.PANEL)
@@ -331,8 +374,12 @@ var MenuSettingsController = class {
             releaseId: focusTarget.connect('key-release-event', (actor, event) => {
                 this.disconnectKeyRelease();
 
-                if (this._menuKeyBindingKey == event.get_key_symbol()) {
-                    this.toggleMenus();
+                if (this._menuKeyBindingKey === event.get_key_symbol()) {
+                    callback();
+                }
+
+                if (this._runnerKeyBindingKey === event.get_key_symbol()) {
+                    callback();
                 }
             }),
             target: focusTarget
@@ -470,15 +517,23 @@ var MenuSettingsController = class {
     }
 
     // Get the current position of the menu button and its associated position order
-    _getMenuPositionTuple() {
+    _getMenuPosition() {
+        let offset = this._settings.get_int('menu-button-position-offset');
         switch (this._settings.get_enum('position-in-panel')) {
             case Constants.MenuPosition.CENTER:
-                return ['center', 0];
+                return [offset, 'center'];
             case Constants.MenuPosition.RIGHT:
-                return ['right', -1];
-            case Constants.MenuPosition.LEFT: /* falls through */
+                // get number of childrens in rightBox (without arcmenu)
+                let n_children = Main.panel._rightBox.get_n_children();
+                n_children -= Main.panel.statusArea.ArcMenu !== undefined;
+                // position where icon should go,
+                // offset = 0, icon should be last
+                // offset = 1, icon should be second last
+                const order = Math.clamp(n_children - offset, 0, n_children);
+                return [order, 'right'];
+            case Constants.MenuPosition.LEFT:
             default:
-                return ['left', 0];
+                return [offset, 'left'];
         }
     }
 
@@ -489,7 +544,9 @@ var MenuSettingsController = class {
         let container = Main.panel.statusArea.activities.container;
         let parent = container.get_parent();
         let index = 0;
-        if(this._settings.get_enum('position-in-panel') === Constants.MenuPosition.LEFT && this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL)
+        if(this._settings.get_enum('position-in-panel') === Constants.MenuPosition.LEFT && 
+            this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL && 
+            this._settings.get_int('menu-button-position-offset') == 0)
             index = 1;
 
         if(showActivities && !isActivitiesButtonPresent){
@@ -502,7 +559,6 @@ var MenuSettingsController = class {
 
     // Check if the activities button is present on the main panel
     _isActivitiesButtonPresent() {
-        // Thanks to lestcape @github.com for the refinement of this method.
         return (this._activitiesButton &&
             this._activitiesButton.container &&
             Main.panel._leftBox.contains(this._activitiesButton.container));
@@ -520,8 +576,8 @@ var MenuSettingsController = class {
 
     // Add the menu button to the main panel
     _addMenuButtonToMainPanel() {
-        let [menuPosition, order] = this._getMenuPositionTuple();
-        this.panel.addToStatusArea('ArcMenu', this._menuButton, order, menuPosition);
+        let [position, box] = this._getMenuPosition();
+        this.panel.addToStatusArea('ArcMenu', this._menuButton, position, box);
     }
 
     // Remove the menu button from the main panel
@@ -545,49 +601,69 @@ var MenuSettingsController = class {
     }
 
     reEstablishDash(){
-        let container = this.panel._allDocks[this.dashIndex].dash._container;
-        this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled = true;
-        this.oldShowAppsIcon = this.panel._allDocks[this.dashIndex].dash._showAppsIcon;
-        container.remove_actor(this.oldShowAppsIcon);
+        const DashToDock = this.panel._allDocks[this.dashIndex].dash;
+        if(!DashToDock){
+            global.log("ArcMenu Error - Failed to place ArcMenu in Dash-to-Dock");
+            return;
+        }
+            
+        const DashContainer = DashToDock._dashContainer;
+
+        DashToDock.arcMenuEnabled = true;
+        this.oldShowAppsIcon = DashToDock._showAppsIcon;
+
+        DashContainer.remove_actor(DashToDock._showAppsIcon);
+        DashToDock._showAppsIcon = this.menuButtonAdjustedActor;
+        DashContainer.add_actor(DashToDock._showAppsIcon);
 
         this._setButtonIcon();
-        let iconSize = this.panel._allDocks[this.dashIndex].dash.iconSize;
-        this._menuButton.menuButtonWidget.icon.setIconSize(iconSize);
-
-        container.add_actor(this.menuButtonAdjustedActor);
-        this.panel._allDocks[this.dashIndex].dash._showAppsIcon = this.menuButtonAdjustedActor;
-
+        const IconSize = DashToDock.iconSize;
+        this._menuButton.menuButtonWidget.icon.setIconSize(IconSize);
+      
+        DashToDock.updateShowAppsButton();
+        
         this.hoverID = this.menuButtonAdjustedActor.child.connect('notify::hover', () => {
-            this.panel._allDocks[this.dashIndex].dash._syncLabel(this.menuButtonAdjustedActor, null);
+            DashToDock._syncLabel(this.menuButtonAdjustedActor, null);
         });
 
         this.hidingID = Main.overview.connect('hiding', () => {
-            this.panel._allDocks[this.dashIndex].dash._labelShowing = false;
+            DashToDock._labelShowing = false;
             this.menuButtonAdjustedActor.hideLabel();
         });
 
-        this.panel._allDocks[this.dashIndex].dash._queueRedisplay();
-        this.oldDashDestroy = this.panel._allDocks[this.dashIndex].dash.destroy;
-        this.panel._allDocks[this.dashIndex].dash.destroy = ()=> {
-            this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled = false;
-            if(this.hoverID){
-                this.menuButtonAdjustedActor.child.disconnect(this.hoverID);
-                this.hoverID = null;
-            }
-            if(this.hidingID){
-                Main.overview.disconnect(this.hidingID);
-                this.hidingID = null;
-            }
-            
-            let container = this.panel._allDocks[this.dashIndex].dash._container;
-            if(container)
-                container.remove_actor(this.menuButtonAdjustedActor);
-            
-            this.panel._allDocks[this.dashIndex].dash._signalsHandler.destroy();
-        };
+        if(this.isPrimary){
+            this.oldDashOnDestroy = this.panel._deleteDocks;
+            this.panel._deleteDocks = () => {
+                if(this.hoverID){
+                    this.menuButtonAdjustedActor.child.disconnect(this.hoverID);
+                    this.hoverID = null;
+                }
+    
+                if(this.hidingID){
+                    Main.overview.disconnect(this.hidingID);
+                    this.hidingID = null;
+                }
+
+                const AllDocks = this.panel._allDocks;
+
+                if(!AllDocks.length)
+                    return;
+                
+                AllDocks.forEach(dock => {
+                    let dash = dock.dash;
+                    if(dash._dashContainer.contains(dash._showAppsIcon))
+                        dash._dashContainer.remove_actor(dash._showAppsIcon);
+                    dash._showAppsIcon = this.oldShowAppsIcon;
+                    dash._dashContainer.add_actor(dash._showAppsIcon);
+                    dash.arcMenuEnabled = false;
+                });
+
+                this.oldDashOnDestroy.call(this.panel, ...arguments);
+                this.panel._deleteDocks = this.oldDashOnDestroy;
+            };
+        }
     }
 
-    // Disable the menu button
     _disableButton() {
         this._removeMenuButtonFromMainPanel();
         this._addActivitiesButtonToMainPanel();
@@ -598,39 +674,47 @@ var MenuSettingsController = class {
         return this.panel.statusArea['ArcMenu'] !== null;
     }
 
-    // Destroy this object
     destroy() {
         if (this.updateThemeID) {
             GLib.source_remove(this.updateThemeID);
             this.updateThemeID = null;
         }
+        if(this.runnerMenu){
+            this.runnerMenu.destroy();
+        }
         this.settingsChangeIds.forEach(id => this._settings.disconnect(id));
         
-        if(this.arcMenuPlacement == Constants.ArcMenuPlacement.DASH){
-            if(this.panel._allDocks[this.dashIndex] && this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled){
-                if(this.hoverID){
-                    this.menuButtonAdjustedActor.child.disconnect(this.hoverID);
-                    this.hoverID = null;
-                }
-                if(this.hidingID){
-                    Main.overview.disconnect(this.hidingID);
-                    this.hidingID = null;
-                }
-                let parent = this.menuButtonAdjustedActor.get_parent();
-                if(parent)
-                    parent.remove_actor(this.menuButtonAdjustedActor);
-                if(this.panel._allDocks[this.dashIndex]){
-                    this.panel._allDocks[this.dashIndex].dash.arcMenuEnabled = false;
-                    let container = this.panel._allDocks[this.dashIndex].dash._container;
-                    this.panel._allDocks[this.dashIndex].dash._showAppsIcon = this.oldShowAppsIcon;
-                    container.add_actor(this.panel._allDocks[this.dashIndex].dash._showAppsIcon);
-                    this.panel._allDocks[this.dashIndex].dash.destroy = this.oldDashDestroy;
-                    this.panel._allDocks[this.dashIndex].dash._queueRedisplay();
-                }
+        if(this.arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
+            if(this.panel === null || this.panel._allDocks.length === 0){
+                this._menuButton.destroy();
             }
-
-            this._addActivitiesButtonToMainPanel();
-            this._menuButton.destroy();
+            else{
+                const DashToDock = this.panel._allDocks[this.dashIndex].dash;
+                const DashContainer = DashToDock._dashContainer;
+                if(this.panel._allDocks[this.dashIndex] && DashToDock && DashToDock.arcMenuEnabled){
+                    if(this.hoverID){
+                        this.menuButtonAdjustedActor.child.disconnect(this.hoverID);
+                        this.hoverID = null;
+                    }
+    
+                    if(this.hidingID){
+                        Main.overview.disconnect(this.hidingID);
+                        this.hidingID = null;
+                    }
+    
+                    if(this.panel._allDocks[this.dashIndex]){
+                        DashToDock.arcMenuEnabled = false;
+                        if(DashContainer.contains(DashToDock._showAppsIcon))
+                            DashContainer.remove_actor(DashToDock._showAppsIcon);
+                        DashToDock._showAppsIcon = this.oldShowAppsIcon;
+                        DashContainer.add_actor(DashToDock._showAppsIcon);
+                        this.panel._deleteDocks = this.oldDashOnDestroy;
+                        DashToDock.updateShowAppsButton();
+                    }
+                }
+                this._addActivitiesButtonToMainPanel();
+                this._menuButton.destroy();
+            }
         }
         else if(this.panel == undefined)
             this._menuButton.destroy();

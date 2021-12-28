@@ -152,6 +152,8 @@ Linux - is the registered trademark of Linus Torvalds in the U.S. and other coun
 * **Red Hat, Inc.![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/copyright2.svg)** Copyright 2020 
 (name) and (logo)
 
+* **ZORIN OS** - The "Z" logomark is a registered trademark of Zorin Technology Group Ltd. Copyright © 2019 - 2021 Zorin Technology Group Ltd
+
 </p>
 </details>
 
