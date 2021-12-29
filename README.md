@@ -65,9 +65,9 @@ When reporting a bug, please provide as much information as you can about the is
 **@[lexruee](https://github.com/lexruee) - Former UI/UX Designer | @[Thomas Ingvarsson](https://gitlab.com/tingvarsson) -  Former Developer**
 
 Additional credits:
-* ArcMenu leverages some of the design elements for the default menu layout from Zorin OS.
-* ArcMenu utilizes some modified code from GNOME Shell and the GNOME Shell extensions package.
-* ArcMenu also uses adapted code from Dash to Panel's utils.js.
+* The 'ArcMenu' layout design is insipired by the Zorin OS menu extension.
+* ArcMenu utilizes various code from GNOME Shell and the GNOME Shell extensions package.
+* Borrowed code from Dash-to-Dock's extension 'location.js' file to implement a trash shortcut in ArcMenu.
 
 -----
 
