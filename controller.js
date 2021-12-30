@@ -222,13 +222,17 @@ var MenuSettingsController = class {
     }
 
     _toggleMenuOnMonitor(monitor){
-        this.currentMonitorIndex = monitor.index;
         for (let i = 0; i < this._settingsControllers.length; i++) {
-            if(this.currentMonitorIndex !== i){
-                if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
-                    this._settingsControllers[i]._menuButton.toggleMenu();
-                if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
-                    this._settingsControllers[i]._menuButton.toggleArcMenuContextMenu();
+            let menuButton = this._settingsControllers[i]._menuButton;
+            let actor = menuButton.menuButtonWidget.actor;
+            let monitorForActor = Main.layoutManager.findMonitorForActor(actor);
+            if(monitor === monitorForActor)
+                this.currentMonitorIndex = i;
+            else{
+                if(menuButton.arcMenu.isOpen)
+                    menuButton.toggleMenu();
+                if(menuButton.arcMenuContextMenu.isOpen)
+                    menuButton.toggleArcMenuContextMenu();
             }
         } 
         //open the current monitors menu
@@ -237,10 +241,11 @@ var MenuSettingsController = class {
 
     _closeAllArcMenus(){
         for (let i = 0; i < this._settingsControllers.length; i++) {
-            if(this._settingsControllers[i]._menuButton.arcMenu.isOpen)
-                this._settingsControllers[i]._menuButton.toggleMenu();
-            if(this._settingsControllers[i]._menuButton.arcMenuContextMenu.isOpen)
-                this._settingsControllers[i]._menuButton.toggleArcMenuContextMenu();
+            let menuButton = this._settingsControllers[i]._menuButton;
+            if(menuButton.arcMenu.isOpen)
+                menuButton.toggleMenu();
+            if(menuButton.arcMenuContextMenu.isOpen)
+                menuButton.toggleArcMenuContextMenu();
         }
     }
 
