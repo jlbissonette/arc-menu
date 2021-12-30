@@ -77,11 +77,11 @@ var SoftwareManagerIDs = ['org.manjaro.pamac.manager.desktop', 'pamac-manager.de
                             'snap-store_ubuntu-software.desktop', 'snap-store_snap-store.desktop', 'org.gnome.Software.desktop'];
 
 var Categories = [
-    {CATEGORY: CategoryType.FAVORITES, NAME: _("Favorites"), ICON: 'emblem-favorite-symbolic'},
-    {CATEGORY: CategoryType.FREQUENT_APPS, NAME: _("Frequent Apps"), ICON: 'user-bookmarks-symbolic'},
-    {CATEGORY: CategoryType.ALL_PROGRAMS, NAME: _("All Programs"), ICON: 'view-grid-symbolic'},
-    {CATEGORY: CategoryType.PINNED_APPS, NAME: _("Pinned Apps"), ICON: Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg'},
-    {CATEGORY: CategoryType.RECENT_FILES, NAME: _("Recent Files"), ICON: 'document-open-recent-symbolic'}
+    {CATEGORY: CategoryType.FAVORITES, NAME: _("Favorites"), ICON: 'emblem-favorite-symbolic', FULL_COLOR_ICON: 'emblem-favorite'},
+    {CATEGORY: CategoryType.FREQUENT_APPS, NAME: _("Frequent Apps"), ICON: 'user-bookmarks-symbolic', FULL_COLOR_ICON: 'user-bookmarks'},
+    {CATEGORY: CategoryType.ALL_PROGRAMS, NAME: _("All Programs"), ICON: 'view-grid-symbolic', FULL_COLOR_ICON: 'view-grid-symbolic'},
+    {CATEGORY: CategoryType.PINNED_APPS, NAME: _("Pinned Apps"), ICON: 'view-pin-symbolic', FULL_COLOR_ICON: 'view-pin-symbolic'},
+    {CATEGORY: CategoryType.RECENT_FILES, NAME: _("Recent Files"), ICON: 'document-open-recent-symbolic', FULL_COLOR_ICON: 'document-open-recent'}
 ]
 
 var ArcMenuPlacement = {
@@ -115,6 +115,11 @@ var CaretPosition = {
     START: 0,
     MIDDLE: 2,
 };
+
+var CategoryIconType = {
+    FULL_COLOR: 0,
+    SYMBOLIC: 1,
+}
 
 var ForcedMenuLocation = {
     OFF: 0,

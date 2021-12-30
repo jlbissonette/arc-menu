@@ -2894,6 +2894,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
         this.disableTooltips = this._settings.get_boolean('disable-tooltips');
         this.appDescriptions = this._settings.get_boolean('apps-show-extra-details');
+        this.categoryIconType = this._settings.get_enum('category-icon-type');
 
         let generalSettingsFrame = new PW.FrameBox();
         //find the greatest screen height of all monitors
@@ -3127,6 +3128,29 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         appDescriptionsRow.add(appDescriptionsSwitch);
         miscSettingsFrame.add(appDescriptionsRow);
 
+        let categoryIconTypeRow = new PW.FrameBoxRow();
+        let categoryIconTypeLabel = new Gtk.Label({
+            label: _('Category Icon Type'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+         });
+        let categoryIconTypeCombo = new Gtk.ComboBoxText({
+            halign: Gtk.Align.END,
+        });
+        categoryIconTypeCombo.append_text(_("Full Color"));
+        categoryIconTypeCombo.append_text(_("Symbolic"));
+        categoryIconTypeCombo.set_active(this.categoryIconType);
+        categoryIconTypeCombo.connect('changed', (widget) => {
+            this.categoryIconType = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        categoryIconTypeRow.add(categoryIconTypeLabel);
+        categoryIconTypeRow.add(categoryIconTypeCombo);
+        miscSettingsFrame.add(categoryIconTypeRow);
+
         let subMenusRow = new PW.FrameBoxRow();
         let subMenusLabel = new Gtk.Label({
             label: _('Category Sub Menus'),
@@ -3258,6 +3282,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
             this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
             this.appDescriptions = this._settings.get_default_value('apps-show-extra-details').unpack();
+            this.categoryIconType = this._settings.get_default_value('category-icon-type').unpack();
             this.forcedMenuLocation = 0;
             hscale.set_value(this.heightValue);
             menuWidthScale.set_value(this.menuWidth);
@@ -3272,6 +3297,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             appDescriptionsSwitch.set_active(this.appDescriptions);
             recentAppsSwitch.set_active(this.disableRecentApps);
             menuLocationCombo.set_active(this.forcedMenuLocation);
+            categoryIconTypeCombo.set_active(this.categoryIconType);
 
             this.saveButton.set_sensitive(true);
             this.resetButton.set_sensitive(false);
@@ -3296,6 +3322,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this._settings.set_boolean('disable-tooltips', this.disableTooltips);
             this._settings.set_boolean('reload-theme', true);
             this._settings.set_boolean('apps-show-extra-details', this.appDescriptions);
+            this._settings.set_enum('category-icon-type', this.categoryIconType);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         });
@@ -3350,7 +3377,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.quicklinksIconSizeCombo.get_active() !== 0 ||
             this.miscIconSizeCombo.get_active() !== 0 ||
             this.subMenus !== this._settings.get_default_value('enable-sub-menus').unpack() ||
-            this.appDescriptions !== this._settings.get_default_value('apps-show-extra-details').unpack()) ? true : false
+            this.appDescriptions !== this._settings.get_default_value('apps-show-extra-details').unpack() ||
+            this.categoryIconType !== 0) ? true : false
     }
 });
 

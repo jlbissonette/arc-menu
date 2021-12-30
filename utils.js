@@ -234,15 +234,13 @@ function getIconSize(iconSizeEnum, defaultIconSize){
     return iconSize;
 }
 
-function getCategoryDetails(currentCategory){
+function getCategoryDetails(currentCategory, categoryIconType){
     let name, gicon, iconName, fallbackIconName;
-    let categoryMatchFound = false;
     for(let entry of Constants.Categories){
         if(entry.CATEGORY === currentCategory){
-            categoryMatchFound = true;
             name = entry.NAME;
-            if(entry.ICON.startsWith(Me.path))
-                gicon = Gio.icon_new_for_string(entry.ICON);
+            if(categoryIconType === Constants.CategoryIconType.FULL_COLOR)
+                iconName = entry.FULL_COLOR_ICON;
             else
                 iconName = entry.ICON;
             return [name, gicon, iconName, fallbackIconName];
@@ -253,9 +251,12 @@ function getCategoryDetails(currentCategory){
         gicon = Gio.icon_new_for_string(Me.path + '/media/icons/menu_icons/homescreen-symbolic.svg');
         return [name, gicon, iconName, fallbackIconName];
     }
-    else if(!categoryMatchFound){
+    else{
         name = currentCategory.get_name();
-        gicon = currentCategory.get_icon() ? currentCategory.get_icon() : null;
+        if(categoryIconType === Constants.CategoryIconType.FULL_COLOR)
+            gicon = currentCategory.get_icon() ? currentCategory.get_icon() : null;
+        else
+            iconName = currentCategory.get_icon().to_string() + "-symbolic";
         fallbackIconName = currentCategory.get_icon() ? currentCategory.get_icon().to_string() : null;
         return [name, gicon, iconName, fallbackIconName];
     }

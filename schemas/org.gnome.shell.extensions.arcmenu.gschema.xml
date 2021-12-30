@@ -100,6 +100,10 @@
         <value value="4" nick="Large"/>
         <value value="5" nick="Extralarge"/>
     </enum>
+      <enum id='org.gnome.shell.extensions.arcmenu.category-icon-type'>
+        <value value="0" nick="Full_Color"/>
+        <value value="1" nick="Symbolic"/>
+    </enum>
   <schema path="/org/gnome/shell/extensions/arcmenu/" id="org.gnome.shell.extensions.arcmenu">
     <key type="i" name="menu-position-alignment">
       <default>50</default>
@@ -185,6 +189,11 @@
       <default>false</default>
       <summary>disable the arrows on category menu items</summary>
       <description>disable the arrows on category menu items</description>
+    </key>
+    <key enum="org.gnome.shell.extensions.arcmenu.category-icon-type" name="category-icon-type">
+      <default>'Full_Color'</default>
+      <summary>Categroy icon type. Full_Color or Symbolic</summary>
+      <description>Categroy icon type. Full_Color or Symbolic</description>
     </key>
     <key type="b" name="disable-scrollview-fade-effect">
       <default>false</default>

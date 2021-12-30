@@ -2336,7 +2336,6 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
     _init(menuLayout, category, displayType) {
         super._init(menuLayout);
         this.appList = [];
-        this.add_style_class_name('symbolic-icons');
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
         this._layout = this._settings.get_enum('menu-layout');
@@ -2405,13 +2404,13 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
         }
 
-
         let icon = new St.Icon({
             style_class: 'popup-menu-icon',
             icon_size: iconSize
         });
 
-        let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category);
+        let categoryIconType = this._settings.get_enum('category-icon-type');
+        let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category, categoryIconType);
         this._name = _(name);
         if(gicon)
             icon.gicon = gicon;
@@ -2667,7 +2666,8 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
         this.applicationsMap = new Map();
         this.appList = [];
 
-        let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category);
+        let categoryIconType = this._settings.get_enum('category-icon-type');
+        let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category, categoryIconType);
         this._name = _(name);
         if(gicon)
             this.icon.gicon = gicon;
