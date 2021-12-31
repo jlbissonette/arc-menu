@@ -371,6 +371,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.arcMenu._boxPointer.setPosition(this, 0.5);
             this.setMenuPositionAlignment();
             this._forcedMenuLocation = false;
+            this.updateStyle();
             return;
         }
 
