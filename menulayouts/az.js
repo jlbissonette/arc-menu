@@ -194,6 +194,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         let themeNode = this.arcMenu.actor.get_theme_node();
         let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
+        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
+        borderRadius = borderRadius / scaleFactor;
+
         const RoundBottomBorder = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
         const RoundTopBorder = "border-radius: " + borderRadius + "px " + borderRadius + "px 0px 0px;";
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + RoundBottomBorder;

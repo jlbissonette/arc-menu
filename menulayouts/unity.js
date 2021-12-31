@@ -290,7 +290,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let appsScrollBoxAdj = this.categoriesScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
 
-        let customStyle=this._settings.get_boolean('enable-custom-arc-menu');
+        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
         this.categoriesMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
         this.categoriesMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
         this.categoriesButton.tooltip.hide();
@@ -316,11 +316,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     updateStyle(){
         super.updateStyle();
-        let customStyle=this._settings.get_boolean('enable-custom-arc-menu');
         let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow'); 
        
         let themeNode = this.arcMenu.actor.get_theme_node();
         let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
+        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
+        borderRadius = borderRadius / scaleFactor;
         this.themeNodeBorderRadius = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + this.themeNodeBorderRadius;
         

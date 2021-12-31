@@ -316,6 +316,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let backgroundColor = themeNode.get_color('-arrow-background-color');
         let borderWidth = themeNode.get_length('-arrow-border-width');
         let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
+        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
+        borderRadius = borderRadius / scaleFactor;
 
         let drawBoxShadow = true;
         if(backgroundColor?.alpha === 0){

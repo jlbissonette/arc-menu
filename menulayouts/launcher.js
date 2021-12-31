@@ -370,6 +370,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow'); 
         let themeNode = this.arcMenu.actor.get_theme_node();
         let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
+        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
+        borderRadius = borderRadius / scaleFactor;
         this.themeNodeBorderRadius = "border-radius: " + borderRadius + "px " + borderRadius + "px 0px 0px;";
         this.searchProvidersBox.style = this.searchProvidersBoxStyle + this.themeNodeBorderRadius;
         if(removeMenuArrow)
