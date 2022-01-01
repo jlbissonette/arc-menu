@@ -225,6 +225,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                     this.menuButton.tooltipShowing = false;
                 }
             }
+            else{
+                this.pinnedAppsButton.active = false;
+                this.pinnedAppsButton.sync_hover();
+                this.pinnedAppsButton.hovered = this.pinnedAppsButton.hover;
+            }
         });
     }
 

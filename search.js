@@ -37,6 +37,7 @@ const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
 const { OpenWindowSearchProvider } = Me.imports.searchProviders.openWindows;
+const { RecentFilesSearchProvider } = Me.imports.searchProviders.recentFiles;
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
@@ -58,7 +59,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         this.resultsView = resultsView;
         this.layout = this._settings.get_enum('menu-layout');
 
-        if(this.provider.id === 'org.gnome.Nautilus.desktop')
+        if(this.provider.id === 'org.gnome.Nautilus.desktop' || this.provider.id === 'arcmenu.recent-files')
             this._path = this.metaInfo['description'];
 
         let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
@@ -539,6 +540,8 @@ var SearchResults = GObject.registerClass({
 
         if(this._settings.get_boolean('search-provider-open-windows'))
             this._registerProvider(new OpenWindowSearchProvider());
+        if(this._settings.get_boolean('search-provider-recent-files'))
+            this._registerProvider(new RecentFilesSearchProvider());
 
         RemoteSearch.loadRemoteSearchProviders(this._searchSettings, providers => {
             providers.forEach(this._registerProvider.bind(this));

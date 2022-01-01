@@ -100,7 +100,7 @@
         <value value="4" nick="Large"/>
         <value value="5" nick="Extralarge"/>
     </enum>
-      <enum id='org.gnome.shell.extensions.arcmenu.category-icon-type'>
+    <enum id='org.gnome.shell.extensions.arcmenu.category-icon-type'>
         <value value="0" nick="Full_Color"/>
         <value value="1" nick="Symbolic"/>
     </enum>
@@ -219,6 +219,11 @@
       <default>true</default>
       <summary>Show custom search provider - open windows</summary>
       <description>Show custom search provider - open windows.</description>
+    </key>
+    <key type="b" name="search-provider-recent-files">
+      <default>true</default>
+      <summary>Show custom search provider - recent files</summary>
+      <description>Show custom search provider - recent files.</description>
     </key>
     <key type="b" name="activate-on-hover">
       <default>false</default>

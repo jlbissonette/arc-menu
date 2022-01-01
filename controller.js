@@ -124,6 +124,7 @@ var MenuSettingsController = class {
             this._settings.connect('changed::apps-show-extra-details', this._reload.bind(this)),
             this._settings.connect('changed::show-search-result-details', this._reload.bind(this)),
             this._settings.connect('changed::search-provider-open-windows', this._reload.bind(this)),
+            this._settings.connect('changed::search-provider-recent-files', this._reload.bind(this)),
             this._settings.connect('changed::disable-scrollview-fade-effect', this._reload.bind(this)),
             this._settings.connect('changed::menu-height', this._updateMenuHeight.bind(this)),
             this._settings.connect('changed::reload-theme', this._reloadExtension.bind(this)),

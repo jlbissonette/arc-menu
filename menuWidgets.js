@@ -1240,6 +1240,11 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
                     this.menuButton.tooltipShowing = false;
                 }
             }
+            else{
+                this.active = false;
+                this.sync_hover();
+                this.hovered = this.hover;
+            }
         });
     }
 

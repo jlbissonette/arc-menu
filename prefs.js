@@ -3769,9 +3769,17 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this._settings = settings;
         this.searchResultsDetails = this._settings.get_boolean('show-search-result-details');
         this.openWindowsSearchProvider = this._settings.get_boolean('search-provider-open-windows');
+        this.recentFilesSearchProvider = this._settings.get_boolean('search-provider-recent-files');
         this.highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
 
-        let searchOptionsFrame = new PW.FrameBox();
+        let searchProvidersFrame = new PW.FrameBox();
+        let searchProvidersLabel = new Gtk.Label({
+            label: "<b>" + _("Search Providers") + "</b>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        this.mainBox.append(searchProvidersLabel);
         let openWindowsRow = new PW.FrameBoxRow();
         let openWindowsLabel = new Gtk.Label({
             label: _("Search for open windows across all workspaces"),
@@ -3789,8 +3797,36 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         });
         openWindowsRow.add(openWindowsLabel);
         openWindowsRow.add(openWindowsSwitch);
-        searchOptionsFrame.add(openWindowsRow);
+        searchProvidersFrame.add(openWindowsRow);
 
+        let recentFilesRow = new PW.FrameBoxRow();
+        let recentFilesLabel = new Gtk.Label({
+            label: _("Search for recent files"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+
+        let recentFilesSwitch = new Gtk.Switch({ halign: Gtk.Align.END });
+        recentFilesSwitch.set_active(this.recentFilesSearchProvider);
+        recentFilesSwitch.connect('notify::active', (widget) => {
+            this.recentFilesSearchProvider = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        recentFilesRow.add(recentFilesLabel);
+        recentFilesRow.add(recentFilesSwitch);
+        searchProvidersFrame.add(recentFilesRow);
+        this.mainBox.append(searchProvidersFrame);
+
+        let searchOptionsFrame = new PW.FrameBox();
+        let searchOptionsLabel = new Gtk.Label({
+            label: "<b>" + _("Search Options") + "</b>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        this.mainBox.append(searchOptionsLabel);
         let descriptionsRow = new PW.FrameBoxRow();
         let descriptionsLabel = new Gtk.Label({
             label: _("Show descriptions of search results"),
@@ -3808,7 +3844,6 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         descriptionsRow.add(descriptionsLabel);
         descriptionsRow.add(descriptionsSwitch);
         searchOptionsFrame.add(descriptionsRow);
-        this.mainBox.append(searchOptionsFrame);
 
         let highlightSearchResultRow = new PW.FrameBoxRow();
         let highlightSearchResultLabel = new Gtk.Label({
@@ -3843,6 +3878,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this.resetButton.connect('clicked', ()=> {
             this.searchResultsDetails = this._settings.get_default_value('show-search-result-details').unpack();
             this.openWindowsSearchProvider = this._settings.get_default_value('search-provider-open-windows').unpack();
+            this.recentFilesSearchProvider = this._settings.get_default_value('search-provider-recent-files').unpack();
             this.highlightSearchResultTerms = this._settings.get_default_value('highlight-search-result-terms').unpack();
             descriptionsSwitch.set_active(this.searchResultsDetails);
             openWindowsSwitch.set_active(this.openWindowsSearchProvider);
@@ -3858,6 +3894,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this.saveButton.connect('clicked', ()=> {
             this._settings.set_boolean('show-search-result-details', this.searchResultsDetails);
             this._settings.set_boolean('search-provider-open-windows', this.openWindowsSearchProvider);
+            this._settings.set_boolean('search-provider-recent-files', this.recentFilesSearchProvider);
             this._settings.set_boolean('highlight-search-result-terms', this.highlightSearchResultTerms);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
@@ -3874,6 +3911,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         return (
             this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack() ||
             this.openWindowsSearchProvider !== this._settings.get_default_value('search-provider-open-windows').unpack() ||
+            this.recentFilesSearchProvider !== this._settings.get_default_value('search-provider-recent-files').unpack() ||
             this.highlightSearchResultTerms !== this._settings.get_default_value('highlight-search-result-terms').unpack()) ? true : false;
     }
 });

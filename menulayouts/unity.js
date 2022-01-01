@@ -250,6 +250,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                     this.menuButton.tooltipShowing = false;
                 }
             }
+            else{
+                this.categoriesButton.active = false;
+                this.categoriesButton.sync_hover();
+                this.categoriesButton.hovered = this.categoriesButton.hover;
+            }
         });
         this.section = new PopupMenu.PopupMenuSection();
         this.categoriesMenu.addMenuItem(this.section);  

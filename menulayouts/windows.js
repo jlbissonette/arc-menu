@@ -228,22 +228,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_actor(this.dummyCursor);
         this.extrasMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
-        this.extrasMenu.connect('open-state-changed', (menu, open) => {
-            if(!open){
-                this.extrasButton.set_hover(false);
-            }
-            else{
-                if(this.menuButton.tooltipShowingID){
-                    GLib.source_remove(this.menuButton.tooltipShowingID);
-                    this.menuButton.tooltipShowingID = null;
-                    this.menuButton.tooltipShowing = false;
-                }
-                if(this.extrasButton.tooltip){
-                    this.extrasButton.tooltip.hide();
-                    this.menuButton.tooltipShowing = false;
-                }
-            }
-        });
         this.section = new PopupMenu.PopupMenuSection();
         this.extrasMenu.addMenuItem(this.section);  
         
@@ -301,6 +285,24 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMenuManager.addMenu(this.extrasMenu);
         this.extrasMenu.actor.hide();
         Main.uiGroup.add_actor(this.extrasMenu.actor);
+        this.extrasMenu.connect('open-state-changed', (menu, open) => {
+            if(!open){
+                this.extrasButton.active = false;
+                this.extrasButton.sync_hover();
+                this.extrasButton.hovered = this.extrasButton.hover;
+            }
+            else{
+                if(this.menuButton.tooltipShowingID){
+                    GLib.source_remove(this.menuButton.tooltipShowingID);
+                    this.menuButton.tooltipShowingID = null;
+                    this.menuButton.tooltipShowing = false;
+                }
+                if(this.extrasButton.tooltip){
+                    this.extrasButton.tooltip.hide();
+                    this.menuButton.tooltipShowing = false;
+                }
+            }
+        });
     }
 
     toggleExtrasMenu(){
