@@ -149,11 +149,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton)
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton)
 
-        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.loadCategories();
-        this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         this.loadPinnedApps();
-        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.setDefaultMenuView();
     }
 
@@ -162,10 +159,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.layoutProperties.IconGridSize = 42;
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
     }
     
     setDefaultMenuView(){
         this.setGridLayout(Constants.DisplayType.GRID, 4, 4);
+        this.layoutProperties.IconGridSize = 42;
         super.setDefaultMenuView();
         this.activeCategory = _("Pinned");
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
@@ -218,6 +217,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadCategories() {
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.layoutProperties.IconGridSize = 26;
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();

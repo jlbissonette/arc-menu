@@ -182,11 +182,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
         this.frequentAppsHeader = this._createNavigationButtons(_("Frequent"), null);
 
-        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.loadCategories();
         this.loadPinnedApps();
-        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
-
         this.setDefaultMenuView();
 
         this.disableFrequentAppsID = this._settings.connect("changed::eleven-disable-frequent-apps", () => this.setDefaultMenuView());
@@ -196,6 +193,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.layoutProperties.IconGridSize = 34;
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
     }
 
     loadFrequentApps(){
@@ -224,6 +222,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
     
     setDefaultMenuView(){
+        this.layoutProperties.IconGridSize = 34;
         this.setGridLayout(Constants.DisplayType.GRID, 6, 0);
         super.setDefaultMenuView();
         this.loadFrequentApps();
@@ -283,6 +282,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadCategories() {
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();
         this.hasPinnedApps = true;
