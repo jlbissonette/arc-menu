@@ -70,7 +70,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style: 'padding-bottom: 10px; padding-right: 15px;'
         });
 
-
         this.mainBox.add(this.topBox);
         this.categoriesButton = new MW.CategoriesButton(this);
         
@@ -103,7 +102,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'vfade',
         });   
-        this.applicationsScrollBox.style = "width:750px;";    
+        this.applicationsScrollBox.style = "width: 750px;";    
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
 
@@ -192,7 +191,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _addSeparator(){
-        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
+        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.ALWAYS_SHOW, Constants.SeparatorAlignment.VERTICAL);
         this.actionsBox.add(verticalSeparator);
     }
 

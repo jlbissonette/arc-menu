@@ -108,6 +108,7 @@ var SeparatorStyle = {
     MAX: 3,
     HEADER_LABEL: 4,
     NORMAL: 5,
+    ALWAYS_SHOW: 6,
 };
 
 var CaretPosition = {

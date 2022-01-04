@@ -801,11 +801,17 @@ class Arc_Menu_Separator extends PopupMenu.PopupBaseMenuItem {
             }
         }
         else if(separatorAlignment === Constants.SeparatorAlignment.VERTICAL){
-            this._syncVisibility();
-            this.vertSeparatorChangedID = this._settings.connect('changed::vert-separator', this._syncVisibility.bind(this));
-            this.remove_actor(this.label);
+            if(separatorLength === Constants.SeparatorStyle.ALWAYS_SHOW){
+                this.style = "padding: 8px 4px;"
+            }
+            else{
+                this._syncVisibility();
+                this.vertSeparatorChangedID = this._settings.connect('changed::vert-separator', this._syncVisibility.bind(this));
+                this.style = "padding: 0px 4px;"
+            }
+
             this._separator.style = "margin: 0px; width: 1px; height: -1px;";
-            this.style = "padding: 0px 4px;"
+            this.remove_actor(this.label);
             this.x_expand = this._separator.x_expand = true;
             this.x_align = this._separator.x_align = Clutter.ActorAlign.CENTER;
             this.y_expand = this._separator.y_expand = true;
