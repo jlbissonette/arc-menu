@@ -353,6 +353,8 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
         Main.uiGroup.add_actor(this.actor);
         this.actor.hide();
         this._boxPointer.set_offscreen_redirect(Clutter.OffscreenRedirect.ON_IDLE);
+        this._menuClosedID = this.connect('menu-closed', () => this.standaloneRunner.setDefaultMenuView());
+        this.connect('destroy', () => this._onDestroy());
     }
 
     open(animate){
@@ -363,7 +365,6 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
 
     close(animate){
         if(this.isOpen){
-            this.standaloneRunner.setDefaultMenuView();
             if(this.standaloneRunner.contextMenuManager.activeMenu)
                 this.standaloneRunner.contextMenuManager.activeMenu.toggle();
             if(this.standaloneRunner.subMenuManager.activeMenu)
@@ -371,5 +372,12 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
         }
 
         super.close(animate);
+    }
+
+    _onDestroy(){
+        if(this._menuClosedID){
+            this.disconnect(this._menuClosedID)
+            this._menuClosedID = null;
+        }
     }
 };
