@@ -481,8 +481,11 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 this.MenuLayout.updateLocation();
             if(this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
                 if(this.dtpPanel){
-                    if(this.dtpPanel.intellihide?.enabled)
+                    if(this.dtpPanel.intellihide?.enabled){
                         this.dtpPanel.intellihide._revealPanel(true);
+                        this.dtpPanel.intellihide.revealAndHold(1);
+                    }
+                        
                     else if(!this.dtpPanel.panelBox.visible){
                         this.dtpPanel.panelBox.visible = true;
                         this.dtpNeedsHiding = true;
@@ -682,7 +685,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 if(this.dtpPanel && !this.dtpNeedsRelease){
                     if(this.dtpPanel.intellihide?.enabled){
                         this.dtpNeedsRelease = true;
-                        this.dtpPanel.intellihide.disable();
                     }
                 }
             }
@@ -717,7 +719,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){
                     if(this.dtpPanel && this.dtpNeedsRelease && !this.dtpNeedsHiding){
                         this.dtpNeedsRelease = false;
-                        this.dtpPanel.intellihide?.enable();
+                        this.dtpPanel.intellihide?.release(1);
                     }
                     if(this.dtpPanel && this.dtpNeedsHiding){
                         this.dtpNeedsHiding = false;

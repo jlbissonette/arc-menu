@@ -247,7 +247,7 @@ function _enableButtons() {
                     if(!panel._allDocks[index].dash.arcMenuEnabled){
                         let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, 
                                                                                         index, Constants.ArcMenuPlacement.DASH);
-                        
+                        settingsController.monitorIndex = panel._allDocks[index].dash._monitorIndex;
                         settingsController.enableButton(index);
                         settingsController.bindSettingsChanges();
                         settingsControllers.push(settingsController); 
@@ -288,6 +288,8 @@ function _enableButtons() {
     
             let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, 
                                                                             index, Constants.ArcMenuPlacement.PANEL);
+
+            settingsController.monitorIndex = panelParent.monitor?.index;
             
             if (isDtPLoaded) {
                 panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController, 1) : null);

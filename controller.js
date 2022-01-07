@@ -30,7 +30,6 @@ const MenuButton = Me.imports.menuButton;
 const {StandaloneRunner} = Me.imports.standaloneRunner;
 const Utils = Me.imports.utils;
 
-
 var MenuSettingsController = class {
     constructor(settings, settingsControllers, panel, panelIndex, arcMenuPlacement) {
         this._settings = settings;
@@ -226,9 +225,8 @@ var MenuSettingsController = class {
     _toggleMenuOnMonitor(monitor){
         for (let i = 0; i < this._settingsControllers.length; i++) {
             let menuButton = this._settingsControllers[i]._menuButton;
-            let actor = menuButton.menuButtonWidget.actor;
-            let monitorForActor = Main.layoutManager.findMonitorForActor(actor);
-            if(monitor === monitorForActor)
+            let monitorIndex = this._settingsControllers[i].monitorIndex;
+            if(monitor.index === monitorIndex)
                 this.currentMonitorIndex = i;
             else{
                 if(menuButton.arcMenu.isOpen)
