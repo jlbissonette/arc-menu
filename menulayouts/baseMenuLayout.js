@@ -105,6 +105,47 @@ var BaseLayout = class {
         this.resetScrollBarPosition();
     }
 
+    getColumnsFromActor(actor){
+        let gridIconWidth = this.getActorWidthFromStyleClass(actor.name);
+        return this.getBestFitColumns(gridIconWidth);
+    }
+
+    getColumnsFromGridIconSizeSetting(){
+        let gridIconWidth;
+        let iconSizeEnum = this._settings.get_enum("menu-item-grid-icon-size");
+
+        if(iconSizeEnum === Constants.GridIconSize.DEFAULT)
+            gridIconWidth = this.getActorWidthFromStyleClass(this.layoutProperties.DefaultIconGridStyle);
+        else{
+            Constants.GridIconInfo.forEach((info) => {
+                if(iconSizeEnum === info.ENUM){
+                    gridIconWidth = info.SIZE;
+                    return;
+                }
+            });
+        }
+        return this.getBestFitColumns(gridIconWidth);
+    }
+
+    getBestFitColumns(gridIconWidth){
+        let width = this.layoutProperties.MenuWidth;      
+        let spacing = this.layoutProperties.ColumnSpacing;
+        let columns = Math.floor(width / (gridIconWidth + spacing));
+        return columns;
+    }
+
+    getActorWidthFromStyleClass(name){
+        let size;
+        
+        Constants.GridIconInfo.forEach((info) => {
+            if(name === info.NAME){
+                size = info.SIZE;
+                return;
+            }
+        });
+        return size;
+    }
+
     resetScrollBarPosition(){
         let appsScrollBoxAdj;
 
@@ -231,7 +272,7 @@ var BaseLayout = class {
         let iter = dir.iter();
         let nextType;
         let foundRecentlyInstallApp = false;
-        let isLayoutSimple2 = this.layout == Constants.MenuLayout.SIMPLE_2;
+        let isLayoutSimple2 = this.layout === Constants.MenuLayout.SIMPLE_2;
         while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
             if (nextType == GMenu.TreeItemType.ENTRY) {
                 let entry = iter.get_entry();
@@ -679,6 +720,7 @@ var BaseLayout = class {
         let currentCharacter;
         let alphabetizeAllPrograms = this._settings.get_boolean("alphabetize-all-programs") && this.layoutProperties.DisplayType === Constants.DisplayType.LIST;
         let rtl = this.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
+        let columns = -1;
 
         for (let i = 0; i < apps.length; i++) {
             let app = apps[i];
@@ -702,13 +744,23 @@ var BaseLayout = class {
                 item.actor.get_parent().remove_actor(item.actor);
 
             if(shouldShow){
-                if(!rtl && (count % this.layoutProperties.GridColumns === 0)){
+                if(columns === -1){
+                    if(grid.layout_manager.forceGridColumns)
+                        columns = grid.layout_manager.forceGridColumns;
+                    else if(this.layoutProperties.DisplayType === Constants.DisplayType.GRID)
+                        columns = this.getColumnsFromActor(item);
+                    else
+                        columns = 1;
+                    grid.layout_manager.gridColumns = columns;
+                }
+                    
+                if(!rtl && (count % columns === 0)){
                     top++;
                     left = 0;
                 }
                 else if(rtl && (left === 0)){
                     top++;
-                    left = this.layoutProperties.GridColumns;
+                    left = columns;
                 }
 
                 if(alphabetizeAllPrograms && category === Constants.CategoryType.ALL_PROGRAMS){
@@ -771,7 +823,7 @@ var BaseLayout = class {
                 item.grab_key_focus();
             else if(this.arcMenu.isOpen)
                 this.mainBox.grab_key_focus();
-            if(this.layout === Constants.MenuLayout.LAUNCHER && item)
+            if(this.layout === Constants.MenuLayout.LAUNCHER && !this.layoutProperties.StandaloneRunner && item)
                 this.createActiveSearchItemPanel(item);
         }
     }

@@ -39,11 +39,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
-            GridColumns: 4,
             ColumnSpacing: 10,
             RowSpacing: 10,
-            IconGridSize: 36,
-            IconGridStyle: 'SmallIconGrid',
+            DefaultMenuWidth: 410,
+            DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: false,
             SupportsCategoryOnHover: true,
             DefaultCategoryIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
@@ -137,8 +136,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'vfade',
-        });   
-        this.applicationsScrollBox.style = "width:410px;";    
+        });  
   
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
@@ -150,7 +148,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END,
             vertical: true
         });
-        this.weatherBox.style = "width:410px;"; 
+        //this.weatherBox.style = "width:410px;"; 
         this._weatherItem = new MW.WeatherSection(this);
         this._weatherItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
         this._clocksItem = new MW.WorldClocksSection(this);
@@ -192,11 +190,24 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.GRID);
             this.appShortcuts.push(shortcutMenuItem);
         }
+
+        this.updateWidth();
         this._updatePosition();
         this.loadCategories();
         this.loadPinnedApps();
 
         this.setDefaultMenuView();
+    }
+
+    updateWidth(setDefaultMenuView){
+        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+        //Set a 400px minimum limit for the menu width
+        menuWidth = Math.max(400, menuWidth);
+        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
+        this.layoutProperties.MenuWidth = menuWidth;
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
     }
 
     _updatePosition(){

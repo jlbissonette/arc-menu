@@ -37,11 +37,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
-            GridColumns: 4,
             ColumnSpacing: 10,
             RowSpacing: 10,
-            IconGridSize: 36,
-            IconGridStyle: 'SmallIconGrid',
+            DefaultMenuWidth: 450,
+            DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: true,
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
             DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
@@ -81,8 +80,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true,
             style_class:  this.disableFadeEffect ? '' : 'vfade',
             reactive: true
-        });   
-        this.applicationsScrollBox.style = "width:450px;";   
+        });  
         this.applicationsScrollBox.add_actor(this.applicationsBox);
 
         this.subMainBox.add(this.applicationsScrollBox);
@@ -90,8 +88,21 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style = "margin: 10px 10px 0px 10px;";
             this.mainBox.add(this.searchBox.actor);
         }
+
+        this.updateWidth();
         this.loadCategories();
         this.setDefaultMenuView();
+    }
+
+    updateWidth(setDefaultMenuView){
+        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+        //Set a 400px minimum limit for the menu width
+        menuWidth = Math.max(400, menuWidth);
+        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
+        this.layoutProperties.MenuWidth = menuWidth;
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
     }
 
     setDefaultMenuView(){

@@ -363,7 +363,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         if(this.searchType === Constants.DisplayType.GRID){
             let spacing = this.layoutProperties.ColumnSpacing;
 
-            this._grid.style = "padding: 0px 10px 10px 10px; spacing: " + spacing + "px;";   
+            this._grid.style = "padding: 0px 0px 10px 0px; spacing: " + spacing + "px;";   
             this._resultDisplayBin.x_align = Clutter.ActorAlign.CENTER;
         }
             
@@ -373,7 +373,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
     _getMaxDisplayedResults() {
         let maxDisplayedResults;
         if(this.searchType === Constants.DisplayType.GRID)
-            maxDisplayedResults = this.layoutProperties.GridColumns
+            maxDisplayedResults = this._menuLayout.getColumnsFromGridIconSizeSetting();
         else 
             maxDisplayedResults = MAX_SEARCH_RESULTS;
         return maxDisplayedResults;
@@ -391,7 +391,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
     }
 
     _addItem(display) {
-        const GridColumns = this.searchType === Constants.DisplayType.LIST ? 1 : this.layoutProperties.GridColumns;
+        const GridColumns = this.searchType === Constants.DisplayType.LIST ? 1 : this._menuLayout.getColumnsFromGridIconSizeSetting();
         if(!this.rtl && (this.itemCount % GridColumns === 0)){
             this.gridTop++;
             this.gridLeft = 0;

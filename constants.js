@@ -137,6 +137,25 @@ var IconSize = {
     EXTRA_LARGE: 5,
 }
 
+var GridIconSize = {
+    DEFAULT: 0,
+    SMALL: 1,
+    MEDIUM: 2,
+    LARGE: 3,
+    SMALL_RECT: 4,
+    MEDIUM_RECT: 5,
+    LARGE_RECT: 6,
+};
+
+var GridIconInfo = [
+    { NAME: 'SmallIconGrid', SIZE: 90, ICON_SIZE: 36, ENUM: GridIconSize.SMALL },
+    { NAME: 'MediumIconGrid', SIZE: 97, ICON_SIZE: 42, ENUM: GridIconSize.MEDIUM },
+    { NAME: "LargeIconGrid", SIZE: 105, ICON_SIZE: 52, ENUM: GridIconSize.LARGE },
+    { NAME: 'SmallRectIconGrid', SIZE: 95, ICON_SIZE: 28, ENUM: GridIconSize.SMALL_RECT },
+    { NAME: 'MediumRectIconGrid', SIZE: 102, ICON_SIZE: 34, ENUM: GridIconSize.MEDIUM_RECT },
+    { NAME: 'LargeRectIconGrid', SIZE: 105, ICON_SIZE: 42, ENUM: GridIconSize.LARGE_RECT },
+]
+
 var EXTRA_SMALL_ICON_SIZE = 16;
 var SMALL_ICON_SIZE = 20;
 var MEDIUM_ICON_SIZE = 25;
