@@ -173,6 +173,8 @@ function getSettings(schema, extensionUUID) {
 
 function convertToGridLayout(item){
     const Clutter = imports.gi.Clutter;
+    const settings = item._settings;
+    const layoutProperties = item._menuLayout.layoutProperties;
 
     let icon = item._icon ? item._icon : item._iconBin;
 
@@ -186,7 +188,7 @@ function convertToGridLayout(item){
 
     icon.y_align = Clutter.ActorAlign.CENTER;
     icon.y_expand = true;
-    if(item._settings.get_boolean('multi-lined-labels')){
+    if(settings.get_boolean('multi-lined-labels')){
         icon.y_align = Clutter.ActorAlign.TOP;
         icon.y_expand = false;
 
@@ -205,9 +207,11 @@ function convertToGridLayout(item){
         item._indicator.y_expand = false;
     }
 
-    item.name = item._menuLayout.layoutProperties.IconGridStyle;
-    if(item._icon) 
-        icon.icon_size = item._menuLayout.layoutProperties.IconGridSize;
+    const iconSizeEnum = settings.get_enum('menu-item-grid-icon-size');
+    let defaultIconStyle = layoutProperties.DefaultIconGridStyle;      
+
+    iconSize = getGridIconStyle(iconSizeEnum, defaultIconStyle);
+    item.name = iconSize;
 }
 
 function getIconSize(iconSizeEnum, defaultIconSize){
@@ -215,23 +219,54 @@ function getIconSize(iconSizeEnum, defaultIconSize){
     let iconSize = defaultIconSize;
     if(IconSizeEnum === Constants.IconSize.DEFAULT)
         iconSize = defaultIconSize;
-    else if(IconSizeEnum === Constants.IconSize.EXTRA_SMALL){
+    else if(IconSizeEnum === Constants.IconSize.EXTRA_SMALL)
         iconSize = Constants.EXTRA_SMALL_ICON_SIZE;
-    }
-    else if(IconSizeEnum === Constants.IconSize.SMALL){
+    else if(IconSizeEnum === Constants.IconSize.SMALL)
         iconSize = Constants.SMALL_ICON_SIZE;
-    }
-    else if(IconSizeEnum === Constants.IconSize.MEDIUM){
+    else if(IconSizeEnum === Constants.IconSize.MEDIUM)
         iconSize = Constants.MEDIUM_ICON_SIZE;
-    }
-    else if(IconSizeEnum === Constants.IconSize.LARGE){
+    else if(IconSizeEnum === Constants.IconSize.LARGE)
         iconSize = Constants.LARGE_ICON_SIZE;
-    }
-    else if(IconSizeEnum === Constants.IconSize.EXTRA_LARGE){
+    else if(IconSizeEnum === Constants.IconSize.EXTRA_LARGE)
         iconSize = Constants.EXTRA_LARGE_ICON_SIZE;
-    }
 
     return iconSize;
+}
+
+function getGridIconSize(iconSizeEnum, defaultIconStyle){
+    let iconSize;
+    if(iconSizeEnum === Constants.GridIconSize.DEFAULT){
+        Constants.GridIconInfo.forEach((info) => {
+            if(info.NAME === defaultIconStyle){
+                iconSize = info.ICON_SIZE;
+            }
+        });
+    }
+    else
+        iconSize = Constants.GridIconInfo[iconSizeEnum - 1].ICON_SIZE;
+    
+    return iconSize;
+}
+
+function getGridIconStyle(iconSizeEnum, defaultIconStyle){
+    const IconSizeEnum = iconSizeEnum;
+    let iconStyle = defaultIconStyle;
+    if(IconSizeEnum === Constants.GridIconSize.DEFAULT)
+        iconStyle = defaultIconStyle;
+    else if(IconSizeEnum === Constants.GridIconSize.SMALL)
+        iconStyle = 'SmallIconGrid';
+    else if(IconSizeEnum === Constants.GridIconSize.MEDIUM)
+        iconStyle = 'MediumIconGrid';
+    else if(IconSizeEnum === Constants.GridIconSize.LARGE)
+        iconStyle = 'LargeIconGrid';
+    else if(IconSizeEnum === Constants.GridIconSize.SMALL_RECT)
+        iconStyle = 'SmallRectIconGrid';
+    else if(IconSizeEnum === Constants.GridIconSize.MEDIUM_RECT)
+        iconStyle = 'MediumRectIconGrid';
+    else if(IconSizeEnum === Constants.GridIconSize.LARGE_RECT)
+        iconStyle = 'LargeRectIconGrid';
+
+    return iconStyle;
 }
 
 function getCategoryDetails(currentCategory, categoryIconType){
@@ -562,14 +597,26 @@ function createStylesheet(settings){
         menuButtonStyle += ".arc-menu-panel-menu{\nborder-radius: " + menuButtonBorderRadius + "px;\nborder: " + border + "px solid transparent;\n}\n\n";
     }
 
+    let iconGridStyle = "\ntext-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n";
+
     let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
         +".arc-menu-status-text{\ncolor:" + menuForegroundColor + ";\nfont-size:" + fontSize + "pt;\n}\n\n"                                                     
-        +".search-statustext{\nfont-size:11pt;\n}\n\n"    
-        +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +"#ElevenIconGrid{\nwidth: 92px;\n height: 78px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
-        +"#AZIconGrid{\nwidth: 95px;\n height: 85px;\n text-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n}\n\n"
+        +".search-statustext{\nfont-size:11pt;\n}\n\n"
+
+        +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;" + iconGridStyle + "}\n\n"
+
+        +"#LargeIconGrid{\nwidth: 95px;\n height: 95px;" + iconGridStyle + "}\n\n"
+
+        +"#MediumIconGrid{\nwidth: 87px;\n height: 87px;" + iconGridStyle + "}\n\n"
+
+        +"#SmallIconGrid{\nwidth: 80px;\n height: 80px;" + iconGridStyle + "}\n\n"
+
+        +"#LargeRectIconGrid{\nwidth: 95px;\n height: 85px;" + iconGridStyle + "}\n\n"
+
+        +"#MediumRectIconGrid{\nwidth: 92px;\n height: 78px;" + iconGridStyle + "}\n\n"
+
+        +"#SmallRectIconGrid{\nwidth: 85px;\n height: 70px;" + iconGridStyle + "}\n\n"
+
         +".left-panel{\nwidth:" + leftPanelWidth + "px;\n}\n\n"   
         +".left-panel-small{\nwidth:" + leftPanelWidthSmall + "px;\n}\n\n"
         +".right-panel{\nwidth:" + rightPanelWidth + "px;\n}\n\n"   

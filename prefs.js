@@ -2886,6 +2886,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.append(this.scrollBox);
         this._settings = settings;
         this.heightValue = this._settings.get_int('menu-height');
+        this.widthValue = this._settings.get_int('menu-width-adjustment');
         this.rightPanelWidth = this._settings.get_int('right-panel-width');
         this.menuWidth = this._settings.get_int('menu-width');
         this.forcedMenuLocation = this._settings.get_enum('force-menu-location');
@@ -2967,6 +2968,61 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         heightRow.add(hscale);
         heightRow.add(hSpinButton);
         generalSettingsFrame.add(heightRow);
+
+        let widthRow = new PW.FrameBoxRow();
+        let widthLabel = new Gtk.Label({
+            label: _('Grid Icon Panel\nWidth Adjustment'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: false,
+            selectable: false
+        });
+        let widthScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: -600,
+                upper: 600,
+                step_increment: 1,
+                page_increment: 1,
+                page_size: 0
+            }),
+            digits: 0,
+            round_digits: 0,
+            hexpand: true,
+            value_pos: Gtk.PositionType.RIGHT
+        });
+        widthScale.add_mark(0, Gtk.PositionType.BOTTOM, _("Default"));
+        widthScale.set_value(this.widthValue);
+        widthScale.connect('value-changed', (widget) => {
+            this.widthValue = widget.get_value();
+            if(widthSpinButton.value !== this.widthValue)
+                widthSpinButton.set_value(this.widthValue);
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+
+        let widthSpinButton = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower: -600, upper: 600, step_increment: 1, page_increment: 1, page_size: 0,
+            }),
+            climb_rate: 1,
+            digits: 0,
+            numeric: true,
+            valign: Gtk.Align.START
+        });
+        widthSpinButton.set_value(this.widthValue);
+        widthSpinButton.connect('value-changed', () => {
+            this.widthValue = widthSpinButton.get_value();
+            if(widthScale.value !== this.widthValue)
+                widthScale.set_value(this.widthValue);
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+
+        widthRow.add(widthLabel);
+        widthRow.add(widthScale);
+        widthRow.add(widthSpinButton);
+        generalSettingsFrame.add(widthRow);
 
         let menuWidthRow = new PW.FrameBoxRow();
         let menuWidthLabel = new Gtk.Label({
@@ -3097,6 +3153,35 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         menuItemSizeHeaderRow.add(menuItemSizeHeaderLabel);
         iconsSizeFrame.add(menuItemSizeHeaderRow);
+
+        let gridIconsSizeRow = new PW.FrameBoxRow();
+        gridIconsSizeRow._grid.margin_start = 25;
+        gridIconsSizeRow._grid.margin_end = 25;
+        let gridIconsSizeLabel = new Gtk.Label({
+            label: _("Grid Icons"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+         });
+        this.gridIconsSizeCombo = new Gtk.ComboBoxText({
+            halign: Gtk.Align.END,
+        });
+        this.gridIconsSizeCombo.append("Default", _("Default"));
+        this.gridIconsSizeCombo.append("Small", _("Small"));
+        this.gridIconsSizeCombo.append("Medium", _("Medium"));
+        this.gridIconsSizeCombo.append("Large", _("Large"));
+        this.gridIconsSizeCombo.append("Small Rect", _("Small Rect"));
+        this.gridIconsSizeCombo.append("Medium Rect", _("Medium Rect"));
+        this.gridIconsSizeCombo.append("Large Rect", _("Large Rect"));
+        this.gridIconsSizeCombo.set_active(this._settings.get_enum('menu-item-grid-icon-size'));
+        this.gridIconsSizeCombo.connect('changed', (widget) => {
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        gridIconsSizeRow.add(gridIconsSizeLabel);
+        gridIconsSizeRow.add(this.gridIconsSizeCombo);
+        iconsSizeFrame.add(gridIconsSizeRow);
 
         [this.menuItemIconSizeCombo, this.menuItemIconSizeRow] = this.createIconSizeRow(_("Categories &amp; Applications"), this._settings.get_enum('menu-item-icon-size'));
         iconsSizeFrame.add(this.menuItemIconSizeRow);
@@ -3275,6 +3360,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         this.resetButton.connect('clicked', ()=> {
             this.heightValue = this._settings.get_default_value('menu-height').unpack();
+            this.widthValue = this._settings.get_default_value('menu-width-adjustment').unpack();
             this.rightPanelWidth = this._settings.get_default_value('right-panel-width').unpack();
             this.menuWidth = this._settings.get_default_value('menu-width').unpack();
             this.verticalSeparator = this._settings.get_default_value('vert-separator').unpack();
@@ -3285,10 +3371,12 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.categoryIconType = this._settings.get_default_value('category-icon-type').unpack();
             this.forcedMenuLocation = 0;
             hscale.set_value(this.heightValue);
+            widthScale.set_value(this.widthValue);
             menuWidthScale.set_value(this.menuWidth);
             rightPanelWidthScale.set_value(this.rightPanelWidth);
             subMenusSwitch.set_active(this.subMenus);
             vertSeparatorSwitch.set_active(this.verticalSeparator);
+            this.gridIconsSizeCombo.set_active(0);
             this.menuItemIconSizeCombo.set_active(0);
             this.buttonIconSizeCombo.set_active(0);
             this.quicklinksIconSizeCombo.set_active(0);
@@ -3309,11 +3397,13 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         this.saveButton.connect('clicked', ()=> {
             this._settings.set_int('menu-height', this.heightValue);
+            this._settings.set_int('menu-width-adjustment', this.widthValue);
             this._settings.set_int('right-panel-width', this.rightPanelWidth);
             this._settings.set_int('menu-width', this.menuWidth);
             this._settings.set_enum('force-menu-location', this.forcedMenuLocation);
             this._settings.set_boolean('vert-separator', this.verticalSeparator);
             this._settings.set_enum('menu-item-icon-size', this.menuItemIconSizeCombo.get_active());
+            this._settings.set_enum('menu-item-grid-icon-size', this.gridIconsSizeCombo.get_active());
             this._settings.set_enum('button-item-icon-size', this.buttonIconSizeCombo.get_active());
             this._settings.set_enum('quicklinks-item-icon-size', this.quicklinksIconSizeCombo.get_active());
             this._settings.set_enum('misc-item-icon-size', this.miscIconSizeCombo.get_active());
@@ -3368,10 +3458,12 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         return (this.disableTooltips !== this._settings.get_default_value('disable-tooltips').unpack() ||
             this.disableRecentApps !== this._settings.get_default_value('disable-recently-installed-apps').unpack() ||
             this.heightValue !== this._settings.get_default_value('menu-height').unpack() ||
+            this.widthValue !== this._settings.get_default_value('menu-width-adjustment').unpack() ||
             this.rightPanelWidth !== this._settings.get_default_value('right-panel-width').unpack() ||
             this.menuWidth !== this._settings.get_default_value('menu-width').unpack() ||
             this.forcedMenuLocation !== 0 ||
             this.verticalSeparator !== this._settings.get_default_value('vert-separator').unpack() ||
+            this.gridIconsSizeCombo.get_active() !== 0 ||
             this.menuItemIconSizeCombo.get_active() !== 0 ||
             this.buttonIconSizeCombo.get_active() !== 0 ||
             this.quicklinksIconSizeCombo.get_active() !== 0 ||
@@ -3771,6 +3863,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this.openWindowsSearchProvider = this._settings.get_boolean('search-provider-open-windows');
         this.recentFilesSearchProvider = this._settings.get_boolean('search-provider-recent-files');
         this.highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
+        this.maxSearchResults = this._settings.get_int('max-search-results');
 
         let searchProvidersFrame = new PW.FrameBox();
         let searchProvidersLabel = new Gtk.Label({
@@ -3862,6 +3955,39 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         highlightSearchResultRow.add(highlightSearchResultLabel);
         highlightSearchResultRow.add(highlightSearchResultSwitch);
         searchOptionsFrame.add(highlightSearchResultRow);
+
+        let maxSearchResultsRow = new PW.FrameBoxRow();
+        let maxSearchResultsLabel = new Gtk.Label({
+            label: _('Max Search Results'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let maxSearchResultsScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 2,
+                upper: 10,
+                step_increment: 1,
+                page_increment: 1,
+                page_size: 0
+            }),
+            digits: 0,
+            round_digits: 0,
+            hexpand: true,
+            draw_value: true,
+            value_pos: Gtk.PositionType.RIGHT
+        });
+        maxSearchResultsScale.set_value(this.maxSearchResults);
+        maxSearchResultsScale.connect('value-changed', (widget) => {
+            this.maxSearchResults = widget.get_value();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+
+        maxSearchResultsRow.add(maxSearchResultsLabel);
+        maxSearchResultsRow.add(maxSearchResultsScale);
+        searchOptionsFrame.add( maxSearchResultsRow);
         this.mainBox.append(searchOptionsFrame);
 
         let buttonRow = new Gtk.Box({
@@ -3880,9 +4006,11 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             this.openWindowsSearchProvider = this._settings.get_default_value('search-provider-open-windows').unpack();
             this.recentFilesSearchProvider = this._settings.get_default_value('search-provider-recent-files').unpack();
             this.highlightSearchResultTerms = this._settings.get_default_value('highlight-search-result-terms').unpack();
+            this.maxSearchResults = this._settings.get_default_value('max-search-results').unpack();
             descriptionsSwitch.set_active(this.searchResultsDetails);
             openWindowsSwitch.set_active(this.openWindowsSearchProvider);
             highlightSearchResultSwitch.set_active(this.highlightSearchResultTerms);
+            maxSearchResultsScale.set_value(this.maxSearchResults);
             this.saveButton.set_sensitive(true);
             this.resetButton.set_sensitive(false);
         });
@@ -3896,6 +4024,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             this._settings.set_boolean('search-provider-open-windows', this.openWindowsSearchProvider);
             this._settings.set_boolean('search-provider-recent-files', this.recentFilesSearchProvider);
             this._settings.set_boolean('highlight-search-result-terms', this.highlightSearchResultTerms);
+            this._settings.set_int('max-search-results', this.maxSearchResults);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         });
@@ -3912,7 +4041,8 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack() ||
             this.openWindowsSearchProvider !== this._settings.get_default_value('search-provider-open-windows').unpack() ||
             this.recentFilesSearchProvider !== this._settings.get_default_value('search-provider-recent-files').unpack() ||
-            this.highlightSearchResultTerms !== this._settings.get_default_value('highlight-search-result-terms').unpack()) ? true : false;
+            this.highlightSearchResultTerms !== this._settings.get_default_value('highlight-search-result-terms').unpack() ||
+            this.maxSearchResults !== this._settings.get_default_value('max-search-results').unpack()) ? true : false;
     }
 });
 

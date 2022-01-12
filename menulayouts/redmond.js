@@ -39,11 +39,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
-            GridColumns: 4,
             ColumnSpacing: 10,
             RowSpacing: 10,
-            IconGridSize: 36,
-            IconGridStyle: 'SmallIconGrid',
+            DefaultMenuWidth: 450,
+            DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: false,
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
             DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
@@ -71,7 +70,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true
         });
 
-
         this.applicationsScrollBox = this._createScrollBox({
             x_expand: true,
             y_expand: true,
@@ -79,9 +77,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'vfade',
-        });   
-
-        this.applicationsScrollBox.style = "width:450px;";   
+        });  
         this.applicationsScrollBox.add_actor(this.applicationsBox);
 
         this.subMainBox.add(this.applicationsScrollBox);
@@ -204,8 +200,20 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add(horizonalFlip ? this.subMainBox: this.rightBox);  
         horizonalFlip ? this.rightBox.style += "margin-right: 0px" : this.rightBox.style += "margin-left: 0px"
 
+        this.updateWidth();
         this.loadCategories();
         this.setDefaultMenuView();
+    }
+
+    updateWidth(setDefaultMenuView){
+        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+        //Set a 400px minimum limit for the menu width
+        menuWidth = Math.max(400, menuWidth);
+        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
+        this.layoutProperties.MenuWidth = menuWidth;
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
     }
 
     setDefaultMenuView(){

@@ -41,8 +41,6 @@ const { RecentFilesSearchProvider } = Me.imports.searchProviders.recentFiles;
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
-var MAX_SEARCH_RESULTS = 5;
-
 var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
         let menulayout = resultsView._menuLayout;
@@ -306,7 +304,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
     }
 
     _getMaxDisplayedResults() {
-        return MAX_SEARCH_RESULTS;
+        return this._settings.get_int('max-search-results');
     }
 
     _clearResultDisplay() {
@@ -338,6 +336,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         super._init(provider, resultsView);
         this._parentContainer = resultsView;
         this._menuLayout = resultsView._menuLayout;
+        this._settings = this._menuLayout._settings;
         this.layoutProperties = this._menuLayout.layoutProperties;
         this.searchType = this.layoutProperties.SearchDisplayType;
         this.layout = this._menuLayout._settings.get_enum('menu-layout');
@@ -363,7 +362,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         if(this.searchType === Constants.DisplayType.GRID){
             let spacing = this.layoutProperties.ColumnSpacing;
 
-            this._grid.style = "padding: 0px 10px 10px 10px; spacing: " + spacing + "px;";   
+            this._grid.style = "padding: 0px 0px 10px 0px; spacing: " + spacing + "px;";   
             this._resultDisplayBin.x_align = Clutter.ActorAlign.CENTER;
         }
             
@@ -373,9 +372,9 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
     _getMaxDisplayedResults() {
         let maxDisplayedResults;
         if(this.searchType === Constants.DisplayType.GRID)
-            maxDisplayedResults = this.layoutProperties.GridColumns
+            maxDisplayedResults = this._menuLayout.getColumnsFromGridIconSizeSetting();
         else 
-            maxDisplayedResults = MAX_SEARCH_RESULTS;
+            maxDisplayedResults = this._settings.get_int('max-search-results');
         return maxDisplayedResults;
     }
 
@@ -391,7 +390,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
     }
 
     _addItem(display) {
-        const GridColumns = this.searchType === Constants.DisplayType.LIST ? 1 : this.layoutProperties.GridColumns;
+        const GridColumns = this.searchType === Constants.DisplayType.LIST ? 1 : this._menuLayout.getColumnsFromGridIconSizeSetting();
         if(!this.rtl && (this.itemCount % GridColumns === 0)){
             this.gridTop++;
             this.gridLeft = 0;

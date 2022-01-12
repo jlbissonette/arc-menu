@@ -37,14 +37,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
             Search: true,
-            DisplayType: Constants.DisplayType.LIST,
+            DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
-            GridColumns: 6,
             ColumnSpacing: 0,
             RowSpacing: 0,
-            IconGridSize: 34,
-            IconGridStyle: 'ElevenIconGrid',
             VerticalMainBox: true,
+            DefaultMenuWidth: 650,
+            DefaultIconGridStyle: "MediumRectIconGrid",
             DefaultCategoryIconSize: Constants.LARGE_ICON_SIZE,
             DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
             DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
@@ -94,8 +93,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'vfade',
-        });   
-        this.applicationsScrollBox.style = "width: 640px;";    
+        }); 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
 
@@ -148,6 +146,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             layout_manager: layout 
         });
         layout.hookup_style(this.shortcutsGrid);
+        layout.forceGridColumns = 2;
         this.shortcutsBox.add(this.shortcutsGrid);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
@@ -182,6 +181,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
         this.frequentAppsHeader = this._createNavigationButtons(_("Frequent"), null);
 
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
@@ -189,11 +189,21 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.disableFrequentAppsID = this._settings.connect("changed::eleven-disable-frequent-apps", () => this.setDefaultMenuView());
     }
 
+    updateWidth(setDefaultMenuView){
+        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+        //Set a 400px minimum limit for the menu width
+        menuWidth = Math.max(400, menuWidth);
+        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
+        this.layoutProperties.MenuWidth = menuWidth;
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
+    }
+
     loadPinnedApps(){
         this.layoutProperties.IconGridSize = 34;
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
-        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
     }
 
     loadFrequentApps(){
@@ -277,7 +287,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
         this.applicationsGrid.layout_manager.column_spacing = spacing;
         this.applicationsGrid.layout_manager.row_spacing = spacing;
-        this.layoutProperties.GridColumns = columns;
         this.layoutProperties.DisplayType = displayType;
     }
 

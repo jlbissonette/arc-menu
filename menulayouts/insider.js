@@ -39,12 +39,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
-            GridColumns: 5,
             ColumnSpacing: 10,
             RowSpacing: 10,
             PinnedAppsColumns: 1,
-            IconGridSize: 36,
-            IconGridStyle: 'SmallIconGrid',
+            DefaultMenuWidth: 525,
+            DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: false,
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
             DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
@@ -126,18 +125,29 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class:  this.disableFadeEffect ? '' : 'vfade',
-        });   
-        this.applicationsScrollBox.style = "width:525px;";   
+        });
 
         this.applicationsScrollBox.add_actor( this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
         
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
 
         this._createPinnedAppsMenu();
         this.setDefaultMenuView();
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
+    }
+
+    updateWidth(setDefaultMenuView){
+        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+        //Set a 400px minimum limit for the menu width
+        menuWidth = Math.max(400, menuWidth);
+        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
+        this.layoutProperties.MenuWidth = menuWidth;
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
     }
 
     loadPinnedApps(){
@@ -201,7 +211,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             layout_manager: layout 
         });
-        this.pinnedAppsGrid.isPinnedAppsGrid = true;
+        layout.forceGridColumns = 1;
         layout.hookup_style(this.pinnedAppsGrid);
 
         let themeContext = St.ThemeContext.get_for_stage(global.stage);

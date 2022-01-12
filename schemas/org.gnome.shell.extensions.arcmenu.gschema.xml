@@ -100,6 +100,15 @@
         <value value="4" nick="Large"/>
         <value value="5" nick="Extralarge"/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.grid-icon-sizes'>
+        <value value="0" nick="Default"/>
+        <value value="1" nick="Small"/>
+        <value value="2" nick="Medium"/>
+        <value value="3" nick="Large"/>
+        <value value="4" nick="Small_Rect"/>
+        <value value="5" nick="Medium_Rect"/>
+        <value value="6" nick="Large_Rect"/>
+    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.category-icon-type'>
         <value value="0" nick="Full_Color"/>
         <value value="1" nick="Symbolic"/>
@@ -204,6 +213,11 @@
       <default>false</default>
       <summary>Show a larger icon and extra app details</summary>
       <description>Show a larger icon and extra app details.</description>
+    </key>
+    <key type="i" name="max-search-results">
+      <default>5</default>
+      <summary>The amount of search results to display.</summary>
+      <description>The amount of search results to display.</description>
     </key>
     <key type="b" name="highlight-search-result-terms">
       <default>false</default>
@@ -435,6 +449,11 @@
       <summary>Menu width</summary>
       <description>Menu width.</description>
     </key>
+    <key type="i" name="menu-width-adjustment">
+      <default>0</default>
+      <summary>Menu Width Adjustement.</summary>
+      <description>Menu Width Adjustement. 0 Default. A negative value decreses the default width, positive increases width.</description>
+    </key>
     <key type="i" name="right-panel-width">
       <default>205</default>
       <summary>Right Panel width</summary>
@@ -559,6 +578,11 @@
       <default>'Default'</default>
       <summary>Size of the menu items icon.</summary>
       <description>Size of the menu items icon. Includes all application items, category items, search results.</description>
+    </key>
+    <key name="menu-item-grid-icon-size" enum="org.gnome.shell.extensions.arcmenu.grid-icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of the menu grid icons.</summary>
+      <description>Size of the menu grid icon.</description>
     </key>
     <key name="button-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
       <default>'Default'</default>

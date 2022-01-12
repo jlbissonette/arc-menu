@@ -39,12 +39,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
-            GridColumns: 6,
             ColumnSpacing: 15,
             RowSpacing: 15,
-            IconGridSize: 52,
-            IconGridStyle: 'LargeIconGrid',
             VerticalMainBox: true,
+            DefaultMenuWidth: 750,
+            DefaultIconGridStyle: "LargeIconGrid",
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
             DefaultApplicationIconSize: Constants.EXTRA_LARGE_ICON_SIZE,
             DefaultQuickLinksIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
@@ -101,8 +100,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'vfade',
-        });   
-        this.applicationsScrollBox.style = "width: 750px;";    
+        });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add(this.applicationsScrollBox);
 
@@ -182,12 +180,25 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.GRID, isContainedInCategory);
             this.appShortcuts.push(shortcutMenuItem);
         }
+
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this._createCategoriesMenu();
         this.loadExtraPinnedApps();
 
         this.setDefaultMenuView();
+    }
+
+    updateWidth(setDefaultMenuView){
+        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+        //Set a 400px minimum limit for the menu width
+        menuWidth = Math.max(400, menuWidth);
+        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
+        this.layoutProperties.MenuWidth = menuWidth;
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
     }
 
     _addSeparator(){

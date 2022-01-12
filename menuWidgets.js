@@ -1727,7 +1727,9 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
             iconSize = Utils.getIconSize(iconSizeEnum, defaultIconSize);
         }
         else if(this._displayType === Constants.DisplayType.GRID){
-            iconSize = this._menuLayout.layoutProperties.IconGridSize;
+            iconSizeEnum = this._settings.get_enum('menu-item-grid-icon-size');
+            let defaultIconStyle = LayoutProps.DefaultIconGridStyle;
+            iconSize = Utils.getGridIconSize(iconSizeEnum, defaultIconStyle);
         }
 
         return new St.Icon({
@@ -1999,7 +2001,10 @@ var PinnedAppsMenuItem = GObject.registerClass({
     createIcon(){
         let iconSize;
         if(this._displayType === Constants.DisplayType.GRID){
-            iconSize = this._menuLayout.layoutProperties.IconGridSize;
+            const IconSizeEnum = this._settings.get_enum('menu-item-grid-icon-size');
+            const LayoutProps = this._menuLayout.layoutProperties;
+            let defaultIconStyle = LayoutProps.DefaultIconGridStyle;
+            iconSize = Utils.getGridIconSize(IconSizeEnum, defaultIconStyle);
         }
         else if(this._displayType === Constants.DisplayType.LIST){
             const IconSizeEnum = this._settings.get_enum('menu-item-icon-size');
@@ -2079,7 +2084,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
             this._parentBox.remove_child(this);
             let children = this._parentBox.get_children();
             let childrenCount = children.length;
-            let columns = this._parentBox.isPinnedAppsGrid ? this._menuLayout.layoutProperties.PinnedAppsColumns : this._menuLayout.layoutProperties.GridColumns;
+            let columns = layoutManager.gridColumns;
             let rows = Math.floor(childrenCount / columns);
             if(this.yIndex >= rows)
                 this.yIndex = rows;
@@ -2099,10 +2104,10 @@ var PinnedAppsMenuItem = GObject.registerClass({
             for(let i = 0; i < children.length; i++){
                 if(this.xIndex === x && this.yIndex === y)
                     [x, y] = this.gridLayoutIter(x, y, columns);
-                this._parentBox.layout_manager.attach(children[i], x, y, 1, 1);
+                layoutManager.attach(children[i], x, y, 1, 1);
                 [x, y] = this.gridLayoutIter(x, y, columns);
             }
-            this._parentBox.layout_manager.attach(this, this.xIndex, this.yIndex, 1, 1);
+            layoutManager.attach(this, this.xIndex, this.yIndex, 1, 1);
         }
         return DND.DragMotionResult.CONTINUE;
     }
@@ -2116,7 +2121,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
         let layoutManager = this._parentBox.layout_manager;
         if(layoutManager instanceof Clutter.GridLayout){
             let x = 0, y = 0;
-            let columns = this._parentBox.isPinnedAppsGrid ? this._menuLayout.layoutProperties.PinnedAppsColumns : this._menuLayout.layoutProperties.GridColumns;
+            let columns = layoutManager.gridColumns;
             let orderedList = [];
             let children = this._parentBox.get_children();
             for(let i = 0; i < children.length; i++){
@@ -2250,8 +2255,12 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
     createIcon(){
         let iconSize;
         if(this._displayType === Constants.DisplayType.GRID){
-            iconSize = this._menuLayout.layoutProperties.IconGridSize;
             this._iconBin.x_align = Clutter.ActorAlign.CENTER;
+
+            const IconSizeEnum = this._settings.get_enum('menu-item-grid-icon-size');
+            const LayoutProps = this._menuLayout.layoutProperties;
+            let defaultIconStyle = LayoutProps.DefaultIconGridStyle;
+            iconSize = Utils.getGridIconSize(IconSizeEnum, defaultIconStyle);
         }
         else if(this._displayType === Constants.DisplayType.LIST){
             const IconSizeEnum = this._settings.get_enum('menu-item-icon-size');

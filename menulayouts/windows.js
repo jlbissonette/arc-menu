@@ -40,11 +40,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             SearchDisplayType: Constants.DisplayType.LIST,
             DisplayType: Constants.DisplayType.LIST,
-            GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
-            IconGridSize: 36,
-            IconGridStyle: 'SmallIconGrid',
+            DefaultMenuWidth: 300,
+            DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: false,
             DefaultCategoryIconSize: Constants.LARGE_ICON_SIZE,
             DefaultApplicationIconSize: Constants.LARGE_ICON_SIZE,
@@ -97,8 +96,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: this.disableFadeEffect ? '' : 'vfade',
-            style: "padding: 0px 12px;"
+            style_class: this.disableFadeEffect ? '' : 'vfade'
         });
 
         this.pinnedAppsBox = new St.BoxLayout({ 
@@ -173,6 +171,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.externalDevicesBox.add(this._sections[id]);
         }
 
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
 
@@ -180,9 +179,24 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.setDefaultMenuView();
     }
 
+    updateWidth(setDefaultMenuView){
+        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+        //Set a 200px minimum limit for the menu width
+        menuWidth = Math.max(200, menuWidth);
+        this.pinnedAppsScrollBox.style = `width: ${menuWidth}px;`;
+        this.layoutProperties.MenuWidth = menuWidth;
+        if(setDefaultMenuView){
+            this.loadPinnedApps();
+            this.setDefaultMenuView();
+        }
+            
+    }
+
     loadPinnedApps(){
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
+        this.pinnedAppsGrid.layout_manager.forceGridColumns = this.getColumnsFromGridIconSizeSetting();
         this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
     }
 
@@ -417,7 +431,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             return a.get_name().toLowerCase() > b.get_name().toLowerCase();
         });
         this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
-        this.layoutProperties.GridColumns = 1;
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
 
         if(this.activeMenuItemSet)
@@ -442,7 +455,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let label = this.createLabelRow(_("Pinned Apps"));
         label.remove_actor(label._ornamentLabel);
         this.pinnedAppsBox.add_actor(label);
-        this.layoutProperties.GridColumns = 3;
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.HOME_SCREEN, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
             this.pinnedAppsBox.add(this.pinnedAppsGrid);

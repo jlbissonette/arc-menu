@@ -547,6 +547,8 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         
         if(!(layout == Constants.MenuLayout.SIMPLE || layout == Constants.MenuLayout.SIMPLE_2 || layout == Constants.MenuLayout.RUNNER) && this.MenuLayout)
             this.mainBox.style = `height: ${height}px`;
+        if(this.MenuLayout.updateWidth)
+            this.MenuLayout.updateWidth(true);
     }
 
     _onDestroy(){
