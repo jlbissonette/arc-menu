@@ -19,6 +19,7 @@ var RecentFilesSearchProvider = class {
         this.isRemoteProvider = true;
         this.canLaunchSearch = true;
 
+        this._recentFiles = [];
         this.recentManager = new Gtk.RecentManager();
 
         this.appInfo = {

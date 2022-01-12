@@ -557,11 +557,15 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             }
         });
 
-        this.iconThemeChangedId = St.TextureCache.get_default().connect('icon-theme-changed', this._updateIcon.bind(this));
+        let textureCache = St.TextureCache.get_default();
+        let iconThemeChangedId = textureCache.connect('icon-theme-changed', this._updateIcon.bind(this));
+        this.connect('destroy', () => {
+            textureCache.disconnect(iconThemeChangedId);
+        });
     }
 
     _updateIcon() {
-        if(!this._iconBin || !this.createIcon || this.iconThemeChangedId === null)
+        if(!this._iconBin || !this.createIcon)
             return;
 
         let icon = this.createIcon();
@@ -742,10 +746,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
 
     destroy(){
         this.isDestroyed = true;
-        if(this.iconThemeChangedId){
-            St.TextureCache.get_default().disconnect(this.iconThemeChangedId);
-            this.iconThemeChangedId = null;
-        }
         if(this.arcMenuOpenStateChangeID){
             this.arcMenu.disconnect(this.arcMenuOpenStateChangeID);
             this.arcMenuOpenStateChangeID = null;
