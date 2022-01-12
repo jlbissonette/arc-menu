@@ -214,6 +214,11 @@
       <summary>Show a larger icon and extra app details</summary>
       <description>Show a larger icon and extra app details.</description>
     </key>
+    <key type="i" name="max-search-results">
+      <default>5</default>
+      <summary>The amount of search results to display.</summary>
+      <description>The amount of search results to display.</description>
+    </key>
     <key type="b" name="highlight-search-result-terms">
       <default>false</default>
       <summary>Highlight search results terms</summary>

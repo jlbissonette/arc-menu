@@ -42,7 +42,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ColumnSpacing: 15,
             RowSpacing: 15,
             VerticalMainBox: true,
-            DefaultMenuWidth: 1000,
+            DefaultMenuWidth: 750,
             DefaultIconGridStyle: "LargeIconGrid",
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
             DefaultApplicationIconSize: Constants.EXTRA_LARGE_ICON_SIZE,

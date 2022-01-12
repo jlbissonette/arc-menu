@@ -2971,7 +2971,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         let widthRow = new PW.FrameBoxRow();
         let widthLabel = new Gtk.Label({
-            label: _('Menu Width Offset'),
+            label: _('Grid Icon Panel\nWidth Adjustment'),
             use_markup: true,
             xalign: 0,
             hexpand: false,
@@ -2982,8 +2982,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             adjustment: new Gtk.Adjustment({
                 lower: -600,
                 upper: 600,
-                step_increment: 10,
-                page_increment: 10,
+                step_increment: 1,
+                page_increment: 1,
                 page_size: 0
             }),
             digits: 0,
@@ -3863,6 +3863,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this.openWindowsSearchProvider = this._settings.get_boolean('search-provider-open-windows');
         this.recentFilesSearchProvider = this._settings.get_boolean('search-provider-recent-files');
         this.highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
+        this.maxSearchResults = this._settings.get_int('max-search-results');
 
         let searchProvidersFrame = new PW.FrameBox();
         let searchProvidersLabel = new Gtk.Label({
@@ -3954,6 +3955,39 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         highlightSearchResultRow.add(highlightSearchResultLabel);
         highlightSearchResultRow.add(highlightSearchResultSwitch);
         searchOptionsFrame.add(highlightSearchResultRow);
+
+        let maxSearchResultsRow = new PW.FrameBoxRow();
+        let maxSearchResultsLabel = new Gtk.Label({
+            label: _('Max Search Results'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let maxSearchResultsScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 2,
+                upper: 10,
+                step_increment: 1,
+                page_increment: 1,
+                page_size: 0
+            }),
+            digits: 0,
+            round_digits: 0,
+            hexpand: true,
+            draw_value: true,
+            value_pos: Gtk.PositionType.RIGHT
+        });
+        maxSearchResultsScale.set_value(this.maxSearchResults);
+        maxSearchResultsScale.connect('value-changed', (widget) => {
+            this.maxSearchResults = widget.get_value();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+
+        maxSearchResultsRow.add(maxSearchResultsLabel);
+        maxSearchResultsRow.add(maxSearchResultsScale);
+        searchOptionsFrame.add( maxSearchResultsRow);
         this.mainBox.append(searchOptionsFrame);
 
         let buttonRow = new Gtk.Box({
@@ -3972,9 +4006,11 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             this.openWindowsSearchProvider = this._settings.get_default_value('search-provider-open-windows').unpack();
             this.recentFilesSearchProvider = this._settings.get_default_value('search-provider-recent-files').unpack();
             this.highlightSearchResultTerms = this._settings.get_default_value('highlight-search-result-terms').unpack();
+            this.maxSearchResults = this._settings.get_default_value('max-search-results').unpack();
             descriptionsSwitch.set_active(this.searchResultsDetails);
             openWindowsSwitch.set_active(this.openWindowsSearchProvider);
             highlightSearchResultSwitch.set_active(this.highlightSearchResultTerms);
+            maxSearchResultsScale.set_value(this.maxSearchResults);
             this.saveButton.set_sensitive(true);
             this.resetButton.set_sensitive(false);
         });
@@ -3988,6 +4024,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             this._settings.set_boolean('search-provider-open-windows', this.openWindowsSearchProvider);
             this._settings.set_boolean('search-provider-recent-files', this.recentFilesSearchProvider);
             this._settings.set_boolean('highlight-search-result-terms', this.highlightSearchResultTerms);
+            this._settings.set_int('max-search-results', this.maxSearchResults);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         });
@@ -4004,7 +4041,8 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             this.searchResultsDetails !== this._settings.get_default_value('show-search-result-details').unpack() ||
             this.openWindowsSearchProvider !== this._settings.get_default_value('search-provider-open-windows').unpack() ||
             this.recentFilesSearchProvider !== this._settings.get_default_value('search-provider-recent-files').unpack() ||
-            this.highlightSearchResultTerms !== this._settings.get_default_value('highlight-search-result-terms').unpack()) ? true : false;
+            this.highlightSearchResultTerms !== this._settings.get_default_value('highlight-search-result-terms').unpack() ||
+            this.maxSearchResults !== this._settings.get_default_value('max-search-results').unpack()) ? true : false;
     }
 });
 
