@@ -98,8 +98,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMainBox.add(this.applicationsScrollBox);
 
         this.arcMenu.box.style = "padding-bottom:0px;";
-        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(186, 196,201, 0.1) ; padding: 12px 5px;"+
-                                            "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
+        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(186, 196,201, 0.1); padding: 12px 25px;"+
+                                            "border-color: rgba(186, 196,201, 0.2); border-top-width: 1px;";
         this.themeNodeBorderRadius = "";
         this.actionsContainerBox = new St.BoxLayout({
             x_expand: true,
@@ -119,7 +119,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.CENTER,
             vertical: false
         });
-        this.actionsBox.style = "margin: 0px 25px; spacing: 10px;";
+        this.actionsBox.style = "spacing: 10px;";
         this.appsBox = new St.BoxLayout({
             vertical: true
         });
@@ -150,17 +150,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsBox.add(this.shortcutsGrid);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.user.x_expand = true;
-        this.user.x_align = Clutter.ActorAlign.FILL;
-        this.user.style = "margin: 0px 75px 0px 0px;"
         this.actionsBox.add(this.user.actor);
 
+        this.quickLinksBox = new St.BoxLayout({
+            x_expand: true,
+            y_expand: true,
+            x_align: Clutter.ActorAlign.END,
+            y_align: Clutter.ActorAlign.CENTER,
+            vertical: false,
+            style: 'spacing: 10px;'
+        });
         let path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
         if (path !== null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Downloads"));
             let isContainedInCategory = false;
             let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.actionsBox.add_actor(placeMenuItem.actor);
+            this.quickLinksBox.add_actor(placeMenuItem.actor);
         }
 
         path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
@@ -168,14 +173,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
             let isContainedInCategory = false;
             let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.actionsBox.add_actor(placeMenuItem.actor);
+            this.quickLinksBox.add_actor(placeMenuItem.actor);
         }
 
         let settingsButton = new MW.SettingsButton(this);
-        this.actionsBox.add(settingsButton.actor);
+        this.quickLinksBox.add(settingsButton.actor);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add(this.leaveButton.actor);
+        this.quickLinksBox.add(this.leaveButton.actor);
+
+        this.actionsBox.add(this.quickLinksBox);
 
         this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton);
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
@@ -192,8 +199,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     updateWidth(setDefaultMenuView){
         const widthAdjustment = this._settings.get_int("menu-width-adjustment");
         let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 400px minimum limit for the menu width
-        menuWidth = Math.max(400, menuWidth);
+        //Set a 300px minimum limit for the menu width
+        menuWidth = Math.max(300, menuWidth);
         this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
         this.layoutProperties.MenuWidth = menuWidth;
         if(setDefaultMenuView)
@@ -201,7 +208,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadPinnedApps(){
-        this.layoutProperties.IconGridSize = 34;
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
     }

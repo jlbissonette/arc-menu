@@ -2980,7 +2980,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         let widthScale = new Gtk.Scale({
             orientation: Gtk.Orientation.HORIZONTAL,
             adjustment: new Gtk.Adjustment({
-                lower: -600,
+                lower: -350,
                 upper: 600,
                 step_increment: 1,
                 page_increment: 1,
@@ -3003,7 +3003,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         let widthSpinButton = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
-                lower: -600, upper: 600, step_increment: 1, page_increment: 1, page_size: 0,
+                lower: -350, upper: 600, step_increment: 1, page_increment: 1, page_size: 0,
             }),
             climb_rate: 1,
             digits: 0,

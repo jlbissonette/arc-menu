@@ -148,7 +148,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END,
             vertical: true
         });
-        //this.weatherBox.style = "width:410px;"; 
+        
         this._weatherItem = new MW.WeatherSection(this);
         this._weatherItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
         this._clocksItem = new MW.WorldClocksSection(this);
@@ -202,9 +202,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     updateWidth(setDefaultMenuView){
         const widthAdjustment = this._settings.get_int("menu-width-adjustment");
         let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 400px minimum limit for the menu width
-        menuWidth = Math.max(400, menuWidth);
+        //Set a 300px minimum limit for the menu width
+        menuWidth = Math.max(300, menuWidth);
         this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
+        this.weatherBox.style = `width: ${menuWidth}px;`;
         this.layoutProperties.MenuWidth = menuWidth;
         if(setDefaultMenuView)
             this.setDefaultMenuView();

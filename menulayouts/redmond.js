@@ -208,8 +208,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     updateWidth(setDefaultMenuView){
         const widthAdjustment = this._settings.get_int("menu-width-adjustment");
         let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 400px minimum limit for the menu width
-        menuWidth = Math.max(400, menuWidth);
+        //Set a 300px minimum limit for the menu width
+        menuWidth = Math.max(300, menuWidth);
         this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
         this.layoutProperties.MenuWidth = menuWidth;
         if(setDefaultMenuView)
