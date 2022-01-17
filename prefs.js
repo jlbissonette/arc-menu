@@ -3168,12 +3168,12 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             halign: Gtk.Align.END,
         });
         this.gridIconsSizeCombo.append("Default", _("Default"));
-        this.gridIconsSizeCombo.append("Small", _("Small"));
-        this.gridIconsSizeCombo.append("Medium", _("Medium"));
-        this.gridIconsSizeCombo.append("Large", _("Large"));
-        this.gridIconsSizeCombo.append("Small Rect", _("Small Rect"));
-        this.gridIconsSizeCombo.append("Medium Rect", _("Medium Rect"));
-        this.gridIconsSizeCombo.append("Large Rect", _("Large Rect"));
+        this.gridIconsSizeCombo.append("Small", _("Small") + " - " + _("Square"));
+        this.gridIconsSizeCombo.append("Medium", _("Medium") + " - " + _("Square"));
+        this.gridIconsSizeCombo.append("Large", _("Large") + " - " + _("Square"));
+        this.gridIconsSizeCombo.append("Small Rect", _("Small") + " - " + _("Wide"));
+        this.gridIconsSizeCombo.append("Medium Rect", _("Medium") + " - " + _("Wide"));
+        this.gridIconsSizeCombo.append("Large Rect", _("Large") + " - " + _("Wide"));
         this.gridIconsSizeCombo.set_active(this._settings.get_enum('menu-item-grid-icon-size'));
         this.gridIconsSizeCombo.connect('changed', (widget) => {
             this.saveButton.set_sensitive(true);
