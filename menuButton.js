@@ -547,15 +547,11 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         
         if(!(layout == Constants.MenuLayout.SIMPLE || layout == Constants.MenuLayout.SIMPLE_2 || layout == Constants.MenuLayout.RUNNER) && this.MenuLayout)
             this.mainBox.style = `height: ${height}px`;
-        if(this.MenuLayout.updateWidth)
+        if(this.MenuLayout?.updateWidth)
             this.MenuLayout.updateWidth(true);
     }
 
     _onDestroy(){
-        if (this._iconThemeChangedId){
-            St.TextureCache.get_default().disconnect(this._iconThemeChangedId);
-            this._iconThemeChangedId = null;
-        }
         if (this._monitorsChangedId){
             Main.layoutManager.disconnect(this._monitorsChangedId);
             this._monitorsChangedId = null;
@@ -563,10 +559,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if (this._startupCompleteId){
             Main.layoutManager.disconnect(this._startupCompleteId);
             this._startupCompleteId = null;
-        }
-        if(this.reloadID){
-            GLib.source_remove(this.reloadID);
-            this.reloadID = null;
         }
         if(this.createLayoutID){
             GLib.source_remove(this.createLayoutID);
@@ -576,17 +568,14 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             GLib.source_remove(this.updateMenuLayoutID);
             this.updateMenuLayoutID = null;
         }
-        if (this.tooltipShowingID) {
+        if(this.tooltipShowingID){
             GLib.source_remove(this.tooltipShowingID);
             this.tooltipShowingID = null;
         }     
-        if (this.tooltipHidingID) {
+        if(this.tooltipHidingID){
             GLib.source_remove(this.tooltipHidingID);
             this.tooltipHidingID = null;
         }
-        if(this.MenuLayout)
-            this.MenuLayout.destroy();
-
         if(this.extensionChangedId){
             Main.extensionManager.disconnect(this.extensionChangedId);
             this.extensionChangedId = null;
@@ -603,12 +592,16 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;
         }
+
+        if(this.MenuLayout)
+            this.MenuLayout.destroy();
         if(this.arcMenu)
             this.arcMenu.destroy();
         if(this.arcMenuContextMenu)
             this.arcMenuContextMenu.destroy();
         if(this.dummyWidget)
             this.dummyWidget.destroy();
+
         super._onDestroy();
     }
 

@@ -430,7 +430,7 @@ var SearchResults = GObject.registerClass({
             x_align: Clutter.ActorAlign.FILL  
         });
         this._menuLayout = menuLayout;
-        let layoutProperties = this._menuLayout.layoutProperties;
+        this.layoutProperties = this._menuLayout.layoutProperties;
         this.searchType = this._menuLayout.layoutProperties.SearchDisplayType;
         this._settings = this._menuLayout._settings;
         this.layout = this._settings.get_enum('menu-layout');
@@ -533,6 +533,8 @@ var SearchResults = GObject.registerClass({
     _reloadRemoteProviders() {
         this._oldProviders = null;
         let remoteProviders = this._providers.filter(p => p.isRemoteProvider);
+        if(remoteProviders.length > 0)
+            this._menuLayout.setDefaultMenuView();
         remoteProviders.forEach(provider => {
             this._unregisterProvider(provider);
         });

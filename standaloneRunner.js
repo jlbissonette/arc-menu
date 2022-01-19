@@ -221,11 +221,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     destroy(){
-        if(this.reloadID){
-            GLib.source_remove(this.reloadID);
-            this.reloadID = null;
-        }
-
         if(this.createLayoutID){
             GLib.source_remove(this.createLayoutID);
             this.createLayoutID = null;
@@ -246,17 +241,15 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             this.tooltipHidingID = null;
         }
 
-        if(this.MenuLayout)
-            this.MenuLayout.destroy();
-
         if(this._installedChangedId){
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;
         }
 
+        if(this.MenuLayout)
+            this.MenuLayout.destroy();
         if(this.arcMenu)
             this.arcMenu.destroy();
-
         if(this.dummyWidget){
             Main.uiGroup.remove_actor(this.dummyWidget);
             this.dummyWidget.destroy();
