@@ -897,9 +897,10 @@ var BaseLayout = class {
                 return Clutter.EVENT_PROPAGATE;
             default:
                 if (unicode !== 0 && this.searchBox) {
-                    this.searchBox.grabKeyFocus();
-                    let newText = this.searchBox.getText() + String.fromCharCode(unicode);
-                    this.searchBox.setText(newText);
+                    global.stage.set_key_focus(this.searchBox.clutter_text);
+                    let synthEvent = event.copy();
+                    synthEvent.set_source(this.searchBox.clutter_text);
+                    this.searchBox.clutter_text.event(synthEvent, false);
                 }
         }
         return Clutter.EVENT_PROPAGATE;
