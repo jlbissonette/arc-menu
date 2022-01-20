@@ -855,7 +855,7 @@ var BaseLayout = class {
         }
 
         let symbol = event.get_key_symbol();
-        let key = event.get_key_unicode();
+        let unicode = Clutter.keysym_to_unicode(symbol);
 
         switch (symbol) {
             case Clutter.KEY_BackSpace:
@@ -896,9 +896,9 @@ var BaseLayout = class {
             case Clutter.KEY_Escape:
                 return Clutter.EVENT_PROPAGATE;
             default:
-                if (key.length != 0 && this.searchBox) {
+                if (unicode !== 0 && this.searchBox) {
                     this.searchBox.grabKeyFocus();
-                    let newText = this.searchBox.getText() + key;
+                    let newText = this.searchBox.getText() + String.fromCharCode(unicode);
                     this.searchBox.setText(newText);
                 }
         }
