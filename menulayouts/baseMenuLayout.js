@@ -897,7 +897,7 @@ var BaseLayout = class {
         }
 
         let symbol = event.get_key_symbol();
-        let key = event.get_key_unicode();
+        let unicode = Clutter.keysym_to_unicode(symbol);
 
         switch (symbol) {
             case Clutter.KEY_BackSpace:
@@ -941,10 +941,11 @@ var BaseLayout = class {
             case Clutter.KEY_Escape:
                 return Clutter.EVENT_PROPAGATE;
             default:
-                if (key.length != 0 && this.searchBox) {
-                    this.searchBox.grab_key_focus();
-                    let newText = this.searchBox.getText() + key;
-                    this.searchBox.setText(newText);
+                if (unicode !== 0 && this.searchBox) {
+                    global.stage.set_key_focus(this.searchBox.clutter_text);
+                    let synthEvent = event.copy();
+                    synthEvent.set_source(this.searchBox.clutter_text);
+                    this.searchBox.clutter_text.event(synthEvent, false);
                 }
         }
         return Clutter.EVENT_PROPAGATE;
