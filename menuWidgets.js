@@ -561,6 +561,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         let iconThemeChangedId = textureCache.connect('icon-theme-changed', this._updateIcon.bind(this));
         this.connect('destroy', () => {
             textureCache.disconnect(iconThemeChangedId);
+            this._onDestroy();
         });
     }
 
@@ -744,13 +745,12 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         });
     }
 
-    destroy(){
+    _onDestroy(){
         this.isDestroyed = true;
         if(this.arcMenuOpenStateChangeID){
             this.arcMenu.disconnect(this.arcMenuOpenStateChangeID);
             this.arcMenuOpenStateChangeID = null;
         }
-        super.destroy();
     }
 });
 
@@ -1254,10 +1254,9 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
         });
     }
 
-    destroy(){
+    _onDestroy(){
         Main.uiGroup.remove_actor(this.leaveMenu.actor);
         this.leaveMenu.destroy();
-        super.destroy();
     }
 
     activate(event) {
@@ -1326,8 +1325,7 @@ var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends A
         });
     }
 
-    activate(event){
-        super.activate(event);
+    activate(){
         activatePowerOption(this.powerType, this._menuLayout.arcMenu);
     }
 });
@@ -2338,7 +2336,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         super.activate(event);
     }
 
-    destroy(){
+    _onDestroy(){
         if(this.hoverID){
             this.disconnect(this.hoverID);
             this.hoverID = null;
@@ -2347,7 +2345,6 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             this.disconnect(this.keyFocusInID);
             this.keyFocusInID = null;
         }
-        super.destroy();
     }
 });
 
@@ -2901,14 +2898,14 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         });
     }
 
-    destroy() {
+    _onDestroy() {
         if (this._changedId) {
             this._info.disconnect(this._changedId);
             this._changedId = null;
         }
         if(this._info)
             this._info.destroy();
-        super.destroy();
+        super._onDestroy();
     }
 
     activate(event) {
@@ -2969,6 +2966,7 @@ class Arc_Menu_SearchBox extends St.Entry {
         this._keyFocusInId = this._text.connect('key-focus-in', this._onKeyFocusIn.bind(this));
         this._keyFocusInId = this._text.connect('key-focus-out', this._onKeyFocusOut.bind(this));
         this._searchIconClickedId = this.connect('secondary-icon-clicked', () => this.clear());
+        this.connect('destroy', this._onDestroy.bind(this));
     }
 
     updateStyle(removeBorder){
@@ -3060,7 +3058,7 @@ class Arc_Menu_SearchBox extends St.Entry {
         return Clutter.EVENT_PROPAGATE;
     }
 
-    destroy() {
+    _onDestroy() {
         if (this._textChangedId) {
             this._text.disconnect(this._textChangedId);
             this._textChangedId = null;
@@ -3077,7 +3075,6 @@ class Arc_Menu_SearchBox extends St.Entry {
             this.disconnect(this._searchIconClickedId);
             this._searchIconClickedId = null;
         }
-        super.destroy();
     }
 });
 
@@ -3359,7 +3356,7 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
         this._sync();
     }
 
-    destroy(){
+    _onDestroy(){
         if(this.syncID){
             this._appSystem.disconnect(this.syncID);
             this.syncID = null;
@@ -3376,7 +3373,6 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
             this._clock.disconnect(this._clockNotifyId);
             this._clockNotifyId = null;
         }
-        super.destroy();
     }
 
     activate(event) {
@@ -3543,13 +3539,12 @@ var WeatherSection = GObject.registerClass(class Arc_Menu_WeatherSection extends
         this._sync();
 
     }
-    destroy(){
+    _onDestroy(){
         if(this.syncID){
             this._weatherClient.disconnect(this.syncID);
             this.syncID = null;
         }
         this._weatherClient = null;
-        super.destroy();
     }
     vfunc_map() {
         this._weatherClient.update();

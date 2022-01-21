@@ -72,6 +72,14 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
 
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
+        this.connect('destroy', this._onDestroy.bind(this));
+    }
+    
+    _onDestroy() {
+        if (this._termsChangedId) {
+            this.resultsView.disconnect(this._termsChangedId);
+            this._termsChangedId = null;
+        }
     }
 
     _highlightTerms() {
@@ -82,14 +90,6 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         }
         let labelMarkup = this.resultsView.highlightTerms(this.label.text.split('\n')[0]);
         this.label.clutter_text.set_markup(labelMarkup);
-    }
-
-    destroy() {
-        if (this._termsChangedId) {
-            this.resultsView.disconnect(this._termsChangedId);
-            this._termsChangedId = null;
-        }
-        super.destroy();
     }
 });
 
@@ -112,6 +112,15 @@ var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult exten
             this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
             this._highlightTerms();
         }
+
+        this.connect('destroy', this._onDestroy.bind(this));
+    }
+
+    _onDestroy() {
+        if (this._termsChangedId) {
+            this.resultsView.disconnect(this._termsChangedId);
+            this._termsChangedId = null;
+        }
     }
 
     _highlightTerms() {
@@ -123,14 +132,6 @@ var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult exten
 
         let labelMarkup = this.resultsView.highlightTerms(this.label.text.split('\n')[0]);
         this.label.clutter_text.set_markup(labelMarkup);
-    }
-
-    destroy() {
-        if (this._termsChangedId) {
-            this.resultsView.disconnect(this._termsChangedId);
-            this._termsChangedId = null;
-        }
-        super.destroy();
     }
 });
 
@@ -156,11 +157,11 @@ var SearchResultsBase = GObject.registerClass({
         this._clipboard = St.Clipboard.get_default();
 
         this._cancellable = new Gio.Cancellable();
+        this.connect('destroy', this._onDestroy.bind(this));
     }
 
-    destroy() {
+    _onDestroy() {
         this._terms = [];
-        super.destroy();
     }
 
     _createResultDisplay(meta) {
@@ -431,7 +432,7 @@ var SearchResults = GObject.registerClass({
         });
         this._menuLayout = menuLayout;
         this.layoutProperties = this._menuLayout.layoutProperties;
-        this.searchType = this._menuLayout.layoutProperties.SearchDisplayType;
+        this.searchType = this.layoutProperties.SearchDisplayType;
         this._settings = this._menuLayout._settings;
         this.layout = this._settings.get_enum('menu-layout');
 
@@ -483,6 +484,8 @@ var SearchResults = GObject.registerClass({
         this.installChangedID = appSys.connect('installed-changed', this._reloadRemoteProviders.bind(this));
 
         this._reloadRemoteProviders();
+
+        this.connect('destroy', this._onDestroy.bind(this));
     }
     
     get terms() {
@@ -495,7 +498,7 @@ var SearchResults = GObject.registerClass({
         }
     }
 
-    destroy(){
+    _onDestroy(){
         this._terms = [];
         this._results = {};
         this._clearDisplay();
@@ -527,7 +530,6 @@ var SearchResults = GObject.registerClass({
             this._unregisterProvider(provider);
         });
         this._content.destroy_all_children();
-        super.destroy();
     }
 
     _reloadRemoteProviders() {

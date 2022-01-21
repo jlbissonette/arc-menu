@@ -22,7 +22,7 @@
  */
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-const {Gio, GLib, Gtk} = imports.gi;
+const {Gio, GLib, Gtk, St} = imports.gi;
 const Constants = Me.imports.constants;
 const Helper = Me.imports.helper;
 const Main = imports.ui.main;
@@ -40,12 +40,6 @@ var MenuSettingsController = class {
 
         global.toggleArcMenu = () => this.toggleMenus();
 
-        this.updateThemeID = GLib.timeout_add(0, 100, () => {
-            Utils.createStylesheet(this._settings);
-            Main.loadTheme();
-            this.updateThemeID = null;
-            return GLib.SOURCE_REMOVE;
-        });
         this.currentMonitorIndex = 0;
         this._activitiesButton = Main.panel.statusArea.activities;
         this.isPrimary = panelIndex === 0 ? true : false;
@@ -254,8 +248,13 @@ var MenuSettingsController = class {
     _reloadExtension(){
         if(this._settings.get_boolean('reload-theme')){
             this._settings.reset('reload-theme');
+            let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
             Utils.createStylesheet(this._settings);
-            Main.loadTheme();
+            let stylesheet = Utils.getStylesheet();
+            if(Me.stylesheet)
+                theme.unload_stylesheet(Me.stylesheet);
+            Me.stylesheet = stylesheet;
+            theme.load_stylesheet(Me.stylesheet);
             this._updateStyle();
         }
     }
@@ -682,10 +681,6 @@ var MenuSettingsController = class {
     }
 
     destroy() {
-        if (this.updateThemeID) {
-            GLib.source_remove(this.updateThemeID);
-            this.updateThemeID = null;
-        }
         if(this.runnerMenu){
             this.runnerMenu.destroy();
         }
