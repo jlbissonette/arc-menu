@@ -56,7 +56,7 @@ var RecentFilesSearchProvider = class {
                     item,
                     file
                 }
-        });
+        }).filter(rf => rf !== undefined);
 
         callback(this._getFilteredFileUris(terms, this._recentFiles));
     }
@@ -83,6 +83,8 @@ var RecentFilesSearchProvider = class {
     _getFilteredFileUris(terms, recentFiles) {
         terms = terms.map(term => term.toLowerCase());
         recentFiles = recentFiles.filter(rf => {
+            if (!rf.item.exists())
+                return false;
             const fileName = rf.item.get_display_name()?.toLowerCase();
             const uri = rf.item.get_uri()?.toLowerCase();
             const fileDescription = rf.item.get_description()?.toLowerCase();
