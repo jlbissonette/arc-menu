@@ -246,7 +246,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let themeNode = this.arcMenu.actor.get_theme_node();
         let borderWidth = themeNode.get_length('-arrow-border-width');
 
-        let height = Math.round(screenHeight / scaleFactor) - (borderWidth * 2);
+        let height = Math.round((screenHeight - borderWidth * 2) / scaleFactor);
         this.mainBox.style = `height: ${height}px;`;
     }
 
