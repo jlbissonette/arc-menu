@@ -2313,7 +2313,10 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         else{
             if (metaInfo.id.endsWith('.desktop')) {
                 let app = Shell.AppSystem.get_default().lookup_app(metaInfo.id);
-                app.open_new_window(-1);
+                if (app.can_open_new_window())
+                    app.open_new_window(-1);
+                else
+                    app.activate();
             }
             else{
                 this._menuLayout.arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
