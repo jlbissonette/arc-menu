@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-01-17 15:23-0500\n"
-"PO-Revision-Date: 2022-01-19 22:52+1000\n"
-"Last-Translator: Ser82-png\n"
+"PO-Revision-Date: 2022-02-01 15:18+1000\n"
+"Last-Translator: Ser82-png <sw@atrus.ru>\n"
 "Language-Team: \n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -828,7 +828,7 @@ msgstr "Открыть на основном мониторе"
 
 #: prefs.js:977
 msgid "Menu Hotkey"
-msgstr "Меню горячих клавиш"
+msgstr "Горячая клавиша для Меню"
 
 #: prefs.js:977
 msgid "Runner Hotkey"
