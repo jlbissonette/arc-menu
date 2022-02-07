@@ -51,11 +51,7 @@ var RecentFilesSearchProvider = class {
     getInitialResultSet(terms, callback, _cancellable) {
         this._recentFiles = this.recentManager.get_items().map(item => {
             let file = Gio.File.new_for_uri(item.get_uri());
-            if(file !== null)
-                return {
-                    item,
-                    file
-                }
+            if(file) return { item, file };
         }).filter(rf => rf !== undefined);
 
         callback(this._getFilteredFileUris(terms, this._recentFiles));
@@ -67,10 +63,21 @@ var RecentFilesSearchProvider = class {
     }
 
     activateResult(fileUri, _terms) {
-        const recentFile = this._getRecentFile(fileUri)?.file;
+        const recentFile = this._getRecentFile(fileUri);
         if (recentFile){
-            let launchContext = global.create_app_launch_context(0, -1);
-            Gio.AppInfo.launch_default_for_uri(recentFile.get_uri(), launchContext);
+            let context = global.create_app_launch_context(0, -1);
+
+            new Promise((resolve, reject) => {
+                Gio.AppInfo.launch_default_for_uri_async(recentFile.file.get_uri(), context, null, (o, res) => {
+                    try {
+                        Gio.AppInfo.launch_default_for_uri_finish(res);
+                        resolve();
+                    } catch (e) {
+                        Main.notifyError(_('Failed to open “%s”').format(recentFile.item.get_display_name()), e.message);
+                        reject(e);
+                    }
+                });
+            });
         }
     }
 
@@ -83,8 +90,6 @@ var RecentFilesSearchProvider = class {
     _getFilteredFileUris(terms, recentFiles) {
         terms = terms.map(term => term.toLowerCase());
         recentFiles = recentFiles.filter(rf => {
-            if (!rf.item.exists())
-                return false;
             const fileName = rf.item.get_display_name()?.toLowerCase();
             const uri = rf.item.get_uri()?.toLowerCase();
             const fileDescription = rf.item.get_description()?.toLowerCase();
