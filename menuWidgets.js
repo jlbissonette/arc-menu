@@ -2808,10 +2808,22 @@ var PlaceInfo = class Arc_Menu_PlaceInfo {
         this.icon = icon ? icon : null;
         this.gicon = icon ? null : this.getIcon();
     }
+
     launch(timestamp) {
-        let launchContext = global.create_app_launch_context(timestamp, -1);
-        Gio.AppInfo.launch_default_for_uri(this.file.get_uri(), launchContext);
+        let context = global.create_app_launch_context(timestamp, -1);
+        new Promise((resolve, reject) => {
+            Gio.AppInfo.launch_default_for_uri_async(this.file.get_uri(), context, null, (o, res) => {
+                try {
+                    Gio.AppInfo.launch_default_for_uri_finish(res);
+                    resolve();
+                } catch (e) {
+                    Main.notifyError(_('Failed to open “%s”').format(this._getFileName()), e.message);
+                    reject(e);
+                }
+            });
+        });
     }
+
     getIcon() {
         try {
             let info = this.file.query_info('standard::symbolic-icon', 0, null);
@@ -2827,6 +2839,7 @@ var PlaceInfo = class Arc_Menu_PlaceInfo {
             }
         }
     }
+
     _getFileName() {
         try {
             let info = this.file.query_info('standard::display-name', 0, null);
@@ -2839,7 +2852,6 @@ var PlaceInfo = class Arc_Menu_PlaceInfo {
     }
 
     destroy(){
-
     }
 };
 Signals.addSignalMethods(PlaceInfo.prototype);
