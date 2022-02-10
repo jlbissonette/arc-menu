@@ -2891,9 +2891,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.menuWidth = this._settings.get_int('menu-width');
         this.forcedMenuLocation = this._settings.get_enum('force-menu-location');
         this.verticalSeparator = this._settings.get_boolean('vert-separator');
-        this.subMenus = this._settings.get_boolean('enable-sub-menus');
         this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
-        this.disableTooltips = this._settings.get_boolean('disable-tooltips');
         this.appDescriptions = this._settings.get_boolean('apps-show-extra-details');
         this.categoryIconType = this._settings.get_enum('category-icon-type');
 
@@ -3239,51 +3237,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         categoryIconTypeFrame.add(categoryIconTypeRow);
         this.mainBox.append(categoryIconTypeFrame);
 
-        let subMenusFrame = new PW.FrameBox();
-        let subMenusRow = new PW.FrameBoxRow();
-        let subMenusLabel = new Gtk.Label({
-            label: _('Category Sub Menus'),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            selectable: false
-         });
-        let subMenusSwitch = new Gtk.Switch({
-            halign: Gtk.Align.END,
-        });
-        subMenusSwitch.set_active(this.subMenus);
-        subMenusSwitch.connect('notify::active', (widget) => {
-            this.subMenus = widget.get_active();
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-        subMenusRow.add(subMenusLabel);
-        subMenusRow.add(subMenusSwitch);
-        subMenusFrame.add(subMenusRow);
-        this.mainBox.append(subMenusFrame);
-
-        let tooltipFrame = new PW.FrameBox();
-        let tooltipRow = new PW.FrameBoxRow();
-        let tooltipLabel = new Gtk.Label({
-            label: _("Disable Tooltips"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-        let tooltipSwitch = new Gtk.Switch({
-            halign: Gtk.Align.END,
-        });
-        tooltipSwitch.set_active(this.disableTooltips);
-        tooltipSwitch.connect('notify::active', (widget) => {
-            this.disableTooltips = widget.get_active();
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-        tooltipRow.add(tooltipLabel);
-        tooltipRow.add(tooltipSwitch);
-        tooltipFrame.add(tooltipRow);
-        this.mainBox.append(tooltipFrame);
-
         let vertSeparatorFrame = new PW.FrameBox();
         let vertSeparatorRow = new PW.FrameBoxRow();
         let vertSeparatorLabel = new Gtk.Label({
@@ -3370,9 +3323,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.rightPanelWidth = this._settings.get_default_value('right-panel-width').unpack();
             this.menuWidth = this._settings.get_default_value('menu-width').unpack();
             this.verticalSeparator = this._settings.get_default_value('vert-separator').unpack();
-            this.subMenus = this._settings.get_default_value('enable-sub-menus').unpack();
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
-            this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
             this.appDescriptions = this._settings.get_default_value('apps-show-extra-details').unpack();
             this.categoryIconType = this._settings.get_default_value('category-icon-type').unpack();
             this.forcedMenuLocation = 0;
@@ -3380,14 +3331,12 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             widthScale.set_value(this.widthValue);
             menuWidthScale.set_value(this.menuWidth);
             rightPanelWidthScale.set_value(this.rightPanelWidth);
-            subMenusSwitch.set_active(this.subMenus);
             vertSeparatorSwitch.set_active(this.verticalSeparator);
             this.gridIconsSizeCombo.set_active(0);
             this.menuItemIconSizeCombo.set_active(0);
             this.buttonIconSizeCombo.set_active(0);
             this.quicklinksIconSizeCombo.set_active(0);
             this.miscIconSizeCombo.set_active(0);
-            tooltipSwitch.set_active(this.disableTooltips);
             appDescriptionsSwitch.set_active(this.appDescriptions);
             recentAppsSwitch.set_active(this.disableRecentApps);
             menuLocationCombo.set_active(this.forcedMenuLocation);
@@ -3413,9 +3362,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this._settings.set_enum('button-item-icon-size', this.buttonIconSizeCombo.get_active());
             this._settings.set_enum('quicklinks-item-icon-size', this.quicklinksIconSizeCombo.get_active());
             this._settings.set_enum('misc-item-icon-size', this.miscIconSizeCombo.get_active());
-            this._settings.set_boolean('enable-sub-menus', this.subMenus);
             this._settings.set_boolean('disable-recently-installed-apps', this.disableRecentApps);
-            this._settings.set_boolean('disable-tooltips', this.disableTooltips);
             this._settings.set_boolean('reload-theme', true);
             this._settings.set_boolean('apps-show-extra-details', this.appDescriptions);
             this._settings.set_enum('category-icon-type', this.categoryIconType);
@@ -3461,7 +3408,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
     }
 
     checkIfResetButtonSensitive(){
-        return (this.disableTooltips !== this._settings.get_default_value('disable-tooltips').unpack() ||
+        return (
             this.disableRecentApps !== this._settings.get_default_value('disable-recently-installed-apps').unpack() ||
             this.heightValue !== this._settings.get_default_value('menu-height').unpack() ||
             this.widthValue !== this._settings.get_default_value('menu-width-adjustment').unpack() ||
@@ -3474,7 +3421,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.buttonIconSizeCombo.get_active() !== 0 ||
             this.quicklinksIconSizeCombo.get_active() !== 0 ||
             this.miscIconSizeCombo.get_active() !== 0 ||
-            this.subMenus !== this._settings.get_default_value('enable-sub-menus').unpack() ||
             this.appDescriptions !== this._settings.get_default_value('apps-show-extra-details').unpack() ||
             this.categoryIconType !== 0) ? true : false
     }
@@ -3512,6 +3458,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         this.disableSearchStyle = this._settings.get_boolean('disable-searchbox-border');
         this.alphabetizeAllPrograms = this._settings.get_boolean('alphabetize-all-programs')
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
+        this.disableTooltips = this._settings.get_boolean('disable-tooltips');
+        this.subMenus = this._settings.get_boolean('enable-sub-menus');
 
         let searchStyleFrame = new PW.FrameBox();
         let searchStyleRow = new PW.FrameBoxRow();
@@ -3582,6 +3530,28 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         fadeEffectFrame.add(fadeEffectRow);
         this.mainBox.append(fadeEffectFrame);
 
+        let tooltipFrame = new PW.FrameBox();
+        let tooltipRow = new PW.FrameBoxRow();
+        let tooltipLabel = new Gtk.Label({
+            label: _("Disable Tooltips"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+        let tooltipSwitch = new Gtk.Switch({
+            halign: Gtk.Align.END,
+        });
+        tooltipSwitch.set_active(this.disableTooltips);
+        tooltipSwitch.connect('notify::active', (widget) => {
+            this.disableTooltips = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        tooltipRow.add(tooltipLabel);
+        tooltipRow.add(tooltipSwitch);
+        tooltipFrame.add(tooltipRow);
+        this.mainBox.append(tooltipFrame);
+
         let alphabetizeAllProgramsFrame = new PW.FrameBox();
         let alphabetizeAllProgramsRow = new PW.FrameBoxRow();
         let alphabetizeAllProgramsLabel = new Gtk.Label({
@@ -3601,6 +3571,29 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         alphabetizeAllProgramsRow.add(alphabetizeAllProgramsSwitch);
         alphabetizeAllProgramsFrame.add(alphabetizeAllProgramsRow);
         this.mainBox.append(alphabetizeAllProgramsFrame);
+
+        let subMenusFrame = new PW.FrameBox();
+        let subMenusRow = new PW.FrameBoxRow();
+        let subMenusLabel = new Gtk.Label({
+            label: _('Category Sub Menus'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+         });
+        let subMenusSwitch = new Gtk.Switch({
+            halign: Gtk.Align.END,
+        });
+        subMenusSwitch.set_active(this.subMenus);
+        subMenusSwitch.connect('notify::active', (widget) => {
+            this.subMenus = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        subMenusRow.add(subMenusLabel);
+        subMenusRow.add(subMenusSwitch);
+        subMenusFrame.add(subMenusRow);
+        this.mainBox.append(subMenusFrame);
 
         let multiLinedLabelFrame = new PW.FrameBox();
         let multiLinedLabelRow = new PW.FrameBoxRow();
@@ -3758,6 +3751,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.disableSearchStyle = this._settings.get_default_value('disable-searchbox-border').unpack();
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
             this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
+            this.subMenus = this._settings.get_default_value('enable-sub-menus').unpack();
+            this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
             this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
             gapAdjustmentScale.set_value(this.gapAdjustment);
@@ -3767,6 +3762,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             let color = new Gdk.RGBA();
             color.parse(this.indicatorColor);
             appIndicatorColorChooser.set_rgba(color);
+            tooltipSwitch.set_active(this.disableTooltips);
+            subMenusSwitch.set_active(this.subMenus);
             color.parse(this.indicatorTextColor);
             appIndicatorTextColorChooser.set_rgba(color);
             fadeEffectSwitch.set_active(this.disableFadeEffect);
@@ -3788,6 +3785,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this._settings.set_boolean('alphabetize-all-programs', this.alphabetizeAllPrograms);
             this._settings.set_boolean('multi-lined-labels', this.multiLinedLabels);
             this._settings.set_boolean('disable-scrollview-fade-effect', this.disableFadeEffect);
+            this._settings.set_boolean('disable-tooltips', this.disableTooltips);
+            this._settings.set_boolean('enable-sub-menus', this.subMenus);
             this._settings.set_boolean('reload-theme', true);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
@@ -3802,6 +3801,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
 
     checkIfResetButtonSensitive(){
         return (
+            this.subMenus !== this._settings.get_default_value('enable-sub-menus').unpack() ||
+            this.disableTooltips !== this._settings.get_default_value('disable-tooltips').unpack() ||
             this.indicatorColor !== this._settings.get_default_value('indicator-color').unpack() ||
             this.indicatorTextColor !== this._settings.get_default_value('indicator-text-color').unpack() ||
             this.gapAdjustment !== this._settings.get_default_value('gap-adjustment').unpack() ||
