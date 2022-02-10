@@ -3194,7 +3194,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         this.mainBox.append(iconsSizeFrame);
 
-        let miscSettingsFrame = new PW.FrameBox();
+        let appDescriptionsFrame = new PW.FrameBox();
         let appDescriptionsRow = new PW.FrameBoxRow();
         let appDescriptionsLabel = new Gtk.Label({
             label: _("Show Application Descriptions"),
@@ -3211,8 +3211,10 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         appDescriptionsRow.add(appDescriptionsLabel);
         appDescriptionsRow.add(appDescriptionsSwitch);
-        miscSettingsFrame.add(appDescriptionsRow);
+        appDescriptionsFrame.add(appDescriptionsRow);
+        this.mainBox.append(appDescriptionsFrame);
 
+        let categoryIconTypeFrame = new PW.FrameBox();
         let categoryIconTypeRow = new PW.FrameBoxRow();
         let categoryIconTypeLabel = new Gtk.Label({
             label: _('Category Icon Type'),
@@ -3234,8 +3236,10 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         categoryIconTypeRow.add(categoryIconTypeLabel);
         categoryIconTypeRow.add(categoryIconTypeCombo);
-        miscSettingsFrame.add(categoryIconTypeRow);
+        categoryIconTypeFrame.add(categoryIconTypeRow);
+        this.mainBox.append(categoryIconTypeFrame);
 
+        let subMenusFrame = new PW.FrameBox();
         let subMenusRow = new PW.FrameBoxRow();
         let subMenusLabel = new Gtk.Label({
             label: _('Category Sub Menus'),
@@ -3255,10 +3259,10 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         subMenusRow.add(subMenusLabel);
         subMenusRow.add(subMenusSwitch);
-        miscSettingsFrame.add(subMenusRow);
-        this.mainBox.append(miscSettingsFrame);
+        subMenusFrame.add(subMenusRow);
+        this.mainBox.append(subMenusFrame);
 
-        let miscMenuSettingsFrame = new PW.FrameBox();
+        let tooltipFrame = new PW.FrameBox();
         let tooltipRow = new PW.FrameBoxRow();
         let tooltipLabel = new Gtk.Label({
             label: _("Disable Tooltips"),
@@ -3266,7 +3270,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             xalign: 0,
             hexpand: true
         });
-
         let tooltipSwitch = new Gtk.Switch({
             halign: Gtk.Align.END,
         });
@@ -3276,12 +3279,12 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.saveButton.set_sensitive(true);
             this.resetButton.set_sensitive(true);
         });
-
         tooltipRow.add(tooltipLabel);
         tooltipRow.add(tooltipSwitch);
-        miscMenuSettingsFrame.add(tooltipRow);
-        this.mainBox.append(miscMenuSettingsFrame);
+        tooltipFrame.add(tooltipRow);
+        this.mainBox.append(tooltipFrame);
 
+        let vertSeparatorFrame = new PW.FrameBox();
         let vertSeparatorRow = new PW.FrameBoxRow();
         let vertSeparatorLabel = new Gtk.Label({
             label: _('Enable Vertical Separator'),
@@ -3301,8 +3304,10 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         vertSeparatorRow.add(vertSeparatorLabel);
         vertSeparatorRow.add(vertSeparatorSwitch);
-        miscMenuSettingsFrame.add(vertSeparatorRow);
+        vertSeparatorFrame.add(vertSeparatorRow);
+        this.mainBox.append(vertSeparatorFrame);
 
+        let recentAppsFrame = new PW.FrameBox();
         let recentAppsRow = new PW.FrameBoxRow();
         let recentAppsLabel = new Gtk.Label({
             label: _("Disable Recently Installed Apps Indicator"),
@@ -3323,7 +3328,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         recentAppsRow.add(recentAppsLabel);
         recentAppsRow.add(recentAppsSwitch);
-        miscMenuSettingsFrame.add(recentAppsRow);
+        recentAppsFrame.add(recentAppsRow);
 
         let clearRecentAppsRow = new PW.FrameBoxRow();
         let clearRecentAppsLabel = new Gtk.Label({
@@ -3345,7 +3350,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         clearRecentAppsRow.add(clearRecentAppsLabel);
         clearRecentAppsRow.add(clearRecentAppsButton);
-        miscMenuSettingsFrame.add(clearRecentAppsRow);
+        recentAppsFrame.add(clearRecentAppsRow);
+        this.mainBox.append(recentAppsFrame);
     
         let buttonRow = new Gtk.Box({
             valign: Gtk.Align.END,
@@ -3502,34 +3508,10 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         this.indicatorColor = this._settings.get_string('indicator-color');
         this.indicatorTextColor = this._settings.get_string('indicator-text-color');
         this.gapAdjustment = this._settings.get_int('gap-adjustment');
-        this.disableCategoryArrow = this._settings.get_boolean('disable-category-arrows');
         this.removeMenuArrow = this._settings.get_boolean('remove-menu-arrow');
         this.disableSearchStyle = this._settings.get_boolean('disable-searchbox-border');
         this.alphabetizeAllPrograms = this._settings.get_boolean('alphabetize-all-programs')
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
-
-        let disableCategoryArrowFrame = new PW.FrameBox();
-        let disableCategoryArrowRow = new PW.FrameBoxRow();
-        let disableCategoryArrowLabel = new Gtk.Label({
-            label: _('Disable Category Arrows'),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            selectable: false
-         });
-        let disableCategoryArrowSwitch = new Gtk.Switch({
-            halign: Gtk.Align.END,
-        });
-        disableCategoryArrowSwitch.set_active(this.disableCategoryArrow);
-        disableCategoryArrowSwitch.connect('notify::active', (widget) => {
-             this.disableCategoryArrow = widget.get_active();
-             this.saveButton.set_sensitive(true);
-             this.resetButton.set_sensitive(true);
-        });
-        disableCategoryArrowRow.add(disableCategoryArrowLabel);
-        disableCategoryArrowRow.add(disableCategoryArrowSwitch);
-        disableCategoryArrowFrame.add(disableCategoryArrowRow);
-        this.mainBox.append(disableCategoryArrowFrame);
 
         let searchStyleFrame = new PW.FrameBox();
         let searchStyleRow = new PW.FrameBoxRow();
@@ -3772,7 +3754,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.indicatorColor = this._settings.get_default_value('indicator-color').unpack();
             this.indicatorTextColor = this._settings.get_default_value('indicator-text-color').unpack();
             this.gapAdjustment = this._settings.get_default_value('gap-adjustment').unpack();
-            this.disableCategoryArrow = this._settings.get_default_value('disable-category-arrows').unpack();
             this.removeMenuArrow = this._settings.get_default_value('remove-menu-arrow').unpack();
             this.disableSearchStyle = this._settings.get_default_value('disable-searchbox-border').unpack();
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
@@ -3780,7 +3761,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
             gapAdjustmentScale.set_value(this.gapAdjustment);
-            disableCategoryArrowSwitch.set_active(this.disableCategoryArrow);
             searchStyleSwitch.set_active(this.disableSearchStyle);
             tweakStyleSwitch.set_active(this.removeMenuArrow);
             multiLinedLabelSwitch.set_active(this.multiLinedLabels);
@@ -3803,7 +3783,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this._settings.set_string('indicator-color', this.indicatorColor);
             this._settings.set_string('indicator-text-color', this.indicatorTextColor);
             this._settings.set_int('gap-adjustment', this.gapAdjustment);
-            this._settings.set_boolean('disable-category-arrows', this.disableCategoryArrow);
             this._settings.set_boolean('remove-menu-arrow', this.removeMenuArrow);
             this._settings.set_boolean('disable-searchbox-border', this.disableSearchStyle);
             this._settings.set_boolean('alphabetize-all-programs', this.alphabetizeAllPrograms);
@@ -3826,7 +3805,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.indicatorColor !== this._settings.get_default_value('indicator-color').unpack() ||
             this.indicatorTextColor !== this._settings.get_default_value('indicator-text-color').unpack() ||
             this.gapAdjustment !== this._settings.get_default_value('gap-adjustment').unpack() ||
-            this.disableCategoryArrow !== this._settings.get_default_value('disable-category-arrows').unpack() ||
             this.removeMenuArrow !== this._settings.get_default_value('remove-menu-arrow').unpack() ||
             this.disableSearchStyle !== this._settings.get_default_value('disable-searchbox-border').unpack()||
             this.alphabetizeAllPrograms !== this._settings.get_default_value('alphabetize-all-programs').unpack()||

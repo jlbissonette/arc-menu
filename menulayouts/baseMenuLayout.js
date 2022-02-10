@@ -366,13 +366,12 @@ var BaseLayout = class {
         }
         this._clearActorsFromBox(categoriesBox);
         
-        let isActiveMenuItemSet = false;
+        this._futureActiveItem = false;
 
         for(let categoryMenuItem of this.categoryDirectories.values()){
             categoriesBox.add_actor(categoryMenuItem.actor);	
-            if(!isActiveMenuItemSet){
+            if(!this._futureActiveItem){
                 this._futureActiveItem = categoryMenuItem;
-                isActiveMenuItemSet = true;
             }	 
         }
 
@@ -402,7 +401,8 @@ var BaseLayout = class {
     displayRecentFiles(box = this.applicationsBox){
         const homeRegExp = new RegExp('^(' + GLib.get_home_dir() + ')');
         this._clearActorsFromBox(box);
-        let activeMenuItemSet = false;
+        this._futureActiveItem = false;
+
         RecentFilesManager.filterRecentFiles(recentFile => {
             let file = Gio.File.new_for_uri(recentFile.get_uri()).get_path();
             let name = recentFile.get_display_name();
@@ -434,12 +434,11 @@ var BaseLayout = class {
             placeMenuItem.add(placeMenuItem._removeBtn);
             box.add_actor(placeMenuItem);
 
-            if(!activeMenuItemSet){
+            if(!this._futureActiveItem){
                 this._futureActiveItem = placeMenuItem;
-                activeMenuItemSet = true;
+                this.activeMenuItem = this._futureActiveItem;
             }
-            this.activeMenuItem = this._futureActiveItem;
-        })
+        });
     }
 
     _displayPlaces() {
@@ -659,6 +658,7 @@ var BaseLayout = class {
     }   
 
     setActiveCategory(category, setActive = true){
+        this._futureActiveItem = category;
         this.activeMenuItem = category;
     }
 
@@ -705,7 +705,7 @@ var BaseLayout = class {
         let count = 0;
         let top = -1;
         let left = 0;
-        let activeMenuItemSet = false;
+        this._futureActiveItem = false;
         let currentCharacter;
         let alphabetizeAllPrograms = this._settings.get_boolean("alphabetize-all-programs") && this.layoutProperties.DisplayType === Constants.DisplayType.LIST;
         let rtl = this.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
@@ -776,9 +776,8 @@ var BaseLayout = class {
                     left--;
                 count++;
     
-                if(!activeMenuItemSet && grid === this.applicationsGrid){
+                if(!this._futureActiveItem && grid === this.applicationsGrid){
                     this._futureActiveItem = item;
-                    activeMenuItemSet = true;
                 }
             }
         }

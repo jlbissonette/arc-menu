@@ -45,7 +45,6 @@ function queryFileExists(item) {
                     }
                     resolve(item);
                 }
-                    
             }
             catch (err) {
                 if (timeOutID) {
