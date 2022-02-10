@@ -656,6 +656,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             this.activate(event);
             if(!(this instanceof CategoryMenuItem) && !(this instanceof ArcMenuButtonItem))
                 this.active = false;
+            return Clutter.EVENT_STOP;
         }
         if(event.get_button() == 3 && this.pressed){
             this.pressed = false;
@@ -665,6 +666,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
                 this.active = false;
                 this.hovered = true;
             }
+            return Clutter.EVENT_STOP;
         }
         return Clutter.EVENT_PROPAGATE;
     }
