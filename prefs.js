@@ -2894,7 +2894,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.appDescriptions = this._settings.get_boolean('apps-show-extra-details');
         this.categoryIconType = this._settings.get_enum('category-icon-type');
 
-        let generalSettingsFrame = new PW.FrameBox();
+        let menuSizeFrame = new PW.FrameBox();
         //find the greatest screen height of all monitors
         //use that value to set Menu Height cap
         let display = Gdk.Display.get_default();
@@ -2913,9 +2913,19 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         let monitorHeight = greatestHeight * scaleFactor;
         monitorHeight = Math.round((monitorHeight * 8) / 10);
 
+        let menuSizeHeaderLabel = new Gtk.Label({
+            label: "<b>" + _("Menu Size") + "</b>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+        });
+        this.mainBox.append(menuSizeHeaderLabel);
+
+        this.mainBox.append(menuSizeFrame);
         let heightRow = new PW.FrameBoxRow();
         let heightLabel = new Gtk.Label({
-            label: _('Menu Height'),
+            label: _('Height'),
             use_markup: true,
             xalign: 0,
             hexpand: false,
@@ -2964,11 +2974,11 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         heightRow.add(heightLabel);
         heightRow.add(hscale);
         heightRow.add(hSpinButton);
-        generalSettingsFrame.add(heightRow);
+        menuSizeFrame.add(heightRow);
 
         let widthRow = new PW.FrameBoxRow();
         let widthLabel = new Gtk.Label({
-            label: _('Grid Icon Panel\nWidth Adjustment'),
+            label: _('Width Offset'),
             use_markup: true,
             xalign: 0,
             hexpand: false,
@@ -3019,11 +3029,23 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         widthRow.add(widthLabel);
         widthRow.add(widthScale);
         widthRow.add(widthSpinButton);
-        generalSettingsFrame.add(widthRow);
+        menuSizeFrame.add(widthRow);
+
+        let menuWidthTwoPanelsHeaderRow = new PW.FrameBoxRow();
+        let menuWidthTwoPanelsHeaderLabel = new Gtk.Label({
+            label: _("Traditional Layouts Width"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false,
+            sensitive: false
+        });
+        menuWidthTwoPanelsHeaderRow.add(menuWidthTwoPanelsHeaderLabel)
+        menuSizeFrame.add(menuWidthTwoPanelsHeaderRow);
 
         let menuWidthRow = new PW.FrameBoxRow();
         let menuWidthLabel = new Gtk.Label({
-            label: _('Left-Panel Width'),
+            label: _('Left-Panel'),
             xalign:0,
             hexpand: false,
         });
@@ -3064,11 +3086,11 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         menuWidthRow.add(menuWidthLabel);
         menuWidthRow.add(menuWidthScale);
         menuWidthRow.add( menuWidthSpinButton);
-        generalSettingsFrame.add(menuWidthRow);
+        menuSizeFrame.add(menuWidthRow);
 
         let rightPanelWidthRow = new PW.FrameBoxRow();
         let rightPanelWidthLabel = new Gtk.Label({
-            label: _('Right-Panel Width'),
+            label: _('Right-Panel'),
             xalign:0,
             hexpand: false,
         });
@@ -3109,51 +3131,19 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         rightPanelWidthRow.add(rightPanelWidthLabel);
         rightPanelWidthRow.add(rightPanelWidthScale);
         rightPanelWidthRow.add(rightPanelWidthSpinButton);
-        generalSettingsFrame.add(rightPanelWidthRow);
-        this.mainBox.append(generalSettingsFrame);
-
-        let menuLocationFrame = new PW.FrameBox();
-        let menuLocationRow = new PW.FrameBoxRow();
-        let menuLocationLabel = new Gtk.Label({
-            label: _('Override Menu Location'),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            selectable: false
-         });
-        let menuLocationCombo = new Gtk.ComboBoxText({
-            halign: Gtk.Align.END,
-        });
-        menuLocationCombo.append_text(_("Off"));
-        menuLocationCombo.append_text(_("Top Centered"));
-        menuLocationCombo.append_text(_("Bottom Centered"));
-        menuLocationCombo.set_active(this._settings.get_enum('force-menu-location'));
-        menuLocationCombo.connect('changed', (widget) => {
-            this.forcedMenuLocation = widget.get_active();
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-        menuLocationRow.add(menuLocationLabel);
-        menuLocationRow.add(menuLocationCombo);
-        menuLocationFrame.add(menuLocationRow);
-        this.mainBox.append(menuLocationFrame);
+        menuSizeFrame.add(rightPanelWidthRow);
 
         let iconsSizeFrame = new PW.FrameBox();
-
-        let menuItemSizeHeaderRow = new PW.FrameBoxRow();
         let menuItemSizeHeaderLabel = new Gtk.Label({
-            label: _("Menu Items Icon Size"),
+            label: "<b>" + _("Menu Items Icon Size") + "</b>",
             use_markup: true,
             xalign: 0,
             hexpand: true,
             selectable: false
         });
-        menuItemSizeHeaderRow.add(menuItemSizeHeaderLabel);
-        iconsSizeFrame.add(menuItemSizeHeaderRow);
+        this.mainBox.append(menuItemSizeHeaderLabel);
 
         let gridIconsSizeRow = new PW.FrameBoxRow();
-        gridIconsSizeRow._grid.margin_start = 25;
-        gridIconsSizeRow._grid.margin_end = 25;
         let gridIconsSizeLabel = new Gtk.Label({
             label: _("Grid Icons"),
             use_markup: true,
@@ -3191,7 +3181,41 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         this.mainBox.append(iconsSizeFrame);
 
-        let appDescriptionsFrame = new PW.FrameBox();
+        let generalHeaderLabel = new Gtk.Label({
+            label: "<b>" + _("General Settings") + "</b>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+        });
+        this.mainBox.append(generalHeaderLabel);
+
+        let generalSettingsFrame = new PW.FrameBox();
+        let menuLocationRow = new PW.FrameBoxRow();
+        let menuLocationLabel = new Gtk.Label({
+            label: _('Override Menu Location'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+         });
+        let menuLocationCombo = new Gtk.ComboBoxText({
+            halign: Gtk.Align.END,
+        });
+        menuLocationCombo.append_text(_("Off"));
+        menuLocationCombo.append_text(_("Top Centered"));
+        menuLocationCombo.append_text(_("Bottom Centered"));
+        menuLocationCombo.set_active(this._settings.get_enum('force-menu-location'));
+        menuLocationCombo.connect('changed', (widget) => {
+            this.forcedMenuLocation = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        menuLocationRow.add(menuLocationLabel);
+        menuLocationRow.add(menuLocationCombo);
+        generalSettingsFrame.add(menuLocationRow);
+        this.mainBox.append(generalSettingsFrame);
+
         let appDescriptionsRow = new PW.FrameBoxRow();
         let appDescriptionsLabel = new Gtk.Label({
             label: _("Show Application Descriptions"),
@@ -3208,10 +3232,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         appDescriptionsRow.add(appDescriptionsLabel);
         appDescriptionsRow.add(appDescriptionsSwitch);
-        appDescriptionsFrame.add(appDescriptionsRow);
-        this.mainBox.append(appDescriptionsFrame);
+        generalSettingsFrame.add(appDescriptionsRow);
 
-        let categoryIconTypeFrame = new PW.FrameBox();
         let categoryIconTypeRow = new PW.FrameBoxRow();
         let categoryIconTypeLabel = new Gtk.Label({
             label: _('Category Icon Type'),
@@ -3233,10 +3255,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         categoryIconTypeRow.add(categoryIconTypeLabel);
         categoryIconTypeRow.add(categoryIconTypeCombo);
-        categoryIconTypeFrame.add(categoryIconTypeRow);
-        this.mainBox.append(categoryIconTypeFrame);
+        generalSettingsFrame.add(categoryIconTypeRow);
 
-        let vertSeparatorFrame = new PW.FrameBox();
         let vertSeparatorRow = new PW.FrameBoxRow();
         let vertSeparatorLabel = new Gtk.Label({
             label: _('Enable Vertical Separator'),
@@ -3256,8 +3276,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         vertSeparatorRow.add(vertSeparatorLabel);
         vertSeparatorRow.add(vertSeparatorSwitch);
-        vertSeparatorFrame.add(vertSeparatorRow);
-        this.mainBox.append(vertSeparatorFrame);
+        generalSettingsFrame.add(vertSeparatorRow);
     
         let buttonRow = new Gtk.Box({
             valign: Gtk.Align.END,
@@ -3329,8 +3348,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
     createIconSizeRow(title, iconSizeEnum){
         let iconsSizeRow = new PW.FrameBoxRow();
-        iconsSizeRow._grid.margin_start = 25;
-        iconsSizeRow._grid.margin_end = 25;
         let iconsSizeLabel = new Gtk.Label({
             label: _(title),
             use_markup: true,
@@ -3740,13 +3757,11 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
             if(widget.get_active()){
                 appIndicatorColorFrame.hide();
                 recentlyInstalledInfoLabel.hide();
-                clearAllLabel.hide();
                 clearRecentAppsFrame.hide();
             }
             else{
                 appIndicatorColorFrame.show();
                 recentlyInstalledInfoLabel.show();
-                clearAllLabel.show();
                 clearRecentAppsFrame.show();
                 this.mainBox.show();
             }
@@ -3815,13 +3830,6 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
         appIndicatorColorFrame.add(appIndicatorTextColorRow);
         this.mainBox.append(appIndicatorColorFrame);
 
-        let clearAllLabel = new Gtk.Label({
-            label: "<b>" + _('Clear all New Apps') + "</b>",
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-        });
-        this.mainBox.append(clearAllLabel);
         let clearRecentAppsFrame = new PW.FrameBox();
         let clearRecentAppsRow = new PW.FrameBoxRow();
         let clearRecentAppsLabel = new Gtk.Label({
