@@ -2920,7 +2920,7 @@ Signals: {
 class Arc_Menu_SearchBox extends St.Entry {
     _init(menuLayout) {
         super._init({
-            hint_text: _("Type to search…"),
+            hint_text: _("Search…"),
             track_hover: true,
             can_focus: true,
             x_expand: true,

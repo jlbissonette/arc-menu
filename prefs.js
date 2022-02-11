@@ -273,7 +273,7 @@ var AddAppsToPinnedListWindow = GObject.registerClass(
 
         _createLayout(vbox) {
             let searchBar = new Gtk.SearchEntry({
-                placeholder_text: _("Type to search…")
+                placeholder_text: _("Search…")
             });
             searchBar.connect('search-changed', ()=> {
                 this._loadCategories();
@@ -2891,7 +2891,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.menuWidth = this._settings.get_int('menu-width');
         this.forcedMenuLocation = this._settings.get_enum('force-menu-location');
         this.verticalSeparator = this._settings.get_boolean('vert-separator');
-        this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
         this.appDescriptions = this._settings.get_boolean('apps-show-extra-details');
         this.categoryIconType = this._settings.get_enum('category-icon-type');
 
@@ -3259,52 +3258,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         vertSeparatorRow.add(vertSeparatorSwitch);
         vertSeparatorFrame.add(vertSeparatorRow);
         this.mainBox.append(vertSeparatorFrame);
-
-        let recentAppsFrame = new PW.FrameBox();
-        let recentAppsRow = new PW.FrameBoxRow();
-        let recentAppsLabel = new Gtk.Label({
-            label: _("Disable Recently Installed Apps Indicator"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-
-        let recentAppsSwitch = new Gtk.Switch({
-            halign: Gtk.Align.END,
-        });
-        recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
-        recentAppsSwitch.connect('notify::active', (widget) => {
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-            this.disableRecentApps = widget.get_active();
-            this._settings.set_boolean('disable-recently-installed-apps', widget.get_active());
-        });
-        recentAppsRow.add(recentAppsLabel);
-        recentAppsRow.add(recentAppsSwitch);
-        recentAppsFrame.add(recentAppsRow);
-
-        let clearRecentAppsRow = new PW.FrameBoxRow();
-        let clearRecentAppsLabel = new Gtk.Label({
-            label: _('Clear all Applications Marked "New"'),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        });
-
-        let clearRecentAppsButton = new Gtk.Button({
-            halign: Gtk.Align.END,
-            label: _("Clear All"),
-        });
-        let sensitive = this._settings.get_strv('recently-installed-apps').length > 0;
-        clearRecentAppsButton.set_sensitive(sensitive);
-        clearRecentAppsButton.connect('clicked', (widget) => {
-            clearRecentAppsButton.set_sensitive(false);
-            this._settings.reset('recently-installed-apps');
-        });
-        clearRecentAppsRow.add(clearRecentAppsLabel);
-        clearRecentAppsRow.add(clearRecentAppsButton);
-        recentAppsFrame.add(clearRecentAppsRow);
-        this.mainBox.append(recentAppsFrame);
     
         let buttonRow = new Gtk.Box({
             valign: Gtk.Align.END,
@@ -3323,7 +3276,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.rightPanelWidth = this._settings.get_default_value('right-panel-width').unpack();
             this.menuWidth = this._settings.get_default_value('menu-width').unpack();
             this.verticalSeparator = this._settings.get_default_value('vert-separator').unpack();
-            this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
             this.appDescriptions = this._settings.get_default_value('apps-show-extra-details').unpack();
             this.categoryIconType = this._settings.get_default_value('category-icon-type').unpack();
             this.forcedMenuLocation = 0;
@@ -3338,7 +3290,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.quicklinksIconSizeCombo.set_active(0);
             this.miscIconSizeCombo.set_active(0);
             appDescriptionsSwitch.set_active(this.appDescriptions);
-            recentAppsSwitch.set_active(this.disableRecentApps);
             menuLocationCombo.set_active(this.forcedMenuLocation);
             categoryIconTypeCombo.set_active(this.categoryIconType);
 
@@ -3362,7 +3313,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this._settings.set_enum('button-item-icon-size', this.buttonIconSizeCombo.get_active());
             this._settings.set_enum('quicklinks-item-icon-size', this.quicklinksIconSizeCombo.get_active());
             this._settings.set_enum('misc-item-icon-size', this.miscIconSizeCombo.get_active());
-            this._settings.set_boolean('disable-recently-installed-apps', this.disableRecentApps);
             this._settings.set_boolean('reload-theme', true);
             this._settings.set_boolean('apps-show-extra-details', this.appDescriptions);
             this._settings.set_enum('category-icon-type', this.categoryIconType);
@@ -3409,7 +3359,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
     checkIfResetButtonSensitive(){
         return (
-            this.disableRecentApps !== this._settings.get_default_value('disable-recently-installed-apps').unpack() ||
             this.heightValue !== this._settings.get_default_value('menu-height').unpack() ||
             this.widthValue !== this._settings.get_default_value('menu-width-adjustment').unpack() ||
             this.rightPanelWidth !== this._settings.get_default_value('right-panel-width').unpack() ||
@@ -3451,8 +3400,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         this.append(this.scrollBox);
         this._settings = settings;
         this.disableFadeEffect = this._settings.get_boolean('disable-scrollview-fade-effect');
-        this.indicatorColor = this._settings.get_string('indicator-color');
-        this.indicatorTextColor = this._settings.get_string('indicator-text-color');
         this.gapAdjustment = this._settings.get_int('gap-adjustment');
         this.removeMenuArrow = this._settings.get_boolean('remove-menu-arrow');
         this.disableSearchStyle = this._settings.get_boolean('disable-searchbox-border');
@@ -3629,65 +3576,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         multiLinedLabelFrame.add(multiLinedLabelRow);
         this.mainBox.append(multiLinedLabelFrame);
 
-        let appIndicatorColorFrame = new PW.FrameBox();
-        let recentlyInstalledInfoRow = new PW.FrameBoxRow();
-        let recentlyInstalledInfoLabel = new Gtk.Label({
-            label: _('Recently Installed Application Indicators'),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            selectable: false,
-            sensitive: false
-        });
-        recentlyInstalledInfoRow.add(recentlyInstalledInfoLabel);
-        appIndicatorColorFrame.add(recentlyInstalledInfoRow);
-        let appIndicatorColorRow = new PW.FrameBoxRow();
-        let appIndicatorColorLabel = new Gtk.Label({
-            label: _('Category Indicator Color'),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            selectable: false
-        });
-        let appIndicatorColorChooser = new Gtk.ColorButton({
-            use_alpha: true,
-        });
-        let color = new Gdk.RGBA();
-        color.parse(this.indicatorColor);
-        appIndicatorColorChooser.set_rgba(color);
-        appIndicatorColorChooser.connect('color-set', ()=>{
-            this.indicatorColor = appIndicatorColorChooser.get_rgba().to_string();
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-        appIndicatorColorRow.add(appIndicatorColorLabel);
-        appIndicatorColorRow.add(appIndicatorColorChooser);
-        appIndicatorColorFrame.add(appIndicatorColorRow);
-
-        let appIndicatorTextColorRow = new PW.FrameBoxRow();
-        let appIndicatorTextColorLabel = new Gtk.Label({
-            label: _('Application Indicator Label Color'),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            selectable: false
-        });
-        let appIndicatorTextColorChooser = new Gtk.ColorButton({
-            use_alpha: true,
-        });
-        color = new Gdk.RGBA();
-        color.parse(this.indicatorTextColor);
-        appIndicatorTextColorChooser.set_rgba(color);
-        appIndicatorTextColorChooser.connect('color-set', ()=>{
-            this.indicatorTextColor = appIndicatorTextColorChooser.get_rgba().to_string();
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-        appIndicatorTextColorRow.add(appIndicatorTextColorLabel);
-        appIndicatorTextColorRow.add(appIndicatorTextColorChooser);
-        appIndicatorColorFrame.add(appIndicatorTextColorRow);
-        this.mainBox.append(appIndicatorColorFrame);
-
         let gapAdjustmentFrame = new PW.FrameBox();
         let gapAdjustmentRow = new PW.FrameBoxRow();
         let gapAdjustmentLabel = new Gtk.Label({
@@ -3744,8 +3632,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         });
         this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         this.resetButton.connect('clicked', ()=> {
-            this.indicatorColor = this._settings.get_default_value('indicator-color').unpack();
-            this.indicatorTextColor = this._settings.get_default_value('indicator-text-color').unpack();
             this.gapAdjustment = this._settings.get_default_value('gap-adjustment').unpack();
             this.removeMenuArrow = this._settings.get_default_value('remove-menu-arrow').unpack();
             this.disableSearchStyle = this._settings.get_default_value('disable-searchbox-border').unpack();
@@ -3759,13 +3645,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             searchStyleSwitch.set_active(this.disableSearchStyle);
             tweakStyleSwitch.set_active(this.removeMenuArrow);
             multiLinedLabelSwitch.set_active(this.multiLinedLabels);
-            let color = new Gdk.RGBA();
-            color.parse(this.indicatorColor);
-            appIndicatorColorChooser.set_rgba(color);
             tooltipSwitch.set_active(this.disableTooltips);
             subMenusSwitch.set_active(this.subMenus);
-            color.parse(this.indicatorTextColor);
-            appIndicatorTextColorChooser.set_rgba(color);
             fadeEffectSwitch.set_active(this.disableFadeEffect);
 
             this.saveButton.set_sensitive(true);
@@ -3777,8 +3658,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             hexpand: true
         });
         this.saveButton.connect('clicked', ()=> {
-            this._settings.set_string('indicator-color', this.indicatorColor);
-            this._settings.set_string('indicator-text-color', this.indicatorTextColor);
             this._settings.set_int('gap-adjustment', this.gapAdjustment);
             this._settings.set_boolean('remove-menu-arrow', this.removeMenuArrow);
             this._settings.set_boolean('disable-searchbox-border', this.disableSearchStyle);
@@ -3803,14 +3682,221 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         return (
             this.subMenus !== this._settings.get_default_value('enable-sub-menus').unpack() ||
             this.disableTooltips !== this._settings.get_default_value('disable-tooltips').unpack() ||
-            this.indicatorColor !== this._settings.get_default_value('indicator-color').unpack() ||
-            this.indicatorTextColor !== this._settings.get_default_value('indicator-text-color').unpack() ||
             this.gapAdjustment !== this._settings.get_default_value('gap-adjustment').unpack() ||
             this.removeMenuArrow !== this._settings.get_default_value('remove-menu-arrow').unpack() ||
             this.disableSearchStyle !== this._settings.get_default_value('disable-searchbox-border').unpack()||
             this.alphabetizeAllPrograms !== this._settings.get_default_value('alphabetize-all-programs').unpack()||
             this.multiLinedLabels !== this._settings.get_default_value('multi-lined-labels').unpack() ||
             this.disableFadeEffect !== this._settings.get_default_value('disable-scrollview-fade-effect').unpack()) ? true : false;
+    }
+});
+
+var MenuSettingsNewAppsPage = GObject.registerClass(
+    class Arc_Menu_MenuSettingsNewAppsPage extends Gtk.Box {
+    _init(settings) {
+        super._init({
+            orientation: Gtk.Orientation.VERTICAL,
+        });
+
+        this.scrollBox = new Gtk.ScrolledWindow();
+        this.scrollBox.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+
+        this.mainBox = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            margin_top: 24,
+            margin_bottom: 24,
+            margin_start: 24,
+            margin_end: 24,
+            spacing: 20,
+            vexpand: true,
+            valign: Gtk.Align.FILL
+        });
+
+        this.scrollBox.set_child(this.mainBox);
+        this.append(this.scrollBox);
+        this._settings = settings;
+        this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
+        this.indicatorColor = this._settings.get_string('indicator-color');
+        this.indicatorTextColor = this._settings.get_string('indicator-text-color');
+
+        let recentAppsFrame = new PW.FrameBox();
+        let recentAppsRow = new PW.FrameBoxRow();
+        let recentAppsLabel = new Gtk.Label({
+            label: _("Disable New Apps Tracker"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+
+        let recentAppsSwitch = new Gtk.Switch({
+            halign: Gtk.Align.END,
+        });
+
+        recentAppsSwitch.connect('notify::active', (widget) => {
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+            this.disableRecentApps = widget.get_active();
+
+            if(widget.get_active()){
+                appIndicatorColorFrame.hide();
+                recentlyInstalledInfoLabel.hide();
+                clearAllLabel.hide();
+                clearRecentAppsFrame.hide();
+            }
+            else{
+                appIndicatorColorFrame.show();
+                recentlyInstalledInfoLabel.show();
+                clearAllLabel.show();
+                clearRecentAppsFrame.show();
+                this.mainBox.show();
+            }
+            this._settings.set_boolean('disable-recently-installed-apps', widget.get_active());
+        });
+
+        recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
+
+        recentAppsRow.add(recentAppsLabel);
+        recentAppsRow.add(recentAppsSwitch);
+        recentAppsFrame.add(recentAppsRow);
+        this.mainBox.append(recentAppsFrame);
+
+        let appIndicatorColorFrame = new PW.FrameBox();
+        let recentlyInstalledInfoLabel = new Gtk.Label({
+            label: "<b>" + _("Customize New Apps Indicator") + "</b>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+        });
+        this.mainBox.append(recentlyInstalledInfoLabel);
+        let appIndicatorColorRow = new PW.FrameBoxRow();
+        let appIndicatorColorLabel = new Gtk.Label({
+            label: _('Category Indicator Color'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+        });
+        let appIndicatorColorChooser = new Gtk.ColorButton({
+            use_alpha: true,
+        });
+        let color = new Gdk.RGBA();
+        color.parse(this.indicatorColor);
+        appIndicatorColorChooser.set_rgba(color);
+        appIndicatorColorChooser.connect('color-set', ()=>{
+            this.indicatorColor = appIndicatorColorChooser.get_rgba().to_string();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        appIndicatorColorRow.add(appIndicatorColorLabel);
+        appIndicatorColorRow.add(appIndicatorColorChooser);
+        appIndicatorColorFrame.add(appIndicatorColorRow);
+
+        let appIndicatorTextColorRow = new PW.FrameBoxRow();
+        let appIndicatorTextColorLabel = new Gtk.Label({
+            label: _('App Indicator Label Color'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+        });
+        let appIndicatorTextColorChooser = new Gtk.ColorButton({
+            use_alpha: true,
+        });
+        color = new Gdk.RGBA();
+        color.parse(this.indicatorTextColor);
+        appIndicatorTextColorChooser.set_rgba(color);
+        appIndicatorTextColorChooser.connect('color-set', ()=>{
+            this.indicatorTextColor = appIndicatorTextColorChooser.get_rgba().to_string();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        appIndicatorTextColorRow.add(appIndicatorTextColorLabel);
+        appIndicatorTextColorRow.add(appIndicatorTextColorChooser);
+        appIndicatorColorFrame.add(appIndicatorTextColorRow);
+        this.mainBox.append(appIndicatorColorFrame);
+
+        let clearAllLabel = new Gtk.Label({
+            label: "<b>" + _('Clear all New Apps') + "</b>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+        });
+        this.mainBox.append(clearAllLabel);
+        let clearRecentAppsFrame = new PW.FrameBox();
+        let clearRecentAppsRow = new PW.FrameBoxRow();
+        let clearRecentAppsLabel = new Gtk.Label({
+            label: _("Clear Apps Marked 'New'"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+
+        let clearRecentAppsButton = new Gtk.Button({
+            halign: Gtk.Align.END,
+            label: _("Clear All"),
+        });
+        let sensitive = this._settings.get_strv('recently-installed-apps').length > 0;
+        clearRecentAppsButton.set_sensitive(sensitive);
+        clearRecentAppsButton.connect('clicked', (widget) => {
+            clearRecentAppsButton.set_sensitive(false);
+            this._settings.reset('recently-installed-apps');
+        });
+        clearRecentAppsRow.add(clearRecentAppsLabel);
+        clearRecentAppsRow.add(clearRecentAppsButton);
+        clearRecentAppsFrame.add(clearRecentAppsRow);
+        this.mainBox.append(clearRecentAppsFrame);
+
+        let buttonRow = new Gtk.Box({
+            valign: Gtk.Align.END,
+            margin_top: 6,
+            margin_bottom: 6,
+            margin_start: 24,
+            margin_end: 24,
+        });
+        this.resetButton = new Gtk.Button({
+            label: _("Restore Defaults"),
+        });
+        this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
+        this.resetButton.connect('clicked', ()=> {
+            this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
+            this.indicatorColor = this._settings.get_default_value('indicator-color').unpack();
+            this.indicatorTextColor = this._settings.get_default_value('indicator-text-color').unpack();
+            recentAppsSwitch.set_active(this.disableRecentApps);
+            let color = new Gdk.RGBA();
+            color.parse(this.indicatorColor);
+            appIndicatorColorChooser.set_rgba(color);
+            color.parse(this.indicatorTextColor);
+            appIndicatorTextColorChooser.set_rgba(color);
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(false);
+        });
+
+        this.saveButton = new Gtk.Button({
+            label: _("Apply"),
+            hexpand: true
+        });
+        this.saveButton.connect('clicked', ()=> {
+            this._settings.set_boolean('disable-recently-installed-apps', this.disableRecentApps);
+            this._settings.set_string('indicator-color', this.indicatorColor);
+            this._settings.set_string('indicator-text-color', this.indicatorTextColor);
+            this._settings.set_boolean('reload-theme', true);
+            this.saveButton.set_sensitive(false);
+            this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
+        });
+        this.saveButton.set_halign(Gtk.Align.END);
+        this.saveButton.set_sensitive(false);
+
+        buttonRow.append(this.resetButton);
+        buttonRow.append(this.saveButton);
+        this.append(buttonRow);
+    }
+
+    checkIfResetButtonSensitive(){
+        return (
+            this.disableRecentApps !== this._settings.get_default_value('disable-recently-installed-apps').unpack() ||
+            this.indicatorColor !== this._settings.get_default_value('indicator-color').unpack() ||
+            this.indicatorTextColor !== this._settings.get_default_value('indicator-text-color').unpack()
+            ) ? true : false;
     }
 });
 
@@ -6433,8 +6519,9 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box {
         menuSettingsStackListBox.addRow("MenuSettingsPowerOptions", _("Power Options"), 'gnome-power-manager-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsSearchOptions", _("Search Options"), 'preferences-system-search-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsCategories", _("Extra Categories"), 'categories-symbolic');
+        menuSettingsStackListBox.addRow("MenuSettingsNewApps", _("New Apps Tracker"), 'preferences-system-notifications-symbolic');
         menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), 'fine-tune-symbolic');
-        menuSettingsStackListBox.setSeparatorIndices([1, 4, 7]);
+        menuSettingsStackListBox.setSeparatorIndices([1, 4, 8]);
 
         this.settingsListStack.add_named(mainStackBox, "Main");
         this.settingsListStack.add_named(menuSettingsListBox, "MenuSettings");
@@ -6474,6 +6561,7 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box {
         this.settingsFrameStack.add_named(new MenuSettingsPowerOptionsPage(this._settings), "MenuSettingsPowerOptions");
         this.settingsFrameStack.add_named(new MenuSettingsSearchOptionsPage(this._settings), "MenuSettingsSearchOptions");
         this.settingsFrameStack.add_named(new MenuSettingsCategoriesPage(this._settings), "MenuSettingsCategories");
+        this.settingsFrameStack.add_named(new MenuSettingsNewAppsPage(this._settings), "MenuSettingsNewApps");
         this.settingsFrameStack.add_named(new MenuSettingsFineTunePage(this._settings), "MenuSettingsFineTune");
         this.settingsFrameStack.add_named(new ButtonAppearancePage(this._settings), "ButtonAppearance");
         this.settingsFrameStack.add_named(new MiscPage(this._settings, this), "Misc");
