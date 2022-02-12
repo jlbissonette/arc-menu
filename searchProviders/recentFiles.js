@@ -49,6 +49,7 @@ var RecentFilesSearchProvider = class {
     }
 
     getInitialResultSet(terms, callback, _cancellable) {
+        RecentFilesManager.cancelCurrentQueries();
         this._recentFiles = [];
         RecentFilesManager.filterRecentFiles(recentFile => {
             this._recentFiles.push(recentFile);

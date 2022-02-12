@@ -2694,7 +2694,7 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
         this.menu.actor.style = 'max-height: 250px;';
         this.menu.actor.overlay_scrollbars = true;
         this.menu.actor.style_class = 'popup-sub-menu ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade');
-        this.menu._needsScrollbar = this._needsScrollbar.bind(this);
+        this.menu._needsScrollbar = () => this._needsScrollbar();
 
         this.menu.connect('open-state-changed', () => {
             if(!this.menu.isOpen){
@@ -2734,6 +2734,14 @@ var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuIt
             this.menu.actor.style = 'min-height:150px; max-height: 250px;';
         else
             this.menu.actor.style = 'max-height: 250px;';
+
+        this.menu.actor.vscrollbar_policy = St.PolicyType.AUTOMATIC;
+
+        if (needsScrollbar)
+            this.menu.actor.add_style_pseudo_class('scrolled');
+        else
+            this.menu.actor.remove_style_pseudo_class('scrolled');
+
         return needsScrollbar;
     }
 

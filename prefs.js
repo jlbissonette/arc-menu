@@ -2976,7 +2976,124 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         heightRow.add(hSpinButton);
         menuSizeFrame.add(heightRow);
 
+        let menuWidthTwoPanelsHeaderRow = new PW.FrameBoxRow();
+        let menuWidthTwoPanelsHeaderLabel = new Gtk.Label({
+            label: _("Traditional Layouts Width"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false,
+            sensitive: false
+        });
+        menuWidthTwoPanelsHeaderRow.add(menuWidthTwoPanelsHeaderLabel)
+        menuSizeFrame.add(menuWidthTwoPanelsHeaderRow);
+
+        let menuWidthRow = new PW.FrameBoxRow();
+        menuWidthRow._grid.margin_start = 25;
+        let menuWidthLabel = new Gtk.Label({
+            label: _('Left-Panel'),
+            xalign:0,
+            hexpand: false,
+        });
+        let menuWidthScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 175, upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
+            }),
+            digits: 0,round_digits: 0,hexpand: true,
+            value_pos: Gtk.PositionType.RIGHT
+        });
+        menuWidthScale.set_value(this.menuWidth);
+        menuWidthScale.connect('value-changed', () => {
+            this.menuWidth = menuWidthScale.get_value();
+            if(menuWidthSpinButton.value !== this.menuWidth)
+                menuWidthSpinButton.set_value(this.menuWidth);
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+
+        let menuWidthSpinButton = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower: 175, upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
+            }),
+            climb_rate: 1,
+            digits: 0,
+            numeric: true,
+        });
+        menuWidthSpinButton.set_value(this.menuWidth);
+        menuWidthSpinButton.connect('value-changed', () => {
+            this.menuWidth = menuWidthSpinButton.get_value();
+            if(menuWidthScale.value !== this.menuWidth)
+                menuWidthScale.set_value(this.menuWidth);
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+
+        menuWidthRow.add(menuWidthLabel);
+        menuWidthRow.add(menuWidthScale);
+        menuWidthRow.add( menuWidthSpinButton);
+        menuSizeFrame.add(menuWidthRow);
+
+        let rightPanelWidthRow = new PW.FrameBoxRow();
+        rightPanelWidthRow._grid.margin_start = 25;
+        let rightPanelWidthLabel = new Gtk.Label({
+            label: _('Right-Panel'),
+            xalign:0,
+            hexpand: false,
+        });
+        let rightPanelWidthScale = new Gtk.Scale({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            adjustment: new Gtk.Adjustment({
+                lower: 200,upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
+            }),
+            digits: 0,round_digits: 0,hexpand: true,
+            value_pos: Gtk.PositionType.RIGHT
+        });
+        rightPanelWidthScale.set_value(this.rightPanelWidth);
+        rightPanelWidthScale.connect('value-changed', () => {
+            this.rightPanelWidth = rightPanelWidthScale.get_value();
+            if(rightPanelWidthSpinButton.value !== this.rightPanelWidth)
+                rightPanelWidthSpinButton.set_value(this.rightPanelWidth);
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+
+        let rightPanelWidthSpinButton = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower: 200,upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
+            }),
+            climb_rate: 1,
+            digits: 0,
+            numeric: true,
+        });
+        rightPanelWidthSpinButton.set_value(this.rightPanelWidth);
+        rightPanelWidthSpinButton.connect('value-changed', () => {
+            this.rightPanelWidth = rightPanelWidthSpinButton.get_value();
+            if(rightPanelWidthScale.value !== this.rightPanelWidth)
+                rightPanelWidthScale.set_value(this.rightPanelWidth);
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+
+        rightPanelWidthRow.add(rightPanelWidthLabel);
+        rightPanelWidthRow.add(rightPanelWidthScale);
+        rightPanelWidthRow.add(rightPanelWidthSpinButton);
+        menuSizeFrame.add(rightPanelWidthRow);
+
+        let otherWidthHeaderRow = new PW.FrameBoxRow();
+        let otherWidthHeaderLabel = new Gtk.Label({
+            label: _("Non-Traditional Layouts Width"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false,
+            sensitive: false
+        });
+        otherWidthHeaderRow.add(otherWidthHeaderLabel)
+        menuSizeFrame.add(otherWidthHeaderRow);
+
         let widthRow = new PW.FrameBoxRow();
+        widthRow._grid.margin_start = 25;
         let widthLabel = new Gtk.Label({
             label: _('Width Offset'),
             use_markup: true,
@@ -3030,108 +3147,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         widthRow.add(widthScale);
         widthRow.add(widthSpinButton);
         menuSizeFrame.add(widthRow);
-
-        let menuWidthTwoPanelsHeaderRow = new PW.FrameBoxRow();
-        let menuWidthTwoPanelsHeaderLabel = new Gtk.Label({
-            label: _("Traditional Layouts Width"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            selectable: false,
-            sensitive: false
-        });
-        menuWidthTwoPanelsHeaderRow.add(menuWidthTwoPanelsHeaderLabel)
-        menuSizeFrame.add(menuWidthTwoPanelsHeaderRow);
-
-        let menuWidthRow = new PW.FrameBoxRow();
-        let menuWidthLabel = new Gtk.Label({
-            label: _('Left-Panel'),
-            xalign:0,
-            hexpand: false,
-        });
-        let menuWidthScale = new Gtk.Scale({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            adjustment: new Gtk.Adjustment({
-                lower: 175, upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
-            }),
-            digits: 0,round_digits: 0,hexpand: true,
-            value_pos: Gtk.PositionType.RIGHT
-        });
-        menuWidthScale.set_value(this.menuWidth);
-        menuWidthScale.connect('value-changed', () => {
-            this.menuWidth = menuWidthScale.get_value();
-            if(menuWidthSpinButton.value !== this.menuWidth)
-                menuWidthSpinButton.set_value(this.menuWidth);
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-
-        let menuWidthSpinButton = new Gtk.SpinButton({
-            adjustment: new Gtk.Adjustment({
-                lower: 175, upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
-            }),
-            climb_rate: 1,
-            digits: 0,
-            numeric: true,
-        });
-        menuWidthSpinButton.set_value(this.menuWidth);
-        menuWidthSpinButton.connect('value-changed', () => {
-            this.menuWidth = menuWidthSpinButton.get_value();
-            if(menuWidthScale.value !== this.menuWidth)
-                menuWidthScale.set_value(this.menuWidth);
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-
-        menuWidthRow.add(menuWidthLabel);
-        menuWidthRow.add(menuWidthScale);
-        menuWidthRow.add( menuWidthSpinButton);
-        menuSizeFrame.add(menuWidthRow);
-
-        let rightPanelWidthRow = new PW.FrameBoxRow();
-        let rightPanelWidthLabel = new Gtk.Label({
-            label: _('Right-Panel'),
-            xalign:0,
-            hexpand: false,
-        });
-        let rightPanelWidthScale = new Gtk.Scale({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            adjustment: new Gtk.Adjustment({
-                lower: 200,upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
-            }),
-            digits: 0,round_digits: 0,hexpand: true,
-            value_pos: Gtk.PositionType.RIGHT
-        });
-        rightPanelWidthScale.set_value(this.rightPanelWidth);
-        rightPanelWidthScale.connect('value-changed', () => {
-            this.rightPanelWidth = rightPanelWidthScale.get_value();
-            if(rightPanelWidthSpinButton.value !== this.rightPanelWidth)
-                rightPanelWidthSpinButton.set_value(this.rightPanelWidth);
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-
-        let rightPanelWidthSpinButton = new Gtk.SpinButton({
-            adjustment: new Gtk.Adjustment({
-                lower: 200,upper: 500, step_increment: 1, page_increment: 1, page_size: 0,
-            }),
-            climb_rate: 1,
-            digits: 0,
-            numeric: true,
-        });
-        rightPanelWidthSpinButton.set_value(this.rightPanelWidth);
-        rightPanelWidthSpinButton.connect('value-changed', () => {
-            this.rightPanelWidth = rightPanelWidthSpinButton.get_value();
-            if(rightPanelWidthScale.value !== this.rightPanelWidth)
-                rightPanelWidthScale.set_value(this.rightPanelWidth);
-            this.saveButton.set_sensitive(true);
-            this.resetButton.set_sensitive(true);
-        });
-
-        rightPanelWidthRow.add(rightPanelWidthLabel);
-        rightPanelWidthRow.add(rightPanelWidthScale);
-        rightPanelWidthRow.add(rightPanelWidthSpinButton);
-        menuSizeFrame.add(rightPanelWidthRow);
 
         let iconsSizeFrame = new PW.FrameBox();
         let menuItemSizeHeaderLabel = new Gtk.Label({

@@ -398,7 +398,7 @@ var BaseLayout = class {
             this.recentManager = RecentFilesManager.getRecentManager();
     }
 
-    displayRecentFiles(box = this.applicationsBox){
+    displayRecentFiles(box = this.applicationsBox, callback){
         const homeRegExp = new RegExp('^(' + GLib.get_home_dir() + ')');
         this._clearActorsFromBox(box);
         this._futureActiveItem = false;
@@ -438,6 +438,9 @@ var BaseLayout = class {
                 this._futureActiveItem = placeMenuItem;
                 this.activeMenuItem = this._futureActiveItem;
             }
+            
+            if(callback)
+                callback();
         });
     }
 
@@ -672,6 +675,7 @@ var BaseLayout = class {
     }
 
     _clearActorsFromBox(box){
+        RecentFilesManager.cancelCurrentQueries();
         if(!box){
             box = this.applicationsBox;
             this.activeCategoryType = -1;
@@ -940,6 +944,8 @@ var BaseLayout = class {
     }
 
     destroy(){
+        RecentFilesManager.cancelCurrentQueries();
+
         if(this._treeChangedId){
             this._tree.disconnect(this._treeChangedId);
             this._treeChangedId = null;

@@ -4,13 +4,18 @@ const Main = imports.ui.main;
 const LogEnabled = false;
 const RecentManager = new Gtk.RecentManager();
 
+var isCanceled = false;
+var currentQueries = [];
+
 function filterRecentFiles(callback){
+    isCanceled = false;
     RecentManager.get_items().sort((a, b) => b.get_modified() - a.get_modified())
     .forEach(item => {
         queryFileExists(item)
         .then(validFile =>{
             debugLog("Valid file - " + validFile.get_display_name());
-            callback(validFile);
+            if(!isCanceled)
+                callback(validFile);
         })
         .catch(err =>{
             debugLog(err);
@@ -26,35 +31,54 @@ function queryFileExists(item) {
         if(file === null)
             reject("Recent file is null. Rejected.");
 
-        //Assume query_info_async() will throw error if not resolved before set elapsed time.
-        //Cancel the query and reject the promise if elapsed time reached.
-        let timeOutID = GLib.timeout_add(0, 1000, () => {
-            cancellable.cancel();
-            reject('query_info_async() timed out - ' + item.get_display_name());
-            timeOutID = null;
-            return GLib.SOURCE_REMOVE;
-        });
+        //Create and store queryInfo to cancel any active queries when needed
+        let queryInfo = { 
+            timeOutID: null, 
+            cancellable, 
+            reject,
+            item
+        };
 
-        file.query_info_async('standard::type', 0, 0, cancellable, (o, res) => {
+        currentQueries.push(queryInfo);
+
+        file.query_info_async('standard::type', 0, 0, cancellable, (source, res) => {
             try {
-                let fileInfo = file.query_info_finish(res);
-                if (fileInfo) {
-                    if (timeOutID) {
-                        GLib.source_remove(timeOutID);
-                        timeOutID = null;
-                    }
+                let fileInfo = source.query_info_finish(res);
+                removeQueryInfoFromList(queryInfo);
+                if (fileInfo) 
                     resolve(item);
-                }
             }
             catch (err) {
-                if (timeOutID) {
-                    GLib.source_remove(timeOutID);
-                    timeOutID = null;
-                }
+                if (err.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
+                    debugLog("Cancel Called: " + item.get_display_name());
+
+                removeQueryInfoFromList(queryInfo);
                 reject(err);
             }
         });
     });
+}
+
+function removeQueryInfoFromList(queryInfo){
+    let queryIndex = currentQueries.indexOf(queryInfo);
+    if(queryIndex !== -1)
+        currentQueries.splice(queryIndex, 1);
+}
+
+function cancelCurrentQueries(){
+    if(currentQueries.length === 0)
+        return;
+    isCanceled = true;
+    debugLog("Canceling " + currentQueries.length + " queries...")
+    for(let queryInfo of currentQueries){
+        debugLog("Cancel query - " + queryInfo.item.get_display_name());
+        queryInfo.cancellable.cancel();
+        queryInfo.cancellable = null;
+        queryInfo.reject("Query Canceled");
+    }
+    currentQueries = null;
+    currentQueries = [];
+    debugLog("Cancel Finished");
 }
 
 function getRecentManager(){
