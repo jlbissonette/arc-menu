@@ -196,8 +196,13 @@
     </key>
     <key enum="org.gnome.shell.extensions.arcmenu.category-icon-type" name="category-icon-type">
       <default>'Full_Color'</default>
-      <summary>Categroy icon type. Full_Color or Symbolic</summary>
-      <description>Categroy icon type. Full_Color or Symbolic</description>
+      <summary>Category icon type. Full_Color or Symbolic</summary>
+      <description>Category icon type. Full_Color or Symbolic</description>
+    </key>
+    <key enum="org.gnome.shell.extensions.arcmenu.category-icon-type" name="shortcut-icon-type">
+      <default>'Symbolic'</default>
+      <summary>Shortcut icon type. Full_Color or Symbolic</summary>
+      <description>Shortcut icon type. Full_Color or Symbolic</description>
     </key>
     <key type="b" name="disable-scrollview-fade-effect">
       <default>false</default>

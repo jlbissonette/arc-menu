@@ -2893,6 +2893,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.verticalSeparator = this._settings.get_boolean('vert-separator');
         this.appDescriptions = this._settings.get_boolean('apps-show-extra-details');
         this.categoryIconType = this._settings.get_enum('category-icon-type');
+        this.shortcutsIconType = this._settings.get_enum('shortcut-icon-type');
 
         let menuSizeFrame = new PW.FrameBox();
         //find the greatest screen height of all monitors
@@ -3272,6 +3273,29 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         categoryIconTypeRow.add(categoryIconTypeCombo);
         generalSettingsFrame.add(categoryIconTypeRow);
 
+        let shortcutsIconTypeRow = new PW.FrameBoxRow();
+        let shortcutsIconTypeLabel = new Gtk.Label({
+            label: _('Shortcuts Icon Type'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+         });
+        let shortcutsIconTypeCombo = new Gtk.ComboBoxText({
+            halign: Gtk.Align.END,
+        });
+        shortcutsIconTypeCombo.append_text(_("Full Color"));
+        shortcutsIconTypeCombo.append_text(_("Symbolic"));
+        shortcutsIconTypeCombo.set_active(this.shortcutsIconType);
+        shortcutsIconTypeCombo.connect('changed', (widget) => {
+            this.shortcutsIconType = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        shortcutsIconTypeRow.add(shortcutsIconTypeLabel);
+        shortcutsIconTypeRow.add(shortcutsIconTypeCombo);
+        generalSettingsFrame.add(shortcutsIconTypeRow);
+
         let vertSeparatorRow = new PW.FrameBoxRow();
         let vertSeparatorLabel = new Gtk.Label({
             label: _('Enable Vertical Separator'),
@@ -3311,7 +3335,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.menuWidth = this._settings.get_default_value('menu-width').unpack();
             this.verticalSeparator = this._settings.get_default_value('vert-separator').unpack();
             this.appDescriptions = this._settings.get_default_value('apps-show-extra-details').unpack();
-            this.categoryIconType = this._settings.get_default_value('category-icon-type').unpack();
+            this.categoryIconType = 0;
+            this.shortcutsIconType = 1;
             this.forcedMenuLocation = 0;
             hscale.set_value(this.heightValue);
             widthScale.set_value(this.widthValue);
@@ -3325,7 +3350,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.miscIconSizeCombo.set_active(0);
             appDescriptionsSwitch.set_active(this.appDescriptions);
             menuLocationCombo.set_active(this.forcedMenuLocation);
-            categoryIconTypeCombo.set_active(this.categoryIconType);
+            categoryIconTypeCombo.set_active(0);
+            shortcutsIconTypeCombo.set_active(1);
 
             this.saveButton.set_sensitive(true);
             this.resetButton.set_sensitive(false);
@@ -3350,6 +3376,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this._settings.set_boolean('reload-theme', true);
             this._settings.set_boolean('apps-show-extra-details', this.appDescriptions);
             this._settings.set_enum('category-icon-type', this.categoryIconType);
+            this._settings.set_enum('shortcut-icon-type', this.shortcutsIconType);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
         });
@@ -3403,7 +3430,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.quicklinksIconSizeCombo.get_active() !== 0 ||
             this.miscIconSizeCombo.get_active() !== 0 ||
             this.appDescriptions !== this._settings.get_default_value('apps-show-extra-details').unpack() ||
-            this.categoryIconType !== 0) ? true : false
+            this.categoryIconType !== 0 ||
+            this.shortcutsIconType !== 1 ) ? true : false
     }
 });
 

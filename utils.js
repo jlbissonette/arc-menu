@@ -631,6 +631,7 @@ function createStylesheet(settings){
         +"#ArcSearchEntryRound{\nmin-height: 0px;\nborder-radius: 18px;\nborder-width: 1px;\npadding: 7px 12px;\n}\n\n"       
         + menuButtonStyle
         +".symbolic-icons{\n-st-icon-style: symbolic;\n}\n\n"
+        +".regular-icons{\n-st-icon-style: regular;\n}\n\n"
         +".arcmenu-menu-item{\nborder-radius: 8px;\n}\n\n"     
         +".margin-box{\nmargin: 0px 4px;\n}\n\n" 
         +"#arc-menu-launcher-button{\nmax-width: 90px;\nborder-radius: 0px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\nborder-color: transparent;\nborder-bottom-width: 3px;\n}\n\n"

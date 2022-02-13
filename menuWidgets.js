@@ -1635,9 +1635,12 @@ var ViewAllPrograms = GObject.registerClass(class Arc_Menu_ViewAllPrograms exten
 var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, name, icon, command, displayType, isContainedInCategory) {
         super._init(menuLayout);
-        this.add_style_class_name('symbolic-icons');
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
+        if(this._settings.get_enum('shortcut-icon-type') === Constants.CategoryIconType.FULL_COLOR)
+            this.add_style_class_name('regular-icons');
+        else
+            this.add_style_class_name('symbolic-icons');
         this._command = command;
         this._displayType = displayType;
         this.isContainedInCategory = isContainedInCategory;
