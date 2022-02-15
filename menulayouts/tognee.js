@@ -268,7 +268,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayCategoryAppList(appList, category){
         super.displayCategoryAppList(appList, category);
-        this.activeCategoryType = Constants.CategoryType.CATEGORY_APP_LIST;
         this.navigateBox.show();
     }
 

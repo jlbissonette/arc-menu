@@ -507,6 +507,11 @@ var BaseLayout = class {
 
                 placeMenuItem = new MW.ShortcutMenuItem(this, menuItemArray[0], menuItemArray[1], menuItemArray[2], displayType, isContainedInCategory);
         }
+        else if(command === "ArcMenu_Recent"){
+            let uri = "recent:///";
+            placeInfo = new MW.PlaceInfo(Gio.File.new_for_uri(uri), _(menuItemArray[0]));
+            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
+        }
         else if(command.startsWith("ArcMenu_")){
             let path = command.replace("ArcMenu_",'');
 

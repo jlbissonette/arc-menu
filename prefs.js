@@ -355,6 +355,7 @@ var AddAppsToPinnedListWindow = GObject.registerClass(
                 defaultApplicationShortcuts.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
                 defaultApplicationShortcuts.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
                 defaultApplicationShortcuts.push([_("Trash"), "user-trash-symbolic", "ArcMenu_Trash"]);
+                defaultApplicationShortcuts.push([_("Recent"), "document-open-recent-symbolic", "ArcMenu_Recent"]);
                 for(let i = 0;i < defaultApplicationShortcuts.length; i++) {
                     let frameRow = new PW.FrameBoxRow();
 
@@ -4164,11 +4165,12 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
 
 var MenuSettingsCategoriesPage = GObject.registerClass(
     class Arc_Menu_MenuSettingsCategoriesPage extends Gtk.Box {
-    _init(settings) {
+    _init(settings, settingType) {
         super._init({
             orientation: Gtk.Orientation.VERTICAL,
         });
 
+        this.settingType = settingType;
         this.scrollBox = new Gtk.ScrolledWindow();
         this.scrollBox.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
 
@@ -4196,10 +4198,10 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
             hexpand: true
         });
 
-        this._createFrame(this._settings.get_value("extra-categories").deep_unpack());
+        this._createFrame(this._settings.get_value(this.settingType).deep_unpack());
         this.mainBox.append(this.categoriesFrame);
 
-        let buttonRow = new Gtk.Box({
+        this.buttonRow = new Gtk.Box({
             valign: Gtk.Align.END,
             margin_top: 6,
             margin_bottom: 6,
@@ -4212,7 +4214,7 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
         this.resetButton.connect('clicked', ()=> {
             this.saveButton.set_sensitive(true);
             this.categoriesFrame.remove_all_children();
-            this._createFrame(this._settings.get_default_value('extra-categories').deep_unpack());
+            this._createFrame(this._settings.get_default_value(this.settingType).deep_unpack());
             this.categoriesFrame.show();
             this.resetButton.set_sensitive(false);
         });
@@ -4223,20 +4225,20 @@ var MenuSettingsCategoriesPage = GObject.registerClass(
                 let frame = this.categoriesFrame.get_index(i);
                 array.push([frame._enum, frame._shouldShow]);
             }
-            this._settings.set_value('extra-categories', new GLib.Variant('a(ib)', array));
+            this._settings.set_value(this.settingType, new GLib.Variant('a(ib)', array));
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.getSensitive());
         });
         this.saveButton.set_halign(Gtk.Align.END);
         this.saveButton.set_sensitive(false);
-        buttonRow.append(this.resetButton);
-        buttonRow.append(this.saveButton);
-        this.append(buttonRow);
+        this.buttonRow.append(this.resetButton);
+        this.buttonRow.append(this.saveButton);
+        this.append(this.buttonRow);
     }
 
     getSensitive(){
-        let defaultExtraCategories = this._settings.get_default_value("extra-categories").deep_unpack();
-        let currentExtraCategories = this._settings.get_value("extra-categories").deep_unpack();
+        let defaultExtraCategories = this._settings.get_default_value(this.settingType).deep_unpack();
+        let currentExtraCategories = this._settings.get_value(this.settingType).deep_unpack();
         return !Utils.getArraysEqual(defaultExtraCategories, currentExtraCategories);
     }
 
@@ -6611,7 +6613,7 @@ class Arc_Menu_ArcMenuPreferencesWidget extends Gtk.Box {
         this.settingsFrameStack.add_named(new MenuSettingsShortcutApplicationsPage(this._settings), "MenuSettingsShortcutApplications");
         this.settingsFrameStack.add_named(new MenuSettingsPowerOptionsPage(this._settings), "MenuSettingsPowerOptions");
         this.settingsFrameStack.add_named(new MenuSettingsSearchOptionsPage(this._settings), "MenuSettingsSearchOptions");
-        this.settingsFrameStack.add_named(new MenuSettingsCategoriesPage(this._settings), "MenuSettingsCategories");
+        this.settingsFrameStack.add_named(new MenuSettingsCategoriesPage(this._settings, "extra-categories"), "MenuSettingsCategories");
         this.settingsFrameStack.add_named(new MenuSettingsNewAppsPage(this._settings), "MenuSettingsNewApps");
         this.settingsFrameStack.add_named(new MenuSettingsFineTunePage(this._settings), "MenuSettingsFineTune");
         this.settingsFrameStack.add_named(new ButtonAppearancePage(this._settings), "ButtonAppearance");

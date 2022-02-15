@@ -1179,6 +1179,11 @@ var TweaksPage = GObject.registerClass({
 
         placesFrame.add(bookmarksRow);   
         this.mainBox.append(arcMenuTweaksFrame);
+
+        let extraCategoriesFrame = new PW.FrameBox();
+        let extraCategoriesRow = new PW.FrameBoxRow();
+        let extraCategoriesButtonRow = new PW.FrameBoxRow();
+        let extraCategoriesLocationRow = new PW.FrameBoxRow();
         this.mainBox.append(new Gtk.Label({
             label: "<b>" + _("Extra Shortcuts") + "</b>",
             use_markup: true,
@@ -1186,6 +1191,46 @@ var TweaksPage = GObject.registerClass({
             hexpand: true
         }));
         this.mainBox.append(placesFrame);
+        this.mainBox.append(new Gtk.Label({
+            label: "<b>" + _("Extra Categories Quick Links") + "</b>"
+            + "\n" + '<span size="small">' + _("Display quick links for extra categories on the home page") + "</span>"
+            + "\n" + '<span size="small">' + _("Enable extra categories in Customize Menu -> Extra Categories") + "</span>",
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        }));
+        let extraCategoriesLinksBox = new Prefs.MenuSettingsCategoriesPage(this._settings, "arcmenu-extra-categories-links");
+        extraCategoriesLinksBox.categoriesFrame.unparent();
+        extraCategoriesLinksBox.buttonRow.unparent();
+        extraCategoriesRow.add(extraCategoriesLinksBox.categoriesFrame);
+        extraCategoriesLinksBox.categoriesFrame.hexpand = true;
+        extraCategoriesLinksBox.categoriesFrame.halign = Gtk.Align.FILL;
+        extraCategoriesButtonRow.add(extraCategoriesLinksBox.buttonRow);
+        extraCategoriesFrame.add(extraCategoriesRow);
+        extraCategoriesFrame.add(extraCategoriesButtonRow);
+
+        this.mainBox.append(extraCategoriesFrame);
+
+        let extraCategoriesLocationFrame = new PW.FrameBox();
+        let extraCategoriesLocationLabel = new Gtk.Label({
+            label: _("Quick Links Location"),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
+
+        let extraCategoriesLocationCombo = new Gtk.ComboBoxText({ halign: Gtk.Align.END });
+        extraCategoriesLocationCombo.append_text(_("Bottom"));
+        extraCategoriesLocationCombo.append_text(_("Top"));
+        extraCategoriesLocationCombo.set_active(this._settings.get_enum('arcmenu-extra-categories-links-location'));
+        extraCategoriesLocationCombo.connect('changed', (widget) => {
+            this._settings.set_enum('arcmenu-extra-categories-links-location' , widget.get_active());
+        });
+
+        extraCategoriesLocationRow.add(extraCategoriesLocationLabel);
+        extraCategoriesLocationRow.add(extraCategoriesLocationCombo);
+        extraCategoriesLocationFrame.add(extraCategoriesLocationRow);
+        this.mainBox.append(extraCategoriesLocationFrame);
     }
     _createWidgetsRows(layout){
         let weatherWidgetSetting = 'enable-weather-widget-raven';

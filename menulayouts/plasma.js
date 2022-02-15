@@ -419,7 +419,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._insertCategoryHeader();
         this.categoryHeader.setActiveCategory(this.activeCategory);
         this._displayAppList(appList, category, this.applicationsGrid);
-        this.activeCategoryType = Constants.CategoryType.CATEGORY_APP_LIST; 
     }
 
     displayRecentFiles(){

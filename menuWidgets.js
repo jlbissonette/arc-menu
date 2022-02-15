@@ -1551,8 +1551,6 @@ var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends Arc
             y_align: Clutter.ActorAlign.CENTER,
         });
         this.add_actor(backLabel);
-
-        
     }
 
     createIcon(){
@@ -1567,16 +1565,13 @@ var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends Arc
 
     activate(event) {
         if(this._layout === Constants.MenuLayout.ARCMENU){
-            let defaultMenuView = this._settings.get_enum('default-menu-view');
-            if(this._menuLayout.activeCategoryType === Constants.CategoryType.SEARCH_RESULTS || this._menuLayout.activeCategoryType === Constants.CategoryType.ALL_PROGRAMS_BUTTON){
-                this._menuLayout.setDefaultMenuView();
-            }
-            else if(this._menuLayout.activeCategoryType === Constants.CategoryType.CATEGORIES_LIST && defaultMenuView === Constants.DefaultMenuView.PINNED_APPS)
-                this._menuLayout.displayPinnedApps();
-            else if(this._menuLayout.activeCategoryType === Constants.CategoryType.CATEGORIES_LIST && defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS)
-                this._menuLayout.displayFrequentApps();
-            else
+            //If the current page is inside a category and 
+            //previous page was the categories page,
+            //go back to categories page
+            if(this._menuLayout.previousCategoryType === Constants.CategoryType.CATEGORIES_LIST && (this._menuLayout.activeCategoryType <= 4 || this._menuLayout.activeCategoryType instanceof GMenu.TreeDirectory))
                 this._menuLayout.displayCategories();
+            else
+                this._menuLayout.setDefaultMenuView();
         }
         else if(this._layout === Constants.MenuLayout.TOGNEE)
             this._menuLayout.setDefaultMenuView();
@@ -1620,14 +1615,11 @@ var ViewAllPrograms = GObject.registerClass(class Arc_Menu_ViewAllPrograms exten
     }
 
     activate(event) {
-        this._menuLayout._clearActorsFromBox();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
         if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS || defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS)
             this._menuLayout.displayCategories();
-        else{
+        else
             this._menuLayout.displayAllApps();
-            this._menuLayout.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS_BUTTON;
-        }
         super.activate(event);
     }
 });
@@ -1777,7 +1769,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
             activatePowerOption(Constants.PowerType.HYBRID_SLEEP, this._menuLayout.arcMenu);
         else if(this._command === "ArcMenu_Hibernate")
             activatePowerOption(Constants.PowerType.HIBERNATE, this._menuLayout.arcMenu);
-        
+
         else{
             this._menuLayout.arcMenu.toggle();
             if(this._command === "ArcMenu_ActivitiesOverview")
