@@ -230,17 +230,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
         this.rightBox.add(this.actionsBox);
 
-        this.extraCategoriesButtonBox = new St.BoxLayout({
+        this.extraCategoriesLinksBox = new St.BoxLayout({
             vertical: true
         });
         this.extraCategoriesSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
 
         let extraCategoriesLinksLocation = this._settings.get_enum('arcmenu-extra-categories-links-location');
         if(extraCategoriesLinksLocation === Constants.MenuItemLocation.TOP)
-            this.leftBox.insert_child_below(this.extraCategoriesButtonBox, this.applicationsScrollBox);
+            this.leftBox.insert_child_below(this.extraCategoriesLinksBox, this.applicationsScrollBox);
         else
-            this.navigateBox.insert_child_above(this.extraCategoriesButtonBox, this.navigateBox.get_child_at_index(0));
-        this.extraCategoriesButtonBox.add_actor(this.extraCategoriesSeparator);
+            this.navigateBox.insert_child_above(this.extraCategoriesLinksBox, this.navigateBox.get_child_at_index(0));
+        this.extraCategoriesLinksBox.add_actor(this.extraCategoriesSeparator);
 
         this.loadCategories();
         this.loadPinnedApps();
@@ -251,8 +251,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _showExtraCategoriesLinks(){
+        let showExtraCategoriesLinksBox = false;
         let extraCategories = this._settings.get_value("arcmenu-extra-categories-links").deep_unpack();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
+        
         for(let i = 0; i < extraCategories.length; i++){
             let categoryEnum = extraCategories[i][0];
             let shouldShow = extraCategories[i][1];
@@ -268,20 +270,23 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 let extraCategoryItem = this.categoryDirectories.get(categoryEnum);
                 if(!extraCategoryItem)
                     continue;
-
+                showExtraCategoriesLinksBox = true;
                 if(extraCategoryItem.get_parent())
                     extraCategoryItem.get_parent().remove_actor(extraCategoryItem);
 
-                this.extraCategoriesButtonBox.insert_child_below(extraCategoryItem, this.extraCategoriesSeparator);
+                this.extraCategoriesLinksBox.insert_child_below(extraCategoryItem, this.extraCategoriesSeparator);
             }
         }
-        this.extraCategoriesButtonBox.show();
+        if(showExtraCategoriesLinksBox)
+            this.extraCategoriesLinksBox.show();
+        else
+            this.extraCategoriesLinksBox.hide();
     }
 
     _clearExtraCategoriesLinks(){
-        this.extraCategoriesButtonBox.remove_all_children();
-        this.extraCategoriesButtonBox.add_actor(this.extraCategoriesSeparator);
-        this.extraCategoriesButtonBox.hide();
+        this.extraCategoriesLinksBox.remove_all_children();
+        this.extraCategoriesLinksBox.add_actor(this.extraCategoriesSeparator);
+        this.extraCategoriesLinksBox.hide();
     }
 
     loadCategories(){
