@@ -169,6 +169,23 @@ var BaseLayout = class {
     }
 
     reloadApplications(){
+        //Don't reload applications if the menu is open.
+        //Instead, reload on menu-closed event.
+        //Prevents the menu from jumping to its default view
+        //when reloadApplications() is called.
+        if(this.arcMenu.isOpen){
+            if(!this._menuClosedID){
+                this._menuClosedID = this.arcMenu.connect('menu-closed', () => {
+                    this.reloadApplications();
+                    if(this._menuClosedID){
+                        this.arcMenu.disconnect(this._menuClosedID);
+                        this._menuClosedID = null;
+                    }
+                });
+            }
+            return;
+        }
+
         if(this.applicationsMap){
             this.applicationsMap.forEach((value,key,map)=>{
                 value.destroy();

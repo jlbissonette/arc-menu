@@ -533,10 +533,14 @@ var SearchResults = GObject.registerClass({
     }
 
     _reloadRemoteProviders() {
+        let currentTerms = this._terms;
+        //cancel any active search
+        if (this._terms.length !== 0)
+            this._reset();
+
         this._oldProviders = null;
         let remoteProviders = this._providers.filter(p => p.isRemoteProvider);
-        if(remoteProviders.length > 0)
-            this._menuLayout.setDefaultMenuView();
+
         remoteProviders.forEach(provider => {
             this._unregisterProvider(provider);
         });
@@ -549,6 +553,10 @@ var SearchResults = GObject.registerClass({
         RemoteSearch.loadRemoteSearchProviders(this._searchSettings, providers => {
             providers.forEach(this._registerProvider.bind(this));
         });
+
+        //restart any active search
+        if(currentTerms.length > 0)
+            this.setTerms(currentTerms);
     }
 
     _registerProvider(provider) {
