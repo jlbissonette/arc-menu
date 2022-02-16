@@ -233,6 +233,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.extraCategoriesLinksBox = new St.BoxLayout({
             vertical: true
         });
+        this.extraCategoriesLinksBox.hide();
         this.extraCategoriesSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
 
         let extraCategoriesLinksLocation = this._settings.get_enum('arcmenu-extra-categories-links-location');
@@ -252,7 +253,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.showExtraCategoriesLinksBox = false;
         let extraCategories = this._settings.get_value("arcmenu-extra-categories-links").deep_unpack();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
-        
+
+        //Don't create extra categories quick links if
+        //the default menu view is the categories list
+        if(defaultMenuView === Constants.DefaultMenuView.CATEGORIES_LIST)
+            return;
+
         for(let i = 0; i < extraCategories.length; i++){
             let categoryEnum = extraCategories[i][0];
             let shouldShow = extraCategories[i][1];
