@@ -1193,8 +1193,8 @@ var TweaksPage = GObject.registerClass({
         this.mainBox.append(placesFrame);
         this.mainBox.append(new Gtk.Label({
             label: "<b>" + _("Extra Categories Quick Links") + "</b>"
-            + "\n" + '<span size="small">' + _("Display quick links for extra categories on the home page") + "</span>"
-            + "\n" + '<span size="small">' + _("Enable extra categories in Customize Menu -> Extra Categories") + "</span>",
+            + "\n" + '<span size="small">' + _("Display quick links of extra categories on the home page") + "</span>"
+            + "\n" + '<span size="small">' + _("See Customize Menu -> Extra Categories") + "</span>",
             use_markup: true,
             xalign: 0,
             hexpand: true

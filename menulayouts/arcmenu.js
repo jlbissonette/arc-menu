@@ -245,13 +245,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadCategories();
         this.loadPinnedApps();
 
-        this._showExtraCategoriesLinks();
-
         this.setDefaultMenuView();
     }
 
-    _showExtraCategoriesLinks(){
-        let showExtraCategoriesLinksBox = false;
+    _createExtraCategoriesLinks(){
+        this.showExtraCategoriesLinksBox = false;
         let extraCategories = this._settings.get_value("arcmenu-extra-categories-links").deep_unpack();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
         
@@ -270,24 +268,20 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 let extraCategoryItem = this.categoryDirectories.get(categoryEnum);
                 if(!extraCategoryItem)
                     continue;
-                showExtraCategoriesLinksBox = true;
+
+                this.showExtraCategoriesLinksBox = true;
                 if(extraCategoryItem.get_parent())
-                    extraCategoryItem.get_parent().remove_actor(extraCategoryItem);
+                    extraCategoryItem.get_parent().remove_child(extraCategoryItem);
 
                 this.extraCategoriesLinksBox.insert_child_below(extraCategoryItem, this.extraCategoriesSeparator);
             }
         }
-        if(showExtraCategoriesLinksBox)
+        if(this.showExtraCategoriesLinksBox)
             this.extraCategoriesLinksBox.show();
         else
             this.extraCategoriesLinksBox.hide();
     }
 
-    _clearExtraCategoriesLinks(){
-        this.extraCategoriesLinksBox.remove_all_children();
-        this.extraCategoriesLinksBox.add_actor(this.extraCategoriesSeparator);
-        this.extraCategoriesLinksBox.hide();
-    }
 
     loadCategories(){
         this.categoryDirectories = null;
@@ -314,27 +308,29 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         super.loadCategories();
+
+        this._createExtraCategoriesLinks();
     }
 
     displayPinnedApps(){
         let defaultMenuView = this._settings.get_enum('default-menu-view');
         if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS){
-            this._showExtraCategoriesLinks();
+            if (this.showExtraCategoriesLinksBox) this.extraCategoriesLinksBox.show();
             this.viewProgramsButton.actor.show();
             this.backButton.actor.hide();
         }
         else if(defaultMenuView === Constants.DefaultMenuView.CATEGORIES_LIST){
-            this._clearExtraCategoriesLinks();
+            this.extraCategoriesLinksBox.hide();
             this.viewProgramsButton.actor.hide();
             this.backButton.actor.show();
         }
         else if(defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS){
-            this._clearExtraCategoriesLinks();
+            this.extraCategoriesLinksBox.hide();
             this.viewProgramsButton.actor.hide();
             this.backButton.actor.show();
         }
         else if(defaultMenuView === Constants.DefaultMenuView.ALL_PROGRAMS){
-            this._clearExtraCategoriesLinks();
+            this.extraCategoriesLinksBox.hide();
             this.viewProgramsButton.actor.hide();
             this.backButton.actor.show();
         }
@@ -347,11 +343,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.viewProgramsButton.actor.hide();
 
         if(showBackButton){
-            this._clearExtraCategoriesLinks();
+            this.extraCategoriesLinksBox.hide();
             this.backButton.actor.show();
         }
         else{
-            this._showExtraCategoriesLinks();
+            if (this.showExtraCategoriesLinksBox) this.extraCategoriesLinksBox.show();
             this.backButton.actor.hide();
         }
     }
@@ -359,12 +355,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayCategories(){
         let defaultMenuView = this._settings.get_enum('default-menu-view');
         if(defaultMenuView === Constants.DefaultMenuView.PINNED_APPS || defaultMenuView === Constants.DefaultMenuView.FREQUENT_APPS){
-            this._clearExtraCategoriesLinks();
+            this.extraCategoriesLinksBox.hide();
             this.viewProgramsButton.actor.hide();
             this.backButton.actor.show();
         }
         else{
-            this._clearExtraCategoriesLinks();
+            this.extraCategoriesLinksBox.hide();
             this.viewProgramsButton.actor.show();
             this.backButton.actor.hide();
         }
@@ -389,14 +385,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayCategoryAppList(appList, category){
         super.displayCategoryAppList(appList, category);
-        this._clearExtraCategoriesLinks();
+        this.extraCategoriesLinksBox.hide();
         this.backButton.actor.show();
         this.viewProgramsButton.actor.hide();
     }
 
     displayFrequentApps(){
         this._clearActorsFromBox();
-        this._showExtraCategoriesLinks();
+        if (this.showExtraCategoriesLinksBox) this.extraCategoriesLinksBox.show();
         this.viewProgramsButton.actor.show();
         this.backButton.actor.hide();
         let mostUsed = Shell.AppUsage.get_default().get_most_used();
@@ -423,7 +419,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     displayRecentFiles(){
-        this._clearExtraCategoriesLinks();
+        this.extraCategoriesLinksBox.hide();
         this.backButton.actor.show();
         this.viewProgramsButton.actor.hide();
         super.displayRecentFiles();
@@ -438,7 +434,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _onSearchBoxChanged(searchBox, searchString){
         super._onSearchBoxChanged(searchBox, searchString);
         if(!searchBox.isEmpty()){
-            this._clearExtraCategoriesLinks();
+            this.extraCategoriesLinksBox.hide();
             this.backButton.actor.show();
             this.viewProgramsButton.actor.hide();
             this.activeCategoryType = Constants.CategoryType.SEARCH_RESULTS;

@@ -369,7 +369,9 @@ var BaseLayout = class {
         this._futureActiveItem = false;
 
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            categoriesBox.add_actor(categoryMenuItem.actor);	
+            if(categoryMenuItem.get_parent())
+                continue;
+            categoriesBox.add_child(categoryMenuItem.actor);	
             if(!this._futureActiveItem){
                 this._futureActiveItem = categoryMenuItem;
             }	 
@@ -792,8 +794,8 @@ var BaseLayout = class {
         }
         if(this.applicationsBox && !this.applicationsBox.contains(this.applicationsGrid))
             this.applicationsBox.add(this.applicationsGrid);
-
-        this.activeMenuItem = this._futureActiveItem;
+        if(this._futureActiveItem)
+            this.activeMenuItem = this._futureActiveItem;
     }
 
     displayAllApps(){
@@ -926,10 +928,14 @@ var BaseLayout = class {
                     this.searchResults.getTopResult().actor.grab_key_focus();
                     return Clutter.EVENT_STOP;
                 }
+                else if(global.stage.key_focus === this.mainBox && symbol === Clutter.KEY_Up){
+                    return actor.navigate_focus(global.stage.key_focus, direction, true);
+                }
                 else if(global.stage.key_focus === this.mainBox){
-                    this.activeMenuItem.actor.grab_key_focus();
+                    this.activeMenuItem.grab_key_focus();
                     return Clutter.EVENT_STOP;
                 }
+
                 return actor.navigate_focus(global.stage.key_focus, direction, false);
             case Clutter.KEY_Tab:
             case Clutter.KEY_KP_Tab:
