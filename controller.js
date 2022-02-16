@@ -151,6 +151,8 @@ var MenuSettingsController = class {
             this._settings.connect('changed::force-menu-location', this._forceMenuLocation.bind(this)),
             this._settings.connect('changed::category-icon-type', this._reload.bind(this)),
             this._settings.connect('changed::shortcut-icon-type', this._reload.bind(this)),
+            this._settings.connect('changed::arcmenu-extra-categories-links', this._reload.bind(this)),
+            this._settings.connect('changed::arcmenu-extra-categories-links-location', this._reload.bind(this)),
         ];
     }
 
@@ -281,7 +283,9 @@ var MenuSettingsController = class {
             this._menuButton.loadPinnedApps();
 
         //If the active category is Pinned Apps, redisplay the new Pinned Apps
-        const activeCategory = this._menuButton.MenuLayout ? this._menuButton.MenuLayout.activeCategoryType : -1;
+        const activeCategory = this._menuButton.MenuLayout?.activeCategoryType;
+        if(!activeCategory)
+            return;
         if(activeCategory === Constants.CategoryType.PINNED_APPS || activeCategory === Constants.CategoryType.HOME_SCREEN)
             this._menuButton.displayPinnedApps();  
     }

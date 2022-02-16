@@ -86,6 +86,10 @@
         <value value="0" nick="Bottom"/>
         <value value="1" nick="Top"/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.menuitem-location'>
+        <value value="0" nick="Bottom"/>
+        <value value="1" nick="Top"/>
+    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.hot-corners'>
         <value value="0" nick="Default"/>
         <value value="1" nick="Disabled"/>
@@ -701,8 +705,18 @@
     </key>
     <key name="extra-categories" type="a(ib)">
       <default>[(0, true), (1, true), (2, false), (3, false), (4, false)]</default>
-      <summary>List of recently installed apps</summary>
-      <description>List of recently installed apps</description>
+      <summary>Array of extra categories. See Constants.js - Categories</summary>
+      <description>Array of extra categories. See Constants.js - Categories</description>
+    </key>
+    <key name="arcmenu-extra-categories-links" type="a(ib)">
+      <default>[(0, false), (1, false), (2, false), (3, false), (4, false)]</default>
+      <summary>Array of extra categories links for ArcMenu layout. See Constants.js - Categories</summary>
+      <description>Array of extra categories for ArcMenu layout. See Constants.js - Categories</description>
+    </key>
+    <key enum="org.gnome.shell.extensions.arcmenu.menuitem-location" name="arcmenu-extra-categories-links-location">
+      <default>'Bottom'</default>
+      <summary>Display extra categories quick links on ArcMenu Layout home page</summary>
+      <description>Display extra categories quick links on ArcMenu Layout home page</description>
     </key>
     <key name="recently-installed-apps" type="as">
       <default>[]</default>

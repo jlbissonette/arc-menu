@@ -30,6 +30,11 @@ var SearchbarLocation = {
     TOP: 1
 }
 
+var MenuItemLocation = {
+    BOTTOM: 0,
+    TOP: 1
+}
+
 var DisplayType = {
     LIST: 0,
     GRID: 1,
@@ -47,8 +52,6 @@ var CategoryType = {
     HOME_SCREEN: 5,
     SEARCH_RESULTS: 6,
     CATEGORIES_LIST: 7,
-    CATEGORY_APP_LIST: 8,
-    ALL_PROGRAMS_BUTTON: 9,
 };
 
 var DefaultMenuView = {
