@@ -111,7 +111,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true
         });
 
-        this.applicationsScrollBox.add_child(this.applicationsBox);
+        this.applicationsScrollBox.add_actor(this.applicationsBox);
     
         this.navigateBoxContainer = new St.BoxLayout({ 
             x_expand: true,
