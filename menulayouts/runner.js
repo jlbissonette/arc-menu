@@ -55,7 +55,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     createLayout(){
         super.createLayout();
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
-        Main.uiGroup.add_actor(this.dummyCursor);
+        Main.uiGroup.add_child(this.dummyCursor);
         this.updateLocation();
 
         //store old ArcMenu variables
@@ -82,9 +82,9 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.runnerTweaksButton.actor.x_align = Clutter.ActorAlign.CENTER;
         this.runnerTweaksButton.actor.style = "margin: 0px 6px;";
 
-        this.topBox.add(this.searchBox.actor);
-        this.topBox.add(this.runnerTweaksButton);
-        this.mainBox.add(this.topBox);
+        this.topBox.add_child(this.searchBox.actor);
+        this.topBox.add_child(this.runnerTweaksButton);
+        this.mainBox.add_child(this.topBox);
 
         this.applicationsScrollBox = this._createScrollBox({
             x_expand: true,
@@ -96,7 +96,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             reactive:true
         });
 
-        this.mainBox.add(this.applicationsScrollBox);
+        this.mainBox.add_child(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ 
             vertical: true,
             style: "margin: 5px 6px 0px 16px;"
@@ -115,7 +115,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
 
     displayFrequentApps(){
         let labelRow = this.createLabelRow(_("Frequent Apps"));
-        this.applicationsBox.add(labelRow);
+        this.applicationsBox.add_child(labelRow);
         let mostUsed = Shell.AppUsage.get_default().get_most_used();
         let appList = [];
         for (let i = 0; i < mostUsed.length; i++) {
@@ -128,7 +128,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         for (let i = 0; i < appList.length; i++) {
             let item = appList[i];
             if(item.actor.get_parent())
-                item.actor.get_parent().remove_actor(item.actor);
+                item.actor.get_parent().remove_child(item.actor);
             if (!item.actor.get_parent()) 
                 this.applicationsBox.add_actor(item.actor);
             if(!activeMenuItemSet){
@@ -201,7 +201,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;
         this.arcMenu._boxPointer.setPosition(this.oldSourceActor, this.oldArrowAlignment);
-        Main.uiGroup.remove_actor(this.dummyCursor);
+        Main.uiGroup.remove_child(this.dummyCursor);
         this.dummyCursor.destroy();
         super.destroy();
     }

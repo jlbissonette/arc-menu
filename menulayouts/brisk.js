@@ -55,7 +55,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 0px 10px 5px 10px;";
-            this.mainBox.add(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox.actor);
         }
 
         //subMainBox stores left and right box
@@ -66,7 +66,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             style_class: 'margin-box'
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
         
         this.rightBox = new St.BoxLayout({
             x_expand: true,
@@ -86,7 +86,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: 'right-panel-plus70 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.rightBox.add(this.applicationsScrollBox);
+        this.rightBox.add_child(this.applicationsScrollBox);
 
         this.leftBox = new St.BoxLayout({
             x_expand: true,
@@ -96,10 +96,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
-        this.subMainBox.add(verticalSeparator);
-        this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
+        this.subMainBox.add_child(verticalSeparator);
+        this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
             x_expand: true,
@@ -109,7 +109,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: 'left-panel-small ' + (this.disableFadeEffect ? '' : 'small-vfade'),
         });
 
-        this.leftBox.add(this.categoriesScrollBox);
+        this.leftBox.add_child(this.categoriesScrollBox);
 
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
@@ -121,7 +121,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END
         });
         this.actionsBox.style = "padding: 5px 0px 0px 0px;"
-        this.leftBox.add(this.actionsBox);
+        this.leftBox.add_child(this.actionsBox);
         
         //create new section for Power, Lock, Logout, Suspend Buttons
         this.sessionBox = new St.BoxLayout({
@@ -139,14 +139,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let shouldShow = powerOptions[i][1];
             if(shouldShow){
                 let powerButton = new MW.PowerButton(this, powerType);
-                this.sessionBox.add(powerButton);
+                this.sessionBox.add_child(powerButton);
             }
         }
-        this.leftBox.add(this.sessionBox);
+        this.leftBox.add_child(this.sessionBox);
         
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 10px 10px 0px 10px;";
-            this.mainBox.add(this.searchBox.actor); 
+            this.mainBox.add_child(this.searchBox.actor); 
         }
 
         this.loadCategories();
@@ -159,18 +159,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     loadExtraPinnedApps(){
         this.actionsBox.destroy_all_children();
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        this.actionsBox.add(separator);
+        this.actionsBox.add_child(separator);
         let pinnedApps = this._settings.get_strv('brisk-shortcuts-list');
 
         for(let i = 0;i < pinnedApps.length; i += 3){
             let isContainedInCategory = false;
             let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);     
             if(placeMenuItem){
-                this.actionsBox.add(placeMenuItem.actor);
+                this.actionsBox.add_child(placeMenuItem.actor);
             }
         }
         separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        this.actionsBox.add(separator);  
+        this.actionsBox.add_child(separator);  
     }
 
     setDefaultMenuView(){

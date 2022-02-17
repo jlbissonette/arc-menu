@@ -58,7 +58,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style_class: 'margin-box'
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.rightBox = new St.BoxLayout({
             x_expand: true,
@@ -78,7 +78,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }); 
         
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.rightBox.add(this.applicationsScrollBox);
+        this.rightBox.add_child(this.applicationsScrollBox);
 
         this.leftBox = new St.BoxLayout({
             x_expand: true,
@@ -90,10 +90,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
-        this.subMainBox.add(verticalSeparator);
-        this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
+        this.subMainBox.add_child(verticalSeparator);
+        this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
             x_expand: true,
@@ -103,7 +103,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true
         });
 
-        this.leftBox.add(this.categoriesScrollBox);
+        this.leftBox.add_child(this.categoriesScrollBox);
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
 
@@ -114,8 +114,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END
         });
         let activities = new MW.ActivitiesMenuItem(this);
-        this.activitiesBox.add(activities.actor);
-        this.leftBox.add(this.activitiesBox);
+        this.activitiesBox.add_child(activities.actor);
+        this.leftBox.add_child(this.activitiesBox);
 
         this.loadCategories();
         this.loadPinnedApps();

@@ -56,7 +56,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 0px 10px 5px 10px;";
-            this.mainBox.add(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox.actor);
         }
 
         this.buttonPressEventID = global.stage.connect("button-press-event", () => {
@@ -76,7 +76,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             style_class: 'margin-box'
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.leftBox = new St.BoxLayout({
             x_expand: true,
@@ -95,7 +95,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true,
             reactive:true
         });
-        this.leftBox.add(this.applicationsScrollBox);
+        this.leftBox.add_child(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ vertical: true });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
 
@@ -106,17 +106,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END
         });
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        this.navigateBox.add(separator);
+        this.navigateBox.add_child(separator);
 
         this.backButton = new MW.BackMenuItem(this);
-        this.navigateBox.add(this.backButton.actor);
+        this.navigateBox.add_child(this.backButton.actor);
 
         this.viewProgramsButton = new MW.ViewAllPrograms(this);
-        this.navigateBox.add(this.viewProgramsButton.actor);
-        this.leftBox.add(this.navigateBox);
+        this.navigateBox.add_child(this.viewProgramsButton.actor);
+        this.leftBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 5px 10px 0px 10px;";
-            this.leftBox.add(this.searchBox.actor);
+            this.leftBox.add_child(this.searchBox.actor);
         }
 
         this.rightBox = new St.BoxLayout({
@@ -125,10 +125,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
-        this.subMainBox.add(verticalSeparator);
-        this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
+        this.subMainBox.add_child(verticalSeparator);
+        this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.placesShortcuts = false;
         this.externalDevicesShorctus = false;
@@ -138,9 +138,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(!this._settings.get_boolean('disable-user-avatar')){
             this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-            this.rightBox.add(this.user.actor);
+            this.rightBox.add_child(this.user.actor);
             separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
-            this.rightBox.add(separator);
+            this.rightBox.add_child(separator);
         }
 
         this.shortcutsBox = new St.BoxLayout({
@@ -154,7 +154,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);
-        this.rightBox.add(this.shortcutsScrollBox);
+        this.rightBox.add_child(this.shortcutsScrollBox);
 
         // Add place shortcuts to menu (Home,Documents,Downloads,Music,Pictures,Videos)
         this._displayPlaces();
@@ -173,7 +173,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             shouldDraw = true;
         if(shouldDraw){
             separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
-            this.shortcutsBox.add(separator);
+            this.shortcutsBox.add_child(separator);
         }
 
         //External Devices and Bookmarks Shortcuts
@@ -182,7 +182,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true
         });
-        this.shortcutsBox.add(this.externalDevicesBox);
+        this.shortcutsBox.add_child(this.externalDevicesBox);
 
         this._sections = { };
         this.placesManager = new PlaceDisplay.PlacesManager();
@@ -196,7 +196,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             });
 
             this._createPlaces(id);
-            this.externalDevicesBox.add(this._sections[id]);
+            this.externalDevicesBox.add_child(this._sections[id]);
         }
 
         //Add Application Shortcuts to menu (Software, Settings, Tweaks, Terminal)
@@ -206,7 +206,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let applicationName = applicationShortcuts[i][0];
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.LIST);
             if(shortcutMenuItem.shouldShow)
-                this.shortcutsBox.add(shortcutMenuItem.actor);
+                this.shortcutsBox.add_child(shortcutMenuItem.actor);
         }
 
         //create new section for Power, Lock, Logout, Suspend Buttons
@@ -225,10 +225,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let shouldShow = powerOptions[i][1];
             if(shouldShow){
                 let powerButton = new MW.PowerButton(this, powerType);
-                this.actionsBox.add(powerButton);
+                this.actionsBox.add_child(powerButton);
             }
         }
-        this.rightBox.add(this.actionsBox);
+        this.rightBox.add_child(this.actionsBox);
 
         this.extraCategoriesLinksBox = new St.BoxLayout({
             vertical: true
@@ -241,7 +241,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.leftBox.insert_child_below(this.extraCategoriesLinksBox, this.applicationsScrollBox);
         else
             this.navigateBox.insert_child_above(this.extraCategoriesLinksBox, this.navigateBox.get_child_at_index(0));
-        this.extraCategoriesLinksBox.add_actor(this.extraCategoriesSeparator);
+        this.extraCategoriesLinksBox.add_child(this.extraCategoriesSeparator);
 
         this.loadCategories();
         this.loadPinnedApps();
@@ -287,7 +287,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         else
             this.extraCategoriesLinksBox.hide();
     }
-
 
     loadCategories(){
         this.categoryDirectories = null;
@@ -414,9 +413,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         for (let i = 0; i < appList.length; i++) {
             let item = appList[i];
             if(item.actor.get_parent())
-                item.actor.get_parent().remove_actor(item.actor);
+                item.actor.get_parent().remove_child(item.actor);
             if (!item.actor.get_parent())
-                this.applicationsBox.add_actor(item.actor);
+                this.applicationsBox.add_child(item.actor);
             if(!activeMenuItemSet){
                 activeMenuItemSet = true;
                 this.activeMenuItem = item;

@@ -62,29 +62,29 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true
         });
         this.actionsBox.style = "margin: 0px 5px 0px 10px; spacing: 10px;";
-        this.mainBox.add(this.actionsBox);
+        this.mainBox.add_child(this.actionsBox);
 
         this.pinnedAppsButton = new MW.PinnedAppsButton(this);
         this.pinnedAppsButton.actor.y_expand = true;
         this.pinnedAppsButton.actor.y_align= Clutter.ActorAlign.START;
         this.pinnedAppsButton.actor.margin = 5;
-        this.actionsBox.add(this.pinnedAppsButton.actor);
+        this.actionsBox.add_child(this.pinnedAppsButton.actor);
         let userButton = new MW.UserMenuItem(this, Constants.DisplayType.BUTTON);
-        this.actionsBox.add(userButton.actor);
+        this.actionsBox.add_child(userButton.actor);
         let path = GLib.get_user_special_dir(imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS);
         if (path != null){
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
             let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
-            this.actionsBox.add_actor(placeMenuItem.actor);
+            this.actionsBox.add_child(placeMenuItem.actor);
         }
         let settingsButton = new MW.SettingsButton(this);
         settingsButton.actor.expand = false;
         settingsButton.actor.margin = 5;
-        this.actionsBox.add(settingsButton.actor);
+        this.actionsBox.add_child(settingsButton.actor);
         this.leaveButton = new MW.LeaveButton(this);
         this.leaveButton.actor.expand = false;
         this.leaveButton.actor.margin = 5;
-        this.actionsBox.add(this.leaveButton.actor);
+        this.actionsBox.add_child(this.leaveButton.actor);
 
         this.subMainBox = new St.BoxLayout({
             x_expand: true,
@@ -92,7 +92,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             vertical: true
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         let userMenuBox = new St.BoxLayout({
             x_expand: true,
@@ -106,13 +106,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.user.actor.y_align = Clutter.ActorAlign.CENTER;
         this.user.label.x_align = Clutter.ActorAlign.CENTER;
         this.user.label.style = "margin-left: 10px;"
-        userMenuBox.add(this.user.actor);
-        userMenuBox.add(this.user.label);
-        this.subMainBox.add(userMenuBox);
+        userMenuBox.add_child(this.user.actor);
+        userMenuBox.add_child(this.user.label);
+        this.subMainBox.add_child(userMenuBox);
 
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 15px 10px 10px 10px;";
-        this.subMainBox.add(this.searchBox.actor);
+        this.subMainBox.add_child(this.searchBox.actor);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true
@@ -128,7 +128,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.applicationsScrollBox.add_actor( this.applicationsBox);
-        this.subMainBox.add(this.applicationsScrollBox);
+        this.subMainBox.add_child(this.applicationsScrollBox);
         
         this.updateWidth();
         this.loadCategories();
@@ -158,7 +158,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _createPinnedAppsMenu(){
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
-        Main.uiGroup.add_actor(this.dummyCursor);
+        Main.uiGroup.add_child(this.dummyCursor);
         this.pinnedAppsMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
         this.pinnedAppsMenu.blockSourceEvents = true;
         this.section = new PopupMenu.PopupMenuSection();
@@ -176,14 +176,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             vertical: true
         });    
-        this.leftPanelPopup.add(headerBox);
+        this.leftPanelPopup.add_child(headerBox);
 
         this.backButton = new MW.BackMenuItem(this);
         this.backButton.connect("activate", () => this.togglePinnedAppsMenu());
-        headerBox.add(this.backButton.actor);
+        headerBox.add_child(this.backButton.actor);
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        headerBox.add(separator);
-        headerBox.add(this.createLabelRow(_("Pinned Apps")));
+        headerBox.add_child(separator);
+        headerBox.add_child(this.createLabelRow(_("Pinned Apps")));
 
         this.pinnedAppsScrollBox = this._createScrollBox({
             x_expand: true, 
@@ -194,7 +194,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             reactive:true
         });   
         
-        this.leftPanelPopup.add(this.pinnedAppsScrollBox);
+        this.leftPanelPopup.add_child(this.pinnedAppsScrollBox);
        
         this.pinnedAppsBox = new St.BoxLayout({
             vertical: true
@@ -218,11 +218,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let scaleFactor = themeContext.scale_factor;
         let height = Math.round(this._settings.get_int('menu-height') / scaleFactor) - 1;
         this.leftPanelPopup.style = `height: ${height}px`;        
-        this.section.actor.add_actor(this.leftPanelPopup); 
+        this.section.actor.add_child(this.leftPanelPopup); 
         this.displayPinnedApps();
         this.subMenuManager.addMenu(this.pinnedAppsMenu);
         this.pinnedAppsMenu.actor.hide();
-        Main.uiGroup.add_actor(this.pinnedAppsMenu.actor);
+        Main.uiGroup.add_child(this.pinnedAppsMenu.actor);
         this.pinnedAppsMenu.connect('open-state-changed', (menu, open) => {
             if(open){
                 if(this.menuButton.tooltipShowingID){
@@ -307,7 +307,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.displayAllApps();
         this.activeMenuItem = this.applicationsGrid.layout_manager.get_child_at(0, 0);
         if(!this.applicationsBox.contains(this.applicationsGrid))
-            this.applicationsBox.add(this.applicationsGrid);
+            this.applicationsBox.add_child(this.applicationsGrid);
         let appsScrollBoxAdj = this.pinnedAppsScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
@@ -330,7 +330,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.layoutProperties.GridColumns = 1;
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
-            this.pinnedAppsBox.add(this.pinnedAppsGrid);
+            this.pinnedAppsBox.add_child(this.pinnedAppsGrid);
         this.updateStyle();  
         this.layoutProperties.GridColumns = 5;
     }

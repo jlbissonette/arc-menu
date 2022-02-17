@@ -66,7 +66,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
                                     x_align: Clutter.ActorAlign.FILL,
                                     y_align: Clutter.ActorAlign.CENTER });
         
-        this.add_actor(this.label);
+        this.add_child(this.label);
 
         if (info.isRemovable()) {
             this.style = "padding-right: 15px;";
@@ -76,7 +76,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
             this._ejectButton.x_align = Clutter.ActorAlign.END;
             this._ejectButton.x_expand = true;
             this._ejectButton.connect('activate', info.eject.bind(info));
-            this.add_actor(this._ejectButton);
+            this.add_child(this._ejectButton);
         }
 
         this._changedId = info.connect('changed',
