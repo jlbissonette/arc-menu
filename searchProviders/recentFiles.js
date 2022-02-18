@@ -88,9 +88,7 @@ var RecentFilesSearchProvider = class {
         terms = terms.map(term => term.toLowerCase());
         recentFiles = recentFiles.filter(rf => {
             const fileName = rf.get_display_name()?.toLowerCase();
-            const uri = rf.get_uri()?.toLowerCase();
-            const fileDescription = rf.get_description()?.toLowerCase();
-            return terms.some(term => fileName?.includes(term) || uri?.includes(term) || fileDescription?.includes(term));
+            return terms.some(term => fileName?.includes(term));
         });
 
         return recentFiles.map(rf => rf.get_uri());
