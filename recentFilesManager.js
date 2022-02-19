@@ -3,6 +3,9 @@ const Main = imports.ui.main;
 
 const LogEnabled = false;
 const RecentManager = new Gtk.RecentManager();
+const GTK_SETTINGS_SCHEMA = 'org.gtk.Settings.FileChooser';
+const GTK4_SETTINGS_SCHEMA = 'org.gtk.gtk4.Settings.FileChooser';
+const GTKSettings = new Gio.Settings({ 'schema': GTK_SETTINGS_SCHEMA });
 
 var isCanceled = false;
 var currentQueries = [];
@@ -12,7 +15,7 @@ function filterRecentFiles(callback){
     RecentManager.get_items().sort((a, b) => b.get_modified() - a.get_modified())
     .forEach(item => {
         queryFileExists(item)
-        .then(validFile =>{
+        .then(validFile => {
             debugLog("Valid file - " + validFile.get_display_name());
             if(!isCanceled)
                 callback(validFile);
@@ -41,12 +44,17 @@ function queryFileExists(item) {
 
         currentQueries.push(queryInfo);
 
-        file.query_info_async('standard::type', 0, 0, cancellable, (source, res) => {
+        file.query_info_async('standard::type,standard::is-hidden', 0, 0, cancellable, (source, res) => {
             try {
                 let fileInfo = source.query_info_finish(res);
                 removeQueryInfoFromList(queryInfo);
-                if (fileInfo) 
+                if (fileInfo) {
+                    let isHidden = fileInfo.get_attribute_boolean("standard::is-hidden");
+                    let showHidden = GTKSettings.get_boolean('show-hidden');
+                    if(isHidden && !showHidden)
+                        reject(item.get_display_name() + " is hidden. Rejected.")
                     resolve(item);
+                }
             }
             catch (err) {
                 if (err.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
