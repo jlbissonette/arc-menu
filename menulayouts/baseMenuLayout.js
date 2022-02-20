@@ -429,6 +429,7 @@ var BaseLayout = class {
             let isContainedInCategory = true;
 
             let placeMenuItem = this.createMenuItem([name, icon, file], Constants.DisplayType.LIST, isContainedInCategory);
+            placeMenuItem._path = recentFile.get_uri_display().replace(recentFile.get_display_name(), '');
             placeMenuItem.style = "padding-right: 15px;";
             placeMenuItem.description = recentFile.get_uri_display().replace(homeRegExp, '~');
             placeMenuItem.fileUri = recentFile.get_uri();

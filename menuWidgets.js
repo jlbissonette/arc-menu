@@ -2842,6 +2842,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         this._info = info;
         this._settings = menuLayout._settings;
         this.isContainedInCategory = isContainedInCategory;
+        this.hasContextMenu = true;
 
         this.label = new St.Label({
             text: _(info.name),
@@ -2898,6 +2899,24 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         if(this._info)
             this._info.destroy();
         super._onDestroy();
+    }
+
+    popupContextMenu(){
+        if(this.tooltip)
+            this.tooltip.hide();
+        if(!this._app && !this._path)
+            return;
+
+        if(this.contextMenu === undefined){
+            this.contextMenu = new ApplicationContextMenu(this.actor, this._app, this._menuLayout);
+            if(this._path)
+                this.contextMenu.path = this._path;
+            if(this._displayType === Constants.DisplayType.GRID)
+                this.contextMenu.centerBoxPointerPosition();
+        }
+        if(!this.contextMenu.isOpen)
+            this.contextMenu.rebuildItems();
+        this.contextMenu.toggle();
     }
 
     activate(event) {
