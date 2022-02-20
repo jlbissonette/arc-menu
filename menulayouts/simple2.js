@@ -129,7 +129,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                         gridChild.menu.close();
                 });
             }
-            parent.remove_actor(actor);
+            parent.remove_child(actor);
         }
         super._clearActorsFromBox(this.mainBox);
     }
@@ -149,11 +149,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let actor = children[i];
             if(actor._delegate instanceof MW.CategorySubMenuItem)
                 actor._delegate.menu.close();
-            categoryMenuItem.menu.box.remove_actor(actor);
+            categoryMenuItem.menu.box.remove_child(actor);
         }
         super.displayRecentFiles(categoryMenuItem.menu.box, () => categoryMenuItem._needsScrollbar());
         if(!categoryMenuItem.menu.box.contains(this.applicationsGrid))
-            categoryMenuItem.menu.box.add(this.applicationsGrid);
+            categoryMenuItem.menu.box.add_child(this.applicationsGrid);
 
     }
 
@@ -169,7 +169,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super._displayAppList(apps, category, this.applicationsGrid);
         let box = categoryMenuItem.menu.box;
         if(!box.contains(this.applicationsGrid))
-            box.add(this.applicationsGrid);
+            box.add_child(this.applicationsGrid);
     }
 
     destroy(){

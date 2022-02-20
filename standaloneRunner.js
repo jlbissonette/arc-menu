@@ -42,7 +42,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         this.dtpNeedsRelease = false;
 
         this.dummyWidget = new St.Widget({ width: 0, height: 0, opacity: 0 });
-        Main.uiGroup.add_actor(this.dummyWidget);
+        Main.uiGroup.add_child(this.dummyWidget);
 
         //Create Main Menus - ArcMenu and arcMenu's context menu
         this.arcMenu = new ArcMenu(this.dummyWidget, 0.5, St.Side.TOP, this);
@@ -146,7 +146,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             y_align: Clutter.ActorAlign.FILL
         });        
         this.mainBox._delegate = this.mainBox;
-        this.section.actor.add_actor(this.mainBox);
+        this.section.actor.add_child(this.mainBox);
 
         const StandaloneRunner = true;
         this.MenuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
@@ -251,7 +251,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         if(this.arcMenu)
             this.arcMenu.destroy();
         if(this.dummyWidget){
-            Main.uiGroup.remove_actor(this.dummyWidget);
+            Main.uiGroup.remove_child(this.dummyWidget);
             this.dummyWidget.destroy();
         }
     }
@@ -343,7 +343,7 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
         super(sourceActor, arrowAlignment, arrowSide);
         this._settings = sourceActor._settings;
         this.standaloneRunner = standaloneRunner;
-        Main.uiGroup.add_actor(this.actor);
+        Main.uiGroup.add_child(this.actor);
         this.actor.hide();
         this._boxPointer.set_offscreen_redirect(Clutter.OffscreenRedirect.ON_IDLE);
         this._menuClosedID = this.connect('menu-closed', () => this.standaloneRunner.setDefaultMenuView());

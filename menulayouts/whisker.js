@@ -60,15 +60,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.actionsBox.style = "spacing: 6px; margin: 0px 10px;";
-        this.mainBox.add(this.actionsBox);
+        this.mainBox.add_child(this.actionsBox);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
         this.user.actor.x_expand = true;
         this.user.actor.x_align = Clutter.ActorAlign.FILL;
-        this.actionsBox.add(this.user.actor);
+        this.actionsBox.add_child(this.user.actor);
         
         let settingsButton = new MW.SettingsButton(this);
-        this.actionsBox.add(settingsButton.actor);
+        this.actionsBox.add_child(settingsButton.actor);
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();
         for(let i = 0; i < powerOptions.length; i++){
@@ -76,17 +76,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let shouldShow = powerOptions[i][1];
             if(shouldShow){
                 let powerButton = new MW.PowerButton(this, powerType);
-                this.actionsBox.add(powerButton);
+                this.actionsBox.add_child(powerButton);
             }
         }
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 10px;";
-            this.mainBox.add(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox.actor);
         }
         else{
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-            this.mainBox.add(separator);
+            this.mainBox.add_child(separator);
         }
 
         //Sub Main Box -- stores left and right box
@@ -97,7 +97,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style_class: 'margin-box'
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.rightBox = new St.BoxLayout({
             x_expand: true,
@@ -117,7 +117,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.rightBox.add(this.applicationsScrollBox);
+        this.rightBox.add_child(this.applicationsScrollBox);
 
         this.leftBox = new St.BoxLayout({
             x_expand: true,
@@ -128,10 +128,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
-        this.subMainBox.add(verticalSeparator);
-        this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
+        this.subMainBox.add_child(verticalSeparator);
+        this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
             x_expand: true, 
@@ -141,12 +141,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true
         });
 
-        this.leftBox.add(this.categoriesScrollBox);
+        this.leftBox.add_child(this.categoriesScrollBox);
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 10px 10px 0px 10px;";
-            this.mainBox.add(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox.actor);
         }
         this.loadCategories();
         this.loadPinnedApps();

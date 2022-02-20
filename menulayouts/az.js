@@ -75,11 +75,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.style = "margin: 5px 15px 5px 15px;";
-        this.topBox.add(this.searchBox.actor);
-        this.subMainBox.add(this.topBox);
+        this.topBox.add_child(this.searchBox.actor);
+        this.subMainBox.add_child(this.topBox);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
@@ -99,7 +99,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: this.disableFadeEffect ? '' : 'vfade',
         });  
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.subMainBox.add(this.applicationsScrollBox);
+        this.subMainBox.add_child(this.applicationsScrollBox);
 
         this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(186, 196,201, 0.1) ; padding: 12px 5px;"+
                                         "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
@@ -113,7 +113,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style: this.actionsContainerBoxStyle
         });
 
-        this.subMainBox.add(this.actionsContainerBox);
+        this.subMainBox.add_child(this.actionsContainerBox);
         
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
@@ -126,23 +126,23 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.appsBox = new St.BoxLayout({
             vertical: true
         });
-        this.actionsContainerBox.add(this.actionsBox);
+        this.actionsContainerBox.add_child(this.actionsBox);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
         this.user.x_expand = true;
         this.user.x_align = Clutter.ActorAlign.FILL;
-        this.actionsBox.add(this.user.actor);
+        this.actionsBox.add_child(this.user.actor);
 
 
         let filesButton = new MW.ShortcutMenuItem(this, _("Files"), "system-file-manager", "org.gnome.Nautilus.desktop", Constants.DisplayType.BUTTON);
         if(filesButton.shouldShow)
-            this.actionsBox.add_actor(filesButton.actor);
+            this.actionsBox.add_child(filesButton.actor);
 
         let settingsButton = new MW.SettingsButton(this);
-        this.actionsBox.add(settingsButton.actor);
+        this.actionsBox.add_child(settingsButton.actor);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add(this.leaveButton.actor);
+        this.actionsBox.add_child(this.leaveButton.actor);
 
         this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton)
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton)
@@ -253,17 +253,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _hideNavigationButtons(){
         if(this.subMainBox.contains(this.backButton))
-            this.subMainBox.remove_actor(this.backButton);
+            this.subMainBox.remove_child(this.backButton);
         if(this.subMainBox.contains(this.allAppsButton))
-            this.subMainBox.remove_actor(this.allAppsButton);
+            this.subMainBox.remove_child(this.allAppsButton);
     }
 
     _createNavigationButtons(buttonTitle, ButtonClass){
         let navButton = this.createLabelRow(buttonTitle);
-        navButton.remove_actor(navButton._ornamentLabel);
+        navButton.remove_child(navButton._ornamentLabel);
         navButton.label.y_align = Clutter.ActorAlign.CENTER;
         navButton.style = 'padding: 0px 15px 10px 15px;'
-        navButton.add(new ButtonClass(this));
+        navButton.add_child(new ButtonClass(this));
         return navButton;
     }
 

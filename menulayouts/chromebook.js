@@ -56,7 +56,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 0px 10px 10px 10px;";
-            this.mainBox.add(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox.actor);
         }
 
         this.subMainBox = new St.BoxLayout({
@@ -66,7 +66,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             x_align: Clutter.ActorAlign.START
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true
@@ -83,10 +83,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });  
         this.applicationsScrollBox.add_actor(this.applicationsBox);
 
-        this.subMainBox.add(this.applicationsScrollBox);
+        this.subMainBox.add_child(this.applicationsScrollBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 10px 10px 0px 10px;";
-            this.mainBox.add(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox.actor);
         }
 
         this.updateWidth();

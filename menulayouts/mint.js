@@ -74,18 +74,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if( this._settings.get_boolean('enable-custom-arc-menu'))
             this.actionsBox.add_style_class_name('arc-menu');
 
-        this.mainBox.add(this.actionsScrollBox);
+        this.mainBox.add_child(this.actionsScrollBox);
         this.rightMenuBox = new St.BoxLayout({ 
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true 
         });
-        this.mainBox.add(this.rightMenuBox);
+        this.mainBox.add_child(this.rightMenuBox);
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 0px 20px 10px 8px;";
-            this.rightMenuBox.add(this.searchBox.actor);
+            this.rightMenuBox.add_child(this.searchBox.actor);
         }
         else
             this.rightMenuBox.style = "margin-top: 10px;";
@@ -98,7 +98,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             style_class: 'margin-box'
         });
-        this.rightMenuBox.add(this.subMainBox);
+        this.rightMenuBox.add_child(this.subMainBox);
 
         this.rightBox = new St.BoxLayout({
             x_expand: true,
@@ -119,7 +119,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });   
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.rightBox.add(this.applicationsScrollBox);
+        this.rightBox.add_child(this.applicationsScrollBox);
 
         this.leftBox = new St.BoxLayout({
             x_expand: true,
@@ -130,10 +130,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
-        this.subMainBox.add(verticalSeparator);
-        this.subMainBox.add(horizonalFlip ? this.leftBox : this.rightBox);
+        this.subMainBox.add_child(verticalSeparator);
+        this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
             x_expand: true, 
@@ -143,14 +143,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true
         });
 
-        this.leftBox.add(this.categoriesScrollBox);
+        this.leftBox.add_child(this.categoriesScrollBox);
         this.categoriesBox = new St.BoxLayout({ vertical: true });
 
         this.categoriesScrollBox.add_actor( this.categoriesBox);  
         this.categoriesScrollBox.clip_to_allocation = true;
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 10px 20px 10px 8px;";
-            this.rightMenuBox.add(this.searchBox.actor);
+            this.rightMenuBox.add_child(this.searchBox.actor);
         }
         this.loadCategories();
         this.loadPinnedApps();
@@ -161,7 +161,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _addSeparator(){
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        this.actionsBox.add(separator);
+        this.actionsBox.add_child(separator);
     }    
 
     setDefaultMenuView(){

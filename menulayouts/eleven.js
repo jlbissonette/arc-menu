@@ -70,11 +70,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.style = "margin: 5px 15px 10px 15px;";
 
-        this.topBox.add(this.searchBox.actor);
+        this.topBox.add_child(this.searchBox.actor);
         this.mainBox.insert_child_at_index(this.topBox, 0);
 
         this.applicationsBox = new St.BoxLayout({
@@ -95,7 +95,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: this.disableFadeEffect ? '' : 'vfade',
         }); 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.subMainBox.add(this.applicationsScrollBox);
+        this.subMainBox.add_child(this.applicationsScrollBox);
 
         this.arcMenu.box.style = "padding-bottom:0px;";
         this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(186, 196,201, 0.1); padding: 12px 25px;"+
@@ -110,7 +110,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style: this.actionsContainerBoxStyle + this.themeNodeBorderRadius
         });
 
-        this.subMainBox.add(this.actionsContainerBox);
+        this.subMainBox.add_child(this.actionsContainerBox);
         
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
@@ -123,7 +123,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.appsBox = new St.BoxLayout({
             vertical: true
         });
-        this.actionsContainerBox.add(this.actionsBox);
+        this.actionsContainerBox.add_child(this.actionsBox);
 
         this.shortcutsBox = new St.BoxLayout({
             x_expand: true,
@@ -147,10 +147,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         layout.hookup_style(this.shortcutsGrid);
         layout.forceGridColumns = 2;
-        this.shortcutsBox.add(this.shortcutsGrid);
+        this.shortcutsBox.add_child(this.shortcutsGrid);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.actionsBox.add(this.user.actor);
+        this.actionsBox.add_child(this.user.actor);
 
         this.quickLinksBox = new St.BoxLayout({
             x_expand: true,
@@ -165,7 +165,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Downloads"));
             let isContainedInCategory = false;
             let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.quickLinksBox.add_actor(placeMenuItem.actor);
+            this.quickLinksBox.add_child(placeMenuItem.actor);
         }
 
         path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
@@ -173,16 +173,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
             let isContainedInCategory = false;
             let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.quickLinksBox.add_actor(placeMenuItem.actor);
+            this.quickLinksBox.add_child(placeMenuItem.actor);
         }
 
         let settingsButton = new MW.SettingsButton(this);
-        this.quickLinksBox.add(settingsButton.actor);
+        this.quickLinksBox.add_child(settingsButton.actor);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.quickLinksBox.add(this.leaveButton.actor);
+        this.quickLinksBox.add_child(this.leaveButton.actor);
 
-        this.actionsBox.add(this.quickLinksBox);
+        this.actionsBox.add_child(this.quickLinksBox);
 
         this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton);
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
@@ -219,7 +219,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             return;
 
         let labelRow = this.createLabelRow(_("Frequent"));
-        this.applicationsBox.add(labelRow);
+        this.applicationsBox.add_child(labelRow);
         let mostUsed = Shell.AppUsage.get_default().get_most_used();
 
         if(mostUsed.length < 1)
@@ -315,10 +315,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._displayAppList(this.frequentAppsList, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
             this.setGridLayout(Constants.DisplayType.GRID, 6, 0);
             if(!this.applicationsBox.contains(this.shortcutsBox))
-                this.applicationsBox.add(this.shortcutsBox);
+                this.applicationsBox.add_child(this.shortcutsBox);
         }
         else if(this.applicationsBox.contains(this.shortcutsBox)){
-            this.applicationsBox.remove_actor(this.shortcutsBox);
+            this.applicationsBox.remove_child(this.shortcutsBox);
         }
     }
 
@@ -340,17 +340,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _hideNavigationButtons(){
         if(this.mainBox.contains(this.backButton))
-            this.mainBox.remove_actor(this.backButton);
+            this.mainBox.remove_child(this.backButton);
     }
 
     _createNavigationButtons(buttonTitle, ButtonClass){
         let navButton = this.createLabelRow(buttonTitle);
-        navButton.remove_actor(navButton._ornamentLabel);
+        navButton.remove_child(navButton._ornamentLabel);
         navButton.label.y_align = Clutter.ActorAlign.CENTER;
         navButton.label.style = 'padding: 15px 0px;';
         navButton.style = 'padding: 0px 25px;'
         if(ButtonClass)
-            navButton.add(new ButtonClass(this));
+            navButton.add_child(new ButtonClass(this));
         return navButton;
     }
 

@@ -447,12 +447,12 @@ var BaseLayout = class {
                     log(err);
                 }
                 
-                box.remove_actor(placeMenuItem);
+                box.remove_child(placeMenuItem);
                 placeMenuItem.destroy();
             });
 
-            placeMenuItem.add(placeMenuItem._removeBtn);
-            box.add_actor(placeMenuItem);
+            placeMenuItem.add_child(placeMenuItem._removeBtn);
+            box.add_child(placeMenuItem);
 
             if(!this._futureActiveItem){
                 this._futureActiveItem = placeMenuItem;
@@ -472,7 +472,7 @@ var BaseLayout = class {
             let isContainedInCategory = false;
             let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST, isContainedInCategory);
             if(placeMenuItem)
-                this.shortcutsBox.add_actor(placeMenuItem.actor);
+                this.shortcutsBox.add_child(placeMenuItem.actor);
         }
     }
 
@@ -492,7 +492,7 @@ var BaseLayout = class {
             placeMenuItem.actor.y_expand = false;
             placeMenuItem.actor.y_align = Clutter.ActorAlign.CENTER;
             placeMenuItem.actor.x_align = Clutter.ActorAlign.CENTER;
-            this.actionsBox.add(placeMenuItem.actor);
+            this.actionsBox.add_child(placeMenuItem.actor);
         }  
     }
 
@@ -631,7 +631,7 @@ var BaseLayout = class {
 
     placesAddSeparator(id){
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
-        this._sections[id].add_actor(separator);  
+        this._sections[id].add_child(separator);  
     }
 
     _redisplayPlaces(id) {
@@ -657,7 +657,7 @@ var BaseLayout = class {
             if(id === 'bookmarks' && places.length > 0){
                 for (let i = 0; i < places.length; i++){
                     let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
-                    this._sections[id].add_actor(item); 
+                    this._sections[id].add_child(item); 
                 } 
                 //create a separator if bookmark and software shortcut are both shown
                 if(this.bookmarksShorctus && this.softwareShortcuts){
@@ -669,7 +669,7 @@ var BaseLayout = class {
             if(id === 'devices'){
                 for (let i = 0; i < places.length; i++){
                     let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
-                    this._sections[id].add_actor(item); 
+                    this._sections[id].add_child(item); 
                 }
                 if((this.externalDevicesShorctus && !this.networkDevicesShorctus) && (this.bookmarksShorctus || this.softwareShortcuts))
                     this.placesAddSeparator(id);
@@ -677,7 +677,7 @@ var BaseLayout = class {
             if(id === 'network'){
                 for (let i = 0; i < places.length; i++){
                     let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
-                    this._sections[id].add_actor(item); 
+                    this._sections[id].add_child(item); 
                 }
                 if(this.networkDevicesShorctus && (this.bookmarksShorctus || this.softwareShortcuts))
                     this.placesAddSeparator(id);
@@ -719,7 +719,7 @@ var BaseLayout = class {
                         gridChild.menu.close();
                 });
             }
-            box.remove_actor(actor);
+            box.remove_child(actor);
         }
     }
 
@@ -759,7 +759,7 @@ var BaseLayout = class {
             }
 
             if(item.actor.get_parent())
-                item.actor.get_parent().remove_actor(item.actor);
+                item.actor.get_parent().remove_child(item.actor);
 
             if(shouldShow){
                 if(columns === -1){
@@ -811,7 +811,7 @@ var BaseLayout = class {
             }
         }
         if(this.applicationsBox && !this.applicationsBox.contains(this.applicationsGrid))
-            this.applicationsBox.add(this.applicationsGrid);
+            this.applicationsBox.add_child(this.applicationsGrid);
         if(this._futureActiveItem)
             this.activeMenuItem = this._futureActiveItem;
     }
@@ -854,7 +854,7 @@ var BaseLayout = class {
             this._clearActorsFromBox();
             let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
             appsScrollBoxAdj.set_value(0);
-            this.applicationsBox.add(this.searchResults);
+            this.applicationsBox.add_child(this.searchResults);
             this.searchResults.show();
             searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
             this.searchResults.setTerms(searchString.split(/\s+/));

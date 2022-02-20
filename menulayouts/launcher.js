@@ -69,7 +69,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style: this.searchProvidersBoxStyle + this.themeNodeBorderRadius
         });
         this.searchProvidersBox.clip_to_allocation = true;
-        this.mainBox.add(this.searchProvidersBox);
+        this.mainBox.add_child(this.searchProvidersBox);
         this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -77,7 +77,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style_class: 'margin-box'
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 10px;";
@@ -121,8 +121,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.searchResultDetailsScrollBox.add_actor(this.searchResultDetailsBox);
-        this.subMainBox.add(this.applicationsScrollBox);
-        this.mainBox.add(this.searchBox);
+        this.subMainBox.add_child(this.applicationsScrollBox);
+        this.mainBox.add_child(this.searchBox);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
         this.arcMenu.box.style = "padding-top: 0px;";
         this.hasPinnedApps = true;
@@ -132,7 +132,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.moreItem = this.createProviderMenuItem(_("More"), MORE_PROVIDERS_POP_UP);
         let arrowIcon = PopupMenu.arrowIcon(St.Side.BOTTOM);
         arrowIcon.y_expand = false;
-        this.moreItem.add_actor(arrowIcon);
+        this.moreItem.add_child(arrowIcon);
         this._createMoreProvidersMenu();
 
         this.setDefaultMenuView();
@@ -161,7 +161,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.displayPinnedApps();
         this.searchProvidersBox.remove_all_children();
         let allProvidersItem = this.createProviderMenuItem(_("All"), Constants.CategoryType.SEARCH_RESULTS);
-        this.searchProvidersBox.add(allProvidersItem);
+        this.searchProvidersBox.add_child(allProvidersItem);
         let searchProviders = this.searchResults.getProviders();
 
         let currentItems = 1;
@@ -170,19 +170,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let item = this.createProviderMenuItem(provider, provider.appInfo ? null : Constants.CategoryType.ALL_PROGRAMS);
 
             if(currentItems < MAX_VISIBLE_PROVIDERS)
-                this.searchProvidersBox.add(item);
+                this.searchProvidersBox.add_child(item);
             else{
                 this.moveProvidersMenuItems.push(item);
                 item.moreIndex = currentItems - MAX_VISIBLE_PROVIDERS;
                 item.x_expand = true;
                 item.x_align = Clutter.ActorAlign.FILL;
-                this.moreProvidersBox.add(item);
+                this.moreProvidersBox.add_child(item);
             }
                 
             currentItems++;
         }
 
-        this.searchProvidersBox.add(this.moreItem);
+        this.searchProvidersBox.add_child(this.moreItem);
 
         this.activeProvider = allProvidersItem;
         this.activeProvider.add_style_class_name("active-item");
@@ -195,7 +195,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let providerMenuItem = new MW.ArcMenuPopupBaseMenuItem(this);
         providerMenuItem.name = "arc-menu-launcher-button";
         providerMenuItem.x_expand = false;
-        providerMenuItem.remove_actor(providerMenuItem._ornamentLabel);
+        providerMenuItem.remove_child(providerMenuItem._ornamentLabel);
         providerMenuItem.x_align = Clutter.ActorAlign.START;
         providerMenuItem.style = 'padding: 10px 14px; margin: 0px;';
         providerMenuItem.provider = provider;
@@ -205,7 +205,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.CENTER,
         });
         providerMenuItem.label = label;
-        providerMenuItem.add_actor(label);
+        providerMenuItem.add_child(label);
 
         providerMenuItem.connect("activate", () => this.activateProviderMenuItem(providerMenuItem, providerEnum));
         return providerMenuItem;
@@ -248,7 +248,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
                 let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
                 appsScrollBoxAdj.set_value(0);
-                this.applicationsBox.add(this.searchResults);
+                this.applicationsBox.add_child(this.searchResults);
                 this.searchResults.setTerms(searchString.split(/\s+/));
                 this.searchResults.highlightDefault(true);
                 this.activeProvider.grab_key_focus();
@@ -261,7 +261,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let align = wasMoved ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.START;
         let index = wasMoved ? menuItem.moreIndex : MAX_VISIBLE_PROVIDERS;
 
-        currentBox.remove_actor(menuItem);
+        currentBox.remove_child(menuItem);
         newBox.insert_child_at_index(menuItem, index);
         menuItem.x_expand = expand;
         menuItem.x_align = align;
@@ -304,9 +304,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
         });
-        providerBox.add(icon);
-        providerBox.add(label);
-        this.applicationsBox.add(providerBox);
+        providerBox.add_child(icon);
+        providerBox.add_child(label);
+        this.applicationsBox.add_child(providerBox);
     }
 
     _createMoreProvidersMenu(){
@@ -336,10 +336,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.moreProvidersScrollBox.clip_to_allocation = true;
 
         this.moreProvidersScrollBox.style = "max-height: 350px;";        
-        this.section.actor.add_actor(this.moreProvidersScrollBox); 
+        this.section.actor.add_child(this.moreProvidersScrollBox); 
         this.subMenuManager.addMenu(this.moreProvidersMenu);
         this.moreProvidersMenu.actor.hide();
-        Main.uiGroup.add_actor(this.moreProvidersMenu.actor);
+        Main.uiGroup.add_child(this.moreProvidersMenu.actor);
     }
 
     toggleMoreProvidersMenu(){
@@ -355,7 +355,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.setSearchHintText(_("Applications"));
         let categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.FREQUENT_APPS);
         let label = this.createLabelRow(_("Frequent Apps"));
-        this.applicationsBox.add_actor(label);
+        this.applicationsBox.add_child(label);
         this.layoutProperties.GridColumns = 5;
         super._displayAppList(categoryMenuItem.appList, Constants.CategoryType.FREQUENT_APPS, this.applicationsGrid);
     }
@@ -388,14 +388,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super._clearActorsFromBox();
         let label = this.createLabelRow(_("Pinned Apps"));
         this.searchBox.hint_text = _("Search…");
-        this.applicationsBox.add_actor(label);
+        this.applicationsBox.add_child(label);
         this.layoutProperties.GridColumns = 5;
         super._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
     }
 
     searchResultsChangedEvent(){
         if(!this.subMainBox.contains(this.searchResultDetailsScrollBox))
-            this.subMainBox.add_actor(this.searchResultDetailsScrollBox);
+            this.subMainBox.add_child(this.searchResultDetailsScrollBox);
         if(this.activeResult === this.searchResults.getTopResult())
             return;           
         
@@ -440,11 +440,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             });
             this.activeResultMenuItem._iconBin.set_child(icon);
         }
-        this.searchResultDetailsBox.add_actor(this.activeResultMenuItem);
+        this.searchResultDetailsBox.add_child(this.activeResultMenuItem);
         this.searchResultContextItems = new MW.ApplicationContextItems(this.activeResultMenuItem, app, this);
         this.searchResultContextItems.path = path;
         this.searchResultContextItems.rebuildItems();
-        this.searchResultDetailsBox.add_actor(this.searchResultContextItems);
+        this.searchResultDetailsBox.add_child(this.searchResultContextItems);
     }
 
     destroy(){

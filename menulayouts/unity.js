@@ -69,7 +69,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style: 'padding-bottom: 10px; padding-right: 15px;'
         });
 
-        this.mainBox.add(this.topBox);
+        this.mainBox.add_child(this.topBox);
         this.categoriesButton = new MW.CategoriesButton(this);
         
         this.subMainBox= new St.BoxLayout({
@@ -79,14 +79,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.actor.y_align = Clutter.ActorAlign.CENTER;
         this.searchBox.actor.y_expand = true;
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 15px 0px 15px;";
-        this.topBox.add(this.searchBox.actor);
-        this.topBox.add(this.categoriesButton.actor);
+        this.topBox.add_child(this.searchBox.actor);
+        this.topBox.add_child(this.categoriesButton.actor);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
@@ -102,7 +102,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: this.disableFadeEffect ? '' : 'vfade',
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.subMainBox.add(this.applicationsScrollBox);
+        this.subMainBox.add_child(this.applicationsScrollBox);
 
         this.arcMenu.box.style = "padding-bottom:0px;";
 
@@ -118,7 +118,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style: this.actionsContainerBoxStyle + this.themeNodeBorderRadius
         });
 
-        this.subMainBox.add(this.actionsContainerBox);
+        this.subMainBox.add_child(this.actionsContainerBox);
         
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
@@ -131,7 +131,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.appsBox = new St.BoxLayout({
             vertical: true
         });
-        this.actionsContainerBox.add(this.actionsBox);
+        this.actionsContainerBox.add_child(this.actionsBox);
 
         this.widgetBox = new St.BoxLayout({
             x_expand: false,
@@ -169,7 +169,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         layout.hookup_style(this.shortcutsGrid);
 
-        this.shortcutsBox.add(this.shortcutsGrid);
+        this.shortcutsBox.add_child(this.shortcutsGrid);
 
         //Add Application Shortcuts to menu (Software, Settings, Tweaks, Terminal)
         let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
@@ -203,11 +203,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _addSeparator(){
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.ALWAYS_SHOW, Constants.SeparatorAlignment.VERTICAL);
-        this.actionsBox.add(verticalSeparator);
+        this.actionsBox.add_child(verticalSeparator);
     }
 
     loadExtraPinnedApps(){
-        this.actionsContainerBox.remove_actor(this.actionsBox);
+        this.actionsContainerBox.remove_child(this.actionsBox);
         this.actionsBox.destroy_all_children();
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
@@ -217,7 +217,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false
         });
         this.actionsBox.style = "spacing: 10px; padding: 5px 0px;";
-        this.actionsContainerBox.add(this.actionsBox);
+        this.actionsContainerBox.add_child(this.actionsBox);
 
         super.loadExtraPinnedApps(this._settings.get_strv('unity-pinned-app-list'), this._settings.get_int('unity-separator-index'));
     }
@@ -281,7 +281,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true,
             reactive:true
         });        
-        this.leftPanelPopup.add(this.categoriesScrollBox);
+        this.leftPanelPopup.add_child(this.categoriesScrollBox);
        
         this.categoriesBox = new St.BoxLayout({
             vertical: true,
@@ -294,11 +294,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let scaleFactor = themeContext.scale_factor;
         let height =  Math.round(350 / scaleFactor);
         this.leftPanelPopup.style = `max-height: ${height}px`;        
-        this.section.actor.add_actor(this.leftPanelPopup); 
+        this.section.actor.add_child(this.leftPanelPopup); 
         this._displayCategories();
         this.subMenuManager.addMenu(this.categoriesMenu);
         this.categoriesMenu.actor.hide();
-        Main.uiGroup.add_actor(this.categoriesMenu.actor);
+        Main.uiGroup.add_child(this.categoriesMenu.actor);
     }
 
     toggleCategoriesMenu(){
@@ -381,21 +381,21 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._clearActorsFromBox(this.applicationsBox);
         else
             this._clearActorsFromBox();
-        this.subMainBox.remove_actor(this.actionsContainerBox);
+        this.subMainBox.remove_child(this.actionsContainerBox);
         this.activeCategory = _("Pinned Apps");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
         this.activeCategory = _("Shortcuts");
         this._displayAppList(this.appShortcuts, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
         if(!this.applicationsBox.contains(this.shortcutsBox))
-            this.applicationsBox.add(this.shortcutsBox);
+            this.applicationsBox.add_child(this.shortcutsBox);
         this.widgetBox.remove_all_children();
         if(this._settings.get_boolean('enable-clock-widget-unity'))
-            this.widgetBox.add(this._clocksItem);
+            this.widgetBox.add_child(this._clocksItem);
         if(this._settings.get_boolean('enable-weather-widget-unity'))
-            this.widgetBox.add(this._weatherItem);
+            this.widgetBox.add_child(this._weatherItem);
         if(!this.subMainBox.contains(this.widgetBox))
-            this.subMainBox.add(this.widgetBox);
-        this.subMainBox.add(this.actionsContainerBox);     
+            this.subMainBox.add_child(this.widgetBox);
+        this.subMainBox.add_child(this.actionsContainerBox);     
     }
 
     displayRecentFiles(){
@@ -415,7 +415,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.categoriesMenu.isOpen)
             this.categoriesMenu.toggle();
         if(this.subMainBox.contains(this.widgetBox)){
-            this.subMainBox.remove_actor(this.widgetBox);
+            this.subMainBox.remove_child(this.widgetBox);
         }
         this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);

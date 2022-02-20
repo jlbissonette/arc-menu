@@ -58,7 +58,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.ravenPositionChangedID = this._settings.connect('changed::raven-position', () => this._updatePosition());
 
         this.dummyCursor = new St.Widget({ width: 1, height: 0, opacity: 0});
-        Main.uiGroup.add_actor(this.dummyCursor);
+        Main.uiGroup.add_child(this.dummyCursor);
         this.updateLocation();
 
         //store old ArcMenu variables
@@ -95,7 +95,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.CENTER,
             vertical: true
         });
-        this.actionsBoxContainer.add(this.actionsBox);
+        this.actionsBoxContainer.add_child(this.actionsBox);
         this.actionsBox.style = "spacing: 5px;";
         this.actionsBoxContainerStyle =  "margin: 0px 0px 0px 0px; spacing: 10px; background-color: rgba(186, 196,201, 0.1); padding: 5px 5px;"+
                                          "border-color: rgba(186, 196,201, 0.2);";
@@ -116,12 +116,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
-        this.subMainBox.add(this.topBox);
-        this.mainBox.add(this.subMainBox);
+        this.subMainBox.add_child(this.topBox);
+        this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 25px 10px 10px 10px;";
-        this.topBox.add(this.searchBox.actor);
+        this.topBox.add_child(this.searchBox.actor);
 
         this.applicationsBox = new St.BoxLayout({
             x_align: Clutter.ActorAlign.FILL,
@@ -139,7 +139,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });  
   
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.subMainBox.add(this.applicationsScrollBox);
+        this.subMainBox.add_child(this.applicationsScrollBox);
    
         this.weatherBox = new St.BoxLayout({
             x_expand: true,
@@ -156,8 +156,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._clocksItem.x_align = Clutter.ActorAlign.FILL;
         this._clocksItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
 
-        this.weatherBox.add(this._clocksItem);
-        this.weatherBox.add(this._weatherItem);
+        this.weatherBox.add_child(this._clocksItem);
+        this.weatherBox.add_child(this._weatherItem);
         
         this.appShortcuts = [];
         this.shortcutsBox = new St.BoxLayout({
@@ -180,7 +180,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         layout.hookup_style(this.shortcutsGrid);
 
-        this.shortcutsBox.add(this.shortcutsGrid);
+        this.shortcutsBox.add_child(this.shortcutsGrid);
 
         //Add Application Shortcuts to menu (Software, Settings, Tweaks, Terminal)
         let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
@@ -214,7 +214,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _updatePosition(){
         let ravenPosition = this._settings.get_enum('raven-position');
         if(this.mainBox.contains(this.actionsBoxContainer)){
-            this.mainBox.remove_actor(this.actionsBoxContainer);
+            this.mainBox.remove_child(this.actionsBoxContainer);
         }
         if(ravenPosition === Constants.RavenPosition.LEFT){
             this.mainBox.insert_child_at_index(this.actionsBoxContainer, 0);
@@ -303,7 +303,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayCategories(){
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            this.actionsBox.add_actor(categoryMenuItem.actor);	 
+            this.actionsBox.add_child(categoryMenuItem.actor);	 
         }
     }
 
@@ -317,19 +317,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeCategory = _("Shortcuts");
         this._displayAppList(this.appShortcuts, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
         if(!this.applicationsBox.contains(this.shortcutsBox))
-            this.applicationsBox.add(this.shortcutsBox);
+            this.applicationsBox.add_child(this.shortcutsBox);
         let actors = this.weatherBox.get_children();
         for (let i = 0; i < actors.length; i++) {
-            this.weatherBox.remove_actor(actors[i]);
+            this.weatherBox.remove_child(actors[i]);
         }
         if(this._settings.get_boolean('enable-clock-widget-raven')){
-            this.weatherBox.add(this._clocksItem);
+            this.weatherBox.add_child(this._clocksItem);
         }
         if(this._settings.get_boolean('enable-weather-widget-raven')){
-            this.weatherBox.add(this._weatherItem);
+            this.weatherBox.add_child(this._weatherItem);
         }
         if(!this.subMainBox.contains(this.weatherBox))
-            this.subMainBox.add(this.weatherBox);
+            this.subMainBox.add_child(this.weatherBox);
     }
 
     displayRecentFiles(){
@@ -348,7 +348,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     
     _clearActorsFromBox(box) {
         if(this.subMainBox.contains(this.weatherBox)){
-            this.subMainBox.remove_actor(this.weatherBox);
+            this.subMainBox.remove_child(this.weatherBox);
         }
 
         this.applicationsBox.remove_style_class_name('margin-box');
@@ -387,7 +387,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.arcMenu._boxPointer.setPosition(this.oldSourceActor, this.oldArrowAlignment);
         this.arcMenu.close();
         this.arcMenu._boxPointer.hide();
-        Main.uiGroup.remove_actor(this.dummyCursor);
+        Main.uiGroup.remove_child(this.dummyCursor);
         this.dummyCursor.destroy();
 
         super.destroy();

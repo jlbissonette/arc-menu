@@ -629,9 +629,9 @@ var MenuSettingsController = class {
         DashToDock.arcMenuEnabled = true;
         this.oldShowAppsIcon = DashToDock._showAppsIcon;
 
-        DashContainer.remove_actor(DashToDock._showAppsIcon);
+        DashContainer.remove_child(DashToDock._showAppsIcon);
         DashToDock._showAppsIcon = this.menuButtonAdjustedActor;
-        DashContainer.add_actor(DashToDock._showAppsIcon);
+        DashContainer.add_child(DashToDock._showAppsIcon);
 
         this._setButtonIcon();
         const IconSize = DashToDock.iconSize;
@@ -669,9 +669,9 @@ var MenuSettingsController = class {
                 AllDocks.forEach(dock => {
                     let dash = dock.dash;
                     if(dash._dashContainer.contains(dash._showAppsIcon))
-                        dash._dashContainer.remove_actor(dash._showAppsIcon);
+                        dash._dashContainer.remove_child(dash._showAppsIcon);
                     dash._showAppsIcon = this.oldShowAppsIcon;
-                    dash._dashContainer.add_actor(dash._showAppsIcon);
+                    dash._dashContainer.add_child(dash._showAppsIcon);
                     dash.arcMenuEnabled = false;
                 });
 
@@ -718,9 +718,9 @@ var MenuSettingsController = class {
                     if(this.panel._allDocks[this.dashIndex]){
                         DashToDock.arcMenuEnabled = false;
                         if(DashContainer.contains(DashToDock._showAppsIcon))
-                            DashContainer.remove_actor(DashToDock._showAppsIcon);
+                            DashContainer.remove_child(DashToDock._showAppsIcon);
                         DashToDock._showAppsIcon = this.oldShowAppsIcon;
-                        DashContainer.add_actor(DashToDock._showAppsIcon);
+                        DashContainer.add_child(DashToDock._showAppsIcon);
                         this.panel._deleteDocks = this.oldDashOnDestroy;
                         DashToDock.updateShowAppsButton();
                     }

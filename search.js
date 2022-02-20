@@ -151,7 +151,7 @@ var SearchResultsBase = GObject.registerClass({
             y_expand: true
         });
 
-        this.add(this._resultDisplayBin);
+        this.add_child(this._resultDisplayBin);
 
         this._resultDisplays = {};
         this._clipboard = St.Clipboard.get_default();
@@ -287,7 +287,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
             }
         });
 
-        this._container.add(this.providerInfo);
+        this._container.add_child(this.providerInfo);
 
         this._content = new St.BoxLayout({
             vertical: true,
@@ -296,7 +296,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
             x_align: Clutter.ActorAlign.FILL
         });
 
-        this._container.add(this._content);
+        this._container.add_child(this._content);
         this._resultDisplayBin.set_child(this._container);
     }
 
@@ -319,8 +319,8 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
 
     _addItem(display) {
         if(display.get_parent())
-            display.get_parent().remove_actor(display);
-        this._content.add_actor(display);
+            display.get_parent().remove_child(display);
+        this._content.add_child(display);
     }
 
     getFirstResult() {
@@ -441,7 +441,7 @@ var SearchResults = GObject.registerClass({
             x_align: Clutter.ActorAlign.FILL  
         });
  
-        this.add(this._content);
+        this.add_child(this._content);
        
         this._statusText = new St.Label();
         this._statusBin = new St.Bin({ 
@@ -456,8 +456,8 @@ var SearchResults = GObject.registerClass({
         else
             this._statusText.style_class = '';
         
-        this.add(this._statusBin);
-        this._statusBin.add_actor(this._statusText);
+        this.add_child(this._statusBin);
+        this._statusBin.set_child(this._statusText);
 
         this._highlightDefault = true;
         this._defaultResult = null;
@@ -689,7 +689,7 @@ var SearchResults = GObject.registerClass({
         else
             providerDisplay = new AppSearchResults(provider, this);
         providerDisplay.hide();
-        this._content.add(providerDisplay);
+        this._content.add_child(providerDisplay);
         provider.display = providerDisplay;
     }
 

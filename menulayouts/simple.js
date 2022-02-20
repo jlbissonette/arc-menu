@@ -57,9 +57,9 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         let actors = this.section.actor.get_children();
         for (let i = 0; i < actors.length; i++) {
             let actor = actors[i];
-            this.section.actor.remove_actor(actor);
+            this.section.actor.remove_child(actor);
         }
-        this.section.actor.add_actor(this.mainBox);  
+        this.section.actor.add_child(this.mainBox);  
 
         this.loadPinnedApps();
         this.loadCategories();
@@ -130,7 +130,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
                         gridChild.menu.close();
                 });
             }
-            parent.remove_actor(actor);
+            parent.remove_child(actor);
         }
     }
 
@@ -146,7 +146,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             let actor = children[i];
             if(actor._delegate instanceof MW.CategorySubMenuItem)
                 actor._delegate.menu.close();
-            categoryMenuItem.applicationsBox.remove_actor(actor);
+            categoryMenuItem.applicationsBox.remove_child(actor);
         }
         super.displayRecentFiles(categoryMenuItem.applicationsBox);
     }
@@ -154,6 +154,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     _displayAppList(apps, category, categoryMenuItem) {
         super._displayAppList(apps, category, this.applicationsGrid);
         if(!categoryMenuItem.applicationsBox.contains(this.applicationsGrid))
-            categoryMenuItem.applicationsBox.add(this.applicationsGrid);
+            categoryMenuItem.applicationsBox.add_child(this.applicationsGrid);
     }
 }

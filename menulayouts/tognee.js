@@ -67,7 +67,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             style_class: 'margin-box'
         });
-        this.mainBox.add(this.subMainBox);
+        this.mainBox.add_child(this.subMainBox);
 
         // The "Left Box"
         // Contains the app list and the searchbar
@@ -91,9 +91,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 0px 10px 10px 10px;";
-            this.appBox.add(this.searchBox.actor);
+            this.appBox.add_child(this.searchBox.actor);
         }
-        this.appBox.add(this.applicationsScrollBox);
+        this.appBox.add_child(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ vertical: true });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
 
@@ -104,12 +104,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END
         });
         this.backButton = new MW.BackMenuItem(this);
-        this.navigateBox.add(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL));
-        this.navigateBox.add(this.backButton.actor);
-        this.appBox.add(this.navigateBox);
+        this.navigateBox.add_child(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL));
+        this.navigateBox.add_child(this.backButton.actor);
+        this.appBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 10px 10px 0px 10px;";
-            this.appBox.add(this.searchBox.actor);
+            this.appBox.add_child(this.searchBox.actor);
         }
         
         // The "Right Box"
@@ -121,10 +121,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL
         });
 
-        this.subMainBox.add(horizonalFlip ? this.appBox : this.quickBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.appBox : this.quickBox);  
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
-        this.subMainBox.add(verticalSeparator);
-        this.subMainBox.add(horizonalFlip ? this.quickBox : this.appBox);
+        this.subMainBox.add_child(verticalSeparator);
+        this.subMainBox.add_child(horizonalFlip ? this.quickBox : this.appBox);
 
         this.placesShortcuts= this._settings.get_value('directory-shortcuts-list').deep_unpack().length>0;
         this.softwareShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack().length>0;
@@ -148,7 +148,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });    
         this.shortcutsScrollBox.set_policy(St.PolicyType.EXTERNAL, St.PolicyType.EXTERNAL);
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);
-        this.quickBox.add(this.shortcutsScrollBox);
+        this.quickBox.add_child(this.shortcutsScrollBox);
 
         // Add place shortcuts to menu (Home,Documents,Downloads,Music,Pictures,Videos)
         this._displayPlaces();
@@ -156,7 +156,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         //check to see if should draw separator
         if(this.placesShortcuts && this.softwareShortcuts){
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG, Constants.SeparatorAlignment.HORIZONTAL);
-            this.shortcutsBox.add(separator);
+            this.shortcutsBox.add_child(separator);
         }
 
         //Add Application Shortcuts to menu (Software, Settings, Tweaks, Terminal)
@@ -167,7 +167,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let isContainedInCategory = false;
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.BUTTON, isContainedInCategory);
             if(shortcutMenuItem.shouldShow)
-                this.shortcutsBox.add(shortcutMenuItem.actor);
+                this.shortcutsBox.add_child(shortcutMenuItem.actor);
         }
         
         // Bottom Section for Power etc...
@@ -189,10 +189,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         
         let leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add(leaveButton.actor); 
+        this.actionsBox.add_child(leaveButton.actor); 
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG, Constants.SeparatorAlignment.HORIZONTAL);
         this.actionsBox.insert_child_at_index(separator, 0);
-        this.quickBox.add(this.actionsScrollBox);
+        this.quickBox.add_child(this.actionsScrollBox);
 
         this.updateWidth();
         this.loadCategories();
@@ -217,7 +217,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let directory = directoryShortcuts[i];
             let isContainedInCategory = false;
             let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.shortcutsBox.add_actor(placeMenuItem.actor);
+            this.shortcutsBox.add_child(placeMenuItem.actor);
         }
     }
 

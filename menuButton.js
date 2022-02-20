@@ -106,7 +106,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         }
 
         //Add Menu Button Widget to Button
-        this.add_actor(this.menuButtonWidget.actor);
+        this.add_child(this.menuButtonWidget.actor);
     }
 
     initiate(){
@@ -252,7 +252,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             y_align: Clutter.ActorAlign.FILL
         });        
         this.mainBox._delegate = this.mainBox;
-        this.section.actor.add_actor(this.mainBox);
+        this.section.actor.add_child(this.mainBox);
 
         this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
         this.setMenuPositionAlignment();
@@ -384,7 +384,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 
         if(!this.dummyWidget){
             this.dummyWidget = new St.Widget({ width: 0, height: 0, opacity: 0 });
-            Main.uiGroup.add_actor(this.dummyWidget);
+            Main.uiGroup.add_child(this.dummyWidget);
         }
 
         if(!this._menuInForcedLocation){
@@ -761,7 +761,7 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
         super(sourceActor, arrowAlignment, arrowSide);
         this._settings = sourceActor._settings;
         this._menuButton = sourceActor;
-        Main.uiGroup.add_actor(this.actor);
+        Main.uiGroup.add_child(this.actor);
         this.actor.hide();
         this._boxPointer.set_offscreen_redirect(Clutter.OffscreenRedirect.ON_IDLE);
         this._menuClosedID = this.connect('menu-closed', () => this._menuButton.setDefaultMenuView());
@@ -801,7 +801,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         this.extensionSettingsItem = false;
         
         this.actor.add_style_class_name('panel-menu');
-        Main.uiGroup.add_actor(this.actor);
+        Main.uiGroup.add_child(this.actor);
         this.actor.hide();
 
         this.addMenuItem(this.createQuickLinkItem(_("ArcMenu Settings"), Constants.PrefsVisiblePage.MAIN));

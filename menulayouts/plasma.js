@@ -84,16 +84,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.user.actor.y_expand = true;
         this.user.actor.x_align = Clutter.ActorAlign.CENTER;
         this.user.actor.y_align = Clutter.ActorAlign.CENTER;
-        this.leftTopBox.add(this.user.actor);
-        this.rightTopBox.add(this.user.label);
+        this.leftTopBox.add_child(this.user.actor);
+        this.rightTopBox.add_child(this.user.label);
         this.user.label.style = "padding-left: 0.4em; margin: 0px 10px 0px 15px; font-weight: bold;";
         this.user.label.y_expand = false; 
         this.user.label.x_expand = true;
         this.user.label.x_align = Clutter.ActorAlign.START;
-        this.rightTopBox.add(this.searchBox.actor);
+        this.rightTopBox.add_child(this.searchBox.actor);
 
-        this.topBox.add(this.leftTopBox);
-        this.topBox.add(this.rightTopBox);
+        this.topBox.add_child(this.leftTopBox);
+        this.topBox.add_child(this.rightTopBox);
 
         this.searchBarLocation = this._settings.get_enum('searchbar-default-top-location');
 
@@ -135,7 +135,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             layout_manager: layout
         });
         layout.hookup_style(this.grid);
-        this.navigateBox.add(this.grid);
+        this.navigateBox.add_child(this.grid);
 
         this.pinnedAppsButton = new MW.PlasmaMenuItem(this, _("Pinned Apps"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg');
         this.pinnedAppsButton.connect("activate", () => this.displayPinnedApps() );
@@ -161,31 +161,31 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style = "margin: 3px 10px 5px 10px;";
             this.topBox.style = 'padding-top: 0.5em;'
             
-            this.navigateBoxContainer.add(this.navigateBox);
+            this.navigateBoxContainer.add_child(this.navigateBox);
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-            this.navigateBoxContainer.add(separator);
+            this.navigateBoxContainer.add_child(separator);
             this.navigateBoxContainer.y_expand = false;
             this.navigateBoxContainer.y_align = Clutter.ActorAlign.START;
-            this.mainBox.add(this.navigateBoxContainer);
-            this.mainBox.add(this.applicationsScrollBox);
+            this.mainBox.add_child(this.navigateBoxContainer);
+            this.mainBox.add_child(this.applicationsScrollBox);
             separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-            this.mainBox.add(separator);
+            this.mainBox.add_child(separator);
 
-            this.mainBox.add(this.topBox);
+            this.mainBox.add_child(this.topBox);
         }
         else if(this.searchBarLocation === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 3px 10px 10px 10px;";
             
-            this.mainBox.add(this.topBox);
+            this.mainBox.add_child(this.topBox);
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-            this.mainBox.add(separator);
-            this.mainBox.add(this.applicationsScrollBox);
+            this.mainBox.add_child(separator);
+            this.mainBox.add_child(this.applicationsScrollBox);
             this.navigateBoxContainer.y_expand = true;
             this.navigateBoxContainer.y_align = Clutter.ActorAlign.END;
             separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-            this.navigateBoxContainer.add(separator);
-            this.navigateBoxContainer.add(this.navigateBox);
-            this.mainBox.add(this.navigateBoxContainer);
+            this.navigateBoxContainer.add_child(separator);
+            this.navigateBoxContainer.add_child(this.navigateBox);
+            this.mainBox.add_child(this.navigateBoxContainer);
         }
            
         let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
@@ -218,7 +218,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             });
 
             this._createPlaces(id);
-            this.externalDevicesBox.add(this._sections[id]);
+            this.externalDevicesBox.add_child(this._sections[id]);
         }
         this.updateWidth();
         this._createPowerItems();
@@ -256,7 +256,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _clearActorsFromBox(box){
         this.categoryHeader.setActiveCategory(null);
         if(this.mainBox.contains(this.categoryHeader))
-            this.mainBox.remove_actor(this.categoryHeader);
+            this.mainBox.remove_child(this.categoryHeader);
         super._clearActorsFromBox(box);
     }
 
@@ -289,15 +289,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayComputerCategory(){
         this._clearActorsFromBox(this.applicationsBox);
-        this.applicationsBox.add(this.createLabelRow(_("Application Shortcuts")));
+        this.applicationsBox.add_child(this.createLabelRow(_("Application Shortcuts")));
         for(let i = 0; i < this.applicationShortcuts.length; i++){
-            this.applicationsBox.add(this.applicationShortcuts[i]);
+            this.applicationsBox.add_child(this.applicationShortcuts[i]);
         }
-        this.applicationsBox.add(this.createLabelRow(_("Places")));
+        this.applicationsBox.add_child(this.createLabelRow(_("Places")));
         for(let i = 0; i < this.directoryShortcuts.length; i++){
-            this.applicationsBox.add(this.directoryShortcuts[i]);
+            this.applicationsBox.add_child(this.directoryShortcuts[i]);
         }
-        this.applicationsBox.add(this.externalDevicesBox);
+        this.applicationsBox.add_child(this.externalDevicesBox);
         this.activeMenuItem = this.applicationShortcuts[0];
     }
 
@@ -305,26 +305,26 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let places = this.placesManager.get(id);
 
         if(id === 'bookmarks' && places.length > 0){
-            this._sections[id].add_actor(this.createLabelRow(_("Bookmarks")));
+            this._sections[id].add_child(this.createLabelRow(_("Bookmarks")));
             for (let i = 0; i < places.length; i++){
                 let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_actor(item); 
+                this._sections[id].add_child(item); 
             } 
         }
 
         if(id === 'devices' && places.length > 0){
-            this._sections[id].add_actor(this.createLabelRow(_("Devices")));
+            this._sections[id].add_child(this.createLabelRow(_("Devices")));
             for (let i = 0; i < places.length; i++){
                 let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_actor(item); 
+                this._sections[id].add_child(item); 
             }
         }
 
         if(id === 'network' && places.length > 0){
-            this._sections[id].add_actor(this.createLabelRow(_("Network")));
+            this._sections[id].add_child(this.createLabelRow(_("Network")));
             for (let i = 0; i < places.length; i++){
                 let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_actor(item); 
+                this._sections[id].add_child(item); 
             }
         }
     }   
@@ -366,18 +366,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayPowerItems(){
         this._clearActorsFromBox(this.applicationsBox);         
-        this.applicationsBox.add(this.createLabelRow(_("Session")));
-        this.applicationsBox.add(this.lock);
-        this.applicationsBox.add(this.logOut);
-        this.applicationsBox.add(this.createLabelRow(_("System")));
-        this.applicationsBox.add(this.suspend);
+        this.applicationsBox.add_child(this.createLabelRow(_("Session")));
+        this.applicationsBox.add_child(this.lock);
+        this.applicationsBox.add_child(this.logOut);
+        this.applicationsBox.add_child(this.createLabelRow(_("System")));
+        this.applicationsBox.add_child(this.suspend);
         if(this.sleep)
             this.applicationsBox.insert_child_at_index(this.sleep, 4);
 
         if(this.hibernate)
             this.applicationsBox.insert_child_at_index(this.hibernate, 5);
-        this.applicationsBox.add(this.restart);
-        this.applicationsBox.add(this.powerOff);
+        this.applicationsBox.add_child(this.restart);
+        this.applicationsBox.add_child(this.powerOff);
         this.activeMenuItem = this.lock;
     }
 
@@ -390,7 +390,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let isActiveMenuItemSet = false;
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            this.applicationsBox.add_actor(categoryMenuItem.actor);	
+            this.applicationsBox.add_child(categoryMenuItem.actor);	
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;
                 this.activeMenuItem = categoryMenuItem;
@@ -407,7 +407,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _insertCategoryHeader(){
         if(this.mainBox.contains(this.categoryHeader))
-            this.mainBox.remove_actor(this.categoryHeader);
+            this.mainBox.remove_child(this.categoryHeader);
         if(this.searchBarLocation === Constants.SearchbarLocation.BOTTOM)
             this.mainBox.insert_child_at_index(this.categoryHeader, 1);
         else
