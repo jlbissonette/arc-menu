@@ -691,6 +691,9 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     vfunc_key_press_event(keyEvent) {
+        if (global.focus_manager.navigate_from_event(Clutter.get_current_event()))
+            return Clutter.EVENT_STOP;
+
         if (!this._activatable)
             return super.vfunc_key_press_event(keyEvent);
 
@@ -790,9 +793,9 @@ class Arc_Menu_Separator extends PopupMenu.PopupBaseMenuItem {
         if(separatorAlignment === Constants.SeparatorAlignment.HORIZONTAL){
             this.style = "padding: 0px 5px;"
             if(separatorLength === Constants.SeparatorStyle.SHORT)
-                this._separator.style = "margin: 5px 45px;";
+                this._separator.style = "margin: 0px 45px;";
             else if(separatorLength === Constants.SeparatorStyle.MEDIUM)
-                this._separator.style = "margin: 5px 15px;";
+                this._separator.style = "margin: 0px 15px;";
             else if(separatorLength === Constants.SeparatorStyle.LONG)
                 this._separator.style = "margin: 0px 5px;";
             else if(separatorLength === Constants.SeparatorStyle.MAX)
@@ -1284,7 +1287,7 @@ var CategoriesButton = GObject.registerClass(class Arc_Menu_CategoriesButton ext
 
 var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends ArcMenuButtonItem {
     _init(menuLayout, powerType) {
-        super._init(menuLayout, Constants.PowerOptions[powerType].TITLE, Constants.PowerOptions[powerType].IMAGE);
+        super._init(menuLayout, Constants.PowerOptions[powerType].NAME, Constants.PowerOptions[powerType].ICON);
         this.powerType = powerType;
     }
     activate(event) {
@@ -1306,7 +1309,7 @@ var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends A
         this._updateIcon();
 
         this.label = new St.Label({
-            text: _(Constants.PowerOptions[this.powerType].TITLE),
+            text: _(Constants.PowerOptions[this.powerType].NAME),
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER
         });
@@ -1321,7 +1324,7 @@ var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends A
         let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
 
         return new St.Icon({
-            gicon: Gio.icon_new_for_string(Constants.PowerOptions[this.powerType].IMAGE),
+            gicon: Gio.icon_new_for_string(Constants.PowerOptions[this.powerType].ICON),
             style_class: 'popup-menu-icon',
             icon_size: iconSize,
         });
@@ -1560,6 +1563,7 @@ var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends Arc
         return new St.Icon({
             icon_name: 'go-previous-symbolic',
             icon_size: iconSize,
+            style_class: 'popup-menu-icon',
         });
     }
 
@@ -1610,7 +1614,8 @@ var ViewAllPrograms = GObject.registerClass(class Arc_Menu_ViewAllPrograms exten
         return new St.Icon({
             icon_name: 'go-next-symbolic',
             icon_size: iconSize,
-            x_align: Clutter.ActorAlign.START
+            x_align: Clutter.ActorAlign.START,
+            style_class: 'popup-menu-icon',
         });
     }
 
@@ -1836,7 +1841,7 @@ var UserMenuIcon = class Arc_Menu_UserMenuIcon{
         this._user = AccountsService.UserManager.get_default().get_user(username);
 
         this.actor = new St.Bin({
-            style_class: 'menu-user-avatar user-icon',
+            style_class: 'menu-user-avatar user-icon popup-menu-icon',
             track_hover: true,
             reactive: true,
             x_align: Clutter.ActorAlign.CENTER,
@@ -2009,7 +2014,8 @@ var PinnedAppsMenuItem = GObject.registerClass({
 
         return new St.Icon({
             gicon: Gio.icon_new_for_string(this._iconString),
-            icon_size: iconSize
+            icon_size: iconSize,
+            style_class: 'popup-menu-icon',
         });
     }
 
@@ -2262,7 +2268,9 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             let defaultIconSize = this.isContainedInCategory || this.isSearchResult ? LayoutProps.DefaultApplicationIconSize : LayoutProps.DefaultPinnedIconSize;
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
         }
-        return this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
+        let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
+        icon.style_class = 'popup-menu-icon';
+        return icon;
     }
 
     removeIndicator(){
@@ -2888,6 +2896,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         return new St.Icon({
             gicon:  this._info.gicon ?  this._info.gicon :  this._info.icon,
             icon_size: iconSize,
+            style_class: 'popup-menu-icon',
         });
     }
 

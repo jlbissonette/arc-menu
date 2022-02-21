@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const {Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
+const {Adw, Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
@@ -101,30 +101,28 @@ var Button = GObject.registerClass(class Arc_Menu_Button extends Gtk.Button {
     }
 });
 
-var DialogWindow = GObject.registerClass(class Arc_Menu_DialogWindow extends Gtk.Dialog {
+//TODO - Rework this
+var DialogWindow = GObject.registerClass({
+    Signals: {
+        'response': { param_types: [GObject.TYPE_INT]},
+    },
+},class Arc_Menu_DialogWindow extends Adw.PreferencesWindow {
     _init(title, parent) {
         super._init({
             title: title,
             transient_for: parent.get_root(),
-            modal: true
+            modal: true,
+            search_enabled: true,
         });
-        let vbox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            spacing: 20,
-            homogeneous: false,
-            margin_top: 5,
-            margin_bottom: 5,
-            margin_start: 5,
-            margin_end: 5,
-            hexpand: true,
-            halign: Gtk.Align.FILL
+        this.page = new Adw.PreferencesPage();
+        this.pageGroup = new Adw.PreferencesGroup();
+        this.headerGroup = new Adw.PreferencesGroup({
+            margin_top: 0,
+            margin_bottom: 0
         });
-        vbox.insert_after(this.get_content_area(), null);
-        this._createLayout(vbox);
-    }
-
-    _createLayout(vbox) {
-        throw "Not implemented!";
+        this.add(this.page);
+        this.page.add(this.headerGroup);
+        this.page.add(this.pageGroup);
     }
 });
 
@@ -177,42 +175,43 @@ var MessageDialog = GObject.registerClass(class Arc_Menu_MessageDialog extends G
     }
 });
 
-var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
+var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Adw.PreferencesGroup {
     _init(params) {
         super._init(params);
-        this._listBox = new Gtk.ListBox();
-        this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.count = 0;
         this.children = [];
-        Gtk.Frame.prototype.set_child.call(this, this._listBox);
+        this._listBox = this;
     }
 
     add(boxRow) {
-        this._listBox.append(boxRow);
+        super.add(boxRow);
         this.children.push(boxRow);
         this.count++;
     }
+
     show() {
-        this._listBox.show();
         super.show();
     }
+
     length() {
-        return this._listBox.length;
+        return this.length;
     }
+
     remove(boxRow){
         if(boxRow){
-            this._listBox.remove(boxRow);
+            super.remove(boxRow);
             this.children = this.children.filter(e => e !== boxRow)
             this.count = this.count -1;
         }
     }
     removeChildrenAfterIndex(index){
+        let children = [...this];
         let childrenCount = this.count;
         for(let i = childrenCount - 1; i > index; i--){
-            let child = this._listBox.get_row_at_index(i);
+            let child = children[i];
             if(child) this.remove(child);
         }
-        this._listBox.show();
+        this.show();
     }
     remove_all_children() {
         for(let i = 0; i < this.children.length; i++){
@@ -221,23 +220,23 @@ var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Gtk.Frame {
         }
         this.children = [];
         this.count = 0;
-        this._listBox.show();
+        this.show();
     }
     get_index(index){
-        return this._listBox.get_row_at_index(index);
+        return this.get_row_at_index(index);
     }
     insert(row, pos){
-        this._listBox.insert(row, pos);
+        this.insert(row, pos);
         this.children.push(row);
         this.count++;
     }
 });
 
-var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.ListBoxRow {
+var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Adw.ActionRow {
     _init(params) {
         super._init(params);
-        this.selectable = false;
-        this.activatable = false;
+        this.selectable = true;
+        this.activatable = true;
         this._grid = new Gtk.Grid({
             orientation: Gtk.Orientation.HORIZONTAL,
             margin_top: 5,
@@ -248,7 +247,7 @@ var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.L
             row_spacing: 20
         });
         this.x = 0;
-        Gtk.ListBoxRow.prototype.set_child.call(this, this._grid);
+        this.set_child(this._grid);
     }
 
     add(widget) {
@@ -262,19 +261,14 @@ var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Gtk.L
     }
 });
 
-var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow extends Gtk.ListBoxRow {
-    _init(scrolledWindow) {
-        super._init();
-
-        this._grid = new Gtk.Grid({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            margin_top: 5,
-            margin_bottom: 5,
-            margin_start: 5,
-            margin_end: 5,
-            column_spacing: 20,
-            row_spacing: 20
-        });
+var FrameBoxDragRow = GObject.registerClass({
+    Signals: {
+        'drag-drop-done': { },
+    },
+},class Arc_Menu_FrameBoxDragRow extends Adw.ActionRow {
+    _init(params) {
+        super._init(params);
+        let scrolledWindow = null;
 
         let dragSource = new Gtk.DragSource({ 
             actions: Gdk.DragAction.MOVE
@@ -287,7 +281,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
         this.add_controller(dropTarget);
 
         this.x = 0;
-        Gtk.ListBoxRow.prototype.set_child.call(this, this._grid);
+        
         dragSource.connect("drag-begin", (self, gdkDrag) => {
             //get listbox parent
             let listBox = self.get_widget().get_parent();
@@ -352,7 +346,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             let listBox = this.get_parent();
             let index = this.get_index();
             if(index === listBox.dragRow.get_index()){
-                gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
+                gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, () => {
                     gdkDrop.finish(Gdk.DragAction.MOVE);
                 });
                 return true;
@@ -360,11 +354,11 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             listBox.remove(listBox.dragRow);
             listBox.show();
             listBox.insert(listBox.dragRow, index);
-            this.resetButton?.set_sensitive(true);
-            this.saveButton.set_sensitive(true);
+
             gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
                 gdkDrop.finish(Gdk.DragAction.MOVE);
             });
+            this.emit("drag-drop-done");
             return true;
         });
     }
@@ -373,7 +367,7 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
         let dragWidget = new Gtk.ListBox();
         dragWidget.set_size_request(alloc.width, alloc.height);
 
-        let dragRow = new FrameBoxRow();
+        let dragRow = new Adw.ActionRow();
         dragWidget.append(dragRow);
         dragWidget.drag_highlight_row(dragRow);
 
@@ -381,34 +375,20 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             gicon: this._gicon,
             pixel_size: 22
         });
-
-        let imageBox = new Gtk.Box({
-            margin_start: 0,
-            hexpand: false,
-            vexpand: true,
-            spacing: 5,
-        });
         let dragImage = new Gtk.Image( {
             gicon: Gio.icon_new_for_string("drag-symbolic"),
             pixel_size: 12
         });
 
-        imageBox.append(dragImage);
-        imageBox.append(image);
+        dragRow.add_prefix(image);
+        dragRow.add_prefix(dragImage);
+        dragRow.title = _(this._name);
 
-        dragRow.add(imageBox);
-
-        let label = new Gtk.Label({
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            label: _(this._name)
-        });
-        dragRow.add(label);
         let grid = new Gtk.Grid({
             margin_top: 0,
             margin_bottom: 0,
             vexpand: false,
+            valign: Gtk.Align.CENTER,
             hexpand: false,
             column_spacing: 10
         })
@@ -437,19 +417,9 @@ var FrameBoxDragRow = GObject.registerClass(class Arc_Menu_FrameBoxDragRow exten
             grid.insert_column(0);
             grid.attach(editButton, 0, 0, 1, 1);
         }
-        dragRow.add(grid);
+        dragRow.add_suffix(grid);
         
         return dragWidget;
-    }
-
-    add(widget) {
-        this._grid.attach(widget, this.x, 0, 1, 1);
-        this.x++;
-    }
-    
-    setVerticalAlignmentBottom(){
-        this._grid.vexpand = true;
-        this._grid.valign = Gtk.Align.END;
     }
 });
 
@@ -457,9 +427,8 @@ var EditEntriesBox = GObject.registerClass({
     Signals: {
         'modify': {},
         'change': {},
-        'move-up': {},
-        'move-down': {},
-        'delete': {},
+        'row-changed': {},
+        'row-deleted': {}
     },
 },  class Arc_Menu_EditEntriesBox extends Gtk.Grid{
     _init(params){
@@ -467,13 +436,12 @@ var EditEntriesBox = GObject.registerClass({
             margin_top: 0,
             margin_bottom: 0,
             vexpand: false,
+            valign: Gtk.Align.CENTER,
             hexpand: false,
             column_spacing: 10
         });
         let editPopover = new Gtk.Popover();
         let frameRow = params.frameRow;
-        let frame = params.frame;
-        let buttons = params.buttons;
 
         let modifyButton, deleteButton, changeButton;
 
@@ -516,15 +484,15 @@ var EditEntriesBox = GObject.registerClass({
             has_frame: false
         });
         moveUpButton.connect('clicked', ()=> {
-            this.emit('move-up');
+            let parent = frameRow.get_parent();
             let index = frameRow.get_index();
             if(index > 0){
-                frame.remove(frameRow);
-                frame.insert(frameRow, index - 1);
+                parent.remove(frameRow);
+                parent.insert(frameRow, index - 1);
             }
-            frame.show();
-            buttons.forEach(button => button.set_sensitive(true));
+            parent.show();
             editPopover.popdown();
+            this.emit('row-changed');
         });
 
         let moveDownButton = new Gtk.Button({
@@ -532,15 +500,16 @@ var EditEntriesBox = GObject.registerClass({
             has_frame: false
         });
         moveDownButton.connect('clicked', ()=> {
-            this.emit('move-down');
+            let parent = frameRow.get_parent();
+            let children = [...parent];
             let index = frameRow.get_index();
-            if(index + 1 < frame.count) {
-              frame.remove(frameRow);
-              frame.insert(frameRow, index + 1);
+            if(index + 1 < children.length) {
+                parent.remove(frameRow);
+                parent.insert(frameRow, index + 1);
             }
-            frame.show();
-            buttons.forEach(button => button.set_sensitive(true));
+            parent.show();
             editPopover.popdown();
+            this.emit('row-changed');
         });
 
         if(params.deleteButton){
@@ -549,11 +518,11 @@ var EditEntriesBox = GObject.registerClass({
                 has_frame: false,
             });
             deleteButton.connect('clicked', ()=> {
-                this.emit('delete');
-                frame.remove(frameRow);
-                frame.show();
-                buttons.forEach(button => button.set_sensitive(true));
+                let parent = frameRow.get_parent();
+                parent.remove(frameRow);
+                parent.show();
                 editPopover.popdown();
+                this.emit('row-deleted');
             });
         }
 
@@ -582,31 +551,14 @@ var EditEntriesBox = GObject.registerClass({
 var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk.ListBox{
     _init(widget, params){
         super._init(params);
-        this.valign = Gtk.Align.FILL;
-        this.vexpand = true;
-        this.hexpand = false;
         this.settingsFrameStack = widget.settingsFrameStack;
-        this.settingsListStack = widget.settingsListStack
         this.connect("row-selected", (self, row) => {
             if(row){
                 let stackName = row.stackName;
+                widget.headerLabel.label = "<b>" + _(row.translateableName) + "</b>",
                 this.settingsFrameStack.set_visible_child_name(stackName);
-                if(row.nextPage){
-                    if(widget.backButton.get_parent())
-                        widget.leftHeaderBox.remove(widget.backButton);
-                    widget.leftHeaderBox.prepend(widget.backButton);
-                    this.settingsListStack.set_visible_child_name(row.nextPage);
-                    this.settingsListStack.get_child_by_name(row.nextPage).listBox.selectFirstRow();
-                }
             }
         });
-        this.scrollWindow =  new Gtk.ScrolledWindow({
-            valign: Gtk.Align.FILL,
-            vexpand: true
-        });
-        this.scrollWindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
-        this.scrollWindow.set_child(this);
-        this.scrollWindow.listBox = this;
     }
 
     getRowAtIndex(index){
@@ -623,6 +575,14 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
 
     selectRowAtIndex(index){
         this.select_row(this.get_row_at_index(index));
+    }
+
+    selectRowByName(name){
+        let children = [...this];
+        for(let child of children){
+            if(child.stackName === name)
+                this.select_row(child);
+        }
     }
 
     addRow(name, translateableName, iconName, nextPage){
@@ -738,7 +698,59 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
 
         this.box._grid.attach(this._image, 0, 0, 1, 1);
         this.box._grid.attach(this._label, 0, 1, 1, 1);
-        this._listBox.append(this.box);
+        this._listBox.add(this.box);
+    }
+});
+
+var MenuLayoutRow = GObject.registerClass(class Arc_Menu_MenuLayoutRow extends Adw.ActionRow {
+    _init(title, imagePath, imageSize, layout) {
+        super._init();
+        this._grid = new Gtk.Grid({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            margin_top: 5,
+            margin_bottom: 5,
+            margin_start: 5,
+            margin_end: 5,
+            column_spacing: 0,
+            row_spacing: 0
+        });
+
+        if(layout){
+            this.layout = layout.MENU_TYPE;
+        }
+
+        this.title = "<b>" + _(title) + "</b>"
+        this.image = new Gtk.Image({ 
+            hexpand: false,
+            halign: Gtk.Align.START,
+            gicon: Gio.icon_new_for_string(imagePath),
+            pixel_size: imageSize
+        });
+        
+        this.label = new Gtk.Label({
+            label: "<b>" + _(title) + "</b>",
+            use_markup: true,
+            hexpand: true,
+            halign: Gtk.Align.CENTER,
+            vexpand: true,
+            valign: Gtk.Align.CENTER,
+            wrap: true,
+        })
+
+        let goNextImage = new Gtk.Image({
+            gicon: Gio.icon_new_for_string('go-next-symbolic'),
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            hexpand: false,
+            vexpand: false,
+        })
+        this._grid.attach(this.image, 0, 0, 1, 1);
+        this._grid.attach(this.label, 0, 0, 1, 1);
+        this._grid.attach(goNextImage, 0, 0, 1, 1);
+
+        this.set_child(this._grid);
+        this.activatable_widget = this._grid;
+
     }
 });
 
@@ -750,7 +762,7 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
             hexpand: true,
             vexpand: false
         });
-        this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
+        //this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         this.name = name;
         this.layout = layout.MENU_TYPE;
         
@@ -788,6 +800,6 @@ var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBo
         this.box._grid.attach(titleLabel, 1, 0, 1, 1);
         this.box._grid.attach(goNextImage, 2, 0, 1, 2);
         
-        this._listBox.append(this.box);
+        this._listBox.add(this.box);
    }
 });

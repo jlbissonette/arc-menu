@@ -243,8 +243,9 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.arcMenu.actor.style = null;
         this.arcMenu.removeAll();
         this.section = new PopupMenu.PopupMenuSection();
-        this.arcMenu.addMenuItem(this.section);            
+        this.arcMenu.addMenuItem(this.section);
         this.mainBox = new St.BoxLayout({
+            reactive: true,
             vertical: false,
             x_expand: true,
             y_expand: true,
@@ -425,7 +426,13 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.arcMenuContextMenu.actor.set_style_class_name(null);
         this.arcMenuContextMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
         this.arcMenuContextMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
-
+        if(!customStyle)
+            this.arcMenuContextMenu.actor.add_style_class_name('panel-menu');
+        this.arcMenuContextMenu.actor.add_style_class_name('app-menu');
+        if(!customStyle)
+            this.arcMenu.actor.add_style_class_name('panel-menu');
+        this.arcMenu.actor.add_style_class_name('arcmenu-menu');
+        
         if(layout === Constants.MenuLayout.RAVEN){
             this.MenuLayout?.updateStyle();
             return;
@@ -434,11 +441,12 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if(removeMenuArrow){
             this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px; -boxpointer-gap: " + gapAdjustment + "px;";
             this.arcMenu.box.style = "margin:0px;";
-        }  
-        else if(forcedMenuLocation === Constants.ForcedMenuLocation.OFF){
+        }
+        //TODO
+        /*else if(forcedMenuLocation === Constants.ForcedMenuLocation.OFF){
             this.arcMenu.actor.style = "-boxpointer-gap: " + gapAdjustment + "px;";
             this.arcMenu.box.style = null;
-        }
+        }*/
 
         this.MenuLayout?.updateStyle();
     }
@@ -769,8 +777,10 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
     }
 
     open(animate){
-        if(!this.isOpen)
+        if(!this.isOpen){
             this._menuButton.arcMenu.actor._muteInput = false;
+            this._menuButton.arcMenu.actor._muteKeys = false;
+        }
         super.open(animate);
     }
 
@@ -811,7 +821,8 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
 
         let item = new PopupMenu.PopupMenuItem(_("Settings Quick Links:"), { 
             activate: false,
-            reactive: false
+            reactive: false,
+            can_focus: false,
         });
         item.add_style_class_name("margin-box arcmenu-menu-item");
         this.addMenuItem(item);
@@ -819,7 +830,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
         this.addMenuItem(this.createQuickLinkItem(_("Layout Tweaks"), Constants.PrefsVisiblePage.LAYOUT_TWEAKS));
         this.addMenuItem(this.createQuickLinkItem(_("Customize Menu"), Constants.PrefsVisiblePage.CUSTOMIZE_MENU));
-        this.addMenuItem(this.createQuickLinkItem(_("Button Appearance"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
+        this.addMenuItem(this.createQuickLinkItem(_("Button Settings"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
 
         separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
         this.addMenuItem(separator);

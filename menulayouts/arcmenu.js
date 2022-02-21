@@ -59,7 +59,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add_child(this.searchBox.actor);
         }
 
-        this.buttonPressEventID = global.stage.connect("button-press-event", () => {
+        this.buttonPressEventID = this.mainBox.connect("button-press-event", () => {
             if(this.arcMenu.isOpen && this.backButton.visible){
                 let event = Clutter.get_current_event();
                 if(event.get_button() === 8){
@@ -448,7 +448,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     destroy(){
         if(this.buttonPressEventID){
-            global.stage.disconnect(this.buttonPressEventID);
+            this.mainBox.disconnect(this.buttonPressEventID);
             this.buttonPressEventID = null;
         }
         super.destroy()

@@ -632,8 +632,7 @@ function createStylesheet(settings){
         + menuButtonStyle
         +".symbolic-icons{\n-st-icon-style: symbolic;\n}\n\n"
         +".regular-icons{\n-st-icon-style: regular;\n}\n\n"
-        +".arcmenu-menu-item{\nborder-radius: 8px;\n}\n\n"     
-        +".margin-box{\nmargin: 0px 4px;\n}\n\n" 
+        +".arcmenu-menu-item{\npadding-top: 6px;\npadding-bottom: 6px;\n}\n\n"
         +"#arc-menu-launcher-button{\nmax-width: 90px;\nborder-radius: 0px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\nborder-color: transparent;\nborder-bottom-width: 3px;\n}\n\n"
         +"#arc-menu-launcher-button.active-item, #arc-menu-launcher-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             +"\nborder-color: " + plasmaSelectedItemColor + ";\nborder-bottom-width: 3px;\n}\n\n"
@@ -643,7 +642,9 @@ function createStylesheet(settings){
             + plasmaButtonStyle + "\nborder-color: " + plasmaSelectedItemColor + ";\n}\n\n"
 
         +"StScrollView .small-vfade{\n-st-vfade-offset: 44px;\n}\n\n"
-
+        +".arcmenu-menu .popup-menu-ornament{\nwidth: 0;\n}\n\n"
+        +".arcmenu-menu .popup-menu-icon:ltr{\nmargin-right: 8px;\n}\n\n"
+        +".arcmenu-menu .popup-menu-icon:rlt{\nmargin-left: 8px;\n}\n\n"
         +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
         +".arcmenu-small-button{\n-st-icon-style: symbolic;\nborder-radius: 8px;\npadding: 3px 8px;\n}\n\n"
         +smallButtonHoverStyle
@@ -667,7 +668,7 @@ function createStylesheet(settings){
                                 +"-arrow-border-width:" + borderSize + "px;\n"
                                 +"-arrow-base:" + menuMargin + "px;\n"
                                 +"-arrow-rise:" + menuArrowSize + "px;\n}\n\n"
-        +".arc-menu .popup-menu-content{\npadding: 16px 0px;\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nbox-shadow: 0;\n}\n\n"
+        +".arc-menu .popup-menu-content{\npadding: 16px 0px;\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nborder: none;\nbox-shadow: 0;\n}\n\n"
 
         +".arcmenu-separator{\npadding: 0px;\nheight: 1px;\nmargin: 0px 20px;\n}\n\n"
         + separatorColorStyle

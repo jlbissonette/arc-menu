@@ -137,8 +137,9 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         this.arcMenu.actor.style = null;
         this.arcMenu.removeAll();
         this.section = new PopupMenu.PopupMenuSection();
-        this.arcMenu.addMenuItem(this.section);            
+        this.arcMenu.addMenuItem(this.section);
         this.mainBox = new St.BoxLayout({
+            reactive: true,
             vertical: false,
             x_expand: true,
             y_expand: true,
@@ -187,6 +188,10 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         this.arcMenu.actor.set_style_class_name(null);
         this.arcMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
         this.arcMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
+
+        if(!customStyle)
+            this.arcMenu.actor.add_style_class_name('panel-menu');
+        this.arcMenu.actor.add_style_class_name('arcmenu-menu');
 
         if(this.MenuLayout)
             this.MenuLayout.updateStyle();   

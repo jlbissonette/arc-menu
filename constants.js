@@ -216,6 +216,16 @@ var DiaglogType = {
     DIRECTORIES: 3
 };
 
+var MenuSettingsListType = {
+    PINNED_APPS: 0,
+    APPLICATIONS: 1,
+    DIRECTORIES: 2,
+    OTHER: 3,
+    POWER_OPTIONS: 4,
+    EXTRA_CATEGORIES: 5,
+    QUICK_LINKS: 6
+};
+
 var MenuButtonAppearance = {
     ICON: 0,
     TEXT: 1,
@@ -245,13 +255,13 @@ var SleepIcon = {
 };
 
 var PowerOptions = [
-    { TYPE: PowerType.LOGOUT, IMAGE: 'application-exit-symbolic', TITLE: _("Log Out") },
-    { TYPE: PowerType.LOCK, IMAGE: 'changes-prevent-symbolic', TITLE: _("Lock") },
-    { TYPE: PowerType.RESTART, IMAGE: 'system-reboot-symbolic', TITLE: _("Restart") },
-    { TYPE: PowerType.POWER_OFF, IMAGE: 'system-shutdown-symbolic', TITLE: _("Power Off") },
-    { TYPE: PowerType.SUSPEND, IMAGE: 'media-playback-pause-symbolic', TITLE: _("Suspend") },
-    { TYPE: PowerType.HYBRID_SLEEP, IMAGE: Me.path + SleepIcon.PATH, TITLE: _("Hybrid Sleep") },
-    { TYPE: PowerType.HIBERNATE, IMAGE: 'document-save-symbolic', TITLE: _("Hibernate") },
+    { TYPE: PowerType.LOGOUT, ICON: 'application-exit-symbolic', NAME: _("Log Out") },
+    { TYPE: PowerType.LOCK, ICON: 'changes-prevent-symbolic', NAME: _("Lock") },
+    { TYPE: PowerType.RESTART, ICON: 'system-reboot-symbolic', NAME: _("Restart") },
+    { TYPE: PowerType.POWER_OFF, ICON: 'system-shutdown-symbolic', NAME: _("Power Off") },
+    { TYPE: PowerType.SUSPEND, ICON: 'media-playback-pause-symbolic', NAME: _("Suspend") },
+    { TYPE: PowerType.HYBRID_SLEEP, ICON: Me.path + SleepIcon.PATH, NAME: _("Hybrid Sleep") },
+    { TYPE: PowerType.HIBERNATE, ICON: 'document-save-symbolic', NAME: _("Hibernate") },
 ];
 
 var MenuIcons = [
@@ -444,11 +454,11 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
                                 '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo' +
                                 '\n\n•   <b>ZORIN OS</b> - The "Z" logomark is a registered trademark of Zorin Technology Group Ltd. Copyright © 2019 - 2021 Zorin Technology Group Ltd';
 
-var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer\t' +
+var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer' +
                 '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a> - <b>(Inactive)</b>\nArcMenu Founder - Former Maintainer - Former Digital Art Designer';
 var TRANSLATORS = '<b>Thank you to all translators!</b>\n\n' +
                     '<b>For a list of all translators please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
-var CONTRIBUTORS = '<b>Thank you to all who contributed to, and/or helped, the developement of ArcMenu!</b>'
+var CONTRIBUTORS = '<b>Thank you to all who contributed to, and or helped, the developement of ArcMenu!</b>'
                     +'\n\n<b>For a list of all contributors please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
 var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
                 '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
