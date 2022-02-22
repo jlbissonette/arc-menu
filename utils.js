@@ -578,7 +578,7 @@ function createStylesheet(settings){
         smallButtonHoverStyle = ".arc-menu .popup-menu-item .arcmenu-small-button.selected{\nbackground-color: " + modifyColorLuminance(highlightColor, -0.25) + "\n}\n\n";
     }
     else
-        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\npadding: 3px 8px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
+        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);\npadding: 3px 8px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
     
     let menuButtonStyle = '';
     if(settings.get_boolean('override-menu-button-color'))

@@ -345,9 +345,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _createNavigationButtons(buttonTitle, ButtonClass){
         let navButton = this.createLabelRow(buttonTitle);
-        navButton.remove_child(navButton._ornamentLabel);
         navButton.label.y_align = Clutter.ActorAlign.CENTER;
-        navButton.label.style = 'padding: 15px 0px;';
         navButton.style = 'padding: 0px 25px;'
         if(ButtonClass)
             navButton.add_child(new ButtonClass(this));

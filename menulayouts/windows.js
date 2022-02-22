@@ -453,7 +453,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super._clearActorsFromBox(this.pinnedAppsBox);
         this.pinnedAppsGrid.remove_all_children();
         let label = this.createLabelRow(_("Pinned Apps"));
-        label.remove_child(label._ornamentLabel);
         this.pinnedAppsBox.add_child(label);
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.HOME_SCREEN, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))

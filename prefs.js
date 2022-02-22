@@ -615,22 +615,22 @@ var GeneralPage = GObject.registerClass(
                 enableRunnerMenuSwitch.connect('notify::active', (widget) => {
                     this._settings.set_boolean('enable-standlone-runner-menu', widget.get_active());
                     if(!widget.get_active()){
-                        customHotkeyRow.visible = false;
-                        hotkeyRow.visible = false;
-                        primaryMonitorRow.visible = false;
-                        hotkeyActivationRow.visible = false;
+                        customHotkeyRow.hide();
+                        hotkeyRow.hide();
+                        primaryMonitorRow.hide();
+                        hotkeyActivationRow.hide();
                     }
                     else{
-                        hotkeyRow.visible = true;
-                        primaryMonitorRow.visible = true;
+                        hotkeyRow.show();
+                        primaryMonitorRow.show();
                         
                         if(this._settings.get_enum(hotkeyEnumSetting) === 0){
-                            customHotkeyRow.visible = false;
-                            hotkeyActivationRow.visible = false;
+                            customHotkeyRow.hide();
+                            hotkeyActivationRow.hide();
                         }
                         else{
-                            customHotkeyRow.visible = true;
-                            hotkeyActivationRow.visible = true;
+                            customHotkeyRow.show();
+                            hotkeyActivationRow.show();
                         }
                     }
                 });
@@ -728,35 +728,35 @@ var GeneralPage = GObject.registerClass(
 
             hotkeyCombo.connect('changed', (widget) => {
                 if(widget.get_active_id() === "NONE"){
-                    customHotkeyRow.visible = false;
-                    hotkeyActivationRow.visible = false;
-                    primaryMonitorRow.visible = false;
+                    customHotkeyRow.hide();
+                    hotkeyActivationRow.hide();
+                    primaryMonitorRow.hide();
                     if(!isMenuHotkey)
-                        hotkeyRow.visible = false;
+                        hotkeyRow.hide();
                 }
                 else if(widget.get_active_id() === "SUPER_L"){
-                    customHotkeyRow.visible = false;
-                    hotkeyActivationRow.visible = false;
-                    primaryMonitorRow.visible = true;
+                    customHotkeyRow.hide();
+                    hotkeyActivationRow.hide();
+                    primaryMonitorRow.show();
                     if(!isMenuHotkey)
-                        hotkeyRow.visible = true;
+                        hotkeyRow.show();
                 }
                 else if(widget.get_active_id() === "CUSTOM"){
-                    customHotkeyRow.visible = true;
-                    hotkeyActivationRow.visible = true;
-                    primaryMonitorRow.visible = true;
+                    customHotkeyRow.show();
+                    hotkeyActivationRow.show();
+                    primaryMonitorRow.show();
                     if(!isMenuHotkey)
-                        hotkeyRow.visible = true;
+                        hotkeyRow.show();
                 }
                 this._settings.set_enum(hotkeyEnumSetting, widget.get_active());
             });
             hotkeyCombo.set_active(this._settings.get_enum(hotkeyEnumSetting));
 
             if(!isMenuHotkey && !enableRunnerMenuSwitch.get_active()){
-                customHotkeyRow.visible = false;
-                hotkeyActivationRow.visible = false;
-                primaryMonitorRow.visible = false;
-                hotkeyRow.visible = false;
+                customHotkeyRow.hide();
+                hotkeyActivationRow.hide();
+                primaryMonitorRow.hide();
+                hotkeyRow.hide();
             }
             return hotkeyGroup;
         }
@@ -829,9 +829,9 @@ var GeneralPage = GObject.registerClass(
             menuPositionCombo.set_active(this._settings.get_enum('position-in-panel'));
             menuPositionCombo.connect('changed', (widget) => {
                 if(widget.get_active() === Constants.MenuPosition.CENTER)
-                    menuAlignmentRow.visible = true;
+                    menuAlignmentRow.show();
                 else
-                    menuAlignmentRow.visible = false;
+                    menuAlignmentRow.hide();
                 this._settings.set_enum('position-in-panel', widget.get_active());
             });
 
@@ -923,51 +923,51 @@ var GeneralPage = GObject.registerClass(
             //If set to display on Dash to Panel
             if(arcMenuPlacement === Constants.ArcMenuPlacement.DTP){
                 if(avaliablePlacement[Constants.ArcMenuPlacement.DTP]){
-                    warningRow.visible = false;
-                    showActivitiesRow.visible = true;
-                    multiMonitorRow.visible = true;
+                    warningRow.hide();
+                    showActivitiesRow.show();
+                    multiMonitorRow.show();
                 }
                 else{
                     warningRow.title = _("Dash to Panel extension not running!") + "\n" + _("Enable Dash to Panel for this feature to work.");
-                    menuPositionRow.visible = false;
-                    menuAlignmentRow.visible = false;
-                    multiMonitorRow.visible = false;
-                    showActivitiesRow.visible = false;
-                    warningRow.visible = true;
+                    menuPositionRow.hide();
+                    menuAlignmentRow.hide();
+                    multiMonitorRow.hide();
+                    showActivitiesRow.hide();
+                    warningRow.show();
                 }
             }
 
             //If set to display on Dash to Dock
             if(arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
                 if(avaliablePlacement[Constants.ArcMenuPlacement.DASH]){
-                    warningRow.visible = false;
-                    multiMonitorRow.visible = true;
-                    showActivitiesRow.visible = true;
+                    warningRow.hide();
+                    multiMonitorRow.show();
+                    showActivitiesRow.show();
                 }
                 else{
                     warningRow.title = _("Dash to Dock extension not running!") + "\n" + _("Enable Dash to Dock for this feature to work.");
-                    menuPositionRow.visible = false;
-                    menuAlignmentRow.visible = false;
-                    multiMonitorRow.visible = false;
-                    showActivitiesRow.visible = false;
-                    warningRow.visible = true;
+                    menuPositionRow.hide();
+                    menuAlignmentRow.hide();
+                    multiMonitorRow.hide();
+                    showActivitiesRow.hide();
+                    warningRow.show();
                 }
             }
 
             //If set to display on Main Panel
             if(arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
-                multiMonitorRow.visible = false;
+                multiMonitorRow.hide();
                 if(avaliablePlacement[Constants.ArcMenuPlacement.PANEL]){
-                    showActivitiesRow.visible = true;
-                    warningRow.visible = false;
+                    showActivitiesRow.show();
+                    warningRow.hide();
                 }
                 else{
                     warningRow.title = _("Main Panel not found!");
-                    menuPositionRow.visible = false;
-                    menuAlignmentRow.visible = false;
-                    multiMonitorRow.visible = false;
-                    showActivitiesRow.visible = false;
-                    warningRow.visible = true;
+                    menuPositionRow.hide();
+                    menuAlignmentRow.hide();
+                    multiMonitorRow.hide();
+                    showActivitiesRow.hide();
+                    warningRow.show();
                 }
             }
         }
@@ -1351,28 +1351,28 @@ var ButtonAppearancePage = GObject.registerClass(
             menuButtonAppearanceCombo.append_text(_("Hidden"));
             menuButtonAppearanceCombo.connect('changed', (widget) => {
                 if(widget.get_active() === Constants.MenuButtonAppearance.NONE){
-                    menuButtonOffsetRow.visible = false;
-                    menuButtonArrowIconBoxRow.visible = false;
-                    menuButtonPaddingRow.visible = false;
-                    menuButtonCustomTextBoxRow.visible = false;
+                    menuButtonOffsetRow.hide();
+                    menuButtonArrowIconBoxRow.hide();
+                    menuButtonPaddingRow.hide();
+                    menuButtonCustomTextBoxRow.hide();
                 }
                 else if(widget.get_active() === Constants.MenuButtonAppearance.ICON){
-                    menuButtonArrowIconBoxRow.visible = true;
-                    menuButtonPaddingRow.visible = true;
-                    menuButtonCustomTextBoxRow.visible = false;
+                    menuButtonArrowIconBoxRow.show();
+                    menuButtonPaddingRow.show();
+                    menuButtonCustomTextBoxRow.hide();
                     if (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL || this.arcMenuPlacement === Constants.ArcMenuPlacement.DTP)
-                        menuButtonOffsetRow.visible = true;
+                        menuButtonOffsetRow.show();
                     else
-                        menuButtonOffsetRow.visible = false;
+                        menuButtonOffsetRow.hide();
                 }
                 else{
-                    menuButtonArrowIconBoxRow.visible = true;
-                    menuButtonPaddingRow.visible = true;
+                    menuButtonArrowIconBoxRow.show();
+                    menuButtonPaddingRow.show();
                     if (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL || this.arcMenuPlacement === Constants.ArcMenuPlacement.DTP)
-                        menuButtonOffsetRow.visible = true;
+                        menuButtonOffsetRow.show();
                     else
-                        menuButtonOffsetRow.visible = false;    
-                    menuButtonCustomTextBoxRow.visible = true;
+                        menuButtonOffsetRow.hide();    
+                    menuButtonCustomTextBoxRow.show();
                 }
                 this._settings.set_enum('menu-button-appearance', widget.get_active());
             });

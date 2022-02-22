@@ -429,7 +429,6 @@ var BaseLayout = class {
             let isContainedInCategory = true;
 
             let placeMenuItem = this.createMenuItem([name, icon, file], Constants.DisplayType.LIST, isContainedInCategory);
-            placeMenuItem._path = recentFile.get_uri_display().replace(recentFile.get_display_name(), '');
             placeMenuItem.style = "padding-right: 15px;";
             placeMenuItem.description = recentFile.get_uri_display().replace(homeRegExp, '~');
             placeMenuItem.fileUri = recentFile.get_uri();
@@ -1089,12 +1088,16 @@ var BaseLayout = class {
     }
 
     createLabelRow(title){
-        let labelRow = new PopupMenu.PopupMenuItem(_(title), {
-            hover: false,
-            can_focus: false
-        });  
-        labelRow.actor.add_style_pseudo_class = () => { return false;};
-        labelRow.label.style = 'font-weight: bold;';
+        let labelRow = new St.BoxLayout({
+            style: "padding: 9px 12px;"
+        });
+        let label = new St.Label({
+            text:_(title),
+            y_align: Clutter.ActorAlign.CENTER,
+            style: 'font-weight: bold;'
+        })
+        labelRow.add_child(label);
+        labelRow.label = label;
         return labelRow;
     }
 
