@@ -262,248 +262,163 @@ var MenuSettingsListPage = GObject.registerClass(
 });
 
 var AddAppsToPinnedListWindow = GObject.registerClass(
-    class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
-        _init(settings, parent, dialogType) {
-            this._settings = settings;
-            this._dialogType = dialogType;
-            if(this._dialogType === Constants.MenuSettingsListType.PINNED_APPS)
-                super._init(_('Add to your Pinned Apps'), parent, Constants.MenuItemLocation.TOP);
-            else if(this._dialogType === Constants.MenuSettingsListType.OTHER)
-                super._init(_('Change Selected Pinned App'), parent, Constants.MenuItemLocation.TOP);
-            else if(this._dialogType === Constants.MenuSettingsListType.APPLICATIONS, Constants.MenuItemLocation.TOP)
-                super._init(_('Select Application Shortcuts'), parent);
-            else if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES, Constants.MenuItemLocation.TOP)
-                super._init(_('Select Directory Shortcuts'), parent);
-            this.newPinnedAppsArray = [];
-            this.addResponse = false;
-            this._createLayout();
+class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
+    _init(settings, parent, dialogType) {
+        this._settings = settings;
+        this._dialogType = dialogType;
+        if(this._dialogType === Constants.MenuSettingsListType.PINNED_APPS)
+            super._init(_('Add to your Pinned Apps'), parent, Constants.MenuItemLocation.TOP);
+        else if(this._dialogType === Constants.MenuSettingsListType.OTHER)
+            super._init(_('Change Selected Pinned App'), parent, Constants.MenuItemLocation.TOP);
+        else if(this._dialogType === Constants.MenuSettingsListType.APPLICATIONS)
+            super._init(_('Select Application Shortcuts'), parent, Constants.MenuItemLocation.TOP);
+        else if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES)
+            super._init(_('Select Directory Shortcuts'), parent, Constants.MenuItemLocation.TOP);
+        this.newPinnedAppsArray = [];
+        this.addResponse = false;
+
+        let addAppsButton;
+        if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS || this._dialogType == Constants.MenuSettingsListType.APPLICATIONS
+            || this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
+            addAppsButton = new Gtk.Button({
+                label: _("Add"),
+                halign: Gtk.Align.END
+            });
+            let context = addAppsButton.get_style_context();
+            context.add_class('suggested-action');
+            addAppsButton.connect('clicked', ()=> {
+                this.emit("response", Gtk.ResponseType.APPLY);
+            });
+            this.headerGroup.add(addAppsButton);
         }
 
-        _createLayout(vbox) {
-            let addAppsButton;
-            if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS || this._dialogType == Constants.MenuSettingsListType.APPLICATIONS
-                || this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
-                addAppsButton = new Gtk.Button({
-                    label: _("Add"),
-                    halign: Gtk.Align.END
-                });
-                let context = addAppsButton.get_style_context();
-                context.add_class('suggested-action');
-                addAppsButton.connect('clicked', ()=> {
-                    this.emit("response", Gtk.ResponseType.APPLY);
-                });
-                this.headerGroup.add(addAppsButton);
-            }
-
-            if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS){
-                this._loadCategories();
-            }
-            else if(this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
-                let defaultApplicationShortcuts = this._settings.get_default_value('directory-shortcuts-list').deep_unpack();
-                defaultApplicationShortcuts.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
-                defaultApplicationShortcuts.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
-                defaultApplicationShortcuts.push([_("Trash"), "user-trash-symbolic", "ArcMenu_Trash"]);
-                defaultApplicationShortcuts.push([_("Recent"), "document-open-recent-symbolic", "ArcMenu_Recent"]);
-                for(let i = 0;i < defaultApplicationShortcuts.length; i++) {
-                    let frameRow = new Adw.ActionRow();
-
-                    frameRow._name = _(defaultApplicationShortcuts[i][0]);
-                    frameRow._icon = defaultApplicationShortcuts[i][1];
-                    frameRow._cmd = defaultApplicationShortcuts[i][2];
-
-                    let iconImage = new Gtk.Image( {
-                        gicon: Gio.icon_new_for_string(getIconPath(defaultApplicationShortcuts[i])),
-                        pixel_size: 22
-                    });
-                    frameRow.add_prefix(iconImage);
-
-                    frameRow.title = _(frameRow._name);
-                    let checkButton = new Gtk.CheckButton({
-                        margin_end: 20
-                    });
-                    checkButton.connect('toggled', ()=> {
-                        if(checkButton.get_active())
-                            this.newPinnedAppsArray.push(frameRow);
-                        else {
-                            let index = this.newPinnedAppsArray.indexOf(frameRow);
-                            this.newPinnedAppsArray.splice(index,1);
-                        }
-                    });
-                    frameRow.add_suffix(checkButton);
-                    frameRow.activatable_widget = checkButton;
-                    this.pageGroup.add(frameRow);
-                }
-            }
-            else if(this._dialogType == Constants.MenuSettingsListType.APPLICATIONS){
-                this._loadCategories();
-                let defaultApplicationShortcutsPage = new Adw.PreferencesPage({
-                    title: _("Default Apps")
-                });
-                let defaultApplicationShortcutsFrame = new Adw.PreferencesGroup();
-                defaultApplicationShortcutsPage.add(defaultApplicationShortcutsFrame);
-                let defaultApplicationShortcuts = this._settings.get_default_value('application-shortcuts-list').deep_unpack();
-                defaultApplicationShortcuts.push([_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ArcMenuSettingsCommand]);
-                defaultApplicationShortcuts.push([_("Run Command..."), "system-run-symbolic", "ArcMenu_RunCommand"]);
-                defaultApplicationShortcuts.push([_("Show All Applications"), "view-fullscreen-symbolic", "ArcMenu_ShowAllApplications"]);
-
-                for(let i = 0;i < defaultApplicationShortcuts.length; i++) {
-                    let frameRow = new Adw.ActionRow();
-                    frameRow._name = _(defaultApplicationShortcuts[i][0]);
-                    frameRow._icon = defaultApplicationShortcuts[i][1];
-                    frameRow._cmd = defaultApplicationShortcuts[i][2];
-
-                    let iconImage = new Gtk.Image( {
-                        gicon: Gio.icon_new_for_string(frameRow._icon),
-                        pixel_size: 22
-                    });
-                    frameRow.add_prefix(iconImage);
-
-                    frameRow.title = frameRow._name;
-
-                    let checkButton = new Gtk.CheckButton({
-                        margin_end: 20
-                    });
-                    checkButton.connect('toggled', ()=> {
-                        if(checkButton.get_active()) {
-                            this.newPinnedAppsArray.push(frameRow);
-                        }
-                        else {
-                            let index= this.newPinnedAppsArray.indexOf(frameRow);
-                            this.newPinnedAppsArray.splice(index,1);
-                        }
-                    });
-                    frameRow.add_suffix(checkButton);
-                    frameRow.activatable_widget = checkButton;
-
-                    defaultApplicationShortcutsFrame.add(frameRow);
-
-                }
-                this.add(defaultApplicationShortcutsPage);
-            }
-            else{
-                this._loadCategories();
-                let defaultApplicationShortcutsPage = new Adw.PreferencesPage({
-                    title: _("Presets")
-                });
-                let defaultApplicationShortcutsFrame = new Adw.PreferencesGroup();
-                defaultApplicationShortcutsPage.add(defaultApplicationShortcutsFrame);
-                let defaultApplicationShortcuts = this._settings.get_default_value('directory-shortcuts-list').deep_unpack();
-                defaultApplicationShortcuts.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
-                defaultApplicationShortcuts.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
-                defaultApplicationShortcuts.push([_("Trash"), "user-trash-symbolic", "ArcMenu_Trash"]);
-                defaultApplicationShortcuts.push([_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock"]);
-                defaultApplicationShortcuts.push([_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut"]);
-                defaultApplicationShortcuts.push([_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
-                defaultApplicationShortcuts.push([_("Restart"), 'system-reboot-symbolic', "ArcMenu_Restart"]);
-                defaultApplicationShortcuts.push([_("Suspend"), "media-playback-pause-symbolic", "ArcMenu_Suspend"]);
-                defaultApplicationShortcuts.push([_("Hybrid Sleep"), Me.path + Constants.SleepIcon.PATH, "ArcMenu_HybridSleep"]);
-                defaultApplicationShortcuts.push([_("Hibernate"), "document-save-symbolic", "ArcMenu_Hibernate"]);
-                for(let i = 0;i < defaultApplicationShortcuts.length; i++) {
-                    let frameRow = new Adw.ActionRow();
-
-                    frameRow._name = _(defaultApplicationShortcuts[i][0]);
-                    frameRow._icon = defaultApplicationShortcuts[i][1];
-                    frameRow._cmd = defaultApplicationShortcuts[i][2];
-
-                    let iconImage = new Gtk.Image( {
-                        gicon: Gio.icon_new_for_string(getIconPath(defaultApplicationShortcuts[i])),
-                        pixel_size: 22
-                    });
-                    frameRow.add_prefix(iconImage);
-
-                    frameRow.title = frameRow._name;
-
-                    let checkButton = new PW.Button({
-                        icon_name: 'list-add-symbolic'
-                    });
-                    checkButton.margin_end = 20;
-                    checkButton.connect('clicked', ()=> {
-                        this.newPinnedAppsArray.push(frameRow._name, frameRow._icon, frameRow._cmd);
-                        this.emit("response", Gtk.ResponseType.APPLY);
-                    });
-                    frameRow.add_suffix(checkButton);
-                    frameRow.activatable_widget = checkButton;
-
-                    defaultApplicationShortcutsFrame.add(frameRow);
-
-                }
-                this.add(defaultApplicationShortcutsPage);
-            }
+        if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS){
+            let extraItem = [[_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ArcMenuSettingsCommand]];
+            this._loadExtraCategories(extraItem);
+            this._loadCategories();
         }
+        else if(this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
+            let extraLinks = this._settings.get_default_value('directory-shortcuts-list').deep_unpack();
+            extraLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
+            extraLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
+            extraLinks.push([_("Trash"), "user-trash-symbolic", "ArcMenu_Trash"]);
+            extraLinks.push([_("Recent"), "document-open-recent-symbolic", "ArcMenu_Recent"]);
+            this._loadExtraCategories(extraLinks);
+        }
+        else if(this._dialogType == Constants.MenuSettingsListType.APPLICATIONS){
+            let extraLinks = [];
+            extraLinks.push(["Activities Overview", "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
+            extraLinks.push([_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ArcMenuSettingsCommand]);
+            extraLinks.push([_("Run Command..."), "system-run-symbolic", "ArcMenu_RunCommand"]);
+            extraLinks.push([_("Show All Applications"), "view-fullscreen-symbolic", "ArcMenu_ShowAllApplications"]);
+            this._loadExtraCategories(extraLinks);
+            this._loadCategories();
+        }
+        else{
+            let extraLinks = this._settings.get_default_value('directory-shortcuts-list').deep_unpack();
+            extraLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
+            extraLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
+            extraLinks.push([_("Trash"), "user-trash-symbolic", "ArcMenu_Trash"]);
+            extraLinks.push([_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock"]);
+            extraLinks.push([_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut"]);
+            extraLinks.push([_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
+            extraLinks.push([_("Restart"), 'system-reboot-symbolic', "ArcMenu_Restart"]);
+            extraLinks.push([_("Suspend"), "media-playback-pause-symbolic", "ArcMenu_Suspend"]);
+            extraLinks.push([_("Hybrid Sleep"), Me.path + Constants.SleepIcon.PATH, "ArcMenu_HybridSleep"]);
+            extraLinks.push([_("Hibernate"), "document-save-symbolic", "ArcMenu_Hibernate"]);
+            this._loadExtraCategories(extraLinks);
+            this._loadCategories();
+        }
+    }
 
-        _loadCategories(searchResults, showArcMenuSettings) {
-            let allApps = searchResults ? searchResults : Gio.app_info_get_all();
-            allApps.sort((a, b) => {
-              let _a = a.get_display_name();
-              let _b = b.get_display_name();
-              return GLib.strcmp0(_a, _b);
+    _loadExtraCategories(extraCategories){
+        for(let item of extraCategories){
+            let frameRow = new Adw.ActionRow({
+                title: _(item[0])
             });
 
-            let iter = -1;
-            if(searchResults)
-                iter = 0;
-            if(showArcMenuSettings)
-                iter = -1;
-            for(let i = iter; i < allApps.length; i++) {
-                if(i == -1 ? true : allApps[i].should_show()) {
-                    let frameRow = new Adw.ActionRow();
-                    let icon;
-                    if(i == -1){
-                        frameRow._name = _("ArcMenu Settings");
-                        icon = frameRow._icon = Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg';
-                        frameRow._cmd = Constants.ArcMenuSettingsCommand;
-                    }
-                    else{
-                        frameRow._app = allApps[i];
-                        frameRow._name = allApps[i].get_display_name();
-                        frameRow._icon = '';
-                        if(allApps[i].get_icon())
-                            icon = allApps[i].get_icon().to_string();
-                        else
-                            icon = "dialog-information";
+            let iconString;
+            if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES || this._dialogType === Constants.MenuSettingsListType.OTHER)
+                iconString = getIconPath([item[0], item[1], item[2]]);
+            else
+                iconString = item[1];
 
-                        frameRow._cmd = allApps[i].get_id();
-                    }
-                    frameRow.title = frameRow._name;
-                    let iconImage = new Gtk.Image( {
-                        gicon: Gio.icon_new_for_string(icon),
-                        pixel_size: 22
-                    });
-                    frameRow.add_prefix(iconImage);
+            frameRow._name = _(item[0]);
+            frameRow._icon = item[1];
+            frameRow._cmd = item[2];
 
-                    if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS || this._dialogType == Constants.MenuSettingsListType.APPLICATIONS||
-                        this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
-                        let checkButton = new Gtk.CheckButton({
-                            margin_end: 20
-                        });
-                        checkButton.connect('toggled', ()=> {
-                            if(checkButton.get_active())
-                                this.newPinnedAppsArray.push(frameRow);
-                            else {
-                                let index= this.newPinnedAppsArray.indexOf(frameRow);
-                                this.newPinnedAppsArray.splice(index,1);
-                            }
-                        });
-                        frameRow.add_suffix(checkButton);
-                        frameRow.activatable_widget = checkButton;
-                    }
-                    else{
-                        let checkButton = new PW.Button({
-                            icon_name: 'list-add-symbolic',
-                            margin_end: 20
-                        });
-                        checkButton.connect('clicked', ()=> {
-                            this.newPinnedAppsArray.push(frameRow._name, frameRow._icon, frameRow._cmd);
-                            this.addResponse = true;
-                            this.emit("response", Gtk.ResponseType.APPLY);
-                        });
-                        frameRow.add_suffix(checkButton);
-                        frameRow.activatable_widget = checkButton;
-                    }
-                    this.pageGroup.add(frameRow);
-                }
+            let iconImage = new Gtk.Image( {
+                gicon: Gio.icon_new_for_string(iconString),
+                pixel_size: 22
+            });
+            frameRow.add_prefix(iconImage);
+            this.addButtonAction(frameRow);
+            this.pageGroup.add(frameRow);
+        }
+    }
+
+    _loadCategories() {
+        let allApps = Gio.app_info_get_all();
+        allApps.sort((a, b) => {
+            let _a = a.get_display_name();
+            let _b = b.get_display_name();
+            return GLib.strcmp0(_a, _b);
+        });
+
+        for(let i = 0; i < allApps.length; i++) {
+            if(allApps[i].should_show()) {
+                let frameRow = new Adw.ActionRow();
+                frameRow._app = allApps[i];
+                frameRow._name = allApps[i].get_display_name();
+                frameRow._icon = '';
+                frameRow._cmd = allApps[i].get_id();
+                frameRow.title = frameRow._name;
+
+                let icon = allApps[i].get_icon() ? allApps[i].get_icon().to_string() : "dialog-information";
+
+                let iconImage = new Gtk.Image( {
+                    gicon: Gio.icon_new_for_string(icon),
+                    pixel_size: 22
+                });
+                frameRow.add_prefix(iconImage);
+
+                this.addButtonAction(frameRow);
+                this.pageGroup.add(frameRow);
             }
         }
+    }
+
+    addButtonAction(frameRow){
+        if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS || this._dialogType == Constants.MenuSettingsListType.APPLICATIONS||
+            this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
+            let checkButton = new Gtk.CheckButton({
+                margin_end: 20
+            });
+            checkButton.connect('toggled', (widget) => {
+                if(widget.get_active())
+                    this.newPinnedAppsArray.push(frameRow);
+                else{
+                    let index = this.newPinnedAppsArray.indexOf(frameRow);
+                    this.newPinnedAppsArray.splice(index,1);
+                }
+            });
+            frameRow.add_suffix(checkButton);
+            frameRow.activatable_widget = checkButton;
+        }
+        else{
+            let checkButton = new PW.Button({
+                icon_name: 'list-add-symbolic',
+                margin_end: 20
+            });
+            checkButton.connect('clicked', () => {
+                this.newPinnedAppsArray.push(frameRow._name, frameRow._icon, frameRow._cmd);
+                this.addResponse = true;
+                this.emit("response", Gtk.ResponseType.APPLY);
+            });
+            frameRow.add_suffix(checkButton);
+            frameRow.activatable_widget = checkButton;
+        }
+    }
 });
 
 var AddCustomLinkDialogWindow = GObject.registerClass(
