@@ -266,13 +266,13 @@ var AddAppsToPinnedListWindow = GObject.registerClass(
         _init(settings, parent, dialogType) {
             this._settings = settings;
             this._dialogType = dialogType;
-            if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS)
-                super._init(_('Add to your Pinned Apps'), parent);
-            else if(this._dialogType == Constants.MenuSettingsListType.OTHER)
-                super._init(_('Change Selected Pinned App'), parent);
-            else if(this._dialogType == Constants.MenuSettingsListType.APPLICATIONS)
+            if(this._dialogType === Constants.MenuSettingsListType.PINNED_APPS)
+                super._init(_('Add to your Pinned Apps'), parent, Constants.MenuItemLocation.TOP);
+            else if(this._dialogType === Constants.MenuSettingsListType.OTHER)
+                super._init(_('Change Selected Pinned App'), parent, Constants.MenuItemLocation.TOP);
+            else if(this._dialogType === Constants.MenuSettingsListType.APPLICATIONS, Constants.MenuItemLocation.TOP)
                 super._init(_('Select Application Shortcuts'), parent);
-            else if(this._dialogType == Constants.MenuSettingsListType.DIRECTORIES)
+            else if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES, Constants.MenuItemLocation.TOP)
                 super._init(_('Select Directory Shortcuts'), parent);
             this.newPinnedAppsArray = [];
             this.addResponse = false;
@@ -516,8 +516,8 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
             else if (pinnedShortcut)
                 title = _('Edit Shortcut');
 
-            super._init(_(title), parent);
-
+            super._init(_(title), parent, Constants.MenuItemLocation.BOTTOM);
+            this.set_default_size(550, 200);
             this._settings = settings;
             this.newPinnedAppsArray = [];
             this.addResponse = false;
@@ -1063,8 +1063,8 @@ var ModifyHotCornerDialogWindow = GObject.registerClass(
         _init(settings, parent) {
             this._settings = settings;
             this.addResponse = false;
-            super._init(_('Modify Hot Corner'), parent);
-            this.set_default_size(600,250);
+            super._init(_('Modify Hot Corner'), parent, Constants.MenuItemLocation.TOP);
+            this.set_default_size(600, 250);
         }
 
         _createLayout(vbox) {
@@ -1790,205 +1790,201 @@ var ButtonAppearancePage = GObject.registerClass(
 });
 
 var ArcMenuIconsDialogWindow = GObject.registerClass(
-    class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
-        _init(settings, parent) {
-            this._settings = settings;
-            super._init(_('ArcMenu Icons'), parent);
-            this.set_default_size(550, 400);
-        }
+class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
+    _init(settings, parent) {
+        this._settings = settings;
+        super._init(_('ArcMenu Icons'), parent, Constants.MenuItemLocation.TOP);
+        this.set_default_size(550, 400);
+        this.search_enabled = false;
 
-        _createLayout(vbox){
-            this.stack = new Gtk.Stack({
-                halign: Gtk.Align.FILL,
-                hexpand: true,
-                transition_type: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT
-            });
+        let arcMenuIconsFlowBox = new PW.IconGrid();
+        this.page.title = _("ArcMenu Icons");
+        this.page.icon_name = 'arcmenu-logo-symbolic';
+        arcMenuIconsFlowBox.connect('child-activated', ()=> {
+            distroIconsBox.unselect_all();
+            customIconFlowBox.unselect_all();
+            let selectedChild = arcMenuIconsFlowBox.get_selected_children();
+            let selectedChildIndex = selectedChild[0].get_index();
+            this._settings.set_enum('menu-button-icon', Constants.MenuIcon.ARC_MENU);
+            this._settings.set_int('arc-menu-icon', selectedChildIndex);
+        });
+        this.pageGroup.add(arcMenuIconsFlowBox);
 
-            let arcMenuIconsBox = new Gtk.ScrolledWindow();
-
-            let arcMenuIconsFlowBox = new PW.IconGrid();
-            arcMenuIconsFlowBox.connect('child-activated', ()=> {
-                distroIconsBox.unselect_all();
-                customIconFlowBox.unselect_all();
-                let selectedChild = arcMenuIconsFlowBox.get_selected_children();
-                let selectedChildIndex = selectedChild[0].get_index();
-                this._settings.set_enum('menu-button-icon', Constants.MenuIcon.ARC_MENU);
-                this._settings.set_int('arc-menu-icon', selectedChildIndex);
-            });
-            arcMenuIconsBox.set_child(arcMenuIconsFlowBox);
-            Constants.MenuIcons.forEach((icon)=>{
-                let iconName = icon.PATH.replace("/media/icons/menu_button_icons/icons/", '');
-                iconName = iconName.replace(".svg", '');
-                let iconImage = new Gtk.Image({
-                    icon_name: iconName,
-                    pixel_size: 36
-                });
-                arcMenuIconsFlowBox.add(iconImage);
-            });
-
-            let distroIconsBox = new PW.IconGrid();
-            distroIconsBox.connect('child-activated', ()=> {
-                arcMenuIconsFlowBox.unselect_all();
-                customIconFlowBox.unselect_all();
-                let selectedChild = distroIconsBox.get_selected_children();
-                let selectedChildIndex = selectedChild[0].get_index();
-                this._settings.set_enum('menu-button-icon', Constants.MenuIcon.DISTRO_ICON);
-                this._settings.set_int('distro-icon', selectedChildIndex);
-            });
-            Constants.DistroIcons.forEach((icon)=>{
-                let iconImage;
-                if(icon.PATH === 'start-here-symbolic'){
-                    iconImage = new Gtk.Image({
-                        icon_name: 'start-here-symbolic',
-                        pixel_size: 36
-                    });
-                }
-                else{
-                    let iconName1 = icon.PATH.replace("/media/icons/menu_button_icons/distro_icons/", '');
-                    iconName1 = iconName1.replace(".svg", '');
-                    iconImage = new Gtk.Image({
-                        icon_name: iconName1,
-                        pixel_size: 36
-                    });
-                }
-                distroIconsBox.add(iconImage);
-            });
-
-            let customIconBox = new Gtk.Box({
-                orientation: Gtk.Orientation.VERTICAL
-            });
-            let customIconFlowBox = new PW.IconGrid();
-            customIconFlowBox.vexpand = false;
-            customIconFlowBox.homogeneous = false;
-            customIconFlowBox.connect('child-activated', ()=> {
-                arcMenuIconsFlowBox.unselect_all();
-                distroIconsBox.unselect_all();
-                let customIconPath = this._settings.get_string('custom-menu-button-icon');
-                this._settings.set_string('custom-menu-button-icon', customIconPath)
-                this._settings.set_enum('menu-button-icon', Constants.MenuIcon.CUSTOM);
-            });
-            customIconBox.append(customIconFlowBox);
-            let customIconImage = new Gtk.Image({
-                gicon: Gio.icon_new_for_string(this._settings.get_string('custom-menu-button-icon')),
+        Constants.MenuIcons.forEach((icon)=>{
+            let iconName = icon.PATH.replace("/media/icons/menu_button_icons/icons/", '');
+            iconName = iconName.replace(".svg", '');
+            let iconImage = new Gtk.Image({
+                icon_name: iconName,
                 pixel_size: 36
             });
-            customIconFlowBox.add(customIconImage);
+            arcMenuIconsFlowBox.add(iconImage);
+        });
 
-            let fileChooserFrame = new PW.FrameBox();
-            fileChooserFrame.margin_top = 20;
-            fileChooserFrame.margin_bottom = 20;
-            fileChooserFrame.margin_start = 20;
-            fileChooserFrame.margin_end = 20;
-            let fileChooserRow = new PW.FrameBoxRow();
-            let fileChooserLabel = new Gtk.Label({
-                label: _('Browse for a Custom Icon'),
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
-            });
-
-            let fileFilter = new Gtk.FileFilter();
-            fileFilter.add_pixbuf_formats();
-            let fileChooserButton = new Gtk.Button({
-                label: _('Select an Icon')
-            });
-            fileChooserButton.connect('clicked', (widget) => {
-                let dialog = new Gtk.FileChooserDialog({
-                    title: _('Select an Icon'),
-                    transient_for: this.get_root(),
-                    modal: true,
-                    action: Gtk.FileChooserAction.OPEN,
+        this.distroIconsPage = new Adw.PreferencesPage({
+            title: _("Distro Icons"),
+            icon_name: 'start-here-symbolic'
+        });
+        let distroIconsGroup = new Adw.PreferencesGroup();
+        this.distroIconsPage.add(distroIconsGroup)
+        this.add(this.distroIconsPage);
+        let distroIconsBox = new PW.IconGrid();
+        distroIconsBox.connect('child-activated', ()=> {
+            arcMenuIconsFlowBox.unselect_all();
+            customIconFlowBox.unselect_all();
+            let selectedChild = distroIconsBox.get_selected_children();
+            let selectedChildIndex = selectedChild[0].get_index();
+            this._settings.set_enum('menu-button-icon', Constants.MenuIcon.DISTRO_ICON);
+            this._settings.set_int('distro-icon', selectedChildIndex);
+        });
+        Constants.DistroIcons.forEach((icon)=>{
+            let iconImage;
+            if(icon.PATH === 'start-here-symbolic'){
+                iconImage = new Gtk.Image({
+                    icon_name: 'start-here-symbolic',
+                    pixel_size: 36
                 });
+            }
+            else{
+                let iconName1 = icon.PATH.replace("/media/icons/menu_button_icons/distro_icons/", '');
+                iconName1 = iconName1.replace(".svg", '');
+                iconImage = new Gtk.Image({
+                    icon_name: iconName1,
+                    pixel_size: 36
+                });
+            }
+            distroIconsBox.add(iconImage);
+        });
+        distroIconsGroup.add(distroIconsBox);
 
-                if(dialog.get_parent())
-                    dialog.unparent();
-                dialog.set_filter(fileFilter);
+        this.customIconPage = new Adw.PreferencesPage({
+            title: _("Custom Icon"),
+            icon_name: 'icon-preview-symbolic'
+        });
+        let customIconGroup = new Adw.PreferencesGroup();
+        this.customIconPage.add(customIconGroup);
+        this.add(this.customIconPage);
 
-                dialog.add_button("_Cancel", Gtk.ResponseType.CANCEL);
-                dialog.add_button("_Open", Gtk.ResponseType.ACCEPT);
+        let customIconBox = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL
+        });
+        let customIconFlowBox = new PW.IconGrid();
+        customIconFlowBox.vexpand = false;
+        customIconFlowBox.homogeneous = false;
+        customIconFlowBox.connect('child-activated', ()=> {
+            arcMenuIconsFlowBox.unselect_all();
+            distroIconsBox.unselect_all();
+            let customIconPath = this._settings.get_string('custom-menu-button-icon');
+            this._settings.set_string('custom-menu-button-icon', customIconPath)
+            this._settings.set_enum('menu-button-icon', Constants.MenuIcon.CUSTOM);
+        });
+        customIconBox.append(customIconFlowBox);
+        let customIconImage = new Gtk.Image({
+            gicon: Gio.icon_new_for_string(this._settings.get_string('custom-menu-button-icon')),
+            pixel_size: 36
+        });
+        customIconFlowBox.add(customIconImage);
 
-                dialog.connect("response", (self, response) => {
-                    if(response === Gtk.ResponseType.ACCEPT){
-                        arcMenuIconsFlowBox.unselect_all();
-                        distroIconsBox.unselect_all();
-                        customIconImage.gicon = Gio.icon_new_for_string(dialog.get_file().get_path());
-                        this._settings.set_string('custom-menu-button-icon', dialog.get_file().get_path());
-                        this._settings.set_enum('menu-button-icon', Constants.MenuIcon.CUSTOM);
-                        customIconFlowBox.select_child(customIconFlowBox.get_child_at_index(0));
-                        dialog.destroy();
-                    }
-                    else
-                        dialog.destroy();
-                })
+        let fileChooserFrame = new PW.FrameBox();
+        fileChooserFrame.margin_top = 20;
+        fileChooserFrame.margin_bottom = 20;
+        fileChooserFrame.margin_start = 20;
+        fileChooserFrame.margin_end = 20;
+        let fileChooserRow = new PW.FrameBoxRow();
+        let fileChooserLabel = new Gtk.Label({
+            label: _('Browse for a Custom Icon'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true
+        });
 
-                dialog.show();
+        let fileFilter = new Gtk.FileFilter();
+        fileFilter.add_pixbuf_formats();
+        let fileChooserButton = new Gtk.Button({
+            label: _('Select an Icon')
+        });
+        fileChooserButton.connect('clicked', (widget) => {
+            let dialog = new Gtk.FileChooserDialog({
+                title: _('Select an Icon'),
+                transient_for: this.get_root(),
+                modal: true,
+                action: Gtk.FileChooserAction.OPEN,
             });
+            if(dialog.get_parent())
+                dialog.unparent();
+            dialog.set_filter(fileFilter);
 
-            fileChooserRow.add(fileChooserLabel);
-            fileChooserRow.add(fileChooserButton);
-            fileChooserFrame.add(fileChooserRow);
-            customIconBox.append(fileChooserFrame);
+            dialog.add_button("_Cancel", Gtk.ResponseType.CANCEL);
+            dialog.add_button("_Open", Gtk.ResponseType.ACCEPT);
 
-            this.stack.add_titled(arcMenuIconsBox, 'ArcMenu Icons', _('ArcMenu Icons'));
-            this.stack.add_titled(distroIconsBox, 'Distro Icons', _('Distro Icons'));
-            this.stack.add_titled(customIconBox, 'Custom Icon', _('Custom Icon'));
+            dialog.connect("response", (self, response) => {
+                if(response === Gtk.ResponseType.ACCEPT){
+                    arcMenuIconsFlowBox.unselect_all();
+                    distroIconsBox.unselect_all();
+                    customIconImage.gicon = Gio.icon_new_for_string(dialog.get_file().get_path());
+                    this._settings.set_string('custom-menu-button-icon', dialog.get_file().get_path());
+                    this._settings.set_enum('menu-button-icon', Constants.MenuIcon.CUSTOM);
+                    customIconFlowBox.select_child(customIconFlowBox.get_child_at_index(0));
+                    dialog.destroy();
+                }
+                else
+                    dialog.destroy();
+            })
+            dialog.show();
+        });
 
-            let stackSwitcher = new Gtk.StackSwitcher({
-                stack: this.stack,
-                halign: Gtk.Align.CENTER
-            });
+        fileChooserRow.add(fileChooserLabel);
+        fileChooserRow.add(fileChooserButton);
+        fileChooserFrame.add(fileChooserRow);
+        customIconBox.append(fileChooserFrame);
+        customIconGroup.add(customIconBox);
 
-            vbox.append(stackSwitcher);
-            vbox.append(this.stack);
-            if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARC_MENU)
-                this.stack.set_visible_child_name('ArcMenu Icons');
-            else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.DISTRO_ICON)
-                this.stack.set_visible_child_name('Distro Icons');
-            else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.CUSTOM)
-                this.stack.set_visible_child_name('Custom Icon');
-
-            if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARC_MENU){
-                let children = arcMenuIconsFlowBox.childrenCount;
-                for(let i = 0; i < children; i++){
-                    if(i === this._settings.get_int('arc-menu-icon')){
-                        arcMenuIconsFlowBox.select_child(arcMenuIconsFlowBox.get_child_at_index(i));
-                        break;
-                    }
+        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARC_MENU){
+            let children = arcMenuIconsFlowBox.childrenCount;
+            for(let i = 0; i < children; i++){
+                if(i === this._settings.get_int('arc-menu-icon')){
+                    arcMenuIconsFlowBox.select_child(arcMenuIconsFlowBox.get_child_at_index(i));
+                    break;
                 }
             }
-            else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.DISTRO_ICON){
-                let children = distroIconsBox.childrenCount;
-                for(let i = 0; i < children; i++){
-                    if(i === this._settings.get_int('distro-icon')){
-                        distroIconsBox.select_child(distroIconsBox.get_child_at_index(i));
-                        break;
-                    }
+        }
+        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.DISTRO_ICON){
+            let children = distroIconsBox.childrenCount;
+            for(let i = 0; i < children; i++){
+                if(i === this._settings.get_int('distro-icon')){
+                    distroIconsBox.select_child(distroIconsBox.get_child_at_index(i));
+                    break;
                 }
             }
-            else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.CUSTOM){
-                customIconFlowBox.select_child(customIconFlowBox.get_child_at_index(0));
-            }
-
-            let distroInfoButton = new PW.Button({
-                icon_name: 'info-circle-symbolic'
-            });
-            distroInfoButton.halign = Gtk.Align.START;
-            distroInfoButton.connect('clicked', ()=> {
-                let dialog = new DistroIconsDisclaimerWindow(this._settings, this);
-                dialog.connect ('response', ()=> dialog.destroy());
-                dialog.show();
-            });
-            vbox.append(distroInfoButton);
+        }
+        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.CUSTOM){
+            customIconFlowBox.select_child(customIconFlowBox.get_child_at_index(0));
         }
 
-        setVisibleChild(){
-            if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARC_MENU)
-                this.stack.set_visible_child_name('ArcMenu Icons');
-            else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.DISTRO_ICON)
-                this.stack.set_visible_child_name('Distro Icons');
-            else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.CUSTOM)
-                this.stack.set_visible_child_name('Custom Icon');
-        }
+        let distroInfoButtonGroup = new Adw.PreferencesGroup();
+        let distroInfoButton = new PW.Button({
+            icon_name: 'info-circle-symbolic',
+            halign: Gtk.Align.START
+        });
+        distroInfoButton.connect('clicked', ()=> {
+            let dialog = new DistroIconsDisclaimerWindow(this._settings, this);
+            dialog.connect ('response', ()=> dialog.destroy());
+            dialog.show();
+        });
+        distroInfoButtonGroup.add(distroInfoButton);
+        this.distroIconsPage.add(distroInfoButtonGroup);
+        this.page.remove(this.headerGroup);
+
+        this.setVisibleChild();
+    }
+
+    setVisibleChild(){
+        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARC_MENU)
+            this.set_visible_page(this.page);
+        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.DISTRO_ICON)
+            this.set_visible_page(this.distroIconsPage);
+        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.CUSTOM)
+            this.set_visible_page(this.customIconPage);
+    }
 });
 
 var DistroIconsDisclaimerWindow = GObject.registerClass(
@@ -3688,7 +3684,7 @@ var ColorThemeDialogWindow = GObject.registerClass(
             this._settings = settings;
             this.addResponse = false;
             this.themeName = themeName;
-            super._init(_('Color Theme Name'), parent);
+            super._init(_('Color Theme Name'), parent, Constants.MenuItemLocation.TOP);
         }
 
         _createLayout(vbox) {
@@ -3739,7 +3735,7 @@ var ExportColorThemeDialogWindow = GObject.registerClass(
             this._themes = themes;
             this.addResponse = false;
             this.selectedThemes = [];
-            super._init(this._themes ? _('Select Themes to Import'): _('Select Themes to Export'), parent);
+            super._init(this._themes ? _('Select Themes to Import'): _('Select Themes to Export'), parent, Constants.MenuItemLocation.TOP);
         }
 
         _createLayout(vbox) {
@@ -3848,7 +3844,7 @@ var ManageColorThemeDialogWindow = GObject.registerClass(
             this._settings = settings;
             this.addResponse = false;
             this.selectedThemes = [];
-            super._init( _('Manage Presets'), parent);
+            super._init( _('Manage Presets'), parent, Constants.MenuItemLocation.TOP);
         }
 
         _createLayout(vbox) {

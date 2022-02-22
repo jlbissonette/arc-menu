@@ -22,6 +22,7 @@
  */
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const {Adw, Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
+const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
@@ -101,13 +102,12 @@ var Button = GObject.registerClass(class Arc_Menu_Button extends Gtk.Button {
     }
 });
 
-//TODO - Rework this
 var DialogWindow = GObject.registerClass({
     Signals: {
         'response': { param_types: [GObject.TYPE_INT]},
     },
 },class Arc_Menu_DialogWindow extends Adw.PreferencesWindow {
-    _init(title, parent) {
+    _init(title, parent, buttonLocation) {
         super._init({
             title: title,
             transient_for: parent.get_root(),
@@ -116,13 +116,16 @@ var DialogWindow = GObject.registerClass({
         });
         this.page = new Adw.PreferencesPage();
         this.pageGroup = new Adw.PreferencesGroup();
-        this.headerGroup = new Adw.PreferencesGroup({
-            margin_top: 0,
-            margin_bottom: 0
-        });
+        this.headerGroup = new Adw.PreferencesGroup();
         this.add(this.page);
-        this.page.add(this.headerGroup);
-        this.page.add(this.pageGroup);
+        if(buttonLocation === Constants.MenuItemLocation.TOP){
+            this.page.add(this.headerGroup);
+            this.page.add(this.pageGroup);
+        }
+        else{
+            this.page.add(this.pageGroup);
+            this.page.add(this.headerGroup);
+        }
     }
 });
 

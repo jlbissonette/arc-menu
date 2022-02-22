@@ -1029,132 +1029,102 @@ var TweaksPage = GObject.registerClass({
     _loadTogneeMenuTweaks(){
         let togneeMenuTweaksFrame = new PW.FrameBox();
         let searchBarBottomDefault = true;
-        let defaultLeftBoxRow = new PW.FrameBoxRow();
+        let defaulViewRow = new PW.FrameBoxRow();
         let defaultLeftBoxLabel = new Gtk.Label({
             label: _("Default View"),
             use_markup: true,
             xalign: 0,
             hexpand: true
         });
-        let defaultLeftBoxCombo = new Gtk.ComboBoxText({ 
+        let defaultViewCombo = new Gtk.ComboBoxText({ 
             halign: Gtk.Align.END
         });
-        defaultLeftBoxCombo.append_text(_("Categories List"));
-        defaultLeftBoxCombo.append_text(_("All Programs"));
-        defaultLeftBoxCombo.set_active(this._settings.get_enum('default-menu-view-tognee'));
-        defaultLeftBoxCombo.connect('changed', (widget) => {
+        defaultViewCombo.append_text(_("Categories List"));
+        defaultViewCombo.append_text(_("All Programs"));
+        defaultViewCombo.set_active(this._settings.get_enum('default-menu-view-tognee'));
+        defaultViewCombo.connect('changed', (widget) => {
             this._settings.set_enum('default-menu-view-tognee', widget.get_active());
         });
 
-        defaultLeftBoxRow.add(defaultLeftBoxLabel);
-        defaultLeftBoxRow.add(defaultLeftBoxCombo);
-        togneeMenuTweaksFrame.add(defaultLeftBoxRow);
+        defaulViewRow.add(defaultLeftBoxLabel);
+        defaulViewRow.add(defaultViewCombo);
+        togneeMenuTweaksFrame.add(defaulViewRow);
         togneeMenuTweaksFrame.add(this._createSearchBarLocationRow(searchBarBottomDefault));
         togneeMenuTweaksFrame.add(this._createFlipHorizontalRow());
         this.mainBox.append(togneeMenuTweaksFrame);
     }
     _loadArcMenuTweaks(){
-        let arcMenuTweaksFrame = new PW.FrameBox();
-        let defaultLeftBoxRow = new PW.FrameBoxRow();
-        let defaultLeftBoxLabel = new Gtk.Label({
-            label: _("Default View"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
+        let arcMenuTweaksFrame = new Adw.PreferencesGroup();
+        let defaulViewRow = new Adw.ActionRow({
+            title: _("Default View")
         });
-        let defaultLeftBoxCombo = new Gtk.ComboBoxText({ 
-            halign: Gtk.Align.END,
+        let defaultViewCombo = new Gtk.ComboBoxText({ 
+            valign: Gtk.Align.CENTER,
         });
-        defaultLeftBoxCombo.append_text(_("Pinned Apps"));
-        defaultLeftBoxCombo.append_text(_("Categories List"));
-        defaultLeftBoxCombo.append_text(_("Frequent Apps"));
-        defaultLeftBoxCombo.append_text(_("All Programs"));
-        defaultLeftBoxCombo.set_active(this._settings.get_enum('default-menu-view'));
-        defaultLeftBoxCombo.connect('changed', (widget) => {
+        defaultViewCombo.append_text(_("Pinned Apps"));
+        defaultViewCombo.append_text(_("Categories List"));
+        defaultViewCombo.append_text(_("Frequent Apps"));
+        defaultViewCombo.append_text(_("All Programs"));
+        defaultViewCombo.set_active(this._settings.get_enum('default-menu-view'));
+        defaultViewCombo.connect('changed', (widget) => {
             this._settings.set_enum('default-menu-view', widget.get_active());
         });
 
-        defaultLeftBoxRow.add(defaultLeftBoxLabel);
-        defaultLeftBoxRow.add(defaultLeftBoxCombo);
-        arcMenuTweaksFrame.add(defaultLeftBoxRow);
+        defaulViewRow.add_suffix(defaultViewCombo);
+        arcMenuTweaksFrame.add(defaulViewRow);
 
         let searchBarBottomDefault = true;
         arcMenuTweaksFrame.add(this._createSearchBarLocationRow(searchBarBottomDefault));
         arcMenuTweaksFrame.add(this._createFlipHorizontalRow());
         arcMenuTweaksFrame.add(this._createAvatarShapeRow());
         arcMenuTweaksFrame.add(this._disableAvatarRow());
+        this.mainBox.append(arcMenuTweaksFrame);
 
-        let placesFrame = new PW.FrameBox();
-        let externalDeviceRow = new PW.FrameBoxRow();
-        let externalDeviceLabel = new Gtk.Label({
-            label: _("External Devices"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
+        let placesFrame = new Adw.PreferencesGroup({
+            title: _("Extra Shortcuts")
         });
-        
-        let externalDeviceButton = new Gtk.Switch();
-        if(this._settings.get_boolean('show-external-devices'))
-            externalDeviceButton.set_active(true);
+        let externalDeviceRow = new Adw.ActionRow({
+            title: _("External Devices")
+        });
+        let externalDeviceButton = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+        });
+        externalDeviceButton.set_active(this._settings.get_boolean('show-external-devices'));
         externalDeviceButton.connect('notify::active', (widget) => {
             this._settings.set_boolean('show-external-devices', widget.get_active());
         });   
-        externalDeviceRow.add(externalDeviceLabel);
-        externalDeviceRow.add(externalDeviceButton);
-
+        externalDeviceRow.add_suffix(externalDeviceButton);
         placesFrame.add(externalDeviceRow);
                 
-        let bookmarksRow = new PW.FrameBoxRow();
-        let bookmarksLabel = new Gtk.Label({
-            label: _("Bookmarks"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
+        let bookmarksRow = new Adw.ActionRow({
+            title: _("Bookmarks")
         });
-        
-        let bookmarksButton = new Gtk.Switch();
-        if(this._settings.get_boolean('show-bookmarks'))
-            bookmarksButton.set_active(true);
+        let bookmarksButton = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+        });
+        bookmarksButton.set_active(this._settings.get_boolean('show-bookmarks'));
         bookmarksButton.connect('notify::active', (widget) => {
             this._settings.set_boolean('show-bookmarks', widget.get_active());
         });   
-        bookmarksRow.add(bookmarksLabel);
-        bookmarksRow.add(bookmarksButton);
-
-        placesFrame.add(bookmarksRow);   
-        this.mainBox.append(arcMenuTweaksFrame);
-
-        let extraCategoriesFrame = new PW.FrameBox();
-        let extraCategoriesLocationRow = new PW.FrameBoxRow();
-        this.mainBox.append(new Gtk.Label({
-            label: "<b>" + _("Extra Shortcuts") + "</b>",
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        }));
+        bookmarksRow.add_suffix(bookmarksButton);
+        placesFrame.add(bookmarksRow);
         this.mainBox.append(placesFrame);
-        this.mainBox.append(new Gtk.Label({
-            label: "<b>" + _("Extra Categories Quick Links") + "</b>"
-            + "\n" + '<span size="small">' + _("Display quick links of extra categories on the home page") + "</span>"
-            + "\n" + '<span size="small">' + _("See Customize Menu -> Extra Categories") + "</span>",
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        }));
+        
+        let extraCategoriesFrame = new Adw.PreferencesGroup({
+            title: _("Extra Categories Quick Links"),
+            description: _("Display quick links of extra categories on the home page\nSee Customize Menu -> Extra Categories")
+        });
         let extraCategoriesLinksBox = new Prefs.MenuSettingsListOtherPage(this._settings, Constants.MenuSettingsListType.QUICK_LINKS);
         extraCategoriesFrame.add(extraCategoriesLinksBox);
-
         this.mainBox.append(extraCategoriesFrame);
 
-        let extraCategoriesLocationFrame = new PW.FrameBox();
-        let extraCategoriesLocationLabel = new Gtk.Label({
-            label: _("Quick Links Location"),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
+        let extraCategoriesLocationFrame = new Adw.PreferencesGroup();
+        let extraCategoriesLocationRow = new Adw.ActionRow({
+            title: _("Quick Links Location")
         });
-
-        let extraCategoriesLocationCombo = new Gtk.ComboBoxText({ halign: Gtk.Align.END });
+        let extraCategoriesLocationCombo = new Gtk.ComboBoxText({ 
+            valign: Gtk.Align.CENTER,
+        });
         extraCategoriesLocationCombo.append_text(_("Bottom"));
         extraCategoriesLocationCombo.append_text(_("Top"));
         extraCategoriesLocationCombo.set_active(this._settings.get_enum('arcmenu-extra-categories-links-location'));
@@ -1162,8 +1132,7 @@ var TweaksPage = GObject.registerClass({
             this._settings.set_enum('arcmenu-extra-categories-links-location' , widget.get_active());
         });
 
-        extraCategoriesLocationRow.add(extraCategoriesLocationLabel);
-        extraCategoriesLocationRow.add(extraCategoriesLocationCombo);
+        extraCategoriesLocationRow.add_suffix(extraCategoriesLocationCombo);
         extraCategoriesLocationFrame.add(extraCategoriesLocationRow);
         this.mainBox.append(extraCategoriesLocationFrame);
     }
