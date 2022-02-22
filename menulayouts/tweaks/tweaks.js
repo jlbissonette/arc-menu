@@ -708,12 +708,17 @@ var TweaksPage = GObject.registerClass({
             icon_name: 'info-circle-symbolic'
         });
         infoButton.connect('clicked', ()=> {
-            let dialog = new PW.MessageDialog({
-                text: _('Adjust the position of the separator in the button panel'),
+            let dialog = new Gtk.MessageDialog({
+                text: "<b>" + _("Adjust the position of the separator in the button panel") + '</b>',
+                use_markup: true,
                 buttons: Gtk.ButtonsType.OK,
-                transient_for: this.get_root()
+                message_type: Gtk.MessageType.WARNING,
+                transient_for: this.get_root(),
+                modal: true
             });
-            dialog.connect ('response', ()=> dialog.destroy());
+            dialog.connect('response', (widget, response) => {
+                dialog.destroy();
+            });
             dialog.show();
         });
 
@@ -836,12 +841,17 @@ var TweaksPage = GObject.registerClass({
             icon_name: 'info-circle-symbolic'
         });
         infoButton.connect('clicked', ()=> {
-            let dialog = new PW.MessageDialog({
-                text: _('Adjust the position of the separator in the button panel'),
+            let dialog = new Gtk.MessageDialog({
+                text: "<b>" + _("Adjust the position of the separator in the button panel") + '</b>',
+                use_markup: true,
                 buttons: Gtk.ButtonsType.OK,
-                transient_for: this.get_root()
+                message_type: Gtk.MessageType.WARNING,
+                transient_for: this.get_root(),
+                modal: true
             });
-            dialog.connect ('response', ()=> dialog.destroy());
+            dialog.connect('response', (widget, response) => {
+                dialog.destroy();
+            });
             dialog.show();
         });
 
@@ -851,6 +861,7 @@ var TweaksPage = GObject.registerClass({
         pinnedAppsSeparatorFrame.add(pinnedAppsSeparatorRow);
         this.mainBox.append(pinnedAppsSeparatorFrame);
     }
+
     _loadPinnedApps(array, frame, savePinnedAppsButton) {
         let pinnedApps = [];
         for(let i = 0; i < array.length; i += 3) {

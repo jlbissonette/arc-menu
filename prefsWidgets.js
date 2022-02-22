@@ -26,46 +26,6 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
-var Notebook = GObject.registerClass(class Arc_Menu_Notebook extends Gtk.Notebook{
-    _init() {
-        super._init({
-            margin_start: 0,
-            margin_end: 0
-        });
-    }
-
-    append_page(notebookPage) {
-        Gtk.Notebook.prototype.append_page.call(
-            this,
-            notebookPage,
-            notebookPage.getTitleLabel()
-        );
-    }
-});
-
-var NotebookPage = GObject.registerClass(class Arc_Menu_NotebookPage extends Gtk.Box {
-    _init(title) {
-        super._init({
-            orientation: Gtk.Orientation.VERTICAL,
-            margin_top: 24,
-            margin_bottom: 24,
-            margin_start: 24,
-            margin_end: 24,
-            spacing: 20,
-            homogeneous: false
-        });
-        this._title = new Gtk.Label({
-            label: "<b>" + title + "</b>",
-            use_markup: true,
-            xalign: 0
-        });
-    }
-
-    getTitleLabel() {
-        return this._title;
-    }
-});
-
 var Button = GObject.registerClass(class Arc_Menu_Button extends Gtk.Button {
     _init(params) {
         super._init();
@@ -125,55 +85,6 @@ var DialogWindow = GObject.registerClass({
         else{
             this.page.add(this.pageGroup);
             this.page.add(this.headerGroup);
-        }
-    }
-});
-
-var MessageDialog = GObject.registerClass(class Arc_Menu_MessageDialog extends Gtk.MessageDialog {
-    _init(params) {
-        super._init({
-            transient_for: params.transient_for,
-            modal: true,
-            buttons: params.buttons
-        });
-        this.set_size_request(300, 50);
-        this.grid = new Gtk.Grid({
-            row_spacing: 10,
-            column_spacing: 24,
-            margin_top: 24,
-            margin_bottom: 0,
-            margin_start: 24,
-            margin_end: 24,
-            hexpand: false,
-            halign: Gtk.Align.CENTER
-        });
-        this.grid.insert_after(this.get_content_area(), null);
-        let text = new Gtk.Label({
-            label: "<b>" + _(params.text) + "</b>",
-            use_markup: true,
-            hexpand: false,
-            halign: Gtk.Align.START,
-            wrap: true,
-        });
-        this.grid.attach(text, 1, 0, 1, 1);
-
-        if(params.secondaryText){
-            let secondayText = new Gtk.Label({
-                label: _(params.secondaryText),
-                use_markup: true,
-                hexpand: false,
-                halign: Gtk.Align.START,
-                wrap: true,
-            });
-            this.grid.attach(secondayText, 1, 1, 1, 1);
-        }
-
-        if(params.iconName){
-            let image = new Gtk.Image({
-                icon_name: params.iconName,
-                pixel_size: 48
-            });
-            this.grid.attach(image, 0, 0, 1, 2);
         }
     }
 });
@@ -639,22 +550,6 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
     }
 });
 
-var TileGrid = GObject.registerClass(class Arc_Menu_TileGrid extends Gtk.FlowBox{
-    _init(maxColumns) {
-        super._init({
-            row_spacing: 5,
-            column_spacing: 5,
-            vexpand: true,
-            hexpand: true,
-            valign: Gtk.Align.CENTER,
-            halign: Gtk.Align.CENTER,
-            max_children_per_line: maxColumns,
-            homogeneous: true,
-            selection_mode: Gtk.SelectionMode.NONE
-        });
-    }
-});
-
 var IconGrid = GObject.registerClass(class Arc_Menu_IconGrid extends Gtk.FlowBox{
     _init() {
         super._init({
@@ -683,21 +578,25 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
             hexpand: true,
             vexpand: false,
             halign: Gtk.Align.FILL,
-            valign: Gtk.Align.CENTER
+            valign: Gtk.Align.CENTER,
         });
-        this.box = new FrameBoxRow();
-        this.box.activatable = true;
-        this.box._grid.row_spacing = 0;
-        this.box._grid.orientation = Gtk.Orientation.VERTICAL,
-        this.activatable = true;
         this.name = name;
         this.layout = layout;
+
+        this.box = new FrameBoxRow({
+            activatable: true
+        });
+        this.box._grid.row_spacing = 0;
+        this.box._grid.orientation = Gtk.Orientation.VERTICAL,
+
         this._image = new Gtk.Image({
-            
             gicon: Gio.icon_new_for_string(file),
             pixel_size: width
         });
-        this._label = new Gtk.Label({ label: _(this.name) });
+
+        this._label = new Gtk.Label({ 
+            label: _(this.name) 
+        });
 
         this.box._grid.attach(this._image, 0, 0, 1, 1);
         this.box._grid.attach(this._label, 0, 1, 1, 1);
@@ -755,54 +654,4 @@ var MenuLayoutRow = GObject.registerClass(class Arc_Menu_MenuLayoutRow extends A
         this.activatable_widget = this._grid;
 
     }
-});
-
-var LayoutTile = GObject.registerClass(class Arc_Menu_LayoutTile extends FrameBox{
-    _init(name, file, layout) {
-        super._init({
-            halign: Gtk.Align.FILL,
-            valign: Gtk.Align.CENTER,
-            hexpand: true,
-            vexpand: false
-        });
-        //this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
-        this.name = name;
-        this.layout = layout.MENU_TYPE;
-        
-        this.box = new FrameBoxRow();
-        this.box.activatable = true;
-        this.box._grid.row_spacing = 0;
-        this.box._grid.column_spacing = 0;
-
-        this._image = new Gtk.Image({ 
-            hexpand: false,
-            halign: Gtk.Align.START,
-            gicon: Gio.icon_new_for_string(file),
-            pixel_size: 46
-        });
-        
-        let titleLabel = new Gtk.Label({
-            label: "<b>" + _("%s Menu Layouts", layout.TITLE).format(layout.TITLE) + "</b>",
-            use_markup: true,
-            hexpand: true,
-            halign: Gtk.Align.CENTER,
-            vexpand: true,
-            valign: Gtk.Align.CENTER,
-            wrap: true,
-        })
-
-        let goNextImage = new Gtk.Image({
-            gicon: Gio.icon_new_for_string('go-next-symbolic'),
-            halign: Gtk.Align.END,
-            valign: Gtk.Align.CENTER,
-            hexpand: false,
-            vexpand: false,
-        })
-
-        this.box._grid.attach(this._image, 0, 0, 1, 2);
-        this.box._grid.attach(titleLabel, 1, 0, 1, 1);
-        this.box._grid.attach(goNextImage, 2, 0, 1, 2);
-        
-        this._listBox.add(this.box);
-   }
 });

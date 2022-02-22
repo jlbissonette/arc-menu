@@ -2166,7 +2166,17 @@ var MenuLayoutCategoryPage = GObject.registerClass({
 
             this.add(buttonBox);
             this.add(layoutsFrame);
-            this._tileGrid = new PW.TileGrid(this._params.maxColumns);
+            this._tileGrid = new Gtk.FlowBox({
+                row_spacing: 5,
+                column_spacing: 5,
+                vexpand: true,
+                hexpand: true,
+                valign: Gtk.Align.CENTER,
+                halign: Gtk.Align.CENTER,
+                max_children_per_line: this._params.maxColumns,
+                homogeneous: true,
+                selection_mode: Gtk.SelectionMode.NONE
+            });
 
             this._params.styles.forEach((style) => {
                 this._addTile(style.TITLE, style.IMAGE, style.LAYOUT);
@@ -3171,13 +3181,17 @@ var MenuSettingsFineTunePage = GObject.registerClass(
                 icon_name: 'info-circle-symbolic'
         });
         multiLinedLabelInfoButton.connect('clicked', ()=> {
-            let dialog = new PW.MessageDialog({
-                text: _("Multi-Lined Labels"),
-                secondaryText: _('Enable/Disable multi-lined labels on large application icon layouts.'),
+            let dialog = new Gtk.MessageDialog({
+                text: "<b>" + _("Multi-Lined Labels") + '</b>\n' + _('Enable/Disable multi-lined labels on large application icon layouts.'),
+                use_markup: true,
                 buttons: Gtk.ButtonsType.OK,
-                transient_for: this.get_root()
+                message_type: Gtk.MessageType.WARNING,
+                transient_for: this.get_root(),
+                modal: true
             });
-            dialog.connect ('response', () => dialog.destroy());
+            dialog.connect('response', (widget, response) => {
+                dialog.destroy();
+            });
             dialog.show();
         });
         multiLinedLabelRow.add_suffix(multiLinedLabelSwitch);
@@ -3208,12 +3222,17 @@ var MenuSettingsFineTunePage = GObject.registerClass(
                 icon_name: 'info-circle-symbolic'
         });
         gapAdjustmentInfoButton.connect('clicked', ()=> {
-            let dialog = new PW.MessageDialog({
-                text: _("Adjust the gap between the ArcMenu button and the menu."),
+            let dialog = new Gtk.MessageDialog({
+                text: _("Adjust the gap between the ArcMenu button and the menu"),
+                use_markup: true,
                 buttons: Gtk.ButtonsType.OK,
-                transient_for: this.get_root()
+                message_type: Gtk.MessageType.WARNING,
+                transient_for: this.get_root(),
+                modal: true
             });
-            dialog.connect ('response', ()=> dialog.destroy());
+            dialog.connect('response', (widget, response) => {
+                dialog.destroy();
+            });
             dialog.show();
         });
         gapAdjustmentRow.add_suffix(gapAdjustmentScale);
@@ -3882,13 +3901,18 @@ var MiscPage = GObject.registerClass(
                 icon_name: 'info-circle-symbolic'
             });
             settingsImportInfoButton.connect('clicked', ()=> {
-                let dialog = new PW.MessageDialog({
-                    text: _("Export or Import All ArcMenu Settings"),
-                    secondaryText: _('Importing settings from file may replace ALL saved settings.\nThis includes all saved pinned apps.'),
+                let dialog = new Gtk.MessageDialog({
+                    text: "<b>" + _("Export or Import All ArcMenu Settings") + '</b>\n' + 
+                                _('Importing settings from file may replace ALL saved settings.\nThis includes all saved pinned apps.'),
+                    use_markup: true,
                     buttons: Gtk.ButtonsType.OK,
-                    transient_for: this.get_root()
+                    message_type: Gtk.MessageType.WARNING,
+                    transient_for: this.get_root(),
+                    modal: true
                 });
-                dialog.connect ('response', ()=> dialog.destroy());
+                dialog.connect('response', (widget, response) => {
+                    dialog.destroy();
+                });
                 dialog.show();
             });
 
@@ -3953,13 +3977,18 @@ var MiscPage = GObject.registerClass(
                 icon_name: 'info-circle-symbolic'
             });
             colorThemesImportInfoButton.connect('clicked', ()=> {
-                let dialog = new PW.MessageDialog({
-                    text: _("Export or Import Menu Theme Presets"),
-                    secondaryText: _('Menu theme presets are located in the "Menu Theme" section'),
+                let dialog = new Gtk.MessageDialog({
+                    text: "<b>" + _("Export or Import Menu Theme Presets") + '</b>\n' + 
+                                _('Menu theme presets are located in the "Menu Theme" section'),
+                    use_markup: true,
                     buttons: Gtk.ButtonsType.OK,
-                    transient_for: this.get_root()
+                    message_type: Gtk.MessageType.WARNING,
+                    transient_for: this.get_root(),
+                    modal: true
                 });
-                dialog.connect ('response', ()=> dialog.destroy());
+                dialog.connect('response', (widget, response) => {
+                    dialog.destroy();
+                });
                 dialog.show();
             });
 
