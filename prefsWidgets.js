@@ -89,92 +89,6 @@ var DialogWindow = GObject.registerClass({
     }
 });
 
-var FrameBox = GObject.registerClass(class Arc_Menu_FrameBox extends Adw.PreferencesGroup {
-    _init(params) {
-        super._init(params);
-        this.count = 0;
-        this.children = [];
-        this._listBox = this;
-    }
-
-    add(boxRow) {
-        super.add(boxRow);
-        this.children.push(boxRow);
-        this.count++;
-    }
-
-    show() {
-        super.show();
-    }
-
-    length() {
-        return this.length;
-    }
-
-    remove(boxRow){
-        if(boxRow){
-            super.remove(boxRow);
-            this.children = this.children.filter(e => e !== boxRow)
-            this.count = this.count -1;
-        }
-    }
-    removeChildrenAfterIndex(index){
-        let children = [...this];
-        let childrenCount = this.count;
-        for(let i = childrenCount - 1; i > index; i--){
-            let child = children[i];
-            if(child) this.remove(child);
-        }
-        this.show();
-    }
-    remove_all_children() {
-        for(let i = 0; i < this.children.length; i++){
-            let child = this.children[i];
-            this._listBox.remove(child);
-        }
-        this.children = [];
-        this.count = 0;
-        this.show();
-    }
-    get_index(index){
-        return this.get_row_at_index(index);
-    }
-    insert(row, pos){
-        this.insert(row, pos);
-        this.children.push(row);
-        this.count++;
-    }
-});
-
-var FrameBoxRow = GObject.registerClass(class Arc_Menu_FrameBoxRow extends Adw.ActionRow {
-    _init(params) {
-        super._init(params);
-        this.selectable = true;
-        this.activatable = true;
-        this._grid = new Gtk.Grid({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            margin_top: 5,
-            margin_bottom: 5,
-            margin_start: 5,
-            margin_end: 5,
-            column_spacing: 20,
-            row_spacing: 20
-        });
-        this.x = 0;
-        this.set_child(this._grid);
-    }
-
-    add(widget) {
-        this._grid.attach(widget, this.x, 0, 1, 1);
-        this.x++;
-    }
-    
-    setVerticalAlignmentBottom(){
-        this._grid.vexpand = true;
-        this._grid.valign = Gtk.Align.END;
-    }
-});
-
 var FrameBoxDragRow = GObject.registerClass({
     Signals: {
         'drag-drop-done': { },
@@ -572,7 +486,7 @@ var IconGrid = GObject.registerClass(class Arc_Menu_IconGrid extends Gtk.FlowBox
     }
 });
 
-var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
+var Tile = GObject.registerClass(class Arc_Menu_Tile extends Adw.PreferencesGroup{
     _init(name, file, width, height, layout) {
         super._init({
             hexpand: true,
@@ -583,11 +497,19 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
         this.name = name;
         this.layout = layout;
 
-        this.box = new FrameBoxRow({
+        this.box = new Adw.ActionRow({
             activatable: true
         });
-        this.box._grid.row_spacing = 0;
-        this.box._grid.orientation = Gtk.Orientation.VERTICAL,
+        this._grid = new Gtk.Grid({
+            orientation: Gtk.Orientation.VERTICAL,
+            margin_top: 5,
+            margin_bottom: 5,
+            margin_start: 5,
+            margin_end: 5,
+            column_spacing: 20,
+            row_spacing: 0
+        });
+        this.box.set_child(this._grid);
 
         this._image = new Gtk.Image({
             gicon: Gio.icon_new_for_string(file),
@@ -598,9 +520,9 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends FrameBox{
             label: _(this.name) 
         });
 
-        this.box._grid.attach(this._image, 0, 0, 1, 1);
-        this.box._grid.attach(this._label, 0, 1, 1, 1);
-        this._listBox.add(this.box);
+        this._grid.attach(this._image, 0, 0, 1, 1);
+        this._grid.attach(this._label, 0, 1, 1, 1);
+        this.add(this.box);
     }
 });
 

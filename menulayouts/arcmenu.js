@@ -56,7 +56,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 5px 10px;";
+            this.searchBox.style = "margin: 0px 0px 5px 0px;";
             this.mainBox.add_child(this.searchBox.actor);
         }
 
@@ -116,7 +116,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add_child(this.viewProgramsButton.actor);
         this.leftBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 5px 10px 0px 10px;";
+            this.searchBox.style = "margin: 5px 0px 2px 0px;";
             this.leftBox.add_child(this.searchBox.actor);
         }
 

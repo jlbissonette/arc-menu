@@ -38,7 +38,7 @@ const GSET = 'gnome-shell-extension-tool';
 
 var MenuSettingsListPage = GObject.registerClass(
     class Arc_Menu_MenuSettingsListPage extends Gtk.Box {
-        _init(settings, listType) {
+        _init(settings, listType, settingString) {
             super._init({
                 margin_top: 10,
                 margin_bottom: 10,
@@ -78,6 +78,10 @@ var MenuSettingsListPage = GObject.registerClass(
                 }
                 addMoreTitle = _("Add More Apps");
             }
+            else if(this.listType === Constants.MenuSettingsListType.OTHER){
+                this.settingString = settingString;
+                this.appsList = this._settings.get_strv(settingString);
+            }
             
             this.frameRows = [];
             this.frame = new Adw.PreferencesGroup();
@@ -85,55 +89,57 @@ var MenuSettingsListPage = GObject.registerClass(
             this._createFrame(this.appsList);
             this.append(this.frame);
 
-            let addMoreGroup = new Adw.PreferencesGroup();
-            let addMoreRow = new Adw.ActionRow({
-                title: _(addMoreTitle)
-            });
-            let addMoreButton = new PW.Button({
-                icon_name: 'list-add-symbolic',
-            });
-            addMoreButton.connect('clicked', ()=> {
-                let dialog = new AddAppsToPinnedListWindow(this._settings, this, this.listType);
-                dialog.show();
-                dialog.connect('response', (_w, response) => {
-                    if(response === Gtk.ResponseType.APPLY) {
-                        let newPinnedApps = dialog.newPinnedAppsArray;
-                        let array = [];
-                        for(let i = 0; i < newPinnedApps.length; i++){
-                            array.push(newPinnedApps[i]._name);
-                            array.push(newPinnedApps[i]._icon);
-                            array.push(newPinnedApps[i]._cmd);
+            if(this.listType !== Constants.MenuSettingsListType.OTHER){
+                let addMoreGroup = new Adw.PreferencesGroup();
+                let addMoreRow = new Adw.ActionRow({
+                    title: _(addMoreTitle)
+                });
+                let addMoreButton = new PW.Button({
+                    icon_name: 'list-add-symbolic',
+                });
+                addMoreButton.connect('clicked', ()=> {
+                    let dialog = new AddAppsToPinnedListWindow(this._settings, this, this.listType);
+                    dialog.show();
+                    dialog.connect('response', (_w, response) => {
+                        if(response === Gtk.ResponseType.APPLY) {
+                            let newPinnedApps = dialog.newPinnedAppsArray;
+                            let array = [];
+                            for(let i = 0; i < newPinnedApps.length; i++){
+                                array.push(newPinnedApps[i]._name);
+                                array.push(newPinnedApps[i]._icon);
+                                array.push(newPinnedApps[i]._cmd);
+                            }
+                            this._createFrame(array);
+                            dialog.destroy();
+                            this.saveSettings();
                         }
-                        this._createFrame(array);
-                        dialog.destroy();
-                        this.saveSettings();
-                    }
+                    });
                 });
-            });
-            addMoreRow.add_suffix(addMoreButton);
-            addMoreGroup.add(addMoreRow);
-            this.append(addMoreGroup);
-
-            let addCustomRow = new Adw.ActionRow({
-                title: _("Add Custom Shortcut")
-            });
-            let addCustomButton = new PW.Button({
-                icon_name: 'list-add-symbolic',
-            });
-            addCustomButton.connect('clicked', ()=> {
-                let dialog = new AddCustomLinkDialogWindow(this._settings, this, this.listType);
-                dialog.show();
-                dialog.connect('response', (_w, response) => {
-                    if(response === Gtk.ResponseType.APPLY) {
-                        let newPinnedApps = dialog.newPinnedAppsArray;
-                        this._createFrame(newPinnedApps);
-                        dialog.destroy();
-                        this.saveSettings();
-                    }
+                addMoreRow.add_suffix(addMoreButton);
+                addMoreGroup.add(addMoreRow);
+                this.append(addMoreGroup);
+    
+                let addCustomRow = new Adw.ActionRow({
+                    title: _("Add Custom Shortcut")
                 });
-            });
-            addCustomRow.add_suffix(addCustomButton);
-            addMoreGroup.add(addCustomRow);
+                let addCustomButton = new PW.Button({
+                    icon_name: 'list-add-symbolic',
+                });
+                addCustomButton.connect('clicked', ()=> {
+                    let dialog = new AddCustomLinkDialogWindow(this._settings, this, this.listType);
+                    dialog.show();
+                    dialog.connect('response', (_w, response) => {
+                        if(response === Gtk.ResponseType.APPLY) {
+                            let newPinnedApps = dialog.newPinnedAppsArray;
+                            this._createFrame(newPinnedApps);
+                            dialog.destroy();
+                            this.saveSettings();
+                        }
+                    });
+                });
+                addCustomRow.add_suffix(addCustomButton);
+                addMoreGroup.add(addCustomRow);
+            }
 
             this.restoreDefaults = () => {
                 this.frameRows.forEach(child => {
@@ -165,7 +171,7 @@ var MenuSettingsListPage = GObject.registerClass(
                 return a.get_index() > b.get_index();
             })
             this.frameRows.forEach(child => {
-                if(this.listType === Constants.MenuSettingsListType.PINNED_APPS){
+                if(this.listType === Constants.MenuSettingsListType.PINNED_APPS || this.listType === Constants.MenuSettingsListType.OTHER){
                     array.push(child._name);
                     array.push(child._icon);
                     array.push(child._cmd);
@@ -174,11 +180,10 @@ var MenuSettingsListPage = GObject.registerClass(
                     array.push([child._name, child._icon, child._cmd]);
             });
             
-            if(this.listType === Constants.MenuSettingsListType.PINNED_APPS)
+            if(this.listType === Constants.MenuSettingsListType.PINNED_APPS || this.listType === Constants.MenuSettingsListType.OTHER)
                 this._settings.set_strv(this.settingString, array);
             else
                 this._settings.set_value(this.settingString, new GLib.Variant('aas', array));
-
         }
 
         _createFrame(array) {
@@ -197,9 +202,10 @@ var MenuSettingsListPage = GObject.registerClass(
                 if(frameRow._icon === "ArcMenu_ArcMenuIcon"){
                     frameRow._icon = Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg';
                 }
-                if(this.listType === Constants.MenuSettingsListType.DIRECTORIES){
+                if(this.listType === Constants.MenuSettingsListType.DIRECTORIES || this.listType === Constants.MenuSettingsListType.OTHER){
                     frameRow._icon = getIconPath([array[i], array[i + 1], array[i + 2]]);
                 }
+
                 iconString = frameRow._icon;
                 if(frameRow._icon === "" && Gio.DesktopAppInfo.new(frameRow._cmd)){
                     iconString = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon() ? Gio.DesktopAppInfo.new(frameRow._cmd).get_icon().to_string() : "";
@@ -219,11 +225,23 @@ var MenuSettingsListPage = GObject.registerClass(
 
                 checkIfValidShortcut(frameRow, arcMenuImage);
 
-                let buttonBox = new PW.EditEntriesBox({
-                    frameRow: frameRow,
-                    modifyButton: editable,
-                    deleteButton: true
-                });
+                let buttonBox;
+                if(this.listType === Constants.MenuSettingsListType.OTHER){
+                    frameRow.hasEditButton = true;
+                    buttonBox = new PW.EditEntriesBox({
+                        frameRow: frameRow,
+                        modifyButton: true,
+                        changeButton: true
+                    });
+                }
+                else{
+                    buttonBox = new PW.EditEntriesBox({
+                        frameRow: frameRow,
+                        modifyButton: editable,
+                        deleteButton: true
+                    });
+                }
+
                 buttonBox.connect('modify', ()=> {
                     let pinnedShortcut = [frameRow._name, frameRow._icon, frameRow._cmd];
                     let dialog = new AddCustomLinkDialogWindow(this._settings, this, Constants.MenuSettingsListType.PINNED_APPS, pinnedShortcut);
@@ -243,6 +261,27 @@ var MenuSettingsListPage = GObject.registerClass(
                             this.saveSettings();
                         }
                     });
+                });
+                buttonBox.connect('change', ()=> {
+                    let dialog = new AddAppsToPinnedListWindow(this._settings, this, Constants.MenuSettingsListType.OTHER);
+                    dialog.show();
+                    dialog.connect('response', (_w, response) => { 
+                        if(response === Gtk.ResponseType.APPLY) {
+                            let newPinnedApps = dialog.newPinnedAppsArray;
+                            frameRow._name = newPinnedApps[0];
+                            frameRow._icon = newPinnedApps[1];
+                            frameRow._cmd = newPinnedApps[2];
+                            frameRow.title = _(frameRow._name);
+                            let iconString;
+                            if(frameRow._icon === "" && Gio.DesktopAppInfo.new(frameRow._cmd)){
+                                iconString = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon() ? Gio.DesktopAppInfo.new(frameRow._cmd).get_icon().to_string() : "";
+                            }
+                            let icon = getIconPath(newPinnedApps);
+                            arcMenuImage.gicon = Gio.icon_new_for_string(iconString ? iconString : icon);
+                            dialog.destroy();
+                            this.saveSettings();
+                        }
+                    }); 
                 });
                 buttonBox.connect("row-changed", () =>{
                     this.saveSettings();
@@ -275,7 +314,6 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         else if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES)
             super._init(_('Select Directory Shortcuts'), parent, Constants.MenuItemLocation.TOP);
         this.newPinnedAppsArray = [];
-        this.addResponse = false;
 
         let addAppsButton;
         if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS || this._dialogType == Constants.MenuSettingsListType.APPLICATIONS
@@ -412,7 +450,6 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             });
             checkButton.connect('clicked', () => {
                 this.newPinnedAppsArray.push(frameRow._name, frameRow._icon, frameRow._cmd);
-                this.addResponse = true;
                 this.emit("response", Gtk.ResponseType.APPLY);
             });
             frameRow.add_suffix(checkButton);
@@ -435,7 +472,6 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
             this.set_default_size(550, 200);
             this._settings = settings;
             this.newPinnedAppsArray = [];
-            this.addResponse = false;
             this._dialogType = dialogType;
             this.pinnedShortcut = pinnedShortcut;
 
@@ -561,7 +597,7 @@ var GeneralPage = GObject.registerClass(
             modifyHotCornerButton.connect('clicked', ()=> {
                 let dialog = new ModifyHotCornerDialogWindow(this._settings, this);
                 dialog.show();
-                dialog.connect('response', ()=> {
+                dialog.connect('response', () => {
                     dialog.destroy();
                 });
             });
@@ -573,10 +609,10 @@ var GeneralPage = GObject.registerClass(
             modifyHotCornerSwitch.set_active(this._settings.get_boolean('override-hot-corners'));
             modifyHotCornerButton.set_sensitive(this._settings.get_boolean('override-hot-corners'));
             modifyHotCornerSwitch.connect('notify::active', (widget) => {
-                this._settings.set_boolean('override-hot-corners',widget.get_active());
+                this._settings.set_boolean('override-hot-corners', widget.get_active());
                 modifyHotCornerButton.set_sensitive(widget.get_active());
                 if(!widget.get_active()){
-                    this._settings.set_enum('hot-corners',Constants.HotCornerAction.DEFAULT);
+                    this._settings.set_enum('hot-corners', Constants.HotCornerAction.DEFAULT);
                 }
             });
             modifyHotCornerRow.add_suffix(modifyHotCornerSwitch);
@@ -704,9 +740,9 @@ var GeneralPage = GObject.registerClass(
             modifyHotkeyButton.connect('clicked', () => {
                 let dialog = new CustomHotkeyDialogWindow(this._settings, this);
                 dialog.show();
-                dialog.connect('response', () => {
+                dialog.connect('response', (_w, response) => {
                     let customHotKeyEnum = isMenuHotkey ? 2 : 1;
-                    if(dialog.addResponse) {
+                    if(response === Gtk.ResponseType.APPLY) {
                         this._settings.set_enum(hotkeyEnumSetting, 0);
                         this._settings.set_strv(customHotkeySetting, [dialog.resultsText]);
                         this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
@@ -974,166 +1010,143 @@ var GeneralPage = GObject.registerClass(
 });
 
 var ModifyHotCornerDialogWindow = GObject.registerClass(
-    class Arc_Menu_ModifyHotCornerDialogWindow extends PW.DialogWindow {
-        _init(settings, parent) {
-            this._settings = settings;
-            this.addResponse = false;
-            super._init(_('Modify Hot Corner'), parent, Constants.MenuItemLocation.TOP);
-            this.set_default_size(600, 250);
-        }
+class Arc_Menu_ModifyHotCornerDialogWindow extends PW.DialogWindow {
+    _init(settings, parent) {
+        super._init(_('Modify Hot Corner'), parent, Constants.MenuItemLocation.BOTTOM);
+        this._settings = settings;
+        this.set_default_size(600, 250);
 
-        _createLayout(vbox) {
-            let modifyHotCornerFrame = new PW.FrameBox();
-            let modifyHotCornerRow = new PW.FrameBoxRow();
-            let modifyHotCornerLabel = new Gtk.Label({
-                label: _("Hot Corner Action"),
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
-            });
-            let hotCornerActionCombo = new Gtk.ComboBoxText({
-                halign: Gtk.Align.END,
-            });
-            hotCornerActionCombo.append_text(_("GNOME Default"));
-            hotCornerActionCombo.append_text(_("Disabled"));
-            hotCornerActionCombo.append_text(_("Open ArcMenu"));
-            hotCornerActionCombo.append_text(_("Custom"));
+        let modifyHotCornerRow = new Adw.ActionRow({
+            title: _("Hot Corner Action")
+        });
+        let hotCornerActionCombo = new Gtk.ComboBoxText({
+            valign: Gtk.Align.CENTER,
+        });
+        hotCornerActionCombo.append_text(_("GNOME Default"));
+        hotCornerActionCombo.append_text(_("Disabled"));
+        hotCornerActionCombo.append_text(_("Open ArcMenu"));
+        hotCornerActionCombo.append_text(_("Custom"));
+        modifyHotCornerRow.add_suffix(hotCornerActionCombo);
+        this.pageGroup.add(modifyHotCornerRow);
 
-            let customHotCornerFrame = new PW.FrameBox();
-            let customHeaderHotCornerRow = new PW.FrameBoxRow();
+        let customHotCornerFrame = new Adw.PreferencesGroup({
+            title: _("Custom Hot Corner")
+        });
+        let customHeaderHotCornerRow = new Adw.ActionRow({
+            title: _("Custom Hot Corner Action"),
+            subtitle: _("Choose from a list of preset commands or use your own terminal command")
+        });
 
-            let customHeaderHotCornerLabel = new Gtk.Label({
-                label: "<b>"+_("Custom Hot Corner Action") + "</b>\n" + _("Choose from a list of preset commands or use your own terminal command"),
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
-            });
-            customHeaderHotCornerRow.add(customHeaderHotCornerLabel);
+        let presetCustomHotCornerRow =  new Adw.ActionRow({
+            title: _("Preset commands"),
+        });
+        let hotCornerPresetsCombo = new Gtk.ComboBoxText({
+            valign: Gtk.Align.CENTER,
+        });
+        hotCornerPresetsCombo.append_text(_("Show all Applications"));
+        hotCornerPresetsCombo.append_text(_("GNOME Terminal"));
+        hotCornerPresetsCombo.append_text(_("GNOME System Monitor"));
+        hotCornerPresetsCombo.append_text(_("GNOME Calculator"));
+        hotCornerPresetsCombo.append_text(_("GNOME gedit"));
+        hotCornerPresetsCombo.append_text(_("GNOME Screenshot"));
+        hotCornerPresetsCombo.append_text(_("GNOME Weather"));
+        hotCornerPresetsCombo.append_text(_("Run Command..."));
+        hotCornerPresetsCombo.connect('changed', (widget) => {
+            if(widget.get_active() === 0)
+                customHotCornerEntry.set_text("ArcMenu_ShowAllApplications");
+            else if(widget.get_active() === 1)
+                customHotCornerEntry.set_text("gnome-terminal");
+            else if(widget.get_active() === 2)
+                customHotCornerEntry.set_text("gnome-system-monitor");
+            else if(widget.get_active() === 3)
+                customHotCornerEntry.set_text("gnome-calculator");
+            else if(widget.get_active() === 4)
+                customHotCornerEntry.set_text("gedit");
+            else if(widget.get_active() === 5)
+                customHotCornerEntry.set_text("gnome-screenshot");
+            else if(widget.get_active() === 6)
+                customHotCornerEntry.set_text("gnome-weather");
+            else if(widget.get_active() === 7)
+                customHotCornerEntry.set_text("ArcMenu_RunCommand");
+        });
+        presetCustomHotCornerRow.add_suffix(hotCornerPresetsCombo);
 
-            let presetCustomHotCornerRow = new PW.FrameBoxRow();
-            let presetCustomHotCornerLabel = new Gtk.Label({
-                label: _("Preset commands"),
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
-            });
-            let hotCornerPresetsCombo = new Gtk.ComboBoxText({
-                hexpand: true
-            });
-
-            hotCornerPresetsCombo.append_text(_("Show all Applications"));
-            hotCornerPresetsCombo.append_text(_("GNOME Terminal"));
-            hotCornerPresetsCombo.append_text(_("GNOME System Monitor"));
-            hotCornerPresetsCombo.append_text(_("GNOME Calculator"));
-            hotCornerPresetsCombo.append_text(_("GNOME gedit"));
-            hotCornerPresetsCombo.append_text(_("GNOME Screenshot"));
-            hotCornerPresetsCombo.append_text(_("GNOME Weather"));
-            hotCornerPresetsCombo.append_text(_("Run Command..."));
-            hotCornerPresetsCombo.connect('changed', (widget) => {
-                if(widget.get_active() === 0)
-                    customHotCornerEntry.set_text("ArcMenu_ShowAllApplications");
-                else if(widget.get_active() === 1)
-                    customHotCornerEntry.set_text("gnome-terminal");
-                else if(widget.get_active() === 2)
-                    customHotCornerEntry.set_text("gnome-system-monitor");
-                else if(widget.get_active() === 3)
-                    customHotCornerEntry.set_text("gnome-calculator");
-                else if(widget.get_active() === 4)
-                    customHotCornerEntry.set_text("gedit");
-                else if(widget.get_active() === 5)
-                    customHotCornerEntry.set_text("gnome-screenshot");
-                else if(widget.get_active() === 6)
-                    customHotCornerEntry.set_text("gnome-weather");
-                else if(widget.get_active() === 7)
-                    customHotCornerEntry.set_text("ArcMenu_RunCommand");
-            });
-            presetCustomHotCornerRow.add(presetCustomHotCornerLabel);
-            presetCustomHotCornerRow.add(hotCornerPresetsCombo);
-
-            let customHotCornerRow = new PW.FrameBoxRow();
-            let customHotCornerLabel = new Gtk.Label({
-                label: _("Terminal Command"),
-                use_markup: true,
-                xalign: 0,
-                hexpand: true
-            });
-            let customHotCornerEntry = new Gtk.Entry({
-            });
-            customHotCornerEntry.set_text(this._settings.get_string('custom-hot-corner-cmd'));
-            customHotCornerEntry.connect('changed', (widget) => {
-                applyButton.set_sensitive(true);
-                let index = this.checkIfMatch(customHotCornerEntry.get_text());
-                hotCornerPresetsCombo.set_active(index)
-            });
-            customHotCornerEntry.set_width_chars(40);
-
+        let customHotCornerRow = new Adw.ActionRow({
+            title: _("Terminal Command"),
+        });
+        let customHotCornerEntry = new Gtk.Entry({
+            valign: Gtk.Align.CENTER,
+        });
+        customHotCornerEntry.set_text(this._settings.get_string('custom-hot-corner-cmd'));
+        customHotCornerEntry.connect('changed', (widget) => {
+            applyButton.set_sensitive(true);
             let index = this.checkIfMatch(customHotCornerEntry.get_text());
             hotCornerPresetsCombo.set_active(index)
-            customHotCornerRow.add(customHotCornerLabel);
-            customHotCornerRow.add(customHotCornerEntry);
+        });
+        customHotCornerEntry.set_width_chars(40);
 
-            customHotCornerFrame.add(customHeaderHotCornerRow);
-            customHotCornerFrame.add(presetCustomHotCornerRow);
-            customHotCornerFrame.add(customHotCornerRow);
+        let index = this.checkIfMatch(customHotCornerEntry.get_text());
+        hotCornerPresetsCombo.set_active(index)
+        customHotCornerRow.add_suffix(customHotCornerEntry);
 
-            let applyButton = new Gtk.Button({
-                label: _("Apply"),
-                hexpand: true,
-            });
-            applyButton.connect('clicked', () => {
-                this._settings.set_string('custom-hot-corner-cmd',customHotCornerEntry.get_text());
-                this._settings.set_enum('hot-corners',hotCornerActionCombo.get_active());
-                applyButton.set_sensitive(false);
-                this.addResponse = true;
-                this.response(-10);
-            });
-            applyButton.set_halign(Gtk.Align.END);
-            applyButton.set_sensitive(false);
+        customHotCornerFrame.add(customHeaderHotCornerRow);
+        customHotCornerFrame.add(presetCustomHotCornerRow);
+        customHotCornerFrame.add(customHotCornerRow);
 
+        let applyButton = new Gtk.Button({
+            label: _("Apply"),
+            hexpand: true,
+        });
+        let context = applyButton.get_style_context();
+        context.add_class('suggested-action');
+        applyButton.connect('clicked', () => {
+            this._settings.set_string('custom-hot-corner-cmd', customHotCornerEntry.get_text());
+            this._settings.set_enum('hot-corners',hotCornerActionCombo.get_active());
+            this.emit("response", Gtk.ResponseType.APPLY);
+        });
+        applyButton.set_halign(Gtk.Align.END);
+        applyButton.set_sensitive(false);
 
-            let hotCornerAction = this._settings.get_enum('hot-corners');
-            hotCornerActionCombo.set_active(hotCornerAction);
-            hotCornerActionCombo.connect('changed', (widget) => {
-                applyButton.set_sensitive(true);
-                if(widget.get_active()==Constants.HotCornerAction.CUSTOM){
-                    customHotCornerFrame.set_sensitive(true);
-                }
-                else{
-                    customHotCornerFrame.set_sensitive(false);
-                }
-            });
-
-            modifyHotCornerRow.add(modifyHotCornerLabel);
-            modifyHotCornerRow.add(hotCornerActionCombo);
-            modifyHotCornerFrame.add(modifyHotCornerRow);
-            if(hotCornerActionCombo.get_active() == Constants.HotCornerAction.CUSTOM)
-                customHotCornerFrame.set_sensitive(true);
+        let hotCornerAction = this._settings.get_enum('hot-corners');
+        hotCornerActionCombo.set_active(hotCornerAction);
+        hotCornerActionCombo.connect('changed', (widget) => {
+            applyButton.set_sensitive(true);
+            if(widget.get_active() === Constants.HotCornerAction.CUSTOM)
+                customHotCornerFrame.show();
             else
-                customHotCornerFrame.set_sensitive(false);
-            vbox.append(modifyHotCornerFrame);
-            vbox.append(customHotCornerFrame);
-            vbox.append(applyButton);
-        }
-        checkIfMatch(text){
-            if(text === "ArcMenu_ShowAllApplications")
-                return 0;
-            else if(text === "gnome-terminal")
-                return 1;
-            else if(text === "gnome-system-monitor")
-                return 2;
-            else if(text === "gnome-calculator")
-                return 3;
-            else if(text === "gedit")
-                return 4;
-            else if(text === "gnome-screenshot")
-                return 5;
-            else if(text === "gnome-weather")
-                return 6;
-            else if(text === "ArcMenu_RunCommand")
-                return 7;
-            else
-                return -1;
-        }
+                customHotCornerFrame.hide();
+        });
+
+        if(hotCornerActionCombo.get_active() == Constants.HotCornerAction.CUSTOM)
+            customHotCornerFrame.show();
+        else
+            customHotCornerFrame.hide();
+
+        this.page.add(customHotCornerFrame);
+        this.page.remove(this.headerGroup);
+        this.headerGroup.add(applyButton);
+        this.page.add(this.headerGroup);
+    }
+    checkIfMatch(text){
+        if(text === "ArcMenu_ShowAllApplications")
+            return 0;
+        else if(text === "gnome-terminal")
+            return 1;
+        else if(text === "gnome-system-monitor")
+            return 2;
+        else if(text === "gnome-calculator")
+            return 3;
+        else if(text === "gedit")
+            return 4;
+        else if(text === "gnome-screenshot")
+            return 5;
+        else if(text === "gnome-weather")
+            return 6;
+        else if(text === "ArcMenu_RunCommand")
+            return 7;
+        else
+            return -1;
+    }
 });
 
 var CustomHotkeyDialogWindow = GObject.registerClass({
@@ -1144,7 +1157,6 @@ var CustomHotkeyDialogWindow = GObject.registerClass({
     class Arc_Menu_CustomHotkeyDialogWindow extends Gtk.Window {
         _init(settings, parent) {
             this._settings = settings;
-            this.addResponse = false;
             this.keyEventController = new Gtk.EventControllerKey();
 
             super._init({
@@ -1172,33 +1184,32 @@ var CustomHotkeyDialogWindow = GObject.registerClass({
         _createLayout(vbox) {
             let hotkeyKey = '';
 
-            let modLabel = new Gtk.Label({
-                label:_("Choose Modifiers"),
-                use_markup: true,
-                hexpand: true,
-                halign: Gtk.Align.START
+            let modFrame = new Adw.PreferencesGroup()
+            let modRow = new Adw.ActionRow({
+                title: _("Choose Modifiers")
             });
-            let modFrame = new PW.FrameBox();
-            let modRow = new PW.FrameBoxRow();
-            modRow.add(modLabel);
 
             let buttonBox = new Gtk.Box({
                 hexpand: true,
                 halign: Gtk.Align.END,
                 spacing: 5
             });
-            modRow.add(buttonBox);
+            modRow.add_suffix(buttonBox);
             let ctrlButton = new Gtk.ToggleButton({
-                label: _("Ctrl")
+                label: _("Ctrl"),
+                valign: Gtk.Align.CENTER
             });
             let superButton = new Gtk.ToggleButton({
-                label: _("Super")
+                label: _("Super"),
+                valign: Gtk.Align.CENTER
             });
             let shiftButton = new Gtk.ToggleButton({
-                label: _("Shift")
+                label: _("Shift"),
+                valign: Gtk.Align.CENTER
             });
             let altButton = new Gtk.ToggleButton({
-                label: _("Alt")
+                label: _("Alt"),
+                valign: Gtk.Align.CENTER
             });
             ctrlButton.connect('toggled', () => {
                 this.resultsText="";
@@ -1247,7 +1258,7 @@ var CustomHotkeyDialogWindow = GObject.registerClass({
             modFrame.add(modRow);
             vbox.append(modFrame);
 
-            let keyFrame = new PW.FrameBox();
+            let keyFrame = new Adw.PreferencesGroup();
             let keyLabel = new Gtk.Label({
                 label: _("Press any key"),
                 use_markup: true,
@@ -1264,29 +1275,24 @@ var CustomHotkeyDialogWindow = GObject.registerClass({
             keyboardImage.valign = Gtk.Align.CENTER;
             vbox.append(keyboardImage)
 
-            let resultsRow = new PW.FrameBoxRow();
-            let resultsLabel = new Gtk.Label({
-                label: _("New Hotkey"),
-                use_markup: true,
-                xalign: .5,
-                hexpand: false,
-                halign: Gtk.Align.START
+            let resultsRow = new Adw.ActionRow({
+                title: _("New Hotkey")
             });
             let resultsWidget = new Gtk.ShortcutsShortcut({
                 hexpand: true,
                 halign: Gtk.Align.END
             });
-            resultsRow.add(resultsLabel);
-            resultsRow.add(resultsWidget);
+            resultsRow.add_suffix(resultsWidget);
             keyFrame.add(resultsRow);
 
             let applyButton = new Gtk.Button({
                 label: _("Apply"),
                 halign: Gtk.Align.END
             });
+            let context = applyButton.get_style_context();
+            context.add_class('suggested-action');
             applyButton.connect('clicked', () => {
-                this.addResponse = true;
-                this.emit("response", -10);
+                this.emit("response", Gtk.ResponseType.APPLY);
             });
             applyButton.set_sensitive(false);
 
@@ -1631,23 +1637,20 @@ class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         });
         customIconFlowBox.add(customIconImage);
 
-        let fileChooserFrame = new PW.FrameBox();
+        let fileChooserFrame = new Adw.PreferencesGroup();
         fileChooserFrame.margin_top = 20;
         fileChooserFrame.margin_bottom = 20;
         fileChooserFrame.margin_start = 20;
         fileChooserFrame.margin_end = 20;
-        let fileChooserRow = new PW.FrameBoxRow();
-        let fileChooserLabel = new Gtk.Label({
-            label: _('Browse for a Custom Icon'),
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
+        let fileChooserRow = new Adw.ActionRow({
+            title: _('Browse for a Custom Icon'),
         });
 
         let fileFilter = new Gtk.FileFilter();
         fileFilter.add_pixbuf_formats();
         let fileChooserButton = new Gtk.Button({
-            label: _('Select an Icon')
+            label: _('Select an Icon'),
+            valign: Gtk.Align.CENTER
         });
         fileChooserButton.connect('clicked', (widget) => {
             let dialog = new Gtk.FileChooserDialog({
@@ -1679,8 +1682,7 @@ class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             dialog.show();
         });
 
-        fileChooserRow.add(fileChooserLabel);
-        fileChooserRow.add(fileChooserButton);
+        fileChooserRow.add_suffix(fileChooserButton);
         fileChooserFrame.add(fileChooserRow);
         customIconBox.append(fileChooserFrame);
         customIconGroup.add(customIconBox);
@@ -2679,8 +2681,6 @@ var MenuSettingsListOtherPage = GObject.registerClass(
             frameRow._shouldShow = extraCategories[i][1];
             frameRow._name = _(name);
             frameRow._gicon = Gio.icon_new_for_string(iconString);
-            frameRow.saveButton = this.saveButton;
-            frameRow.resetButton = this.resetButton;
             frameRow.hasSwitch = true;
             frameRow.switchActive = frameRow._shouldShow;
 
@@ -2698,8 +2698,7 @@ var MenuSettingsListOtherPage = GObject.registerClass(
 
             let buttonBox = new PW.EditEntriesBox({
                 frameRow: frameRow,
-                frame: this.categoriesFrame,
-                buttons: [this.saveButton, this.resetButton],
+                frame: this.categoriesFrame
             });
 
             let modifyButton = new Gtk.Switch({
