@@ -6,6 +6,6 @@
 "name": "ArcMenu",
 "description": "An Application Menu for GNOME",
 "version": 23,
-"shell-version": [ "40", "41" ],
+"shell-version": [ "42" ],
 "url": "https://gitlab.com/arcmenu/ArcMenu"
 }

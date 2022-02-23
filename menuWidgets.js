@@ -402,8 +402,10 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
         this._settings = menuLayout._settings;
         this._menuButton = menuLayout.menuButton;
         this._app = app;
+        this.actor.add_style_class_name('popup-menu app-menu');
         this.layout = this._settings.get_enum('menu-layout');
-        this._boxPointer.setSourceAlignment(.20);
+        this.actor.add_style_class_name("app-menu");
+        this._boxPointer.setSourceAlignment(0);
         this._boxPointer._border.queue_repaint();
         this.blockSourceEvents = true;
         Main.uiGroup.add_child(this.actor);
@@ -470,16 +472,6 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
     }
 
     rebuildItems(){
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        if(customStyle){
-            this.actor.style_class = 'arc-menu-boxpointer';
-            this.actor.add_style_class_name('arc-menu');
-        }
-        else{
-            this.actor.style_class = 'popup-menu-boxpointer';
-            this.actor.add_style_class_name('popup-menu');
-        }
-
         this.contextMenuItems.rebuildItems();
     }
 
@@ -1011,6 +1003,7 @@ var Tooltip = class Arc_Menu_Tooltip{
                     x = stageX + Math.floor((itemWidth - labelWidth) / 2);
                     break;
                 case Constants.TooltipLocation.BOTTOM:
+                default:
                     y = stageY + itemHeight + gap;
                     x = stageX + gap;
                     break;
@@ -1196,6 +1189,7 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
     _createLeaveMenu(){
         this.leaveMenu = new PopupMenu.PopupMenu(this, 0.5 , St.Side.BOTTOM);
         this.leaveMenu.blockSourceEvents = true;
+        this.leaveMenu.actor.add_style_class_name('popup-menu context-menu');
         let section = new PopupMenu.PopupMenuSection();
         this.leaveMenu.addMenuItem(section);
 
@@ -1270,9 +1264,6 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
 
     activate(event) {
         super.activate(event);
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        this.leaveMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.leaveMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
         this.leaveMenu.toggle();
     }
 });
@@ -1705,6 +1696,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
         if(this._displayType === Constants.DisplayType.GRID)
             Utils.convertToGridLayout(this);
         else if(this._displayType === Constants.DisplayType.BUTTON){
+            this.tooltipLocation = Constants.TooltipLocation.TOP_CENTERED;
             this.style_class = 'popup-menu-item arc-menu-button';
             this.remove_child(this._ornamentLabel);
             this.remove_child(this.label);
@@ -1740,7 +1732,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
         return new St.Icon({
             icon_name: this.iconName,
             gicon: Gio.icon_new_for_string(this.iconName),
-            style_class: this._displayType === Constants.DisplayType.BUTTON ? '' : 'popup-menu-icon',
+            style_class: this._displayType === Constants.DisplayType.LIST ? 'popup-menu-icon' : '',
             icon_size: iconSize
         });
     }
@@ -1806,6 +1798,7 @@ var UserMenuItem = GObject.registerClass(class Arc_Menu_UserMenuItem extends Arc
         this._settings = this._menuLayout._settings;
 
         if(this._displayType === Constants.DisplayType.BUTTON){
+            this.tooltipLocation = Constants.TooltipLocation.TOP_CENTERED;
             this.style_class = 'popup-menu-item arc-menu-button';
             const IconSizeEnum = this._settings.get_enum('button-item-icon-size');
             const LayoutProps = this._menuLayout.layoutProperties;
@@ -1824,7 +1817,8 @@ var UserMenuItem = GObject.registerClass(class Arc_Menu_UserMenuItem extends Arc
         }
 
         this.userMenuIcon = new UserMenuIcon(menuLayout, this.iconSize, false);
-
+        if(this._displayType === Constants.DisplayType.BUTTON)
+            this.userMenuIcon.actor.set_style_class_name('menu-user-avatar user-icon');
         this.add_child(this.userMenuIcon.actor);
         this.label = this.userMenuIcon.label;
         if(this._displayType !== Constants.DisplayType.BUTTON)
@@ -2021,7 +2015,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
         return new St.Icon({
             gicon: Gio.icon_new_for_string(this._iconString),
             icon_size: iconSize,
-            style_class: 'popup-menu-icon',
+            style_class: this._displayType === Constants.DisplayType.GRID ? '' : 'popup-menu-icon',
         });
     }
 
@@ -2140,15 +2134,11 @@ var PinnedAppsMenuItem = GObject.registerClass({
     }
 
     getDragActor() {
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
         let icon = new St.Icon({
             gicon: Gio.icon_new_for_string(this._iconString),
             style_class: 'popup-menu-icon',
             icon_size: this._iconBin.get_child().icon_size
         });
-        let iconColor = this._settings.get_string('menu-foreground-color');
-        if(customStyle)
-            icon.style = `color: ${iconColor};`;
         return icon;
     }
 
@@ -2275,7 +2265,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
         }
         let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
-        icon.style_class = 'popup-menu-icon';
+        icon.style_class = this._displayType === Constants.DisplayType.GRID ? '' : 'popup-menu-icon'
         return icon;
     }
 
@@ -2391,6 +2381,7 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
             this.setRecentlyInstalledIndicator(true);
 
         if(this._displayType === Constants.DisplayType.BUTTON){
+            this.tooltipLocation = Constants.TooltipLocation.TOP_CENTERED;
             this.style_class = 'popup-menu-item arc-menu-button';
             this.remove_child(this._ornamentLabel);
             this.x_expand = false;
@@ -2536,261 +2527,6 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
     }
 });
 
-var SimpleMenuItem = GObject.registerClass(class Arc_Menu_SimpleMenuItem extends CategoryMenuItem{
-    _init(menuLayout, category) {
-        super._init(menuLayout, category);
-        this.subMenu = new PopupMenu.PopupMenu(this.actor,.5,St.Side.LEFT);
-        this.subMenu.connect("open-state-changed", (menu, open) => {
-            if(!open){
-                let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
-                appsScrollBoxAdj.set_value(0);
-            }
-        });
-
-        Main.uiGroup.add_child(this.subMenu.actor);
-        this.section = new PopupMenu.PopupMenuSection();
-        this.subMenu.addMenuItem(this.section);
-
-        this.applicationsScrollBox = this._menuLayout._createScrollBox({
-            x_expand: true,
-            y_expand: true,
-            y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade'),
-            overlay_scrollbars: true
-        });
-        this._menuLayout.subMenuManager.addMenu(this.subMenu);
-        this.applicationsBox = new St.BoxLayout({
-            vertical: true,
-            style_class: 'margin-box'
-        });
-        this.applicationsScrollBox.style = 'max-height: 25em;';
-        this.applicationsBox._delegate = this.applicationsBox;
-        this.applicationsScrollBox.add_actor(this.applicationsBox);
-        this.section.actor.add_child(this.applicationsScrollBox);
-
-        if(this.subMenu._keyPressId)
-            this.actor.disconnect(this.subMenu._keyPressId);
-        this.applicationsScrollBox.connect("key-press-event",(actor, event)=>{
-            let symbol = event.get_key_symbol();
-            switch (symbol) {
-                case Clutter.KEY_Right:
-                case Clutter.KEY_Left:
-                    this.subMenu.toggle();
-                    this.actor.navigate_focus(null, St.DirectionType.TAB_FORWARD, false);
-                case Clutter.KEY_Escape:
-                    if(this.subMenu.isOpen){
-                        this.subMenu.toggle();
-                        this.actor.navigate_focus(null, St.DirectionType.TAB_FORWARD, false);
-                    }
-                    return Clutter.EVENT_STOP;
-                default:
-                    return Clutter.EVENT_PROPAGATE;
-            }
-        });
-        this.actor.connect("key-press-event",(actor, event)=>{
-            let symbol = event.get_key_symbol();
-            switch (symbol) {
-                case Clutter.KEY_Escape:
-                    if(this.subMenu.isOpen){
-                        this.subMenu.toggle();
-                    }
-                    return Clutter.EVENT_STOP;
-                case Clutter.KEY_Left:
-                case Clutter.KEY_Right:
-                case Clutter.KEY_Return:
-                    if(!this.subMenu.isOpen){
-                        let navigateFocus = true;
-                        this.activate(event, navigateFocus);
-                        this.subMenu.actor.navigate_focus(null, St.DirectionType.TAB_FORWARD, false);
-                        return Clutter.EVENT_STOP;
-                    }
-                    else{
-                        return Clutter.EVENT_PROPAGATE;
-                    }
-                default:
-                    return Clutter.EVENT_PROPAGATE;
-            }
-        });
-        this.updateStyle();
-    }
-
-    updateStyle(){
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-
-        this.subMenu.actor.hide();
-        if(customStyle){
-            this.subMenu.actor.style_class = 'arc-menu-boxpointer';
-            this.subMenu.actor.add_style_class_name('arc-menu');
-        }
-        else
-        {
-            this.subMenu.actor.style_class = 'popup-menu-boxpointer';
-            this.subMenu.actor.add_style_class_name('popup-menu');
-        }
-    }
-
-    displayAppList(){
-        this._menuLayout.activeCategory = this._name;
-    }
-
-    activate(event, navigateFocus = true) {
-        this._menuLayout.activeCategory = this._name;
-        Utils.activateCategory(this._category, this._menuLayout, this, true);
-        this.subMenu.toggle();
-        if(navigateFocus)
-            this.subMenu.actor.navigate_focus(null, St.DirectionType.TAB_FORWARD, false);
-        this._menuLayout.setActiveCategory(this, true);
-    }
-
-    _onMotionEvent(actor, event) {
-        if (!this._menuLayout.navigatingCategory) {
-            this._menuLayout.navigatingCategory = this;
-        }
-
-        if (this._isInTriangle(event.get_coords())){
-            if(this._menuLayout.activeCategory !== this._name && this._menuLayout.navigatingCategory === this){
-                let navigateFocus = false;
-                this.activate(event, navigateFocus);
-            }
-            return true;
-        }
-        this._menuLayout.navigatingCategory = this;
-        return true;
-    }
-});
-// SubMenu Category item class
-var CategorySubMenuItem = GObject.registerClass(class Arc_Menu_CategorySubMenuItem extends PopupMenu.PopupSubMenuMenuItem{
-    _init(menuLayout, category) {
-        super._init('', true);
-        this.add_style_class_name("arcmenu-menu-item");
-        this.add_style_class_name('margin-box');
-        this._category = category;
-        this._menuLayout = menuLayout;
-        this._settings = this._menuLayout._settings;
-        this._name = "";
-        this.isSimpleMenuItem = false;
-        this._active = false;
-        this.applicationsMap = new Map();
-        this.appList = [];
-
-        let categoryIconType = this._settings.get_enum('category-icon-type');
-        let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category, categoryIconType);
-        this._name = _(name);
-        if(gicon)
-            this.icon.gicon = gicon;
-        else if(iconName)
-            this.icon.icon_name = iconName;
-        else
-            this.icon.fallback_icon_name = fallbackIconName;
-
-        this.label.text = this._name;
-
-        const IconSizeEnum = this._settings.get_enum('menu-item-icon-size');
-        const LayoutProps = this._menuLayout.layoutProperties;
-        let defaultIconSize = LayoutProps.DefaultCategoryIconSize;
-        let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
-        this.icon.icon_size = iconSize;
-
-        let panAction = new Clutter.PanAction({ interpolate: false });
-        panAction.connect('pan', (action) => {
-            this._menuLayout._blockActivateEvent = true;
-            this._menuLayout.onPan(action, this.menu.actor);
-        });
-        panAction.connect('gesture-cancel',(action) =>  this._menuLayout.onPanEnd(action, this.menu.actor));
-        panAction.connect('gesture-end', (action) => this._menuLayout.onPanEnd(action, this.menu.actor));
-        this.menu.actor.add_action(panAction);
-
-        this.menu.actor.style = 'max-height: 250px;';
-        this.menu.actor.overlay_scrollbars = true;
-        this.menu.actor.style_class = 'popup-sub-menu ' + (this._menuLayout.disableFadeEffect ? '' : 'small-vfade');
-        this.menu._needsScrollbar = () => this._needsScrollbar();
-
-        this.menu.connect('open-state-changed', () => {
-            if(!this.menu.isOpen){
-                let scrollbar= this.menu.actor.get_vscroll_bar().get_adjustment();
-                scrollbar.set_value(0);
-            }
-        });
-        this.menu.box.style_class = 'margin-box';
-    }
-
-    setRecentlyInstalledIndicator(shouldShow){
-        this.isRecentlyInstalled = shouldShow;
-        if(shouldShow){
-            this._indicator = new St.Icon({
-                icon_name: 'message-indicator-symbolic',
-                style_class: 'arc-menu-menu-item-indicator',
-                icon_size: INDICATOR_ICON_SIZE,
-                x_expand: true,
-                y_expand: false,
-                x_align: Clutter.ActorAlign.END,
-                y_align: Clutter.ActorAlign.CENTER
-            });
-            this.actor.add_child(this._indicator);
-        }
-        else if(this._indicator && this.actor.contains(this._indicator))
-            this.actor.remove_child(this._indicator);
-    }
-
-    _needsScrollbar() {
-        let topMenu = this.menu;
-        let [, topNaturalHeight] = topMenu.actor.get_preferred_height(-1);
-        let topThemeNode = topMenu.actor.get_theme_node();
-
-        let topMaxHeight = topThemeNode.get_max_height();
-        let needsScrollbar = topMaxHeight >= 0 && topNaturalHeight >= topMaxHeight;
-        if(needsScrollbar)
-            this.menu.actor.style = 'min-height:150px; max-height: 250px;';
-        else
-            this.menu.actor.style = 'max-height: 250px;';
-
-        this.menu.actor.vscrollbar_policy = St.PolicyType.AUTOMATIC;
-
-        if (needsScrollbar)
-            this.menu.actor.add_style_pseudo_class('scrolled');
-        else
-            this.menu.actor.remove_style_pseudo_class('scrolled');
-
-        return needsScrollbar;
-    }
-
-    loadMenu(){
-        let children = this.menu.box.get_children();
-        for (let i = 0; i < children.length; i++) {
-            let item = children[i];
-            this.menu.box.remove_child(item);
-        }
-        let appList = [];
-        this.applicationsMap.forEach((value,key,map) => {
-            appList.push(key);
-        });
-        appList.sort((a, b) => {
-            return a.get_name().toLowerCase() > b.get_name().toLowerCase();
-        });
-        for (let i = 0; i < appList.length; i++) {
-            let app = appList[i];
-            let item = this.applicationsMap.get(app);
-            if(item.actor.get_parent()){
-                item.actor.get_parent().remove_child(item.actor);
-            }
-            if (!item.actor.get_parent()) {
-                this.menu.box.add_child(item.actor);
-            }
-        }
-    }
-
-    _setOpenState(open){
-        if(this.isSimpleMenuItem && open){
-            this._menuLayout.activeCategory = this._name;
-            Utils.activateCategory(this._category, this._menuLayout, this, true);
-        }
-        else if(open)
-            this.loadMenu();
-
-        this.setSubmenuShown(open);
-    }
-});
-
 // Place Info class
 var PlaceInfo = class Arc_Menu_PlaceInfo {
     constructor(file, name, icon) {
@@ -2869,6 +2605,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         this._updateIcon();
 
         if(this._displayType === Constants.DisplayType.BUTTON){
+            this.tooltipLocation = Constants.TooltipLocation.TOP_CENTERED;
             this.style_class = 'popup-menu-item arc-menu-button';
             this.remove_child(this._ornamentLabel);
             this.x_expand = this.y_expand = false;

@@ -48,6 +48,10 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         this.arcMenu = new ArcMenu(this.dummyWidget, 0.5, St.Side.TOP, this);
         this.arcMenu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
 
+        this.arcMenu.actor.add_style_class_name('popup-menu');
+        this.arcMenu.actor.add_style_class_name('panel-menu');
+        this.arcMenu.actor.add_style_class_name('arcmenu-menu');
+
         this.menuManager = new PopupMenu.PopupMenuManager(Main.panel);
         this.menuManager._changeMenu = (menu) => {};
         this.menuManager.addMenu(this.arcMenu);
@@ -183,16 +187,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     updateStyle(){
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-
-        this.arcMenu.actor.set_style_class_name(null);
-        this.arcMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.arcMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
-
-        if(!customStyle)
-            this.arcMenu.actor.add_style_class_name('panel-menu');
-        this.arcMenu.actor.add_style_class_name('arcmenu-menu');
-
         if(this.MenuLayout)
             this.MenuLayout.updateStyle();   
     }

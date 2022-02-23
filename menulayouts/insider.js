@@ -160,6 +160,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_child(this.dummyCursor);
         this.pinnedAppsMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
+        this.pinnedAppsMenu.actor.add_style_class_name('popup-menu context-menu');
         this.pinnedAppsMenu.blockSourceEvents = true;
         this.section = new PopupMenu.PopupMenuSection();
         this.pinnedAppsMenu.addMenuItem(this.section);  
@@ -247,9 +248,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let appsScrollBoxAdj = this.pinnedAppsScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
 
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        this.pinnedAppsMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.pinnedAppsMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
         this.pinnedAppsButton.tooltip.hide();
 
         let themeNode = this.arcMenu.actor.get_theme_node();

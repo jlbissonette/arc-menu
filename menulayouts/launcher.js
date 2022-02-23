@@ -311,6 +311,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _createMoreProvidersMenu(){
         this.moreProvidersMenu = new PopupMenu.PopupMenu(this.moreItem, 0.5, St.Side.TOP);
+        this.moreProvidersMenu.actor.add_style_class_name('popup-menu context-menu');
         this.moreProvidersMenu.connect('open-state-changed', (menu, open) => {
             if(!open)
                 this.moreItem.remove_style_class_name("active-item");
@@ -343,10 +344,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     toggleMoreProvidersMenu(){
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        this.moreProvidersMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.moreProvidersMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
-
         this.moreProvidersMenu.toggle();
     }
 
@@ -366,7 +363,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     updateStyle(){
         super.updateStyle();
-        let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow'); 
         let themeNode = this.arcMenu.actor.get_theme_node();
         let borderRadius = themeNode.get_length('-arrow-border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
@@ -374,10 +370,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         borderRadius = borderRadius / scaleFactor;
         this.themeNodeBorderRadius = "border-radius: " + borderRadius + "px " + borderRadius + "px 0px 0px;";
         this.searchProvidersBox.style = this.searchProvidersBoxStyle + this.themeNodeBorderRadius;
-        if(removeMenuArrow)
-            this.arcMenu.box.style = "padding-top: 0px; margin: 0px;";
-        else
-            this.arcMenu.box.style = "padding-top: 0px;";
+        this.arcMenu.box.style = "padding-top: 0px;";
     }
 
     _clearActorsFromBox(box){

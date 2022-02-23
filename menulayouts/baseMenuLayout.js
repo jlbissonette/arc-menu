@@ -205,19 +205,6 @@ var BaseLayout = class {
     }
 
     updateStyle(){
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        if(this.layoutProperties.Search){
-            this.searchBox.updateStyle(this._settings.get_boolean('disable-searchbox-border'))
-            customStyle ? this.searchResults.setStyle('arc-menu-status-text') : this.searchResults.setStyle(''); 
-            if(customStyle){
-                this.searchBox.remove_style_class_name('default-search-entry');
-                this.searchBox.add_style_class_name('arc-search-entry');
-            }
-            else{
-                this.searchBox.remove_style_class_name('arc-search-entry');
-                this.searchBox.add_style_class_name('default-search-entry');
-            } 
-        }
     }
 
     loadCategories(displayType = Constants.DisplayType.LIST){  
@@ -231,13 +218,7 @@ var BaseLayout = class {
                 let dir = iter.get_directory();                  
                 if (!dir.get_is_nodisplay()) {
                     let categoryId = dir.get_menu_id();
-                    let categoryMenuItem;
-                    if(displayType === Constants.DisplayType.SIMPLE_CATEGORY)
-                        categoryMenuItem = new MW.SimpleMenuItem(this, dir);
-                    else if(displayType === Constants.DisplayType.SUBMENU_CATEGORY)
-                        categoryMenuItem = new MW.CategorySubMenuItem(this, dir);
-                    else
-                        categoryMenuItem = new MW.CategoryMenuItem(this, dir, displayType);
+                    let categoryMenuItem = new MW.CategoryMenuItem(this, dir, displayType);
                     this.categoryDirectories.set(categoryId, categoryMenuItem);
                     let foundRecentlyInstallApp = this._loadCategory(categoryId, dir);
                     categoryMenuItem.setRecentlyInstalledIndicator(foundRecentlyInstallApp);
@@ -286,11 +267,10 @@ var BaseLayout = class {
             
     }
 
-    _loadCategory(categoryId, dir, submenuItem) {
+    _loadCategory(categoryId, dir) {
         let iter = dir.iter();
         let nextType;
         let foundRecentlyInstallApp = false;
-        let isLayoutSimple2 = this.layout === Constants.MenuLayout.SIMPLE_2;
         while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
             if (nextType == GMenu.TreeItemType.ENTRY) {
                 let entry = iter.get_entry();
@@ -309,41 +289,22 @@ var BaseLayout = class {
                         let isContainedInCategory = true;
                         item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.DisplayType, null, isContainedInCategory);
                     }
+
                     let disabled = this._settings.get_boolean("disable-recently-installed-apps")
                     if(!disabled && item.isRecentlyInstalled)
                         foundRecentlyInstallApp = true;
-                    if(!submenuItem){
-                        let categoryMenuItem = this.categoryDirectories.get(categoryId);
-                        categoryMenuItem.appList.push(app);
-                        this.applicationsMap.set(app, item);
-                    }
-                    else{
-                        submenuItem.applicationsMap.set(app, item);
-                    }
+
+                    let categoryMenuItem = this.categoryDirectories.get(categoryId);
+                    categoryMenuItem.appList.push(app);
+                    this.applicationsMap.set(app, item);
                 } 
             } 
             else if (nextType == GMenu.TreeItemType.DIRECTORY) {
                 let subdir = iter.get_directory();
                 if (!subdir.get_is_nodisplay()){
-                    if(this._settings.get_boolean('enable-sub-menus') && this.layoutProperties.DisplayType === Constants.DisplayType.LIST && !isLayoutSimple2){
-                        let submenuItem = this.applicationsMap.get(subdir);
-                        if (!submenuItem) {
-                            submenuItem = new MW.CategorySubMenuItem(this, subdir);
-                            submenuItem._setParent(this.arcMenu);
-                            let categoryMenuItem = this.categoryDirectories.get(categoryId);
-                            categoryMenuItem.appList.push(subdir);
-                            this.applicationsMap.set(subdir, submenuItem);
-                        }
-                        let recentlyInstallApp = this._loadCategory(categoryId, subdir, submenuItem);
-                        if(recentlyInstallApp)
-                            foundRecentlyInstallApp = true;
-                        submenuItem.setRecentlyInstalledIndicator(foundRecentlyInstallApp);
-                    }
-                    else{
-                        let recentlyInstallApp = this._loadCategory(categoryId, subdir);
-                        if(recentlyInstallApp)
-                            foundRecentlyInstallApp = true;
-                    }
+                    let recentlyInstallApp = this._loadCategory(categoryId, subdir);
+                    if(recentlyInstallApp)
+                        foundRecentlyInstallApp = true;
                 }    
             }
         }
@@ -359,15 +320,6 @@ var BaseLayout = class {
                     let item = this.applicationsMap.get(categoryMenuItem.appList[i]);
                     if(!item)
                         continue;
-                    if(item instanceof MW.CategorySubMenuItem){
-                        item.setRecentlyInstalledIndicator(false);
-                        for(let menuItem of item.applicationsMap.values()){
-                            if(menuItem.isRecentlyInstalled){
-                                item.setRecentlyInstalledIndicator(true);
-                                break;
-                            }
-                        }
-                    }
                     if(item.isRecentlyInstalled){
                         categoryMenuItem.setRecentlyInstalledIndicator(true);
                         break;
@@ -712,12 +664,6 @@ var BaseLayout = class {
         let actors = box.get_children();
         for (let i = 0; i < actors.length; i++) {
             let actor = actors[i];
-            if(actor instanceof St.Widget && actor.layout_manager instanceof Clutter.GridLayout){
-                actor.get_children().forEach(gridChild => {
-                    if(gridChild instanceof MW.CategorySubMenuItem)
-                        gridChild.menu.close();
-                });
-            }
             box.remove_child(actor);
         }
     }
@@ -792,11 +738,6 @@ var BaseLayout = class {
 
                 grid.layout_manager.attach(item, left, top, 1, 1);
                 item.gridLocation = [left, top];
-
-                if(item instanceof MW.CategorySubMenuItem){
-                    top++;
-                    grid.layout_manager.attach(item.menu.actor, left, top, 1, 1);
-                }
                 
                 if(!rtl)
                     left++;

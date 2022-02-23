@@ -68,11 +68,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
         
-        this.actionsScrollBox.style = "padding: 21px 0px; width: 62px; margin: 0px 10px 10px 20px; background-color:rgba(186, 196,201, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 5px;";
+        this.actionsScrollBox.style = "padding: 21px 0px; width: 62px; margin: 0px 10px 10px 0px; background-color:rgba(10, 10, 15, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 8px;";
         this.actionsBox.style = "spacing: 10px;";
-        //check if custom ArcMenu is enabled
-        if( this._settings.get_boolean('enable-custom-arc-menu'))
-            this.actionsBox.add_style_class_name('arc-menu');
 
         this.mainBox.add_child(this.actionsScrollBox);
         this.rightMenuBox = new St.BoxLayout({ 
@@ -84,7 +81,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.rightMenuBox);
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 20px 10px 8px;";
+            this.searchBox.style = "margin: 0px 0px 10px 0px;";
             this.rightMenuBox.add_child(this.searchBox.actor);
         }
         else
@@ -149,7 +146,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesScrollBox.add_actor( this.categoriesBox);  
         this.categoriesScrollBox.clip_to_allocation = true;
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 20px 10px 8px;";
+            this.searchBox.style = "margin: 10px 0px 10px 0px;";
             this.rightMenuBox.add_child(this.searchBox.actor);
         }
         this.loadCategories();

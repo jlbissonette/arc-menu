@@ -109,10 +109,6 @@ function getMenuLayout(menuButton, layout, isStandaloneRunner){
             return new MenuLayout.elementary.createMenu(menuButton); 
         case Constants.MenuLayout.REDMOND:
             return new MenuLayout.redmond.createMenu(menuButton); 
-        case Constants.MenuLayout.SIMPLE:
-            return new MenuLayout.simple.createMenu(menuButton);  
-        case Constants.MenuLayout.SIMPLE_2:
-            return new MenuLayout.simple2.createMenu(menuButton);  
         case Constants.MenuLayout.UNITY:
             return new MenuLayout.unity.createMenu(menuButton); 
         case Constants.MenuLayout.BUDGIE:
@@ -538,48 +534,32 @@ function modifyColorLuminance(colorString, luminanceFactor, overrideAlpha){
 }
 
 function createStylesheet(settings){
-    let customarcMenu = settings.get_boolean('enable-custom-arc-menu');
-    let separatorColor = settings.get_string('separator-color');
-    let menuColor = settings.get_string('menu-color');
-    let menuForegroundColor = settings.get_string('menu-foreground-color');
-    let borderColor = settings.get_string('border-color');
-    let highlightColor = settings.get_string('highlight-color');
-    let highlightForegroundColor = settings.get_string('highlight-foreground-color');
-    let fontSize = settings.get_int('menu-font-size');
-    let borderSize = settings.get_int('menu-border-size');
-    let cornerRadius = settings.get_int('menu-corner-radius');
-    let menuMargin = settings.get_int('menu-margin');
-    let menuArrowSize = settings.get_int('menu-arrow-size');
     let leftPanelWidth = settings.get_int('menu-width');
     let leftPanelWidthSmall = settings.get_int('menu-width') - 65;
     let rightPanelWidth = settings.get_int('right-panel-width');
     let rightPanelWidthPlus45 = settings.get_int('right-panel-width') + 45;
     let rightPanelWidthPlus70 = settings.get_int('right-panel-width') + 70;
+
     let avatarStyle =  settings.get_enum('avatar-style');
     let avatarRadius = avatarStyle == 0 ? 999 : 0;
+
     let menuButtonColor = settings.get_string('menu-button-color');
     let menuButtonHoverColor = settings.get_string('menu-button-hover-color');
     let menuButtonActiveColor = settings.get_string('menu-button-active-color');
     let menuButtonHoverBackgroundcolor = settings.get_string('menu-button-hover-backgroundcolor');
     let menuButtonActiveBackgroundcolor = settings.get_string('menu-button-active-backgroundcolor');
-    let gapAdjustment = settings.get_int('gap-adjustment');
+
     let indicatorColor = settings.get_string('indicator-color');
     let indicatorTextBackgroundColor = settings.get_string('indicator-text-color');
+
     let plasmaSelectedItemColor = settings.get_string('plasma-selected-color');
     let plasmaSelectedItemBackgroundColor = settings.get_string('plasma-selected-background-color');
     let plasmaSearchBarTop = settings.get_enum('searchbar-default-top-location');
+
     let menuButtonBorderRadius = settings.get_int('menu-button-border-radius');
-    let tooltipStyle, separatorColorStyle = "\n", smallButtonHoverStyle = "\n";
+    let tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);\npadding: 3px 8px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
     let plasmaButtonStyle = plasmaSearchBarTop === Constants.SearchbarLocation.TOP ? 'border-top-width: 2px;' : 'border-bottom-width: 2px;';
-    if(customarcMenu){
-        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 0 1px 0px " + separatorColor + ";\nfont-size:" + fontSize + "pt;\npadding: 3px 8px;\nmin-height: 0px;"
-                        + "\ncolor:" + menuForegroundColor+ ";\nbackground-color:" + modifyColorLuminance(menuColor, 0.05, 1) + ";\nmax-width:550px;\n}\n\n"; 
-        separatorColorStyle = ".separator-color-style{\nbackground-color: " + separatorColor + ";\n}\n\n";
-        smallButtonHoverStyle = ".arc-menu .popup-menu-item .arcmenu-small-button.selected{\nbackground-color: " + modifyColorLuminance(highlightColor, -0.25) + "\n}\n\n";
-    }
-    else
-        tooltipStyle = ".tooltip-menu-item{\nborder-radius: 8px;\nbox-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);\npadding: 3px 8px;\nmax-width:550px;\nmin-height: 0px;\n}\n\n";
-    
+
     let menuButtonStyle = '';
     if(settings.get_boolean('override-menu-button-color'))
         menuButtonStyle += ".arc-menu-icon, .arc-menu-text, .arc-menu-arrow{\ncolor: " + menuButtonColor + ";\n}\n\n";
@@ -599,8 +579,7 @@ function createStylesheet(settings){
 
     let iconGridStyle = "\ntext-align: center;\n border-radius: 8px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\n";
 
-    let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"
-        +".arc-menu-status-text{\ncolor:" + menuForegroundColor + ";\nfont-size:" + fontSize + "pt;\n}\n\n"                                                     
+    let stylesheetCSS = "#arc-search{\nwidth: " + leftPanelWidth + "px;\n}\n\n"                                                  
         +".search-statustext{\nfont-size:11pt;\n}\n\n"
 
         +"#ExtraLargeIconGrid{\nwidth: 150px;\n height: 150px;" + iconGridStyle + "}\n\n"
@@ -622,17 +601,17 @@ function createStylesheet(settings){
         +".right-panel{\nwidth:" + rightPanelWidth + "px;\n}\n\n"   
         +".right-panel-plus45{\nwidth:" + rightPanelWidthPlus45 + "px;\n}\n\n"   
         +".right-panel-plus70{\nwidth:" + rightPanelWidthPlus70 + "px;\n}\n\n"
-        +".default-search-entry{\nmax-width: 17.667em;\n}\n\n"
-        +".arc-search-entry{\nmax-width: 17.667em;\nfont-size:" + fontSize + "pt;\nborder-color:" + separatorColor + ";\nborder-width: 1px;\n"
-                            +"color:" + menuForegroundColor + ";\nbackground-color:" + modifyColorLuminance(menuColor, -0.1, 1) + ";\n}\n\n"
-        +".arc-search-entry:focus{\nborder-color:" + highlightColor + ";\nborder-width: 1px;\nbox-shadow: inset 0 0 0 1px " + modifyColorLuminance(highlightColor, 0.05) + ";\n}\n\n"
-        +".arc-search-entry StLabel.hint-text{\ncolor: " + modifyColorLuminance(menuForegroundColor, 0, 0.6) + ";\n}\n\n"
+
         +"#ArcSearchEntry{\nmin-height: 0px;\nborder-radius: 8px;\nborder-width: 1px;\npadding: 7px 9px;\n}\n\n"
         +"#ArcSearchEntryRound{\nmin-height: 0px;\nborder-radius: 18px;\nborder-width: 1px;\npadding: 7px 12px;\n}\n\n"       
+        
         + menuButtonStyle
+        
         +".symbolic-icons{\n-st-icon-style: symbolic;\n}\n\n"
         +".regular-icons{\n-st-icon-style: regular;\n}\n\n"
+        
         +".arcmenu-menu-item{\npadding-top: 6px;\npadding-bottom: 6px;\n}\n\n"
+        
         +"#arc-menu-launcher-button{\nmax-width: 90px;\nborder-radius: 0px;\n padding: 5px;\n spacing: 0px;\n margin: 0px;\nborder-color: transparent;\nborder-bottom-width: 3px;\n}\n\n"
         +"#arc-menu-launcher-button.active-item, #arc-menu-launcher-button:active{\nbackground-color: " + plasmaSelectedItemBackgroundColor + ";\n"
             +"\nborder-color: " + plasmaSelectedItemColor + ";\nborder-bottom-width: 3px;\n}\n\n"
@@ -642,36 +621,20 @@ function createStylesheet(settings){
             + plasmaButtonStyle + "\nborder-color: " + plasmaSelectedItemColor + ";\n}\n\n"
 
         +"StScrollView .small-vfade{\n-st-vfade-offset: 44px;\n}\n\n"
+        
         +".arcmenu-menu .popup-menu-ornament{\nwidth: 0;\n}\n\n"
         +".arcmenu-menu .popup-menu-icon:ltr{\nmargin-right: 8px;\n}\n\n"
         +".arcmenu-menu .popup-menu-icon:rlt{\nmargin-left: 8px;\n}\n\n"
+
         +".arc-menu-button{\n-st-icon-style: symbolic;\nborder-width: 1px;\nborder-radius: 8px;\npadding: 8px;\n}\n\n"
         +".arcmenu-small-button{\n-st-icon-style: symbolic;\nborder-radius: 8px;\npadding: 3px 8px;\n}\n\n"
-        +smallButtonHoverStyle
 
         +".arc-menu-menu-item-indicator{\ncolor: " + indicatorColor + ";\n}\n\n"
         +".arc-menu-menu-item-text-indicator{\nbackground-color: " + indicatorTextBackgroundColor + ";\n}\n\n"
 
         +tooltipStyle
 
-        +".arc-menu{\n-boxpointer-gap: " + gapAdjustment + "px;\nmin-width: 15em;\ncolor: #D3DAE3;\nborder-image: none;\n"
-                        +"box-shadow: none;\nfont-size:" + fontSize + "pt;\n}\n\n"
-        +".arc-menu .popup-sub-menu{\npadding-bottom: 1px;\nbackground-color: " + modifyColorLuminance(menuColor, 0.04) + ";\n}\n\n"
-        +".arc-menu .popup-menu-item{\nspacing: 6px; \nborder: none;\ncolor:" + menuForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item:active{\nbackground-color:" + modifyColorLuminance(highlightColor, -0.15) + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item.selected{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item:checked{\nbackground-color:" + highlightColor + "; \ncolor: " + highlightForegroundColor + ";\n}\n\n"
-        +".arc-menu .popup-menu-item:insensitive{\ncolor:" + modifyColorLuminance(menuForegroundColor, 0, 0.6) + ";\n}\n\n"
-        +".arc-menu-boxpointer{ \n-arrow-border-radius:" + cornerRadius + "px;\n"
-                                +"-arrow-background-color:" + menuColor + ";\n"
-                                +"-arrow-border-color:" + borderColor + ";\n"
-                                +"-arrow-border-width:" + borderSize + "px;\n"
-                                +"-arrow-base:" + menuMargin + "px;\n"
-                                +"-arrow-rise:" + menuArrowSize + "px;\n}\n\n"
-        +".arc-menu .popup-menu-content{\npadding: 16px 0px;\nmargin: 0;\nbackground-color: transparent;\nborder-radius: 0px;\nborder: none;\nbox-shadow: 0;\n}\n\n"
-
         +".arcmenu-separator{\npadding: 0px;\nheight: 1px;\nmargin: 0px 20px;\n}\n\n"
-        + separatorColorStyle
         +".menu-user-avatar{\nbackground-size: contain;\nborder-radius: " + avatarRadius + "px;\n}\n\n";
     
     let stylesheet = getStylesheet();

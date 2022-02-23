@@ -79,7 +79,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.activeCategory = _("All Programs");
 
         this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px"; 
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
+        this.arcMenu.box.style = "padding: 0px; margin: 0px; border-radius: 0px;";
         this.actionsBoxContainer = new St.BoxLayout({
             x_expand: false,
             y_expand: true,
@@ -97,7 +97,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.actionsBoxContainer.add_child(this.actionsBox);
         this.actionsBox.style = "spacing: 5px;";
-        this.actionsBoxContainerStyle =  "margin: 0px 0px 0px 0px; spacing: 10px; background-color: rgba(186, 196,201, 0.1); padding: 5px 5px;"+
+        this.actionsBoxContainerStyle =  "margin: 0px 0px 0px 0px; spacing: 10px; background-color: rgba(10, 10, 15, 0.1); padding: 5px 5px;"+
                                          "border-color: rgba(186, 196,201, 0.2);";
         
 
@@ -120,7 +120,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.name = "ArcSearchEntryRound";
-        this.searchBox.style = "margin: 25px 10px 10px 10px;";
+        this.searchBox.style = "margin: 10px 10px 10px 10px;";
         this.topBox.add_child(this.searchBox.actor);
 
         this.applicationsBox = new St.BoxLayout({
@@ -273,7 +273,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.updateStyle();
 
         this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px;";
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
+        this.arcMenu.box.style = "padding: 0px; margin: 0px; border-radius: 0px;";
         this.updateLocation();
     }
 

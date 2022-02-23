@@ -8,21 +8,19 @@
         <value value='4' nick='Mint'/>
         <value value='5' nick='Elementary'/>
         <value value='6' nick='GnomeOverview'/>
-        <value value='7' nick='Simple'/>
-        <value value='8' nick='Simple2'/>
-        <value value='9' nick='Redmond'/>
-        <value value='10' nick='Unity'/>
-        <value value='11' nick='Budgie'/>
-        <value value='12' nick='Insider'/>
-        <value value='13' nick='Runner'/>
-        <value value='14' nick='Chromebook'/>
-        <value value='15' nick='Raven'/>
-        <value value='16' nick='Tognee'/>
-        <value value='17' nick='Plasma'/>
-        <value value='18' nick='Windows'/>
-        <value value='19' nick='Launcher'/>
-        <value value='20' nick='Eleven'/>
-        <value value='21' nick='AZ'/>
+        <value value='7' nick='Redmond'/>
+        <value value='8' nick='Unity'/>
+        <value value='9' nick='Budgie'/>
+        <value value='10' nick='Insider'/>
+        <value value='11' nick='Runner'/>
+        <value value='12' nick='Chromebook'/>
+        <value value='13' nick='Raven'/>
+        <value value='14' nick='Tognee'/>
+        <value value='15' nick='Plasma'/>
+        <value value='16' nick='Windows'/>
+        <value value='17' nick='Launcher'/>
+        <value value='18' nick='Eleven'/>
+        <value value='19' nick='AZ'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.forcemenulocation'>
         <value value='0' nick='Off'/>
@@ -193,11 +191,6 @@
       <summary>Enable Clocks Widget Unity layout</summary>
       <description>Enable Clocks Widget Unity layout.</description>
     </key>
-    <key type="b" name="enable-sub-menus">
-      <default>false</default>
-      <summary>Enable Category Sub Menus</summary>
-      <description>Enable Category Sub Menus.</description>
-    </key>
     <key enum="org.gnome.shell.extensions.arcmenu.category-icon-type" name="category-icon-type">
       <default>'Full_Color'</default>
       <summary>Category icon type. Full_Color or Symbolic</summary>
@@ -282,16 +275,6 @@
       <default>true</default>
       <summary>Set Unity layout to display "Home Screen" as default</summary>
       <description>Set Unity layout to display "Home Screen" as default. False = Show all Apps</description>
-    </key>
-    <key type="b" name="remove-menu-arrow">
-      <default>false</default>
-      <summary>Remove the themes menu arrow and displacement</summary>
-      <description>Remove the themes menu arrow and displacement</description>
-    </key>
-    <key type="b" name="disable-searchbox-border">
-      <default>false</default>
-      <summary>Remove border around the searchbox</summary>
-      <description>Remove border around the searchbox</description>
     </key>
     <key type="b" name="disable-user-avatar">
       <default>false</default>
@@ -388,61 +371,6 @@
       <summary>Enable a vertical separator</summary>
       <description>Enable a vertical separator.</description>
     </key>
-    <key type="s" name="separator-color">
-      <default>"rgb(32,32,32)"</default>
-      <summary>Separator Color</summary>
-      <description>Separator Color.</description>
-    </key>
-    <key type="s" name="menu-color">
-      <default>"rgba(53,53,53,0.987)"</default>
-      <summary>Menu Background Color</summary>
-      <description>Menu Background Color.</description>
-    </key>
-    <key type="s" name="menu-foreground-color">
-      <default>"rgb(223,223,223)"</default>
-      <summary>Menu Foreground Color</summary>
-      <description>Menu Foreground Color.</description>
-    </key>  
-    <key type="s" name="border-color">
-      <default>"rgb(32,32,32)"</default>
-      <summary>Border Color</summary>
-      <description>Border Color.</description>
-    </key>
-    <key type="s" name="highlight-color">
-      <default>"rgb(21,83,158)"</default>
-      <summary>Highlight/Active Menu Item Background Color</summary>
-      <description>Highlight/Active Menu Item Background Color.</description>
-    </key>
-    <key type="s" name="highlight-foreground-color">
-      <default>"rgba(255,255,255,1)"</default>
-      <summary>Highlight/Active Menu Item Foreground Color</summary>
-      <description>Highlight/Active Menu Item Foreground Color.</description>
-    </key>
-    <key type="i" name="menu-font-size">
-      <default>9</default>
-      <summary>Menu font size</summary>
-      <description>Menu font size.</description>
-    </key>
-    <key type="i" name="menu-border-size">
-      <default>1</default>
-      <summary>Menu border size</summary>
-      <description>Menu border size.</description>
-    </key>
-    <key type="i" name="menu-corner-radius">
-      <default>5</default>
-      <summary>Menu corner radius</summary>
-      <description>Menu corner radius.</description>
-    </key>
-    <key type="i" name="menu-margin">
-      <default>24</default>
-      <summary>Menu margin</summary>
-      <description>Menu margin.</description>
-    </key>
-    <key type="i" name="menu-arrow-size">
-      <default>12</default>
-      <summary>Menu arrow size</summary>
-      <description>Menu arrow size.</description>
-    </key>
     <key type="i" name="menu-height">
       <default>550</default>
       <summary>Menu Height</summary>
@@ -477,16 +405,6 @@
       <default>"rgba(196, 196, 196, 0.3)"</default>
       <summary>Recently Installed Application Inidcator Text Background Color</summary>
       <description>Recently Installed Application Inidcator Text Background Color..</description>
-    </key>
-    <key type="b" name="enable-custom-arc-menu">
-      <default>false</default>
-      <summary>Enable Custom ArcMenu Theme</summary>
-      <description>Enable Custom ArcMenu Theme.</description>
-    </key>
-    <key type="b" name="enable-custom-arc-menu-layout">
-      <default>false</default>
-      <summary>Enable Custom ArcMenu Layout</summary>
-      <description>Enable Custom ArcMenu Layout.</description>
     </key>
     <key type="b" name="show-external-devices">
       <default>false</default>
@@ -775,15 +693,6 @@
       <default>5</default>
       <summary>Index of Mint Layout Pinned App Separator</summary>
       <description>Index of Mint Layout Pinned App Separator, 0 = none</description>
-    </key>
-    <key name="color-themes" type="aas">
-      <default>[['ArcMenu Style', 'rgba(53,53,53,0.987)', 'rgb(223,223,223)', 'rgb(32,32,32)', 'rgb(21,83,158)', 'rgba(255,255,255,1)', 'rgb(32,32,32)', '9', '1', '5', '12', '24', 'false'],
-      ['Simply Dark', 'rgba(28, 28, 28, 0.98)', 'rgba(211, 218, 227, 1)', 'rgb(63,62,64)', 'rgba(238, 238, 236, 0.1)', 'rgba(255,255,255,1)', 'rgb(63,62,64)', '9', '0', '0', '0', '0', 'false'],
-      ['Dark Blue Theme', 'rgb(25,31,34)', 'rgb(189,230,251)', 'rgb(41,50,55)', 'rgb(41,50,55)', 'rgba(255,255,255,1)', 'rgb(41,50,55)', '9', '1', '5', '12', '24', 'true'], 
-      ['Light Blue Theme', 'rgb(255,255,255)', 'rgb(51,51,51)', 'rgb(235,235,235)', 'rgba(189,230,251,0.9)', 'rgba(89,89,89,1)', 'rgba(189,230,251,0.9)', '9', '1', '5', '12', '24', 'true']]</default>
-      <summary>List of color-themes</summary>
-      <description> List of color themes.
-      </description>
     </key>
     <key name="prefs-visible-page" type="i">
       <default>0</default>

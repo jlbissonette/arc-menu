@@ -38,9 +38,7 @@ var MenuItemLocation = {
 var DisplayType = {
     LIST: 0,
     GRID: 1,
-    BUTTON: 2,
-    SIMPLE_CATEGORY: 3,
-    SUBMENU_CATEGORY: 4,
+    BUTTON: 2
 }
 
 var CategoryType = {
@@ -368,21 +366,19 @@ var MenuLayout = {
     MINT: 4,
     ELEMENTARY: 5,
     GNOME_OVERVIEW: 6,
-    SIMPLE: 7,
-    SIMPLE_2: 8,
-    REDMOND: 9,
-    UNITY: 10,
-    BUDGIE: 11,
-    INSIDER: 12,
-    RUNNER: 13,
-    CHROMEBOOK: 14,
-    RAVEN: 15,
-    TOGNEE: 16,
-    PLASMA: 17,
-    WINDOWS: 18,
-    LAUNCHER: 19,
-    ELEVEN: 20,
-    AZ: 21,
+    REDMOND: 7,
+    UNITY: 8,
+    BUDGIE: 0,
+    INSIDER: 10,
+    RUNNER: 11,
+    CHROMEBOOK: 12,
+    RAVEN: 13,
+    TOGNEE: 14,
+    PLASMA: 15,
+    WINDOWS: 16,
+    LAUNCHER: 17,
+    ELEVEN: 18,
+    AZ: 19,
 };
 
 var TraditionalMenus = [
@@ -412,10 +408,6 @@ var LauncherMenus = [
     { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
     { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 
-var SimpleMenus = [
-    { IMAGE: 'simple-layout-symbolic', TITLE: _('Simple'), LAYOUT: MenuLayout.SIMPLE},
-    { IMAGE: 'simple2-layout-symbolic', TITLE: _('Simple 2'), LAYOUT: MenuLayout.SIMPLE_2}];
-
 var AlternativeMenus = [
     { IMAGE: 'raven-layout-symbolic', TITLE: _('Raven'), LAYOUT: MenuLayout.RAVEN}];
 
@@ -424,7 +416,6 @@ var MenuStyles = {
         { IMAGE: 'traditional-category-symbolic', TITLE: _("Traditional"), MENU_TYPE: TraditionalMenus },
         { IMAGE: 'modern-category-symbolic', TITLE: _("Modern"), MENU_TYPE: ModernMenus },
         { IMAGE: 'touch-category-symbolic', TITLE: _("Touch"), MENU_TYPE: TouchMenus },
-        { IMAGE: 'simple-category-symbolic', TITLE: _("Simple"), MENU_TYPE: SimpleMenus },
         { IMAGE: 'launcher-category-symbolic', TITLE: _("Launcher"), MENU_TYPE: LauncherMenus },
         { IMAGE: 'alternative-category-symbolic', TITLE: _("Alternative"), MENU_TYPE: AlternativeMenus }
     ]

@@ -61,7 +61,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
-        this.actionsBox.style = "margin: 0px 5px 0px 10px; spacing: 10px;";
+        this.actionsBox.style = "margin: 0px 5px 0px 0px; spacing: 10px;";
         this.mainBox.add_child(this.actionsBox);
 
         this.extrasButton = new MW.ExtrasButton(this);
@@ -244,7 +244,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.extrasMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
         this.section = new PopupMenu.PopupMenuSection();
         this.extrasMenu.addMenuItem(this.section);  
-        
+        this.extrasMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
         this.leftPanelPopup = new St.BoxLayout({
             vertical: true,
             style_class: 'margin-box'
@@ -322,11 +322,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     toggleExtrasMenu(){
         let appsScrollBoxAdj = this.pinnedAppsScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
-
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        this.extrasMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.extrasMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
-        this.extrasButton.tooltip.hide();
 
         let themeNode = this.arcMenu.actor.get_theme_node();
         let backgroundColor = themeNode.get_color('-arrow-background-color');

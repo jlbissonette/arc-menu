@@ -68,6 +68,13 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.arcMenuContextMenu = new ArcMenuContextMenu(this, 0.5, St.Side.TOP);	
         this.arcMenuContextMenu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
 
+        this.arcMenuContextMenu.actor.add_style_class_name('panel-menu');
+        this.arcMenuContextMenu.actor.add_style_class_name('arcmenu-menu');
+        this.arcMenuContextMenu.actor.add_style_class_name('popup-menu');
+        this.arcMenu.actor.add_style_class_name('panel-menu');
+        this.arcMenu.actor.add_style_class_name('arcmenu-menu');
+        this.arcMenu.actor.add_style_class_name('popup-menu');
+
         this.menuManager = new PopupMenu.PopupMenuManager(menuManagerParent);
         this.menuManager._changeMenu = (menu) => {};
         this.menuManager.addMenu(this.arcMenu);
@@ -419,35 +426,14 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     }
 
     updateStyle(){
-        let forcedMenuLocation = this._settings.get_enum('force-menu-location');
-        let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow');   
+        let forcedMenuLocation = this._settings.get_enum('force-menu-location'); 
         let layout = this._settings.get_enum('menu-layout');
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        let gapAdjustment = this._settings.get_int('gap-adjustment');
-
-        this.arcMenu.actor.set_style_class_name(null);
-        this.arcMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.arcMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
-        
-        this.arcMenuContextMenu.actor.set_style_class_name(null);
-        this.arcMenuContextMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.arcMenuContextMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
-        if(!customStyle)
-            this.arcMenuContextMenu.actor.add_style_class_name('panel-menu');
-        this.arcMenuContextMenu.actor.add_style_class_name('app-menu');
-        if(!customStyle)
-            this.arcMenu.actor.add_style_class_name('panel-menu');
-        this.arcMenu.actor.add_style_class_name('arcmenu-menu');
-        
+      
         if(layout === Constants.MenuLayout.RAVEN){
             this.MenuLayout?.updateStyle();
             return;
         }
 
-        if(removeMenuArrow){
-            this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px; -boxpointer-gap: " + gapAdjustment + "px;";
-            this.arcMenu.box.style = "margin:0px;";
-        }
         //TODO
         /*else if(forcedMenuLocation === Constants.ForcedMenuLocation.OFF){
             this.arcMenu.actor.style = "-boxpointer-gap: " + gapAdjustment + "px;";
@@ -565,7 +551,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             height = (monitorWorkArea.height * 8) / 10;
         }
         
-        if(!(layout == Constants.MenuLayout.SIMPLE || layout == Constants.MenuLayout.SIMPLE_2 || layout == Constants.MenuLayout.RUNNER) && this.MenuLayout)
+        if(layout !== Constants.MenuLayout.RUNNER && this.MenuLayout)
             this.mainBox.style = `height: ${height}px`;
         if(this.MenuLayout?.updateWidth)
             this.MenuLayout.updateWidth(true);

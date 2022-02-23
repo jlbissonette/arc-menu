@@ -55,7 +55,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     createLayout(){
         super.createLayout();
 
-        this.topBoxStyle = "margin: 0px 0px 10px 0px; spacing: 0px; background-color: rgba(186, 196,201, 0.1); padding: 11px 5px;"+
+        this.topBoxStyle = "margin: 0px 0px 10px 0px; spacing: 0px; background-color: rgba(10, 10, 15, 0.1); padding: 11px 5px;"+
                             "border-color:rgba(186, 196,201, 0.2); border-bottom-width: 1px;";
 
         this.topBox = new St.BoxLayout({
@@ -66,7 +66,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style: this.topBoxStyle
         });
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
+        this.arcMenu.box.style = "padding: 0px; margin: 0px;";
 
         this.subMainBox= new St.BoxLayout({
             x_expand: true,
@@ -101,7 +101,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
-        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(186, 196,201, 0.1) ; padding: 12px 5px;"+
+        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(10, 10, 15, 0.1) ; padding: 12px 5px;"+
                                         "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
         
         this.actionsContainerBox = new St.BoxLayout({
@@ -199,8 +199,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     updateStyle(){
         super.updateStyle();
         
-        let themeNode = this.arcMenu.actor.get_theme_node();
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let themeNode = this.arcMenu.box.get_theme_node();
+        let borderRadius = themeNode.get_length('border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         borderRadius = borderRadius / scaleFactor;
@@ -209,7 +209,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         const RoundTopBorder = "border-radius: " + borderRadius + "px " + borderRadius + "px 0px 0px;";
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + RoundBottomBorder;
         this.topBox.style = this.topBoxStyle + RoundTopBorder;
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
+        this.arcMenu.box.style = "padding: 0px; margin: 0px;";
     }
 
     setGridLayout(displayType, columns, spacing, setStyle = true){

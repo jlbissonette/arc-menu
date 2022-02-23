@@ -450,11 +450,6 @@ var SearchResults = GObject.registerClass({
             x_expand: true,
             y_expand: true  
         });
-
-        if(menuLayout._settings.get_boolean('enable-custom-arc-menu'))
-            this._statusText.style_class = 'arc-menu-status-text';
-        else
-            this._statusText.style_class = '';
         
         this.add_child(this._statusBin);
         this._statusBin.set_child(this._statusText);
@@ -846,7 +841,7 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
         });
 
         this.label.style = 'font-weight: bold;';
-        this.style = "padding: 10px 0px;";
+        this.style = "padding: 10px 12px;";
         this.add_child(this.label);
 
         this._moreText = "";

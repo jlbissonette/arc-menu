@@ -97,7 +97,8 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem2 extends 
 
         return new St.Icon({
             gicon: this._info.icon,
-            icon_size: iconSize
+            icon_size: iconSize,
+            style_class: 'popup-menu-icon'
         });
     }
 

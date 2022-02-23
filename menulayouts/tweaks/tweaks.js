@@ -109,10 +109,6 @@ var TweaksPage = GObject.registerClass({
             this._loadElementaryTweaks();
         else if(menuLayout == Constants.MenuLayout.GNOME_OVERVIEW)
             this._loadGnomeOverviewTweaks();
-        else if(menuLayout == Constants.MenuLayout.SIMPLE)
-            this._loadPlaceHolderTweaks();
-        else if(menuLayout == Constants.MenuLayout.SIMPLE_2)
-            this._loadPlaceHolderTweaks();
         else if(menuLayout == Constants.MenuLayout.REDMOND)
             this._loadRedmondMenuTweaks()
         else if(menuLayout == Constants.MenuLayout.UNITY)
