@@ -188,23 +188,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
         this.frequentAppsHeader = this._createNavigationButtons(_("Frequent"), null);
 
+        this.updateStyle();
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
 
         this.disableFrequentAppsID = this._settings.connect("changed::eleven-disable-frequent-apps", () => this.setDefaultMenuView());
-    }
-
-    updateWidth(setDefaultMenuView){
-        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
-        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 300px minimum limit for the menu width
-        menuWidth = Math.max(300, menuWidth);
-        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
-        this.layoutProperties.MenuWidth = menuWidth;
-        if(setDefaultMenuView)
-            this.setDefaultMenuView();
     }
 
     loadPinnedApps(){
@@ -268,9 +258,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.setGridLayout(Constants.DisplayType.GRID, 6, 0, false);
     }
 
-    updateStyle(){
-        super.updateStyle();
-       
+    updateStyle(){       
         let themeNode = this.arcMenu.box.get_theme_node();
         let borderRadius = themeNode.get_length('border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);

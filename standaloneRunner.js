@@ -28,6 +28,7 @@ const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
+const MW = Me.imports.menuWidgets;
 const PopupMenu = imports.ui.popupMenu;
 const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
@@ -40,6 +41,8 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         this.tooltipHidingID = null;
         this.tooltipShowingID = null;
         this.dtpNeedsRelease = false;
+
+        this.tooltip = new MW.Tooltip(this);
 
         this.dummyWidget = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_child(this.dummyWidget);
@@ -137,6 +140,8 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     createMenuLayout(){
+        if(this.tooltip)
+            this.tooltip.sourceActor = null;
         this._forcedMenuLocation = false;
         this.arcMenu.actor.style = null;
         this.arcMenu.removeAll();
@@ -155,8 +160,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
 
         const StandaloneRunner = true;
         this.MenuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
-        this.updateStyle();
-
         if(this.arcMenu.isOpen){
             if(this.MenuLayout.activeMenuItem)
                 this.MenuLayout.activeMenuItem.active = true;
@@ -166,6 +169,8 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     reloadMenuLayout(){
+        if(this.tooltip)
+            this.tooltip.sourceActor = null;
         this._forcedMenuLocation = false;
 
         this.MenuLayout.destroy();
@@ -175,8 +180,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
 
         const StandaloneRunner = true;
         this.MenuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
-    
-        this.updateStyle();
+
 
         if(this.arcMenu.isOpen){
             if(this.MenuLayout.activeMenuItem)
@@ -184,11 +188,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             else
                 this.mainBox.grab_key_focus();
         }
-    }
-
-    updateStyle(){
-        if(this.MenuLayout)
-            this.MenuLayout.updateStyle();   
     }
 
     toggleMenu(){
@@ -239,7 +238,8 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             GLib.source_remove(this.tooltipHidingID);
             this.tooltipHidingID = null;
         }
-
+        if(this.tooltip)
+            this.tooltip.destroy();
         if(this._installedChangedId){
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;
@@ -256,24 +256,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     updateMenuLayout(){
-        this.tooltipShowing = false;
-        if (this.tooltipShowingID) {
-            GLib.source_remove(this.tooltipShowingID);
-            this.tooltipShowingID = null;
-        }     
-        if (this.tooltipHidingID) {
-            GLib.source_remove(this.tooltipHidingID);
-            this.tooltipHidingID = null;
-        }    
-        if(this.MenuLayout){
-            this.MenuLayout.destroy();
-            this.MenuLayout = null;
-        }
-        this.updateMenuLayoutID = GLib.timeout_add(0, 100, () => {
-            this.createMenuLayout();
-            this.updateMenuLayoutID = null;
-            return GLib.SOURCE_REMOVE;
-        });  
     }
 
     loadExtraPinnedApps(){

@@ -1327,11 +1327,6 @@ var ButtonAppearancePage = GObject.registerClass(
                 orientation: Gtk.Orientation.VERTICAL
             });
             this._settings = settings;
-            this.menuButtonColor = this._settings.get_string('menu-button-color');
-            this.menuButtonHoverColor = this._settings.get_string('menu-button-hover-color');
-            this.menuButtonActiveColor = this._settings.get_string('menu-button-active-color');
-            this.menuButtonHoverBackgroundcolor = this._settings.get_string('menu-button-hover-backgroundcolor');
-            this.menuButtonActiveBackgroundcolor = this._settings.get_string('menu-button-active-backgroundcolor');
             this.arcMenuPlacement = this._settings.get_enum('arc-menu-placement');
 
             let menuButtonAppearanceFrame = new Adw.PreferencesGroup({
@@ -1415,7 +1410,6 @@ var ButtonAppearancePage = GObject.registerClass(
             paddingScale.set_value(menuButtonPadding);
             paddingScale.connect('value-changed', () => {
                 this._settings.set_int('button-padding', paddingScale.get_value());
-                this._settings.set_boolean('reload-theme', true);
             });
             menuButtonPaddingRow.add_suffix(paddingScale);
 
@@ -1526,181 +1520,19 @@ var ButtonAppearancePage = GObject.registerClass(
 
             this.append(menuButtonIconFrame);
 
-            this.menuButtonIconColorFrame = new Adw.PreferencesGroup({
-                title: _('Menu Button Styling')
-            });
-
-            let[menuButtonColorSwitch, menuButtonColorChooser] = this.newColorChooserRow({
-                color: this.menuButtonColor,
-                label: _("Color"),
-                settingColorName: 'menu-button-color',
-                settingOverrideName: 'override-menu-button-color',
-            });
-
-            let[menuButtonHoverColorSwitch, menuButtonHoverColorChooser] = this.newColorChooserRow({
-                color: this.menuButtonHoverColor,
-                label: _("Hover Color"),
-                settingColorName: 'menu-button-hover-color',
-                settingOverrideName: 'override-menu-button-hover-color',
-            });
-
-            let[menuButtonActiveColorSwitch, menuButtonActiveColorChooser] = this.newColorChooserRow({
-                color: this.menuButtonActiveColor,
-                label: _("Active Color"),
-                settingColorName: 'menu-button-active-color',
-                settingOverrideName: 'override-menu-button-active-color',
-            });
-
-            let[menuButtonHoverBackgroundcolorSwitch, menuButtonHoverBackgroundcolorChooser] = this.newColorChooserRow({
-                color: this.menuButtonHoverBackgroundcolor,
-                label: _("Hover Background Color"),
-                settingColorName: 'menu-button-hover-backgroundcolor',
-                settingOverrideName: 'override-menu-button-hover-background-color',
-            });
-
-            let[menuButtonActiveBackgroundcolorSwitch, menuButtonActiveBackgroundcolorChooser] = this.newColorChooserRow({
-                color: this.menuButtonActiveBackgroundcolor,
-                label: _("Active Background Color"),
-                settingColorName: 'menu-button-active-backgroundcolor',
-                settingOverrideName: 'override-menu-button-active-background-color',
-            });
-
-            let roundedCornersRow = new Adw.ActionRow({
-                title: _("Override Border Radius")
-            });
-            let roundedCornersSwitch = new Gtk.Switch({
-                halign: Gtk.Align.END,
-                valign: Gtk.Align.CENTER,
-                active: this._settings.get_boolean('menu-button-override-border-radius')
-            });
-            roundedCornersSwitch.connect("notify::active", (widget)=> {
-                this._settings.set_boolean('menu-button-override-border-radius', widget.get_active())
-                this._settings.set_boolean('reload-theme', true);
-                menuButtonBorderRadiusRow.set_sensitive(widget.get_active());
-            });
-            roundedCornersRow.add_suffix(roundedCornersSwitch);
-
-            this.menuButtonIconColorFrame.add(roundedCornersRow);
-
-            let menuButtonBorderRadiusRow = new Adw.ActionRow({
-                title: _("Border Radius")
-            });
-            let borderRadius = this._settings.get_int('menu-button-border-radius');
-            let menuButtonBorderRadiusScale = new Gtk.Scale({
-                orientation: Gtk.Orientation.HORIZONTAL,
-                adjustment: new Gtk.Adjustment({
-                    lower: 0,
-                    upper: 20,
-                    step_increment: 1,
-                    page_increment: 1,
-                    page_size: 0
-                }),
-                digits: 0,
-                round_digits: 0,
-                hexpand: true,
-                valign: Gtk.Align.CENTER,
-                draw_value: true,
-                value_pos: Gtk.PositionType.RIGHT
-            });
-            menuButtonBorderRadiusScale.set_value(borderRadius);
-            menuButtonBorderRadiusScale.connect('value-changed', () => {
-                this._settings.set_int('menu-button-border-radius', menuButtonBorderRadiusScale.get_value());
-                this._settings.set_boolean('reload-theme', true);
-            });
-
-            menuButtonBorderRadiusRow.add_suffix(menuButtonBorderRadiusScale);
-            menuButtonBorderRadiusRow.set_sensitive(this._settings.get_boolean('menu-button-override-border-radius'));
-            this.menuButtonIconColorFrame.add(menuButtonBorderRadiusRow);
-
-            this.append(this.menuButtonIconColorFrame);
-
             this.restoreDefaults = () => {
                 menuButtonAppearanceCombo.set_active(0);
                 menuButtonCustomTextEntry.set_text('Applications');
                 paddingScale.set_value(-1);
                 menuButtonIconSizeScale.set_value(20);
-                let colorParse = new Gdk.RGBA();
-                colorParse.parse('rgb(240,240,240)');
-                menuButtonActiveColorChooser.set_rgba(colorParse);
-                menuButtonColorChooser.set_rgba(colorParse);
-                colorParse.parse('rgb(214,214,214)');
-                menuButtonHoverColorChooser.set_rgba(colorParse);
-                colorParse.parse('rgba(238,238,236,0.1)');
-                menuButtonHoverBackgroundcolorChooser.set_rgba(colorParse);
-                colorParse.parse('rgba(238,238,236,0.18)');
-                menuButtonActiveBackgroundcolorChooser.set_rgba(colorParse);
                 enableArrowIconSwitch.set_active(false);
-                menuButtonColorSwitch.set_active(false);
-                menuButtonHoverColorSwitch.set_active(false);
-                menuButtonActiveColorSwitch.set_active(false);
-                menuButtonHoverBackgroundcolorSwitch.set_active(false);
-                menuButtonActiveBackgroundcolorSwitch.set_active(false);
-                roundedCornersSwitch.set_active(false);
-                menuButtonBorderRadiusScale.set_value(0);
                 offsetScale.set_value(0);
                 this._settings.reset('menu-button-icon');
                 this._settings.reset('arc-menu-icon');
                 this._settings.reset('distro-icon');
                 this._settings.reset('custom-menu-button-icon');
-                this._settings.reset('menu-button-hover-color');
-                this._settings.reset('menu-button-active-color');
-                this._settings.reset('menu-button-hover-backgroundcolor');
-                this._settings.reset('menu-button-active-backgroundcolor');
-                this._settings.reset('menu-button-color');
-                this._settings.reset('override-menu-button-hover-color');
-                this._settings.reset('override-menu-button-active-color');
-                this._settings.reset('override-menu-button-hover-background-color');
-                this._settings.reset('override-menu-button-active-background-color');
-                this._settings.reset('override-menu-button-color');
-                this._settings.reset('menu-button-override-border-radius');
-                this._settings.reset('menu-button-border-radius');
                 this._settings.reset('menu-button-position-offset');
-                this._settings.set_boolean('reload-theme', true);
             };
-        }
-
-        newColorChooserRow(params){
-            let colorParse = new Gdk.RGBA();
-            let colorRow = new Adw.ActionRow({
-                title: _(params.label)
-            });
-            let buttonsGrid = new Gtk.Grid({
-                margin_top: 0,
-                margin_bottom: 0,
-                valign: Gtk.Align.CENTER,
-                column_spacing: 10
-            });
-            let colorSwitch = new Gtk.Switch({
-                halign: Gtk.Align.END,
-                valign: Gtk.Align.CENTER,
-                active: this._settings.get_boolean(params.settingOverrideName)
-            });
-            colorSwitch.connect("notify::active", (widget)=> {
-                this._settings.set_boolean(params.settingOverrideName, widget.get_active())
-                colorChooser.sensitive = widget.get_active();
-                this._settings.set_boolean('reload-theme', true);
-            });
-
-            let colorChooser = new Gtk.ColorButton({
-                use_alpha: true,
-                sensitive: colorSwitch.get_active()
-            });
-
-            colorParse.parse(params.color);
-            colorChooser.set_rgba(colorParse);
-
-            colorChooser.connect('color-set', ()=>{
-                params.color = colorChooser.get_rgba().to_string();
-                this._settings.set_string(params.settingColorName, params.color);
-                this._settings.set_boolean('reload-theme', true);
-            });
-
-            buttonsGrid.attach(colorSwitch, 0, 0, 1, 1);
-            buttonsGrid.attach(Gtk.Separator.new(Gtk.Orientation.VERTICAL), 1, 0, 1, 1);
-            buttonsGrid.attach(colorChooser, 2, 0, 1, 1);
-            colorRow.add_suffix(buttonsGrid);
-            this.menuButtonIconColorFrame.add(colorRow);
-            return [colorSwitch, colorChooser];
         }
 });
 
@@ -2013,7 +1845,6 @@ var MenuLayoutPage = GObject.registerClass(
                 menuLayoutsBox.connect('menu-layout-response', (dialog, response) => {
                     if(response === -10) {
                         this._settings.set_enum('menu-layout', dialog.index);
-                        this._settings.set_boolean('reload-theme', true);
                         currentLayoutBoxRow.label.label = "<b>" + this.getMenuLayoutName(dialog.index) + "</b>";
                         tweaksLabel.label = this.getMenuLayoutTweaksName(dialog.index);
                         currentLayoutBoxRow.image.gicon = Gio.icon_new_for_string(this.getMenuLayoutImagePath(dialog.index));
@@ -2217,7 +2048,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         this.heightValue = this._settings.get_int('menu-height');
         this.widthValue = this._settings.get_int('menu-width-adjustment');
         this.rightPanelWidth = this._settings.get_int('right-panel-width');
-        this.menuWidth = this._settings.get_int('menu-width');
+        this.leftPanelWidth = this._settings.get_int('left-panel-width');
         this.forcedMenuLocation = this._settings.get_enum('force-menu-location');
         this.verticalSeparator = this._settings.get_boolean('vert-separator');
         this.appDescriptions = this._settings.get_boolean('apps-show-extra-details');
@@ -2280,10 +2111,9 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             numeric: true,
             valign: Gtk.Align.CENTER,
         });
-        menuWidthSpinButton.set_value(this.menuWidth);
+        menuWidthSpinButton.set_value(this.leftPanelWidth);
         menuWidthSpinButton.connect('value-changed', (widget) => {
-            this._settings.set_int('menu-width', widget.get_value());
-            this._settings.set_boolean('reload-theme', true);
+            this._settings.set_int('left-panel-width', widget.get_value());
         });
         menuWidthRow.add_suffix(menuWidthSpinButton);
         menuSizeFrame.add(menuWidthRow);
@@ -2304,7 +2134,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         rightPanelWidthSpinButton.set_value(this.rightPanelWidth);
         rightPanelWidthSpinButton.connect('value-changed', (widget) => {
             this._settings.set_int('right-panel-width', widget.get_value());
-            this._settings.set_boolean('reload-theme', true);
         });
         rightPanelWidthRow.add_suffix(rightPanelWidthSpinButton);
         menuSizeFrame.add(rightPanelWidthRow);
@@ -2325,7 +2154,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         widthSpinButton.set_value(this.widthValue);
         widthSpinButton.connect('value-changed', (widget) => {
             this._settings.set_int('menu-width-adjustment', widget.get_value());
-            this._settings.set_boolean('reload-theme', true);
         });
         widthRow.add_suffix(widthSpinButton);
         menuSizeFrame.add(widthRow);
@@ -2447,7 +2275,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.heightValue = this._settings.get_default_value('menu-height').unpack();
             this.widthValue = this._settings.get_default_value('menu-width-adjustment').unpack();
             this.rightPanelWidth = this._settings.get_default_value('right-panel-width').unpack();
-            this.menuWidth = this._settings.get_default_value('menu-width').unpack();
+            this.leftPanelWidth = this._settings.get_default_value('left-panel-width').unpack();
             this.verticalSeparator = this._settings.get_default_value('vert-separator').unpack();
             this.appDescriptions = this._settings.get_default_value('apps-show-extra-details').unpack();
             this.categoryIconType = 0;
@@ -2455,7 +2283,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
             this.forcedMenuLocation = 0;
             heightSpinButton.set_value(this.heightValue);
             widthSpinButton.set_value(this.widthValue);
-            menuWidthSpinButton.set_value(this.menuWidth);
+            menuWidthSpinButton.set_value(this.leftPanelWidth);
             rightPanelWidthSpinButton.set_value(this.rightPanelWidth);
             vertSeparatorSwitch.set_active(this.verticalSeparator);
             this.gridIconsSizeCombo.set_active(0);
@@ -2505,7 +2333,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         });
         this._settings = settings;
         this.disableFadeEffect = this._settings.get_boolean('disable-scrollview-fade-effect');
-        this.gapAdjustment = this._settings.get_int('gap-adjustment');
         this.alphabetizeAllPrograms = this._settings.get_boolean('alphabetize-all-programs')
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
         this.disableTooltips = this._settings.get_boolean('disable-tooltips');
@@ -2588,55 +2415,12 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         multiLinedLabelFrame.add(multiLinedLabelRow);
         this.append(multiLinedLabelFrame);
 
-        let gapAdjustmentFrame = new Adw.PreferencesGroup();
-        let gapAdjustmentRow = new Adw.ActionRow({
-            title: _('Gap Adjustment')
-        });
-        let gapAdjustmentScale = new Gtk.Scale({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            adjustment: new Gtk.Adjustment({
-                lower: -1, upper: 20, step_increment: 1, page_increment: 1, page_size: 0
-            }),
-            digits: 0,round_digits: 0,hexpand: true,
-            value_pos: Gtk.PositionType.RIGHT,
-            draw_value: true,
-            valign: Gtk.Align.CENTER 
-        });
-        gapAdjustmentScale.set_value(this.gapAdjustment);
-        gapAdjustmentScale.connect('value-changed', (widget) => {
-            this._settings.set_int('gap-adjustment', widget.get_value());
-        });
-
-        let gapAdjustmentInfoButton = new PW.Button({
-                icon_name: 'info-circle-symbolic'
-        });
-        gapAdjustmentInfoButton.connect('clicked', ()=> {
-            let dialog = new Gtk.MessageDialog({
-                text: _("Adjust the gap between the ArcMenu button and the menu"),
-                use_markup: true,
-                buttons: Gtk.ButtonsType.OK,
-                message_type: Gtk.MessageType.WARNING,
-                transient_for: this.get_root(),
-                modal: true
-            });
-            dialog.connect('response', (widget, response) => {
-                dialog.destroy();
-            });
-            dialog.show();
-        });
-        gapAdjustmentRow.add_suffix(gapAdjustmentScale);
-        gapAdjustmentRow.add_suffix(gapAdjustmentInfoButton);
-        gapAdjustmentFrame.add(gapAdjustmentRow);
-        this.append(gapAdjustmentFrame);
-
         this.restoreDefaults = ()=> {
-            this.gapAdjustment = this._settings.get_default_value('gap-adjustment').unpack();
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
             this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
             this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
             this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
-            gapAdjustmentScale.set_value(this.gapAdjustment);
             multiLinedLabelSwitch.set_active(this.multiLinedLabels);
             tooltipSwitch.set_active(this.disableTooltips);
             fadeEffectSwitch.set_active(this.disableFadeEffect);
@@ -2669,11 +2453,9 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
         });
         recentAppsSwitch.connect('notify::active', (widget) => {
             if(widget.get_active()){
-                appIndicatorColorFrame.hide();
                 clearRecentAppsFrame.hide();
             }
             else{
-                appIndicatorColorFrame.show();
                 clearRecentAppsFrame.show();
             }
             this._settings.set_boolean('disable-recently-installed-apps', widget.get_active());
@@ -2681,46 +2463,6 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
         recentAppsRow.add_suffix(recentAppsSwitch);
         recentAppsFrame.add(recentAppsRow);
         this.append(recentAppsFrame);
-
-        let appIndicatorColorFrame = new Adw.PreferencesGroup({
-            title: _("Customize New Apps Indicator")
-        });
-
-        let appIndicatorColorRow = new Adw.ActionRow({
-            title: _('Category Indicator Color')
-        });
-        let appIndicatorColorChooser = new Gtk.ColorButton({
-            use_alpha: true,
-            valign: Gtk.Align.CENTER,
-        });
-        let color = new Gdk.RGBA();
-        color.parse(this.indicatorColor);
-        appIndicatorColorChooser.set_rgba(color);
-        appIndicatorColorChooser.connect('color-set', (widget) => {
-            this._settings.set_string('indicator-color', widget.get_rgba().to_string());
-            this._settings.set_boolean('reload-theme', true);
-        });
-        appIndicatorColorRow.add_suffix(appIndicatorColorChooser);
-        appIndicatorColorFrame.add(appIndicatorColorRow);
-
-        let appIndicatorTextColorRow = new Adw.ActionRow({
-            title: _('App Indicator Label Color')
-        });
-
-        let appIndicatorTextColorChooser = new Gtk.ColorButton({
-            use_alpha: true,
-            valign: Gtk.Align.CENTER,
-        });
-        color = new Gdk.RGBA();
-        color.parse(this.indicatorTextColor);
-        appIndicatorTextColorChooser.set_rgba(color);
-        appIndicatorTextColorChooser.connect('color-set', (widget) => {
-            this._settings.set_string('indicator-text-color', widget.get_rgba().to_string());
-            this._settings.set_boolean('reload-theme', true);
-        });
-        appIndicatorTextColorRow.add_suffix(appIndicatorTextColorChooser);
-        appIndicatorColorFrame.add(appIndicatorTextColorRow);
-        this.append(appIndicatorColorFrame);
 
         let clearRecentAppsFrame = new Adw.PreferencesGroup();
         let clearRecentAppsRow = new Adw.ActionRow({
@@ -2743,14 +2485,7 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
 
         this.restoreDefaults = ()=> {
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
-            this.indicatorColor = this._settings.get_default_value('indicator-color').unpack();
-            this.indicatorTextColor = this._settings.get_default_value('indicator-text-color').unpack();
             recentAppsSwitch.set_active(this.disableRecentApps);
-            let color = new Gdk.RGBA();
-            color.parse(this.indicatorColor);
-            appIndicatorColorChooser.set_rgba(color);
-            color.parse(this.indicatorTextColor);
-            appIndicatorTextColorChooser.set_rgba(color);
         };
         recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
     }

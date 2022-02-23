@@ -139,17 +139,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
     }
 
-    updateWidth(setDefaultMenuView){
-        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
-        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 300px minimum limit for the menu width
-        menuWidth = Math.max(300, menuWidth);
-        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
-        this.layoutProperties.MenuWidth = menuWidth;
-        if(setDefaultMenuView)
-            this.setDefaultMenuView();
-    }
-
     loadPinnedApps(){
         this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         super.loadPinnedApps();
@@ -329,7 +318,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
             this.pinnedAppsBox.add_child(this.pinnedAppsGrid);
-        this.updateStyle();  
         this.layoutProperties.GridColumns = 5;
     }
 }

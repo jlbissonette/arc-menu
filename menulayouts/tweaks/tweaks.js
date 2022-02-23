@@ -169,7 +169,6 @@ var TweaksPage = GObject.registerClass({
         avatarStyleCombo.set_active(this._settings.get_enum('avatar-style'));
         avatarStyleCombo.connect('changed', (widget) => {
             this._settings.set_enum('avatar-style', widget.get_active());
-            this._settings.set_boolean('reload-theme', true);
         });
 
         avatarStyleRow.add_suffix(avatarStyleCombo);
@@ -329,40 +328,6 @@ var TweaksPage = GObject.registerClass({
         hoverRow.add_suffix(hoverSwitch);
         plasmaMenuTweaksFrame.add(hoverRow);
 
-        let foregroundColorRow = new Adw.ActionRow({
-            title: _("Selected Button Border Color")
-        });
-        let foregroundColorChooser = new Gtk.ColorButton({
-            use_alpha: true,
-            valign: Gtk.Align.CENTER 
-        });   
-        let color = new Gdk.RGBA();
-        color.parse(this._settings.get_string('plasma-selected-color'));
-        foregroundColorChooser.set_rgba(color);            
-        foregroundColorChooser.connect('color-set', ()=>{
-            this._settings.set_string('plasma-selected-color', foregroundColorChooser.get_rgba().to_string());
-            this._settings.set_boolean('reload-theme', true);
-        });
-        foregroundColorRow.add_suffix(foregroundColorChooser);
-        plasmaMenuTweaksFrame.add(foregroundColorRow);
-
-        let backgroundColorRow = new Adw.ActionRow({
-            title: _("Selected Button Background Color")
-        });
-        let backgroundColorChooser = new Gtk.ColorButton({
-            use_alpha: true,
-            valign: Gtk.Align.CENTER 
-        });   
-        color = new Gdk.RGBA();
-        color.parse(this._settings.get_string('plasma-selected-background-color'));
-        backgroundColorChooser.set_rgba(color);            
-        backgroundColorChooser.connect('color-set', ()=>{
-            this._settings.set_string('plasma-selected-background-color',backgroundColorChooser.get_rgba().to_string());
-            this._settings.set_boolean('reload-theme', true);
-        });
-        backgroundColorRow.add_suffix(backgroundColorChooser);
-        plasmaMenuTweaksFrame.add(backgroundColorRow);
-
         this.mainBox.append(plasmaMenuTweaksFrame);
 
         let resetButton = new Gtk.Button({
@@ -372,23 +337,14 @@ var TweaksPage = GObject.registerClass({
         });
         resetButton.set_sensitive(true);
         resetButton.connect('clicked', ()=> {
-            let foregroundColor = this._settings.get_default_value('plasma-selected-color').unpack();
-            let backgroundColor = this._settings.get_default_value('plasma-selected-background-color').unpack();
             let hoverEnabled = this._settings.get_default_value('plasma-enable-hover').unpack();
             let showDescriptions = this._settings.get_default_value('apps-show-extra-details').unpack();
             this._settings.reset('searchbar-default-top-location');
             searchbarLocationCombo.set_active(this._settings.get_enum(searchBarLocationSetting));
             hoverSwitch.set_active(hoverEnabled);
-            color.parse(foregroundColor);
-            foregroundColorChooser.set_rgba(color); 
-            color.parse(backgroundColor);
-            backgroundColorChooser.set_rgba(color); 
             descriptionsSwitch.set_active(showDescriptions);
-            this._settings.reset('plasma-selected-color');
-            this._settings.reset('plasma-selected-background-color');
             this._settings.reset('plasma-enable-hover');
             this._settings.reset('apps-show-extra-details');
-            this._settings.set_boolean('reload-theme', true);
         });
         this.mainBox.append(resetButton);
     }

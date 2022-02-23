@@ -181,6 +181,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.appShortcuts.push(shortcutMenuItem);
         }
 
+        this.updateStyle();
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
@@ -188,17 +189,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadExtraPinnedApps();
 
         this.setDefaultMenuView();
-    }
-
-    updateWidth(setDefaultMenuView){
-        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
-        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 300px minimum limit for the menu width
-        menuWidth = Math.max(300, menuWidth);
-        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
-        this.layoutProperties.MenuWidth = menuWidth;
-        if(setDefaultMenuView)
-            this.setDefaultMenuView();
     }
 
     _addSeparator(){
@@ -326,8 +316,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     updateStyle(){
-        super.updateStyle();
-       
         let themeNode = this.arcMenu.box.get_theme_node();
         let borderRadius = themeNode.get_length('border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);

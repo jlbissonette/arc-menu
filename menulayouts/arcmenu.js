@@ -37,6 +37,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
             Search: true,
+            DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
@@ -243,9 +244,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.navigateBox.insert_child_above(this.extraCategoriesLinksBox, this.navigateBox.get_child_at_index(0));
         this.extraCategoriesLinksBox.add_child(this.extraCategoriesSeparator);
 
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
-
         this.setDefaultMenuView();
     }
 

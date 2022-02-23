@@ -33,8 +33,6 @@ const Utils = Me.imports.utils;
 var MenuSettingsController = class {
     constructor(settings, settingsControllers, panel, panelIndex, arcMenuPlacement) {
         this._settings = settings;
-        if(this._settings.get_boolean('reload-theme'))
-            this._settings.reset('reload-theme');
         this.panel = panel;
         this.arcMenuPlacement = arcMenuPlacement;
 
@@ -95,8 +93,6 @@ var MenuSettingsController = class {
             this._settings.connect('changed::custom-menu-button-icon-size', this._setButtonIconSize.bind(this)),
             this._settings.connect('changed::button-padding', this._setButtonIconPadding.bind(this)),
             this._settings.connect('changed::enable-menu-button-arrow', this._setMenuButtonArrow.bind(this)),
-            this._settings.connect('changed::indicator-color', this._updateStyle.bind(this)),
-            this._settings.connect('changed::indicator-text-color', this._updateStyle.bind(this)),
             this._settings.connect('changed::directory-shortcuts-list', this._reload.bind(this)),
             this._settings.connect('changed::application-shortcuts-list', this._reload.bind(this)),
             this._settings.connect('changed::disable-recently-installed-apps', this._initiateRecentlyInstalledApps.bind(this)),
@@ -108,7 +104,6 @@ var MenuSettingsController = class {
             this._settings.connect('changed::enable-activities-shortcut', this._reload.bind(this)),
             this._settings.connect('changed::enable-horizontal-flip', this._reload.bind(this)),
             this._settings.connect('changed::searchbar-default-bottom-location', this._reload.bind(this)),
-            this._settings.connect('changed::searchbar-default-top-location', this._plasmaMenuReloadTheme.bind(this)),
             this._settings.connect('changed::searchbar-default-top-location', this._reload.bind(this)),
             this._settings.connect('changed::multi-lined-labels', this._reload.bind(this)),
             this._settings.connect('changed::apps-show-extra-details', this._reload.bind(this)),
@@ -117,8 +112,9 @@ var MenuSettingsController = class {
             this._settings.connect('changed::search-provider-recent-files', this._reload.bind(this)),
             this._settings.connect('changed::disable-scrollview-fade-effect', this._reload.bind(this)),
             this._settings.connect('changed::menu-height', this._updateMenuHeight.bind(this)),
-            this._settings.connect('changed::menu-width-adjustment', this._updateMenuHeight.bind(this)),
-            this._settings.connect('changed::reload-theme', this._reloadTheme.bind(this)),
+            this._settings.connect('changed::left-panel-width', this._updateMenuWidth.bind(this)),
+            this._settings.connect('changed::right-panel-width', this._updateMenuWidth.bind(this)),
+            this._settings.connect('changed::menu-width-adjustment', this._updateMenuWidth.bind(this)),
             this._settings.connect('changed::pinned-app-list',this._updatePinnedApps.bind(this)),
             this._settings.connect('changed::enable-weather-widget-unity',this._updatePinnedApps.bind(this)),
             this._settings.connect('changed::enable-clock-widget-unity',this._updatePinnedApps.bind(this)),
@@ -169,14 +165,6 @@ var MenuSettingsController = class {
             this.runnerMenu.initiateRecentlyInstalledApps();
             this.runnerMenu.reload();
         } 
-    }
-
-    _plasmaMenuReloadTheme(){
-        if(this._settings.get_enum('menu-layout') === Constants.MenuLayout.PLASMA){
-            if(this._settings.get_boolean('reload-theme'))
-                this._settings.reset('reload-theme');
-            this._settings.set_boolean('reload-theme', true);
-        }
     }
 
     updateLocation(){
@@ -243,35 +231,12 @@ var MenuSettingsController = class {
         }
     }
 
-    _reloadTheme(){
-        if(this.isPrimary && this._settings.get_boolean('reload-theme')) {
-            this._settings.reset('reload-theme');
-
-            let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
-            Utils.createStylesheet(this._settings);
-            let stylesheet = Utils.getStylesheet();
-            if(Me.stylesheet)
-                theme.unload_stylesheet(Me.stylesheet);
-            Me.stylesheet = stylesheet;
-            theme.load_stylesheet(Me.stylesheet);
-
-            for (let i = 0; i < this._settingsControllers.length; i++) {
-                let menuButton = this._settingsControllers[i]._menuButton;
-                menuButton.updateStyle();
-            }
-            if(this.runnerMenu)
-                this.runnerMenu.updateStyle();
-        }
-    }
-
-    _updateStyle() {
-        this._menuButton.updateStyle();
-        if(this.runnerMenu)
-            this.runnerMenu.updateStyle();
-    }
-
     _updateMenuHeight(){
         this._menuButton.updateHeight();
+    }
+
+    _updateMenuWidth(){
+        this._menuButton.updateWidth();
     }
 
     _updatePinnedApps(){

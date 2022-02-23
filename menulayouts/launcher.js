@@ -126,6 +126,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
         this.arcMenu.box.style = "padding-top: 0px;";
         this.hasPinnedApps = true;
+
+        this.updateStyle();
         this.loadPinnedApps();
         this.loadCategories();
 
@@ -362,7 +364,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     updateStyle(){
-        super.updateStyle();
         let themeNode = this.arcMenu.actor.get_theme_node();
         let borderRadius = themeNode.get_length('-arrow-border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);

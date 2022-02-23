@@ -368,7 +368,7 @@ var MenuLayout = {
     GNOME_OVERVIEW: 6,
     REDMOND: 7,
     UNITY: 8,
-    BUDGIE: 0,
+    BUDGIE: 9,
     INSIDER: 10,
     RUNNER: 11,
     CHROMEBOOK: 12,

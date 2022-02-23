@@ -103,6 +103,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.activeMenuItem = null;
+        this.updateStyle();
         this.setDefaultMenuView();
     }
 
@@ -189,7 +190,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     }
 
     updateStyle(){
-        super.updateStyle();
         this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px;";
     }
 

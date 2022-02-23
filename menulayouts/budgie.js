@@ -37,6 +37,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
             Search: true,
+            DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
@@ -141,10 +142,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add_child(this.searchBox.actor); 
         }
         
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
-        
         this.setDefaultMenuView(); 
+    }
+
+    updateWidth(setDefaultMenuView){
+        let leftPanelWidthOffset = -70;
+        let rightPanelWidthOffset = 70;
+        super.updateWidth(setDefaultMenuView, leftPanelWidthOffset, rightPanelWidthOffset);
     }
 
     setDefaultMenuView(){

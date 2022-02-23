@@ -63,14 +63,6 @@ function enable() {
         settings.connect('changed::multi-monitor', () => _multiMonitorChanged());
         settings.connect('changed::arc-menu-placement', () => _placementChanged());
         settingsControllers = [];
-
-        let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
-        Utils.createStylesheet(settings);
-        let stylesheet = Utils.getStylesheet();
-        if(Me.stylesheet)
-            theme.unload_stylesheet(Me.stylesheet);
-        Me.stylesheet = stylesheet;
-        theme.load_stylesheet(Me.stylesheet);
     
         let avaliablePlacementArray = settings.get_default_value('available-placement').deep_unpack();
         settings.set_value('available-placement', new GLib.Variant('ab', avaliablePlacementArray));

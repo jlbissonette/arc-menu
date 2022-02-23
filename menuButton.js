@@ -268,7 +268,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 
         this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
         this.setMenuPositionAlignment();
-        this.updateStyle();
         this.forceMenuLocation();
         this.updateHeight();
 
@@ -293,7 +292,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
     
         this.setMenuPositionAlignment();
-        this.updateStyle();
         this.forceMenuLocation();
         this.updateHeight();
 
@@ -386,6 +384,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.arcMenu.sourceActor = this;
             this.arcMenu.focusActor = this;
             this.arcMenu._boxPointer.setPosition(this, 0.5);
+            this.arcMenu.actor.style.replaceAll("margin-bottom: 0px;", "");
             this.setMenuPositionAlignment();
             this._menuInForcedLocation = false;
             return;
@@ -393,7 +392,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 
         if(!this.rise){
             let themeNode = this.arcMenu.actor.get_theme_node();
-            this.rise = themeNode.get_length('-arrow-rise');
+            this.rise = themeNode.get_length('-boxpointer-gap');
         }
 
         if(!this.dummyWidget){
@@ -405,8 +404,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.arcMenu.sourceActor = this.dummyWidget;
             this.arcMenu.focusActor = this.dummyWidget;
             this.arcMenu._boxPointer.setPosition(this.dummyWidget, 0.5);
-
-            this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px;";
             this.arcMenu._boxPointer.setSourceAlignment(0.5);
             this.arcMenu._arrowAlignment = 0.5;
             this._menuInForcedLocation = true;
@@ -418,29 +415,19 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         //Position the runner menu in the center of the current monitor, at top of screen.
         let positionX = Math.round(rect.x + (rect.width / 2));
         let positionY;
-        if(forcedMenuLocation === Constants.ForcedMenuLocation.TOP_CENTERED)
-            positionY = rect.y + this.rise;
-        else if(forcedMenuLocation === Constants.ForcedMenuLocation.BOTTOM_CENTERED)
-            positionY = rect.y + rect.height - this.rise;
-        this.dummyWidget.set_position(positionX, positionY);
-    }
-
-    updateStyle(){
-        let forcedMenuLocation = this._settings.get_enum('force-menu-location'); 
-        let layout = this._settings.get_enum('menu-layout');
-      
-        if(layout === Constants.MenuLayout.RAVEN){
-            this.MenuLayout?.updateStyle();
-            return;
+        if(forcedMenuLocation === Constants.ForcedMenuLocation.TOP_CENTERED){
+            this.updateArrowSide(St.Side.TOP);
+            positionY = rect.y;
+            this.arcMenu.actor.style.replaceAll("margin-bottom: 0px;", "");
         }
-
-        //TODO
-        /*else if(forcedMenuLocation === Constants.ForcedMenuLocation.OFF){
-            this.arcMenu.actor.style = "-boxpointer-gap: " + gapAdjustment + "px;";
-            this.arcMenu.box.style = null;
-        }*/
-
-        this.MenuLayout?.updateStyle();
+            
+        else if(forcedMenuLocation === Constants.ForcedMenuLocation.BOTTOM_CENTERED){
+            this.updateArrowSide(St.Side.BOTTOM);
+            positionY = rect.y + rect.height + 4;
+            this.arcMenu.actor.style += 'margin-bottom: 0px;';
+        }
+           
+        this.dummyWidget.set_position(positionX, positionY);
     }
 
     vfunc_event(event){
@@ -553,6 +540,9 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         
         if(layout !== Constants.MenuLayout.RUNNER && this.MenuLayout)
             this.mainBox.style = `height: ${height}px`;
+    }
+
+    updateWidth(){
         if(this.MenuLayout?.updateWidth)
             this.MenuLayout.updateWidth(true);
     }

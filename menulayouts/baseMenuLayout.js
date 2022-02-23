@@ -77,7 +77,6 @@ var BaseLayout = class {
         this.mainBox.vertical = this.layoutProperties.VerticalMainBox;
 
         this.createLayout();
-        this.updateStyle();
     }
 
     createLayout(){
@@ -104,6 +103,26 @@ var BaseLayout = class {
 
         this._clearActorsFromBox();
         this.resetScrollBarPosition();
+    }
+
+    updateWidth(setDefaultMenuView, leftPanelWidthOffset = 0, rightPanelWidthOffset = 0){
+        if(this.layoutProperties.DualPanelMenu){
+            const leftPanelWidth = this._settings.get_int("left-panel-width") + leftPanelWidthOffset;
+            const rightPanelWidth = this._settings.get_int("right-panel-width") + rightPanelWidthOffset;
+            this.leftBox.style = `width: ${leftPanelWidth}px;`;
+            this.rightBox.style = `width: ${rightPanelWidth}px;`;
+        }
+        else{
+            const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+            let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+            //Set a 300px minimum limit for the menu width
+            menuWidth = Math.max(300, menuWidth);
+            this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
+            this.layoutProperties.MenuWidth = menuWidth;
+        }
+
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
     }
 
     getColumnsFromActor(actor){
@@ -202,9 +221,6 @@ var BaseLayout = class {
 
         this.loadCategories();
         this.setDefaultMenuView();
-    }
-
-    updateStyle(){
     }
 
     loadCategories(displayType = Constants.DisplayType.LIST){  
@@ -381,6 +397,7 @@ var BaseLayout = class {
             let isContainedInCategory = true;
 
             let placeMenuItem = this.createMenuItem([name, icon, file], Constants.DisplayType.LIST, isContainedInCategory);
+            placeMenuItem._path = recentFile.get_uri_display().replace(recentFile.get_display_name(), '');
             placeMenuItem.style = "padding-right: 15px;";
             placeMenuItem.description = recentFile.get_uri_display().replace(homeRegExp, '~');
             placeMenuItem.fileUri = recentFile.get_uri();
