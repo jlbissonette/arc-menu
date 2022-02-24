@@ -101,6 +101,7 @@ var MenuSettingsController = class {
             this._settings.connect('changed::show-external-devices', this._reload.bind(this)),
             this._settings.connect('changed::show-bookmarks', this._reload.bind(this)),
             this._settings.connect('changed::disable-user-avatar', this._reload.bind(this)),
+            this._settings.connect('changed::avatar-style', this._reload.bind(this)),
             this._settings.connect('changed::enable-activities-shortcut', this._reload.bind(this)),
             this._settings.connect('changed::enable-horizontal-flip', this._reload.bind(this)),
             this._settings.connect('changed::searchbar-default-bottom-location', this._reload.bind(this)),

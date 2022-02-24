@@ -53,7 +53,7 @@
         <value value="4" nick="None"/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.avatar-style'>
-        <value value="0" nick="Circular"/>
+        <value value="0" nick="Round"/>
         <value value="1" nick="Square"/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.arc-menu-placement'>
@@ -316,16 +316,6 @@
       <summary>GNOME Dash Layout - Show Applications</summary>
       <description>GNOME Dash Layout - Show Applications</description>
     </key>
-    <key type="s" name="plasma-selected-color">
-      <default>"rgb(61, 174, 235)"</default>
-      <summary>Plasma Selected Item Color</summary>
-      <description>Plasma Selected Item Color.</description>
-    </key>
-    <key type="s" name="plasma-selected-background-color">
-      <default>"rgba(245, 245, 245, .05)"</default>
-      <summary>Plasma Selected Item Background Color</summary>
-      <description>Plasma Selected Item Background Color.</description>
-    </key>
     <key type="b" name="plasma-enable-hover">
       <default>true</default>
       <summary>Plasma Menu Hover to activate item</summary>
@@ -361,11 +351,6 @@
       <summary>Eleven Layout - disable frequent apps</summary>
       <description>Eleven Layout - disable frequent apps</description>
     </key>
-    <key type="b" name="reload-theme">
-      <default>false</default>
-      <summary>Used to reload theme</summary>
-      <description>Used to reload theme.</description>
-    </key>
     <key type="b" name="vert-separator">
       <default>false</default>
       <summary>Enable a vertical separator</summary>
@@ -390,21 +375,6 @@
       <default>205</default>
       <summary>Right Panel width</summary>
       <description>Right Panel width.</description>
-    </key>
-    <key type="i" name="gap-adjustment">
-      <default>0</default>
-      <summary>Gap Adjustment</summary>
-      <description>Gap Adjustment</description>
-    </key>
-    <key type="s" name="indicator-color">
-      <default>"rgb(41, 165, 249)"</default>
-      <summary>Recently Installed Application Inidcator Color</summary>
-      <description>Recently Installed Application Inidcator Color..</description>
-    </key>
-    <key type="s" name="indicator-text-color">
-      <default>"rgba(196, 196, 196, 0.3)"</default>
-      <summary>Recently Installed Application Inidcator Text Background Color</summary>
-      <description>Recently Installed Application Inidcator Text Background Color..</description>
     </key>
     <key type="b" name="show-external-devices">
       <default>false</default>
@@ -487,7 +457,7 @@
       <description>Appearance of the menu button.</description>
     </key>
       <key name="avatar-style" enum="org.gnome.shell.extensions.arcmenu.avatar-style">
-      <default>'Circular'</default>
+      <default>'Round'</default>
       <summary>Appearance of the avatar icon.</summary>
       <description>Appearance of the avatar icon.</description>
     </key>

@@ -87,7 +87,7 @@
     padding-bottom: 6px;
 }
 
-#arc-menu-launcher-button{
+#arcmenu-launcher-button{
     max-width: 90px;
     border-radius: 0px;
     padding: 5px;
@@ -96,13 +96,13 @@
     border-color: transparent;
     border-bottom-width: 3px;
 }
-#arc-menu-launcher-button.active-item, #arc-menu-launcher-button:active{
+#arcmenu-launcher-button.active-item, #arcmenu-launcher-button:active{
     background-color: rgba(245, 245, 245, .05);
     border-color: rgb(61, 174, 235);
     border-bottom-width: 3px;
 }
 
-#arcmenu-plasmabutton-top{
+#arcmenu-plasma-button-top{
     width: 90px;
     height: 65px;
     border-radius: 8px;
@@ -113,12 +113,12 @@
     border-top-width: 2px;
     border-color: transparent;
 }
-#arcmenu-plasmabutton-top:active-item, .arcmenu-plasmabutton-top:active{
+#arcmenu-plasma-button-top:active-item, .arcmenu-plasma-button-top:active{
     background-color: rgba(245, 245, 245, .05);
     border-top-width: 2px;
     border-color: rgb(61, 174, 235);
 }
-#arcmenu-plasmabutton-bottom{
+#arcmenu-plasma-button-bottom{
     width: 90px;
     height: 65px;
     border-radius: 8px;
@@ -129,7 +129,7 @@
     border-bottom-width: 2px;
     border-color: transparent;
 }
-#arcmenu-plasmabutton-bottom:active-item, .arcmenu-plasmabutton-bottom:active{
+#arcmenu-plasma-button-bottom:active-item, .arcmenu-plasma-button-bottom:active{
     background-color: rgba(245, 245, 245, .05);
     border-bottom-width: 2px;
     border-color: rgb(61, 174, 235);
@@ -161,16 +161,16 @@ StScrollView .small-vfade{
     padding: 3px 8px;
 }
 
-.arcmenu-useravatar-round{
+.arcmenu-avatar-round{
     background-size: contain;
     border-radius: 999px;
 }
-.arcmenu-useravatar-square{
+.arcmenu-avatar-square{
     background-size: contain;
     border-radius: 0px;
 }
 
-.tooltip-menu-item{
+.arcmenu-tooltip{
     border-radius: 8px;
     border: 1px solid #353535;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
@@ -179,8 +179,72 @@ StScrollView .small-vfade{
     min-height: 0px;
 }
 
-/* Style varius elements of ArcMenu below--------------------------------------------------------------- */
-/* Uncomment each desired section and fill in desired colors */
+/* Recently Installed App Indicator */
+.arcmenu-indicator{
+    color: rgb(41, 165, 249);
+}
+
+/* Recently Installed App Indicator in parent category */
+.arcmenu-text-indicator{
+    background-color: rgba(196, 196, 196, 0.3);
+}
+
+/* Style varius elements of ArcMenu below */
+/* Uncomment each desired section and fill in desired options */
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+/* -----------------------------------------------------------*/
+
+/* Menu Styling Section -----------------------------------------------------------------------------*/
+/* See https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/data/theme/gnome-shell-sass/widgets/_popovers.scss for more info*/
+/*
+.arcmenu-menu {
+    color: ;
+    font-size: ;
+}
+*/
+
+/*
+.arcmenu-menu popup-menu-content {
+  padding: ;
+  border-radius: ;
+  border: ;
+  box-shadow: ;
+  background-color: ;
+}
+*/
+
+/*
+.arcmenu-menu .popup-menu-item {
+    padding: 
+    border-radius: ;
+    transition: 0.2s all ease;
+    background-color: transparent;
+}
+
+.arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover  {
+    background-color: ;
+}
+
+.arcmenu-menu .popup-menu-item:checked {
+    background-color: ;
+    margin-bottom: ;
+    box-shadow: ;
+    border-radius: ;
+}
+
+.arcmenu-menu .popup-menu-item:active {
+    background-color: ;
+    color: ;
+}
+
+.arcmenu-menu .popup-menu-item:insensitive {
+    background-color: ;
+    color: ;
+}
+*/
+/*End Menu Styling Section----------------------------------------------------------------------*/
+
 
 /* Separator Color */
 /*
@@ -191,45 +255,44 @@ StScrollView .small-vfade{
 
 /* Button Foreground Color */
 /*
-.arc-menu-icon, .arc-menu-text, .arc-menu-arrow{
+.arcmenu-text, .arcmenu-text, .arcmenu-arrow{
     color: ;
 }
 */
 
 /* Button Background Hover Color */
 /*
-.arc-menu-panel-menu:hover{
+.arcmenu-panel-menu:hover{
     background-color: ;
 }
 */
 
 /* Button Foreground Hover Color */
 /*
-.arc-menu-panel-menu:hover .arc-menu-icon, .arc-menu-panel-menu:hover 
-.arc-menu-text .arc-menu-panel-menu:hover .arc-menu-arrow{
+.arcmenu-panel-menu:hover .arcmenu-text, .arcmenu-panel-menu:hover 
+.arcmenu-text .arcmenu-panel-menu:hover .arcmenu-arrow{
     color: ;
 }
 */
 
 /* Button Foreground Active Color */
 /*
-.arc-menu-icon:active, .arc-menu-text:active, .arc-menu-arrow:active{
+.arcmenu-text:active, .arcmenu-text:active, .arcmenu-arrow:active{
     color: ;
 }
 */
 
 /* Button Background Active Color */
 /*
-.arc-menu-panel-menu:active{
+.arcmenu-panel-menu:active{
     background-color: ;
 }
 */
 
 /* Button Border and Border Radius */
 /*
-.arc-menu-panel-menu{
+.arcmenu-panel-menu{
     border-radius: ;
     border: ;
 }
 */
-/*------------------------------------------------------------------------------------------------------ */

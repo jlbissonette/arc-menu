@@ -750,6 +750,10 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     _onDestroy(){
+        if(this._popupTimeoutId){
+            GLib.source_remove(this._popupTimeoutId);
+            this._popupTimeoutId = null;
+        }
         this.isDestroyed = true;
         if(this.arcMenuOpenStateChangeID){
             this.arcMenu.disconnect(this.arcMenuOpenStateChangeID);
@@ -885,7 +889,7 @@ var Tooltip = class Arc_Menu_Tooltip{
 
         this.actor = new St.BoxLayout({
             vertical: true,
-            style_class: 'dash-label tooltip-menu-item',
+            style_class: 'dash-label arcmenu-tooltip',
             opacity: 0
         });
 
@@ -1341,7 +1345,10 @@ var PlasmaMenuItem = GObject.registerClass(class Arc_Menu_PlasmaMenuItem extends
         this._layout = this._menuLayout.layout;
         this._settings = this._menuLayout._settings;
         this.vertical = true;
-        this.name = "arc-menu-plasma-button";
+        if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP)
+            this.name = "arcmenu-plasma-button-top";
+        else
+            this.name = "arcmenu-plasma-button-bottom";
         this.iconPath = iconPath;
 
         this._iconBin = new St.Bin();
@@ -1818,8 +1825,14 @@ var UserMenuItem = GObject.registerClass(class Arc_Menu_UserMenuItem extends Arc
         }
 
         this.userMenuIcon = new UserMenuIcon(menuLayout, this.iconSize, false);
+
+        if(this._settings.get_enum('avatar-style') === Constants.AvatarStyle.ROUND)
+            this.avatarStyle = 'arcmenu-avatar-round';
+        else
+            this.avatarStyle = 'arcmenu-avatar-square';
+
         if(this._displayType === Constants.DisplayType.BUTTON)
-            this.userMenuIcon.actor.set_style_class_name('menu-user-avatar user-icon');
+            this.userMenuIcon.actor.set_style_class_name(this.avatarStyle + ' user-icon');
         this.add_child(this.userMenuIcon.actor);
         this.label = this.userMenuIcon.label;
         if(this._displayType !== Constants.DisplayType.BUTTON)
@@ -1837,13 +1850,19 @@ var UserMenuIcon = class Arc_Menu_UserMenuIcon{
     constructor(menuLayout, size, hasTooltip) {
         this._menuButton = menuLayout.menuButton;
         this._menuLayout = menuLayout;
+        this._settings = this._menuLayout._settings;
         this.iconSize = size;
         this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
         let username = GLib.get_user_name();
         this._user = AccountsService.UserManager.get_default().get_user(username);
 
+        if(this._settings.get_enum('avatar-style') === Constants.AvatarStyle.ROUND)
+            this.avatarStyle = 'arcmenu-avatar-round';
+        else
+            this.avatarStyle = 'arcmenu-avatar-square';
+
         this.actor = new St.Bin({
-            style_class: 'menu-user-avatar user-icon popup-menu-icon',
+            style_class: this.avatarStyle + ' user-icon popup-menu-icon',
             track_hover: true,
             reactive: true,
             x_align: Clutter.ActorAlign.CENTER,
@@ -2234,7 +2253,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         if(this.isRecentlyInstalled){
             this._indicator = new St.Label({
                 text: _('New'),
-                style_class: "arc-menu-menu-item-text-indicator",
+                style_class: "arcmenu-text-indicator",
                 style: "border-radius: 15px; margin: 0px; padding: 0px 10px;",
                 x_expand: true,
                 x_align: Clutter.ActorAlign.END,
@@ -2437,7 +2456,7 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
         if(shouldShow){
             this._indicator = new St.Icon({
                 icon_name: 'message-indicator-symbolic',
-                style_class: 'arc-menu-menu-item-indicator',
+                style_class: 'arcmenu-indicator',
                 icon_size: INDICATOR_ICON_SIZE,
                 x_expand: true,
                 y_expand: false,
@@ -2845,18 +2864,18 @@ var MenuButtonWidget = class Arc_Menu_MenuButtonWidget{
             pack_start: false
         });
         this._arrowIcon = PopupMenu.arrowIcon(St.Side.BOTTOM);
-        this._arrowIcon.add_style_class_name('arc-menu-arrow');
+        this._arrowIcon.add_style_class_name('arcmenu-arrow');
 
         this._icon = new St.Icon({
             icon_name: 'start-here-symbolic',
-            style_class: 'arc-menu-icon',
+            style_class: 'arcmenu-text',
             track_hover:true,
             reactive: true,
         });
         this._label = new St.Label({
             text: _("Applications"),
             y_expand: true,
-            style_class: 'arc-menu-text',
+            style_class: 'arcmenu-text',
             y_align: Clutter.ActorAlign.CENTER,
         });
 
@@ -2965,7 +2984,7 @@ var DashMenuButtonWidget = class Arc_Menu_DashMenuButtonWidget{
                                             createIcon: this._createIcon.bind(this) });
         this._icon = new St.Icon({
             icon_name: 'start-here-symbolic',
-            style_class: 'arc-menu-icon',
+            style_class: 'arcmenu-text',
             icon_size: 15,
             track_hover:true,
             reactive: true
@@ -3058,7 +3077,7 @@ var DashMenuButtonWidget = class Arc_Menu_DashMenuButtonWidget{
     _createIcon(size) {
         this._icon = new St.Icon({
             icon_name: 'start-here-symbolic',
-            style_class: 'arc-menu-icon',
+            style_class: 'arcmenu-text',
             track_hover:true,
             icon_size: size,
             reactive: true
@@ -3081,13 +3100,19 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
         this.x_expand = true;
         this._clock = new imports.gi.GnomeDesktop.WallClock();
         this._clockNotifyId = 0;
+        this._tzNotifyId = 0;
 
         this._locations = [];
 
-        let layout = new Clutter.GridLayout({ orientation: Clutter.Orientation.VERTICAL });
-        this._grid = new St.Widget({ style_class: 'world-clocks-grid',
-                                        x_expand: true,
-                                        layout_manager: layout });
+        let layout = new Clutter.GridLayout({ 
+            orientation: Clutter.Orientation.VERTICAL 
+        });
+
+        this._grid = new St.Widget({ 
+            style_class: 'world-clocks-grid',
+            x_expand: true,
+            layout_manager: layout 
+        });
         layout.hookup_style(this._grid);
 
         this.add_child(this._grid);
@@ -3126,9 +3151,13 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
             this._clocksProxy.disconnect(this.clocksProxyID);
             this.clocksProxyID = null;
         }
-        if (this._clockNotifyId){
+        if(this._clockNotifyId){
             this._clock.disconnect(this._clockNotifyId);
             this._clockNotifyId = null;
+        }
+        if(this._tzNotifyId){
+            this._clock.disconnect(this._tzNotifyId);
+            this._tzNotifyId = null;
         }
     }
 
@@ -3156,42 +3185,50 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
                 this._locations.push({ location: l });
         }
 
+        const unixtime = GLib.DateTime.new_now_local().to_unix();
         this._locations.sort((a, b) => {
-            return a.location.get_timezone().get_offset() -
-                    b.location.get_timezone().get_offset();
+            const tzA = a.location.get_timezone();
+            const tzB = b.location.get_timezone();
+            const intA = tzA.find_interval(GLib.TimeType.STANDARD, unixtime);
+            const intB = tzB.find_interval(GLib.TimeType.STANDARD, unixtime);
+            return tzA.get_offset(intA) - tzB.get_offset(intB);
         });
 
         let layout = this._grid.layout_manager;
         let title = this._locations.length == 0
             ? _("Add world clocks…")
             : _("World Clocks");
-        let header = new St.Label({ x_align: Clutter.ActorAlign.START,
-                                    text: title });
-        header.style = "font-weight: bold;";
+        let header = new St.Label({ 
+            x_align: Clutter.ActorAlign.START,
+            text: title,
+            style: "font-weight: bold;"
+        });
         layout.attach(header, 0, 0, 2, 1);
         this.label_actor = header;
-
-        let localOffset = GLib.DateTime.new_now_local().get_utc_offset();
 
         for (let i = 0; i < this._locations.length; i++) {
             let l = this._locations[i].location;
 
             let name = l.get_city_name() || l.get_name();
-            let label = new St.Label({  text: name,
-                                        x_align: Clutter.ActorAlign.START,
-                                        y_align: Clutter.ActorAlign.CENTER,
-                                        x_expand: true });
-            label.style = "font-weight: normal; font-size: 0.9em;";
-            let time = new St.Label();
-            time.style = "font-feature-settings: \"tnum\"; font-size: 1.2em;";
-            let otherOffset = this._getTimeAtLocation(l).get_utc_offset();
-            let offset = (otherOffset - localOffset) / GLib.TIME_SPAN_HOUR;
-            let fmt = Math.trunc(offset) == offset ? '%s%.0f' : '%s%.1f';
-            let prefix = offset >= 0 ? '+' : '-';
-            let tz = new St.Label({ text: fmt.format(prefix, Math.abs(offset)),
-                                    x_align: Clutter.ActorAlign.END,
-                                    y_align: Clutter.ActorAlign.CENTER });
-            tz.style = "font-feature-settings: \"tnum\"; font-size: 0.9em;";
+            const label = new St.Label({
+                style_class: 'world-clocks-city',
+                text: name,
+                x_align: Clutter.ActorAlign.START,
+                y_align: Clutter.ActorAlign.CENTER,
+                x_expand: true,
+            });
+
+            let time = new St.Label({ style_class: 'world-clocks-time' });
+
+            const tz = new St.Label({
+                style_class: 'world-clocks-timezone',
+                x_align: Clutter.ActorAlign.END,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
+
+            time.clutter_text.ellipsize = imports.gi.Pango.EllipsizeMode.NONE;
+            tz.clutter_text.ellipsize = imports.gi.Pango.EllipsizeMode.NONE;
+
             if (this._grid.text_direction == Clutter.TextDirection.RTL) {
                 layout.attach(tz, 0, i + 1, 1, 1);
                 layout.attach(time, 1, i + 1, 1, 1);
@@ -3202,32 +3239,62 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
                 layout.attach(tz, 2, i + 1, 1, 1);
             }
 
-            this._locations[i].actor = time;
+            this._locations[i].timeLabel = time;
+            this._locations[i].tzLabel = tz;
         }
 
         if (this._grid.get_n_children() > 1) {
             if (!this._clockNotifyId) {
                 this._clockNotifyId =
-                    this._clock.connect('notify::clock', this._updateLabels.bind(this));
+                    this._clock.connect('notify::clock', this._updateTimeLabels.bind(this));
             }
-            this._updateLabels();
+            if (!this._tzNotifyId) {
+                this._tzNotifyId =
+                    this._clock.connect('notify::timezone', this._updateTimezoneLabels.bind(this));
+            }
+            this._updateTimeLabels();
+            this._updateTimezoneLabels();
         } else {
             if (this._clockNotifyId)
                 this._clock.disconnect(this._clockNotifyId);
             this._clockNotifyId = 0;
+
+            if (this._tzNotifyId)
+                this._clock.disconnect(this._tzNotifyId);
+            this._tzNotifyId = 0;
+
         }
     }
 
-    _getTimeAtLocation(location) {
-        let tz = GLib.TimeZone.new(location.get_timezone().get_tzid());
-        return GLib.DateTime.new_now(tz);
+    _getTimezoneOffsetAtLocation(location) {
+        const tz = location.get_timezone();
+        const localOffset = GLib.DateTime.new_now_local().get_utc_offset();
+        const utcOffset = GLib.DateTime.new_now(tz).get_utc_offset();
+        const offsetCurrentTz = utcOffset - localOffset;
+        const offsetHours = Math.abs(offsetCurrentTz) / GLib.TIME_SPAN_HOUR;
+        const offsetMinutes =
+            (Math.abs(offsetCurrentTz) % GLib.TIME_SPAN_HOUR) /
+            GLib.TIME_SPAN_MINUTE;
+
+        const prefix = offsetCurrentTz >= 0 ? '+' : '-';
+        const text = offsetMinutes === 0
+            ? `${prefix}${offsetHours}`
+            : `${prefix}${offsetHours}\u2236${offsetMinutes}`;
+        return text;
     }
 
-    _updateLabels() {
+    _updateTimeLabels() {
         for (let i = 0; i < this._locations.length; i++) {
             let l = this._locations[i];
-            let now = this._getTimeAtLocation(l.location);
-            l.actor.text = Util.formatTime(now, { timeOnly: true });
+            const now = GLib.DateTime.new_now(l.location.get_timezone());
+            l.timeLabel.text = Util.formatTime(now, { timeOnly: true });
+        }
+    }
+
+    _updateTimezoneLabels() {
+        for (let i = 0; i < this._locations.length; i++) {
+            let l = this._locations[i];
+            l.tzLabel.text = this._getTimezoneOffsetAtLocation(l.location);
         }
     }
 
@@ -3266,15 +3333,15 @@ var WeatherSection = GObject.registerClass(class Arc_Menu_WeatherSection extends
 
         this.add_child(box);
 
-        let titleBox = new St.BoxLayout({ });
-        let label = new St.Label({
+        let titleBox = new St.BoxLayout();
+        this._titleLabel = new St.Label({
+            style_class: 'weather-header',
             x_align: Clutter.ActorAlign.START,
             x_expand: true,
             y_align: Clutter.ActorAlign.END,
-            text: _('Weather'),
-        })
-        label.style = "font-weight: bold; padding-bottom: 5px;";
-        titleBox.add_child(label);
+            style: 'font-weight: bold; padding-bottom: 5px;'
+        });
+        titleBox.add_child(this._titleLabel);
         box.add_child(titleBox);
 
         this._titleLocation = new St.Label({
@@ -3350,10 +3417,11 @@ var WeatherSection = GObject.registerClass(class Arc_Menu_WeatherSection extends
         infos.forEach(fc => {
             const [valid_, timestamp] = fc.get_value_update();
             let timeStr = Util.formatTime(new Date(timestamp * 1000), {
-                timeOnly: true
+                timeOnly: true,
+                ampm: false,
             });
             const [, tempValue] = fc.get_value_temp(imports.gi.GWeather.TemperatureUnit.DEFAULT);
-            const tempPrefix = tempValue >= 0 ? ' ' : '';
+            const tempPrefix = Math.round(tempValue) >= 0 ? ' ' : '';
 
             let time = new St.Label({
                 text: timeStr,
@@ -3367,7 +3435,7 @@ var WeatherSection = GObject.registerClass(class Arc_Menu_WeatherSection extends
                 x_expand: true,
             });
             let temp = new St.Label({
-                text: '%s%.0f°'.format(tempPrefix, tempValue),
+                text: `${tempPrefix}${Math.round(tempValue)}°`,
                 x_align: Clutter.ActorAlign.CENTER,
             });
 
@@ -3387,21 +3455,28 @@ var WeatherSection = GObject.registerClass(class Arc_Menu_WeatherSection extends
         layout.attach(label, 0, 0, 1, 1);
     }
 
+    _findBestLocationName(loc) {
+        const locName = loc.get_name();
+
+        if (loc.get_level() === imports.gi.GWeather.LocationLevel.CITY ||
+            !loc.has_coords())
+            return locName;
+
+        const world = imports.gi.GWeather.Location.get_world();
+        const city = world.find_nearest_city(...loc.get_coords());
+        const cityName = city.get_name();
+
+        return locName.includes(cityName) ? cityName : locName;
+    }
+
     _updateForecasts() {
         this._forecastGrid.destroy_all_children();
 
-        if (!this._weatherClient.hasLocation) {
-            this._setStatusLabel(_("Select a location…"));
+        if (!this._weatherClient.hasLocation)
             return;
-        }
 
-        let info = this._weatherClient.info;
-        let loc = info.get_location();
-        if (loc.get_level() !== imports.gi.GWeather.LocationLevel.CITY && loc.has_coords()) {
-            let world = imports.gi.GWeather.Location.get_world();
-            loc = world.find_nearest_city(...loc.get_coords());
-        }
-        this._titleLocation.text = loc.get_name();
+        const { info } = this._weatherClient;
+        this._titleLocation.text = this._findBestLocationName(info.location);
 
         if (this._weatherClient.loading) {
             this._setStatusLabel(_("Loading…"));
@@ -3425,6 +3500,12 @@ var WeatherSection = GObject.registerClass(class Arc_Menu_WeatherSection extends
         if (!this.visible)
             return;
 
+        if (this._weatherClient.hasLocation)
+            this._titleLabel.text = _('Weather');
+        else
+            this._titleLabel.text = _('Select weather location…');
+
+        this._forecastGrid.visible = this._weatherClient.hasLocation;
         this._titleLocation.visible = this._weatherClient.hasLocation;
 
         this._updateForecasts();

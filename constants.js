@@ -41,6 +41,11 @@ var DisplayType = {
     BUTTON: 2
 }
 
+var AvatarStyle = {
+    ROUND: 0,
+    SQUARE: 1
+}
+
 var CategoryType = {
     FAVORITES: 0,
     FREQUENT_APPS: 1,

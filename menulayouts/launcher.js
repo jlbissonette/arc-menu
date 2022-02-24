@@ -195,7 +195,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let providerName = provider.appInfo ? provider.appInfo.get_name() : provider;
     
         let providerMenuItem = new MW.ArcMenuPopupBaseMenuItem(this);
-        providerMenuItem.name = "arc-menu-launcher-button";
+        providerMenuItem.name = "arcmenu-launcher-button";
         providerMenuItem.x_expand = false;
         providerMenuItem.remove_child(providerMenuItem._ornamentLabel);
         providerMenuItem.x_align = Clutter.ActorAlign.START;

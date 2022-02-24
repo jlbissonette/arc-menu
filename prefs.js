@@ -2443,8 +2443,6 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
         });
         this._settings = settings;
         this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
-        this.indicatorColor = this._settings.get_string('indicator-color');
-        this.indicatorTextColor = this._settings.get_string('indicator-text-color');
 
         let recentAppsFrame = new Adw.PreferencesGroup();
         let recentAppsRow = new Adw.ActionRow({

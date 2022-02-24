@@ -164,7 +164,7 @@ var TweaksPage = GObject.registerClass({
         let avatarStyleCombo = new Gtk.ComboBoxText({ 
             valign: Gtk.Align.CENTER 
         });
-        avatarStyleCombo.append_text(_("Circular"));
+        avatarStyleCombo.append_text(_("Round"));
         avatarStyleCombo.append_text(_("Square"));
         avatarStyleCombo.set_active(this._settings.get_enum('avatar-style'));
         avatarStyleCombo.connect('changed', (widget) => {

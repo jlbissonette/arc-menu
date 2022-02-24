@@ -46,7 +46,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this._panel = panel;
         this.menu.destroy();
         this.menu = null;
-        this.add_style_class_name('arc-menu-panel-menu');
+        this.add_style_class_name('arcmenu-panel-menu');
         this.arcMenuPlacement = arcMenuPlacement;
         this.tooltipShowing = false;
         this.tooltipHidingID = null;
