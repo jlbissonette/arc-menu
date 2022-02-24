@@ -90,7 +90,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
-            style: "padding-bottom: 10px;"
+            style: "padding-bottom: 10px;",
+            style_class: 'arcmenu-margin-box'
         });
 
         this.applicationsScrollBox = this._createScrollBox({
@@ -276,7 +277,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
        
         this.categoriesBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'margin-box'
         });     
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         this.categoriesScrollBox.clip_to_allocation = true;
@@ -383,7 +383,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let label = this._createLabelWithSeparator(_("Recent Files"));
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
-        this.applicationsBox.add_style_class_name('margin-box');
     }
 
     displayCategoryAppList(appList, category){
@@ -397,7 +396,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.subMainBox.contains(this.widgetBox)){
             this.subMainBox.remove_child(this.widgetBox);
         }
-        this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);
     }
 

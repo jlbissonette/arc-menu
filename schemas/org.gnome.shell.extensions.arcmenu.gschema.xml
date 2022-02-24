@@ -573,8 +573,8 @@
       <description>List of default directory paths used for links on the right side of ArcMenu.</description>
     </key>
     <key name="application-shortcuts-list" type="aas">
-      <default>[["Software","system-software-install-symbolic", "ArcMenu_Software"], ["Settings","preferences-system-symbolic", "gnome-control-center.desktop"],
-          ["Tweaks","org.gnome.tweaks-symbolic", "org.gnome.tweaks.desktop"],["Terminal","utilities-terminal-symbolic", "org.gnome.Terminal.desktop"],
+      <default>[["Software", "", "ArcMenu_Software"], ["Settings", "", "org.gnome.Settings.desktop"],
+          ["Tweaks", "", "org.gnome.tweaks.desktop"],["Terminal", "", "org.gnome.Terminal.desktop"],
           ["Activities Overview", "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]]</default>
       <summary>List of default directory paths used for links on the right side of ArcMenu</summary>
       <description>List of default directory paths used for links on the right side of ArcMenu.</description>
@@ -590,7 +590,7 @@
       <description>Index of Unity Layout Pinned App Separator, 0 = none</description>
     </key>
     <key name="brisk-shortcuts-list" type="as">
-      <default>["Software","system-software-install-symbolic", "ArcMenu_Software", "Settings","preferences-system-symbolic", "gnome-control-center.desktop"]</default>
+      <default>["Software", "", "ArcMenu_Software", "Settings", "", "org.gnome.Settings.desktop"]</default>
       <summary>List of Brisk Layout Shortcuts</summary>
       <description>List of Brisk Layout Shortcuts</description>
     </key>

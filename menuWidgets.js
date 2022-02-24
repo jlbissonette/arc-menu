@@ -79,7 +79,6 @@ var ApplicationContextItems = GObject.registerClass({
             vertical: true,
             x_expand: true,
             y_expand: true,
-            style_class: 'margin-box',
         });
         this._menuLayout = menuLayout;
         this._settings = menuLayout._settings;
@@ -1200,7 +1199,7 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
 
         let box = new St.BoxLayout({
             vertical: true,
-            style_class: 'margin-box arcmenu-menu'
+            style_class: 'arcmenu-menu'
         });
         box._delegate = box;
 

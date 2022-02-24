@@ -69,7 +69,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'margin-box'
         });
         this.mainBox.add_child(this.subMainBox);
 

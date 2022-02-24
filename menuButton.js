@@ -70,10 +70,9 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 
         this.arcMenuContextMenu.actor.add_style_class_name('panel-menu');
         this.arcMenuContextMenu.actor.add_style_class_name('arcmenu-menu');
-        this.arcMenuContextMenu.actor.add_style_class_name('popup-menu');
+
         this.arcMenu.actor.add_style_class_name('panel-menu');
         this.arcMenu.actor.add_style_class_name('arcmenu-menu');
-        this.arcMenu.actor.add_style_class_name('popup-menu');
 
         this.menuManager = new PopupMenu.PopupMenuManager(menuManagerParent);
         this.menuManager._changeMenu = (menu) => {};
@@ -809,7 +808,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
             reactive: false,
             can_focus: false,
         });
-        item.add_style_class_name("margin-box arcmenu-menu-item");
+        item.add_style_class_name("arcmenu-menu-item");
         this.addMenuItem(item);
 
         this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
@@ -844,7 +843,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
             }
 
             let item = new PopupMenu.PopupMenuItem(_(extensionName));
-            item.add_style_class_name("margin-box arcmenu-menu-item");
+            item.add_style_class_name("arcmenu-menu-item");
             item.connect('activate', ()=>{
                 Util.spawnCommandLine(extensionCommand);
             });
@@ -861,7 +860,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
 
     createQuickLinkItem(title, prefsVisiblePage){
         let item = new PopupMenu.PopupMenuItem(_(title));
-        item.add_style_class_name("margin-box arcmenu-menu-item");
+        item.add_style_class_name("arcmenu-menu-item");
         item.connect('activate', ()=>{
             this._settings.set_int('prefs-visible-page', prefsVisiblePage);
             Util.spawnCommandLine(Constants.ArcMenuSettingsCommand);

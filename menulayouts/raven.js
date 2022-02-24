@@ -126,7 +126,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsBox = new St.BoxLayout({
             x_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style: "padding-bottom: 10px;"
+            style: "padding-bottom: 10px;",
+            style_class: 'arcmenu-margin-box'
         });
 
         this.applicationsScrollBox = this._createScrollBox({
@@ -325,7 +326,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         label.actor.style += "padding-left: 10px;";
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
-        this.applicationsBox.add_style_class_name('margin-box');
     }
 
     displayCategoryAppList(appList, category){
@@ -338,7 +338,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.subMainBox.remove_child(this.weatherBox);
         }
 
-        this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);
     }
 

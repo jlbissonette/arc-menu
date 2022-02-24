@@ -102,7 +102,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: this.disableFadeEffect ? 'margin-box' : 'margin-box small-vfade',
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive:true,
         });
@@ -155,7 +155,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.grid.layout_manager.attach(this.leaveButton, 3, 0, 1, 1);
 
         this.categoryHeader = new MW.PlasmaCategoryHeader(this);
-        this.categoryHeader.add_style_class_name('margin-box');
 
         if(this.searchBarLocation === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 3px 10px 5px 10px;";

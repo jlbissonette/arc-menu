@@ -94,7 +94,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'margin-box'
         });
         this.rightMenuBox.add_child(this.subMainBox);
 
@@ -230,7 +229,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             pinnedApps.push(_("Home"), "ArcMenu_Home", "ArcMenu_Home");
         }
         pinnedApps.push(_("Terminal"), "utilities-terminal", "org.gnome.Terminal.desktop");
-        pinnedApps.push(_("Settings"), "emblem-system-symbolic", "gnome-control-center.desktop");
+        pinnedApps.push(_("Settings"), "emblem-system-symbolic", "org.gnome.Settings.desktop");
 
         let software = Utils.findSoftwareManager();
         if(software)

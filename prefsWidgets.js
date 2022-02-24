@@ -89,11 +89,11 @@ var DialogWindow = GObject.registerClass({
     }
 });
 
-var FrameBoxDragRow = GObject.registerClass({
+var DragRow = GObject.registerClass({
     Signals: {
         'drag-drop-done': { },
     },
-},class Arc_Menu_FrameBoxDragRow extends Adw.ActionRow {
+},class Arc_Menu_DragRow extends Adw.ActionRow {
     _init(params) {
         super._init(params);
         let scrolledWindow = null;
@@ -133,7 +133,7 @@ var FrameBoxDragRow = GObject.registerClass({
             //store drag start cursor location
             listBox.dragX = x;
             listBox.dragY = y;
-            return new Gdk.ContentProvider(Arc_Menu_FrameBoxDragRow);    
+            return new Gdk.ContentProvider(Arc_Menu_DragRow);    
         });
 
         dragSource.connect("drag-end", (self, gdkDrag, deleteData)=> {
@@ -174,7 +174,7 @@ var FrameBoxDragRow = GObject.registerClass({
             let listBox = this.get_parent();
             let index = this.get_index();
             if(index === listBox.dragRow.get_index()){
-                gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, () => {
+                gdkDrop.read_value_async(Arc_Menu_DragRow, 1, null, () => {
                     gdkDrop.finish(Gdk.DragAction.MOVE);
                 });
                 return true;
@@ -183,7 +183,7 @@ var FrameBoxDragRow = GObject.registerClass({
             listBox.show();
             listBox.insert(listBox.dragRow, index);
 
-            gdkDrop.read_value_async(Arc_Menu_FrameBoxDragRow, 1, null, ()=>{
+            gdkDrop.read_value_async(Arc_Menu_DragRow, 1, null, ()=>{
                 gdkDrop.finish(Gdk.DragAction.MOVE);
             });
             this.emit("drag-drop-done");

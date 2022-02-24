@@ -73,14 +73,12 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style: "margin: 5px 0px 0px 0px;"
         });
-
-        this.searchBox.style = "margin: 0px 0px 0px 16px;";
         this.runnerTweaksButton = new MW.RunnerTweaksButton(this);
         this.runnerTweaksButton.actor.x_expand = false;
         this.runnerTweaksButton.actor.y_expand = true;
         this.runnerTweaksButton.actor.y_align = this.searchBox.y_align = Clutter.ActorAlign.CENTER;
         this.runnerTweaksButton.actor.x_align = Clutter.ActorAlign.CENTER;
-        this.runnerTweaksButton.actor.style = "margin: 0px 6px;";
+        this.runnerTweaksButton.actor.style = "margin: 0px 0px 0px 6px;";
 
         this.topBox.add_child(this.searchBox.actor);
         this.topBox.add_child(this.runnerTweaksButton);
@@ -91,7 +89,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             x_align: Clutter.ActorAlign.START,
-            overlay_scrollbars: false,
+            overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             reactive:true
         });
@@ -99,11 +97,10 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ 
             vertical: true,
-            style: "margin: 5px 6px 0px 16px;"
+            style: "margin: 5px 0px 0px 0px;"
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.activeMenuItem = null;
-        this.updateStyle();
         this.setDefaultMenuView();
     }
 
@@ -158,7 +155,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             let themeNode = this.arcMenu.actor.get_theme_node();
             this.rise = themeNode.get_length('-arrow-rise');
         }
-        this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px;";
         this.arcMenu._boxPointer.setSourceAlignment(0.5);
         this.arcMenu._arrowAlignment = 0.5;
         
@@ -182,15 +178,8 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             this.mainBox.style += `font-size: ${this._runnerFontSize}pt;`
             this.searchBox.style += `font-size: ${this._runnerFontSize}pt;`
         }
-        else{
-            this.searchBox.style = "margin: 0px 0px 0px 16px;";
-        }
         this.topBox.style = `width: ${this._runnerWidth}px; margin: 5px 0px 0px 0px;`;
         this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
-    }
-
-    updateStyle(){
-        this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px;";
     }
 
     loadCategories(){

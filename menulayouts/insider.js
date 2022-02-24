@@ -156,7 +156,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         
         this.leftPanelPopup = new St.BoxLayout({
             vertical: true,
-            style_class: 'margin-box'
         });   
         this.leftPanelPopup._delegate = this.leftPanelPopup;
         let headerBox = new St.BoxLayout({

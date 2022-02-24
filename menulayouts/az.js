@@ -87,7 +87,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
-            style: "padding-bottom: 10px;"
+            style: "padding-bottom: 10px;",
+            style_class: 'arcmenu-margin-box'
         });
         this.applicationsScrollBox = this._createScrollBox({
             clip_to_allocation: true,
@@ -203,7 +204,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     setGridLayout(displayType, columns, spacing, setStyle = true){
         if(setStyle){
             this.applicationsGrid.x_align = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
-            displayType === Constants.DisplayType.LIST ? this.applicationsBox.add_style_class_name('margin-box') : this.applicationsBox.remove_style_class_name('margin-box');
         }
 
         this.applicationsGrid.layout_manager.column_spacing = spacing;
@@ -255,7 +255,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _onSearchBoxChanged(searchBox, searchString){
-        this.applicationsBox.remove_style_class_name('margin-box');
         if(!searchBox.isEmpty())
             this._hideNavigationButtons();
         super._onSearchBoxChanged(searchBox, searchString);       

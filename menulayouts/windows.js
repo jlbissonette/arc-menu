@@ -87,7 +87,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'margin-box'
         });
         this.mainBox.add_child(this.subMainBox);
 
@@ -233,7 +232,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.extrasMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
         this.leftPanelPopup = new St.BoxLayout({
             vertical: true,
-            style_class: 'margin-box'
         });   
         this.leftPanelPopup._delegate = this.leftPanelPopup;
         let headerBox = new St.BoxLayout({

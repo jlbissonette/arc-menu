@@ -188,7 +188,7 @@ var MenuSettingsListPage = GObject.registerClass(
 
         _createFrame(array) {
             for(let i = 0; i < array.length; i += 3) {
-                let frameRow = new PW.FrameBoxDragRow();
+                let frameRow = new PW.DragRow();
                 let editable = true;
                 if(array[i + 2].startsWith("ArcMenu_")){
                     editable = false;
@@ -2653,7 +2653,7 @@ var MenuSettingsListOtherPage = GObject.registerClass(
                 iconString = Constants.Categories[categoryEnum].ICON
             }
 
-            let frameRow = new PW.FrameBoxDragRow();
+            let frameRow = new PW.DragRow();
             frameRow._enum = extraCategories[i][0];
             frameRow._shouldShow = extraCategories[i][1];
             frameRow._name = _(name);

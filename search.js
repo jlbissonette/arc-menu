@@ -275,10 +275,6 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
             y_expand: true,
         });
 
-        if(this.searchType === Constants.DisplayType.GRID){
-            this.add_style_class_name('margin-box');
-        }
-
         this.providerInfo = new ArcSearchProviderInfo(provider, this._menuLayout);
         this.providerInfo.connect('activate', () => {
             if (provider.canLaunchSearch) {
