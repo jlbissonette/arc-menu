@@ -1029,9 +1029,7 @@ class Arc_Menu_ModifyHotCornerDialogWindow extends PW.DialogWindow {
         modifyHotCornerRow.add_suffix(hotCornerActionCombo);
         this.pageGroup.add(modifyHotCornerRow);
 
-        let customHotCornerFrame = new Adw.PreferencesGroup({
-            title: _("Custom Hot Corner")
-        });
+        let customHotCornerFrame = new Adw.PreferencesGroup();
         let customHeaderHotCornerRow = new Adw.ActionRow({
             title: _("Custom Hot Corner Action"),
             subtitle: _("Choose from a list of preset commands or use your own terminal command")
@@ -2338,6 +2336,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         this.alphabetizeAllPrograms = this._settings.get_boolean('alphabetize-all-programs')
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
         this.disableTooltips = this._settings.get_boolean('disable-tooltips');
+        this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
 
         let fadeEffectFrame = new Adw.PreferencesGroup();
         let fadeEffectRow = new Adw.ActionRow({
@@ -2417,33 +2416,6 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         multiLinedLabelFrame.add(multiLinedLabelRow);
         this.append(multiLinedLabelFrame);
 
-        this.restoreDefaults = ()=> {
-            this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
-            this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
-            this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
-            this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
-            alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
-            multiLinedLabelSwitch.set_active(this.multiLinedLabels);
-            tooltipSwitch.set_active(this.disableTooltips);
-            fadeEffectSwitch.set_active(this.disableFadeEffect);
-        };
-    }
-});
-
-var MenuSettingsNewAppsPage = GObject.registerClass(
-    class Arc_Menu_MenuSettingsNewAppsPage extends Gtk.Box {
-    _init(settings) {
-        super._init({
-            margin_top: 10,
-            margin_bottom: 10,
-            margin_start: 5,
-            margin_end: 5,
-            spacing: 20,
-            orientation: Gtk.Orientation.VERTICAL
-        });
-        this._settings = settings;
-        this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
-
         let recentAppsFrame = new Adw.PreferencesGroup();
         let recentAppsRow = new Adw.ActionRow({
             title: _("Disable New Apps Tracker")
@@ -2453,10 +2425,10 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
         });
         recentAppsSwitch.connect('notify::active', (widget) => {
             if(widget.get_active()){
-                clearRecentAppsFrame.hide();
+                clearRecentAppsRow.hide();
             }
             else{
-                clearRecentAppsFrame.show();
+                clearRecentAppsRow.show();
             }
             this._settings.set_boolean('disable-recently-installed-apps', widget.get_active());
         });
@@ -2464,7 +2436,6 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
         recentAppsFrame.add(recentAppsRow);
         this.append(recentAppsFrame);
 
-        let clearRecentAppsFrame = new Adw.PreferencesGroup();
         let clearRecentAppsRow = new Adw.ActionRow({
             title: _("Clear Apps Marked 'New'")
         });
@@ -2480,14 +2451,22 @@ var MenuSettingsNewAppsPage = GObject.registerClass(
             this._settings.reset('recently-installed-apps');
         });
         clearRecentAppsRow.add_suffix(clearRecentAppsButton);
-        clearRecentAppsFrame.add(clearRecentAppsRow);
-        this.append(clearRecentAppsFrame);
+        recentAppsFrame.add(clearRecentAppsRow);
+
+        recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
 
         this.restoreDefaults = ()=> {
+            this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
+            this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
+            this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
+            this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
+            alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
+            multiLinedLabelSwitch.set_active(this.multiLinedLabels);
+            tooltipSwitch.set_active(this.disableTooltips);
+            fadeEffectSwitch.set_active(this.disableFadeEffect);
             recentAppsSwitch.set_active(this.disableRecentApps);
         };
-        recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
     }
 });
 
@@ -3120,9 +3099,8 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         this.menuSettingsStackListBox.addRow("MenuSettingsPowerOptions", _("Power Options"), 'gnome-power-manager-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsSearchOptions", _("Search Options"), 'preferences-system-search-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsCategories", _("Extra Categories"), 'categories-symbolic');
-        this.menuSettingsStackListBox.addRow("MenuSettingsNewApps", _("New Apps Tracker"), 'preferences-system-notifications-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), 'fine-tune-symbolic');
-        this.menuSettingsStackListBox.setSeparatorIndices([2, 5, 9]);
+        this.menuSettingsStackListBox.setSeparatorIndices([2, 5, 8]);
 
         this.populateSettingsFrameStack();
         this.menuSettingsStackListBox.selectFirstRow();
@@ -3188,7 +3166,6 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         this.settingsFrameStack.add_named(new MenuSettingsListOtherPage(this._settings, Constants.MenuSettingsListType.POWER_OPTIONS), "MenuSettingsPowerOptions");
         this.settingsFrameStack.add_named(new MenuSettingsSearchOptionsPage(this._settings), "MenuSettingsSearchOptions");
         this.settingsFrameStack.add_named(new MenuSettingsListOtherPage(this._settings, Constants.MenuSettingsListType.EXTRA_CATEGORIES), "MenuSettingsCategories");
-        this.settingsFrameStack.add_named(new MenuSettingsNewAppsPage(this._settings), "MenuSettingsNewApps");
         this.settingsFrameStack.add_named(new MenuSettingsFineTunePage(this._settings), "MenuSettingsFineTune");
     }
 });
