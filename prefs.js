@@ -2708,7 +2708,7 @@ var MenuSettingsListOtherPage = GObject.registerClass(
 
 var MiscPage = GObject.registerClass(
     class Arc_Menu_MiscPage extends Adw.PreferencesPage {
-        _init(settings, parentBox) {
+        _init(settings, preferencesWindow) {
             super._init({
                 title: _('Misc'),
                 icon_name: 'misc-symbolic'
@@ -2858,8 +2858,7 @@ var MiscPage = GObject.registerClass(
                 dialog.connect('response', (widget, response) => {
                     if(response == Gtk.ResponseType.YES){
                         GLib.spawn_command_line_sync('dconf reset -f /org/gnome/shell/extensions/arcmenu/');
-                        //TODO -- FIX THIS
-                        //parentBox.populateSettingsFrameStack();
+                        populateWindow(preferencesWindow);
                     }
                     dialog.destroy();
                 });
@@ -3151,15 +3150,18 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
 
         let pinnedPage = this.settingsFrameStack.get_child_by_name("MenuSettingsPinnedApps");
 
-        /*if(this.pinnedAppsChangedID){
+        if(this.pinnedAppsChangedID){
             this._settings.disconnect(this.pinnedAppsChangedID);
             this.pinnedAppsChangedID = null;
         }
         this.pinnedAppsChangedID = this._settings.connect("changed::pinned-app-list", () =>{
-            pinnedPage.frame.remove_all_children();
+            pinnedPage.frameRows.forEach(child => {
+                pinnedPage.frame.remove(child);
+            });
+
+            pinnedPage.frameRows = [];
             pinnedPage._createFrame(this._settings.get_strv('pinned-app-list'));
-            pinnedPage.frame.show();
-        });*/
+        });
 
         this.settingsFrameStack.add_named(new MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.DIRECTORIES), "MenuSettingsShortcutDirectories");
         this.settingsFrameStack.add_named(new MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.APPLICATIONS), "MenuSettingsShortcutApplications");
@@ -3173,32 +3175,32 @@ function init() {
     ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);
 }
 
-function fillPreferencesWindow(window) {
-    window.set_search_enabled(true);
-    this._settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+function populateWindow(window){
+    if(window.pages?.length > 0){
+        window.pages.forEach(page => window.remove(page));
+    }
 
-    let iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default());
-    if(!iconTheme.get_search_path().includes(Me.path + "/media/icons/prefs_icons"))
-        iconTheme.add_search_path(Me.path + "/media/icons/prefs_icons");
-
-    window.default_width = this._settings.get_int('settings-width');
-    window.default_height = this._settings.get_int('settings-height');
-    window.set_title(_("ArcMenu Settings"));
+    window.pages = [];
 
     const generalSettingPage = new GeneralPage(this._settings);
     window.add(generalSettingPage);
+    window.pages.push(generalSettingPage);
 
     const menuLayoutsPage = new MenuLayoutPage(this._settings);
     window.add(menuLayoutsPage);
+    window.pages.push(menuLayoutsPage);
 
     const menuSettingsPage = new BuildMenuSettingsPages();
     window.add(menuSettingsPage);
+    window.pages.push(menuSettingsPage);
 
-    const miscPage = new MiscPage(this._settings, menuSettingsPage);
+    const miscPage = new MiscPage(this._settings, window);
     window.add(miscPage);
+    window.pages.push(miscPage);
 
     const aboutPage = new AboutPage(this._settings);
     window.add(aboutPage);
+    window.pages.push(aboutPage);
 
     if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MAIN){
         window.set_visible_page(generalSettingPage);
@@ -3226,7 +3228,21 @@ function fillPreferencesWindow(window) {
         window.set_visible_page(aboutPage);
     }
     this._settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.MAIN);
+}
 
+function fillPreferencesWindow(window) {
+    window.set_search_enabled(true);
+    this._settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+
+    let iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default());
+    if(!iconTheme.get_search_path().includes(Me.path + "/media/icons/prefs_icons"))
+        iconTheme.add_search_path(Me.path + "/media/icons/prefs_icons");
+
+    window.default_width = this._settings.get_int('settings-width');
+    window.default_height = this._settings.get_int('settings-height');
+    window.set_title(_("ArcMenu Settings"));
+
+    populateWindow(window);
 }
 
 function checkIfValidShortcut(frameRow, icon){

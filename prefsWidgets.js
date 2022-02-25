@@ -96,8 +96,6 @@ var DragRow = GObject.registerClass({
 },class Arc_Menu_DragRow extends Adw.ActionRow {
     _init(params) {
         super._init(params);
-        let scrolledWindow = null;
-
         let dragSource = new Gtk.DragSource({ 
             actions: Gdk.DragAction.MOVE
         });
@@ -138,35 +136,12 @@ var DragRow = GObject.registerClass({
 
         dragSource.connect("drag-end", (self, gdkDrag, deleteData)=> {
             deleteData = true;
-            let listBox = self.get_widget().get_parent();
-            listBox.dragWidget = null;
-            listBox.drag_unhighlight_row();
         });
 
         dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time)=> {
-            let listBox = self.get_widget().get_parent();
-            let widget = self.get_widget();
-
-            listBox.startIndex = widget.get_index();
-            listBox.drag_highlight_row(widget);
-           
-            if(!scrolledWindow)
-                return true;
-            
-            let height = widget.get_height();
-            let scrollHeight = scrolledWindow.get_height();
-            let widgetLoc = widget.get_index() * height;
-            let value = scrolledWindow.vadjustment.value;
-            
-            if((widgetLoc + (height * 4)) > (value + scrollHeight))
-                scrolledWindow.vadjustment.value += height;
-            else if((widgetLoc - (height * 2)) < value)
-                scrolledWindow.vadjustment.value -= height;
         });
 
         dropTarget.connect("drag-leave", (self, gdkDrop, x, y, selection, info, time)=> {
-            let listBox = self.get_widget().get_parent();
-            listBox.drag_unhighlight_row();
         });
 
         dropTarget.connect("drop", (self, gdkDrop, x, y, selection, info, time)=> {

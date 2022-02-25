@@ -221,11 +221,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let software = Utils.findSoftwareManager();
         if(software)
-            pinnedApps.push(_("Software"), 'system-software-install-symbolic', software);
+            pinnedApps.push(_("Software"), '', software);
         else
             pinnedApps.push(_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer");
         
-        pinnedApps.push(_("Files"), "system-file-manager", "org.gnome.Nautilus.desktop");
+        pinnedApps.push(_("Files"), "", "org.gnome.Nautilus.desktop");
         pinnedApps.push(_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut");
         pinnedApps.push(_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock");
         pinnedApps.push(_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff");
