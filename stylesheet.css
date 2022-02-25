@@ -259,30 +259,29 @@ StScrollView .small-vfade{
 
 /* Button Foreground Color */
 /*
-.arcmenu-text, .arcmenu-text, .arcmenu-arrow{
+.arcmenu-menu-button{
     color: ;
-}
-*/
-
-/* Button Background Hover Color */
-/*
-.arcmenu-panel-menu:hover{
-    background-color: ;
 }
 */
 
 /* Button Foreground Hover Color */
 /*
-.arcmenu-panel-menu:hover .arcmenu-text, .arcmenu-panel-menu:hover 
-.arcmenu-text .arcmenu-panel-menu:hover .arcmenu-arrow{
+.arcmenu-panel-menu:hover .arcmenu-menu-button{
     color: ;
 }
 */
 
 /* Button Foreground Active Color */
 /*
-.arcmenu-text:active, .arcmenu-text:active, .arcmenu-arrow:active{
+.arcmenu-menu-button:active{
     color: ;
+}
+*/
+
+/* Button Background Hover Color */
+/* 
+.arcmenu-panel-menu:hover{
+    background-color: ;
 }
 */
 

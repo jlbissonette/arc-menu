@@ -29,11 +29,6 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 -----
 
-#### ArcMenu integrated with [Dash-to-Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)
-
-![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/ArcMenu_Dash-to-Dock.png)
-
------
 
 ### Installation
 

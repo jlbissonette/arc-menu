@@ -90,12 +90,6 @@ var Categories = [
     {CATEGORY: CategoryType.RECENT_FILES, NAME: _("Recent Files"), ICON: 'document-open-recent-symbolic', FULL_COLOR_ICON: 'document-open-recent'}
 ]
 
-var ArcMenuPlacement = {
-    PANEL: 0,
-    DTP: 1,
-    DASH: 2
-};
-
 var TooltipLocation = {
     TOP_CENTERED: 0,
     BOTTOM_CENTERED: 1,

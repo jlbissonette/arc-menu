@@ -56,11 +56,6 @@
         <value value="0" nick="Round"/>
         <value value="1" nick="Square"/>
     </enum>
-    <enum id='org.gnome.shell.extensions.arcmenu.arc-menu-placement'>
-        <value value="0" nick="Panel"/>
-        <value value="1" nick="DTP"/>
-        <value value="2" nick="DASH"/>
-    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.menu-button-icon'>
         <value value="0" nick="Arc_Menu_Icon"/>
         <value value="1" nick="Distro_Icon"/>
@@ -155,16 +150,6 @@
       <default>725</default>
       <summary>ArcMenu Settings Height</summary>
       <description>ArcMenu Settings Height.</description>
-    </key>
-    <key type="ab" name="available-placement">
-      <default>[true, false, false]</default>
-      <summary>Keeps track of available placement for ArcMenu. [Main Panel, Dash to Panel, Dash to Dock] </summary>
-      <description>false = not avaliable, true = avaliable</description>
-    </key>
-    <key enum="org.gnome.shell.extensions.arcmenu.arc-menu-placement" name="arc-menu-placement">
-      <default>"Panel"</default>
-      <summary>Embed ArcMenu button into Dash instead of panel</summary>
-      <description>Embed ArcMenu button into Dash instead of panel</description>
     </key>
     <key name="raven-position" enum="org.gnome.shell.extensions.arcmenu.raven-position">
       <default>'Left'</default>
@@ -460,11 +445,6 @@
       <default>'Round'</default>
       <summary>Appearance of the avatar icon.</summary>
       <description>Appearance of the avatar icon.</description>
-    </key>
-    <key type="b" name="enable-menu-button-arrow">
-      <default>false</default>
-      <summary>Enables the default menu button arrow.</summary>
-      <description>Enables the default menu button arrow.</description>
     </key>
     <key name="menu-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
       <default>'Default'</default>

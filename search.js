@@ -58,7 +58,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         this.layout = this._settings.get_enum('menu-layout');
 
         if(this.provider.id === 'org.gnome.Nautilus.desktop' || this.provider.id === 'arcmenu.recent-files')
-            this._path = this.metaInfo['description'];
+            this.parentFolderPath = this.metaInfo['description'];
 
         let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
         if(highlightSearchResultTerms){

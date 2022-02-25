@@ -414,13 +414,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             return;
 
         let app = activeResult.app ? activeResult.app : null;
-        let path = activeResult._path ? activeResult._path : null;
+        let path = activeResult.parentFolderPath ? activeResult.parentFolderPath : null;
 
         this.activeResultMenuItem = new MW.ApplicationMenuItem(this, app, Constants.DisplayType.GRID, activeResult.metaInfo);
         this.activeResultMenuItem.name = "ExtraLargeIconGrid";
         this.activeResultMenuItem.provider = activeResult.provider;
         this.activeResultMenuItem.resultsView = activeResult.resultsView;
-        this.activeResultMenuItem._path = path;
+        this.activeResultMenuItem.parentFolderPath = path;
         this.activeResultMenuItem.x_expand = false;
         this.activeResultMenuItem.x_align = Clutter.ActorAlign.CENTER;
         let iconSize = 76;

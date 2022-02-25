@@ -391,13 +391,14 @@ var BaseLayout = class {
         this._futureActiveItem = false;
 
         RecentFilesManager.filterRecentFiles(recentFile => {
-            let file = Gio.File.new_for_uri(recentFile.get_uri()).get_path();
+            let file = Gio.File.new_for_uri(recentFile.get_uri());
+            let filePath = file.get_path();
             let name = recentFile.get_display_name();
             let icon = Gio.content_type_get_symbolic_icon(recentFile.get_mime_type()).to_string();
             let isContainedInCategory = true;
 
-            let placeMenuItem = this.createMenuItem([name, icon, file], Constants.DisplayType.LIST, isContainedInCategory);
-            placeMenuItem._path = recentFile.get_uri_display().replace(recentFile.get_display_name(), '');
+            let placeMenuItem = this.createMenuItem([name, icon, filePath], Constants.DisplayType.LIST, isContainedInCategory);
+            placeMenuItem.parentFolderPath = file.get_parent()?.get_path() // can be null
             placeMenuItem.style = "padding-right: 15px;";
             placeMenuItem.description = recentFile.get_uri_display().replace(homeRegExp, '~');
             placeMenuItem.fileUri = recentFile.get_uri();

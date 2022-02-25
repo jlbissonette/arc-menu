@@ -362,7 +362,7 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             extraLinks.push([_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
             extraLinks.push([_("Restart"), 'system-reboot-symbolic', "ArcMenu_Restart"]);
             extraLinks.push([_("Suspend"), "media-playback-pause-symbolic", "ArcMenu_Suspend"]);
-            extraLinks.push([_("Hybrid Sleep"), Me.path + Constants.SleepIcon.PATH, "ArcMenu_HybridSleep"]);
+            extraLinks.push([_("Hybrid Sleep"), 'sleep-symbolic', "ArcMenu_HybridSleep"]);
             extraLinks.push([_("Hibernate"), "document-save-symbolic", "ArcMenu_Hibernate"]);
             this._loadExtraCategories(extraLinks);
             this._loadCategories();
@@ -576,12 +576,12 @@ var GeneralPage = GObject.registerClass(
             });
             this._settings = settings;
 
-            let menuPlacementGroup = new Adw.PreferencesGroup({
+            let menuDisplayGroup = new Adw.PreferencesGroup({
                 title: _("Display Options")
             });
 
-            this.add(menuPlacementGroup);
-            this._createDisplayOnFrame(menuPlacementGroup);
+            this.add(menuDisplayGroup);
+            this._createDisplayGroup(menuDisplayGroup);
         
             let modifyHotCornerGroup = new Adw.PreferencesGroup({
                 title: _("Hot Corner Options")
@@ -798,30 +798,7 @@ var GeneralPage = GObject.registerClass(
             return hotkeyGroup;
         }
 
-        _createDisplayOnFrame(menuPlacementGroup){
-            const avaliablePlacement = this._settings.get_value('available-placement').deep_unpack();
-
-            //Display ArcMenu on Row ------------------------------------------------------------------------------
-            let menuPlacementRow = new Adw.ActionRow({
-                title: _("Display ArcMenu On"),
-            });
-            let menuPlacementCombo = new Gtk.ComboBoxText({
-                valign: Gtk.Align.CENTER
-            });
-
-            let dashExtensionName = _("Dash to Dock");
-            let gnomeSettings = Gio.Settings.new("org.gnome.shell");
-            let enabledExtensions = gnomeSettings.get_strv('enabled-extensions');
-            if (enabledExtensions.includes('ubuntu-dock@ubuntu.com'))
-                dashExtensionName = _("Ubuntu Dock");
-    
-            menuPlacementCombo.append_text(_("Main Panel"));
-            menuPlacementCombo.append_text(_("Dash to Panel"));
-            menuPlacementCombo.append_text(_(dashExtensionName));
-
-            menuPlacementRow.add_suffix(menuPlacementCombo);
-            //-----------------------------------------------------------------------------------------------------
-
+        _createDisplayGroup(menuDisplayGroup){
             //Show Activities Row----------------------------------------------------------------------------
             let showActivitiesRow = new Adw.ActionRow({
                 title: _("Show Activities Button")
@@ -835,22 +812,6 @@ var GeneralPage = GObject.registerClass(
             });
             showActivitiesRow.add_suffix(showActivitiesSwitch);
             //-----------------------------------------------------------------------------------------------
-
-            //Warning Row------------------------------------------------------------------------------------
-            let warningImage = new Gtk.Image({
-                icon_name: 'warning-symbolic',
-                pixel_size: 24
-            });
-            let warningImageBox = new Gtk.Box({
-                margin_top: 0,
-                margin_bottom: 0,
-                margin_start: 10
-            });
-            warningImageBox.append(warningImage);
-
-            let warningRow = new Adw.ActionRow();
-            warningRow.add_prefix(warningImageBox);
-            //-------------------------------------------------------------------------------------
 
             //Position in Panel Row-------------------------------------------------------------
             let menuPositionRow = new Adw.ActionRow({
@@ -895,11 +856,13 @@ var GeneralPage = GObject.registerClass(
             menuAlignmentScale.connect('value-changed', (widget) => {
                 this._settings.set_int('menu-position-alignment', widget.get_value());
             });
+            menuAlignmentRow.visible = this._settings.get_enum('position-in-panel') === Constants.MenuPosition.CENTER;
             //-------------------------------------------------------------------------------------
 
             //Mulit Monitor Row -------------------------------------------------------------------
             let multiMonitorRow = new Adw.ActionRow({
-                title: _("Display ArcMenu on all monitors")
+                title: _("Display ArcMenu on all Panels"),
+                subtitle: _("Dash to Panel extension required")
             });
 
             let multiMonitorSwitch = new Gtk.Switch({
@@ -914,99 +877,10 @@ var GeneralPage = GObject.registerClass(
             //--------------------------------------------------------------------------------------
 
             //Add the rows to the group
-            menuPlacementGroup.add(menuPlacementRow);
-            menuPlacementGroup.add(warningRow);
-            menuPlacementGroup.add(menuPositionRow);
-            menuPlacementGroup.add(menuAlignmentRow);
-            menuPlacementGroup.add(multiMonitorRow);
-            menuPlacementGroup.add(showActivitiesRow);
-
-            //Set visibility of rows
-            this.setVisibleDisplayOptions(menuPositionRow, menuAlignmentRow, multiMonitorRow, showActivitiesRow, warningRow);
-
-            menuPlacementCombo.connect('changed', (widget) => {
-                this._settings.set_enum('arc-menu-placement', widget.get_active());
-                this.setVisibleDisplayOptions(menuPositionRow, menuAlignmentRow, multiMonitorRow, showActivitiesRow, warningRow);
-            });
-
-            const arcMenuPlacement = this._settings.get_enum('arc-menu-placement');
-
-            //If 'Display Arcmenu On' is set to Dash to Panel, 
-            //but DtP is not found, switch to Main Panel. And vice-versa
-            if(arcMenuPlacement === Constants.ArcMenuPlacement.PANEL && !avaliablePlacement[Constants.ArcMenuPlacement.PANEL])
-                menuPlacementCombo.set_active(Constants.ArcMenuPlacement.DTP);
-            else if(arcMenuPlacement === Constants.ArcMenuPlacement.DTP && !avaliablePlacement[Constants.ArcMenuPlacement.DTP])
-                menuPlacementCombo.set_active(Constants.ArcMenuPlacement.PANEL);
-            else
-                menuPlacementCombo.set_active(arcMenuPlacement);
-
-            this._settings.connect('changed::available-placement', () => {
-                this.setVisibleDisplayOptions(menuPositionRow, menuAlignmentRow, multiMonitorRow, showActivitiesRow, warningRow);
-            });
-        }
-
-        setVisibleDisplayOptions(menuPositionRow, menuAlignmentRow, multiMonitorRow, showActivitiesRow, warningRow){
-            const avaliablePlacement = this._settings.get_value('available-placement').deep_unpack();
-            const arcMenuPlacement = this._settings.get_enum('arc-menu-placement');
-            const isInPanel = arcMenuPlacement === Constants.ArcMenuPlacement.PANEL || arcMenuPlacement === Constants.ArcMenuPlacement.DTP;
-            const positionInPanel = this._settings.get_enum('position-in-panel');
-
-            //Handle the menuPositionRow visibility
-            menuPositionRow.visible = isInPanel ? true : false;
-   
-            //Handle the menuAlignmentRow visibility
-            menuAlignmentRow.visible = isInPanel && positionInPanel === Constants.MenuPosition.CENTER;
-
-            //If set to display on Dash to Panel
-            if(arcMenuPlacement === Constants.ArcMenuPlacement.DTP){
-                if(avaliablePlacement[Constants.ArcMenuPlacement.DTP]){
-                    warningRow.hide();
-                    showActivitiesRow.show();
-                    multiMonitorRow.show();
-                }
-                else{
-                    warningRow.title = _("Dash to Panel extension not running!") + "\n" + _("Enable Dash to Panel for this feature to work.");
-                    menuPositionRow.hide();
-                    menuAlignmentRow.hide();
-                    multiMonitorRow.hide();
-                    showActivitiesRow.hide();
-                    warningRow.show();
-                }
-            }
-
-            //If set to display on Dash to Dock
-            if(arcMenuPlacement === Constants.ArcMenuPlacement.DASH){
-                if(avaliablePlacement[Constants.ArcMenuPlacement.DASH]){
-                    warningRow.hide();
-                    multiMonitorRow.show();
-                    showActivitiesRow.show();
-                }
-                else{
-                    warningRow.title = _("Dash to Dock extension not running!") + "\n" + _("Enable Dash to Dock for this feature to work.");
-                    menuPositionRow.hide();
-                    menuAlignmentRow.hide();
-                    multiMonitorRow.hide();
-                    showActivitiesRow.hide();
-                    warningRow.show();
-                }
-            }
-
-            //If set to display on Main Panel
-            if(arcMenuPlacement === Constants.ArcMenuPlacement.PANEL){
-                multiMonitorRow.hide();
-                if(avaliablePlacement[Constants.ArcMenuPlacement.PANEL]){
-                    showActivitiesRow.show();
-                    warningRow.hide();
-                }
-                else{
-                    warningRow.title = _("Main Panel not found!");
-                    menuPositionRow.hide();
-                    menuAlignmentRow.hide();
-                    multiMonitorRow.hide();
-                    showActivitiesRow.hide();
-                    warningRow.show();
-                }
-            }
+            menuDisplayGroup.add(menuPositionRow);
+            menuDisplayGroup.add(menuAlignmentRow);
+            menuDisplayGroup.add(multiMonitorRow);
+            menuDisplayGroup.add(showActivitiesRow);
         }
 });
 
@@ -1332,7 +1206,6 @@ var ButtonAppearancePage = GObject.registerClass(
                 orientation: Gtk.Orientation.VERTICAL
             });
             this._settings = settings;
-            this.arcMenuPlacement = this._settings.get_enum('arc-menu-placement');
 
             let menuButtonAppearanceFrame = new Adw.PreferencesGroup({
                 title: _('Menu Button Appearance')
@@ -1352,43 +1225,22 @@ var ButtonAppearancePage = GObject.registerClass(
             menuButtonAppearanceCombo.connect('changed', (widget) => {
                 if(widget.get_active() === Constants.MenuButtonAppearance.NONE){
                     menuButtonOffsetRow.hide();
-                    menuButtonArrowIconBoxRow.hide();
                     menuButtonPaddingRow.hide();
                     menuButtonCustomTextBoxRow.hide();
                 }
                 else if(widget.get_active() === Constants.MenuButtonAppearance.ICON){
-                    menuButtonArrowIconBoxRow.show();
                     menuButtonPaddingRow.show();
                     menuButtonCustomTextBoxRow.hide();
-                    if (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL || this.arcMenuPlacement === Constants.ArcMenuPlacement.DTP)
-                        menuButtonOffsetRow.show();
-                    else
-                        menuButtonOffsetRow.hide();
+                    menuButtonOffsetRow.show();
                 }
                 else{
-                    menuButtonArrowIconBoxRow.show();
                     menuButtonPaddingRow.show();
-                    if (this.arcMenuPlacement === Constants.ArcMenuPlacement.PANEL || this.arcMenuPlacement === Constants.ArcMenuPlacement.DTP)
-                        menuButtonOffsetRow.show();
-                    else
-                        menuButtonOffsetRow.hide();    
+                    menuButtonOffsetRow.show();
                     menuButtonCustomTextBoxRow.show();
                 }
                 this._settings.set_enum('menu-button-appearance', widget.get_active());
             });
             menuButtonAppearanceRow.add_suffix(menuButtonAppearanceCombo);
-
-            let menuButtonArrowIconBoxRow = new Adw.ActionRow({
-                title: _('Show Arrow')
-            });
-            let enableArrowIconSwitch = new Gtk.Switch({ 
-                valign: Gtk.Align.CENTER
-            });
-            enableArrowIconSwitch.set_active(this._settings.get_boolean('enable-menu-button-arrow'));
-            enableArrowIconSwitch.connect('notify::active', (widget) => {
-                this._settings.set_boolean('enable-menu-button-arrow', widget.get_active());
-            });
-            menuButtonArrowIconBoxRow.add_suffix(enableArrowIconSwitch);
 
             let menuButtonPaddingRow = new Adw.ActionRow({
                 title: _('Menu Button Padding')
@@ -1466,7 +1318,6 @@ var ButtonAppearancePage = GObject.registerClass(
             
             menuButtonAppearanceFrame.add(menuButtonAppearanceRow);
             menuButtonAppearanceFrame.add(menuButtonCustomTextBoxRow);
-            menuButtonAppearanceFrame.add(menuButtonArrowIconBoxRow);
             menuButtonAppearanceFrame.add(menuButtonPaddingRow);
             menuButtonAppearanceFrame.add(menuButtonOffsetRow);
             this.append(menuButtonAppearanceFrame);
