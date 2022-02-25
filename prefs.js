@@ -571,7 +571,8 @@ var GeneralPage = GObject.registerClass(
         _init(settings) {
             super._init({
                 title: _('General'),
-                icon_name: 'homescreen-symbolic'
+                icon_name: 'homescreen-symbolic',
+                name: 'GeneralSettingPage'
             });
             this._settings = settings;
 
@@ -1796,7 +1797,8 @@ var MenuLayoutPage = GObject.registerClass(
         _init(settings) {
             super._init({
                 title: _('Layouts'),
-                icon_name: 'menu-layouts-symbolic'
+                icon_name: 'menu-layouts-symbolic',
+                name: 'MenuLayoutsPage'
             });
             this._settings = settings;
 
@@ -1882,6 +1884,10 @@ var MenuLayoutPage = GObject.registerClass(
         let layoutName = this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout'));
         this.layoutsTweaksPage.setActiveLayout(this._settings.get_enum('menu-layout'), layoutName);
         this.stack.set_visible_child_name("LayoutsTweaks");
+    }
+
+    displayLayouts(){
+        this.stack.set_visible_child_name("LayoutsBox");
     }
 
     displayRunnerTweaksPage(){
@@ -2711,7 +2717,8 @@ var MiscPage = GObject.registerClass(
         _init(settings, preferencesWindow) {
             super._init({
                 title: _('Misc'),
-                icon_name: 'misc-symbolic'
+                icon_name: 'misc-symbolic',
+                name: "MiscPage"
             });
             this._settings = settings;
 
@@ -2898,6 +2905,7 @@ var AboutPage = GObject.registerClass(
             super._init({
                 title: _("About"),
                 icon_name: 'info-circle-symbolic',
+                name: 'AboutPage'
             });
             this._settings = settings;
 
@@ -3067,7 +3075,8 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
     _init() {
         super._init({
             title: _('Customize'),
-            icon_name: 'menu-settings-symbolic'
+            icon_name: 'menu-settings-symbolic',
+            name: 'MenuSettingsPage'
         });
         this._settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
         this.mainGroup = new Adw.PreferencesGroup();
@@ -3176,17 +3185,18 @@ function init() {
 }
 
 function populateWindow(window){
+    const settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
     if(window.pages?.length > 0){
         window.pages.forEach(page => window.remove(page));
     }
 
     window.pages = [];
 
-    const generalSettingPage = new GeneralPage(this._settings);
+    const generalSettingPage = new GeneralPage(settings);
     window.add(generalSettingPage);
     window.pages.push(generalSettingPage);
 
-    const menuLayoutsPage = new MenuLayoutPage(this._settings);
+    const menuLayoutsPage = new MenuLayoutPage(settings);
     window.add(menuLayoutsPage);
     window.pages.push(menuLayoutsPage);
 
@@ -3194,52 +3204,72 @@ function populateWindow(window){
     window.add(menuSettingsPage);
     window.pages.push(menuSettingsPage);
 
-    const miscPage = new MiscPage(this._settings, window);
+    const miscPage = new MiscPage(settings, window);
     window.add(miscPage);
     window.pages.push(miscPage);
 
-    const aboutPage = new AboutPage(this._settings);
+    const aboutPage = new AboutPage(settings);
     window.add(aboutPage);
     window.pages.push(aboutPage);
 
-    if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MAIN){
-        window.set_visible_page(generalSettingPage);
+    setVisiblePage(window);
+}
+
+function setVisiblePage(window){
+    const settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+
+    if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MAIN){
+        window.set_visible_page_name("GeneralSettingPage");
     }
-    else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.CUSTOMIZE_MENU){
-        window.set_visible_page(menuSettingsPage);
-        menuSettingsPage.menuSettingsStackListBox.selectRowByName("MenuSettingsGeneral");
+    else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.CUSTOMIZE_MENU){
+        window.set_visible_page_name("MenuSettingsPage");
+        let page = window.get_visible_page();
+        page.menuSettingsStackListBox.selectRowByName("MenuSettingsGeneral");
     }
-    else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MENU_LAYOUT){
-        window.set_visible_page(menuLayoutsPage);
+    else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MENU_LAYOUT){
+        window.set_visible_page_name("MenuLayoutsPage");
+        let page = window.get_visible_page();
+        page.displayLayouts();
     }
-    else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.BUTTON_APPEARANCE){
-        window.set_visible_page(menuSettingsPage);
-        menuSettingsPage.menuSettingsStackListBox.selectRowByName("ButtonSettings");
+    else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.BUTTON_APPEARANCE){
+        window.set_visible_page_name("MenuSettingsPage");
+        let page = window.get_visible_page();
+        page.menuSettingsStackListBox.selectRowByName("ButtonSettings");
     }
-    else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.LAYOUT_TWEAKS){
-        window.set_visible_page(menuLayoutsPage);
-        menuLayoutsPage.displayLayoutTweaksPage();
+    else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.LAYOUT_TWEAKS){
+        window.set_visible_page_name("MenuLayoutsPage");
+        let page = window.get_visible_page();
+        page.displayLayoutTweaksPage();
     }
-    else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
-        window.set_visible_page(menuLayoutsPage);
-        menuLayoutsPage.displayRunnerTweaksPage();
+    else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
+        window.set_visible_page_name("MenuLayoutsPage");
+        let page = window.get_visible_page();
+        page.displayRunnerTweaksPage();
     }
-    else if(this._settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.ABOUT){
-        window.set_visible_page(aboutPage);
+    else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.ABOUT){
+        window.set_visible_page_name("AboutPage");
     }
-    this._settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.MAIN);
+    settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.MAIN);
 }
 
 function fillPreferencesWindow(window) {
-    window.set_search_enabled(true);
-    this._settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
-
     let iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default());
     if(!iconTheme.get_search_path().includes(Me.path + "/media/icons/prefs_icons"))
         iconTheme.add_search_path(Me.path + "/media/icons/prefs_icons");
 
-    window.default_width = this._settings.get_int('settings-width');
-    window.default_height = this._settings.get_int('settings-height');
+    window.set_search_enabled(true);
+    window.arcMenuSettings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+
+    const settings = window.arcMenuSettings;
+
+    settings.connect("changed::prefs-visible-page", () => {
+        if(settings.get_int('prefs-visible-page') !== Constants.PrefsVisiblePage.MAIN){
+            setVisiblePage(window);
+        }
+    });
+
+    window.default_width = settings.get_int('settings-width');
+    window.default_height = settings.get_int('settings-height');
     window.set_title(_("ArcMenu Settings"));
 
     populateWindow(window);
