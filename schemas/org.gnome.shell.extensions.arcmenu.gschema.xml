@@ -227,12 +227,12 @@
       <description>Show search result description label.</description>
     </key>
     <key type="b" name="search-provider-open-windows">
-      <default>true</default>
+      <default>false</default>
       <summary>Show custom search provider - open windows</summary>
       <description>Show custom search provider - open windows.</description>
     </key>
     <key type="b" name="search-provider-recent-files">
-      <default>true</default>
+      <default>false</default>
       <summary>Show custom search provider - recent files</summary>
       <description>Show custom search provider - recent files.</description>
     </key>
@@ -573,7 +573,7 @@
       <description>List of default directory paths used for links on the right side of ArcMenu.</description>
     </key>
     <key name="application-shortcuts-list" type="aas">
-      <default>[["Software", "", "ArcMenu_Software"], ["Settings", "", "org.gnome.Settings.desktop"],
+      <default>[["Software", "", "ArcMenu_Software"], ["Settings","", "org.gnome.Settings.desktop"],
           ["Tweaks", "", "org.gnome.tweaks.desktop"],["Terminal", "", "org.gnome.Terminal.desktop"],
           ["Activities Overview", "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]]</default>
       <summary>List of default directory paths used for links on the right side of ArcMenu</summary>

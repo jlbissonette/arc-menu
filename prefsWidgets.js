@@ -358,26 +358,18 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
         this.connect("row-selected", (self, row) => {
             if(row){
                 let stackName = row.stackName;
-                widget.headerLabel.label = "<b>" + _(row.translateableName) + "</b>",
+                widget.headerLabel.label = "<b>" + _(row.translatableName) + "</b>",
                 this.settingsFrameStack.set_visible_child_name(stackName);
             }
         });
     }
 
-    getRowAtIndex(index){
-        return this.get_row_at_index(index).get_children()[0];
-    }
-
     getSelectedRow(){
-        return this.get_selected_row().get_children()[0];
+        return this.get_selected_row();
     }
 
     selectFirstRow(){
         this.select_row(this.get_row_at_index(0));
-    }
-
-    selectRowAtIndex(index){
-        this.select_row(this.get_row_at_index(index));
     }
 
     selectRowByName(name){
@@ -388,7 +380,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
         }
     }
 
-    addRow(name, translateableName, iconName, nextPage){
+    addRow(name, translatableName, iconName, nextPage){
         let row1 = new Gtk.ListBoxRow();
         this.append(row1);
 
@@ -401,14 +393,14 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
         });
         row1.set_child(row);
         row1.stackName = name;
-        row1.translateableName = translateableName;
+        row1.translatableName = translatableName;
         
         let image = new Gtk.Image({ 
             icon_name: iconName
         });
 
         let label = new Gtk.Label({
-            label: translateableName,
+            label: translatableName,
             halign: Gtk.Align.START,
         });
         row.attach(image, 0, 0, 1, 1);

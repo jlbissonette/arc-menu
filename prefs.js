@@ -2495,7 +2495,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         this.maxSearchResults = this._settings.get_int('max-search-results');
 
         let searchProvidersFrame = new Adw.PreferencesGroup({
-            title: _("Search Providers")
+            title: _("Extra Search Providers")
         });
         let openWindowsRow = new Adw.ActionRow({
             title: _("Search for open windows across all workspaces")
@@ -2590,6 +2590,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             this.maxSearchResults = this._settings.get_default_value('max-search-results').unpack();
             descriptionsSwitch.set_active(this.searchResultsDetails);
             openWindowsSwitch.set_active(this.openWindowsSearchProvider);
+            recentFilesSwitch.set_active(this.recentFilesSearchProvider);
             highlightSearchResultSwitch.set_active(this.highlightSearchResultTerms);
             maxSearchResultsScale.set_value(this.maxSearchResults);
         };
@@ -2726,15 +2727,15 @@ var MiscPage = GObject.registerClass(
                 title: _('Export or Import Settings')
             });
             let importRow = new Adw.ActionRow({
-                title: _("All ArcMenu Settings")
+                title: _("ArcMenu Settings")
             });
             let settingsImportInfoButton = new PW.Button({
                 icon_name: 'info-circle-symbolic'
             });
             settingsImportInfoButton.connect('clicked', ()=> {
                 let dialog = new Gtk.MessageDialog({
-                    text: "<b>" + _("Export or Import All ArcMenu Settings") + '</b>\n' + 
-                                _('Importing settings from file may replace ALL saved settings.\nThis includes all saved pinned apps.'),
+                    text: "<b>" + _("Export or Import ArcMenu Settings") + '</b>',
+                    secondary_text:_('Importing will overwrite current settings.'),
                     use_markup: true,
                     buttons: Gtk.ButtonsType.OK,
                     message_type: Gtk.MessageType.WARNING,
@@ -2855,7 +2856,8 @@ var MiscPage = GObject.registerClass(
             context.add_class('suggested-action');
             resetSettingsButton.connect('clicked', (widget) => {
                 let dialog = new Gtk.MessageDialog({
-                    text: "<b>" + _("Restore Default Settings?") + '</b>\n' + _("All ArcMenu settings will be reset to the default value."),
+                    text: "<b>" + _("Reset all settings?") + '</b>',
+                    secondary_text: _("All ArcMenu settings will be reset to the default value."),
                     use_markup: true,
                     buttons: Gtk.ButtonsType.YES_NO,
                     message_type: Gtk.MessageType.WARNING,
@@ -3137,11 +3139,28 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         context = restoreDefaultsButton.get_style_context();
         context.add_class('suggested-action');
         restoreDefaultsButton.connect("clicked", () => {
-            let currentPage = this.settingsFrameStack.get_visible_child();
-            if(!currentPage)
-                return;
-            if(currentPage.restoreDefaults)
-                currentPage.restoreDefaults();
+            const currentPage = this.settingsFrameStack.get_visible_child();
+            const currentSelectedRow = this.menuSettingsStackListBox.getSelectedRow();
+            const pageName = currentSelectedRow.translatableName;
+            let dialog = new Gtk.MessageDialog({
+                text: "<b>" + _("Reset all %s?", pageName).format(pageName) + '</b>',
+                secondary_text: _("All %s will be reset to the default value.", pageName).format(pageName),
+                use_markup: true,
+                buttons: Gtk.ButtonsType.YES_NO,
+                message_type: Gtk.MessageType.WARNING,
+                transient_for: this.get_root(),
+                modal: true
+            });
+            dialog.connect('response', (widget, response) => {
+                if(response == Gtk.ResponseType.YES){
+                    if(!currentPage)
+                        return;
+                    if(currentPage.restoreDefaults)
+                        currentPage.restoreDefaults();
+                }
+                dialog.destroy();
+            });
+            dialog.show();
         });
 
         headerBox.attach(button, 0, 0, 1, 1);
