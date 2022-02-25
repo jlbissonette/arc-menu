@@ -23,12 +23,6 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 -----
 
-#### ArcMenu integrated with [Dash-to-Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)
-
-![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/ArcMenu_Banner.png)
-
------
-
 
 ### Installation
 
