@@ -4128,6 +4128,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             openWindowsSwitch.set_active(this.openWindowsSearchProvider);
             highlightSearchResultSwitch.set_active(this.highlightSearchResultTerms);
             maxSearchResultsScale.set_value(this.maxSearchResults);
+            recentFilesSwitch.set_active(this.recentFilesSearchProvider);
             this.saveButton.set_sensitive(true);
             this.resetButton.set_sensitive(false);
         });

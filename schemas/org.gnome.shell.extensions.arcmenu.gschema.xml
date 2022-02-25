@@ -234,12 +234,12 @@
       <description>Show search result description label.</description>
     </key>
     <key type="b" name="search-provider-open-windows">
-      <default>true</default>
+      <default>false</default>
       <summary>Show custom search provider - open windows</summary>
       <description>Show custom search provider - open windows.</description>
     </key>
     <key type="b" name="search-provider-recent-files">
-      <default>true</default>
+      <default>false</default>
       <summary>Show custom search provider - recent files</summary>
       <description>Show custom search provider - recent files.</description>
     </key>
