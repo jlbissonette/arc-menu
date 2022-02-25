@@ -33,10 +33,11 @@ var RecentFilesSearchProvider = class {
     getResultMetas(fileUris, callback) {
         const metas = fileUris.map(fileUri => {
             const rf = this._getRecentFile(fileUri);
+            const file = Gio.File.new_for_uri(rf.get_uri());
             return rf ? {
                 id: fileUri,
                 name: rf.get_display_name(),
-                description: rf.get_uri_display().replace(rf.get_display_name(), ''),
+                description: file.get_parent()?.get_path(), // can be null
                 createIcon: (size) => createIcon(rf.get_mime_type(), size),
             } : undefined;
         }).filter(m => m?.name !== undefined && m?.name !== null);
