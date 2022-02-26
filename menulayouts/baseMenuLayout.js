@@ -463,7 +463,9 @@ var BaseLayout = class {
         else if(command === "ArcMenu_Software"){
             let software = Utils.findSoftwareManager();
             if(software)
-                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', software, displayType, isContainedInCategory);
+                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), menuItemArray[1], software, displayType, isContainedInCategory);
+            else
+                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', 'ArcMenu_unfound.desktop', displayType, isContainedInCategory);
         }
         else if(command === "ArcMenu_Trash"){
             placeMenuItem = new MW.ShortcutMenuItem(this, _("Trash"), '', "ArcMenu_Trash", displayType, isContainedInCategory);

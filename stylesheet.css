@@ -179,7 +179,7 @@ StScrollView .small-vfade{
     border: 1px solid #353535;
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
     padding: 3px 8px;
-    max-width:550px;
+    max-width: 550px;
     min-height: 0px;
 }
 

@@ -148,7 +148,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         for(let i = 0;i < pinnedApps.length; i += 3){
             let isContainedInCategory = false;
-            let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);     
+            let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);     
             if(placeMenuItem){
                 this.actionsBox.add_child(placeMenuItem.actor);
             }

@@ -179,7 +179,14 @@ var MenuSettingsListPage = GObject.registerClass(
                 if(frameRow._icon === "ArcMenu_ArcMenuIcon"){
                     frameRow._icon = Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg';
                 }
-                if(this.listType === Constants.MenuSettingsListType.DIRECTORIES || this.listType === Constants.MenuSettingsListType.OTHER){
+                else if(frameRow._cmd === 'ArcMenu_Software'){
+                    for(let softwareManagerID of Constants.SoftwareManagerIDs){
+                        let app = Gio.DesktopAppInfo.new(softwareManagerID);
+                        if(app)
+                            frameRow._icon = app.get_icon()?.to_string();
+                    }
+                }
+                else if(this.listType === Constants.MenuSettingsListType.DIRECTORIES || this.listType === Constants.MenuSettingsListType.OTHER){
                     frameRow._icon = getIconPath([array[i], array[i + 1], array[i + 2]]);
                 }
 
@@ -322,7 +329,7 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         }
         else if(this._dialogType == Constants.MenuSettingsListType.APPLICATIONS){
             let extraLinks = [];
-            extraLinks.push(["Activities Overview", "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
+            extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
             extraLinks.push([_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ArcMenuSettingsCommand]);
             extraLinks.push([_("Run Command..."), "system-run-symbolic", "ArcMenu_RunCommand"]);
             extraLinks.push([_("Show All Applications"), "view-fullscreen-symbolic", "ArcMenu_ShowAllApplications"]);
@@ -2481,7 +2488,10 @@ var MenuSettingsListOtherPage = GObject.registerClass(
             let name, iconString;
             if(this.listType === Constants.MenuSettingsListType.POWER_OPTIONS){
                 name = Constants.PowerOptions[categoryEnum].NAME;
-                iconString = Constants.PowerOptions[categoryEnum].ICON;
+                if(categoryEnum === Constants.PowerType.HYBRID_SLEEP)
+                    iconString = 'sleep-symbolic';
+                else
+                    iconString = Constants.PowerOptions[categoryEnum].ICON;
             }
             else {
                 name = Constants.Categories[categoryEnum].NAME;
@@ -3131,11 +3141,13 @@ function checkIfValidShortcut(frameRow, icon){
 
 function getIconPath(listing){
     let path, icon;
+    const shortcutCommand = listing[2];
+    const shortcutIconName = listing[1];
 
-    if(listing[2]=="ArcMenu_Home")
+    if(shortcutCommand === "ArcMenu_Home")
         path = GLib.get_home_dir();
-    else if(listing[2].startsWith("ArcMenu_")){
-        let string = listing[2];
+    else if(shortcutCommand.startsWith("ArcMenu_")){
+        let string = shortcutCommand;
         path = string.replace("ArcMenu_",'');
         if(path === "Documents")
             path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
@@ -3150,10 +3162,10 @@ function getIconPath(listing){
         else
             path = null;
     }
-    else if(listing[1] == listing[2])
-        path = listing[2];
-    else if(listing[1] == "ArcMenu_Folder"){
-        path = listing[2];
+    else if(shortcutIconName === shortcutCommand)
+        path = shortcutIconName;
+    else if(shortcutIconName === "ArcMenu_Folder"){
+        path = shortcutIconName;
     }
     else
         path = null;
@@ -3175,11 +3187,11 @@ function getIconPath(listing){
         return icon.to_string();
     }
     else{
-        if(listing[2]=="ArcMenu_Network")
-            return  'network-workgroup-symbolic';
-        else if(listing[2]=="ArcMenu_Computer")
-            return  'drive-harddisk-symbolic';
+        if(shortcutCommand === "ArcMenu_Network")
+            return 'network-workgroup-symbolic';
+        else if(shortcutCommand === "ArcMenu_Computer")
+            return 'drive-harddisk-symbolic';
         else
-            return listing[1];
+            return shortcutIconName;
     }
 }
