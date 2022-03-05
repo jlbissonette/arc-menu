@@ -236,18 +236,14 @@ var MenuSettingsController = class {
             this._customKeybinding.unbind('ToggleArcMenu');
             this._customKeybinding.unbind('ToggleRunnerMenu');
             this._overrideOverlayKey.disable();
-            this._menuKeyBindingKey = null;
-            this._runnerKeyBindingKey = null;
 
             if(EnableStandaloneRunnerMenu){
                 if(!this.runnerMenu){
                     this.runnerMenu = new StandaloneRunner(this._settings);
                     this.runnerMenu.initiate();
                 }
-            
                 if(RunnerHotKey === Constants.RunnerHotKey.CUSTOM){
-                    this._customKeybinding.bind('ToggleRunnerMenu', 'toggle-runner-menu', () => this._onHotkey(() => this.toggleStandaloneRunner()));
-                    this._runnerKeyBindingKey = this._settings.get_strv('toggle-runner-menu').toString();
+                    this._customKeybinding.bind('ToggleRunnerMenu', 'toggle-runner-menu', () => this.toggleStandaloneRunner());
                 }
                 else if(RunnerHotKey === Constants.RunnerHotKey.SUPER_L){
                     this._overrideOverlayKey.enable(() => this.toggleStandaloneRunner());
@@ -259,63 +255,12 @@ var MenuSettingsController = class {
             }
 
             if(HotKey === Constants.HotKey.CUSTOM){
-                this._customKeybinding.bind('ToggleArcMenu', 'toggle-arcmenu', () => this._onHotkey(() => this.toggleMenus()));
-                this._menuKeyBindingKey = this._settings.get_strv('toggle-arcmenu').toString();
+                this._customKeybinding.bind('ToggleArcMenu', 'toggle-arcmenu', () => this.toggleMenus());
             }
             else if(HotKey === Constants.HotKey.SUPER_L){
                 this._overrideOverlayKey.disable();
                 this._overrideOverlayKey.enable(() => this.toggleMenus());
             }
-
-            if(this._menuKeyBindingKey){
-                this._menuKeyBindingKey = Gtk.accelerator_parse(this._menuKeyBindingKey)[0];
-            }
-            if(this._runnerKeyBindingKey){
-                this._runnerKeyBindingKey = Gtk.accelerator_parse(this._runnerKeyBindingKey)[0];
-            }
-        }
-    }
-
-    _onHotkey(callback) {
-        if(this._settings.get_boolean('disable-hotkey-onkeyrelease'))
-            callback();
-        else
-            this._onHotkeyRelease(callback);
-    }
-
-    _onHotkeyRelease(callback) {
-        let activeMenu = this._settingsControllers[this.currentMonitorIndex]._menuButton.getActiveMenu() || ((this.runnerMenu && this.runnerMenu.arcMenu.isOpen) ? this.runnerMenu.arcMenu : null);
-        let focusPanel = this.panel;
-
-        let focusTarget = activeMenu ? 
-                          (activeMenu.actor || activeMenu) : focusPanel;
-        
-        this.disconnectKeyRelease();
-
-        this.keyInfo = {
-            pressId: focusTarget.connect('key-press-event', () => this.disconnectKeyRelease()),
-            releaseId: focusTarget.connect('key-release-event', (actor, event) => {
-                this.disconnectKeyRelease();
-
-                if (this._menuKeyBindingKey === event.get_key_symbol()) {
-                    callback();
-                }
-
-                if (this._runnerKeyBindingKey === event.get_key_symbol()) {
-                    callback();
-                }
-            }),
-            target: focusTarget
-        };
-
-        focusTarget.grab_key_focus();
-    }
-
-    disconnectKeyRelease() {
-        if (this.keyInfo && this.keyInfo.target) {
-            this.keyInfo.target.disconnect(this.keyInfo.pressId);
-            this.keyInfo.target.disconnect(this.keyInfo.releaseId);
-            this.keyInfo = 0;
         }
     }
 
@@ -517,7 +462,6 @@ var MenuSettingsController = class {
         }
 
         if(this.isPrimaryPanel){
-            this.disconnectKeyRelease();
             this._overrideOverlayKey.destroy();
             this._customKeybinding.destroy();
         }

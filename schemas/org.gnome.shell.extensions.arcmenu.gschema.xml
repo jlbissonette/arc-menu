@@ -120,11 +120,6 @@
       <summary>Force the menu to a specific location</summary>
       <description>Force the menu to a specific location</description>
     </key>
-    <key type="b" name="disable-hotkey-onkeyrelease">
-      <default>false</default>
-      <summary>disable hotkey on key release</summary>
-      <description>disable hotkey on key release.</description>
-    </key>
     <key type="b" name="hotkey-open-primary-monitor">
       <default>false</default>
       <summary>show ArcMenu on primary monitor when using hotkey</summary>

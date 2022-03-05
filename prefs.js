@@ -565,187 +565,7 @@ var GeneralPage = GObject.registerClass(
             });
 
             this.add(menuDisplayGroup);
-            this._createDisplayGroup(menuDisplayGroup);
 
-            let menuHotkeyGroup = this._createHotkeyGroup(_("Hotkey Options"), true);
-            this.add(menuHotkeyGroup);
-
-            let runnerHotkeyGroup = this._createHotkeyGroup(_("Standalone Runner Menu"), false);
-            this.add(runnerHotkeyGroup);
-        }
-
-        _createHotkeyGroup(title, isMenuHotkey){
-            let hotkeyGroup = new Adw.PreferencesGroup({
-                title: _(title)
-            });
-            let enableRunnerMenuSwitch, hotkeyEnumSetting, customHotkeySetting, primaryMonitorSetting;
-            if(isMenuHotkey){
-                hotkeyEnumSetting = 'menu-hotkey';
-                customHotkeySetting = 'toggle-arcmenu';
-                primaryMonitorSetting = 'hotkey-open-primary-monitor';
-            }
-            else{
-                hotkeyEnumSetting = 'runner-menu-hotkey';
-                customHotkeySetting = 'toggle-runner-menu';
-                primaryMonitorSetting = 'runner-hotkey-open-primary-monitor';
-                let enableRunnerMenuRow = new Adw.ActionRow({
-                    title: _("Enable a standalone Runner menu")
-                });
-                enableRunnerMenuSwitch = new Gtk.Switch({
-                    halign: Gtk.Align.END,
-                    valign: Gtk.Align.CENTER,
-                });
-                enableRunnerMenuSwitch.set_active(this._settings.get_boolean('enable-standlone-runner-menu'));
-                enableRunnerMenuSwitch.connect('notify::active', (widget) => {
-                    this._settings.set_boolean('enable-standlone-runner-menu', widget.get_active());
-                    if(!widget.get_active()){
-                        customHotkeyRow.hide();
-                        hotkeyRow.hide();
-                        primaryMonitorRow.hide();
-                        hotkeyActivationRow.hide();
-                    }
-                    else{
-                        hotkeyRow.show();
-                        primaryMonitorRow.show();
-                        
-                        if(this._settings.get_enum(hotkeyEnumSetting) === 0){
-                            customHotkeyRow.hide();
-                            hotkeyActivationRow.hide();
-                        }
-                        else{
-                            customHotkeyRow.show();
-                            hotkeyActivationRow.show();
-                        }
-                    }
-                });
-                enableRunnerMenuRow.add_suffix(enableRunnerMenuSwitch);
-                hotkeyGroup.add(enableRunnerMenuRow);
-            }
-
-            let hotkeyActivationRow = new Adw.ActionRow({
-                title: _("Hotkey Activation"),
-            });
-            let hotkeyActivationCombo = new Gtk.ComboBoxText({
-                valign: Gtk.Align.CENTER,
-            });
-            hotkeyActivationCombo.append_text(_("Key Release"));
-            hotkeyActivationCombo.append_text(_("Key Press"));
-            if(this._settings.get_boolean('disable-hotkey-onkeyrelease'))
-                hotkeyActivationCombo.set_active(1);
-            else
-                hotkeyActivationCombo.set_active(0);
-            hotkeyActivationCombo.connect('changed', (widget) => {
-                if(widget.get_active() === 0)
-                    this._settings.set_boolean('disable-hotkey-onkeyrelease',false);
-                if(widget.get_active() === 1)
-                    this._settings.set_boolean('disable-hotkey-onkeyrelease',true);
-            });
-
-            hotkeyActivationRow.add_suffix(hotkeyActivationCombo);
-
-            let primaryMonitorRow = new Adw.ActionRow({
-                title: _("Open on Primary Monitor"),
-            });
-            let primaryMonitorSwitch = new Gtk.Switch({
-                valign: Gtk.Align.CENTER,
-            });
-            primaryMonitorSwitch.set_active(this._settings.get_boolean(primaryMonitorSetting));
-            primaryMonitorSwitch.connect('notify::active', (widget) => {
-                this._settings.set_boolean(primaryMonitorSetting, widget.get_active());
-            });
-            primaryMonitorRow.add_suffix(primaryMonitorSwitch);
-
-            let hotkeyRow = new Adw.ActionRow({
-                title: isMenuHotkey ? _("Menu Hotkey") : _("Runner Hotkey"),
-            });
-
-            let hotkeyCombo = new Gtk.ComboBoxText({
-                valign: Gtk.Align.CENTER,
-            });
-            if(isMenuHotkey)
-                hotkeyCombo.append("NONE", _("None"));
-            hotkeyCombo.append("SUPER_L", _("Left Super Key"));
-            hotkeyCombo.append("CUSTOM", _("Custom Hotkey"));
-            hotkeyRow.add_suffix(hotkeyCombo);
-
-            let customHotkeyRow = new Adw.ActionRow({
-                title: _("Current Hotkey"),
-            });
-
-            let shortcutCell = new Gtk.ShortcutsShortcut({
-                halign: Gtk.Align.START,
-                valign: Gtk.Align.CENTER,
-                hexpand: true,
-            });
-            shortcutCell.accelerator = this._settings.get_strv(customHotkeySetting).toString();
-
-            let modifyHotkeyButton = new Gtk.Button({
-                label: _("Modify Hotkey"),
-                valign: Gtk.Align.CENTER,
-            });
-            customHotkeyRow.add_suffix(shortcutCell);
-            customHotkeyRow.add_suffix(modifyHotkeyButton);
-            modifyHotkeyButton.connect('clicked', () => {
-                let dialog = new CustomHotkeyDialogWindow(this._settings, this);
-                dialog.show();
-                dialog.connect('response', (_w, response) => {
-                    let customHotKeyEnum = isMenuHotkey ? 2 : 1;
-                    if(response === Gtk.ResponseType.APPLY) {
-                        this._settings.set_enum(hotkeyEnumSetting, 0);
-                        this._settings.set_strv(customHotkeySetting, [dialog.resultsText]);
-                        this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
-                        shortcutCell.accelerator = dialog.resultsText;
-                        dialog.destroy();
-                    }
-                    else {
-                        shortcutCell.accelerator = this._settings.get_strv(customHotkeySetting).toString();
-                        this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
-                        dialog.destroy();
-                    }
-                });
-            });
-
-            hotkeyGroup.add(hotkeyRow);
-            hotkeyGroup.add(customHotkeyRow);
-            hotkeyGroup.add(hotkeyActivationRow);
-            hotkeyGroup.add(primaryMonitorRow);
-
-            hotkeyCombo.connect('changed', (widget) => {
-                if(widget.get_active_id() === "NONE"){
-                    customHotkeyRow.hide();
-                    hotkeyActivationRow.hide();
-                    primaryMonitorRow.hide();
-                    if(!isMenuHotkey)
-                        hotkeyRow.hide();
-                }
-                else if(widget.get_active_id() === "SUPER_L"){
-                    customHotkeyRow.hide();
-                    hotkeyActivationRow.hide();
-                    primaryMonitorRow.show();
-                    if(!isMenuHotkey)
-                        hotkeyRow.show();
-                }
-                else if(widget.get_active_id() === "CUSTOM"){
-                    customHotkeyRow.show();
-                    hotkeyActivationRow.show();
-                    primaryMonitorRow.show();
-                    if(!isMenuHotkey)
-                        hotkeyRow.show();
-                }
-                this._settings.set_enum(hotkeyEnumSetting, widget.get_active());
-            });
-            hotkeyCombo.set_active(this._settings.get_enum(hotkeyEnumSetting));
-
-            if(!isMenuHotkey && !enableRunnerMenuSwitch.get_active()){
-                customHotkeyRow.hide();
-                hotkeyActivationRow.hide();
-                primaryMonitorRow.hide();
-                hotkeyRow.hide();
-            }
-            return hotkeyGroup;
-        }
-
-        _createDisplayGroup(menuDisplayGroup){
             //Show Activities Row----------------------------------------------------------------------------
             let showActivitiesRow = new Adw.ActionRow({
                 title: _("Show Activities Button")
@@ -820,6 +640,9 @@ var GeneralPage = GObject.registerClass(
             multiMonitorSwitch.set_active(this._settings.get_boolean('multi-monitor'));
             multiMonitorSwitch.connect('notify::active', (widget) => {
                 this._settings.set_boolean('multi-monitor', widget.get_active());
+                menuHotkeyGroup.displayRows();
+                runnerHotkeyGroup.displayRows();
+                //todo show/hide open on primary monitor
             });
             //--------------------------------------------------------------------------------------
 
@@ -828,6 +651,160 @@ var GeneralPage = GObject.registerClass(
             menuDisplayGroup.add(menuAlignmentRow);
             menuDisplayGroup.add(multiMonitorRow);
             menuDisplayGroup.add(showActivitiesRow);
+
+            let menuHotkeyGroup = this._createHotkeyGroup(_("Hotkey Options"), true);
+            this.add(menuHotkeyGroup);
+
+            let runnerHotkeyGroup = this._createHotkeyGroup(_("Standalone Runner Menu"), false);
+            this.add(runnerHotkeyGroup);
+        }
+
+        _createHotkeyGroup(title, isMenuHotkey){
+            let hotkeyGroup = new Adw.PreferencesGroup({
+                title: _(title)
+            });
+            let enableRunnerMenuSwitch, hotkeyEnumSetting, customHotkeySetting, primaryMonitorSetting;
+            if(isMenuHotkey){
+                hotkeyEnumSetting = 'menu-hotkey';
+                customHotkeySetting = 'toggle-arcmenu';
+                primaryMonitorSetting = 'hotkey-open-primary-monitor';
+            }
+            else{
+                hotkeyEnumSetting = 'runner-menu-hotkey';
+                customHotkeySetting = 'toggle-runner-menu';
+                primaryMonitorSetting = 'runner-hotkey-open-primary-monitor';
+                let enableRunnerMenuRow = new Adw.ActionRow({
+                    title: _("Enable a standalone Runner menu")
+                });
+                enableRunnerMenuSwitch = new Gtk.Switch({
+                    halign: Gtk.Align.END,
+                    valign: Gtk.Align.CENTER,
+                });
+                enableRunnerMenuSwitch.set_active(this._settings.get_boolean('enable-standlone-runner-menu'));
+                enableRunnerMenuSwitch.connect('notify::active', (widget) => {
+                    this._settings.set_boolean('enable-standlone-runner-menu', widget.get_active());
+                    if(!widget.get_active()){
+                        customHotkeyRow.hide();
+                        hotkeyRow.hide();
+                        primaryMonitorRow.hide();
+                    }
+                    else{
+                        hotkeyRow.show();
+                        if(this._settings.get_boolean('multi-monitor'))
+                            primaryMonitorRow.show();
+                        
+                        if(this._settings.get_enum(hotkeyEnumSetting) === 0)
+                            customHotkeyRow.hide();
+                        else
+                            customHotkeyRow.show();
+                    }
+                });
+                enableRunnerMenuRow.add_suffix(enableRunnerMenuSwitch);
+                hotkeyGroup.add(enableRunnerMenuRow);
+            }
+
+            let primaryMonitorRow = new Adw.ActionRow({
+                title: _("Open on Primary Monitor"),
+            });
+            let primaryMonitorSwitch = new Gtk.Switch({
+                valign: Gtk.Align.CENTER,
+            });
+            primaryMonitorSwitch.set_active(this._settings.get_boolean(primaryMonitorSetting));
+            primaryMonitorSwitch.connect('notify::active', (widget) => {
+                this._settings.set_boolean(primaryMonitorSetting, widget.get_active());
+            });
+            primaryMonitorRow.add_suffix(primaryMonitorSwitch);
+
+            let hotkeyRow = new Adw.ActionRow({
+                title: isMenuHotkey ? _("Menu Hotkey") : _("Runner Hotkey"),
+            });
+
+            let hotkeyCombo = new Gtk.ComboBoxText({
+                valign: Gtk.Align.CENTER,
+            });
+            if(isMenuHotkey)
+                hotkeyCombo.append("NONE", _("None"));
+            hotkeyCombo.append("SUPER_L", _("Left Super Key"));
+            hotkeyCombo.append("CUSTOM", _("Custom Hotkey"));
+            hotkeyRow.add_suffix(hotkeyCombo);
+
+            let customHotkeyRow = new Adw.ActionRow({
+                title: _("Current Hotkey"),
+            });
+
+            let shortcutCell = new Gtk.ShortcutsShortcut({
+                halign: Gtk.Align.START,
+                valign: Gtk.Align.CENTER,
+                hexpand: true,
+            });
+            shortcutCell.accelerator = this._settings.get_strv(customHotkeySetting).toString();
+
+            let modifyHotkeyButton = new Gtk.Button({
+                label: _("Modify Hotkey"),
+                valign: Gtk.Align.CENTER,
+            });
+            customHotkeyRow.add_suffix(shortcutCell);
+            customHotkeyRow.add_suffix(modifyHotkeyButton);
+            modifyHotkeyButton.connect('clicked', () => {
+                let dialog = new CustomHotkeyDialogWindow(this._settings, this);
+                dialog.show();
+                dialog.connect('response', (_w, response) => {
+                    let customHotKeyEnum = isMenuHotkey ? 2 : 1;
+                    if(response === Gtk.ResponseType.APPLY) {
+                        this._settings.set_enum(hotkeyEnumSetting, 0);
+                        this._settings.set_strv(customHotkeySetting, [dialog.resultsText]);
+                        this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
+                        shortcutCell.accelerator = dialog.resultsText;
+                        dialog.destroy();
+                    }
+                    else {
+                        shortcutCell.accelerator = this._settings.get_strv(customHotkeySetting).toString();
+                        this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
+                        dialog.destroy();
+                    }
+                });
+            });
+
+            hotkeyGroup.add(hotkeyRow);
+            hotkeyGroup.add(customHotkeyRow);
+            hotkeyGroup.add(primaryMonitorRow);
+
+            hotkeyGroup.displayRows = () => {
+                if(!isMenuHotkey && !enableRunnerMenuSwitch.get_active())
+                    return;
+
+                customHotkeyRow.hide();
+                primaryMonitorRow.hide();
+                if(!isMenuHotkey)
+                    hotkeyRow.hide();
+                if(hotkeyCombo.get_active_id() === "SUPER_L"){
+                    customHotkeyRow.hide();
+                    if(this._settings.get_boolean('multi-monitor'))
+                        primaryMonitorRow.show();
+                    if(!isMenuHotkey)
+                        hotkeyRow.show();
+                }
+                else if(hotkeyCombo.get_active_id() === "CUSTOM"){
+                    customHotkeyRow.show();
+                    if(this._settings.get_boolean('multi-monitor'))
+                        primaryMonitorRow.show();
+                    if(!isMenuHotkey)
+                        hotkeyRow.show();
+                }
+            }
+
+            hotkeyCombo.connect('changed', (widget) => {
+                hotkeyGroup.displayRows();
+                this._settings.set_enum(hotkeyEnumSetting, widget.get_active());
+            });
+            hotkeyCombo.set_active(this._settings.get_enum(hotkeyEnumSetting));
+
+            if(!isMenuHotkey && !enableRunnerMenuSwitch.get_active()){
+                customHotkeyRow.hide();
+                primaryMonitorRow.hide();
+                hotkeyRow.hide();
+            }
+            return hotkeyGroup;
         }
 });
 
