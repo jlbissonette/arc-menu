@@ -1143,6 +1143,7 @@ var ButtonAppearancePage = GObject.registerClass(
             let menuButtonIconButton = new PW.Button({
                 title: _("Browse Icons") + " ",
                 icon_name: 'icon-preview-symbolic',
+                icon_first: true,
                 valign: Gtk.Align.CENTER,
             });
             menuButtonIconButton.connect('clicked', () => {
@@ -2471,7 +2472,7 @@ var MiscPage = GObject.registerClass(
             });
             let settingsWidthScale = new Gtk.SpinButton({
                 adjustment: new Gtk.Adjustment({
-                    lower: 850, upper: 1800, step_increment: 1, page_increment: 1, page_size: 0,
+                    lower: 500, upper: 1800, step_increment: 1, page_increment: 1, page_size: 0,
                 }),
                 climb_rate: 1,
                 digits: 0,

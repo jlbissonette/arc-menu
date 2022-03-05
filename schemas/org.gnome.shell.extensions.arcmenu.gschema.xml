@@ -136,7 +136,7 @@
       <description>show standalone Runner menu monitor when using hotkey.</description>
     </key>
     <key type="i" name="settings-width">
-      <default>875</default>
+      <default>775</default>
       <summary>ArcMenu Settings Width</summary>
       <description>ArcMenu Settings Width.</description>
     </key>
