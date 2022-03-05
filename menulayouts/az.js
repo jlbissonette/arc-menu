@@ -239,7 +239,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     destroy(){        
         this.arcMenu.box.style = null;
-        this.arcMenu.actor.style = null;
         this.leaveButton.destroy();
         this.backButton.destroy();
         this.allAppsButton.destroy();

@@ -55,8 +55,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         else
             this.activeCategory = _("All Programs");
 
-        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px"; 
+        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px; margin: 0px;";
         this.arcMenu.box.style = "padding: 0px; margin: 0px; border-radius: 0px;";
+
         this.actionsBoxContainer = new St.BoxLayout({
             x_expand: false,
             y_expand: true,
@@ -169,7 +170,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.appShortcuts.push(shortcutMenuItem);
         }
 
-        this.updateStyle();
+        this.updateLocation();
         this.updateWidth();
         this._updatePosition();
         this.loadCategories();
@@ -234,12 +235,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeMenuItem = this.categoryDirectories.values().next().value;
         if(this.arcMenu.isOpen)
             this.activeMenuItem.active = true;
-    }
-
-    updateStyle(){
-        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px;";
-        this.arcMenu.box.style = "padding: 0px; margin: 0px; border-radius: 0px;";
-        this.updateLocation();
     }
 
     loadCategories() {
@@ -343,7 +338,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.ravenPositionChangedID = null;
         }
 
-        this.arcMenu.actor.style = null;
+        this.arcMenu.actor.style = '';
         this.arcMenu.box.style = null;
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;

@@ -210,7 +210,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let software = Utils.findSoftwareManager();
         if(software)
-            pinnedApps.push(_("Software"), 'system-software-install-symbolic', software);
+            pinnedApps.push(_("Software"), '', software);
         else
             pinnedApps.push(_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents");
         

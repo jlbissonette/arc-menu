@@ -1168,15 +1168,14 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
     }
 
     _createLeaveMenu(){
-        this.leaveMenu = new PopupMenu.PopupMenu(this, 0.5 , St.Side.BOTTOM);
+        this.leaveMenu = new PopupMenu.PopupMenu(this, 0.5, St.Side.BOTTOM);
         this.leaveMenu.blockSourceEvents = true;
-        this.leaveMenu.actor.add_style_class_name('popup-menu context-menu');
+        this.leaveMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
         let section = new PopupMenu.PopupMenuSection();
         this.leaveMenu.addMenuItem(section);
 
         let box = new St.BoxLayout({
             vertical: true,
-            style_class: 'arcmenu-menu'
         });
         box._delegate = box;
 

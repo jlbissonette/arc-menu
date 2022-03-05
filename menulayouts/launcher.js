@@ -100,7 +100,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMainBox.add_child(this.applicationsScrollBox);
         this.mainBox.add_child(this.searchBox);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
-        this.arcMenu.box.style = "padding-top: 0px;";
         this.hasPinnedApps = true;
 
         this.updateStyle();

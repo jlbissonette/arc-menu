@@ -194,7 +194,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if(this.tooltip)
             this.tooltip.sourceActor = null;
         this._menuInForcedLocation = false;
-        this.arcMenu.actor.style = null;
+        this.arcMenu.actor.style = '';
         this.arcMenu.removeAll();
         this.section = new PopupMenu.PopupMenuSection();
         this.arcMenu.addMenuItem(this.section);
@@ -230,7 +230,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.MenuLayout.destroy();
         this.MenuLayout = null;
         
-        this.arcMenu.actor.style = null;
+        this.arcMenu.actor.style = '';
 
         this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
     
@@ -625,13 +625,12 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 });
 
 var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
-    constructor(sourceActor, arrowAlignment, arrowSide) {
+    constructor(sourceActor, arrowAlignment, arrowSide, parent) {
         super(sourceActor, arrowAlignment, arrowSide);
         this._settings = sourceActor._settings;
-        this._menuButton = sourceActor;
+        this._menuButton = parent || sourceActor;
         Main.uiGroup.add_child(this.actor);
         this.actor.hide();
-        this._boxPointer.set_offscreen_redirect(Clutter.OffscreenRedirect.ON_IDLE);
         this._menuClosedID = this.connect('menu-closed', () => this._menuButton.setDefaultMenuView());
         this.connect('destroy', () => this._onDestroy());
     }

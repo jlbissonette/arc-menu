@@ -38,7 +38,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
-        this.actionsBox.style = "margin: 0px 5px 0px 0px; spacing: 10px;";
+        this.actionsBox.style = "margin: 0px 0px 0px 0px; spacing: 6px;";
         this.mainBox.add_child(this.actionsBox);
 
         this.extrasButton = new MW.ExtrasButton(this);
@@ -203,14 +203,20 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _createExtrasMenu(){
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_child(this.dummyCursor);
+
         this.extrasMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
+        this.extrasMenu.box.style = "box-shadow: 3px 0px 4px 0 rgba(0, 0, 0, 0.2);";
+        this.extrasMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
+
         this.section = new PopupMenu.PopupMenuSection();
         this.extrasMenu.addMenuItem(this.section);  
-        this.extrasMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
+        
         this.leftPanelPopup = new St.BoxLayout({
             vertical: true,
         });   
         this.leftPanelPopup._delegate = this.leftPanelPopup;
+        this.section.actor.add_child(this.leftPanelPopup);
+
         let headerBox = new St.BoxLayout({
             x_expand: false,
             y_expand: false,
@@ -223,6 +229,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.backButton = new MW.BackMenuItem(this);
         this.backButton.connect("activate", () => this.toggleExtrasMenu());
         headerBox.add_child(this.backButton.actor);
+
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         headerBox.add_child(separator);
 
@@ -231,7 +238,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            reactive:true,
+            reactive: true,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });
         
@@ -255,8 +262,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let themeContext = St.ThemeContext.get_for_stage(global.stage);
         let scaleFactor = themeContext.scale_factor;
         let height = Math.round(this._settings.get_int('menu-height') / scaleFactor) - 1;
-        this.leftPanelPopup.style = `height: ${height}px`;        
-        this.section.actor.add_child(this.leftPanelPopup);
+        this.leftPanelPopup.style = `height: ${height}px;`;
+
         this.subMenuManager.addMenu(this.extrasMenu);
         this.extrasMenu.actor.hide();
         Main.uiGroup.add_child(this.extrasMenu.actor);
@@ -266,17 +273,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 this.extrasButton.sync_hover();
                 this.extrasButton.hovered = this.extrasButton.hover;
             }
-            else{
-                if(this.menuButton.tooltipShowingID){
-                    GLib.source_remove(this.menuButton.tooltipShowingID);
-                    this.menuButton.tooltipShowingID = null;
-                    this.menuButton.tooltipShowing = false;
-                }
-                if(this.extrasButton.tooltip){
-                    this.extrasButton.tooltip.hide();
-                    this.menuButton.tooltipShowing = false;
-                }
-            }
         });
     }
 
@@ -285,32 +281,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         appsScrollBoxAdj.set_value(0);
 
         let themeNode = this.arcMenu.actor.get_theme_node();
-        let backgroundColor = themeNode.get_color('-arrow-background-color');
-        let borderWidth = themeNode.get_length('-arrow-border-width');
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
-        let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
-        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
-        borderRadius = borderRadius / scaleFactor;
-
-        let drawBoxShadow = true;
-        if(backgroundColor?.alpha === 0){
-            backgroundColor = themeNode.get_color('background-color');
-            if(backgroundColor?.alpha === 0){
-                drawBoxShadow = false;
-            }
-        }
-
-        let styleProperties, shadowColor;
-        if(drawBoxShadow){
-            shadowColor = backgroundColor.shade(.35);
-            backgroundColor = Utils.clutterColorToRGBA(backgroundColor);
-            shadowColor = Utils.clutterColorToRGBA(shadowColor);
-            styleProperties = "box-shadow: 3px 0px 2px " + shadowColor + "; background-color: " + backgroundColor + ";";
-        }
-
-        this.extrasMenu.actor.style = "-boxpointer-gap: 0px; -arrow-border-color: transparent; -arrow-border-width: 0px; width: 250px;"
-                                            +"-arrow-base:0px; -arrow-rise: 0px; -arrow-background-color: transparent;"
-                                            +"border-radius: " + borderRadius + "px;" + styleProperties;
 
         this.arcMenu.actor.get_allocation_box();
         let [x, y] = this.arcMenu.actor.get_transformed_position();
@@ -322,11 +292,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y += 1;
 
         if(this.arcMenu._arrowSide === St.Side.LEFT)
-            x = x + (borderRadius * 2) + rise + 1;
-        else
-            x = x + (borderRadius * 2);
+            x += rise + 1;
 
-        this.dummyCursor.set_position(Math.round(x + borderWidth), Math.round(y + borderWidth));
+        this.dummyCursor.set_position(x, y);
         this.extrasMenu.toggle();
         if(this.extrasMenu.isOpen){
             this.activeMenuItem = this.backButton;

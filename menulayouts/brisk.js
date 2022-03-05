@@ -32,7 +32,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 5px 10px;";
+            this.searchBox.style = "margin: 0px 0px 5px 0px;";
             this.mainBox.add_child(this.searchBox.actor);
         }
 
@@ -50,7 +50,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             vertical: true,
-            style_class: 'right-panel-plus70'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -60,7 +59,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus70 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.rightBox.add_child(this.applicationsScrollBox);
@@ -83,7 +82,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'left-panel-small ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });
 
         this.leftBox.add_child(this.categoriesScrollBox);
@@ -97,7 +96,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.END
         });
-        this.actionsBox.style = "padding: 5px 0px 0px 0px;"
         this.leftBox.add_child(this.actionsBox);
         
         //create new section for Power, Lock, Logout, Suspend Buttons
@@ -122,7 +120,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leftBox.add_child(this.sessionBox);
         
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 10px 0px 10px;";
+            this.searchBox.style = "margin: 5px 0px 0px 0px;";
             this.mainBox.add_child(this.searchBox.actor); 
         }
 

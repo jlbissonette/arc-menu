@@ -1,18 +1,17 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const {Gio, GObject, Gtk, Meta, Shell} = imports.gi;
+const {Gio, GObject, Meta, Shell} = imports.gi;
 const Constants = Me.imports.constants;
 const Main = imports.ui.main;
-const Util = imports.misc.util;
 
 const MUTTER_SCHEMA = 'org.gnome.mutter';
 
-var MenuHotKeybinder = class {
+var OverrideOverlayKey = class {
     constructor() {
         this._settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
 
-        this.hotKeyEnabled = false;
+        this.isOverrideOverlayEnabled = false;
         this._ignoreHotKeyChangedEvent = false;
 
         this._mutterSettings = new Gio.Settings({ 'schema': MUTTER_SCHEMA });
@@ -24,10 +23,10 @@ var MenuHotKeybinder = class {
                 this._oldOverlayKey = this._mutterSettings.get_value('overlay-key');
         });
 
-        this._mainStartUpComplete = Main.layoutManager.connect('startup-complete', () => this._setHotKey());
+        this._mainStartUpComplete = Main.layoutManager.connect('startup-complete', () => this._overrideOverlayKey());
     }
 
-    enableHotKey(menuToggler){
+    enable(menuToggler){
         this._menuToggler = menuToggler;
 
         this._ignoreHotKeyChangedEvent = true;
@@ -36,13 +35,15 @@ var MenuHotKeybinder = class {
         Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
             Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
 
-        this.hotKeyEnabled = true;
+        this.isOverrideOverlayEnabled = true;
+
         if(!Main.layoutManager._startingUp)
-            this._setHotKey();
+            this._overrideOverlayKey();
+
         this._ignoreHotKeyChangedEvent = false;
     }
 
-    disableHotKey(){
+    disable(){
         this._ignoreHotKeyChangedEvent = true;
         this._mutterSettings.set_value('overlay-key', this._oldOverlayKey);
         if(this.overlayKeyID){
@@ -55,12 +56,12 @@ var MenuHotKeybinder = class {
         }
         Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW);
 
-        this.hotKeyEnabled = false;
+        this.isOverrideOverlayEnabled = false;
         this._ignoreHotKeyChangedEvent = false;
     }
 
-    _setHotKey(){
-        if(this.hotKeyEnabled){
+    _overrideOverlayKey(){
+        if(this.isOverrideOverlayEnabled){
             Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
             Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
 
@@ -85,7 +86,7 @@ var MenuHotKeybinder = class {
             this._mutterSettings.disconnect(this._overlayKeyChangedID);
             this._overlayKeyChangedID = null;
         }
-        this.disableHotKey();
+        this.disable();
         if (this._mainStartUpComplete) {
             Main.layoutManager.disconnect(this._mainStartUpComplete);
             this._mainStartUpComplete = null;
@@ -93,7 +94,7 @@ var MenuHotKeybinder = class {
     }
 };
 
-var KeybindingManager = class {
+var CustomKeybinding = class {
     constructor(settings) {
         this._settings = settings;
         this._keybindings = new Map();
@@ -127,79 +128,5 @@ var KeybindingManager = class {
 
     destroy() {
         this.unbindAll();
-    }
-};
-
-var HotCornerManager = class {
-    constructor(settings, menuToggler) {
-        this._settings = settings;
-        this._menuToggler = menuToggler;
-        this._hotCornersChangedId = Main.layoutManager.connect('hot-corners-changed', () => this._setCustomHotCorners());
-    }
-
-    _setCustomHotCorners() {
-        let hotCornerAction = this._settings.get_enum('hot-corners');
-
-        if(hotCornerAction === Constants.HotCornerAction.DISABLED)
-            this.disableHotCorners();
-        else if(hotCornerAction === Constants.HotCornerAction.TOGGLE_ARCMENU || hotCornerAction === Constants.HotCornerAction.CUSTOM)
-            this.modifyHotCorners();
-    }
-
-    _getHotCorners() {
-        return Main.layoutManager.hotCorners;
-    }
-
-    restoreDefaultHotCorners() {
-        Main.layoutManager._updateHotCorners();
-    }
-
-    disableHotCorners() {
-        let hotCorners = this._getHotCorners();
-        hotCorners.forEach((corner) => {
-            if(corner){
-                corner._toggleOverview = () => { };
-                corner._pressureBarrier._trigger = () => { };
-            }
-        });
-    }
-
-    modifyHotCorners() {
-        let hotCorners = this._getHotCorners();
-        let hotCornerAction = this._settings.get_enum('hot-corners');
-
-        hotCorners.forEach((corner) => {
-            if (corner) {
-                corner._toggleOverview = () => { };
-                corner._pressureBarrier._trigger = () => { 
-                    corner._pressureBarrier._isTriggered = true;
-                    if(corner._ripples)
-                        corner._ripples.playAnimation(corner._x, corner._y);
-                    else
-                        corner._rippleAnimation();
-                    if(hotCornerAction == Constants.HotCornerAction.TOGGLE_ARCMENU)
-                        this._menuToggler(); 
-                    else if(hotCornerAction == Constants.HotCornerAction.CUSTOM){
-                        let cmd = this._settings.get_string('custom-hot-corner-cmd');
-                        if(cmd == "ArcMenu_ShowAllApplications")
-                            Main.overview._overview._controls._toggleAppsPage();
-                        else if(cmd == "ArcMenu_RunCommand")
-                            Main.openRunDialog();
-                        else
-                            Util.spawnCommandLine(this._settings.get_string('custom-hot-corner-cmd'));
-                    }
-                    corner._pressureBarrier._reset();
-                };
-            }
-        });
-    }
-
-    destroy() {
-        if (this._hotCornersChangedId>0) {
-            Main.layoutManager.disconnect(this._hotCornersChangedId);
-            this._hotCornersChangedId = 0;
-        }
-
-        this.restoreDefaultHotCorners();
     }
 };

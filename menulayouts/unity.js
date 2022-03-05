@@ -82,8 +82,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-left: 0px; padding-right: 0px;";
-
         this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(10, 10, 15, 0.1) ; padding: 5px 5px;"+
                                             "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
         this.themeNodeBorderRadius = "";
@@ -393,7 +391,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._weatherItem.destroy();
         
         this.arcMenu.box.style = null;
-        this.arcMenu.actor.style = null;
 
         super.destroy();
     }

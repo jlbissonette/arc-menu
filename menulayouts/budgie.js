@@ -31,7 +31,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 10px 10px;";
+            this.searchBox.style = "margin: 4px 10px 4px 10px;";
             this.mainBox.add_child(this.searchBox.actor);
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
             separator.style += "margin-bottom: 6px;";
@@ -112,7 +112,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
             separator.style += "margin-top: 6px;";
             this.mainBox.add_child(separator);
-            this.searchBox.style = "margin: 10px 10px 0px 10px;";
+            this.searchBox.style = "margin: 4px 10px 4px 10px;";
             this.mainBox.add_child(this.searchBox.actor); 
         }
         

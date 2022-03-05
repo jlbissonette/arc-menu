@@ -332,19 +332,6 @@ function findSoftwareManager(){
     return softwareManager;
 }
 
-function createXpmImage(color1, color2, color3, color4){
-    let width = 42;
-    let height = 14;
-    let colors = 5;
-    let xpm = [width + " " + height + " " + colors + " " + 1, "1 c " + rgbStringToHex(color1), "2 c " + rgbStringToHex(color2), 
-                "3 c " + rgbStringToHex(color3), "4 c " + rgbStringToHex(color4), "x c #AAAAAA"];
-    xpm.push("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-    for(let i = 0; i < height - 2; i++)
-        xpm.push("x1111111111222222222233333333334444444444x");
-    xpm.push("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-    return xpm;
-}
-
 function areaOfTriangle(p1, p2, p3){
     return Math.abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0);
 }
@@ -381,19 +368,6 @@ function ensureActorVisibleInScrollView(actor) {
     adjustment.set_value(value);  
 }
 
-function getArraysEqual(a, b) {
-    if(a instanceof Array && b instanceof Array){
-        if (a.length !== b.length)
-            return false;
-        for(let i = 0; i < a.length; i++)
-            if (!getArraysEqual(a[i], b[i]))
-                return false;
-        return true;
-    } 
-    else
-        return a === b;
-}
-
 function getDashToPanelPosition(settings, index){
     var positions = null;
     var side;
@@ -420,33 +394,4 @@ function getDashToPanelPosition(settings, index){
         return imports.gi.St.Side.LEFT;
     else
         return imports.gi.St.Side.BOTTOM;
-}
-
-
-function rgbStringToHex(colorString) {
-    let [r, g, b, a_] = parseRgbString(colorString)
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-}
-
-function clutterColorToRGBA(color) {
-    return `rgba(${color.red}, ${color.green}, ${color.blue}, ${color.alpha})`;
-}
-
-function parseRgbString(colorString){
-    if(colorString.includes('rgba'))
-		colorString = colorString.replace('rgba(','');
-	if(colorString.includes('rgb'))
-		colorString = colorString.replace('rgb(','');
-	colorString = colorString.replace(')','');
-    let rgbaColor = colorString.split(",");
-
-    let r = parseFloat(rgbaColor[0]);
-    let g = parseFloat(rgbaColor[1]);
-    let b = parseFloat(rgbaColor[2]);
-	let a;
-	if(rgbaColor[3] != undefined)
-		a = parseFloat(rgbaColor[3]); 
-	else
-        a = 1;
-    return [r, g, b, a];
 }

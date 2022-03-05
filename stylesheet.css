@@ -209,12 +209,13 @@ StScrollView .small-vfade{
 */
 
 /*
-.arcmenu-menu popup-menu-content {
-  padding: ;
-  border-radius: ;
-  border: ;
-  box-shadow: ;
-  background-color: ;
+.arcmenu-menu .popup-menu-content {
+    padding-top: 6px;
+    padding-bottom: 8px;
+    border-radius: ; 
+    border: ; 
+    box-shadow: ;
+    background-color: ; 
 }
 */
 

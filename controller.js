@@ -2,7 +2,7 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Gio, GLib, Gtk, St} = imports.gi;
 const Constants = Me.imports.constants;
-const Helper = Me.imports.helper;
+const Keybinder = Me.imports.keybinder;
 const Main = imports.ui.main;
 const MenuButton = Me.imports.menuButton;
 const {StandaloneRunner} = Me.imports.standaloneRunner;
@@ -24,9 +24,8 @@ var MenuSettingsController = class {
         this._settingsControllers = settingsControllers
 
         if(this.isPrimaryPanel){
-            this._menuHotKeybinder = new Helper.MenuHotKeybinder();
-            this._keybindingManager = new Helper.KeybindingManager(this._settings); 
-            this._hotCornerManager = new Helper.HotCornerManager(this._settings,() => this.toggleMenus());
+            this._overrideOverlayKey = new Keybinder.OverrideOverlayKey();
+            this._customKeybinding = new Keybinder.CustomKeybinding(this._settings); 
         }
         this._applySettings();
     }
@@ -34,7 +33,6 @@ var MenuSettingsController = class {
     // Load and apply the settings from the arc-menu settings
     _applySettings() {
         if(this.isPrimaryPanel){
-            this._updateHotCornerManager();
             this._updateHotKeyBinder();
         }
             
@@ -48,7 +46,6 @@ var MenuSettingsController = class {
     // Bind the callbacks for handling the settings changes to the event signals
     bindSettingsChanges() {
         this.settingsChangeIds = [
-            this._settings.connect('changed::hot-corners', this._updateHotCornerManager.bind(this)),
             this._settings.connect('changed::menu-hotkey', this._updateHotKeyBinder.bind(this)),
             this._settings.connect('changed::runner-menu-hotkey', this._updateHotKeyBinder.bind(this)),
             this._settings.connect('changed::enable-standlone-runner-menu', this._updateHotKeyBinder.bind(this)),
@@ -230,33 +227,15 @@ var MenuSettingsController = class {
         }
     }
 
-    _updateHotCornerManager() {
-        if (this.isPrimaryPanel) {
-            let hotCornerAction = this._settings.get_enum('hot-corners');
-            if (hotCornerAction === Constants.HotCornerAction.DEFAULT) {
-                this._hotCornerManager.restoreDefaultHotCorners();
-            } 
-            else if(hotCornerAction === Constants.HotCornerAction.DISABLED) {
-                this._hotCornerManager.disableHotCorners();
-            }
-            else if(hotCornerAction === Constants.HotCornerAction.TOGGLE_ARCMENU) {
-                this._hotCornerManager.modifyHotCorners();
-            }
-            else if(hotCornerAction === Constants.HotCornerAction.CUSTOM) {
-                this._hotCornerManager.modifyHotCorners();
-            }
-        }
-    }
-
     _updateHotKeyBinder() {
         if (this.isPrimaryPanel) {
             const RunnerHotKey = this._settings.get_enum('runner-menu-hotkey');
             const HotKey = this._settings.get_enum('menu-hotkey');
             const EnableStandaloneRunnerMenu = this._settings.get_boolean('enable-standlone-runner-menu');
 
-            this._keybindingManager.unbind('ToggleArcMenu');
-            this._keybindingManager.unbind('ToggleRunnerMenu');
-            this._menuHotKeybinder.disableHotKey();
+            this._customKeybinding.unbind('ToggleArcMenu');
+            this._customKeybinding.unbind('ToggleRunnerMenu');
+            this._overrideOverlayKey.disable();
             this._menuKeyBindingKey = null;
             this._runnerKeyBindingKey = null;
 
@@ -267,11 +246,11 @@ var MenuSettingsController = class {
                 }
             
                 if(RunnerHotKey === Constants.RunnerHotKey.CUSTOM){
-                    this._keybindingManager.bind('ToggleRunnerMenu', 'toggle-runner-menu', () => this._onHotkey(() => this.toggleStandaloneRunner()));
+                    this._customKeybinding.bind('ToggleRunnerMenu', 'toggle-runner-menu', () => this._onHotkey(() => this.toggleStandaloneRunner()));
                     this._runnerKeyBindingKey = this._settings.get_strv('toggle-runner-menu').toString();
                 }
                 else if(RunnerHotKey === Constants.RunnerHotKey.SUPER_L){
-                    this._menuHotKeybinder.enableHotKey(() => this.toggleStandaloneRunner());
+                    this._overrideOverlayKey.enable(() => this.toggleStandaloneRunner());
                 }
             }
             else if(this.runnerMenu){
@@ -280,12 +259,12 @@ var MenuSettingsController = class {
             }
 
             if(HotKey === Constants.HotKey.CUSTOM){
-                this._keybindingManager.bind('ToggleArcMenu', 'toggle-arcmenu', () => this._onHotkey(() => this.toggleMenus()));
+                this._customKeybinding.bind('ToggleArcMenu', 'toggle-arcmenu', () => this._onHotkey(() => this.toggleMenus()));
                 this._menuKeyBindingKey = this._settings.get_strv('toggle-arcmenu').toString();
             }
             else if(HotKey === Constants.HotKey.SUPER_L){
-                this._menuHotKeybinder.disableHotKey();
-                this._menuHotKeybinder.enableHotKey(() => this.toggleMenus());
+                this._overrideOverlayKey.disable();
+                this._overrideOverlayKey.enable(() => this.toggleMenus());
             }
 
             if(this._menuKeyBindingKey){
@@ -539,9 +518,8 @@ var MenuSettingsController = class {
 
         if(this.isPrimaryPanel){
             this.disconnectKeyRelease();
-            this._menuHotKeybinder.destroy();
-            this._keybindingManager.destroy();
-            this._hotCornerManager.destroy();
+            this._overrideOverlayKey.destroy();
+            this._customKeybinding.destroy();
         }
         this._settings = null;
         this._activitiesButton = null;

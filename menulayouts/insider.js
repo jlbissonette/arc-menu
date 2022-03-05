@@ -38,7 +38,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
-        this.actionsBox.style = "margin: 0px 5px 0px 10px; spacing: 10px;";
+        this.actionsBox.style = "margin: 0px; spacing: 6px;";
         this.mainBox.add_child(this.actionsBox);
 
         this.pinnedAppsButton = new MW.PinnedAppsButton(this);
@@ -125,9 +125,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _createPinnedAppsMenu(){
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_child(this.dummyCursor);
+
         this.pinnedAppsMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
-        this.pinnedAppsMenu.actor.add_style_class_name('popup-menu context-menu');
-        this.pinnedAppsMenu.blockSourceEvents = true;
+        this.pinnedAppsMenu.box.style = "box-shadow: 3px 0px 4px 0 rgba(0, 0, 0, 0.2);";
+        this.pinnedAppsMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
+
         this.section = new PopupMenu.PopupMenuSection();
         this.pinnedAppsMenu.addMenuItem(this.section);  
         
@@ -135,6 +137,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true,
         });   
         this.leftPanelPopup._delegate = this.leftPanelPopup;
+        this.section.actor.add_child(this.leftPanelPopup); 
+
         let headerBox = new St.BoxLayout({
             x_expand: false,
             y_expand: false,
@@ -147,6 +151,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.backButton = new MW.BackMenuItem(this);
         this.backButton.connect("activate", () => this.togglePinnedAppsMenu());
         headerBox.add_child(this.backButton.actor);
+
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         headerBox.add_child(separator);
         headerBox.add_child(this.createLabelRow(_("Pinned Apps")));
@@ -155,9 +160,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class:  this.disableFadeEffect ? '' : 'small-vfade',
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
-            reactive:true
+            reactive: true
         });   
         
         this.leftPanelPopup.add_child(this.pinnedAppsScrollBox);
@@ -183,25 +188,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let themeContext = St.ThemeContext.get_for_stage(global.stage);
         let scaleFactor = themeContext.scale_factor;
         let height = Math.round(this._settings.get_int('menu-height') / scaleFactor) - 1;
-        this.leftPanelPopup.style = `height: ${height}px`;        
-        this.section.actor.add_child(this.leftPanelPopup); 
+        this.leftPanelPopup.style = `height: ${height}px;`;   
+
         this.displayPinnedApps();
         this.subMenuManager.addMenu(this.pinnedAppsMenu);
         this.pinnedAppsMenu.actor.hide();
         Main.uiGroup.add_child(this.pinnedAppsMenu.actor);
         this.pinnedAppsMenu.connect('open-state-changed', (menu, open) => {
-            if(open){
-                if(this.menuButton.tooltipShowingID){
-                    GLib.source_remove(this.menuButton.tooltipShowingID);
-                    this.menuButton.tooltipShowingID = null;
-                    this.menuButton.tooltipShowing = false;
-                }
-                if(this.pinnedAppsButton.tooltip){
-                    this.pinnedAppsButton.tooltip.hide();
-                    this.menuButton.tooltipShowing = false;
-                }
-            }
-            else{
+            if(!open){
                 this.pinnedAppsButton.active = false;
                 this.pinnedAppsButton.sync_hover();
                 this.pinnedAppsButton.hovered = this.pinnedAppsButton.hover;
@@ -213,35 +207,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let appsScrollBoxAdj = this.pinnedAppsScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
 
-        this.pinnedAppsButton.tooltip.hide();
-
         let themeNode = this.arcMenu.actor.get_theme_node();
-        let backgroundColor = themeNode.get_color('-arrow-background-color');
-        let borderWidth = themeNode.get_length('-arrow-border-width');
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
-        let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
-        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
-        borderRadius = borderRadius / scaleFactor;
-
-        let drawBoxShadow = true;
-        if(backgroundColor?.alpha === 0){
-            backgroundColor = themeNode.get_color('background-color');
-            if(backgroundColor?.alpha === 0){
-                drawBoxShadow = false;
-            }
-        }
-
-        let styleProperties, shadowColor;
-        if(drawBoxShadow){
-            shadowColor = backgroundColor.shade(.35);
-            backgroundColor = Utils.clutterColorToRGBA(backgroundColor);
-            shadowColor = Utils.clutterColorToRGBA(shadowColor);
-            styleProperties = "box-shadow: 3px 0px 2px " + shadowColor + "; background-color: " + backgroundColor + ";";
-        }
-
-        this.pinnedAppsMenu.actor.style = "-boxpointer-gap: 0px; -arrow-border-color: transparent; -arrow-border-width: 0px; width: 250px;"
-                                            +"-arrow-base: 0px; -arrow-rise: 0px; -arrow-background-color: transparent;"
-                                            +"border-radius: " + borderRadius + "px;" + styleProperties;
 
         this.arcMenu.actor.get_allocation_box();
         let [x, y] = this.arcMenu.actor.get_transformed_position();
@@ -253,11 +219,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y += 1;
 
         if(this.arcMenu._arrowSide === St.Side.LEFT)
-            x = x + (borderRadius * 2) + rise + 1;
-        else
-            x = x + (borderRadius * 2);
+            x += rise + 1;
 
-        this.dummyCursor.set_position(Math.round(x + borderWidth), Math.round(y + borderWidth));
+        this.dummyCursor.set_position(x, y);
         this.pinnedAppsMenu.toggle();
         if(this.pinnedAppsMenu.isOpen){
             this.activeMenuItem = this.backButton;

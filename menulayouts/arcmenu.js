@@ -33,7 +33,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 0px 5px 0px;";
+            this.searchBox.style = "margin: 4px 2px 5px 2px;";
             this.mainBox.add_child(this.searchBox.actor);
         }
 
@@ -60,7 +60,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             vertical: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'left-panel'
         });
 
         //Applications Box - Contains Favorites, Categories or programs
@@ -68,7 +67,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive:true
         });
@@ -80,7 +79,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true,
             x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.END
+            y_align: Clutter.ActorAlign.END,
         });
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         this.navigateBox.add_child(separator);
@@ -92,13 +91,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add_child(this.viewProgramsButton.actor);
         this.leftBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 5px 0px 2px 0px;";
+            this.searchBox.style = "margin: 5px 2px 0px 2px;";
             this.leftBox.add_child(this.searchBox.actor);
         }
 
         this.rightBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'right-panel'
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -127,7 +125,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });
 
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);
@@ -193,7 +191,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
             y_align: Clutter.ActorAlign.END,
-            style: "spacing: 6px; padding: 0px;"
+            style: "spacing: 6px;"
         });
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();
@@ -202,6 +200,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let shouldShow = powerOptions[i][1];
             if(shouldShow){
                 let powerButton = new MW.PowerButton(this, powerType);
+                powerButton.style = "margin: 0px;"
                 this.actionsBox.add_child(powerButton);
             }
         }

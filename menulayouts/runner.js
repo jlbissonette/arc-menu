@@ -163,7 +163,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     }
 
     destroy(){
-        this.arcMenu.actor.style = null;
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;
         this.arcMenu._boxPointer.setPosition(this.oldSourceActor, this.oldArrowAlignment);

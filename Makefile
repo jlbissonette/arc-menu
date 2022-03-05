@@ -1,7 +1,7 @@
 # Basic Makefile
 
 UUID = arcmenu@arcmenu.com
-BASE_MODULES = COPYING extension.js helper.js metadata.json README.md stylesheet.css utils.js 
+BASE_MODULES = COPYING extension.js keybinder.js metadata.json README.md stylesheet.css utils.js 
 EXTRA_MODULES = constants.js controller.js menuButton.js menuWidgets.js placeDisplay.js prefs.js prefsWidgets.js recentFilesManager.js search.js standaloneRunner.js
 
 MENU_LAYOUTS = arcmenu.js baseMenuLayout.js brisk.js budgie.js chromebook.js elementary.js eleven.js gnomemenu.js insider.js launcher.js mint.js plasma.js raven.js redmond.js runner.js tognee.js unity.js whisker.js windows.js

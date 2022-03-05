@@ -159,13 +159,6 @@ var RunnerHotKey = {
     0: SUPER_L,
 };
 
-var HotCornerAction = {
-    DEFAULT: 0,
-    DISABLED: 1,
-    TOGGLE_ARCMENU: 2,
-    CUSTOM: 3
-}
-
 var SECTIONS = [
     'devices',
     'network',

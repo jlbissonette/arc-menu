@@ -91,6 +91,7 @@ var DragRow = GObject.registerClass({
             let listBox = self.get_widget().get_parent();
             //get widgets parent - the listBoxDragRow
             listBox.dragRow = this;
+            this.listBox = listBox;
 
             let alloc = self.get_widget().get_allocation();
             let dragWidget = self.get_widget().createDragRow(alloc);
@@ -112,17 +113,26 @@ var DragRow = GObject.registerClass({
             return new Gdk.ContentProvider(Arc_Menu_DragRow);    
         });
 
-        dragSource.connect("drag-end", (self, gdkDrag, deleteData)=> {
+        dragSource.connect("drag-end", (self, gdkDrag, deleteData) => {
+            this.listBox.dragWidget = null;
+            this.listBox.drag_unhighlight_row();
             deleteData = true;
         });
 
-        dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time)=> {
+        dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time) => {
+            let listBox = self.get_widget().get_parent();
+            let widget = self.get_widget();
+
+            listBox.startIndex = widget.get_index();
+            listBox.drag_highlight_row(widget);
         });
 
-        dropTarget.connect("drag-leave", (self, gdkDrop, x, y, selection, info, time)=> {
+        dropTarget.connect("drag-leave", (self, gdkDrop, x, y, selection, info, time) => {
+            let listBox = self.get_widget().get_parent();
+            listBox.drag_unhighlight_row();
         });
 
-        dropTarget.connect("drop", (self, gdkDrop, x, y, selection, info, time)=> {
+        dropTarget.connect("drop", (self, gdkDrop, x, y, selection, info, time) => {
             //get listbox parent
             let listBox = this.get_parent();
             let index = this.get_index();
@@ -136,7 +146,7 @@ var DragRow = GObject.registerClass({
             listBox.show();
             listBox.insert(listBox.dragRow, index);
 
-            gdkDrop.read_value_async(Arc_Menu_DragRow, 1, null, ()=>{
+            gdkDrop.read_value_async(Arc_Menu_DragRow, 1, null, () => {
                 gdkDrop.finish(Gdk.DragAction.MOVE);
             });
             this.emit("drag-drop-done");
@@ -412,7 +422,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
 var IconGrid = GObject.registerClass(class Arc_Menu_IconGrid extends Gtk.FlowBox{
     _init() {
         super._init({
-            max_children_per_line: 7,
+            max_children_per_line: 9,
             row_spacing: 10,
             column_spacing: 10,
             vexpand: true,
