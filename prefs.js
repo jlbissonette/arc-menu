@@ -642,7 +642,6 @@ var GeneralPage = GObject.registerClass(
                 this._settings.set_boolean('multi-monitor', widget.get_active());
                 menuHotkeyGroup.displayRows();
                 runnerHotkeyGroup.displayRows();
-                //todo show/hide open on primary monitor
             });
             //--------------------------------------------------------------------------------------
 
@@ -1903,7 +1902,8 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         generalSettingsFrame.add(shortcutsIconTypeRow);
 
         let vertSeparatorRow = new Adw.ActionRow({
-            title: _('Enable Vertical Separator')
+            title: _('Vertical Separator'),
+            subtitle: _("Traditional Layouts")
         });
         let vertSeparatorSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,

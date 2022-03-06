@@ -62,10 +62,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style_class = 'arcmenu-search-top';
             this.mainBox.add_child(this.searchBox.actor);
         }
-        else{
-            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-            this.mainBox.add_child(separator);
-        }
+
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        this.mainBox.add_child(separator);
 
         //Sub Main Box -- stores left and right box
         this.subMainBox = new St.BoxLayout({

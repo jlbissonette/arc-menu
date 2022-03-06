@@ -107,10 +107,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsContainerBox.add_child(this.actionsBox);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.user.x_expand = true;
-        this.user.x_align = Clutter.ActorAlign.FILL;
         this.actionsBox.add_child(this.user.actor);
-
 
         let filesButton = new MW.ShortcutMenuItem(this, _("Files"), "system-file-manager", "org.gnome.Nautilus.desktop", Constants.DisplayType.BUTTON);
         if(filesButton.shouldShow)
