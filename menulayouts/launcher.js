@@ -35,7 +35,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     createLayout(){     
         super.createLayout();
         this.activeResult = null;
-        this.searchProvidersBoxStyle = "padding: 0px 15px; margin-bottom: 10px; height: 50px; background-color: rgba(186, 196, 201, 0.1); border-color:rgba(186, 196, 201, 0.2); border-bottom-width: 1px;"
+        this.arcMenu.box.style = "padding-top: 0px; padding-left: 0px; padding-right: 0px; margin: 0px;";
+        this.searchProvidersBoxStyle = "spacing: 4px; padding: 3px 15px; margin-bottom: 10px; background-color: rgba(186, 196, 201, 0.1); border-color:rgba(186, 196, 201, 0.2); border-bottom-width: 1px;"
         this.themeNodeBorderRadius = "";
         this.searchProvidersBox = new St.BoxLayout({
             x_expand: true,
@@ -56,7 +57,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.name = "ArcSearchEntryRound";
-        this.searchBox.style = "margin: 0px 10px;";
+        this.searchBox.style_class = 'arcmenu-search-bottom';
         this.searchTermsChangedID = this.searchResults.connect('have-results', () => {
             this.searchResultsChangedEvent();
         });
@@ -174,7 +175,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         providerMenuItem.x_expand = false;
         providerMenuItem.remove_child(providerMenuItem._ornamentLabel);
         providerMenuItem.x_align = Clutter.ActorAlign.START;
-        providerMenuItem.style = 'padding: 10px 14px; margin: 0px;';
         providerMenuItem.provider = provider;
         let label = new St.Label({
             text: _(providerName),
@@ -339,14 +339,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     updateStyle(){
-        let themeNode = this.arcMenu.actor.get_theme_node();
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let themeNode = this.arcMenu.box.get_theme_node();
+        let borderRadius = themeNode.get_length('border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         borderRadius = borderRadius / scaleFactor;
         this.themeNodeBorderRadius = "border-radius: " + borderRadius + "px " + borderRadius + "px 0px 0px;";
         this.searchProvidersBox.style = this.searchProvidersBoxStyle + this.themeNodeBorderRadius;
-        this.arcMenu.box.style = "padding-top: 0px;";
     }
 
     _clearActorsFromBox(box){

@@ -31,7 +31,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 4px 10px 4px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.mainBox.add_child(this.searchBox.actor);
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
             separator.style += "margin-bottom: 6px;";
@@ -49,7 +49,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.rightBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'right-panel-plus70',
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL
@@ -62,7 +61,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus70 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
         });  
 
         // Disable horizontal scrolling, hide vertical scrollbar, but allow vertical scrolling.
@@ -88,7 +87,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel-small ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
         this.leftBox.add_child(this.categoriesScrollBox);   
@@ -112,7 +111,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
             separator.style += "margin-top: 6px;";
             this.mainBox.add_child(separator);
-            this.searchBox.style = "margin: 4px 10px 4px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.mainBox.add_child(this.searchBox.actor); 
         }
         

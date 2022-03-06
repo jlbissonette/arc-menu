@@ -32,9 +32,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         this.searchBox.name = "ArcSearchEntryRound";
-        this.searchBox.style = "margin: 0px 10px 5px 10px;";
+        this.searchBox.style_class = 'arcmenu-search-top';
 
-        this.subMainBox= new St.BoxLayout({
+        this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
@@ -44,7 +44,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.subMainBox.add_child(this.searchBox.actor);
         
         this.applicationsBox = new St.BoxLayout({
-            vertical: true
+            vertical: true,
+            style: "margin: 2px 0px;"
         });
 
         this.applicationsScrollBox = this._createScrollBox({
@@ -59,7 +60,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.subMainBox.add_child(this.applicationsScrollBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 10px 0px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.subMainBox.add_child(this.searchBox.actor);
         }
             
@@ -67,7 +68,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             y_expand: true,
             vertical: true,
-            style_class: 'right-panel margin-box'
         });
 
         this.placesShortcuts = false;
@@ -90,7 +90,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
         });     
 
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);
@@ -156,7 +156,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
             y_align: Clutter.ActorAlign.END,
-            style: "spacing: 6px;"
+            style: "spacing: 6px; margin-bottom: 2px;"
         });	
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();

@@ -658,10 +658,9 @@ var TweaksPage = GObject.registerClass({
     }
     _loadRedmondMenuTweaks(){
         let redmondMenuTweaksFrame = new Adw.PreferencesGroup();
-        redmondMenuTweaksFrame.add(this._createSearchBarLocationRow());
-
-        redmondMenuTweaksFrame.add(this._createFlipHorizontalRow());
         redmondMenuTweaksFrame.add(this._createAvatarShapeRow());
+        redmondMenuTweaksFrame.add(this._createSearchBarLocationRow());
+        redmondMenuTweaksFrame.add(this._createFlipHorizontalRow());
         redmondMenuTweaksFrame.add(this._disableAvatarRow());
 
         let placesFrame = new Adw.PreferencesGroup();
@@ -766,9 +765,9 @@ var TweaksPage = GObject.registerClass({
         arcMenuTweaksFrame.add(defaulViewRow);
 
         let searchBarBottomDefault = true;
+        arcMenuTweaksFrame.add(this._createAvatarShapeRow());
         arcMenuTweaksFrame.add(this._createSearchBarLocationRow(searchBarBottomDefault));
         arcMenuTweaksFrame.add(this._createFlipHorizontalRow());
-        arcMenuTweaksFrame.add(this._createAvatarShapeRow());
         arcMenuTweaksFrame.add(this._disableAvatarRow());
         this.mainBox.append(arcMenuTweaksFrame);
 

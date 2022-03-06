@@ -64,7 +64,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 10px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.appBox.add_child(this.searchBox.actor);
         }
         this.appBox.add_child(this.applicationsScrollBox);
@@ -82,7 +82,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add_child(this.backButton.actor);
         this.appBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 10px 0px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.appBox.add_child(this.searchBox.actor);
         }
         

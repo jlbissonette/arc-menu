@@ -75,6 +75,14 @@
     padding: 7px 12px;
 }
 
+.arcmenu-search-top{
+    margin: 3px 10px 5px 10px;
+}
+
+.arcmenu-search-bottom{
+    margin: 5px 10px 3px 10px;
+}
+
 .symbolic-icons{
     -st-icon-style: symbolic;
 }
@@ -89,17 +97,11 @@
 
 #arcmenu-launcher-button{
     max-width: 90px;
-    border-radius: 0px;
-    padding: 5px;
-    spacing: 0px;
+    padding: 10px 14px;
     margin: 0px;
-    border-color: transparent;
-    border-bottom-width: 3px;
 }
 #arcmenu-launcher-button.active-item, #arcmenu-launcher-button:active{
-    background-color: rgba(245, 245, 245, .05);
-    border-color: rgb(61, 174, 235);
-    border-bottom-width: 3px;
+    background-color: rgba(245, 245, 245, .08);
 }
 
 #arcmenu-plasma-button-top{

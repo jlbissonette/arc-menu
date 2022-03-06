@@ -42,7 +42,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             vertical: true,
-            style_class: 'right-panel-plus45'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -51,7 +50,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus45 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
         }); 
         
         this.applicationsScrollBox.add_actor(this.applicationsBox);
@@ -63,7 +62,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'left-panel'
         });
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -76,7 +74,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
 

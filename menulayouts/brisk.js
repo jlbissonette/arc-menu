@@ -32,7 +32,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 0px 5px 0px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.mainBox.add_child(this.searchBox.actor);
         }
 
@@ -120,7 +120,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leftBox.add_child(this.sessionBox);
         
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 5px 0px 0px 0px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.mainBox.add_child(this.searchBox.actor); 
         }
 

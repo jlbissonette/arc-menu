@@ -32,7 +32,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.searchBox.name = "ArcSearchEntryRound";
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 10px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.mainBox.add_child(this.searchBox.actor);
         }
 
@@ -62,7 +62,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.subMainBox.add_child(this.applicationsScrollBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 10px 0px 10px;"
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.mainBox.add_child(this.searchBox.actor);
         }
 

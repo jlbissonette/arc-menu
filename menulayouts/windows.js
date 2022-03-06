@@ -106,7 +106,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
         });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);

@@ -59,7 +59,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 10px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.mainBox.add_child(this.searchBox.actor);
         }
         else{
@@ -81,7 +81,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'right-panel-plus45'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -90,7 +89,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus45 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
         });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
@@ -101,7 +100,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'left-panel'
         });
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -114,7 +112,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
 
@@ -122,7 +120,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 10px 0px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.mainBox.add_child(this.searchBox.actor);
         }
 

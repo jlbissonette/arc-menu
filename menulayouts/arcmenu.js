@@ -33,7 +33,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 4px 2px 5px 2px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.mainBox.add_child(this.searchBox.actor);
         }
 
@@ -91,7 +91,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add_child(this.viewProgramsButton.actor);
         this.leftBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 5px 2px 0px 2px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.leftBox.add_child(this.searchBox.actor);
         }
 
@@ -191,7 +191,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
             y_align: Clutter.ActorAlign.END,
-            style: "spacing: 6px;"
+            style: "spacing: 6px; margin-bottom: 3px;"
         });
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();

@@ -46,7 +46,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
         
-        this.actionsScrollBox.style = "padding: 21px 0px; width: 62px; margin: 0px 10px 10px 0px; background-color:rgba(10, 10, 15, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 8px;";
+        this.actionsScrollBox.style = "padding: 10px 0px; width: 62px; margin: 3px 8px 0px 0px; background-color:rgba(10, 10, 15, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 8px;";
         this.actionsBox.style = "spacing: 10px;";
 
         this.mainBox.add_child(this.actionsScrollBox);
@@ -59,11 +59,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.rightMenuBox);
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 0px 10px 0px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.rightMenuBox.add_child(this.searchBox.actor);
         }
         else
-            this.rightMenuBox.style = "margin-top: 10px;";
+            this.rightMenuBox.style = "margin-top: 3px;";
         
         //Sub Main Box -- stores left and right box
         this.subMainBox = new St.BoxLayout({
@@ -79,7 +79,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'right-panel-plus45'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -89,7 +88,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus45 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
         });   
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
@@ -100,7 +99,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'left-panel'
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -113,7 +111,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
 
@@ -123,7 +121,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesScrollBox.add_actor( this.categoriesBox);  
         this.categoriesScrollBox.clip_to_allocation = true;
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 0px 10px 0px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.rightMenuBox.add_child(this.searchBox.actor);
         }
 
