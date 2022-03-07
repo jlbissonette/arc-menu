@@ -56,7 +56,6 @@ When reporting a bug, please provide as much information as you can about the is
 Additional credits:
 * The 'ArcMenu' layout design is insipired by the Zorin OS menu extension.
 * ArcMenu utilizes various code from GNOME Shell and the GNOME Shell extensions package.
-* Borrowed code from Dash-to-Dock's extension 'location.js' file to implement a trash shortcut in ArcMenu.
 
 -----
 

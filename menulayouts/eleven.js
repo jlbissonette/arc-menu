@@ -6,6 +6,7 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
 const MW = Me.imports.menuWidgets;
+const PlaceDisplay = Me.imports.placeDisplay;
 const PopupMenu = imports.ui.popupMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
@@ -139,7 +140,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         let path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
         if (path !== null){
-            let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Downloads"));
+            let placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _("Downloads"));
             let isContainedInCategory = false;
             let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
             this.quickLinksBox.add_child(placeMenuItem.actor);
@@ -147,7 +148,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
         if (path !== null){
-            let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
+            let placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _("Documents"));
             let isContainedInCategory = false;
             let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
             this.quickLinksBox.add_child(placeMenuItem.actor);

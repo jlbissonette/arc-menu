@@ -272,7 +272,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'bookmarks' && places.length > 0){
             this._sections[id].add_child(this.createLabelRow(_("Bookmarks")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
+                let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_child(item); 
             } 
         }
@@ -280,7 +280,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'devices' && places.length > 0){
             this._sections[id].add_child(this.createLabelRow(_("Devices")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
+                let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_child(item); 
             }
         }
@@ -288,7 +288,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'network' && places.length > 0){
             this._sections[id].add_child(this.createLabelRow(_("Network")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
+                let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_child(item); 
             }
         }

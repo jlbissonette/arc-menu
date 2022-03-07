@@ -323,7 +323,6 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             let extraLinks = this._settings.get_default_value('directory-shortcuts-list').deep_unpack();
             extraLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
             extraLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
-            extraLinks.push([_("Trash"), "user-trash-symbolic", "ArcMenu_Trash"]);
             extraLinks.push([_("Recent"), "document-open-recent-symbolic", "ArcMenu_Recent"]);
             this._loadExtraCategories(extraLinks);
         }
@@ -340,7 +339,6 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             let extraLinks = this._settings.get_default_value('directory-shortcuts-list').deep_unpack();
             extraLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
             extraLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
-            extraLinks.push([_("Trash"), "user-trash-symbolic", "ArcMenu_Trash"]);
             extraLinks.push([_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock"]);
             extraLinks.push([_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut"]);
             extraLinks.push([_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);

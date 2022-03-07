@@ -449,7 +449,7 @@ var BaseLayout = class {
 
         if(command === "ArcMenu_Home"){
             let homePath = GLib.get_home_dir();
-            placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(homePath), _("Home"));
+            placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(homePath), _("Home"));
             placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
         }
         else if(command === "ArcMenu_Computer"){
@@ -467,9 +467,6 @@ var BaseLayout = class {
             else
                 placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', 'ArcMenu_unfound.desktop', displayType, isContainedInCategory);
         }
-        else if(command === "ArcMenu_Trash"){
-            placeMenuItem = new MW.ShortcutMenuItem(this, _("Trash"), '', "ArcMenu_Trash", displayType, isContainedInCategory);
-        }
         else if(command === Constants.ArcMenuSettingsCommand || command === "ArcMenu_Suspend" || command === "ArcMenu_LogOut" || command === "ArcMenu_PowerOff"
             || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || command === "ArcMenu_HybridSleep" || command === "ArcMenu_Hibernate" || app){
 
@@ -477,7 +474,7 @@ var BaseLayout = class {
         }
         else if(command === "ArcMenu_Recent"){
             let uri = "recent:///";
-            placeInfo = new MW.PlaceInfo(Gio.File.new_for_uri(uri), _(menuItemArray[0]));
+            placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_uri(uri), _(menuItemArray[0]));
             placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
         }
         else if(command.startsWith("ArcMenu_")){
@@ -496,13 +493,13 @@ var BaseLayout = class {
 
             path = GLib.get_user_special_dir(path);
             if (path !== null){
-                placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]));
+                placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _(menuItemArray[0]));
                 placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
             }
         }
         else{
             let path = command;
-            placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _(menuItemArray[0]), (menuItemArray[1] !== "ArcMenu_Folder") ? Gio.icon_new_for_string(menuItemArray[1]) : null);
+            placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path));
             placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
         }
         return placeMenuItem;
@@ -604,7 +601,7 @@ var BaseLayout = class {
         if(this._settings.get_boolean('show-bookmarks')){
             if(id === 'bookmarks' && places.length > 0){
                 for (let i = 0; i < places.length; i++){
-                    let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                    let item = new MW.PlaceMenuItem(this, places[i]);
                     this._sections[id].add_child(item); 
                 } 
                 //create a separator if bookmark and software shortcut are both shown
@@ -616,7 +613,7 @@ var BaseLayout = class {
         if(this._settings.get_boolean('show-external-devices')){
             if(id === 'devices'){
                 for (let i = 0; i < places.length; i++){
-                    let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                    let item = new MW.PlaceMenuItem(this, places[i]);
                     this._sections[id].add_child(item); 
                 }
                 if((this.externalDevicesShorctus && !this.networkDevicesShorctus) && (this.bookmarksShorctus || this.softwareShortcuts))
@@ -624,7 +621,7 @@ var BaseLayout = class {
             }
             if(id === 'network'){
                 for (let i = 0; i < places.length; i++){
-                    let item = new PlaceDisplay.PlaceMenuItem(this, places[i]);
+                    let item = new MW.PlaceMenuItem(this, places[i]);
                     this._sections[id].add_child(item); 
                 }
                 if(this.networkDevicesShorctus && (this.bookmarksShorctus || this.softwareShortcuts))

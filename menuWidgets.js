@@ -149,30 +149,13 @@ var ApplicationContextItems = GObject.registerClass({
 
                 for (let i = 0; i < actions.length; i++) {
                     let action = actions[i];
-                    let item;
-                    if(action === "empty-trash-inactive"){
-                        item = new PopupMenu.PopupMenuItem(this.appInfo.get_action_name(action), {reactive:false, can_focus:false});
-                        item.actor.add_style_class_name('inactive');
-                        this._appendSeparator();
-                        this.add_child(item);
-                    }
-                    else if(action === "empty-trash"){
-                        this._appendSeparator();
-                        item = this._appendMenuItem(this.appInfo.get_action_name(action));
-                    }
-                    else{
-                        item = this._appendMenuItem(this.appInfo.get_action_name(action));
-                    }
+                    let item = this._appendMenuItem(this.appInfo.get_action_name(action));
 
                     item.connect('activate', (emitter, event) => {
                         this.closeMenus();
                         this._app.launch_action(action, event.get_time(), -1);
                     });
                 }
-
-                //If Trash Can, we don't want to add the rest of the entries below.
-                if(this.appInfo.get_string('Id') === "ArcMenu_Trash")
-                    return false;
 
                 let desktopIcons = Main.extensionManager.lookup("desktop-icons@csoriano");
                 let desktopIconsNG = Main.extensionManager.lookup("ding@rastersoft.com");
@@ -1628,11 +1611,6 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
             let softwareManager = Utils.findSoftwareManager();
             this._command = softwareManager ? softwareManager : 'ArcMenu_unfound.desktop';
         }
-        else if(this._command === "ArcMenu_Trash"){
-            this.trash = new Me.imports.placeDisplay.Trash(this);
-            this._command = "ArcMenu_Trash";
-            this._app = this.trash.getApp();
-        }
         if(!this._app)
             this._app = Shell.AppSystem.get_default().lookup_app(this._command);
 
@@ -2522,62 +2500,6 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
     }
 });
 
-// Place Info class
-var PlaceInfo = class Arc_Menu_PlaceInfo {
-    constructor(file, name, icon) {
-        this.file = file;
-        this.name = name ? name : this._getFileName();
-        this.icon = icon ? icon : null;
-        this.gicon = icon ? null : this.getIcon();
-    }
-
-    launch(timestamp) {
-        let context = global.create_app_launch_context(timestamp, -1);
-        new Promise((resolve, reject) => {
-            Gio.AppInfo.launch_default_for_uri_async(this.file.get_uri(), context, null, (o, res) => {
-                try {
-                    Gio.AppInfo.launch_default_for_uri_finish(res);
-                    resolve();
-                } catch (e) {
-                    Main.notifyError(_('Failed to open “%s”').format(this._getFileName()), e.message);
-                    reject(e);
-                }
-            });
-        });
-    }
-
-    getIcon() {
-        try {
-            let info = this.file.query_info('standard::symbolic-icon', 0, null);
-            return info.get_symbolic_icon();
-
-        } catch (e) {
-            if (e instanceof Gio.IOErrorEnum) {
-                if (!this.file.is_native()) {
-                    return new Gio.ThemedIcon({ name: 'folder-remote-symbolic' });
-                } else {
-                    return new Gio.ThemedIcon({ name: 'folder-symbolic' });
-                }
-            }
-        }
-    }
-
-    _getFileName() {
-        try {
-            let info = this.file.query_info('standard::display-name', 0, null);
-            return info.get_display_name();
-        } catch (e) {
-            if (e instanceof Gio.IOErrorEnum) {
-                return this.file.get_basename();
-            }
-        }
-    }
-
-    destroy(){
-    }
-};
-Signals.addSignalMethods(PlaceInfo.prototype);
-
 // Menu Place Shortcut item class
 var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, info, displayType, isContainedInCategory) {
@@ -2589,17 +2511,19 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         this.isContainedInCategory = isContainedInCategory;
         this.hasContextMenu = true;
 
-        this.label = new St.Label({
-            text: _(info.name),
-            y_expand: true,
-            y_align: Clutter.ActorAlign.CENTER
+        this.label = new St.Label({ 
+            text: _(info.name), 
+            x_expand: true,
+            y_expand: false,
+            x_align: Clutter.ActorAlign.FILL,
+            y_align: Clutter.ActorAlign.CENTER 
         });
 
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
 
         this._updateIcon();
-
+        
         if(this._displayType === Constants.DisplayType.BUTTON){
             this.tooltipLocation = Constants.TooltipLocation.TOP_CENTERED;
             this.style_class = 'popup-menu-item arcmenu-button';
@@ -2611,31 +2535,18 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
             this.add_child(this.label);
         }
 
-        this._changedId = this._info.connect('changed', this._propertiesChanged.bind(this));
-    }
-
-    createIcon(){
-        let iconSizeEnum;
-        if(this.isContainedInCategory)
-            iconSizeEnum = this._settings.get_enum('menu-item-icon-size');
-        else
-            iconSizeEnum = this._settings.get_enum('quicklinks-item-icon-size');
-
-        const LayoutProps = this._menuLayout.layoutProperties;
-        let defaultIconSize = this.isContainedInCategory ? LayoutProps.DefaultApplicationIconSize : LayoutProps.DefaultQuickLinksIconSize;
-        let iconSize = Utils.getIconSize(iconSizeEnum, defaultIconSize);
-
-        if(this._displayType === Constants.DisplayType.BUTTON){
-            let defaultIconSize = LayoutProps.DefaultButtonsIconSize;
-            const IconSizeEnum = this._settings.get_enum('button-item-icon-size');
-            iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+        if (info.isRemovable()) {
+            this.style = "padding-right: 15px;";
+            this._ejectButton = new MW.ArcMenuButtonItem(this._menuLayout, null, 'media-eject-symbolic');
+            this._ejectButton.add_style_class_name("arcmenu-small-button")
+            this._ejectButton.setIconSize(14);
+            this._ejectButton.x_align = Clutter.ActorAlign.END;
+            this._ejectButton.x_expand = true;
+            this._ejectButton.connect('activate', info.eject.bind(info));
+            this.add_child(this._ejectButton);
         }
 
-        return new St.Icon({
-            gicon:  this._info.gicon ?  this._info.gicon :  this._info.icon,
-            icon_size: iconSize,
-            style_class: this._displayType === Constants.DisplayType.BUTTON ? '' : 'popup-menu-icon',
-        });
+        this._changedId = info.connect('changed', this._propertiesChanged.bind(this));
     }
 
     _onDestroy() {
@@ -2666,6 +2577,30 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         this.contextMenu.toggle();
     }
 
+    createIcon(){
+        let iconSizeEnum;
+        if(this.isContainedInCategory)
+            iconSizeEnum = this._settings.get_enum('menu-item-icon-size');
+        else
+            iconSizeEnum = this._settings.get_enum('quicklinks-item-icon-size');
+
+        const LayoutProps = this._menuLayout.layoutProperties;
+        let defaultIconSize = this.isContainedInCategory ? LayoutProps.DefaultApplicationIconSize : LayoutProps.DefaultQuickLinksIconSize;
+        let iconSize = Utils.getIconSize(iconSizeEnum, defaultIconSize);
+
+        if(this._displayType === Constants.DisplayType.BUTTON){
+            let defaultIconSize = LayoutProps.DefaultButtonsIconSize;
+            const IconSizeEnum = this._settings.get_enum('button-item-icon-size');
+            iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+        }
+
+        return new St.Icon({
+            gicon: this._info.icon,
+            icon_size: iconSize,
+            style_class: this._displayType === Constants.DisplayType.BUTTON ? '' : 'popup-menu-icon',
+        });
+    }
+
     activate(event) {
         this._info.launch(event.get_time());
         this._menuLayout.arcMenu.toggle();
@@ -2674,9 +2609,9 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
 
     _propertiesChanged(info) {
         this._info = info;
-        this.createIcon();
+        this._iconBin.set_child(this.createIcon());
         if(this.label)
-            this.label.text = info.name;
+            this.label.text = _(info.name);
     }
 });
 
