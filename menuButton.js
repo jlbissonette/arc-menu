@@ -213,13 +213,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.setMenuPositionAlignment();
         this.forceMenuLocation();
         this.updateHeight();
-
-        if(this.arcMenu.isOpen){
-            if(this.MenuLayout.activeMenuItem)
-                this.MenuLayout.activeMenuItem.active = true;
-            else
-                this.mainBox.grab_key_focus();
-        }
     }
 
     reloadMenuLayout(){
@@ -237,13 +230,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.setMenuPositionAlignment();
         this.forceMenuLocation();
         this.updateHeight();
-
-        if(this.arcMenu.isOpen){
-            if(this.MenuLayout.activeMenuItem)
-                this.MenuLayout.activeMenuItem.active = true;
-            else
-                this.mainBox.grab_key_focus();
-        }
     }
 
     setMenuPositionAlignment(){

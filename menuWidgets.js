@@ -403,8 +403,6 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
     }
 
     open(animate){
-        if(this._menuLayout.searchResults && this.sourceActor !== this._menuLayout.searchResults.getTopResult())
-            this._menuLayout.searchResults.getTopResult()?.remove_style_pseudo_class('active');
         if(this._menuButton.tooltipShowingID){
             GLib.source_remove(this._menuButton.tooltipShowingID);
             this._menuButton.tooltipShowingID = null;
@@ -420,12 +418,6 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
 
     close(animate){
         super.close(animate);
-        if(this.sourceActor instanceof ArcMenuButtonItem)
-            this.sourceActor.sync_hover();
-        else{       
-            this.sourceActor.active = false;
-        }
-        
         this.sourceActor.sync_hover();
         this.sourceActor.hovered = this.sourceActor.hover;
     }
@@ -442,9 +434,6 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
 var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     Properties: {
         'active': GObject.ParamSpec.boolean('active', 'active', 'active',
-                                            GObject.ParamFlags.READWRITE,
-                                            false),
-        'hovered': GObject.ParamSpec.boolean('hovered', 'hovered', 'hovered',
                                             GObject.ParamFlags.READWRITE,
                                             false),
         'sensitive': GObject.ParamSpec.boolean('sensitive', 'sensitive', 'sensitive',
@@ -496,11 +485,10 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         if (params.style_class)
             this.add_style_class_name(params.style_class);
 
-        if (params.reactive && params.hover)
-            this.bind_property('hover', this, 'hovered', GObject.BindingFlags.SYNC_CREATE);
-
         if(params.hover)
             this.actor.connect('notify::hover', this._onHover.bind(this));
+        if (params.reactive && params.hover)
+            this.bind_property('hover', this, 'active', GObject.BindingFlags.SYNC_CREATE);
 
         this.arcMenuOpenStateChangeID = this.arcMenu.connect('open-state-changed', (menu, open) =>{
             if(!open){
@@ -536,37 +524,32 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     set active(active) {
+        if(this._menuLayout.ignoreHover){
+            this.hover = false;
+            return;
+        }
         if(this.isDestroyed)
             return;
         let activeChanged = active != this.active;
         if(activeChanged){
             this._active = active;
             if(active){
+                const topSearchResult = this._menuLayout.searchResults?.getTopResult();
+                if(topSearchResult){
+                    topSearchResult.remove_style_pseudo_class('active');
+                }
                 if(this._menuLayout.activeMenuItem !== this)
                     this._menuLayout.activeMenuItem = this;
-                this.remove_style_class_name('selected');
-                this.add_style_pseudo_class('active');
+
+                this.add_style_class_name('selected');
                 if(this.can_focus)
                     this.grab_key_focus();
             }
             else{
-                this.remove_style_pseudo_class('active');
                 this.remove_style_class_name('selected');
+                this.remove_style_pseudo_class('active');
             }
             this.notify('active');
-        }
-    }
-
-    set hovered(hover) {
-        let hoverChanged = hover != this.hovered;
-        if(hoverChanged){
-            let isActiveStyle = this.get_style_pseudo_class()?.includes('active')
-            if(hover && !isActiveStyle){
-                this.add_style_class_name('selected');
-            }
-            else{
-                this.remove_style_class_name('selected');
-            }
         }
     }
 
@@ -591,19 +574,28 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         }
     }
 
+    vfunc_motion_event(event){
+        if(this._menuLayout.ignoreHover){
+            this._menuLayout.ignoreHover = false;
+            this.hover = true;
+        }
+        return Clutter.EVENT_PROPAGATE;
+    }
+
     vfunc_button_press_event(){
         let event = Clutter.get_current_event();
         this.pressed = false;
         if(event.get_button() == 1){
             this._menuLayout._blockActivateEvent = false;
             this.pressed = true;
+            this.add_style_pseudo_class('active');
             if(this.hasContextMenu)
                 this.contextMenuTimeOut();
         }
         else if(event.get_button() == 3){
             this.pressed = true;
+            this.add_style_pseudo_class('active');
         }
-        this.active = true;
         return Clutter.EVENT_PROPAGATE;
     }
 
@@ -611,18 +603,18 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         let event = Clutter.get_current_event();
         if(event.get_button() == 1 && !this._menuLayout._blockActivateEvent && this.pressed){
             this.pressed = false;
+            this.active = false;
+            this._menuLayout.mainBox.grab_key_focus();
             this.activate(event);
-            if(!(this instanceof CategoryMenuItem) && !(this instanceof ArcMenuButtonItem))
-                this.active = false;
+            this.remove_style_pseudo_class('active');
             return Clutter.EVENT_STOP;
         }
         if(event.get_button() == 3 && this.pressed){
             this.pressed = false;
             if(this.hasContextMenu)
                 this.popupContextMenu();
-            else if(!(this instanceof CategoryMenuItem && !(this instanceof ArcMenuButtonItem))){
-                this.active = false;
-                this.hovered = true;
+            else{
+                this.remove_style_pseudo_class('active');
             }
             return Clutter.EVENT_STOP;
         }
@@ -668,6 +660,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
 
         let symbol = keyEvent.keyval;
         if ( symbol == Clutter.KEY_Return || symbol == Clutter.KEY_KP_Enter) {
+            this.active = false;
+            this._menuLayout.mainBox.grab_key_focus();
             this.activate(Clutter.get_current_event());
             return Clutter.EVENT_STOP;
         }
@@ -677,6 +671,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     vfunc_touch_event(event){
         if(event.type == Clutter.EventType.TOUCH_END && !this._menuLayout._blockActivateEvent && this.pressed){
             this.remove_style_pseudo_class('active');
+            this.active = false;
+            this._menuLayout.mainBox.grab_key_focus();
             this.activate(Clutter.get_current_event());
             this.pressed = false;
             return Clutter.EVENT_STOP;
@@ -2150,7 +2146,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
         this._settings = this._menuLayout._settings;
         this.searchType = this._menuLayout.layoutProperties.SearchDisplayType;
         this._displayType = displayType;
-        this.hasContextMenu = true;
+        this.hasContextMenu = this._app ? true : false;
         this.isSearchResult = this.metaInfo ? true : false;
         this.isContainedInCategory = isContainedInCategory;
 
@@ -2219,6 +2215,15 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
 
         this.hoverID = this.connect("notify::hover", () => this.removeIndicator());
         this.keyFocusInID = this.connect("key-focus-in", () => this.removeIndicator());
+    }
+
+    set parentFolderPath(value){
+        this.hasContextMenu = value;
+        this._parentFolderPath = value;
+    }
+
+    get parentFolderPath(){
+        return this._parentFolderPath;
     }
 
     createIcon(){
@@ -2509,7 +2514,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         this._info = info;
         this._settings = menuLayout._settings;
         this.isContainedInCategory = isContainedInCategory;
-        this.hasContextMenu = true;
+        this.hasContextMenu = false;
 
         this.label = new St.Label({ 
             text: _(info.name), 
@@ -2549,6 +2554,15 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         this._changedId = info.connect('changed', this._propertiesChanged.bind(this));
     }
 
+    set parentFolderPath(value){
+        this.hasContextMenu = value;
+        this._parentFolderPath = value;
+    }
+
+    get parentFolderPath(){
+        return this._parentFolderPath;
+    }
+
     _onDestroy() {
         if (this._changedId) {
             this._info.disconnect(this._changedId);
@@ -2562,13 +2576,10 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
     popupContextMenu(){
         if(this.tooltip)
             this.tooltip.hide();
-        if(!this._app && !this.parentFolderPath)
-            return;
 
         if(this.contextMenu === undefined){
             this.contextMenu = new ApplicationContextMenu(this.actor, this._app, this._menuLayout);
-            if(this.parentFolderPath)
-                this.contextMenu.parentFolderPath = this.parentFolderPath;
+            this.contextMenu.parentFolderPath = this.parentFolderPath;
             if(this._displayType === Constants.DisplayType.GRID)
                 this.contextMenu.centerBoxPointerPosition();
         }
@@ -2708,8 +2719,8 @@ class Arc_Menu_SearchBox extends St.Entry {
         if(!this.isEmpty()){
             if(!this.hasKeyFocus())
                 this.grab_key_focus();
-            if (!this.searchResults.getTopResult()?.has_style_pseudo_class("active"))
-                this.searchResults.getTopResult()?.add_style_pseudo_class("active")
+            if (!this.searchResults.getTopResult()?.has_style_pseudo_class('active'))
+                this.searchResults.getTopResult()?.add_style_pseudo_class('active')
             this.add_style_pseudo_class('focus');
             this.set_secondary_icon(this._clearIcon);
         }
@@ -2727,10 +2738,8 @@ class Arc_Menu_SearchBox extends St.Entry {
         let symbol = event.get_key_symbol();
         if (symbol == Clutter.KEY_Return ||
             symbol == Clutter.KEY_KP_Enter) {
-            if (!this.isEmpty()) {
-                if (this.searchResults.getTopResult()) {
-                    this.searchResults.getTopResult().activate(event);
-                }
+            if (!this.isEmpty() && this.searchResults.getTopResult()) {
+                this.searchResults.getTopResult().activate(event);
             }
             return Clutter.EVENT_STOP;
         }

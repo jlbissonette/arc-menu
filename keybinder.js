@@ -63,10 +63,10 @@ var OverrideOverlayKey = class {
     _overrideOverlayKey(){
         if(this.isOverrideOverlayEnabled){
             Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
-            Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
+                Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
 
             //Find signal ID in Main.js that connects 'overlay-key' to global.display and toggles Main.overview
-            let [bool,signal_id, detail] = GObject.signal_parse_name('overlay-key', global.display, true);
+            let [bool, signal_id, detail] = GObject.signal_parse_name('overlay-key', global.display, true);
             this.defaultOverlayKeyID = GObject.signal_handler_find(global.display, GObject.SignalMatchType.ID, signal_id, detail, null, null, null); 
 
             //If signal ID found, block it and connect new 'overlay-key' to toggle ArcMenu.

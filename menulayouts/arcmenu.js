@@ -365,10 +365,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     displayCategoryAppList(appList, category){
-        super.displayCategoryAppList(appList, category);
         this.extraCategoriesLinksBox.hide();
-        this.backButton.actor.show();
         this.viewProgramsButton.actor.hide();
+        this.backButton.actor.show();
+        super.displayCategoryAppList(appList, category);
     }
 
     displayFrequentApps(){

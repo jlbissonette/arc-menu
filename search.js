@@ -760,10 +760,10 @@ var SearchResults = GObject.registerClass({
     _setSelected(result, selected) {
         if(!result)
             return;
-
-        if(selected)
+           
+        if(selected && !result.has_style_pseudo_class('active'))
             result.add_style_pseudo_class('active');
-        else
+        else if(!selected)
             result.remove_style_pseudo_class('active');
     }
 

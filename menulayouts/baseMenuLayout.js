@@ -645,6 +645,7 @@ var BaseLayout = class {
     }
 
     _clearActorsFromBox(box){
+        this.ignoreHover = true;
         RecentFilesManager.cancelCurrentQueries();
         if(!box){
             box = this.applicationsBox;
@@ -772,8 +773,6 @@ var BaseLayout = class {
             this._activeMenuItem = item;
             if(this.arcMenu.isOpen && item && this.layoutProperties.SupportsCategoryOnHover)
                 item.grab_key_focus();
-            else if(this.arcMenu.isOpen)
-                this.mainBox.grab_key_focus();
             if(this.layout === Constants.MenuLayout.LAUNCHER && !this.layoutProperties.StandaloneRunner && item)
                 this.createActiveSearchItemPanel(item);
         }
@@ -873,11 +872,13 @@ var BaseLayout = class {
                     direction = St.DirectionType.LEFT;
                     
                 if(this.layoutProperties.Search && this.searchBox.hasKeyFocus() && this.searchResults.hasActiveResult() && this.searchResults.get_parent()){
-                    if(this.searchResults.getTopResult().has_style_pseudo_class("active")){
-                        this.searchResults.getTopResult().actor.grab_key_focus();
+                    const topSearchResult = this.searchResults.getTopResult();
+                    if(topSearchResult.has_style_pseudo_class("active")){
+                        topSearchResult.actor.grab_key_focus();
+                        topSearchResult.remove_style_pseudo_class('active');
                         return actor.navigate_focus(global.stage.key_focus, direction, false); 
                     }
-                    this.searchResults.getTopResult().actor.grab_key_focus();
+                    topSearchResult.actor.grab_key_focus();
                     return Clutter.EVENT_STOP;
                 }
                 else if(global.stage.key_focus === this.mainBox && symbol === Clutter.KEY_Up){
