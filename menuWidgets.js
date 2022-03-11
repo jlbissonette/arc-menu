@@ -547,7 +547,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             }
             else{
                 this.remove_style_class_name('selected');
-                this.remove_style_pseudo_class('active');
+                if(!this.isActiveCategory)
+                    this.remove_style_pseudo_class('active');
             }
             this.notify('active');
         }
@@ -605,8 +606,9 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             this.pressed = false;
             this.active = false;
             this._menuLayout.mainBox.grab_key_focus();
-            this.activate(event);
             this.remove_style_pseudo_class('active');
+            this.activate(event);
+
             return Clutter.EVENT_STOP;
         }
         if(event.get_button() == 3 && this.pressed){
@@ -2435,9 +2437,10 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
 
     activate(event) {
         this.displayAppList();
-        if(this.layoutProps.SupportsCategoryOnHover)
-            this._menuLayout.setActiveCategory(this, true);
+
         super.activate(event);
+        if(this.layoutProps.SupportsCategoryOnHover)
+            this._menuLayout.setActiveCategory(this);
     }
 
     _onEnterEvent(actor, event) {

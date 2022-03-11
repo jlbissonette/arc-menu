@@ -630,9 +630,22 @@ var BaseLayout = class {
         }
     }   
 
-    setActiveCategory(category, setActive = true){
-        this._futureActiveItem = category;
-        this.activeMenuItem = category;
+    setActiveCategory(categoryItem, setActive = true){
+        if(this.activeCategoryItem){
+            this.activeCategoryItem.isActiveCategory = false;
+            this.activeCategoryItem.remove_style_pseudo_class('active');
+            this.activeCategoryItem = null;
+        }
+
+        if(!setActive)
+            return;
+
+        this.activeCategoryItem = categoryItem;
+        this.activeCategoryItem.isActiveCategory = true;
+        this.activeCategoryItem.add_style_pseudo_class('active');   
+
+        this._futureActiveItem = categoryItem;
+        this.activeMenuItem = categoryItem;
     }
 
     setFrequentAppsList(categoryMenuItem){
@@ -784,6 +797,9 @@ var BaseLayout = class {
             this.setDefaultMenuView();
         }            
         else{
+            if(this.activeCategoryItem){
+                this.setActiveCategory(null, false);
+            }
             this._clearActorsFromBox();
             let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
             appsScrollBoxAdj.set_value(0);

@@ -232,9 +232,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.displayAllApps(isGridLayout);   
             this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
         }
-        this.activeMenuItem = this.categoryDirectories.values().next().value;
-        if(this.arcMenu.isOpen)
-            this.activeMenuItem.active = true;
+
+        let topCategory = this.categoryDirectories.values().next().value;
+        topCategory.displayAppList();
+        this.setActiveCategory(topCategory);
     }
 
     loadCategories() {

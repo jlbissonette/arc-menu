@@ -394,10 +394,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             
             this.arcMenu.toggle();
             if(this.arcMenu.isOpen && this.MenuLayout){
-                if(this.MenuLayout.activeMenuItem && this.MenuLayout.layoutProperties.SupportsCategoryOnHover)
-                    this.MenuLayout.activeMenuItem.active = true;
-                else
-                    this.mainBox.grab_key_focus();
+                this.mainBox.grab_key_focus();
             }
         }
         else if(this.arcMenu.isOpen){
