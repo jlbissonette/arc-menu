@@ -148,12 +148,6 @@ StScrollView .small-vfade{
 .arcmenu-menu .popup-menu-ornament{
     width: 0;
 }
-.arcmenu-menu .popup-menu-icon:ltr{
-    margin-right: 8px;
-}
-.arcmenu-menu .popup-menu-icon:rlt{
-    margin-left: 8px;
-}
 
 .arcmenu-button{
     -st-icon-style: symbolic;
@@ -179,8 +173,8 @@ StScrollView .small-vfade{
 
 .arcmenu-tooltip{
     border-radius: 8px;
-    border: 1px solid #353535;
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
     padding: 3px 8px;
     max-width: 550px;
     min-height: 0px;
