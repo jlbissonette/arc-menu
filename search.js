@@ -32,6 +32,7 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const MW = Me.imports.menuWidgets;
 const PopupMenu = imports.ui.popupMenu;
+const { RecentFilesManager } = Me.imports.recentFilesManager;
 const RemoteSearch = imports.ui.remoteSearch;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
@@ -470,6 +471,8 @@ var SearchResults = GObject.registerClass({
 
         this._highlightRegex = null;
 
+        this.recentFilesManager = new RecentFilesManager();
+
         this._searchSettings = new Gio.Settings({ schema_id: SEARCH_PROVIDERS_SCHEMA });
         this.disabledID = this._searchSettings.connect('changed::disabled', this._reloadRemoteProviders.bind(this));
         this.enabledID =  this._searchSettings.connect('changed::enabled', this._reloadRemoteProviders.bind(this));
@@ -529,6 +532,10 @@ var SearchResults = GObject.registerClass({
         remoteProviders.forEach(provider => {
             this._unregisterProvider(provider);
         });
+
+        this.recentFilesManager.destroy();
+        this.recentFilesManager = null;
+
         this._content.destroy_all_children();
     }
 
@@ -548,7 +555,7 @@ var SearchResults = GObject.registerClass({
         if(this._settings.get_boolean('search-provider-open-windows'))
             this._registerProvider(new OpenWindowSearchProvider());
         if(this._settings.get_boolean('search-provider-recent-files'))
-            this._registerProvider(new RecentFilesSearchProvider());
+            this._registerProvider(new RecentFilesSearchProvider(this.recentFilesManager));
 
         RemoteSearch.loadRemoteSearchProviders(this._searchSettings, providers => {
             providers.forEach(this._registerProvider.bind(this));
@@ -644,6 +651,8 @@ var SearchResults = GObject.registerClass({
             return;
 
         this._startingSearch = true;
+
+        this.recentFilesManager.cancelCurrentQueries();
 
         this._cancellable.cancel();
         this._cancellable.reset();

@@ -3,7 +3,6 @@ const { Meta, Gtk, Gio, GLib, St, Shell } = imports.gi;
 const Main = imports.ui.main;
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const RecentFilesManager = Me.imports.recentFilesManager;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
@@ -15,11 +14,11 @@ function createIcon(mimeType, size) {
 }
 
 var RecentFilesSearchProvider = class {
-    constructor() {
+    constructor(recentFilesManager) {
         this.id = 'arcmenu.recent-files';
         this.isRemoteProvider = true;
         this.canLaunchSearch = false;
-
+        this.recentFilesManager = recentFilesManager;
         this._recentFiles = [];
 
         this.appInfo = {
@@ -50,9 +49,9 @@ var RecentFilesSearchProvider = class {
     }
 
     getInitialResultSet(terms, callback, _cancellable) {
-        RecentFilesManager.cancelCurrentQueries();
+        this.recentFilesManager.cancelCurrentQueries();
         this._recentFiles = [];
-        RecentFilesManager.filterRecentFiles(recentFile => {
+        this.recentFilesManager.filterRecentFiles(recentFile => {
             this._recentFiles.push(recentFile);
             callback(this._getFilteredFileUris(terms, this._recentFiles));
         });
