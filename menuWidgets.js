@@ -491,12 +491,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             this.bind_property('hover', this, 'active', GObject.BindingFlags.SYNC_CREATE);
 
         this.arcMenuOpenStateChangeID = this.arcMenu.connect('open-state-changed', (menu, open) =>{
-            if(!open){
-                if(this._popupTimeoutId){
-                    GLib.source_remove(this._popupTimeoutId);
-                    this._popupTimeoutId = null;
-                }
-            }
+            if(!open)
+                this.cancelPopupTimeout();
         });
 
         let textureCache = St.TextureCache.get_default();
@@ -706,11 +702,15 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         });
     }
 
-    _onDestroy(){
+    cancelPopupTimeout(){
         if(this._popupTimeoutId){
             GLib.source_remove(this._popupTimeoutId);
             this._popupTimeoutId = null;
         }
+    }
+
+    _onDestroy(){
+        this.cancelPopupTimeout();
         this.isDestroyed = true;
         if(this.arcMenuOpenStateChangeID){
             this.arcMenu.disconnect(this.arcMenuOpenStateChangeID);
@@ -2013,10 +2013,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
         if(this.contextMenu && this.contextMenu.isOpen)
             this.contextMenu.toggle();
 
-        if(this._popupTimeoutId){
-            GLib.source_remove(this._popupTimeoutId);
-            this._popupTimeoutId = null;
-        }
+        this.cancelPopupTimeout();
 
         this._dragMonitor = {
             dragMotion: this._onDragMotion.bind(this)

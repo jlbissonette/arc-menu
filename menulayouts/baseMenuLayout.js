@@ -393,6 +393,8 @@ var BaseLayout = class {
                     log(err);
                 }
                 
+                placeMenuItem.cancelPopupTimeout();
+                placeMenuItem.contextMenu?.close();
                 box.remove_child(placeMenuItem);
                 placeMenuItem.destroy();
             });
