@@ -11,7 +11,7 @@ const MenuLayouts = Me.imports.menulayouts;
 const MW = Me.imports.menuWidgets;
 const PlaceDisplay = Me.imports.placeDisplay;
 const PopupMenu = imports.ui.popupMenu;
-const RecentFilesManager = Me.imports.recentFilesManager;
+const { RecentFilesManager } = Me.imports.recentFilesManager;
 const Utils =  Me.imports.utils;
 
 //This class handles the core functionality of all the menu layouts.
@@ -358,8 +358,8 @@ var BaseLayout = class {
     }
 
     _loadRecentFiles(){
-        if(!this.recentManager)
-            this.recentManager = RecentFilesManager.getRecentManager();
+        if(!this.recentFilesManager)
+            this.recentFilesManager = new RecentFilesManager();
     }
 
     displayRecentFiles(box = this.applicationsBox, callback){
@@ -367,7 +367,7 @@ var BaseLayout = class {
         this._clearActorsFromBox(box);
         this._futureActiveItem = false;
 
-        RecentFilesManager.filterRecentFiles(recentFile => {
+        this.recentFilesManager.filterRecentFiles(recentFile => {
             let file = Gio.File.new_for_uri(recentFile.get_uri());
             let filePath = file.get_path();
             let name = recentFile.get_display_name();
@@ -388,7 +388,8 @@ var BaseLayout = class {
             placeMenuItem._removeBtn.setIconSize(14);
             placeMenuItem._removeBtn.connect('activate', () =>  {
                 try {
-                    this.recentManager.remove_item(placeMenuItem.fileUri);
+                    let recentManager = this.recentFilesManager.getRecentManager();
+                    recentManager.remove_item(placeMenuItem.fileUri);
                 } catch(err) {
                     log(err);
                 }
@@ -661,7 +662,7 @@ var BaseLayout = class {
 
     _clearActorsFromBox(box){
         this.ignoreHover = true;
-        RecentFilesManager.cancelCurrentQueries();
+        this.recentFilesManager?.cancelCurrentQueries();
         if(!box){
             box = this.applicationsBox;
             this.activeCategoryType = -1;
@@ -926,7 +927,10 @@ var BaseLayout = class {
     }
 
     destroy(){
-        RecentFilesManager.cancelCurrentQueries();
+        if(this.recentFilesManager){
+            this.recentFilesManager.destroy();
+            this.recentFilesManager = null;
+        }
 
         if(this._treeChangedId){
             this._tree.disconnect(this._treeChangedId);
