@@ -3,15 +3,15 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 
 const LogEnabled = false;
-const RecentManager = new Gtk.RecentManager();
-const Settings = ExtensionUtils.getSettings();
 
+var _recentManager = null;
+var _settings = null;
 var isCanceled = false;
 var currentQueries = [];
 
 function filterRecentFiles(callback){
     isCanceled = false;
-    RecentManager.get_items().sort((a, b) => b.get_modified() - a.get_modified())
+    getRecentManager().get_items().sort((a, b) => b.get_modified() - a.get_modified())
     .forEach(item => {
         queryFileExists(item)
         .then(validFile => {
@@ -49,7 +49,7 @@ function queryFileExists(item) {
                 removeQueryInfoFromList(queryInfo);
                 if (fileInfo) {
                     let isHidden = fileInfo.get_attribute_boolean("standard::is-hidden");
-                    let showHidden = Settings.get_boolean('show-hidden-recent-files');
+                    let showHidden = getSettings().get_boolean('show-hidden-recent-files');
                     if(isHidden && !showHidden)
                         reject(item.get_display_name() + " is hidden. Rejected.")
                     resolve(item);
@@ -89,7 +89,17 @@ function cancelCurrentQueries(){
 }
 
 function getRecentManager(){
-    return RecentManager;
+    if (_recentManager === null)
+        _recentManager = new Gtk.RecentManager();
+
+    return _recentManager;
+}
+
+function getSettings(){
+    if (_settings === null)
+        _settings = ExtensionUtils.getSettings();
+
+    return _settings;  
 }
 
 function debugLog(message){
