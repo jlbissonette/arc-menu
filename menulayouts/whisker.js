@@ -60,6 +60,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style_class = 'arcmenu-search-top';
+            this.searchBox.style = "margin-top: 6px; margin-bottom: 0px;";
             this.mainBox.add_child(this.searchBox.actor);
         }
 

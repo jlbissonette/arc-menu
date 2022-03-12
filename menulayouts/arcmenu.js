@@ -191,7 +191,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
             y_align: Clutter.ActorAlign.END,
-            style: "spacing: 6px; margin-bottom: 3px;"
+            style: "spacing: 6px;"
         });
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();

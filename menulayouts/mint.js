@@ -46,7 +46,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
         
-        this.actionsScrollBox.style = "padding: 10px 0px; width: 62px; margin: 3px 8px 0px 0px; background-color:rgba(10, 10, 15, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 8px;";
+        this.actionsScrollBox.style = "padding: 10px 0px; width: 62px; margin: 0px 8px 0px 0px; background-color:rgba(10, 10, 15, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 8px;";
         this.actionsBox.style = "spacing: 10px;";
 
         this.mainBox.add_child(this.actionsScrollBox);
@@ -62,8 +62,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style_class = 'arcmenu-search-top';
             this.rightMenuBox.add_child(this.searchBox.actor);
         }
-        else
-            this.rightMenuBox.style = "margin-top: 3px;";
         
         //Sub Main Box -- stores left and right box
         this.subMainBox = new St.BoxLayout({
