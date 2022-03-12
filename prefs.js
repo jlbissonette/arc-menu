@@ -3468,6 +3468,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
         this.disableTooltips = this._settings.get_boolean('disable-tooltips');
         this.subMenus = this._settings.get_boolean('enable-sub-menus');
+        this.showHiddenRecentFiles = this._settings.get_boolean('show-hidden-recent-files');
 
         let searchStyleFrame = new PW.FrameBox();
         let searchStyleRow = new PW.FrameBoxRow();
@@ -3603,6 +3604,29 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         subMenusFrame.add(subMenusRow);
         this.mainBox.append(subMenusFrame);
 
+        let hiddenFilesFrame = new PW.FrameBox();
+        let hiddenFilesRow = new PW.FrameBoxRow();
+        let hiddenFilesLabel = new Gtk.Label({
+            label: _('Show Hidden Recent Files'),
+            use_markup: true,
+            xalign: 0,
+            hexpand: true,
+            selectable: false
+         });
+        let hiddenFilesSwitch = new Gtk.Switch({
+            halign: Gtk.Align.END,
+        });
+        hiddenFilesSwitch.set_active(this.showHiddenRecentFiles);
+        hiddenFilesSwitch.connect('notify::active', (widget) => {
+            this.showHiddenRecentFiles = widget.get_active();
+            this.saveButton.set_sensitive(true);
+            this.resetButton.set_sensitive(true);
+        });
+        hiddenFilesRow.add(hiddenFilesLabel);
+        hiddenFilesRow.add(hiddenFilesSwitch);
+        hiddenFilesFrame.add(hiddenFilesRow);
+        this.mainBox.append(hiddenFilesFrame);
+
         let multiLinedLabelFrame = new PW.FrameBox();
         let multiLinedLabelRow = new PW.FrameBoxRow();
         let multiLinedLabelLabel = new Gtk.Label({
@@ -3699,6 +3723,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
             this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
             this.subMenus = this._settings.get_default_value('enable-sub-menus').unpack();
+            this.showHiddenRecentFiles = this._settings.get_default_value('show-hidden-recent-files').unpack();
             this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
             this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
@@ -3708,6 +3733,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             multiLinedLabelSwitch.set_active(this.multiLinedLabels);
             tooltipSwitch.set_active(this.disableTooltips);
             subMenusSwitch.set_active(this.subMenus);
+            hiddenFilesSwitch.set_active(this.showHiddenRecentFiles);
             fadeEffectSwitch.set_active(this.disableFadeEffect);
 
             this.saveButton.set_sensitive(true);
@@ -3727,6 +3753,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this._settings.set_boolean('disable-scrollview-fade-effect', this.disableFadeEffect);
             this._settings.set_boolean('disable-tooltips', this.disableTooltips);
             this._settings.set_boolean('enable-sub-menus', this.subMenus);
+            this._settings.set_boolean('show-hidden-recent-files', this.showHiddenRecentFiles);
             this._settings.set_boolean('reload-theme', true);
             this.saveButton.set_sensitive(false);
             this.resetButton.set_sensitive(this.checkIfResetButtonSensitive());
@@ -3748,7 +3775,8 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this.disableSearchStyle !== this._settings.get_default_value('disable-searchbox-border').unpack()||
             this.alphabetizeAllPrograms !== this._settings.get_default_value('alphabetize-all-programs').unpack()||
             this.multiLinedLabels !== this._settings.get_default_value('multi-lined-labels').unpack() ||
-            this.disableFadeEffect !== this._settings.get_default_value('disable-scrollview-fade-effect').unpack()) ? true : false;
+            this.disableFadeEffect !== this._settings.get_default_value('disable-scrollview-fade-effect').unpack() ||
+            this.showHiddenRecentFiles !== this._settings.get_default_value('show-hidden-recent-files').unpack()) ? true : false;
     }
 });
 
