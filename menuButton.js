@@ -24,7 +24,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.menu = null;
         this.add_style_class_name('arcmenu-panel-menu');
         this.tooltipShowing = false;
-        this.tooltipHidingID = null;
         this.tooltipShowingID = null;
 
         this.tooltip = new MW.Tooltip(this);
@@ -462,10 +461,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             GLib.source_remove(this.tooltipShowingID);
             this.tooltipShowingID = null;
         }     
-        if(this.tooltipHidingID){
-            GLib.source_remove(this.tooltipHidingID);
-            this.tooltipHidingID = null;
-        }
         if(this.extensionChangedId){
             Main.extensionManager.disconnect(this.extensionChangedId);
             this.extensionChangedId = null;
@@ -499,10 +494,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             GLib.source_remove(this.tooltipShowingID);
             this.tooltipShowingID = null;
         }     
-        if (this.tooltipHidingID) {
-            GLib.source_remove(this.tooltipHidingID);
-            this.tooltipHidingID = null;
-        }    
         if(this.MenuLayout){
             this.MenuLayout.destroy();
             this.MenuLayout = null;
@@ -580,11 +571,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
                 if(this.tooltip){
                     this.tooltip.hide();
                     this.tooltip.sourceActor = null;
-                }
-
-                if (this.tooltipHidingID) {
-                    GLib.source_remove(this.tooltipHidingID);
-                    this.tooltipHidingID = null;
                 }
             }
             if(!this.arcMenu.isOpen && !this.arcMenuContextMenu.isOpen){

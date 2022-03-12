@@ -871,8 +871,7 @@ var Tooltip = class Arc_Menu_Tooltip{
         if(!sourceActor)
             return;
         if(this.sourceActor === sourceActor){
-            log("same actor " + sourceActor)
-            this._showTimeout();
+            this._showTimeout(titleLabel, description, displayType);
             return;
         }
         this.sourceActor = sourceActor;
@@ -881,6 +880,14 @@ var Tooltip = class Arc_Menu_Tooltip{
         this.descriptionLabel.hide();
         this.titleLabel.hide();
 
+        this._showTimeout(titleLabel, description, displayType);
+    }
+
+    disableTooltips() {
+        this._useTooltips = ! this._settings.get_boolean('disable-tooltips');
+    }
+
+    _setToolTipText(titleLabel, description, displayType){
         let isEllipsized, titleText;
         if(titleLabel instanceof St.Label){
             let lbl = titleLabel.clutter_text;
@@ -892,48 +899,44 @@ var Tooltip = class Arc_Menu_Tooltip{
             titleText = titleLabel;
         }
 
-        if(titleText)
-            this.titleLabel.text = titleText;
-        if(description)
-            this.descriptionLabel.text = description;
-    
+        this.titleLabel.text = '';
+        this.descriptionLabel.text = '';
+
         if(displayType !== Constants.DisplayType.BUTTON){
             if(isEllipsized && description){
-                this.titleLabel.show();
-                this.descriptionLabel.show();
+                this.titleLabel.text = titleText ? titleText : '';
+                this.descriptionLabel.text = description ? description : '';
                 this.titleLabel.style = 'font-weight: bold';
             }
             else if(isEllipsized && !description)
-                this.titleLabel.show();
+                this.titleLabel.text = titleText ? titleText : '';
             else if(!isEllipsized && description)
-                this.descriptionLabel.show();
-            else
-                return;
+                this.descriptionLabel.text = description ? description : '';
         }
         else if(displayType === Constants.DisplayType.BUTTON){
-            if(!titleText)  
-                return;
-            this.titleLabel.show();
+            this.titleLabel.text = titleText ? titleText : '';
         }
-        this._showTimeout();
+
+        return this.titleLabel.text || this.descriptionLabel.text ? true : false;
     }
 
-    disableTooltips() {
-        this._useTooltips = ! this._settings.get_boolean('disable-tooltips');
-    }
-
-    _showTimeout(){
+    _showTimeout(titleLabel, description, displayType){
         if(this._useTooltips){
+            let shouldShow = this._setToolTipText(titleLabel, description, displayType);
+
+            if(!shouldShow)
+                return;
+
             this._menuButton.tooltipShowingID = GLib.timeout_add(0, 750, () => {
+                if(this.titleLabel.text)
+                    this.titleLabel.show();
+                if(this.descriptionLabel.text)
+                    this.descriptionLabel.show();
                 this.show();
                 this._menuButton.tooltipShowing = true;
                 this._menuButton.tooltipShowingID = null;
                 return GLib.SOURCE_REMOVE;
             });
-            if(this._menuButton.tooltipHidingID){
-                GLib.source_remove(this._menuButton.tooltipHidingID);
-                this._menuButton.tooltipHidingID = null;
-            }
         }
     }
 
@@ -993,21 +996,16 @@ var Tooltip = class Arc_Menu_Tooltip{
 
     hide() {
         if(this._useTooltips){
+            if(this._menuButton.tooltipShowingID){
+                GLib.source_remove(this._menuButton.tooltipShowingID);
+                this._menuButton.tooltipShowingID = null;
+            }
             this.sourceActor = null;
             this.actor.ease({
                 opacity: 0,
                 duration: Dash.DASH_ITEM_LABEL_HIDE_TIME,
                 mode: Clutter.AnimationMode.EASE_OUT_QUAD,
                 onComplete: () => this.actor.hide()
-            });
-            if(this._menuButton.tooltipShowingID){
-                GLib.source_remove(this._menuButton.tooltipShowingID);
-                this._menuButton.tooltipShowingID = null;
-            }
-            this._menuButton.tooltipHidingID = GLib.timeout_add(0, 750, () => {
-                this._menuButton.tooltipShowing = false;
-                this._menuButton.tooltipHidingID = null;
-                return GLib.SOURCE_REMOVE;
             });
         }
     }
@@ -1016,10 +1014,6 @@ var Tooltip = class Arc_Menu_Tooltip{
         if (this._menuButton.tooltipShowingID) {
             GLib.source_remove(this._menuButton.tooltipShowingID);
             this._menuButton.tooltipShowingID = null;
-        }
-        if (this._menuButton.tooltipHidingID) {
-            GLib.source_remove(this._menuButton.tooltipHidingID);
-            this._menuButton.tooltipHidingID = null;
         }
         if(this.toggleID){
             this._settings.disconnect(this.toggleID);

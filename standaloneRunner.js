@@ -17,7 +17,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         this._settings = settings;
 
         this.tooltipShowing = false;
-        this.tooltipHidingID = null;
         this.tooltipShowingID = null;
 
         this.tooltip = new MW.Tooltip(this);
@@ -210,10 +209,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             this.tooltipShowingID = null;
         }
 
-        if (this.tooltipHidingID) {
-            GLib.source_remove(this.tooltipHidingID);
-            this.tooltipHidingID = null;
-        }
         if(this.tooltip)
             this.tooltip.destroy();
         if(this._installedChangedId){
@@ -284,11 +279,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
                 this.tooltipShowing = false;
                 if(this.activeTooltip){
                     this.activeTooltip.hide();
-                }
-
-                if (this.tooltipHidingID) {
-                    GLib.source_remove(this.tooltipHidingID);
-                    this.tooltipHidingID = null;
                 }
             }
         }
