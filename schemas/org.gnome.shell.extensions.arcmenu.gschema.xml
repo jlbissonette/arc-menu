@@ -210,6 +210,11 @@
       <summary>Show custom search provider - recent files</summary>
       <description>Show custom search provider - recent files.</description>
     </key>
+    <key type="b" name="show-hidden-recent-files">
+      <default>false</default>
+      <summary>Show hidden recent files</summary>
+      <description>Show hidden recent files.</description>
+    </key>
     <key type="b" name="activate-on-hover">
       <default>false</default>
       <summary>Activate Categories on Hover</summary>

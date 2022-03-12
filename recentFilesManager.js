@@ -1,11 +1,10 @@
 const { Gtk, Gio, GLib } = imports.gi;
+const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
 
 const LogEnabled = false;
 const RecentManager = new Gtk.RecentManager();
-const GTK_SETTINGS_SCHEMA = 'org.gtk.Settings.FileChooser';
-const GTK4_SETTINGS_SCHEMA = 'org.gtk.gtk4.Settings.FileChooser';
-const GTKSettings = new Gio.Settings({ 'schema': GTK_SETTINGS_SCHEMA });
+const Settings = ExtensionUtils.getSettings();
 
 var isCanceled = false;
 var currentQueries = [];
@@ -50,7 +49,7 @@ function queryFileExists(item) {
                 removeQueryInfoFromList(queryInfo);
                 if (fileInfo) {
                     let isHidden = fileInfo.get_attribute_boolean("standard::is-hidden");
-                    let showHidden = GTKSettings.get_boolean('show-hidden');
+                    let showHidden = Settings.get_boolean('show-hidden-recent-files');
                     if(isHidden && !showHidden)
                         reject(item.get_display_name() + " is hidden. Rejected.")
                     resolve(item);

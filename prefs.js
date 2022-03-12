@@ -1979,6 +1979,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
         this.disableTooltips = this._settings.get_boolean('disable-tooltips');
         this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
+        this.showHiddenRecentFiles = this._settings.get_boolean('show-hidden-recent-files');
 
         let fadeEffectFrame = new Adw.PreferencesGroup();
         let fadeEffectRow = new Adw.ActionRow({
@@ -2024,6 +2025,21 @@ var MenuSettingsFineTunePage = GObject.registerClass(
         alphabetizeAllProgramsRow.add_suffix(alphabetizeAllProgramsSwitch);
         alphabetizeAllProgramsFrame.add(alphabetizeAllProgramsRow);
         this.append(alphabetizeAllProgramsFrame);
+
+        let hiddenFilesFrame = new Adw.PreferencesGroup();
+        let hiddenFilesRow = new Adw.ActionRow({
+            title: _("Show Hidden Recent Files")
+        });
+        let hiddenFilesSwitch = new Gtk.Switch({ 
+            valign: Gtk.Align.CENTER
+        });
+        hiddenFilesSwitch.set_active(this._settings.get_boolean('show-hidden-recent-files'));
+        hiddenFilesSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('show-hidden-recent-files', widget.get_active());
+        });
+        hiddenFilesRow.add_suffix(hiddenFilesSwitch);
+        hiddenFilesFrame.add(hiddenFilesRow);
+        this.append(hiddenFilesFrame);
 
         let multiLinedLabelFrame = new Adw.PreferencesGroup();
         let multiLinedLabelRow = new Adw.ActionRow({
@@ -2097,17 +2113,19 @@ var MenuSettingsFineTunePage = GObject.registerClass(
 
         recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
 
-        this.restoreDefaults = ()=> {
+        this.restoreDefaults = () => {
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
             this.multiLinedLabels = this._settings.get_default_value('multi-lined-labels').unpack();
             this.disableTooltips = this._settings.get_default_value('disable-tooltips').unpack();
             this.disableFadeEffect = this._settings.get_default_value('disable-scrollview-fade-effect').unpack();
             this.disableRecentApps = this._settings.get_default_value('disable-recently-installed-apps').unpack();
+            this.showHiddenRecentFiles = this._settings.get_default_value('show-hidden-recent-files').unpack();
             alphabetizeAllProgramsSwitch.set_active(this.alphabetizeAllPrograms);
             multiLinedLabelSwitch.set_active(this.multiLinedLabels);
             tooltipSwitch.set_active(this.disableTooltips);
             fadeEffectSwitch.set_active(this.disableFadeEffect);
             recentAppsSwitch.set_active(this.disableRecentApps);
+            hiddenFilesSwitch.set_active(this.showHiddenRecentFiles);
         };
     }
 });
