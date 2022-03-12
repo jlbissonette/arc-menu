@@ -23,18 +23,6 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 -----
 
-#### ArcMenu integrated with [Dash-to-Panel](https://extensions.gnome.org/extension/1160/dash-to-panel/)
-
-![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/ArcMenu_Banner.png)
-
------
-
-#### ArcMenu integrated with [Dash-to-Dock](https://extensions.gnome.org/extension/307/dash-to-dock/)
-
-![](https://gitlab.com/arcmenu/arcmenu-assets/raw/master/images/ArcMenu_Dash-to-Dock.png)
-
------
-
 ### Installation
 
 #### To install the most recent official release: Visit ArcMenu on the [Official GNOME Extensions](https://extensions.gnome.org/extension/3628/arcmenu/) website.
