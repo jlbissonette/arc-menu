@@ -8,7 +8,7 @@
 
 ### Introduction
 
-ArcMenu is an application menu for GNOME Shell, designed to provide a more traditional user experience and workflow. This extension has many features, including multiple menu layout styles, GNOME search, quick access to system shorctus, and more! If you are a new user to GNOME and are looking for a Windows style start menu, this extension will be perfect for you! 
+ArcMenu is an application menu for GNOME Shell, designed to provide a more familiar user experience and workflow. This extension has many features, including numerous menu layouts to choose from, GNOME search, quick access to system shortcuts, and much more!
 
 **For ArcMenu to work properly, you may need [these dependencies](https://gitlab.com/arcmenu/ArcMenu/-/wikis/ArcMenu-Dependencies).**
 
