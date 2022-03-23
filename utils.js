@@ -42,19 +42,6 @@ const PowerManagerInterface = `<node>
 </node>`;
 const PowerManager = Gio.DBusProxy.makeProxyWrapper(PowerManagerInterface);
 
-function canHibernate(asyncCallback){
-    let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
-    proxy.CanHibernateRemote((result, error) => {
-        if(error)
-            asyncCallback(false, false);
-        else{
-            let needsAuth = result[0] === 'challenge';
-            let canHibernate = needsAuth || result[0] === 'yes';
-            asyncCallback(canHibernate, needsAuth);
-        }
-    });
-}
-
 function activateHibernate(){
     let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
     proxy.CanHibernateRemote((result, error) => {
@@ -62,19 +49,6 @@ function activateHibernate(){
             imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
         else{
             proxy.HibernateRemote(true);
-        }
-    });
-}
-
-function canHybridSleep(asyncCallback){
-    let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
-    proxy.CanHybridSleepRemote((result, error) => {
-        if(error)
-            asyncCallback(false, false);
-        else{
-            let needsAuth = result[0] === 'challenge';
-            let canHybridSleep = needsAuth || result[0] === 'yes';
-            asyncCallback(canHybridSleep, needsAuth);
         }
     });
 }

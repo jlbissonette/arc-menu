@@ -345,40 +345,42 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _createPowerItems(){
-        this.lock = new MW.PowerMenuItem(this, Constants.PowerType.LOCK);
-        this.logOut = new MW.PowerMenuItem(this, Constants.PowerType.LOGOUT);
-        Utils.canHybridSleep((canHybridSleep, needsAuth) => {
-            if(canHybridSleep){
-                this.sleep = new MW.PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
-            }
+        this.sessionBox = new St.BoxLayout({
+            vertical: true,
         });
+        this.sessionBox.add_child(this.createLabelRow(_("Session")));
 
-
-        Utils.canHibernate((canHibernate, needsAuth) => {
-            if(canHibernate){
-                this.hibernate = new MW.PowerMenuItem(this, Constants.PowerType.HIBERNATE);
-            }
+        this.systemBox = new St.BoxLayout({
+            vertical: true,
         });
-        this.suspend = new MW.PowerMenuItem(this, Constants.PowerType.SUSPEND);
-        this.restart = new MW.PowerMenuItem(this, Constants.PowerType.RESTART);
-        this.powerOff = new MW.PowerMenuItem(this, Constants.PowerType.POWER_OFF);
+        this.systemBox.add_child(this.createLabelRow(_("System")));
+
+        this.hasSessionOption = false;
+        this.hasSystemOption = false;
+        let powerOptions = this._settings.get_value("power-options").deep_unpack();
+        for(let i = 0; i < powerOptions.length; i++){
+            let powerType = powerOptions[i][0];
+            let shouldShow = powerOptions[i][1];
+            if(shouldShow){
+                let powerButton = new MW.PowerMenuItem(this, powerType);
+                if(powerType === Constants.PowerType.LOCK || powerType === Constants.PowerType.LOGOUT){
+                    this.hasSessionOption = true;
+                    this.sessionBox.add_child(powerButton);
+                }
+                else{
+                    this.hasSystemOption = true;
+                    this.systemBox.add_child(powerButton);
+                }
+            }
+        }
     }
 
     displayPowerItems(){
         this._clearActorsFromBox(this.applicationsBox);         
-        this.applicationsBox.add_child(this.createLabelRow(_("Session")));
-        this.applicationsBox.add_child(this.lock);
-        this.applicationsBox.add_child(this.logOut);
-        this.applicationsBox.add_child(this.createLabelRow(_("System")));
-        this.applicationsBox.add_child(this.suspend);
-        if(this.sleep)
-            this.applicationsBox.insert_child_at_index(this.sleep, 4);
-
-        if(this.hibernate)
-            this.applicationsBox.insert_child_at_index(this.hibernate, 5);
-        this.applicationsBox.add_child(this.restart);
-        this.applicationsBox.add_child(this.powerOff);
-        this.activeMenuItem = this.lock;
+        if(this.hasSessionOption)
+            this.applicationsBox.add_child(this.sessionBox);
+        if(this.hasSystemOption)
+            this.applicationsBox.add_child(this.systemBox);
     }
 
     displayCategories(){
@@ -442,12 +444,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.hibernate)
             this.hibernate.destroy();
 
-        this.lock.destroy();
-        this.logOut.destroy();
-        this.suspend.destroy();
-        this.restart.destroy();
-        this.powerOff.destroy();
-    
+        this.systemBox.destroy();
+        this.sessionBox.destroy();
+
         super.destroy();
     }
 }
