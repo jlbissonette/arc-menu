@@ -1156,38 +1156,41 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
 
         section.actor.add_child(box);
 
-        box.add_child(this._menuLayout.createLabelRow(_("Session")));
-
-        this.lockItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.LOCK);
-        box.add_child(this.lockItem);
-
-        let logOutItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.LOGOUT);
-        box.add_child(logOutItem);
-
-        box.add_child(this._menuLayout.createLabelRow(_("System")));
-
-        Utils.canHybridSleep((canHybridSleep, needsAuth) => {
-            if(canHybridSleep){
-                let sleepItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.HYBRID_SLEEP);
-                box.insert_child_at_index(sleepItem, 4);
-            }
+        let sessionBox = new St.BoxLayout({
+            vertical: true,
         });
 
-        Utils.canHibernate((canHibernate, needsAuth) => {
-            if(canHibernate){
-                let hibernateItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.HIBERNATE);
-                box.insert_child_at_index(hibernateItem, 5);
-            }
+        sessionBox.add_child(this._menuLayout.createLabelRow(_("Session")));
+        let systemBox = new St.BoxLayout({
+            vertical: true,
         });
+        systemBox.add_child(this._menuLayout.createLabelRow(_("System")));
 
-        let suspendItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.SUSPEND);
-        box.add_child(suspendItem);
+        box.add_child(sessionBox);
+        box.add_child(systemBox);
 
-        let restartItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.RESTART);
-        box.add_child(restartItem);
+        let hasSessionOption, hasSystemOption;
+        let powerOptions = this._settings.get_value("power-options").deep_unpack();
+        for(let i = 0; i < powerOptions.length; i++){
+            let powerType = powerOptions[i][0];
+            let shouldShow = powerOptions[i][1];
+            if(shouldShow){
+                let powerButton = new PowerMenuItem(this._menuLayout, powerType);
+                if(powerType === Constants.PowerType.LOCK || powerType === Constants.PowerType.LOGOUT){
+                    hasSessionOption = true;
+                    sessionBox.add_child(powerButton);
+                }
+                else{
+                    hasSystemOption = true;
+                    systemBox.add_child(powerButton);
+                }
+            }
+        }
 
-        let powerOffItem = new PowerMenuItem(this._menuLayout, Constants.PowerType.POWER_OFF);
-        box.add_child(powerOffItem);
+        if(!hasSessionOption)
+            sessionBox.hide();
+        if(!hasSystemOption)
+            systemBox.hide();
 
         this._menuLayout.subMenuManager.addMenu(this.leaveMenu);
         this.leaveMenu.actor.hide();
