@@ -2536,7 +2536,7 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
 
         if (info.isRemovable()) {
             this.style = "padding-right: 15px;";
-            this._ejectButton = new MW.ArcMenuButtonItem(this._menuLayout, null, 'media-eject-symbolic');
+            this._ejectButton = new ArcMenuButtonItem(this._menuLayout, null, 'media-eject-symbolic');
             this._ejectButton.add_style_class_name("arcmenu-small-button")
             this._ejectButton.setIconSize(14);
             this._ejectButton.x_align = Clutter.ActorAlign.END;
