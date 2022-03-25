@@ -1083,17 +1083,6 @@ var ArcMenuButtonItem = GObject.registerClass(
     }
 });
 
-// Settings Button
-var SettingsButton = GObject.registerClass(class Arc_Menu_SettingsButton extends ArcMenuButtonItem {
-    _init(menuLayout) {
-        super._init(menuLayout, _("Settings"), 'emblem-system-symbolic');
-    }
-    activate(event) {
-        super.activate(event);
-        Util.spawnCommandLine('gnome-control-center');
-    }
-});
-
 // Runner Layout Tweaks Button
 var RunnerTweaksButton = GObject.registerClass(class Arc_Menu_RunnerTweaksButton extends ArcMenuButtonItem {
     _init(menuLayout) {
@@ -1696,9 +1685,11 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
     popupContextMenu(){
         if(this._app && this.contextMenu == undefined){
             this.contextMenu = new ApplicationContextMenu(this.actor, this._app, this._menuLayout);
-            if(this._displayType === Constants.DisplayType.GRID || this.layout === Constants.MenuLayout.UNITY || this.layout === Constants.MenuLayout.AZ)
+            if(this._displayType === Constants.DisplayType.GRID || this.layout === Constants.MenuLayout.UNITY 
+                || this.layout === Constants.MenuLayout.WHISKER)
                 this.contextMenu.centerBoxPointerPosition();
-            else if(this.layout === Constants.MenuLayout.MINT || this.layout === Constants.MenuLayout.TOGNEE)
+            else if(this.layout === Constants.MenuLayout.MINT || this.layout === Constants.MenuLayout.TOGNEE || this.layout === Constants.MenuLayout.INSIDER
+                || this.layout === Constants.MenuLayout.WINDOWS)
                 this.contextMenu.rightBoxPointerPosition();
             if(this.parentFolderPath)
                 this.contextMenu.parentFolderPath = this.parentFolderPath;

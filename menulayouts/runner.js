@@ -128,10 +128,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     }
 
     updateLocation(){
-        if(!this.rise){
-            let themeNode = this.arcMenu.actor.get_theme_node();
-            this.rise = themeNode.get_length('-arrow-rise');
-        }
         this.arcMenu._boxPointer.setSourceAlignment(0.5);
         this.arcMenu._arrowAlignment = 0.5;
         
@@ -139,7 +135,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
 
         //Position the runner menu in the center of the current monitor, at top of screen.
         let positionX = Math.round(rect.x + (rect.width / 2));
-        let positionY = rect.y + (this._settings.get_boolean('runner-use-theme-gap') ? this.rise : 0);
+        let positionY = rect.y;
         if(this._settings.get_enum('runner-position') == 1)
             positionY = Math.round(rect.y + (rect.height / 2) - 125);
         this.dummyCursor.set_position(positionX,  positionY);

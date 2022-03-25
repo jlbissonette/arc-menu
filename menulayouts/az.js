@@ -107,17 +107,21 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsContainerBox.add_child(this.actionsBox);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.actionsBox.add_child(this.user.actor);
+        this.actionsBox.add_child(this.user);
 
-        let filesButton = new MW.ShortcutMenuItem(this, _("Files"), "system-file-manager", "org.gnome.Nautilus.desktop", Constants.DisplayType.BUTTON);
+        let isContainedInCategory = false;
+        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
         if(filesButton.shouldShow)
-            this.actionsBox.add_child(filesButton.actor);
+            this.actionsBox.add_child(filesButton);
 
-        let settingsButton = new MW.SettingsButton(this);
-        this.actionsBox.add_child(settingsButton.actor);
+        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(terminalButton);
+
+        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(settingsButton);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add_child(this.leaveButton.actor);
+        this.actionsBox.add_child(this.leaveButton);
 
         this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton)
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton)

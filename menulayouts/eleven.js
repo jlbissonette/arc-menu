@@ -61,7 +61,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
-            style: "padding-bottom: 10px;",
+            style: "padding-bottom: 10px; spacing: 8px;",
             style_class: 'arcmenu-margin-box'
         });
         this.applicationsScrollBox = this._createScrollBox({
@@ -138,24 +138,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style: 'spacing: 10px;'
         });
-        let path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
-        if (path !== null){
-            let placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _("Downloads"));
-            let isContainedInCategory = false;
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.quickLinksBox.add_child(placeMenuItem.actor);
-        }
+        let isContainedInCategory = false;
+        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        if(filesButton.shouldShow)
+            this.quickLinksBox.add_child(filesButton);
 
-        path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
-        if (path !== null){
-            let placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _("Documents"));
-            let isContainedInCategory = false;
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.quickLinksBox.add_child(placeMenuItem.actor);
-        }
+        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.quickLinksBox.add_child(terminalButton);
 
-        let settingsButton = new MW.SettingsButton(this);
-        this.quickLinksBox.add_child(settingsButton.actor);
+        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.quickLinksBox.add_child(settingsButton);
 
         this.leaveButton = new MW.LeaveButton(this);
         this.quickLinksBox.add_child(this.leaveButton.actor);

@@ -1165,7 +1165,6 @@ var ButtonAppearancePage = GObject.registerClass(
                 menuButtonCustomTextEntry.set_text('Applications');
                 paddingScale.set_value(-1);
                 menuButtonIconSizeScale.set_value(20);
-                enableArrowIconSwitch.set_active(false);
                 offsetScale.set_value(0);
                 this._settings.reset('menu-button-icon');
                 this._settings.reset('arc-menu-icon');

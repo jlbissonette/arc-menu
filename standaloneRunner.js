@@ -35,16 +35,11 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         this.menuManager._changeMenu = (menu) => {};
         this.menuManager.addMenu(this.arcMenu);
 
-        if(!this.rise){
-            let themeNode = this.arcMenu.actor.get_theme_node();
-            this.rise = themeNode.get_length('-arrow-rise');
-        }
-        
         let rect = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryMonitor.index);
 
         //Position the runner menu in the center of the current monitor, at top of screen.
         let positionX = Math.round(rect.x + (rect.width / 2));
-        let positionY = rect.y + this.rise;
+        let positionY = rect.y;
         this.dummyWidget.set_position(positionX, positionY);
         
         //Context Menus for applications and other menu items

@@ -155,11 +155,15 @@ StScrollView .small-vfade{
     border-radius: 8px;
     padding: 8px;
 }
+
 .arcmenu-small-button{
     -st-icon-style: symbolic;
     border-radius: 8px;
     padding: 3px 8px;
     margin: 0px;
+}
+.arcmenu-small-button:hover{
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .arcmenu-avatar-round{

@@ -45,24 +45,20 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.pinnedAppsButton = new MW.PinnedAppsButton(this);
         this.pinnedAppsButton.actor.y_expand = true;
         this.pinnedAppsButton.actor.y_align= Clutter.ActorAlign.START;
-        this.pinnedAppsButton.actor.margin = 5;
-        this.actionsBox.add_child(this.pinnedAppsButton.actor);
-        let userButton = new MW.UserMenuItem(this, Constants.DisplayType.BUTTON);
-        this.actionsBox.add_child(userButton.actor);
-        let path = GLib.get_user_special_dir(imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS);
-        if (path != null){
-            let placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _("Documents"));
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON);
-            this.actionsBox.add_child(placeMenuItem.actor);
-        }
-        let settingsButton = new MW.SettingsButton(this);
-        settingsButton.actor.expand = false;
-        settingsButton.actor.margin = 5;
-        this.actionsBox.add_child(settingsButton.actor);
+        this.actionsBox.add_child(this.pinnedAppsButton);
+
+        let isContainedInCategory = false;
+        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(filesButton);
+
+        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(terminalButton);
+
+        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(settingsButton);
+    
         this.leaveButton = new MW.LeaveButton(this);
-        this.leaveButton.actor.expand = false;
-        this.leaveButton.actor.margin = 5;
-        this.actionsBox.add_child(this.leaveButton.actor);
+        this.actionsBox.add_child(this.leaveButton);
 
         this.subMainBox = new St.BoxLayout({
             x_expand: true,
@@ -215,9 +211,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let rise = themeNode.get_length('-arrow-rise');
     
         if(this.arcMenu._arrowSide === St.Side.TOP)
-            y += rise + 1;
-        else 
             y += 1;
+        else 
+            y -= rise - 1;
 
         if(this.arcMenu._arrowSide === St.Side.LEFT)
             x += rise + 1;

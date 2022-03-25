@@ -45,17 +45,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.extrasButton.actor.y_expand = true;
         this.extrasButton.actor.y_align= Clutter.ActorAlign.START;
         this.actionsBox.add_child(this.extrasButton.actor);
-        let userButton = new MW.UserMenuItem(this, Constants.DisplayType.BUTTON);
-        this.actionsBox.add_child(userButton.actor);
-        let path = GLib.get_user_special_dir(imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS);
-        if (path != null){
-            let placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _("Documents"));
-            let isContainedInCategory = false;
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.actionsBox.add_child(placeMenuItem.actor);
-        }
-        let settingsButton = new MW.SettingsButton(this);
-        this.actionsBox.add_child(settingsButton.actor);
+
+        let isContainedInCategory = false;
+        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(filesButton);
+
+        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(terminalButton);
+
+        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(settingsButton);
+    
         this.leaveButton = new MW.LeaveButton(this);
         this.actionsBox.add_child(this.leaveButton.actor);
 
@@ -287,9 +287,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let rise = themeNode.get_length('-arrow-rise');
     
         if(this.arcMenu._arrowSide === St.Side.TOP)
-            y += rise + 1;
-        else 
             y += 1;
+        else 
+            y -= rise - 1;
 
         if(this.arcMenu._arrowSide === St.Side.LEFT)
             x += rise + 1;

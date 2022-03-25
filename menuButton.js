@@ -303,11 +303,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             return;
         }
 
-        if(!this.rise){
-            let themeNode = this.arcMenu.actor.get_theme_node();
-            this.rise = themeNode.get_length('-boxpointer-gap');
-        }
-
         if(!this.dummyWidget){
             this.dummyWidget = new St.Widget({ width: 0, height: 0, opacity: 0 });
             Main.uiGroup.add_child(this.dummyWidget);

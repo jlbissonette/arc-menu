@@ -305,11 +305,6 @@
       <summary>Runner layout - show frequent apps</summary>
       <description>Runner layout - show frequent apps</description>
     </key>
-    <key type="b" name="runner-use-theme-gap">
-      <default>false</default>
-      <summary>Runner layout - use current shell theme gap</summary>
-      <description>Runner layout - use current shell theme gap</description>
-    </key>
     <key type="i" name="runner-menu-height">
       <default>400</default>
       <summary>Runner layout - menu height</summary>
