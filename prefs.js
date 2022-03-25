@@ -75,20 +75,25 @@ var MenuSettingsListPage = GObject.registerClass(
                     icon_name: 'list-add-symbolic',
                 });
                 addMoreButton.connect('clicked', ()=> {
-                    let dialog = new AddAppsToPinnedListWindow(this._settings, this, this.listType);
+                    let dialog = new AddAppsToPinnedListWindow(this._settings, this, this.listType, this.settingString);
                     dialog.show();
                     dialog.connect('response', (_w, response) => {
                         if(response === Gtk.ResponseType.APPLY) {
-                            let newPinnedApps = dialog.newPinnedAppsArray;
-                            let array = [];
-                            for(let i = 0; i < newPinnedApps.length; i++){
-                                array.push(newPinnedApps[i]._name);
-                                array.push(newPinnedApps[i]._icon);
-                                array.push(newPinnedApps[i]._cmd);
-                            }
-                            this._createFrame(array);
-                            dialog.destroy();
+                            this._createFrame(dialog.newPinnedAppArray);
                             this.saveSettings();
+                        }
+                        if(response === Gtk.ResponseType.REJECT) {
+                            let command = dialog.newPinnedAppArray[2];
+                            let frameRow;
+                            this.frameRows.forEach(child => {
+                                if(command === child._cmd)
+                                    frameRow = child;
+                            });
+                            if(frameRow){
+                                this.frameRows.splice(this.frameRows.indexOf(frameRow), 1);
+                                this.frame.remove(frameRow);
+                                this.saveSettings();
+                            }
                         }
                     });
                 });
@@ -107,7 +112,7 @@ var MenuSettingsListPage = GObject.registerClass(
                     dialog.show();
                     dialog.connect('response', (_w, response) => {
                         if(response === Gtk.ResponseType.APPLY) {
-                            let newPinnedApps = dialog.newPinnedAppsArray;
+                            let newPinnedApps = dialog.newPinnedAppArray;
                             this._createFrame(newPinnedApps);
                             dialog.destroy();
                             this.saveSettings();
@@ -232,7 +237,7 @@ var MenuSettingsListPage = GObject.registerClass(
                     dialog.show();
                     dialog.connect('response', (_w, response) => {
                         if(response === Gtk.ResponseType.APPLY) {
-                            let newPinnedApps = dialog.newPinnedAppsArray;
+                            let newPinnedApps = dialog.newPinnedAppArray;
                             frameRow._name = newPinnedApps[0];
                             frameRow._icon = newPinnedApps[1];
                             frameRow._cmd = newPinnedApps[2];
@@ -247,11 +252,11 @@ var MenuSettingsListPage = GObject.registerClass(
                     });
                 });
                 buttonBox.connect('change', ()=> {
-                    let dialog = new AddAppsToPinnedListWindow(this._settings, this, Constants.MenuSettingsListType.OTHER);
+                    let dialog = new AddAppsToPinnedListWindow(this._settings, this, Constants.MenuSettingsListType.OTHER, this.settingString);
                     dialog.show();
                     dialog.connect('response', (_w, response) => { 
                         if(response === Gtk.ResponseType.APPLY) {
-                            let newPinnedApps = dialog.newPinnedAppsArray;
+                            let newPinnedApps = dialog.newPinnedAppArray;
                             frameRow._name = newPinnedApps[0];
                             frameRow._icon = newPinnedApps[1];
                             frameRow._cmd = newPinnedApps[2];
@@ -286,9 +291,10 @@ var MenuSettingsListPage = GObject.registerClass(
 
 var AddAppsToPinnedListWindow = GObject.registerClass(
 class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
-    _init(settings, parent, dialogType) {
+    _init(settings, parent, dialogType, settingString) {
         this._settings = settings;
         this._dialogType = dialogType;
+        this.settingString = settingString;
         if(this._dialogType === Constants.MenuSettingsListType.PINNED_APPS)
             super._init(_('Add to your Pinned Apps'), parent, Constants.MenuItemLocation.TOP);
         else if(this._dialogType === Constants.MenuSettingsListType.OTHER)
@@ -297,22 +303,8 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             super._init(_('Select Application Shortcuts'), parent, Constants.MenuItemLocation.TOP);
         else if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES)
             super._init(_('Select Directory Shortcuts'), parent, Constants.MenuItemLocation.TOP);
-        this.newPinnedAppsArray = [];
-
-        let addAppsButton;
-        if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS || this._dialogType == Constants.MenuSettingsListType.APPLICATIONS
-            || this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
-            addAppsButton = new Gtk.Button({
-                label: _("Add"),
-                halign: Gtk.Align.END
-            });
-            let context = addAppsButton.get_style_context();
-            context.add_class('suggested-action');
-            addAppsButton.connect('clicked', ()=> {
-                this.emit("response", Gtk.ResponseType.APPLY);
-            });
-            this.headerGroup.add(addAppsButton);
-        }
+        this.newPinnedAppArray = [];
+        this._createPinnedAppsList();
 
         if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS){
             let extraItem = [[_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ArcMenuSettingsCommand]];
@@ -351,6 +343,28 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         }
     }
 
+    _createPinnedAppsList(){
+        let appsList = this._settings.get_value(this.settingString).deep_unpack();
+        if(this._dialogType !== Constants.MenuSettingsListType.PINNED_APPS){
+            this.appsList = [];
+            for(let i = 0; i < appsList.length; i++){
+                this.appsList.push(appsList[i][0]);
+                this.appsList.push(appsList[i][1]);
+                this.appsList.push(appsList[i][2]);
+            }
+        }
+        else
+            this.appsList = appsList;
+    }
+
+    findCommandMatch(command){
+        for(let i = 2; i < this.appsList.length; i += 3){
+            if(this.appsList[i] === command)
+                return true;
+        }
+        return false;
+    }
+
     _loadExtraCategories(extraCategories){
         for(let item of extraCategories){
             let frameRow = new Adw.ActionRow({
@@ -372,7 +386,9 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
                 pixel_size: 22
             });
             frameRow.add_prefix(iconImage);
-            this.addButtonAction(frameRow);
+            let match = this.findCommandMatch(frameRow._cmd);
+
+            this.addButtonAction(frameRow, match);
             this.pageGroup.add(frameRow);
         }
     }
@@ -402,25 +418,32 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
                 });
                 frameRow.add_prefix(iconImage);
 
-                this.addButtonAction(frameRow);
+                let match = this.findCommandMatch(allApps[i].get_id());
+
+                this.addButtonAction(frameRow, match);
                 this.pageGroup.add(frameRow);
             }
         }
     }
 
-    addButtonAction(frameRow){
+    addButtonAction(frameRow, match){
         if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS || this._dialogType == Constants.MenuSettingsListType.APPLICATIONS||
             this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
-            let checkButton = new Gtk.CheckButton({
+            let checkButton = new PW.Button({
+                icon_name: match ? 'list-remove-symbolic' : 'list-add-symbolic',
                 margin_end: 20
             });
-            checkButton.connect('toggled', (widget) => {
-                if(widget.get_active())
-                    this.newPinnedAppsArray.push(frameRow);
-                else{
-                    let index = this.newPinnedAppsArray.indexOf(frameRow);
-                    this.newPinnedAppsArray.splice(index,1);
-                }
+            checkButton.connect('clicked', (widget) => {
+                this.newPinnedAppArray = [frameRow._name, frameRow._icon, frameRow._cmd];
+
+                if(!match)
+                    this.emit("response", Gtk.ResponseType.APPLY);
+                else
+                    this.emit("response", Gtk.ResponseType.REJECT);
+
+                match = !match;
+                checkButton.icon_name = match ? 'list-remove-symbolic' : 'list-add-symbolic';
+
             });
             frameRow.add_suffix(checkButton);
             frameRow.activatable_widget = checkButton;
@@ -431,7 +454,7 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
                 margin_end: 20
             });
             checkButton.connect('clicked', () => {
-                this.newPinnedAppsArray.push(frameRow._name, frameRow._icon, frameRow._cmd);
+                this.newPinnedAppArray = [frameRow._name, frameRow._icon, frameRow._cmd];
                 this.emit("response", Gtk.ResponseType.APPLY);
             });
             frameRow.add_suffix(checkButton);
@@ -453,7 +476,7 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
             super._init(_(title), parent, Constants.MenuItemLocation.BOTTOM);
             this.set_default_size(550, 200);
             this._settings = settings;
-            this.newPinnedAppsArray = [];
+            this.newPinnedAppArray = [];
             this._dialogType = dialogType;
             this.pinnedShortcut = pinnedShortcut;
 
@@ -538,9 +561,9 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
                 cmdEntry.text = this.pinnedShortcut[2];
             }
             addButton.connect('clicked', ()=> {
-                this.newPinnedAppsArray.push(nameEntry.get_text());
-                this.newPinnedAppsArray.push(iconEntry.get_text());
-                this.newPinnedAppsArray.push(cmdEntry.get_text());
+                this.newPinnedAppArray.push(nameEntry.get_text());
+                this.newPinnedAppArray.push(iconEntry.get_text());
+                this.newPinnedAppArray.push(cmdEntry.get_text());
                 this.emit('response', Gtk.ResponseType.APPLY)
             });
 
