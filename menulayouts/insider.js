@@ -17,6 +17,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.RIGHT,
             ColumnSpacing: 10,
             RowSpacing: 10,
             PinnedAppsColumns: 1,

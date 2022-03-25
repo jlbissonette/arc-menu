@@ -73,6 +73,12 @@ var TooltipLocation = {
     BOTTOM: 2,
 };
 
+var ContextMenuLocation = {
+    DEFAULT: 0,
+    BOTTOM_CENTERED: 1,
+    RIGHT: 2,
+};
+
 var SeparatorAlignment = {
     VERTICAL: 0,
     HORIZONTAL: 1

@@ -17,6 +17,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.RIGHT,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -34,8 +35,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         //Stores the Pinned Icons on the left side
         this.actionsScrollBox = new St.ScrollView({
             x_expand: false,
-            y_expand: false,
-            y_align: Clutter.ActorAlign.START,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER,
             overlay_scrollbars: true,
             style_class: 'small-vfade'
         });   
@@ -58,9 +59,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.mainBox.add_child(this.rightMenuBox);
 
+        this.searchBox.style = "margin: 0px;";
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style_class = 'arcmenu-search-top';
             this.rightMenuBox.add_child(this.searchBox.actor);
+
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+            this.rightMenuBox.add_child(separator);
         }
         
         //Sub Main Box -- stores left and right box
@@ -119,6 +124,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesScrollBox.add_actor( this.categoriesBox);  
         this.categoriesScrollBox.clip_to_allocation = true;
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+            this.rightMenuBox.add_child(separator);
+
             this.searchBox.style_class = 'arcmenu-search-bottom';
             this.rightMenuBox.add_child(this.searchBox.actor);
         }

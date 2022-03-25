@@ -1581,6 +1581,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
         super._init(menuLayout);
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
+        this.layoutProps = this._menuLayout.layoutProperties;
         if(this._settings.get_enum('shortcut-icon-type') === Constants.CategoryIconType.FULL_COLOR)
             this.add_style_class_name('regular-icons');
         else
@@ -1685,11 +1686,9 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
     popupContextMenu(){
         if(this._app && this.contextMenu == undefined){
             this.contextMenu = new ApplicationContextMenu(this.actor, this._app, this._menuLayout);
-            if(this._displayType === Constants.DisplayType.GRID || this.layout === Constants.MenuLayout.UNITY 
-                || this.layout === Constants.MenuLayout.WHISKER)
+            if(this.layoutProps.ShortcutContextMenuLocation === Constants.ContextMenuLocation.BOTTOM_CENTERED)
                 this.contextMenu.centerBoxPointerPosition();
-            else if(this.layout === Constants.MenuLayout.MINT || this.layout === Constants.MenuLayout.TOGNEE || this.layout === Constants.MenuLayout.INSIDER
-                || this.layout === Constants.MenuLayout.WINDOWS)
+            else if(this.layoutProps.ShortcutContextMenuLocation === Constants.ContextMenuLocation.RIGHT)
                 this.contextMenu.rightBoxPointerPosition();
             if(this.parentFolderPath)
                 this.contextMenu.parentFolderPath = this.parentFolderPath;

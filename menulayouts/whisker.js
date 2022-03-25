@@ -15,6 +15,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.BOTTOM_CENTERED,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,

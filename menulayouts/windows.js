@@ -17,6 +17,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             SearchDisplayType: Constants.DisplayType.LIST,
             DisplayType: Constants.DisplayType.LIST,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.RIGHT,
             ColumnSpacing: 0,
             RowSpacing: 0,
             DefaultMenuWidth: 300,
