@@ -60,9 +60,12 @@ var DialogWindow = GObject.registerClass({
             this.page.add(this.headerGroup);
             this.page.add(this.pageGroup);
         }
-        else{
+        else if(buttonLocation === Constants.MenuItemLocation.BOTTOM){
             this.page.add(this.pageGroup);
             this.page.add(this.headerGroup);
+        }
+        else{
+            this.page.add(this.pageGroup);
         }
     }
 });

@@ -296,13 +296,13 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         this._dialogType = dialogType;
         this.settingString = settingString;
         if(this._dialogType === Constants.MenuSettingsListType.PINNED_APPS)
-            super._init(_('Add to your Pinned Apps'), parent, Constants.MenuItemLocation.TOP);
+            super._init(_('Add to your Pinned Apps'), parent);
         else if(this._dialogType === Constants.MenuSettingsListType.OTHER)
-            super._init(_('Change Selected Pinned App'), parent, Constants.MenuItemLocation.TOP);
+            super._init(_('Change Selected Pinned App'), parent);
         else if(this._dialogType === Constants.MenuSettingsListType.APPLICATIONS)
-            super._init(_('Select Application Shortcuts'), parent, Constants.MenuItemLocation.TOP);
+            super._init(_('Select Application Shortcuts'), parent);
         else if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES)
-            super._init(_('Select Directory Shortcuts'), parent, Constants.MenuItemLocation.TOP);
+            super._init(_('Select Directory Shortcuts'), parent);
         this.newPinnedAppArray = [];
         this._createPinnedAppsList();
 
@@ -537,7 +537,7 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
                 iconEntry.set_text("ArcMenu_Folder");
 
             let cmdFrameRow = new Adw.ActionRow({
-                title: _('Terminal Command')
+                title: _('Command')
             });
             if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES)
                 cmdFrameRow.title = _("Shortcut Path");
@@ -1014,7 +1014,7 @@ var ButtonAppearancePage = GObject.registerClass(
             this._settings = settings;
 
             let menuButtonAppearanceFrame = new Adw.PreferencesGroup({
-                title: _('Menu Button Appearance')
+                title: _('Menu Button')
             });
             let menuButtonAppearanceRow = new Adw.ActionRow({
                 title: _('Appearance')
@@ -1049,7 +1049,7 @@ var ButtonAppearancePage = GObject.registerClass(
             menuButtonAppearanceRow.add_suffix(menuButtonAppearanceCombo);
 
             let menuButtonPaddingRow = new Adw.ActionRow({
-                title: _('Menu Button Padding')
+                title: _('Padding')
             });
             let menuButtonPadding = this._settings.get_int('button-padding');
 
@@ -1078,7 +1078,7 @@ var ButtonAppearancePage = GObject.registerClass(
 
             ///// Row for menu button offset /////
             let menuButtonOffsetRow = new Adw.ActionRow({
-                title: _('Menu Button Position')
+                title: _('Position in Panel')
             });
             let menuButtonOffset = this._settings.get_int('menu-button-position-offset');
 
@@ -1131,7 +1131,7 @@ var ButtonAppearancePage = GObject.registerClass(
             menuButtonAppearanceCombo.set_active(this._settings.get_enum('menu-button-appearance'));
 
             let menuButtonIconFrame = new Adw.PreferencesGroup({
-                title: _('Icon Appearance')
+                title: _('Icon Settings')
             });
             let menuButtonIconRow = new Adw.ActionRow({
                 title: _('Icon')
@@ -1146,7 +1146,7 @@ var ButtonAppearancePage = GObject.registerClass(
             menuButtonIconButton.connect('clicked', () => {
                 let dialog = new ArcMenuIconsDialogWindow(this._settings, this);
                 dialog.show();
-                dialog.connect('response', ()=> {
+                dialog.connect('response', () => {
                     dialog.destroy();
                 });
             });
@@ -1821,41 +1821,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         widthRow.add_suffix(widthSpinButton);
         menuSizeFrame.add(widthRow);
 
-        let iconsSizeFrame = new Adw.PreferencesGroup({
-            title: _("Menu Items Icon Size")
-        });
-
-        let gridIconsSizeRow = new Adw.ActionRow({
-            title: _("Grid Icons")
-        });
-        this.gridIconsSizeCombo = new Gtk.ComboBoxText({
-            valign: Gtk.Align.CENTER,
-        });
-        this.gridIconsSizeCombo.append("Default", _("Default"));
-        this.gridIconsSizeCombo.append("Small", _("Small") + " - " + _("Square"));
-        this.gridIconsSizeCombo.append("Medium", _("Medium") + " - " + _("Square"));
-        this.gridIconsSizeCombo.append("Large", _("Large") + " - " + _("Square"));
-        this.gridIconsSizeCombo.append("Small Rect", _("Small") + " - " + _("Wide"));
-        this.gridIconsSizeCombo.append("Medium Rect", _("Medium") + " - " + _("Wide"));
-        this.gridIconsSizeCombo.append("Large Rect", _("Large") + " - " + _("Wide"));
-        this.gridIconsSizeCombo.set_active(this._settings.get_enum('menu-item-grid-icon-size'));
-        this.gridIconsSizeCombo.connect('changed', (widget) => {
-            this._settings.set_enum('menu-item-grid-icon-size', widget.get_active());
-        });
-        gridIconsSizeRow.add_suffix(this.gridIconsSizeCombo);
-        iconsSizeFrame.add(gridIconsSizeRow);
-
-        [this.menuItemIconSizeCombo, this.menuItemIconSizeRow] = this.createIconSizeRow(_("Categories &amp; Applications"), 'menu-item-icon-size');
-        iconsSizeFrame.add(this.menuItemIconSizeRow);
-        [this.buttonIconSizeCombo, this.buttonIconSizeRow] = this.createIconSizeRow(_("Buttons"), 'button-item-icon-size');
-        iconsSizeFrame.add(this.buttonIconSizeRow);
-        [this.quicklinksIconSizeCombo, this.quicklinksIconSizeRow] = this.createIconSizeRow(_("Quick Links"),'quicklinks-item-icon-size');
-        iconsSizeFrame.add(this.quicklinksIconSizeRow);
-        [this.miscIconSizeCombo, this.miscIconSizeRow] = this.createIconSizeRow(_("Misc"), 'misc-item-icon-size');
-        iconsSizeFrame.add(this.miscIconSizeRow);
-
-        this.append(iconsSizeFrame);
-
         let generalSettingsFrame = new Adw.PreferencesGroup({
             title: _('General Settings')
         });
@@ -1935,6 +1900,42 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         vertSeparatorRow.add_suffix(vertSeparatorSwitch);
         generalSettingsFrame.add(vertSeparatorRow);
     
+        let iconsSizeFrame = new Adw.PreferencesGroup({
+            title: _("Icon Sizes"),
+            description: _("Modify the icon size of various menu elements.")
+        });
+
+        let gridIconsSizeRow = new Adw.ActionRow({
+            title: _("Grid Icons")
+        });
+        this.gridIconsSizeCombo = new Gtk.ComboBoxText({
+            valign: Gtk.Align.CENTER,
+        });
+        this.gridIconsSizeCombo.append("Default", _("Default"));
+        this.gridIconsSizeCombo.append("Small", _("Small") + " - " + _("Square"));
+        this.gridIconsSizeCombo.append("Medium", _("Medium") + " - " + _("Square"));
+        this.gridIconsSizeCombo.append("Large", _("Large") + " - " + _("Square"));
+        this.gridIconsSizeCombo.append("Small Rect", _("Small") + " - " + _("Wide"));
+        this.gridIconsSizeCombo.append("Medium Rect", _("Medium") + " - " + _("Wide"));
+        this.gridIconsSizeCombo.append("Large Rect", _("Large") + " - " + _("Wide"));
+        this.gridIconsSizeCombo.set_active(this._settings.get_enum('menu-item-grid-icon-size'));
+        this.gridIconsSizeCombo.connect('changed', (widget) => {
+            this._settings.set_enum('menu-item-grid-icon-size', widget.get_active());
+        });
+        gridIconsSizeRow.add_suffix(this.gridIconsSizeCombo);
+        iconsSizeFrame.add(gridIconsSizeRow);
+
+        [this.menuItemIconSizeCombo, this.menuItemIconSizeRow] = this.createIconSizeRow(_("Categories &amp; Applications"), 'menu-item-icon-size');
+        iconsSizeFrame.add(this.menuItemIconSizeRow);
+        [this.buttonIconSizeCombo, this.buttonIconSizeRow] = this.createIconSizeRow(_("Buttons"), 'button-item-icon-size');
+        iconsSizeFrame.add(this.buttonIconSizeRow);
+        [this.quicklinksIconSizeCombo, this.quicklinksIconSizeRow] = this.createIconSizeRow(_("Quick Links"),'quicklinks-item-icon-size');
+        iconsSizeFrame.add(this.quicklinksIconSizeRow);
+        [this.miscIconSizeCombo, this.miscIconSizeRow] = this.createIconSizeRow(_("Misc"), 'misc-item-icon-size');
+        iconsSizeFrame.add(this.miscIconSizeRow);
+
+        this.append(iconsSizeFrame);
+
         this.restoreDefaults = () => {
             this.heightValue = this._settings.get_default_value('menu-height').unpack();
             this.widthValue = this._settings.get_default_value('menu-width-adjustment').unpack();

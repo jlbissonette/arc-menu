@@ -647,6 +647,7 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
             reactive: false,
             can_focus: false,
         });
+        item.style = "font-weight: 700; font-size: 9pt;"
         item.add_style_class_name("arcmenu-menu-item");
         this.addMenuItem(item);
 
