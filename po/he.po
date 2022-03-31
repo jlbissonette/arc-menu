@@ -32,7 +32,7 @@ msgstr "יישומים תדירים"
 #: menulayouts/tweaks/tweaks.js:978 menulayouts/unity.js:58
 #: menulayouts/unity.js:323 menuWidgets.js:1687
 msgid "All Programs"
-msgstr "כל התכניות"
+msgstr "כל התוכניות"
 
 #: constants.js:80 menulayouts/insider.js:191 menulayouts/launcher.js:398
 #: menulayouts/plasma.js:140 menulayouts/raven.js:55 menulayouts/raven.js:200
@@ -45,7 +45,7 @@ msgstr "יישומים מוצמדים"
 
 #: constants.js:81 menulayouts/raven.js:288 menulayouts/unity.js:418
 msgid "Recent Files"
-msgstr "הקבצים האחרונים"
+msgstr "קבצים אחרונים"
 
 #: constants.js:190 menulayouts/mint.js:233 menulayouts/unity.js:238
 #: prefs.js:460
@@ -184,7 +184,7 @@ msgstr "הגדרות ArcMenu"
 
 #: menuButton.js:770
 msgid "Settings Quick Links:"
-msgstr ""
+msgstr "קישורים מהירים להגדרות:"
 
 #: menuButton.js:776
 msgid "Change Menu Layout"
@@ -228,7 +228,7 @@ msgstr "הגדרות מעגן Ubuntu"
 #: menulayouts/redmond.js:167 menulayouts/tognee.js:152
 #: menulayouts/unity.js:190 menulayouts/unity.js:233 menulayouts/windows.js:148
 msgid "Software"
-msgstr "תכנה"
+msgstr "תוכנה"
 
 #: menulayouts/arcmenu.js:196 menulayouts/mint.js:224 menulayouts/plasma.js:186
 #: menulayouts/raven.js:171 menulayouts/redmond.js:167
@@ -332,7 +332,7 @@ msgstr "יציאה"
 
 #: menulayouts/plasma.js:305 menulayouts/windows.js:289 prefs.js:5843
 msgid "Application Shortcuts"
-msgstr "קיצורי הדרך של יישומים"
+msgstr "קיצורי דרך ליישומים"
 
 #: menulayouts/plasma.js:309 menulayouts/windows.js:293
 msgid "Places"
@@ -410,7 +410,7 @@ msgstr "השבתת תמונת המשתמש"
 
 #: menulayouts/tweaks/tweaks.js:249
 msgid "Show Applications Grid"
-msgstr "הצגת טבלת היישומים"
+msgstr "הצגת רשת היישומים"
 
 #: menulayouts/tweaks/tweaks.js:269
 msgid "Disable Frequent Apps"
@@ -495,7 +495,7 @@ msgstr "הכפתורים בפריסת Unity"
 
 #: menulayouts/tweaks/tweaks.js:616
 msgid "Button Separator Position"
-msgstr ""
+msgstr "מיקום מפריד הכפתורים"
 
 #: menulayouts/tweaks/tweaks.js:625 menulayouts/tweaks/tweaks.js:735
 msgid "Separator Position"
@@ -508,7 +508,7 @@ msgstr "כלום"
 
 #: menulayouts/tweaks/tweaks.js:646 menulayouts/tweaks/tweaks.js:756
 msgid "Adjust the position of the separator in the button panel"
-msgstr ""
+msgstr "התאמת מיקום המפריד שבלוח הכפתורים"
 
 #: menulayouts/tweaks/tweaks.js:693
 msgid "Mint Layout Shortcuts"
@@ -516,7 +516,7 @@ msgstr "קיצורי הדרך בפריסת Mint"
 
 #: menulayouts/tweaks/tweaks.js:726
 msgid "Shortcut Separator Position"
-msgstr ""
+msgstr "מיקום מפריד הקיצורים"
 
 #: menulayouts/tweaks/tweaks.js:894 menulayouts/tweaks/tweaks.js:1025
 msgid "External Devices"
@@ -697,7 +697,7 @@ msgstr "הוספת יישומים"
 
 #: prefs.js:72
 msgid "Browse a list of all applications to add to your Pinned Apps list."
-msgstr ""
+msgstr "אפשר לעיין ברשימה של כל היישומים ולהוסיף כמה לרשימת היישומים המוצמדים."
 
 #: prefs.js:103 prefs.js:4676 prefs.js:4903
 msgid "Add Custom Shortcut"
@@ -705,7 +705,7 @@ msgstr "הוספת קיצור דרך מותאם אישית"
 
 #: prefs.js:110
 msgid "Create a custom shortcut to add to your Pinned Apps list."
-msgstr ""
+msgstr "אפשר ליצור קיצור דרך מותאם אישית ולהוסיפו לרשימת היישומים המוצמדים שלך."
 
 #: prefs.js:236
 msgid "Add to your Pinned Apps"
@@ -809,11 +809,11 @@ msgstr ""
 
 #: prefs.js:806
 msgid "Override the default behavoir of the Activities Hot Corner"
-msgstr ""
+msgstr "דריסת התנהגות ברירת המחדל של הפינה החמה של מסך הפעילויות"
 
 #: prefs.js:825
 msgid "Hotkey activation"
-msgstr "הפעלת מקש חם"
+msgstr "הפעלה בעזרת קיצור מקשים"
 
 #: prefs.js:832
 msgid "Choose a method for the hotkey activation"
@@ -829,11 +829,11 @@ msgstr "לחיצה על מקש"
 
 #: prefs.js:851
 msgid "Hotkey Options"
-msgstr "אפשרויות מקש חם"
+msgstr "אפשרויות קיצור מקשים"
 
 #: prefs.js:861
 msgid "Choose a Hotkey for ArcMenu"
-msgstr "נא לבחור מקש חם ל־ArcMenu"
+msgstr "נא לבחור קיצור מקשים עבור ArcMenu"
 
 #: prefs.js:870
 msgid "Left Super Key"
@@ -853,11 +853,11 @@ msgstr "הגדרת מקש Super הימני כמקש החם של ArcMenu"
 
 #: prefs.js:883
 msgid "Custom Hotkey"
-msgstr "מקש חם מותאם אישית"
+msgstr "קיצור מקשים מותאם אישית"
 
 #: prefs.js:887
 msgid "Set a custom hotkey for ArcMenu"
-msgstr "הגדרת מקש חם בהתאמה אישית עבור ArcMenu"
+msgstr "הגדרת קיצור מקשים בהתאמה אישית עבור ArcMenu"
 
 #: prefs.js:894
 msgid "Clear ArcMenu hotkey, use GNOME default"
@@ -984,7 +984,7 @@ msgstr "פעולת הפינה החמה של תצוגת הפעילויות"
 
 #: prefs.js:1275
 msgid "Choose the action of the Activities Hot Corner"
-msgstr ""
+msgstr "בחירת הפעולה של הפינה החמה של מסך הפעילויות"
 
 #: prefs.js:1277
 msgid "GNOME Default"
@@ -1056,11 +1056,11 @@ msgstr ""
 
 #: prefs.js:1365
 msgid "Apply changes and set new hot corner action"
-msgstr "החלת השינויים והגדרת פעולה חדשה למקש החם"
+msgstr "החלת השינויים והגדרת פעולה חדשה לקיצור המקשים"
 
 #: prefs.js:1436
 msgid "Set Custom Hotkey"
-msgstr "הגדרת מקש חם בהתאמה אישית"
+msgstr "הגדרת קיצור מקשים בהתאמה אישית"
 
 #: prefs.js:1460
 msgid "Choose Modifiers"
@@ -1090,7 +1090,7 @@ msgstr "נא ללחוץ על מקש כלשהו"
 #: prefs.js:1553
 #| msgid "Current Hotkey"
 msgid "New Hotkey"
-msgstr "מקש חם חדש"
+msgstr "קיצור מקשים חדש"
 
 #: prefs.js:1631
 msgid "Menu Button Appearance"
@@ -1175,7 +1175,7 @@ msgstr "צבע הרקע לתפריט כאשר הוא פעיל"
 
 #: prefs.js:1889
 msgid "Disable Rounded Corners"
-msgstr ""
+msgstr "השבתת הפינות המעוגלות"
 
 #: prefs.js:1975
 #| msgid "Override Menu Theme"
@@ -1291,11 +1291,11 @@ msgstr ""
 
 #: prefs.js:2980 prefs.js:4433
 msgid "Enable Vertical Separator"
-msgstr ""
+msgstr "הצגת מפריד אנכי"
 
 #: prefs.js:2988
 msgid "Enable a Vertical Separator"
-msgstr ""
+msgstr "להצגת מפריד אנכי"
 
 #: prefs.js:3002 prefs.js:4455
 msgid "Separator Color"
@@ -1327,7 +1327,7 @@ msgstr "השבתת חיצי קטגוריות"
 
 #: prefs.js:3188
 msgid "Disable the arrow on category menu items"
-msgstr ""
+msgstr "הסתרת החץ מפריטי קטגוריה בתפריט"
 
 #: prefs.js:3204
 msgid "Disable Searchbox Border"
