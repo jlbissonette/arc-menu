@@ -340,7 +340,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.ravenPositionChangedID = null;
         }
 
-        this.arcMenu.actor.style = '';
+        this.arcMenu.actor.style = null;
         this.arcMenu.box.style = null;
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;

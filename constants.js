@@ -48,7 +48,8 @@ var PrefsVisiblePage = {
     LAYOUT_TWEAKS: 3,
     ABOUT: 4,
     CUSTOMIZE_MENU: 5,
-    RUNNER_TWEAKS: 6
+    RUNNER_TWEAKS: 6,
+    GENERAL: 7,
 }
 
 var DefaultMenuViewTognee = {

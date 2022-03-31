@@ -104,11 +104,7 @@ var ApplicationContextItems = GObject.registerClass({
             );
 
             if (windows.length > 0){
-                let item = new PopupMenu.PopupMenuItem(_("Current Windows:"), {
-                    reactive: false,
-                    can_focus: false
-                });
-                item.actor.add_style_class_name('inactive');
+                let item = new PopupMenu.PopupSeparatorMenuItem(_("Open Windows"));
                 this.add_child(item);
 
                 windows.forEach(window => {
@@ -337,7 +333,7 @@ var ApplicationContextItems = GObject.registerClass({
     }
 
     _appendSeparator() {
-        let separator = new ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
+        let separator = new ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
         this.add_child(separator);
     }
 
@@ -361,7 +357,6 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
         this._settings = menuLayout._settings;
         this._menuButton = menuLayout.menuButton;
         this._app = app;
-        this.actor.add_style_class_name('popup-menu app-menu');
         this.layout = this._settings.get_enum('menu-layout');
         this.actor.add_style_class_name("app-menu");
         this._boxPointer.setSourceAlignment(0);
@@ -875,7 +870,7 @@ var Tooltip = class Arc_Menu_Tooltip{
             return;
         }
         this.sourceActor = sourceActor;
-        this.titleLabel.style = '';
+        this.titleLabel.style = null;
         this.location = location;
         this.descriptionLabel.hide();
         this.titleLabel.hide();
@@ -2824,7 +2819,7 @@ var MenuButtonWidget = class Arc_Menu_MenuButtonWidget{
     }
 
     hidePanelText() {
-        this._label.style = '';
+        this._label.style = null;
         if (this.actor.contains(this._label)) {
             this.actor.remove_child(this._label);
         }

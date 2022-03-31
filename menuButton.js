@@ -193,7 +193,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if(this.tooltip)
             this.tooltip.sourceActor = null;
         this._menuInForcedLocation = false;
-        this.arcMenu.actor.style = '';
+        this.arcMenu.actor.style = null;
         this.arcMenu.removeAll();
         this.section = new PopupMenu.PopupMenuSection();
         this.arcMenu.addMenuItem(this.section);
@@ -222,7 +222,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.MenuLayout.destroy();
         this.MenuLayout = null;
         
-        this.arcMenu.actor.style = '';
+        this.arcMenu.actor.style = null;
 
         this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
     
@@ -637,28 +637,18 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         Main.uiGroup.add_child(this.actor);
         this.actor.hide();
 
-        this.addMenuItem(this.createQuickLinkItem(_("ArcMenu Settings"), Constants.PrefsVisiblePage.MAIN));
-
-        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
-        this.addMenuItem(separator);
-
-        let item = new PopupMenu.PopupMenuItem(_("Settings Quick Links:"), { 
-            activate: false,
-            reactive: false,
-            can_focus: false,
-        });
+        let item = new PopupMenu.PopupSeparatorMenuItem(_("ArcMenu Settings"));
         item.style = "font-weight: 700; font-size: 9pt;"
         item.add_style_class_name("arcmenu-menu-item");
         this.addMenuItem(item);
 
+        this.addMenuItem(this.createQuickLinkItem(_("General Settings"), Constants.PrefsVisiblePage.GENERAL));
         this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
         this.addMenuItem(this.createQuickLinkItem(_("Layout Tweaks"), Constants.PrefsVisiblePage.LAYOUT_TWEAKS));
         this.addMenuItem(this.createQuickLinkItem(_("Customize Menu"), Constants.PrefsVisiblePage.CUSTOMIZE_MENU));
         this.addMenuItem(this.createQuickLinkItem(_("Button Settings"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
-
-        separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
-        this.addMenuItem(separator);
-
+        item = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+        this.addMenuItem(item);
         this.addMenuItem(this.createQuickLinkItem(_("About"), Constants.PrefsVisiblePage.ABOUT));
     }
 
@@ -666,19 +656,23 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         if(!this.extensionSettingsItem){
             let extensionCommand = 'gnome-extensions prefs ' + DASH_TO_PANEL_UUID; 
 
-            let item = new PopupMenu.PopupMenuItem(_("Dash to Panel Settings"));
-            item.add_style_class_name("arcmenu-menu-item");
-            item.connect('activate', ()=>{
+            this.dashToPanelLink = new PopupMenu.PopupMenuItem(_("Dash to Panel Settings"));
+            this.dashToPanelLink.add_style_class_name("arcmenu-menu-item");
+            this.dashToPanelLink.connect('activate', ()=>{
                 Util.spawnCommandLine(extensionCommand);
             });
-            this.addMenuItem(item, 1);
+            this.addMenuItem(this.dashToPanelLink, 0);
+
             this.extensionSettingsItem = true;
         }
     }
 
     removeExtensionSettings(){
-        let children = this._getMenuItems();
-        children[1].destroy();
+        if(this.dashToPanelLink){
+            this.dashToPanelLink
+            this.dashToPanelLink.destroy();
+        }
+
         this.extensionSettingsItem = false;
     }
 

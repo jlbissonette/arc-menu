@@ -2936,6 +2936,9 @@ function setVisiblePage(window){
     else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.ABOUT){
         window.set_visible_page_name("AboutPage");
     }
+    else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.GENERAL){
+        window.set_visible_page_name("GeneralSettingPage");
+    }
     settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.MAIN);
 }
 
