@@ -2730,13 +2730,18 @@ class Arc_Menu_SearchBox extends St.Entry {
     }
 
     _onKeyPress(actor, event) {
-        let symbol = event.get_key_symbol();
-        if (symbol == Clutter.KEY_Return ||
-            symbol == Clutter.KEY_KP_Enter) {
-            if (!this.isEmpty() && this.searchResults.getTopResult()) {
-                this.searchResults.getTopResult().activate(event);
+        const symbol = event.get_key_symbol();
+        const searchResult = this.searchResults.getTopResult();
+
+        if (!this.isEmpty() && searchResult){
+            if (symbol === Clutter.KEY_Return || symbol === Clutter.KEY_KP_Enter) {
+                searchResult.activate(event);
+                return Clutter.EVENT_STOP;
             }
-            return Clutter.EVENT_STOP;
+            else if (symbol === Clutter.KEY_Menu && searchResult.hasContextMenu){
+                searchResult.popupContextMenu();
+                return Clutter.EVENT_STOP;
+            }
         }
         this.emit('entry-key-press', event);
         return Clutter.EVENT_PROPAGATE;
