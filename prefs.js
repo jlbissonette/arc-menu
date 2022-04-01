@@ -436,10 +436,31 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             checkButton.connect('clicked', (widget) => {
                 this.newPinnedAppArray = [frameRow._name, frameRow._icon, frameRow._cmd];
 
-                if(!match)
+                if(!match){
+                    this.currentToast?.dismiss();
+
+                    this.currentToast = new Adw.Toast({
+                        title: _("%s has been pinned to ArcMenu").format(frameRow._name),
+                        timeout: 2
+                    });
+                    this.currentToast.connect("dismissed", () => this.currentToast = null);
+
+                    this.add_toast(this.currentToast);
                     this.emit("response", Gtk.ResponseType.APPLY);
-                else
+                }
+                else{
+                    this.currentToast?.dismiss();
+
+                    this.currentToast = new Adw.Toast({
+                        title: _("%s has been unpinned from ArcMenu").format(frameRow._name),
+                        timeout: 2
+                    });
+                    this.currentToast.connect("dismissed", () => this.currentToast = null);
+
+                    this.add_toast(this.currentToast);
                     this.emit("response", Gtk.ResponseType.REJECT);
+                }
+                    
 
                 match = !match;
                 checkButton.icon_name = match ? 'list-remove-symbolic' : 'list-add-symbolic';
@@ -1497,7 +1518,7 @@ var MenuLayoutPage = GObject.registerClass(
             mainBox.append(availableLayoutGroup);
 
             Constants.MenuStyles.STYLES.forEach((style) => {
-                let tile = new PW.MenuLayoutRow(_("%s Menu Layouts", style.TITLE).format(style.TITLE) , style.IMAGE, 46, style);
+                let tile = new PW.MenuLayoutRow(_("%s Menu Layouts").format(style.TITLE) , style.IMAGE, 46, style);
                 availableLayoutGroup.add(tile);
 
                 let menuLayoutsBox = new MenuLayoutCategoryPage(this._settings, this, tile, style.TITLE);
@@ -1575,7 +1596,7 @@ var MenuLayoutPage = GObject.registerClass(
         for(let styles of Constants.MenuStyles.STYLES){
             for(let style of styles.MENU_TYPE){
                 if(style.LAYOUT == index){
-                    return _("%s Layout Tweaks", style.TITLE).format(style.TITLE);
+                    return _("%s Layout Tweaks").format(style.TITLE);
                 }
             }
         }
@@ -1649,7 +1670,7 @@ var MenuLayoutCategoryPage = GObject.registerClass({
             });
             buttonBox.append(backButton);
             let chooseNewLayoutLabel = new Gtk.Label({
-                label: "<b>" +  _("%s Menu Layouts", title).format(title) + "</b>",
+                label: "<b>" +  _("%s Menu Layouts").format(title) + "</b>",
                 use_markup: true,
                 halign: Gtk.Align.CENTER,
                 hexpand: true
@@ -2811,8 +2832,8 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
             const currentSelectedRow = this.menuSettingsStackListBox.getSelectedRow();
             const pageName = currentSelectedRow.translatableName;
             let dialog = new Gtk.MessageDialog({
-                text: "<b>" + _("Reset all %s?", pageName).format(pageName) + '</b>',
-                secondary_text: _("All %s will be reset to the default value.", pageName).format(pageName),
+                text: "<b>" + _("Reset all %s?").format(pageName) + '</b>',
+                secondary_text: _("All %s will be reset to the default value.").format(pageName),
                 use_markup: true,
                 buttons: Gtk.ButtonsType.YES_NO,
                 message_type: Gtk.MessageType.WARNING,
