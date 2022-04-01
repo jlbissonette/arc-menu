@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-31 15:15-0400\n"
+"POT-Creation-Date: 2022-04-01 17:23-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,7 +28,7 @@ msgid "Frequent Apps"
 msgstr ""
 
 #: constants.js:66 menulayouts/az.js:127 menulayouts/az.js:153
-#: menulayouts/eleven.js:158 menulayouts/eleven.js:216 menuWidgets.js:1431
+#: menulayouts/eleven.js:158 menulayouts/eleven.js:216 menuWidgets.js:1444
 msgid "All Apps"
 msgstr ""
 
@@ -36,7 +36,7 @@ msgstr ""
 #: menulayouts/plasma.js:117 menulayouts/raven.js:55 menulayouts/raven.js:226
 #: menulayouts/raven.js:277 menulayouts/tweaks/tweaks.js:755
 #: menulayouts/unity.js:37 menulayouts/unity.js:282 menulayouts/unity.js:341
-#: menulayouts/windows.js:380 menuWidgets.js:1097 prefs.js:2774 utils.js:250
+#: menulayouts/windows.js:380 menuWidgets.js:1110 prefs.js:2796 utils.js:250
 msgid "Pinned Apps"
 msgstr ""
 
@@ -46,37 +46,37 @@ msgid "Recent Files"
 msgstr ""
 
 #: constants.js:232 menulayouts/mint.js:222 menulayouts/unity.js:205
-#: prefs.js:335
+#: prefs.js:336
 msgid "Log Out"
 msgstr ""
 
 #: constants.js:233 menulayouts/mint.js:223 menulayouts/unity.js:206
-#: prefs.js:334
+#: prefs.js:335
 msgid "Lock"
 msgstr ""
 
-#: constants.js:234 prefs.js:337
+#: constants.js:234 prefs.js:338
 msgid "Restart"
 msgstr ""
 
 #: constants.js:235 menulayouts/mint.js:224 menulayouts/unity.js:207
-#: prefs.js:336
+#: prefs.js:337
 msgid "Power Off"
 msgstr ""
 
-#: constants.js:236 prefs.js:338
+#: constants.js:236 prefs.js:339
 msgid "Suspend"
 msgstr ""
 
-#: constants.js:237 prefs.js:339
+#: constants.js:237 prefs.js:340
 msgid "Hybrid Sleep"
 msgstr ""
 
-#: constants.js:238 prefs.js:340
+#: constants.js:238 prefs.js:341
 msgid "Hibernate"
 msgstr ""
 
-#: constants.js:361 prefs.js:2609
+#: constants.js:361 prefs.js:2631
 msgid "ArcMenu"
 msgstr ""
 
@@ -175,12 +175,12 @@ msgstr ""
 #: menuButton.js:640 menulayouts/arcmenu.js:178 menulayouts/plasma.js:167
 #: menulayouts/raven.js:166 menulayouts/redmond.js:143
 #: menulayouts/tognee.js:138 menulayouts/unity.js:152
-#: menulayouts/windows.js:118 menuWidgets.js:1886 prefs.js:310 prefs.js:324
-#: prefs.js:2410 prefs.js:2963
+#: menulayouts/windows.js:118 menuWidgets.js:1899 prefs.js:311 prefs.js:325
+#: prefs.js:2432 prefs.js:2985
 msgid "ArcMenu Settings"
 msgstr ""
 
-#: menuButton.js:645 prefs.js:1825
+#: menuButton.js:645 prefs.js:1847
 msgid "General Settings"
 msgstr ""
 
@@ -196,11 +196,11 @@ msgstr ""
 msgid "Customize Menu"
 msgstr ""
 
-#: menuButton.js:649 prefs.js:2773
+#: menuButton.js:649 prefs.js:2795
 msgid "Button Settings"
 msgstr ""
 
-#: menuButton.js:652 prefs.js:2588
+#: menuButton.js:652 prefs.js:2610
 msgid "About"
 msgstr ""
 
@@ -235,20 +235,20 @@ msgstr ""
 #: menulayouts/insider.js:55 menulayouts/mint.js:212 menulayouts/plasma.js:167
 #: menulayouts/raven.js:166 menulayouts/redmond.js:143
 #: menulayouts/tognee.js:138 menulayouts/unity.js:152 menulayouts/windows.js:54
-#: menulayouts/windows.js:118 menuWidgets.js:1889
+#: menulayouts/windows.js:118 menuWidgets.js:1902
 msgid "Terminal"
 msgstr ""
 
 #: menulayouts/arcmenu.js:178 menulayouts/plasma.js:167
 #: menulayouts/raven.js:166 menulayouts/redmond.js:143
 #: menulayouts/tognee.js:138 menulayouts/unity.js:152
-#: menulayouts/windows.js:118 menuWidgets.js:810 prefs.js:323
+#: menulayouts/windows.js:118 menuWidgets.js:823 prefs.js:324
 msgid "Activities Overview"
 msgstr ""
 
 #: menulayouts/az.js:114 menulayouts/eleven.js:143 menulayouts/insider.js:52
 #: menulayouts/mint.js:221 menulayouts/unity.js:204 menulayouts/windows.js:51
-#: menuWidgets.js:1892
+#: menuWidgets.js:1905
 msgid "Files"
 msgstr ""
 
@@ -286,13 +286,13 @@ msgstr ""
 
 #: menulayouts/baseMenuLayout.js:417 menulayouts/plasma.js:126
 #: menulayouts/unity.js:202 placeDisplay.js:125 placeDisplay.js:148
-#: prefs.js:316 prefs.js:332
+#: prefs.js:317 prefs.js:333
 msgid "Computer"
 msgstr ""
 
 #: menulayouts/baseMenuLayout.js:417 menulayouts/baseMenuLayout.js:463
-#: menulayouts/plasma.js:289 menulayouts/windows.js:186 prefs.js:317
-#: prefs.js:333
+#: menulayouts/plasma.js:289 menulayouts/windows.js:186 prefs.js:318
+#: prefs.js:334
 msgid "Network"
 msgstr ""
 
@@ -310,7 +310,7 @@ msgid "All"
 msgstr ""
 
 #: menulayouts/launcher.js:147 menulayouts/launcher.js:329
-#: menulayouts/plasma.js:122 menuWidgets.js:1389 menuWidgets.js:2774
+#: menulayouts/plasma.js:122 menuWidgets.js:1402 menuWidgets.js:2792
 msgid "Applications"
 msgstr ""
 
@@ -318,15 +318,15 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: menulayouts/launcher.js:358 menuWidgets.js:2620
+#: menulayouts/launcher.js:358 menuWidgets.js:2633
 msgid "Search…"
 msgstr ""
 
-#: menulayouts/plasma.js:130 menuWidgets.js:1121
+#: menulayouts/plasma.js:130 menuWidgets.js:1134
 msgid "Leave"
 msgstr ""
 
-#: menulayouts/plasma.js:257 menulayouts/windows.js:253 prefs.js:2776
+#: menulayouts/plasma.js:257 menulayouts/windows.js:253 prefs.js:2798
 msgid "Application Shortcuts"
 msgstr ""
 
@@ -343,11 +343,11 @@ msgstr ""
 msgid "Devices"
 msgstr ""
 
-#: menulayouts/plasma.js:316 menuWidgets.js:1147
+#: menulayouts/plasma.js:316 menuWidgets.js:1160
 msgid "Session"
 msgstr ""
 
-#: menulayouts/plasma.js:321 menuWidgets.js:1151
+#: menulayouts/plasma.js:321 menuWidgets.js:1164
 msgid "System"
 msgstr ""
 
@@ -362,8 +362,8 @@ msgstr ""
 msgid "Shortcuts"
 msgstr ""
 
-#: menulayouts/tweaks/tweaks.js:32 menuWidgets.js:1459 menuWidgets.js:1492
-#: prefs.js:1641
+#: menulayouts/tweaks/tweaks.js:32 menuWidgets.js:1472 menuWidgets.js:1505
+#: prefs.js:1663
 msgid "Back"
 msgstr ""
 
@@ -387,7 +387,7 @@ msgstr ""
 msgid "Round"
 msgstr ""
 
-#: menulayouts/tweaks/tweaks.js:145 prefs.js:1915 prefs.js:1916 prefs.js:1917
+#: menulayouts/tweaks/tweaks.js:145 prefs.js:1937 prefs.js:1938 prefs.js:1939
 msgid "Square"
 msgstr ""
 
@@ -454,12 +454,12 @@ msgid "Width"
 msgstr ""
 
 #: menulayouts/tweaks/tweaks.js:409 menulayouts/tweaks/tweaks.js:435
-#: menulayouts/tweaks/tweaks.js:462 prefs.js:1072 prefs.js:1101 prefs.js:1914
-#: prefs.js:1973
+#: menulayouts/tweaks/tweaks.js:462 prefs.js:1094 prefs.js:1123 prefs.js:1936
+#: prefs.js:1995
 msgid "Default"
 msgstr ""
 
-#: menulayouts/tweaks/tweaks.js:418 prefs.js:1744
+#: menulayouts/tweaks/tweaks.js:418 prefs.js:1766
 msgid "Height"
 msgstr ""
 
@@ -494,7 +494,7 @@ msgid "Separator Position"
 msgstr ""
 
 #: menulayouts/tweaks/tweaks.js:528 menulayouts/tweaks/tweaks.js:622
-#: prefs.js:746
+#: prefs.js:768
 msgid "None"
 msgstr ""
 
@@ -506,11 +506,11 @@ msgstr ""
 msgid "Position on Monitor"
 msgstr ""
 
-#: menulayouts/tweaks/tweaks.js:583 prefs.js:612 prefs.js:639
+#: menulayouts/tweaks/tweaks.js:583 prefs.js:634 prefs.js:661
 msgid "Left"
 msgstr ""
 
-#: menulayouts/tweaks/tweaks.js:584 prefs.js:614 prefs.js:641
+#: menulayouts/tweaks/tweaks.js:584 prefs.js:636 prefs.js:663
 msgid "Right"
 msgstr ""
 
@@ -608,51 +608,51 @@ msgstr ""
 msgid "Open Folder Location"
 msgstr ""
 
-#: menuWidgets.js:1084
+#: menuWidgets.js:1097
 msgid "Configure Runner"
 msgstr ""
 
-#: menuWidgets.js:1109
+#: menuWidgets.js:1122
 msgid "Extras"
 msgstr ""
 
-#: menuWidgets.js:1216
+#: menuWidgets.js:1229
 msgid "Categories"
 msgstr ""
 
-#: menuWidgets.js:1536
+#: menuWidgets.js:1549
 msgid "All Applications"
 msgstr ""
 
-#: menuWidgets.js:2185
+#: menuWidgets.js:2198
 msgid "New"
 msgstr ""
 
-#: menuWidgets.js:2936
+#: menuWidgets.js:2954
 msgid "Add world clocks…"
 msgstr ""
 
-#: menuWidgets.js:2937
+#: menuWidgets.js:2955
 msgid "World Clocks"
 msgstr ""
 
-#: menuWidgets.js:3219
+#: menuWidgets.js:3237
 msgid "Loading…"
 msgstr ""
 
-#: menuWidgets.js:3229
+#: menuWidgets.js:3247
 msgid "Go online for weather information"
 msgstr ""
 
-#: menuWidgets.js:3231
+#: menuWidgets.js:3249
 msgid "Weather information is currently unavailable"
 msgstr ""
 
-#: menuWidgets.js:3241
+#: menuWidgets.js:3259
 msgid "Weather"
 msgstr ""
 
-#: menuWidgets.js:3243
+#: menuWidgets.js:3261
 msgid "Select weather location…"
 msgstr ""
 
@@ -683,559 +683,569 @@ msgstr ""
 msgid "Add Custom Shortcut"
 msgstr ""
 
-#: prefs.js:299
+#: prefs.js:300
 msgid "Add to your Pinned Apps"
 msgstr ""
 
-#: prefs.js:301
+#: prefs.js:302
 msgid "Change Selected Pinned App"
 msgstr ""
 
-#: prefs.js:303
+#: prefs.js:304
 msgid "Select Application Shortcuts"
 msgstr ""
 
-#: prefs.js:305
+#: prefs.js:306
 msgid "Select Directory Shortcuts"
 msgstr ""
 
-#: prefs.js:318
+#: prefs.js:319
 msgid "Recent"
 msgstr ""
 
-#: prefs.js:325
+#: prefs.js:326
 msgid "Run Command..."
 msgstr ""
 
-#: prefs.js:326
+#: prefs.js:327
 msgid "Show All Applications"
 msgstr ""
 
-#: prefs.js:469
+#: prefs.js:444
+#, javascript-format
+msgid "%s has been pinned to ArcMenu"
+msgstr ""
+
+#: prefs.js:456
+#, javascript-format
+msgid "%s has been unpinned from ArcMenu"
+msgstr ""
+
+#: prefs.js:491
 msgid "Add a Custom Shortcut"
 msgstr ""
 
-#: prefs.js:472
+#: prefs.js:494
 msgid "Edit Pinned App"
 msgstr ""
 
-#: prefs.js:474
+#: prefs.js:496
 msgid "Edit Shortcut"
 msgstr ""
 
-#: prefs.js:484
+#: prefs.js:506
 msgid "Title"
 msgstr ""
 
-#: prefs.js:495 prefs.js:1026 prefs.js:1137
+#: prefs.js:517 prefs.js:1048 prefs.js:1159
 msgid "Icon"
 msgstr ""
 
-#: prefs.js:505 prefs.js:1308
+#: prefs.js:527 prefs.js:1330
 msgid "Browse..."
 msgstr ""
 
-#: prefs.js:511 prefs.js:1313
+#: prefs.js:533 prefs.js:1335
 msgid "Select an Icon"
 msgstr ""
 
-#: prefs.js:540
+#: prefs.js:562
 msgid "Command"
 msgstr ""
 
-#: prefs.js:543
+#: prefs.js:565
 msgid "Shortcut Path"
 msgstr ""
 
-#: prefs.js:553 prefs.js:968 prefs.js:1626
+#: prefs.js:575 prefs.js:990 prefs.js:1648
 msgid "Apply"
 msgstr ""
 
-#: prefs.js:553
+#: prefs.js:575
 msgid "Add"
 msgstr ""
 
-#: prefs.js:578
+#: prefs.js:600
 msgid "General"
 msgstr ""
 
-#: prefs.js:585
+#: prefs.js:607
 msgid "Display Options"
 msgstr ""
 
-#: prefs.js:592
+#: prefs.js:614
 msgid "Show Activities Button"
 msgstr ""
 
-#: prefs.js:606 prefs.js:1081
+#: prefs.js:628 prefs.js:1103
 msgid "Position in Panel"
 msgstr ""
 
-#: prefs.js:613 prefs.js:640
+#: prefs.js:635 prefs.js:662
 msgid "Center"
 msgstr ""
 
-#: prefs.js:629
+#: prefs.js:651
 msgid "Menu Alignment"
 msgstr ""
 
-#: prefs.js:652
+#: prefs.js:674
 msgid "Display ArcMenu on all Panels"
 msgstr ""
 
-#: prefs.js:653
+#: prefs.js:675
 msgid "Dash to Panel extension required"
 msgstr ""
 
-#: prefs.js:675
+#: prefs.js:697
 msgid "Hotkey Options"
 msgstr ""
 
-#: prefs.js:678
+#: prefs.js:700
 msgid "Standalone Runner Menu"
 msgstr ""
 
-#: prefs.js:697
+#: prefs.js:719
 msgid "Enable a standalone Runner menu"
 msgstr ""
 
-#: prefs.js:727
+#: prefs.js:749
 msgid "Open on Primary Monitor"
 msgstr ""
 
-#: prefs.js:739
+#: prefs.js:761
 msgid "Menu Hotkey"
 msgstr ""
 
-#: prefs.js:739
+#: prefs.js:761
 msgid "Runner Hotkey"
 msgstr ""
 
-#: prefs.js:747
+#: prefs.js:769
 msgid "Left Super Key"
 msgstr ""
 
-#: prefs.js:748
+#: prefs.js:770
 msgid "Custom Hotkey"
 msgstr ""
 
-#: prefs.js:752
+#: prefs.js:774
 msgid "Current Hotkey"
 msgstr ""
 
-#: prefs.js:763
+#: prefs.js:785
 msgid "Modify Hotkey"
 msgstr ""
 
-#: prefs.js:843
+#: prefs.js:865
 msgid "Set Custom Hotkey"
 msgstr ""
 
-#: prefs.js:868
+#: prefs.js:890
 msgid "Choose Modifiers"
 msgstr ""
 
-#: prefs.js:878
+#: prefs.js:900
 msgid "Ctrl"
 msgstr ""
 
-#: prefs.js:882
+#: prefs.js:904
 msgid "Super"
 msgstr ""
 
-#: prefs.js:886
+#: prefs.js:908
 msgid "Shift"
 msgstr ""
 
-#: prefs.js:890
+#: prefs.js:912
 msgid "Alt"
 msgstr ""
 
-#: prefs.js:942
+#: prefs.js:964
 msgid "Press any key"
 msgstr ""
 
-#: prefs.js:958
+#: prefs.js:980
 msgid "New Hotkey"
 msgstr ""
 
-#: prefs.js:1017
+#: prefs.js:1039
 msgid "Menu Button"
 msgstr ""
 
-#: prefs.js:1020
+#: prefs.js:1042
 msgid "Appearance"
 msgstr ""
 
-#: prefs.js:1027 prefs.js:1112
+#: prefs.js:1049 prefs.js:1134
 msgid "Text"
 msgstr ""
 
-#: prefs.js:1028
+#: prefs.js:1050
 msgid "Icon and Text"
 msgstr ""
 
-#: prefs.js:1029
+#: prefs.js:1051
 msgid "Text and Icon"
 msgstr ""
 
-#: prefs.js:1030
+#: prefs.js:1052
 msgid "Hidden"
 msgstr ""
 
-#: prefs.js:1052
+#: prefs.js:1074
 msgid "Padding"
 msgstr ""
 
-#: prefs.js:1134
+#: prefs.js:1156
 msgid "Icon Settings"
 msgstr ""
 
-#: prefs.js:1141
+#: prefs.js:1163
 msgid "Browse Icons"
 msgstr ""
 
-#: prefs.js:1158
+#: prefs.js:1180
 msgid "Icon Size"
 msgstr ""
 
-#: prefs.js:1205 prefs.js:1210
+#: prefs.js:1227 prefs.js:1232
 msgid "ArcMenu Icons"
 msgstr ""
 
-#: prefs.js:1233
+#: prefs.js:1255
 msgid "Distro Icons"
 msgstr ""
 
-#: prefs.js:1269 prefs.js:1302
+#: prefs.js:1291 prefs.js:1324
 msgid "Custom Icon"
 msgstr ""
 
-#: prefs.js:1400
+#: prefs.js:1422
 msgid "Legal disclaimer for Distro Icons"
 msgstr ""
 
-#: prefs.js:1456
+#: prefs.js:1478
 msgid "Layouts"
 msgstr ""
 
-#: prefs.js:1480
+#: prefs.js:1502
 msgid "Current Menu Layout"
 msgstr ""
 
-#: prefs.js:1495
+#: prefs.js:1517
 msgid "Available Menu Layouts"
 msgstr ""
 
-#: prefs.js:1500 prefs.js:1652
+#: prefs.js:1522 prefs.js:1674
 #, javascript-format
 msgid "%s Menu Layouts"
 msgstr ""
 
-#: prefs.js:1578
+#: prefs.js:1600
 #, javascript-format
 msgid "%s Layout Tweaks"
 msgstr ""
 
-#: prefs.js:1722
+#: prefs.js:1744
 msgid "Menu Size"
 msgstr ""
 
-#: prefs.js:1764
+#: prefs.js:1786
 msgid "Left-Panel Width"
 msgstr ""
 
-#: prefs.js:1765 prefs.js:1786 prefs.js:1891
+#: prefs.js:1787 prefs.js:1808 prefs.js:1913
 msgid "Traditional Layouts"
 msgstr ""
 
-#: prefs.js:1785
+#: prefs.js:1807
 msgid "Right-Panel Width"
 msgstr ""
 
-#: prefs.js:1805
+#: prefs.js:1827
 msgid "Width Offset"
 msgstr ""
 
-#: prefs.js:1806
+#: prefs.js:1828
 msgid "Non-Traditional Layouts"
 msgstr ""
 
-#: prefs.js:1828
+#: prefs.js:1850
 msgid "Override Menu Location"
 msgstr ""
 
-#: prefs.js:1833
+#: prefs.js:1855
 msgid "Off"
 msgstr ""
 
-#: prefs.js:1834
+#: prefs.js:1856
 msgid "Top Centered"
 msgstr ""
 
-#: prefs.js:1835
+#: prefs.js:1857
 msgid "Bottom Centered"
 msgstr ""
 
-#: prefs.js:1845
+#: prefs.js:1867
 msgid "Show Application Descriptions"
 msgstr ""
 
-#: prefs.js:1859
+#: prefs.js:1881
 msgid "Category Icon Type"
 msgstr ""
 
-#: prefs.js:1864 prefs.js:1880
+#: prefs.js:1886 prefs.js:1902
 msgid "Full Color"
 msgstr ""
 
-#: prefs.js:1865 prefs.js:1881
+#: prefs.js:1887 prefs.js:1903
 msgid "Symbolic"
 msgstr ""
 
-#: prefs.js:1874
+#: prefs.js:1896
 msgid "Shortcuts Icon Type"
 msgstr ""
 
-#: prefs.js:1890
+#: prefs.js:1912
 msgid "Vertical Separator"
 msgstr ""
 
-#: prefs.js:1904
+#: prefs.js:1926
 msgid "Icon Sizes"
 msgstr ""
 
-#: prefs.js:1905
+#: prefs.js:1927
 msgid "Modify the icon size of various menu elements."
 msgstr ""
 
-#: prefs.js:1909
+#: prefs.js:1931
 msgid "Grid Icons"
 msgstr ""
 
-#: prefs.js:1915 prefs.js:1918 prefs.js:1975
+#: prefs.js:1937 prefs.js:1940 prefs.js:1997
 msgid "Small"
 msgstr ""
 
-#: prefs.js:1916 prefs.js:1919 prefs.js:1976
+#: prefs.js:1938 prefs.js:1941 prefs.js:1998
 msgid "Medium"
 msgstr ""
 
-#: prefs.js:1917 prefs.js:1920 prefs.js:1977
+#: prefs.js:1939 prefs.js:1942 prefs.js:1999
 msgid "Large"
 msgstr ""
 
-#: prefs.js:1918 prefs.js:1919 prefs.js:1920
+#: prefs.js:1940 prefs.js:1941 prefs.js:1942
 msgid "Wide"
 msgstr ""
 
-#: prefs.js:1928
+#: prefs.js:1950
 msgid "Categories &amp; Applications"
 msgstr ""
 
-#: prefs.js:1930
+#: prefs.js:1952
 msgid "Buttons"
 msgstr ""
 
-#: prefs.js:1932
+#: prefs.js:1954
 msgid "Quick Links"
 msgstr ""
 
-#: prefs.js:1934 prefs.js:2400
+#: prefs.js:1956 prefs.js:2422
 msgid "Misc"
 msgstr ""
 
-#: prefs.js:1974
+#: prefs.js:1996
 msgid "Extra Small"
 msgstr ""
 
-#: prefs.js:1978
+#: prefs.js:2000
 msgid "Extra Large"
 msgstr ""
 
-#: prefs.js:2009
+#: prefs.js:2031
 msgid "Disable ScrollView Fade Effects"
 msgstr ""
 
-#: prefs.js:2024
+#: prefs.js:2046
 msgid "Disable Tooltips"
 msgstr ""
 
-#: prefs.js:2039
+#: prefs.js:2061
 msgid "Alphabetize 'All Programs' Category"
 msgstr ""
 
-#: prefs.js:2054
+#: prefs.js:2076
 msgid "Show Hidden Recent Files"
 msgstr ""
 
-#: prefs.js:2069 prefs.js:2083
+#: prefs.js:2091 prefs.js:2105
 msgid "Multi-Lined Labels"
 msgstr ""
 
-#: prefs.js:2083
+#: prefs.js:2105
 msgid "Enable/Disable multi-lined labels on large application icon layouts."
 msgstr ""
 
-#: prefs.js:2102
+#: prefs.js:2124
 msgid "Disable New Apps Tracker"
 msgstr ""
 
-#: prefs.js:2121
+#: prefs.js:2143
 msgid "Clear Apps Marked 'New'"
 msgstr ""
 
-#: prefs.js:2126
+#: prefs.js:2148
 msgid "Clear All"
 msgstr ""
 
-#: prefs.js:2175
+#: prefs.js:2197
 msgid "Extra Search Providers"
 msgstr ""
 
-#: prefs.js:2178
+#: prefs.js:2200
 msgid "Search for open windows across all workspaces"
 msgstr ""
 
-#: prefs.js:2192
+#: prefs.js:2214
 msgid "Search for recent files"
 msgstr ""
 
-#: prefs.js:2206 prefs.js:2778
+#: prefs.js:2228 prefs.js:2800
 msgid "Search Options"
 msgstr ""
 
-#: prefs.js:2209
+#: prefs.js:2231
 msgid "Show descriptions of search results"
 msgstr ""
 
-#: prefs.js:2222
+#: prefs.js:2244
 msgid "Highlight search result terms"
 msgstr ""
 
-#: prefs.js:2251
+#: prefs.js:2273
 msgid "Max Search Results"
 msgstr ""
 
-#: prefs.js:2407
+#: prefs.js:2429
 msgid "Export or Import Settings"
 msgstr ""
 
-#: prefs.js:2417
+#: prefs.js:2439
 msgid "Export or Import ArcMenu Settings"
 msgstr ""
 
-#: prefs.js:2418
+#: prefs.js:2440
 msgid "Importing will overwrite current settings."
 msgstr ""
 
-#: prefs.js:2432
+#: prefs.js:2454
 msgid "Import"
 msgstr ""
 
-#: prefs.js:2437
+#: prefs.js:2459
 msgid "Import settings"
 msgstr ""
 
-#: prefs.js:2460
+#: prefs.js:2482
 msgid "Export"
 msgstr ""
 
-#: prefs.js:2465
+#: prefs.js:2487
 msgid "Export settings"
 msgstr ""
 
-#: prefs.js:2484
+#: prefs.js:2506
 msgid "ArcMenu Settings Window Size"
 msgstr ""
 
-#: prefs.js:2487
+#: prefs.js:2509
 msgid "Window Width"
 msgstr ""
 
-#: prefs.js:2506
+#: prefs.js:2528
 msgid "Window Height"
 msgstr ""
 
-#: prefs.js:2527
+#: prefs.js:2549
 msgid "Reset all ArcMenu Settings"
 msgstr ""
 
-#: prefs.js:2533
+#: prefs.js:2555
 msgid "Reset all Settings"
 msgstr ""
 
-#: prefs.js:2539
+#: prefs.js:2561
 msgid "Reset all settings?"
 msgstr ""
 
-#: prefs.js:2540
+#: prefs.js:2562
 msgid "All ArcMenu settings will be reset to the default value."
 msgstr ""
 
-#: prefs.js:2616
+#: prefs.js:2638
 msgid "Application Menu Extension for GNOME"
 msgstr ""
 
-#: prefs.js:2630
+#: prefs.js:2652
 msgid "ArcMenu Version"
 msgstr ""
 
-#: prefs.js:2643
+#: prefs.js:2665
 msgid "Git Commit"
 msgstr ""
 
-#: prefs.js:2656
+#: prefs.js:2678
 msgid "GNOME Version"
 msgstr ""
 
-#: prefs.js:2664
+#: prefs.js:2686
 msgid "OS"
 msgstr ""
 
-#: prefs.js:2687
+#: prefs.js:2709
 msgid "Session Type"
 msgstr ""
 
-#: prefs.js:2747
+#: prefs.js:2769
 msgid "Customize"
 msgstr ""
 
-#: prefs.js:2761 prefs.js:2772
+#: prefs.js:2783 prefs.js:2794
 msgid "Menu Settings"
 msgstr ""
 
-#: prefs.js:2775
+#: prefs.js:2797
 msgid "Directory Shortcuts"
 msgstr ""
 
-#: prefs.js:2777
+#: prefs.js:2799
 msgid "Power Options"
 msgstr ""
 
-#: prefs.js:2779
+#: prefs.js:2801
 msgid "Extra Categories"
 msgstr ""
 
-#: prefs.js:2780
+#: prefs.js:2802
 msgid "Fine-Tune"
 msgstr ""
 
-#: prefs.js:2803
+#: prefs.js:2825
 msgid "Reset"
 msgstr ""
 
-#: prefs.js:2814
+#: prefs.js:2836
 #, javascript-format
 msgid "Reset all %s?"
 msgstr ""
 
-#: prefs.js:2815
+#: prefs.js:2837
 #, javascript-format
 msgid "All %s will be reset to the default value."
 msgstr ""
 
-#: prefs.js:2971
+#: prefs.js:2993
 msgid "Invalid Shortcut"
 msgstr ""
 
