@@ -376,6 +376,7 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
             this.contextMenuItems.destroy();
             this.destroy();
         });
+        this.actor.connect("key-press-event", this._menuKeyPress.bind(this));
     }
 
     centerBoxPointerPosition(){
@@ -419,6 +420,15 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
 
     rebuildItems(){
         this.contextMenuItems.rebuildItems();
+    }
+
+    _menuKeyPress(actor, event){
+        let symbol = event.get_key_symbol();
+        if (symbol === Clutter.KEY_Menu){
+            this.toggle();
+            this.sourceActor.sync_hover();
+            this.sourceActor.hovered = this.sourceActor.hover;
+        }
     }
 
     _onKeyPress(actor, event) {
@@ -657,6 +667,9 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             this._menuLayout.mainBox.grab_key_focus();
             this.activate(Clutter.get_current_event());
             return Clutter.EVENT_STOP;
+        }
+        else if (symbol === Clutter.KEY_Menu && this.hasContextMenu){
+            this.popupContextMenu();
         }
         return Clutter.EVENT_PROPAGATE;
     }
