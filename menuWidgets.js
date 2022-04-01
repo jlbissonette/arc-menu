@@ -384,6 +384,12 @@ var ApplicationContextItems = GObject.registerClass({
 
     _appendMenuItem(labelText) {
         let item = new ArcMenuPopupBaseMenuItem(this._menuLayout);
+        item.isContextMenuItem = true;
+        item.closeContextMenu = () => {
+            this.close();
+            this.sourceActor.grab_key_focus();
+            this.sourceActor.active = true;
+        };
         this.label = new St.Label({
             text: _(labelText),
             y_expand: true,
@@ -705,6 +711,13 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         if ( symbol == Clutter.KEY_Return || symbol == Clutter.KEY_KP_Enter) {
             this.activate(Clutter.get_current_event());
             return Clutter.EVENT_STOP;
+        }
+        else if (symbol === Clutter.KEY_Menu && this.hasContextMenu){
+            this.popupContextMenu();
+            this.contextMenu.actor.navigate_focus(null, St.DirectionType.TAB_FORWARD, false);
+        }
+        else if (symbol === Clutter.KEY_Menu && this.isContextMenuItem){
+            this.closeContextMenu();
         }
         return Clutter.EVENT_PROPAGATE;
     }
