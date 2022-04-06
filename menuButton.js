@@ -193,7 +193,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if(this.tooltip)
             this.tooltip.sourceActor = null;
         this._menuInForcedLocation = false;
-        this.arcMenu.actor.style = null;
         this.arcMenu.removeAll();
         this.section = new PopupMenu.PopupMenuSection();
         this.arcMenu.addMenuItem(this.section);
@@ -221,9 +220,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
 
         this.MenuLayout.destroy();
         this.MenuLayout = null;
-        
-        this.arcMenu.actor.style = null;
-
         this.MenuLayout = Utils.getMenuLayout(this, this._settings.get_enum('menu-layout'));
     
         this.setMenuPositionAlignment();
@@ -297,7 +293,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.arcMenu.sourceActor = this;
             this.arcMenu.focusActor = this;
             this.arcMenu._boxPointer.setPosition(this, 0.5);
-            this.arcMenu.actor.style.replaceAll("margin-bottom: 0px;", "");
+            this.arcMenu.actor.style = null
             this.setMenuPositionAlignment();
             this._menuInForcedLocation = false;
             return;
@@ -326,13 +322,13 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         if(forcedMenuLocation === Constants.ForcedMenuLocation.TOP_CENTERED){
             this.updateArrowSide(St.Side.TOP);
             positionY = rect.y;
-            this.arcMenu.actor.style.replaceAll("margin-bottom: 0px;", "");
+            this.arcMenu.actor.style = null;
         }
             
         else if(forcedMenuLocation === Constants.ForcedMenuLocation.BOTTOM_CENTERED){
             this.updateArrowSide(St.Side.BOTTOM);
-            positionY = rect.y + rect.height + 4;
-            this.arcMenu.actor.style += 'margin-bottom: 0px;';
+            positionY = rect.y + rect.height;
+            this.arcMenu.actor.style = 'margin-bottom: 0px;';
         }
            
         this.dummyWidget.set_position(positionX, positionY);
