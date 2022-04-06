@@ -876,6 +876,8 @@ var BaseLayout = class {
                     this.searchBox.setText(newText);
                 }
                 return Clutter.EVENT_PROPAGATE;
+            case Clutter.KEY_Tab:
+            case Clutter.KEY_ISO_Left_Tab:
             case Clutter.KEY_Up:
             case Clutter.KEY_Down:
             case Clutter.KEY_Left:
@@ -883,12 +885,16 @@ var BaseLayout = class {
                 let direction;
                 if (symbol === Clutter.KEY_Down)
                     direction = St.DirectionType.DOWN;
-                if (symbol === Clutter.KEY_Right)
+                else if (symbol === Clutter.KEY_Right)
                     direction = St.DirectionType.RIGHT
-                if (symbol === Clutter.KEY_Up)
+                else if (symbol === Clutter.KEY_Up)
                     direction = St.DirectionType.UP;
-                if (symbol === Clutter.KEY_Left)
+                else if (symbol === Clutter.KEY_Left)
                     direction = St.DirectionType.LEFT;
+                else if (symbol === Clutter.KEY_Tab)
+                    direction = St.DirectionType.TAB_FORWARD;
+                else if (symbol === Clutter.KEY_ISO_Left_Tab)
+                    direction = St.DirectionType.TAB_BACKWARD;
                     
                 if(this.layoutProperties.Search && this.searchBox.hasKeyFocus() && this.searchResults.hasActiveResult() && this.searchResults.get_parent()){
                     const topSearchResult = this.searchResults.getTopResult();
@@ -909,8 +915,6 @@ var BaseLayout = class {
                 }
 
                 return actor.navigate_focus(global.stage.key_focus, direction, false);
-            case Clutter.KEY_Tab:
-            case Clutter.KEY_KP_Tab:
             case Clutter.KEY_KP_Enter:
             case Clutter.KEY_Return:
             case Clutter.KEY_Escape:
