@@ -8,6 +8,7 @@ const AppDisplay = imports.ui.appDisplay;
 const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const { Highlighter } = imports.misc.util;
 const MW = Me.imports.menuWidgets;
 const { RecentFilesManager } = Me.imports.recentFilesManager;
 const RemoteSearch = imports.ui.remoteSearch;
@@ -45,8 +46,16 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         }
 
         let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
-        if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions)
+        if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions){
             this.label.text = this.metaInfo['name'] + " " + this.metaInfo['description'];
+            //if 'highlight-search-result-terms' setting off, we still want to
+            //highlight calculator search resuls to distinguish search terms
+            //from the calculator result.
+            if(!highlightSearchResultTerms){
+                this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
+                this._highlightTerms();
+            }
+        }
 
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
@@ -209,7 +218,10 @@ var SearchResultsBase = GObject.registerClass({
             callback();
         } else {
             let maxResults = this._getMaxDisplayedResults();
-            let results = this.provider.filterResults(providerResults, maxResults);
+            let results = maxResults > -1
+                ? this.provider.filterResults(providerResults, maxResults)
+                : providerResults;
+
             let moreCount = Math.max(providerResults.length - results.length, 0);
 
             this._ensureResultActors(results, successful => {
@@ -437,7 +449,7 @@ var SearchResults = GObject.registerClass({
 
         this._providers = [];
 
-        this._highlightRegex = null;
+        this._highlighter = new Highlighter();
 
         this.recentFilesManager = new RecentFilesManager();
 
@@ -641,17 +653,7 @@ var SearchResults = GObject.registerClass({
         if (this._searchTimeoutId === null)
             this._searchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, this._onSearchTimeout.bind(this));
 
-        
-
-        const escapedTerms = terms
-            .map(term => Shell.util_regex_escape(term))
-            .filter(term => term.length > 0);
-
-        if (escapedTerms.length === 0)
-            return;
-
-        this._highlightRegex = new RegExp('(%s)'.format(
-            escapedTerms.join('|')), 'gi');
+        this._highlighter = new Highlighter(this._terms);
 
         this.emit('terms-changed');
     }
@@ -779,28 +781,11 @@ var SearchResults = GObject.registerClass({
         return (this._defaultResult ? true : false) && this._highlightDefault;
     }
 
-    highlightTerms(text) {
-        if (!this._highlightRegex)
-            return GLib.markup_escape_text(text, -1);
+    highlightTerms(description) {
+        if (!description)
+            return '';
 
-        let escaped = [];
-        let lastMatchEnd = 0;
-        let match;
-        while ((match = this._highlightRegex.exec(text))) {
-            if (match.index > lastMatchEnd) {
-                let unmatched = GLib.markup_escape_text(
-                    text.slice(lastMatchEnd, match.index), -1);
-                escaped.push(unmatched);
-            }
-            let matched = GLib.markup_escape_text(match[0], -1);
-            escaped.push('<b>%s</b>'.format(matched));
-            lastMatchEnd = match.index + match[0].length;
-        }
-        let unmatched = GLib.markup_escape_text(
-            text.slice(lastMatchEnd), -1);
-        escaped.push(unmatched);
-
-        return escaped.join('');
+        return this._highlighter.highlight(description);
     }
 });
 
@@ -838,3 +823,10 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
             this.label.text = this.provider.appInfo.get_name();
     }
 });
+
+function getTermsForSearchString(searchString) {
+    searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
+    if (searchString === '')
+        return [];
+    return searchString.split(/\s+/);
+}

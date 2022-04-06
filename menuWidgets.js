@@ -513,7 +513,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             return;
 
         let icon = this.createIcon();
-        this._iconBin.set_child(icon);
+        if(icon)
+            this._iconBin.set_child(icon);
     }
 
     get actor() {
@@ -2237,8 +2238,12 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
         }
         let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
-        icon.style_class = this._displayType === Constants.DisplayType.GRID ? '' : 'popup-menu-icon'
-        return icon;
+        if(icon){
+            icon.style_class = this._displayType === Constants.DisplayType.GRID ? '' : 'popup-menu-icon'
+            return icon;
+        }
+        else
+            return false;
     }
 
     removeIndicator(){
