@@ -56,7 +56,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
                 x_align: Clutter.ActorAlign.FILL,
                 style: 'spacing: 8px;'
             });
-            let descriptionText = this.description.split('\n')[0];
+            let descriptionText = this.metaInfo['description'].split('\n')[0];
             this.descriptionLabel = new St.Label({
                 text: descriptionText,
                 y_expand: true,
