@@ -45,16 +45,27 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
             this._highlightTerms();
         }
 
+        //Force show calculator metaInfo description even if 'show-search-result-details' off.
+        //otherwise equation solution wouldn't appear.
         let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
         if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions){
-            this.label.text = this.metaInfo['name'] + " " + this.metaInfo['description'];
-            //if 'highlight-search-result-terms' setting off, we still want to
-            //highlight calculator search resuls to distinguish search terms
-            //from the calculator result.
-            if(!highlightSearchResultTerms){
-                this._termsChangedId = this.resultsView.connect('terms-changed', this._highlightTerms.bind(this));
-                this._highlightTerms();
-            }
+            this.remove_child(this.label);
+
+            let labelBox = new St.BoxLayout({
+                x_expand: true,
+                x_align: Clutter.ActorAlign.FILL,
+                style: 'spacing: 8px;'
+            });
+            let descriptionText = this.description.split('\n')[0];
+            this.descriptionLabel = new St.Label({
+                text: descriptionText,
+                y_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+                style: "font-weight: lighter;"
+            });
+            labelBox.add_child(this.label);
+            labelBox.add_child(this.descriptionLabel);
+            this.add_child(labelBox);
         }
 
         if(!this.app && this.metaInfo['description'])
