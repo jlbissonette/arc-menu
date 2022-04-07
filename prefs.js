@@ -187,8 +187,10 @@ var MenuSettingsListPage = GObject.registerClass(
                 else if(frameRow._cmd === 'ArcMenu_Software'){
                     for(let softwareManagerID of Constants.SoftwareManagerIDs){
                         let app = Gio.DesktopAppInfo.new(softwareManagerID);
-                        if(app)
+                        if(app){
                             frameRow._icon = app.get_icon()?.to_string();
+                            break;
+                        }
                     }
                 }
                 else if(this.listType === Constants.MenuSettingsListType.DIRECTORIES || this.listType === Constants.MenuSettingsListType.OTHER){
@@ -196,10 +198,11 @@ var MenuSettingsListPage = GObject.registerClass(
                 }
 
                 iconString = frameRow._icon;
-                if(frameRow._icon === "" && Gio.DesktopAppInfo.new(frameRow._cmd)){
+                if((iconString === "" || iconString === undefined) && Gio.DesktopAppInfo.new(frameRow._cmd)){
                     iconString = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon() ? Gio.DesktopAppInfo.new(frameRow._cmd).get_icon().to_string() : "";
                 }
-                frameRow._gicon = Gio.icon_new_for_string(iconString);
+                //frameRow._gicon used in PW.DragRow
+                frameRow._gicon = Gio.icon_new_for_string(iconString ? iconString : "");
                 let arcMenuImage = new Gtk.Image( {
                     gicon: frameRow._gicon,
                     pixel_size: 22
