@@ -1,5 +1,5 @@
 /*
- * Credits: This file leverages the work from GNOME Shell search.js file 
+ * Credits: This file leverages the work from GNOME Shell search.js file
  * (https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/search.js)
  */
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -72,7 +72,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
             this.description = this.metaInfo['description'].split('\n')[0];
         this.connect('destroy', this._onDestroy.bind(this));
     }
-    
+
     _onDestroy() {
         if (this._termsChangedId) {
             this.resultsView.disconnect(this._termsChangedId);
@@ -165,7 +165,7 @@ var SearchResultsBase = GObject.registerClass({
     _createResultDisplay(meta) {
         if (this.provider.createResultObject)
             return this.provider.createResultObject(meta, this.resultsView);
-        
+
         return null;
     }
 
@@ -212,7 +212,7 @@ var SearchResultsBase = GObject.registerClass({
                 }
 
                 metasNeeded.forEach((resultId, i) => {
-                    let meta = metas[i];                    
+                    let meta = metas[i];
                     let display = this._createResultDisplay(meta);
                     this._resultDisplays[resultId] = display;
                 });
@@ -250,7 +250,7 @@ var SearchResultsBase = GObject.registerClass({
                 results.forEach(resultId => {
                     this._addItem(this._resultDisplays[resultId]);
                 });
-               
+
                 this._setMoreCount(this.provider.canLaunchSearch ? moreCount : 0);
                 this.show();
                 callback();
@@ -267,7 +267,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
         this.searchType = this._menuLayout.layoutProperties.SearchDisplayType;
         this._settings = this._menuLayout._settings;
         this.layout = this._settings.get_enum('menu-layout');
-        
+
         this._container = new St.BoxLayout({
             vertical: true,
             x_align: Clutter.ActorAlign.FILL,
@@ -338,32 +338,32 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         this.layoutProperties = this._menuLayout.layoutProperties;
         this.searchType = this.layoutProperties.SearchDisplayType;
         this.layout = this._menuLayout._settings.get_enum('menu-layout');
-        
+
         this.itemCount = 0;
         this.gridTop = -1;
         this.gridLeft = 0;
-        
+
         this.rtl = this._menuLayout.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
 
-        let layout = new Clutter.GridLayout({ 
+        let layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL,
             column_spacing: this.searchType === Constants.DisplayType.GRID ? this.layoutProperties.ColumnSpacing : 0,
             row_spacing: this.searchType === Constants.DisplayType.GRID ? this.layoutProperties.RowSpacing : 0,
         });
-        this._grid = new St.Widget({ 
+        this._grid = new St.Widget({
             x_expand: true,
             x_align: this.searchType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
-            layout_manager: layout 
+            layout_manager: layout
         });
         layout.hookup_style(this._grid);
 
         if(this.searchType === Constants.DisplayType.GRID){
             let spacing = this.layoutProperties.ColumnSpacing;
 
-            this._grid.style = "padding: 0px 0px 10px 0px; spacing: " + spacing + "px;";   
+            this._grid.style = "padding: 0px 0px 10px 0px; spacing: " + spacing + "px;";
             this._resultDisplayBin.x_align = Clutter.ActorAlign.CENTER;
         }
-            
+
         this._resultDisplayBin.set_child(this._grid);
     }
 
@@ -371,7 +371,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         let maxDisplayedResults;
         if(this.searchType === Constants.DisplayType.GRID)
             maxDisplayedResults = this._menuLayout.getColumnsFromGridIconSizeSetting();
-        else 
+        else
             maxDisplayedResults = this._settings.get_int('max-search-results');
         return maxDisplayedResults;
     }
@@ -382,7 +382,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         this.gridLeft = 0;
         this._grid.remove_all_children();
     }
-    
+
     _createResultDisplay(meta) {
         return new AppSearchResult(this.provider, meta, this.resultsView);
     }
@@ -399,7 +399,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         }
         this._grid.layout_manager.attach(display, this.gridLeft, this.gridTop, 1, 1);
         display.gridLocation = [this.gridLeft, this.gridTop];
-        
+
         if(!this.rtl)
             this.gridLeft++;
         else if(this.rtl)
@@ -425,7 +425,7 @@ var SearchResults = GObject.registerClass({
             vertical: true,
             y_expand: true,
             x_expand: true,
-            x_align: Clutter.ActorAlign.FILL  
+            x_align: Clutter.ActorAlign.FILL
         });
         this._menuLayout = menuLayout;
         this.layoutProperties = this._menuLayout.layoutProperties;
@@ -435,19 +435,19 @@ var SearchResults = GObject.registerClass({
 
         this._content = new St.BoxLayout({
             vertical: true,
-            x_align: Clutter.ActorAlign.FILL  
+            x_align: Clutter.ActorAlign.FILL
         });
- 
+
         this.add_child(this._content);
-       
+
         this._statusText = new St.Label();
-        this._statusBin = new St.Bin({ 
+        this._statusBin = new St.Bin({
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
-            y_expand: true  
+            y_expand: true
         });
-        
+
         this.add_child(this._statusBin);
         this._statusBin.set_child(this._statusText);
 
@@ -481,7 +481,7 @@ var SearchResults = GObject.registerClass({
 
         this.connect('destroy', this._onDestroy.bind(this));
     }
-    
+
     get terms() {
         return this._terms;
     }
@@ -760,7 +760,7 @@ var SearchResults = GObject.registerClass({
     getTopResult(){
         return this._defaultResult;
     }
-    
+
     getProviders(){
         return this._providers;
     }
@@ -781,7 +781,7 @@ var SearchResults = GObject.registerClass({
     _setSelected(result, selected) {
         if(!result)
             return;
-           
+
         if(selected && !result.has_style_pseudo_class('active'))
             result.add_style_pseudo_class('active');
         else if(!selected)
@@ -811,7 +811,7 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
         if(this.description)
             this.description = this.description.split('\n')[0];
 
-        this.label = new St.Label({ 
+        this.label = new St.Label({
             text: provider.appInfo.get_name(),
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER,
@@ -834,10 +834,3 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
             this.label.text = this.provider.appInfo.get_name();
     }
 });
-
-function getTermsForSearchString(searchString) {
-    searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
-    if (searchString === '')
-        return [];
-    return searchString.split(/\s+/);
-}
