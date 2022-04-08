@@ -2175,7 +2175,9 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
 
         if(this.description && (this.searchResultsDescriptions || this.appsShowDescriptions) && this._displayType === Constants.DisplayType.LIST){
             let labelBox = new St.BoxLayout({
-                vertical: true
+                vertical: true,
+                x_expand: true,
+                x_align: Clutter.ActorAlign.FILL,
             });
             let descriptionText = this.description.split('\n')[0];
             this.descriptionLabel = new St.Label({

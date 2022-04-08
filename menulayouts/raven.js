@@ -226,6 +226,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.activeCategory = _("Pinned Apps");
             this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
             this.displayPinnedApps();
+            let topCategory = this.categoryDirectories.values().next().value;
+            this.setActiveCategory(topCategory);
         }
         else{
             this.activeCategory = _("All Programs");
@@ -233,10 +235,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.displayAllApps(isGridLayout);   
             this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
         }
-
-        let topCategory = this.categoryDirectories.values().next().value;
-        topCategory.displayAppList();
-        this.setActiveCategory(topCategory);
     }
 
     loadCategories() {

@@ -796,19 +796,26 @@ var BaseLayout = class {
 
     _onSearchBoxChanged(searchBox, searchString) { 
         if(searchBox.isEmpty()){
-            this.searchResults.hide();
+            if(this.applicationsBox.contains(this.searchResults))
+                this.applicationsBox.remove_child(this.searchResults);
+
             this.setDefaultMenuView();
         }            
         else{
-            if(this.activeCategoryItem){
+            if(this.activeCategoryItem)
                 this.setActiveCategory(null, false);
-            }
-            this._clearActorsFromBox();
+
             let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
             appsScrollBoxAdj.set_value(0);
-            this.applicationsBox.add_child(this.searchResults);
-            this.searchResults.show();
+    
+            if(!this.applicationsBox.contains(this.searchResults)){
+                this._clearActorsFromBox();
+                this.applicationsBox.add_child(this.searchResults);
+            }
+
             searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
+            if (searchString === '')
+                this.searchResults.setTerms([]);    
             this.searchResults.setTerms(searchString.split(/\s+/));
         }            	
     }

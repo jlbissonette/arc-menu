@@ -114,7 +114,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         if(this.tooltip)
             this.tooltip.sourceActor = null;
         this._forcedMenuLocation = false;
-        this.arcMenu.actor.style = null;
         this.arcMenu.removeAll();
         this.section = new PopupMenu.PopupMenuSection();
         this.arcMenu.addMenuItem(this.section);
@@ -146,8 +145,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
 
         this.MenuLayout.destroy();
         this.MenuLayout = null;
-        
-        this.arcMenu.actor.style = null;
 
         const StandaloneRunner = true;
         this.MenuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
