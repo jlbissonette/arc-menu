@@ -50,7 +50,7 @@ var DialogWindow = GObject.registerClass({
             title: title,
             transient_for: parent.get_root(),
             modal: true,
-            search_enabled: true,
+            search_enabled: true
         });
         this.page = new Adw.PreferencesPage();
         this.pageGroup = new Adw.PreferencesGroup();
@@ -77,18 +77,18 @@ var DragRow = GObject.registerClass({
 },class Arc_Menu_DragRow extends Adw.ActionRow {
     _init(params) {
         super._init(params);
-        let dragSource = new Gtk.DragSource({ 
+        let dragSource = new Gtk.DragSource({
             actions: Gdk.DragAction.MOVE
         });
         this.add_controller(dragSource);
 
-        let dropTarget = new Gtk.DropTargetAsync({ 
+        let dropTarget = new Gtk.DropTargetAsync({
             actions: Gdk.DragAction.MOVE
         });
         this.add_controller(dropTarget);
 
         this.x = 0;
-        
+
         dragSource.connect("drag-begin", (self, gdkDrag) => {
             //get listbox parent
             let listBox = self.get_widget().get_parent();
@@ -113,7 +113,7 @@ var DragRow = GObject.registerClass({
             //store drag start cursor location
             listBox.dragX = x;
             listBox.dragY = y;
-            return new Gdk.ContentProvider(Arc_Menu_DragRow);    
+            return new Gdk.ContentProvider(Arc_Menu_DragRow);
         });
 
         dragSource.connect("drag-end", (self, gdkDrag, deleteData) => {
@@ -212,7 +212,7 @@ var DragRow = GObject.registerClass({
             grid.attach(editButton, 0, 0, 1, 1);
         }
         dragRow.add_suffix(grid);
-        
+
         return dragWidget;
     }
 });
@@ -258,6 +258,7 @@ var EditEntriesBox = GObject.registerClass({
                 editPopover.popdown();
                 this.emit('change');
             });
+            this.changeAppButton = changeButton;
         }
 
         let editButton = new Gtk.MenuButton({
@@ -379,14 +380,14 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
             margin_top: 12,
             margin_bottom: 12,
             margin_start: 12,
-            margin_end: 12, 
+            margin_end: 12,
             column_spacing: 10
         });
         row1.set_child(row);
         row1.stackName = name;
         row1.translatableName = translatableName;
-        
-        let image = new Gtk.Image({ 
+
+        let image = new Gtk.Image({
             icon_name: iconName
         });
 
@@ -399,7 +400,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
 
         if(nextPage){
             row1.nextPage = nextPage;
-            let image2 = new Gtk.Image({ 
+            let image2 = new Gtk.Image({
                 gicon: Gio.icon_new_for_string('go-next-symbolic'),
                 halign: Gtk.Align.END,
                 hexpand: true
@@ -415,7 +416,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
                     let sep = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL);
                     sep.show();
                     _row.set_header(sep);
-                    
+
                 }
             }
         });
@@ -474,8 +475,8 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends Adw.PreferencesGrou
             pixel_size: width
         });
 
-        this._label = new Gtk.Label({ 
-            label: _(this.name) 
+        this._label = new Gtk.Label({
+            label: _(this.name)
         });
 
         this._grid.attach(this._image, 0, 0, 1, 1);
@@ -502,13 +503,13 @@ var MenuLayoutRow = GObject.registerClass(class Arc_Menu_MenuLayoutRow extends A
         }
 
         this.title = "<b>" + _(title) + "</b>"
-        this.image = new Gtk.Image({ 
+        this.image = new Gtk.Image({
             hexpand: false,
             halign: Gtk.Align.START,
             gicon: Gio.icon_new_for_string(imagePath),
             pixel_size: imageSize
         });
-        
+
         this.label = new Gtk.Label({
             label: "<b>" + _(title) + "</b>",
             use_markup: true,
