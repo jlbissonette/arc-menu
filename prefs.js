@@ -2723,9 +2723,65 @@ var AboutPage = GObject.registerClass(
             this.add(extensionInfoGroup);
             //-----------------------------------------------------------------------
 
+            //CREDTIS----------------------------------------------------------------
+            let creditsGroup = new Adw.PreferencesGroup({
+                title: _("Credits")
+            });
+            this.add(creditsGroup);
+            
+            let creditsRow = new Adw.PreferencesRow({
+                activatable: false,
+                selectable: false
+            });
+            creditsGroup.add(creditsRow);
+
+            let creditsBox = new Gtk.Box({
+                orientation: Gtk.Orientation.VERTICAL,
+            });
+            creditsRow.set_child(creditsBox);
+
+            let creditsCarousel = new Adw.Carousel({
+                hexpand: true,
+                halign: Gtk.Align.FILL,
+                margin_top: 5,
+                margin_bottom: 5
+            });
+            let creditsCarouselDots = new Adw.CarouselIndicatorDots({
+                carousel: creditsCarousel,
+            });
+            creditsCarousel.append(new Gtk.Label({
+                label: Constants.DEVELOPERS,
+                use_markup: true,
+                vexpand: true,
+                valign: Gtk.Align.CENTER,
+                hexpand: true,
+                halign: Gtk.Align.FILL,
+                justify: Gtk.Justification.CENTER
+            }));
+            creditsCarousel.append(new Gtk.Label({
+                label: Constants.CONTRIBUTORS,
+                use_markup: true,
+                vexpand: true,
+                valign: Gtk.Align.CENTER,
+                hexpand: true,
+                halign: Gtk.Align.FILL,
+                justify: Gtk.Justification.CENTER
+            }));
+            creditsCarousel.append(new Gtk.Label({
+                label: Constants.ARTWORK,
+                use_markup: true,
+                vexpand: true,
+                valign: Gtk.Align.CENTER,
+                hexpand: true,
+                halign: Gtk.Align.FILL,
+                justify: Gtk.Justification.CENTER
+            }));
+            creditsBox.append(creditsCarousel);
+            creditsBox.append(creditsCarouselDots);
+            //-----------------------------------------------------------------------
+
             let linksGroup = new Adw.PreferencesGroup();
             let linksBox = new Adw.ActionRow();
-
 
             let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(Me.path + '/media/icons/prefs_icons/donate-icon.svg', -1, 50, true);
             let donateImage = Gtk.Picture.new_for_pixbuf(pixbuf);

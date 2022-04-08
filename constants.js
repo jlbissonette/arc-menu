@@ -421,17 +421,17 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
                                 '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo' +
                                 '\n\n•   <b>ZORIN OS</b> - The "Z" logomark is a registered trademark of Zorin Technology Group Ltd. Copyright © 2019 - 2021 Zorin Technology Group Ltd';
 
-var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer' +
-                '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a> - <b>(Inactive)</b>\nArcMenu Founder - Former Maintainer - Former Digital Art Designer';
-var TRANSLATORS = '<b>Thank you to all translators!</b>\n\n' +
-                    '<b>For a list of all translators please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
-var CONTRIBUTORS = '<b>Thank you to all who contributed to, and or helped, the developement of ArcMenu!</b>'
-                    +'\n\n<b>For a list of all contributors please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
-var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
-                '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
+var DEVELOPERS = '<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Current ArcMenu Maintainer and Developer' +
+                '\n\n<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - ArcMenu Founder, Former Maintainer, Digital Art Designer';
+var CONTRIBUTORS = '<b>Thank you to all contributors and translators</b>\n\n' +
+                    '<b><a href="https://gitlab.com/arcmenu/ArcMenu#contributors">Contributors</a></b> - ' +
+                    '<b><a href="https://gitlab.com/arcmenu/ArcMenu#translators">Translators</a></b>';
+var ARTWORK = '<b>ArcMenu Artwork</b>\n\n' +
+                '<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - Menu Icons, Settings Icons, Wire-Frame Icons, other ArcMenu Assets' +
+                '\n\n<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Menu Icons, Wire-Frame Icons';
 
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +
     'See the <a href="https://gnu.org/licenses/old-licenses/gpl-2.0.html">' +
-	'GNU General Public License, version 2 or later</a> for details.' +
-	'</span>';
+    'GNU General Public License, version 2 or later</a> for details.' +
+    '</span>';
