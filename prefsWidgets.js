@@ -265,6 +265,7 @@ var EditEntriesBox = GObject.registerClass({
             icon_name: 'view-more-symbolic',
             popover: editPopover,
         });
+        this.editButton = editButton;
 
         this.attach(editButton, 0, 0, 1, 1);
 

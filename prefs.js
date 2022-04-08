@@ -235,6 +235,7 @@ var MenuSettingsListPage = GObject.registerClass(
                         modifyButton: editable,
                         deleteButton: true
                     });
+                    frameRow.activatable_widget = buttonBox.editButton;
                 }
 
                 buttonBox.connect('modify', ()=> {
