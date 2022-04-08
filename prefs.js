@@ -3000,7 +3000,10 @@ function fillPreferencesWindow(window) {
     initializeWindow(window);
 }
 
-//Pop!_OS 22.04 compatibility
+//buildPrefsWidget() added for Pop!_OS 22.04 compatibility.
+//Pop!_OS 22.04 doesn't recognize fillPreferencesWindow(),
+//doesn't include the gir1.2-adw-1 package,
+//and is creating a Gtk.Window instead of Adw.PreferencesWindow?
 function buildPrefsWidget() {
     const window = new Adw.PreferencesWindow();
     window.connect('close-request', () => {
