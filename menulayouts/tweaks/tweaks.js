@@ -786,7 +786,6 @@ var TweaksPage = GObject.registerClass({
             selected: this._settings.get_enum('arcmenu-extra-categories-links-location')
         });
         extraCategoriesLocationRow.connect('notify::selected', (widget) => {
-            log("hello")
             this._settings.set_enum('arcmenu-extra-categories-links-location' , widget.selected);
         });
         extraCategoriesLocationFrame.add(extraCategoriesLocationRow);
