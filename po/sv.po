@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ArcMenu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-07 12:07+0100\n"
-"PO-Revision-Date: 2021-11-07 12:08+0100\n"
+"POT-Creation-Date: 2022-04-10 20:14+0200\n"
+"PO-Revision-Date: 2022-04-10 20:33+0200\n"
 "Last-Translator: Morgan Antonsson <morgan.antonsson@gmail.com>\n"
 "Language-Team: \n"
 "Language: sv\n"
@@ -16,1549 +16,1268 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
-#: constants.js:77
+#: constants.js:64
 msgid "Favorites"
 msgstr "Favoriter"
 
-#: constants.js:78 menulayouts/launcher.js:354 menulayouts/runner.js:112
-#: menulayouts/tweaks/tweaks.js:1102
+#: constants.js:65 menulayouts/launcher.js:331 menulayouts/runner.js:92
+#: menulayouts/tweaks/tweaks.js:719
 msgid "Frequent Apps"
 msgstr "Vanliga appar"
 
-#: constants.js:79 menuWidgets.js:1791 menulayouts/raven.js:57
-#: menulayouts/raven.js:205 menulayouts/unity.js:58 menulayouts/unity.js:323
-#: menulayouts/tweaks/tweaks.js:661 menulayouts/tweaks/tweaks.js:766
-#: menulayouts/tweaks/tweaks.js:1074
-msgid "All Programs"
-msgstr "Alla program"
-
-#: constants.js:80 menuWidgets.js:1281 prefs.js:6136 menulayouts/insider.js:191
-#: menulayouts/launcher.js:398 menulayouts/plasma.js:140
-#: menulayouts/raven.js:55 menulayouts/raven.js:200 menulayouts/raven.js:266
-#: menulayouts/unity.js:56 menulayouts/unity.js:318 menulayouts/unity.js:400
-#: menulayouts/windows.js:448 menulayouts/tweaks/tweaks.js:1100
-msgid "Pinned Apps"
-msgstr "Fästade appar"
-
-#: constants.js:81 menulayouts/raven.js:288 menulayouts/unity.js:418
-msgid "Recent Files"
-msgstr "Senaste filer"
-
-#: constants.js:196 prefs.js:487 menulayouts/mint.js:233
-#: menulayouts/unity.js:238
-msgid "Log Out"
-msgstr "Logga ut"
-
-#: constants.js:197 prefs.js:486 menulayouts/mint.js:234
-#: menulayouts/unity.js:239
-msgid "Lock"
-msgstr "Lås"
-
-#: constants.js:198 prefs.js:489
-msgid "Restart"
-msgstr "Starta om"
-
-#: constants.js:199 prefs.js:488 menulayouts/mint.js:235
-#: menulayouts/unity.js:240
-msgid "Power Off"
-msgstr "Stäng av"
-
-#: constants.js:200 prefs.js:490
-msgid "Suspend"
-msgstr "Vänteläge"
-
-#: constants.js:201 prefs.js:491
-msgid "Hybrid Sleep"
-msgstr "Hybridsömn"
-
-#: constants.js:202 prefs.js:492
-msgid "Hibernate"
-msgstr "Viloläge"
-
-#: constants.js:324 menuWidgets.js:3273 prefs.js:5958
-msgid "ArcMenu"
-msgstr "ArcMenu"
-
-#: constants.js:325
-msgid "Brisk"
-msgstr "Brisk"
-
-#: constants.js:326
-msgid "Whisker"
-msgstr "Whisker"
-
-#: constants.js:327
-msgid "GNOME Menu"
-msgstr "GNOME Menu"
-
-#: constants.js:328
-msgid "Mint"
-msgstr "Mint"
-
-#: constants.js:329
-msgid "Budgie"
-msgstr "Budgie"
-
-#: constants.js:332
-msgid "Unity"
-msgstr "Unity"
-
-#: constants.js:333
-msgid "Plasma"
-msgstr "Plasma"
-
-#: constants.js:334
-msgid "tognee"
-msgstr "tognee"
-
-#: constants.js:335
-msgid "Insider"
-msgstr "Insider"
-
-#: constants.js:336
-msgid "Redmond"
-msgstr "Redmond"
-
-#: constants.js:337
-msgid "Windows"
-msgstr "Windows"
-
-#: constants.js:338
-msgid "11"
-msgstr "11"
-
-#: constants.js:341
-msgid "Elementary"
-msgstr "Elementary"
-
-#: constants.js:342
-msgid "Chromebook"
-msgstr "Chromebook"
-
-#: constants.js:345 constants.js:362
-msgid "Launcher"
-msgstr "Programstartare"
-
-#: constants.js:346
-msgid "Runner"
-msgstr "Runner"
-
-#: constants.js:347
-msgid "GNOME Overview"
-msgstr "GNOME översiktsvy"
-
-#: constants.js:350 constants.js:361
-msgid "Simple"
-msgstr "Enkel"
-
-#: constants.js:351
-msgid "Simple 2"
-msgstr "Enkel 2"
-
-#: constants.js:354
-msgid "Raven"
-msgstr "Raven"
-
-#: constants.js:358
-msgid "Traditional"
-msgstr "Traditionell"
-
-#: constants.js:359
-msgid "Modern"
-msgstr "Modern"
-
-#: constants.js:360
-msgid "Touch"
-msgstr "Pek-"
-
-#: constants.js:363
-msgid "Alternative"
-msgstr "Alternativ"
-
-#: menuButton.js:814 menuWidgets.js:2074 prefs.js:307 prefs.js:407 prefs.js:577
-#: prefs.js:6253 menulayouts/arcmenu.js:196 menulayouts/plasma.js:186
-#: menulayouts/raven.js:171 menulayouts/redmond.js:167
-#: menulayouts/tognee.js:152 menulayouts/unity.js:190
-#: menulayouts/windows.js:148
-msgid "ArcMenu Settings"
-msgstr "ArcMenu-inställningar"
-
-#: menuButton.js:820
-msgid "Settings Quick Links:"
-msgstr "Inställningssnabblänkar:"
-
-#: menuButton.js:826
-msgid "Change Menu Layout"
-msgstr "Ändra menylayout"
-
-#: menuButton.js:827
-msgid "Modify Pinned Apps"
-msgstr "Redigera fästade appar"
-
-#: menuButton.js:828
-msgid "Modify Shortcuts"
-msgstr "Redigera genvägar"
-
-#: menuButton.js:829
-msgid "Layout Tweaks"
-msgstr "Layoutjusteringar"
-
-#: menuButton.js:830 prefs.js:6128
-msgid "Button Appearance"
-msgstr "Knappens utseende"
-
-#: menuButton.js:836 prefs.js:6130
-msgid "About"
-msgstr "Om"
-
-#: menuButton.js:851
-msgid "Dash to Panel Settings"
-msgstr "Inställningar för Dash to Panel"
-
-#: menuButton.js:858
-msgid "Dash to Dock Settings"
-msgstr "Inställningar för Dash to Dock"
-
-#: menuButton.js:862
-msgid "Ubuntu Dock Settings"
-msgstr "Inställningar för Ubuntu Dock"
-
-#: menuWidgets.js:131
-msgid "Current Windows:"
-msgstr "Nuvarande fönster:"
-
-#: menuWidgets.js:152
-msgid "New Window"
-msgstr "Nytt fönster"
-
-#: menuWidgets.js:165
-msgid "Launch using Integrated Graphics Card"
-msgstr "Starta med integrerat grafikkort"
-
-#: menuWidgets.js:166
-msgid "Launch using Discrete Graphics Card"
-msgstr "Starta med dedikerat grafikkort"
-
-#: menuWidgets.js:210
-msgid "Delete Desktop Shortcut"
-msgstr "Radera skrivbordsgenväg"
-
-#: menuWidgets.js:223
-msgid "Create Desktop Shortcut"
-msgstr "Skapa skrivbordsgenväg"
-
-#: menuWidgets.js:244
-msgid "Remove from Favorites"
-msgstr "Ta bort från favoriter"
-
-#: menuWidgets.js:251
-msgid "Add to Favorites"
-msgstr "Lägg till i favoriter"
-
-#: menuWidgets.js:273 menuWidgets.js:335
-msgid "Unpin from ArcMenu"
-msgstr "Koppla loss från ArcMenu"
-
-#: menuWidgets.js:286
-msgid "Pin to ArcMenu"
-msgstr "Fäst i ArcMenu"
-
-#: menuWidgets.js:298
-msgid "Show Details"
-msgstr "Visa detaljer"
-
-#: menuWidgets.js:317
-msgid "Open Folder Location"
-msgstr "Öppna mappens plats"
-
-#: menuWidgets.js:810 menulayouts/arcmenu.js:196 menulayouts/plasma.js:186
-#: menulayouts/raven.js:171 menulayouts/redmond.js:167
-#: menulayouts/tognee.js:152 menulayouts/unity.js:190
-#: menulayouts/windows.js:148
-msgid "Activities Overview"
-msgstr "Översiktsvyn Aktiviteter"
-
-#: menuWidgets.js:1259 menulayouts/arcmenu.js:196 menulayouts/mint.js:224
-#: menulayouts/plasma.js:186 menulayouts/raven.js:171
-#: menulayouts/redmond.js:167 menulayouts/tognee.js:152
-#: menulayouts/unity.js:190 menulayouts/windows.js:148
-msgid "Settings"
-msgstr "Inställningar"
-
-#: menuWidgets.js:1269
-msgid "Configure Runner Layout"
-msgstr "Konfigurera Runner-layout"
-
-#: menuWidgets.js:1292
-msgid "Extras"
-msgstr "Extrafunktioner"
-
-#: menuWidgets.js:1303 menulayouts/plasma.js:153
-msgid "Leave"
-msgstr "Lämna"
-
-#: menuWidgets.js:1336 menulayouts/plasma.js:370
-msgid "Session"
-msgstr "Session"
-
-#: menuWidgets.js:1346 menulayouts/plasma.js:379
-msgid "System"
-msgstr "System"
-
-#: menuWidgets.js:1392
-msgid "Categories"
-msgstr "Kategorier"
-
-#: menuWidgets.js:1402
-msgid "Users"
-msgstr "Användare"
-
-#: menuWidgets.js:1599 menuWidgets.js:3156 menulayouts/launcher.js:167
-#: menulayouts/launcher.js:352 menulayouts/plasma.js:145
-msgid "Applications"
-msgstr "Program"
-
-#: menuWidgets.js:1659 menuWidgets.js:1676
+#: constants.js:66 menuWidgets.js:1445 menulayouts/eleven.js:158
+#: menulayouts/eleven.js:216
 msgid "All Apps"
 msgstr "Alla appar"
 
-#: menuWidgets.js:1708 menuWidgets.js:1745 prefs.js:2738
-#: menulayouts/tweaks/tweaks.js:55
+#: constants.js:67 menuWidgets.js:1111 prefs.js:2828 menulayouts/insider.js:155
+#: menulayouts/launcher.js:357 menulayouts/plasma.js:117
+#: menulayouts/raven.js:55 menulayouts/raven.js:226 menulayouts/raven.js:275
+#: menulayouts/unity.js:37 menulayouts/unity.js:282 menulayouts/unity.js:341
+#: menulayouts/windows.js:380 menulayouts/tweaks/tweaks.js:717
+msgid "Pinned Apps"
+msgstr "Fästade appar"
+
+#: constants.js:68 menulayouts/raven.js:297 menulayouts/unity.js:359
+msgid "Recent Files"
+msgstr "Senaste filer"
+
+#: constants.js:232 prefs.js:343 menulayouts/mint.js:222
+#: menulayouts/unity.js:205
+msgid "Log Out"
+msgstr "Logga ut"
+
+#: constants.js:233 prefs.js:342 menulayouts/mint.js:223
+#: menulayouts/unity.js:206
+msgid "Lock"
+msgstr "Lås"
+
+#: constants.js:234 prefs.js:345
+msgid "Restart"
+msgstr "Starta om"
+
+#: constants.js:235 prefs.js:344 menulayouts/mint.js:224
+#: menulayouts/unity.js:207
+msgid "Power Off"
+msgstr "Stäng av"
+
+#: constants.js:236 prefs.js:346
+msgid "Suspend"
+msgstr "Vänteläge"
+
+#: constants.js:237 prefs.js:347
+msgid "Hybrid Sleep"
+msgstr "Hybridsömn"
+
+#: constants.js:238 prefs.js:348
+msgid "Hibernate"
+msgstr "Viloläge"
+
+#: constants.js:361 prefs.js:2607
+msgid "ArcMenu"
+msgstr "ArcMenu"
+
+#: constants.js:362
+msgid "Brisk"
+msgstr "Brisk"
+
+#: constants.js:363
+msgid "Whisker"
+msgstr "Whisker"
+
+#: constants.js:364
+msgid "GNOME Menu"
+msgstr "GNOME Menu"
+
+#: constants.js:365
+msgid "Mint"
+msgstr "Mint"
+
+#: constants.js:366
+msgid "Budgie"
+msgstr "Budgie"
+
+#: constants.js:369
+msgid "Unity"
+msgstr "Unity"
+
+#: constants.js:370
+msgid "Plasma"
+msgstr "Plasma"
+
+#: constants.js:371
+msgid "tognee"
+msgstr "tognee"
+
+#: constants.js:372
+msgid "Insider"
+msgstr "Insider"
+
+#: constants.js:373
+msgid "Redmond"
+msgstr "Redmond"
+
+#: constants.js:374
+msgid "Windows"
+msgstr "Windows"
+
+#: constants.js:375
+msgid "11"
+msgstr "11"
+
+#: constants.js:376
+msgid "a.z."
+msgstr "a.z."
+
+#: constants.js:379
+msgid "Elementary"
+msgstr "Elementary"
+
+#: constants.js:380
+msgid "Chromebook"
+msgstr "Chromebook"
+
+#: constants.js:383 constants.js:395
+msgid "Launcher"
+msgstr "Programstartare"
+
+#: constants.js:384
+msgid "Runner"
+msgstr "Runner"
+
+#: constants.js:385
+msgid "GNOME Overview"
+msgstr "GNOME översiktsvy"
+
+#: constants.js:388
+msgid "Raven"
+msgstr "Raven"
+
+#: constants.js:392
+msgid "Traditional"
+msgstr "Traditionell"
+
+#: constants.js:393
+msgid "Modern"
+msgstr "Modern"
+
+#: constants.js:394
+msgid "Touch"
+msgstr "Pek-"
+
+#: constants.js:396
+msgid "Alternative"
+msgstr "Alternativ"
+
+#: menuButton.js:636 menuWidgets.js:1900 prefs.js:318 prefs.js:332
+#: prefs.js:2406 prefs.js:3043 menulayouts/arcmenu.js:178
+#: menulayouts/plasma.js:167 menulayouts/raven.js:166
+#: menulayouts/redmond.js:143 menulayouts/tognee.js:138
+#: menulayouts/unity.js:152 menulayouts/windows.js:118
+msgid "ArcMenu Settings"
+msgstr "ArcMenu-inställningar"
+
+#: menuButton.js:641 prefs.js:1832
+msgid "General Settings"
+msgstr "Allmänna inställningar"
+
+#: menuButton.js:642
+msgid "Change Menu Layout"
+msgstr "Ändra menylayout"
+
+#: menuButton.js:643
+msgid "Layout Tweaks"
+msgstr "Layoutjusteringar"
+
+#: menuButton.js:644
+msgid "Customize Menu"
+msgstr "Anpassa menyn"
+
+#: menuButton.js:645 prefs.js:2827
+msgid "Button Settings"
+msgstr "Knappinställningar"
+
+#: menuButton.js:648 prefs.js:2586
+msgid "About"
+msgstr "Om"
+
+#: menuButton.js:655
+msgid "Dash to Panel Settings"
+msgstr "Inställningar för Dash to Panel"
+
+#: menuWidgets.js:107
+msgid "Open Windows"
+msgstr "Öppna fönster"
+
+#: menuWidgets.js:124
+msgid "New Window"
+msgstr "Nytt fönster"
+
+#: menuWidgets.js:137
+msgid "Launch using Integrated Graphics Card"
+msgstr "Starta med integrerat grafikkort"
+
+#: menuWidgets.js:138
+msgid "Launch using Discrete Graphics Card"
+msgstr "Starta med dedikerat grafikkort"
+
+#: menuWidgets.js:165
+msgid "Delete Desktop Shortcut"
+msgstr "Radera skrivbordsgenväg"
+
+#: menuWidgets.js:178
+msgid "Create Desktop Shortcut"
+msgstr "Skapa skrivbordsgenväg"
+
+#: menuWidgets.js:199
+msgid "Remove from Favorites"
+msgstr "Ta bort från favoriter"
+
+#: menuWidgets.js:206
+msgid "Add to Favorites"
+msgstr "Lägg till i favoriter"
+
+#: menuWidgets.js:228 menuWidgets.js:290
+msgid "Unpin from ArcMenu"
+msgstr "Koppla loss från ArcMenu"
+
+#: menuWidgets.js:241
+msgid "Pin to ArcMenu"
+msgstr "Fäst i ArcMenu"
+
+#: menuWidgets.js:253
+msgid "Show Details"
+msgstr "Visa detaljer"
+
+#: menuWidgets.js:272
+msgid "Open Folder Location"
+msgstr "Öppna mappens plats"
+
+#: menuWidgets.js:824 prefs.js:331 menulayouts/arcmenu.js:178
+#: menulayouts/plasma.js:167 menulayouts/raven.js:166
+#: menulayouts/redmond.js:143 menulayouts/tognee.js:138
+#: menulayouts/unity.js:152 menulayouts/windows.js:118
+msgid "Activities Overview"
+msgstr "Översiktsvyn Aktiviteter"
+
+#: menuWidgets.js:1098
+msgid "Configure Runner"
+msgstr "Konfigurera Runner"
+
+#: menuWidgets.js:1123
+msgid "Extras"
+msgstr "Extrafunktioner"
+
+#: menuWidgets.js:1135 menulayouts/plasma.js:130
+msgid "Leave"
+msgstr "Lämna"
+
+#: menuWidgets.js:1161 menulayouts/plasma.js:316
+msgid "Session"
+msgstr "Session"
+
+#: menuWidgets.js:1165 menulayouts/plasma.js:321
+msgid "System"
+msgstr "System"
+
+#: menuWidgets.js:1230
+msgid "Categories"
+msgstr "Kategorier"
+
+#: menuWidgets.js:1403 menuWidgets.js:2799 menulayouts/launcher.js:147
+#: menulayouts/launcher.js:329 menulayouts/plasma.js:122
+msgid "Applications"
+msgstr "Program"
+
+#: menuWidgets.js:1473 menuWidgets.js:1506 prefs.js:1653
+#: menulayouts/tweaks/tweaks.js:32
 msgid "Back"
 msgstr "Tillbaka"
 
-#: menuWidgets.js:2077 menulayouts/arcmenu.js:196 menulayouts/mint.js:223
-#: menulayouts/plasma.js:186 menulayouts/raven.js:171
-#: menulayouts/redmond.js:167 menulayouts/tognee.js:152
-#: menulayouts/unity.js:190 menulayouts/windows.js:148
+#: menuWidgets.js:1550
+msgid "All Applications"
+msgstr "Alla program"
+
+#: menuWidgets.js:1903 menulayouts/arcmenu.js:178 menulayouts/eleven.js:147
+#: menulayouts/insider.js:55 menulayouts/mint.js:212 menulayouts/plasma.js:167
+#: menulayouts/raven.js:166 menulayouts/redmond.js:143
+#: menulayouts/tognee.js:138 menulayouts/unity.js:152 menulayouts/windows.js:54
+#: menulayouts/windows.js:118
 msgid "Terminal"
 msgstr "Terminal"
 
-#: menuWidgets.js:2354
+#: menuWidgets.js:1906 menulayouts/eleven.js:143 menulayouts/insider.js:52
+#: menulayouts/mint.js:221 menulayouts/unity.js:204 menulayouts/windows.js:51
+msgid "Files"
+msgstr "Filer"
+
+#: menuWidgets.js:2201
 msgid "New"
 msgstr "Ny"
 
-#: menuWidgets.js:3007 prefs.js:276 menulayouts/launcher.js:399
-msgid "Type to search…"
-msgstr "Skriv för att söka…"
+#: menuWidgets.js:2640 menulayouts/launcher.js:358
+msgid "Search…"
+msgstr "Sök…"
 
-#: menuWidgets.js:3261
-msgid "Show Applications"
-msgstr "Visa program"
-
-#: menuWidgets.js:3467
+#: menuWidgets.js:2961
 msgid "Add world clocks…"
 msgstr "Lägg till världsklockor…"
 
-#: menuWidgets.js:3468
+#: menuWidgets.js:2962
 msgid "World Clocks"
 msgstr "Världsklockor"
 
-#: menuWidgets.js:3576
-msgid "Weather"
-msgstr "Väder"
-
-#: menuWidgets.js:3696
-msgid "Select a location…"
-msgstr "Välj en plats…"
-
-#: menuWidgets.js:3709
+#: menuWidgets.js:3244
 msgid "Loading…"
 msgstr "Läser in…"
 
-#: menuWidgets.js:3719
+#: menuWidgets.js:3254
 msgid "Go online for weather information"
 msgstr "Gå online för väderinformation"
 
-#: menuWidgets.js:3721
+#: menuWidgets.js:3256
 msgid "Weather information is currently unavailable"
 msgstr "Väderinformation är för närvarande inte tillgänglig"
 
-#: placeDisplay.js:138
+#: menuWidgets.js:3266
+msgid "Weather"
+msgstr "Väder"
+
+#: menuWidgets.js:3268
+msgid "Select weather location…"
+msgstr "Välj plats för väder…"
+
+#: placeDisplay.js:49
 #, javascript-format
 msgid "Failed to launch “%s”"
 msgstr "Det gick inte att starta “%s”"
 
-#: placeDisplay.js:153
+#: placeDisplay.js:64
 #, javascript-format
 msgid "Failed to mount volume for “%s”"
 msgstr "Det gick inte att montera volymen för “%s”"
 
-#: placeDisplay.js:237 placeDisplay.js:261 prefs.js:355 prefs.js:483
-#: menulayouts/baseMenuLayout.js:428 menulayouts/plasma.js:149
-#: menulayouts/unity.js:235
+#: placeDisplay.js:125 placeDisplay.js:148 prefs.js:324 prefs.js:340
+#: menulayouts/baseMenuLayout.js:417 menulayouts/plasma.js:126
+#: menulayouts/unity.js:202
 msgid "Computer"
 msgstr "Dator"
 
-#: placeDisplay.js:326
+#: placeDisplay.js:210
 #, javascript-format
 msgid "Ejecting drive “%s” failed:"
 msgstr "Det gick inte att mata ut enheten “%s”:"
 
-#: placeDisplay.js:452 menulayouts/baseMenuLayout.js:428
-#: menulayouts/baseMenuLayout.js:472 menulayouts/unity.js:227
+#: placeDisplay.js:336 menulayouts/baseMenuLayout.js:417
+#: menulayouts/baseMenuLayout.js:455 menulayouts/mint.js:210
+#: menulayouts/unity.js:194
 msgid "Home"
 msgstr "Hem"
 
-#: placeDisplay.js:722 prefs.js:357 prefs.js:485
-#: menulayouts/baseMenuLayout.js:489
-msgid "Trash"
-msgstr "Papperskorg"
-
-#: placeDisplay.js:732 placeDisplay.js:738
-msgid "Empty Trash"
-msgstr "Töm papperskorgen"
-
-#: prefs.js:72 prefs.js:749 prefs.js:1385 prefs.js:1589 prefs.js:2725
-#: prefs.js:3209 prefs.js:3571 prefs.js:3712 prefs.js:3766 prefs.js:4069
-#: prefs.js:4774 prefs.js:4875 prefs.js:5107 prefs.js:5334
-msgid "Apply"
-msgstr "Verkställ"
-
-#: prefs.js:85 prefs.js:5117
+#: prefs.js:34 prefs.js:56
 msgid "Add More Apps"
 msgstr "Lägg till fler appar"
 
-#: prefs.js:122 prefs.js:4920 prefs.js:5152
+#: prefs.js:45
+msgid "Add Default User Directories"
+msgstr "Lägg till standardanvändarkataloger"
+
+#: prefs.js:121
 msgid "Add Custom Shortcut"
 msgstr "Lägg till en anpassad genväg"
 
-#: prefs.js:263
+#: prefs.js:307
 msgid "Add to your Pinned Apps"
 msgstr "Lägg till fästade appar"
 
-#: prefs.js:265
+#: prefs.js:309
 msgid "Change Selected Pinned App"
 msgstr "Ändra den valda fästade appen"
 
-#: prefs.js:267
+#: prefs.js:311
 msgid "Select Application Shortcuts"
 msgstr "Välj programgenvägar"
 
-#: prefs.js:269
+#: prefs.js:313
 msgid "Select Directory Shortcuts"
 msgstr "Välj kataloggenvägar"
 
-#: prefs.js:336 prefs.js:749
-msgid "Add"
-msgstr "Lägg till"
-
-#: prefs.js:356 prefs.js:484 menulayouts/baseMenuLayout.js:428
-#: menulayouts/baseMenuLayout.js:480 menulayouts/plasma.js:336
-#: menulayouts/windows.js:214
+#: prefs.js:325 prefs.js:341 menulayouts/baseMenuLayout.js:417
+#: menulayouts/baseMenuLayout.js:463 menulayouts/plasma.js:289
+#: menulayouts/windows.js:186
 msgid "Network"
 msgstr "Nätverk"
 
-#: prefs.js:408 prefs.js:1336
+#: prefs.js:326
+msgid "Recent"
+msgstr "Senaste"
+
+#: prefs.js:333
 msgid "Run Command..."
 msgstr "Kör kommando..."
 
-#: prefs.js:409
+#: prefs.js:334
 msgid "Show All Applications"
 msgstr "Visa alla program"
 
-#: prefs.js:458
-msgid "Default Apps"
-msgstr "Standardappar"
+#: prefs.js:451
+#, javascript-format
+msgid "%s has been pinned to ArcMenu"
+msgstr "%s har fästs i ArcMenu"
 
-#: prefs.js:462 prefs.js:542
-msgid "System Apps"
-msgstr "Systemappar"
+#: prefs.js:463
+#, javascript-format
+msgid "%s has been unpinned from ArcMenu"
+msgstr "%s har kopplats loss från ArcMenu"
 
-#: prefs.js:538
-msgid "Presets"
-msgstr "Förinställningar"
-
-#: prefs.js:657 prefs.js:659
-msgid "Edit Pinned App"
-msgstr "Redigera fästad app"
-
-#: prefs.js:657 prefs.js:659 prefs.js:661 prefs.js:663
+#: prefs.js:496
 msgid "Add a Custom Shortcut"
 msgstr "Lägg till en anpassad genväg"
 
-#: prefs.js:661
+#: prefs.js:499
+msgid "Edit Pinned App"
+msgstr "Redigera fästad app"
+
+#: prefs.js:501
 msgid "Edit Shortcut"
 msgstr "Redigera genväg"
 
-#: prefs.js:663
-msgid "Edit Custom Shortcut"
-msgstr "Redigera anpassad genväg"
-
-#: prefs.js:670
-msgid "Shortcut Name:"
-msgstr "Genvägsnamn:"
-
-#: prefs.js:685
-msgid "Icon:"
-msgstr "Ikon:"
-
-#: prefs.js:697
-msgid "Browse..."
-msgstr "Bläddra…"
-
-#: prefs.js:702 prefs.js:2195 prefs.js:2199
-msgid "Select an Icon"
-msgstr "Välj en ikon"
-
-#: prefs.js:734
-msgid "Terminal Command:"
-msgstr "Terminalkommando:"
-
-#: prefs.js:741
-msgid "Shortcut Path:"
-msgstr "Genvägens sökväg:"
-
-#: prefs.js:800
-msgid "Panel and Dock Options"
-msgstr "Panel- och dockningsalternativ"
-
-#: prefs.js:817
-msgid "Activities Hot Corner Options"
-msgstr "Alternativ för Aktiviteter-hörn"
-
-#: prefs.js:827 prefs.js:1285
-msgid "Modify Activities Hot Corner"
-msgstr "Ändra Aktiviteter-hörn"
-
-#: prefs.js:864
-msgid "Hotkey activation"
-msgstr "Snabbtangentaktivering"
-
-#: prefs.js:872
-msgid "Key Release"
-msgstr "Uppsläpp"
-
-#: prefs.js:873
-msgid "Key Press"
-msgstr "Nedtryckning"
-
-#: prefs.js:889
-msgid "Hotkey Options"
-msgstr "Snabbtangentsalternativ"
-
-#: prefs.js:899
-msgid "Choose a Hotkey for ArcMenu"
-msgstr "Välj snabbtangent för ArcMenu"
-
-#: prefs.js:908
-msgid "Left Super Key"
-msgstr "Vänster supertangent"
-
-#: prefs.js:913
-msgid "Right Super Key"
-msgstr "Höger supertangent"
-
-#: prefs.js:919
-msgid "Custom Hotkey"
-msgstr "Anpassad snabbtangent"
-
-#: prefs.js:925 menulayouts/tweaks/tweaks.js:731
-#: menulayouts/tweaks/tweaks.js:841
-msgid "None"
-msgstr "Ingen"
-
-#: prefs.js:988
-msgid "Current Hotkey"
-msgstr "Aktuell snabbtangent"
-
-#: prefs.js:1001
-msgid "Modify Hotkey"
-msgstr "Välj snabbtangent"
-
-#: prefs.js:1037
-msgid "Display ArcMenu On"
-msgstr "Visa Arc-meny i"
-
-#: prefs.js:1047
-msgid "Dash to Dock"
-msgstr "Dash to Dock"
-
-#: prefs.js:1051
-msgid "Ubuntu Dock"
-msgstr "Ubuntu Dock"
-
-#: prefs.js:1054
-msgid "Main Panel"
-msgstr "Systemraden"
-
-#: prefs.js:1055
-msgid "Dash to Panel"
-msgstr "Dash to Panel"
-
-#: prefs.js:1064
-msgid "Dash to Dock extension not running!"
-msgstr "Dash to Dock-tillägget körs inte!"
-
-#: prefs.js:1064
-msgid "Enable Dash to Dock for this feature to work."
-msgstr "Aktivera Dash to Dock för att den här funktionen ska fungera."
-
-#: prefs.js:1072
-msgid "Show Activities Button"
-msgstr "Visa knappen Aktiviteter"
-
-#: prefs.js:1106
-msgid "Main Panel not found!"
-msgstr "Systemraden kunde inte hittas!"
-
-#: prefs.js:1107
-msgid "Dash to Panel extension not running!"
-msgstr "Dash to Panel-tillägget körs inte!"
-
-#: prefs.js:1107
-msgid "Enable Dash to Panel for this feature to work."
-msgstr "Aktivera Dash to Panel för att den här funktionen ska fungera."
-
-#: prefs.js:1127
-msgid "Position in Panel"
-msgstr "Placering i systemraden"
-
-#: prefs.js:1134 prefs.js:1175
-msgid "Left"
-msgstr "Vänster"
-
-#: prefs.js:1137 prefs.js:1176
-msgid "Center"
-msgstr "Mitten"
-
-#: prefs.js:1141 prefs.js:1177
-msgid "Right"
-msgstr "Höger"
-
-#: prefs.js:1165
-msgid "Menu Alignment"
-msgstr "Menyjustering"
-
-#: prefs.js:1188
-msgid "Display ArcMenu on all monitors"
-msgstr "Visa ArcMenu på alla skärmar"
-
-#: prefs.js:1293
-msgid "Activities Hot Corner Action"
-msgstr "Aktiviteter-hörnets åtgärd"
-
-#: prefs.js:1301
-msgid "GNOME Default"
-msgstr "GNOME-standard"
-
-#: prefs.js:1302
-msgid "Disabled"
-msgstr "Inaktiverad"
-
-#: prefs.js:1303
-msgid "Open ArcMenu"
-msgstr "Öppna ArcMenu"
-
-#: prefs.js:1304
-msgid "Custom"
-msgstr "Anpassad"
-
-#: prefs.js:1310
-msgid "Custom Activities Hot Corner Action"
-msgstr "Anpassade åtgärder för Aktiviteter-hörnet"
-
-#: prefs.js:1310
-msgid "Choose from a list of preset commands or use your own terminal command"
-msgstr ""
-"Välj från en lista av förinställda kommandon eller ange ett eget "
-"terminalkommando"
-
-#: prefs.js:1320
-msgid "Preset commands"
-msgstr "Förinställda kommandon"
-
-#: prefs.js:1329
-msgid "Show all Applications"
-msgstr "Visa alla program"
-
-#: prefs.js:1330
-msgid "GNOME Terminal"
-msgstr "GNOME Terminal"
-
-#: prefs.js:1331
-msgid "GNOME System Monitor"
-msgstr "GNOME Systemövervakare"
-
-#: prefs.js:1332
-msgid "GNOME Calculator"
-msgstr "GNOME Kalkylator"
-
-#: prefs.js:1333
-msgid "GNOME gedit"
-msgstr "GNOME Textredigerare"
-
-#: prefs.js:1334
-msgid "GNOME Screenshot"
-msgstr "GNOME Skärmbild"
-
-#: prefs.js:1335
-msgid "GNOME Weather"
-msgstr "GNOME Väder"
-
-#: prefs.js:1360
-msgid "Terminal Command"
-msgstr "Terminalkommando"
-
-#: prefs.js:1457
-msgid "Set Custom Hotkey"
-msgstr "Anpassa snabbtangent"
-
-#: prefs.js:1481
-msgid "Choose Modifiers"
-msgstr "Välj kombinationstangenter"
-
-#: prefs.js:1497
-msgid "Ctrl"
-msgstr "Kontroll"
-
-#: prefs.js:1500
-msgid "Super"
-msgstr "Super"
-
-#: prefs.js:1503
-msgid "Shift"
-msgstr "Skift"
-
-#: prefs.js:1506
-msgid "Alt"
-msgstr "Alt"
-
-#: prefs.js:1557
-msgid "Press any key"
-msgstr "Tryck valfri tangent"
-
-#: prefs.js:1574
-msgid "New Hotkey"
-msgstr "Ny snabbtangent"
-
-#: prefs.js:1652
-msgid "Menu Button Appearance"
-msgstr "Menyknappens utseende"
-
-#: prefs.js:1662
-msgid "Appearance"
-msgstr "Utseende"
-
-#: prefs.js:1668 prefs.js:1790
+#: prefs.js:511
+msgid "Title"
+msgstr "Titel"
+
+#: prefs.js:522 prefs.js:1052 prefs.js:1165
 msgid "Icon"
 msgstr "Ikon"
 
-#: prefs.js:1669 prefs.js:1759
+#: prefs.js:532 prefs.js:1320
+msgid "Browse..."
+msgstr "Bläddra…"
+
+#: prefs.js:538 prefs.js:1325
+msgid "Select an Icon"
+msgstr "Välj en ikon"
+
+#: prefs.js:567
+msgid "Command"
+msgstr "Kommando"
+
+#: prefs.js:570
+msgid "Shortcut Path"
+msgstr "Genvägens sökväg"
+
+#: prefs.js:580 prefs.js:999 prefs.js:1638
+msgid "Apply"
+msgstr "Verkställ"
+
+#: prefs.js:580
+msgid "Add"
+msgstr "Lägg till"
+
+#: prefs.js:605
+msgid "General"
+msgstr "Allmänt"
+
+#: prefs.js:612
+msgid "Display Options"
+msgstr "Visningsalternativ"
+
+#: prefs.js:625
+msgid "Show Activities Button"
+msgstr "Visa knappen Aktiviteter"
+
+#: prefs.js:633 prefs.js:659 menulayouts/tweaks/tweaks.js:542
+msgid "Left"
+msgstr "Vänster"
+
+#: prefs.js:634 prefs.js:660
+msgid "Center"
+msgstr "Mitten"
+
+#: prefs.js:635 prefs.js:661 menulayouts/tweaks/tweaks.js:543
+msgid "Right"
+msgstr "Höger"
+
+#: prefs.js:637 prefs.js:1121
+msgid "Position in Panel"
+msgstr "Placering i systemraden"
+
+#: prefs.js:667
+msgid "Menu Alignment"
+msgstr "Menyjustering"
+
+#: prefs.js:686
+msgid "Display ArcMenu on all Panels"
+msgstr "Visa ArcMenu på alla paneler"
+
+#: prefs.js:687
+msgid "Dash to Panel extension required"
+msgstr "Kräver Dash to Panel-tillägget"
+
+#: prefs.js:699
+msgid "Hotkey Options"
+msgstr "Snabbtangentsalternativ"
+
+#: prefs.js:702
+msgid "Standalone Runner Menu"
+msgstr "Fristående Runner-meny"
+
+#: prefs.js:745
+msgid "Enable a standalone Runner menu"
+msgstr "Aktivera en fristående Runner-meny"
+
+#: prefs.js:760
+msgid "Open on Primary Monitor"
+msgstr "Öppna på primär skärm"
+
+#: prefs.js:767
+msgid "None"
+msgstr "Ingen"
+
+#: prefs.js:768
+msgid "Left Super Key"
+msgstr "Vänster supertangent"
+
+#: prefs.js:769
+msgid "Custom Hotkey"
+msgstr "Anpassad snabbtangent"
+
+#: prefs.js:772
+msgid "Menu Hotkey"
+msgstr "Snabbtangent för meny"
+
+#: prefs.js:772
+msgid "Runner Hotkey"
+msgstr "Snabbtangent för Runner"
+
+#: prefs.js:785
+msgid "Modify Hotkey"
+msgstr "Välj snabbtangent"
+
+#: prefs.js:790
+msgid "Current Hotkey"
+msgstr "Aktuell snabbtangent"
+
+#: prefs.js:874
+msgid "Set Custom Hotkey"
+msgstr "Anpassa snabbtangent"
+
+#: prefs.js:899
+msgid "Choose Modifiers"
+msgstr "Välj kombinationstangenter"
+
+#: prefs.js:909
+msgid "Ctrl"
+msgstr "Kontroll"
+
+#: prefs.js:913
+msgid "Super"
+msgstr "Super"
+
+#: prefs.js:917
+msgid "Shift"
+msgstr "Skift"
+
+#: prefs.js:921
+msgid "Alt"
+msgstr "Alt"
+
+#: prefs.js:973
+msgid "Press any key"
+msgstr "Tryck valfri tangent"
+
+#: prefs.js:989
+msgid "New Hotkey"
+msgstr "Ny snabbtangent"
+
+#: prefs.js:1048
+msgid "Menu Button"
+msgstr "Menyknapp"
+
+#: prefs.js:1053 prefs.js:1137
 msgid "Text"
 msgstr "Text"
 
-#: prefs.js:1670
+#: prefs.js:1054
 msgid "Icon and Text"
 msgstr "Ikon och text"
 
-#: prefs.js:1671
+#: prefs.js:1055
 msgid "Text and Icon"
 msgstr "Text och ikon"
 
-#: prefs.js:1672
+#: prefs.js:1056
 msgid "Hidden"
 msgstr "Dold"
 
-#: prefs.js:1701
-msgid "Show Arrow"
-msgstr "Visa pil"
+#: prefs.js:1058
+msgid "Appearance"
+msgstr "Utseende"
 
-#: prefs.js:1721
-msgid "Menu Button Padding"
-msgstr "Menyknappens utfyllnad"
+#: prefs.js:1097
+msgid "Padding"
+msgstr "Utfyllnad"
 
-#: prefs.js:1744 menulayouts/tweaks/tweaks.js:539
-#: menulayouts/tweaks/tweaks.js:570 menulayouts/tweaks/tweaks.js:603
-msgid "Default"
-msgstr "Standard"
+#: prefs.js:1098 menulayouts/tweaks/tweaks.js:431
+#, javascript-format
+msgid "%d Default Theme Value"
+msgstr "%d standardtemavärde"
 
-#: prefs.js:1780
-msgid "Icon Appearance"
-msgstr "Ikonens utseende"
+#: prefs.js:1149
+msgid "Icon Settings"
+msgstr "Ikoninställningar"
 
-#: prefs.js:1797
+#: prefs.js:1152
 msgid "Browse Icons"
 msgstr "Bläddra ikoner"
 
-#: prefs.js:1817
+#: prefs.js:1188
 msgid "Icon Size"
 msgstr "Ikonstorlek"
 
-#: prefs.js:1853 prefs.js:3177 prefs.js:3540 prefs.js:3699 prefs.js:3763
-#: prefs.js:4723 prefs.js:4872 prefs.js:5104 prefs.js:5331
-#: menulayouts/tweaks/tweaks.js:397
-msgid "Restore Defaults"
-msgstr "Återställ till standardvärden"
-
-#: prefs.js:1861
-msgid "Menu Button Styling"
-msgstr "Menyknappens utformning"
-
-#: prefs.js:1872
-msgid "Color"
-msgstr "Färg"
-
-#: prefs.js:1879
-msgid "Hover Color"
-msgstr "Färg vid pekning"
-
-#: prefs.js:1886
-msgid "Active Color"
-msgstr "Aktiv färg"
-
-#: prefs.js:1893
-msgid "Hover Background Color"
-msgstr "Bakgrundsfärg vid pekning"
-
-#: prefs.js:1900
-msgid "Active Background Color"
-msgstr "Aktiv bakgrundsfärg"
-
-#: prefs.js:1908
-msgid "Override Border Radius"
-msgstr "Åsidosätt kantradie"
-
-#: prefs.js:1932
-msgid "Border Radius"
-msgstr "Kantradie"
-
-#: prefs.js:2098 prefs.js:2234
+#: prefs.js:1217 prefs.js:1222
 msgid "ArcMenu Icons"
 msgstr "ArcMenu-ikoner"
 
-#: prefs.js:2186
-msgid "Browse for a Custom Icon"
-msgstr "Sök efter en anpassad ikon"
-
-#: prefs.js:2235
+#: prefs.js:1245
 msgid "Distro Icons"
 msgstr "Distributionsikoner"
 
-#: prefs.js:2236
+#: prefs.js:1281 prefs.js:1314
 msgid "Custom Icon"
 msgstr "Anpassad ikon"
 
-#: prefs.js:2301
-msgid "Legal disclaimer for Distro Icons..."
-msgstr "Juridisk ansvarsfriskrivning för distributionsikoner..."
+#: prefs.js:1412
+msgid "Legal disclaimer for Distro Icons"
+msgstr "Juridisk ansvarsfriskrivning för Distro Icons"
 
-#: prefs.js:2383
+#: prefs.js:1468
+msgid "Layouts"
+msgstr "Layouter"
+
+#: prefs.js:1492
 msgid "Current Menu Layout"
 msgstr "Nuvarande menylayout"
 
-#: prefs.js:2389
+#: prefs.js:1507
 msgid "Available Menu Layouts"
 msgstr "Tillgängliga menylayouter"
 
-#: prefs.js:2519
-#, javascript-format
-msgid "%s Layout Tweaks"
-msgstr "%s Layoutjusteringar"
-
-#: prefs.js:2577
-msgid "Enable Custom Menu Theme"
-msgstr "Aktivera anpassat menytema"
-
-#: prefs.js:2587
-msgid "Override Menu Theme"
-msgstr "Åsidosätt menytema"
-
-#: prefs.js:2747 prefsWidgets.js:769
+#: prefs.js:1512 prefs.js:1666
 #, javascript-format
 msgid "%s Menu Layouts"
 msgstr "%s menylayouter"
 
-#: prefs.js:2840
-msgid "Menu Height"
-msgstr "Menyns höjd"
+#: prefs.js:1590
+#, javascript-format
+msgid "%s Layout Tweaks"
+msgstr "%s Layoutjusteringar"
 
-#: prefs.js:2893
+#: prefs.js:1726
+msgid "Menu Size"
+msgstr "Menyns storlek"
+
+#: prefs.js:1762 menulayouts/tweaks/tweaks.js:407
+msgid "Height"
+msgstr "Höjd"
+
+#: prefs.js:1782
 msgid "Left-Panel Width"
 msgstr "Vänsterpanelens bredd"
 
-#: prefs.js:2938
+#: prefs.js:1783 prefs.js:1804 prefs.js:1896
+msgid "Traditional Layouts"
+msgstr "Traditionella layouter"
+
+#: prefs.js:1803
 msgid "Right-Panel Width"
 msgstr "Högerpanelens bredd"
 
-#: prefs.js:2985
-msgid "Override Menu Location"
-msgstr "Åsidosätt menyplacering"
+#: prefs.js:1824
+msgid "Width Offset"
+msgstr "Breddförskjutning"
 
-#: prefs.js:2994
+#: prefs.js:1825
+msgid "Non-Traditional Layouts"
+msgstr "Icke-traditionella layouter"
+
+#: prefs.js:1837
 msgid "Off"
 msgstr "Av"
 
-#: prefs.js:2995
+#: prefs.js:1838
 msgid "Top Centered"
 msgstr "Toppcentrerad"
 
-#: prefs.js:2996
+#: prefs.js:1839
 msgid "Bottom Centered"
 msgstr "Bottencentrerad"
 
-#: prefs.js:3011
-msgid "Large Application Icons"
-msgstr "Stora programikoner"
+#: prefs.js:1841
+msgid "Override Menu Location"
+msgstr "Åsidosätt menyplacering"
 
-#: prefs.js:3032
-msgid "Category Sub Menus"
-msgstr "Undermenyer för kategorier"
+#: prefs.js:1858
+msgid "Show Application Descriptions"
+msgstr "Visa programbeskrivningar"
 
-#: prefs.js:3055
-msgid "Disable Tooltips"
-msgstr "Inaktivera verktygstips"
+#: prefs.js:1865
+msgid "Full Color"
+msgstr "Fullfärg"
 
-#: prefs.js:3079 prefs.js:4671
-msgid "Enable Vertical Separator"
-msgstr "Visa vertikal avgränsare"
+#: prefs.js:1866
+msgid "Symbolic"
+msgstr "Symboliska"
 
-#: prefs.js:3100 prefs.js:4693
-msgid "Separator Color"
-msgstr "Avgränsarens färg"
+#: prefs.js:1868
+msgid "Category Icon Type"
+msgstr "Kategoriikontyp"
 
-#: prefs.js:3125
-msgid "Disable Recently Installed Apps Indicator"
-msgstr "Inaktivera indikator för nyligen installerade appar"
+#: prefs.js:1878
+msgid "Shortcuts Icon Type"
+msgstr "Ikontyp för genvägar"
 
-#: prefs.js:3147
-msgid "Clear all Applications Marked \"New\""
-msgstr "Rensa alla program markerade \"Ny\""
+#: prefs.js:1895
+msgid "Vertical Separator"
+msgstr "Vertikal avgränsare"
 
-#: prefs.js:3155
-msgid "Clear All"
-msgstr "Rensa alla"
+#: prefs.js:1903
+msgid "Icon Sizes"
+msgstr "Ikonstorlekar"
 
-#: prefs.js:3286
-msgid "Disable Category Arrows"
-msgstr "Inaktivera kategoripilar"
+#: prefs.js:1904
+msgid "Modify the icon size of various menu elements."
+msgstr "Ändra ikonstorleken för olika menyelement."
 
-#: prefs.js:3309
-msgid "Disable Searchbox Border"
-msgstr "Inaktivera sökrutans ram"
+#: prefs.js:1909 prefs.js:1955
+msgid "Default"
+msgstr "Standard"
 
-#: prefs.js:3332
-msgid "Disable Menu Arrow"
-msgstr "Inaktivera menypil"
+#: prefs.js:1910 prefs.js:1913 prefs.js:1957
+msgid "Small"
+msgstr "Liten"
 
-#: prefs.js:3355
+#: prefs.js:1910 prefs.js:1911 prefs.js:1912 menulayouts/tweaks/tweaks.js:145
+msgid "Square"
+msgstr "Kvadratisk"
+
+#: prefs.js:1911 prefs.js:1914 prefs.js:1958
+msgid "Medium"
+msgstr "Mellan"
+
+#: prefs.js:1912 prefs.js:1915 prefs.js:1959
+msgid "Large"
+msgstr "Stor"
+
+#: prefs.js:1913 prefs.js:1914 prefs.js:1915
+msgid "Wide"
+msgstr "Bred"
+
+#: prefs.js:1917
+msgid "Grid Icons"
+msgstr "Rutnätsikoner"
+
+#: prefs.js:1926
+msgid "Categories &amp; Applications"
+msgstr "Kategorier &amp; program"
+
+#: prefs.js:1928
+msgid "Buttons"
+msgstr "Knappar"
+
+#: prefs.js:1930
+msgid "Quick Links"
+msgstr "Snabblänkar"
+
+#: prefs.js:1932 prefs.js:2396
+msgid "Misc"
+msgstr "Diverse"
+
+#: prefs.js:1956
+msgid "Extra Small"
+msgstr "Extra liten"
+
+#: prefs.js:1960
+msgid "Extra Large"
+msgstr "Extra stor"
+
+#: prefs.js:2002
 msgid "Disable ScrollView Fade Effects"
 msgstr "Inaktivera toning i rullningsvy"
 
-#: prefs.js:3378
+#: prefs.js:2018
+msgid "Disable Tooltips"
+msgstr "Inaktivera verktygstips"
+
+#: prefs.js:2034
 msgid "Alphabetize 'All Programs' Category"
 msgstr "Alfabetisera kategorin 'Alla program'"
 
-#: prefs.js:3398 prefs.js:3415
+#: prefs.js:2050
+msgid "Show Hidden Recent Files"
+msgstr "Visa dolda filer i senaste filer"
+
+#: prefs.js:2070 prefs.js:2083
 msgid "Multi-Lined Labels"
 msgstr "Etiketter med flera rader"
 
-#: prefs.js:3416
+#: prefs.js:2070
 msgid "Enable/Disable multi-lined labels on large application icon layouts."
 msgstr ""
 "Aktivera/inaktivera etiketter med flera rader för layouter med stora "
 "programikoner."
 
-#: prefs.js:3432
-msgid "Recently Installed Application Indicators"
-msgstr "Indikator för nyligen installerat program"
-
-#: prefs.js:3443
-msgid "Category Indicator Color"
-msgstr "Kategoriindikatorfärg"
-
-#: prefs.js:3466
-msgid "Application Indicator Label Color"
-msgstr "Programindikatorns etikettfärg"
-
-#: prefs.js:3491
-msgid "Gap Adjustment"
-msgstr "Mellanrumsjustering"
-
-#: prefs.js:3519
-msgid "Adjust the gap between the ArcMenu button and the menu."
-msgstr "Justera avståndet mellan ArcMenu-knappen och menyn."
-
-#: prefs.js:3639
-msgid "Search Providers"
-msgstr "Söktjänster"
-
-#: prefs.js:3647
-msgid "Open Windows"
-msgstr "Öppna fönster"
-
-#: prefs.js:3667
-msgid "Search Results"
-msgstr "Sökresultat"
-
-#: prefs.js:3674
-msgid "Show Descriptions"
-msgstr "Visa beskrivningar"
-
-#: prefs.js:3889
-msgid "Color Theme Name"
-msgstr "Färgtemats namn"
-
-#: prefs.js:3895
-msgid "Name:"
-msgstr "Namn:"
-
-#: prefs.js:3919
-msgid "Save Theme"
-msgstr "Spara tema"
-
-#: prefs.js:3943
-msgid "Select Themes to Import"
-msgstr "Välj teman att importera"
-
-#: prefs.js:3943
-msgid "Select Themes to Export"
-msgstr "Välj teman att exportera"
-
-#: prefs.js:3959
-msgid "Import"
-msgstr "Importera"
-
-#: prefs.js:3959
-msgid "Export"
-msgstr "Exportera"
-
-#: prefs.js:3988
-msgid "Select All"
-msgstr "Välj alla"
-
-#: prefs.js:4055 prefs.js:4331
-msgid "Manage Presets"
-msgstr "Hantera fördefinierade teman"
-
-#: prefs.js:4216 prefs.js:5563
-msgid "Menu Theme Presets"
-msgstr "Fördefinierade menyteman"
-
-#: prefs.js:4226
-msgid "Current Menu Theme Preset"
-msgstr "Nuvarande fördefinierat menytema"
-
-#: prefs.js:4246
-msgid "Save as Preset"
-msgstr "Spara som fördefinierat tema"
-
-#: prefs.js:4347
-msgid "Browse Presets"
-msgstr "Bläddra i fördefinierade teman"
-
-#: prefs.js:4396
-msgid "Theme Settings"
-msgstr "Temainställningar"
-
-#: prefs.js:4416
-msgid "Menu Background Color"
-msgstr "Menyns bakgrundsfärg"
-
-#: prefs.js:4438
-msgid "Menu Foreground Color"
-msgstr "Menyns förgrundsfärg"
-
-#: prefs.js:4459 menulayouts/tweaks/tweaks.js:582
-msgid "Font Size"
-msgstr "Textstorlek"
-
-#: prefs.js:4489
-msgid "Border Color"
-msgstr "Inramningens färg"
-
-#: prefs.js:4511
-msgid "Border Size"
-msgstr "Inramningens storlek"
-
-#: prefs.js:4540
-msgid "Active Item Background Color"
-msgstr "Bakgrundsfärg för aktivt objekt"
-
-#: prefs.js:4562
-msgid "Active Item Foreground Color"
-msgstr "Förgrundsfärg för aktivt objekt"
-
-#: prefs.js:4584
-msgid "Corner Radius"
-msgstr "Hörnradie"
-
-#: prefs.js:4613
-msgid "Menu Arrow Size"
-msgstr "Menypilens storlek"
-
-#: prefs.js:4642
-msgid "Menu Displacement"
-msgstr "Menyns förskjutning"
-
-#: prefs.js:4885
-msgid "Add Default User Directories"
-msgstr "Lägg till standardanvändarkataloger"
-
-#: prefs.js:5472
-msgid "Export or Import Settings"
-msgstr "Exportera eller importera inställningar"
-
-#: prefs.js:5482
-msgid "All ArcMenu Settings"
-msgstr "Alla ArcMenu-inställningar"
-
-#: prefs.js:5493
-msgid "Export or Import All ArcMenu Settings"
-msgstr "Exportera eller importera alla ArcMenu-inställningar"
-
-#: prefs.js:5494
-msgid ""
-"Importing settings from file may replace ALL saved settings.\n"
-"This includes all saved pinned apps."
-msgstr ""
-"Importering av inställningar från fil kan komma att ersätta ALLA sparade "
-"inställningar.\n"
-"Detta inkluderar alla sparade fästade appar."
-
-#: prefs.js:5504
-msgid "Import from File"
-msgstr "Importera från fil"
-
-#: prefs.js:5510
-msgid "Import settings"
-msgstr "Importera inställningar"
-
-#: prefs.js:5533
-msgid "Export to File"
-msgstr "Exportera till fil"
-
-#: prefs.js:5539
-msgid "Export settings"
-msgstr "Exportera inställningar"
-
-#: prefs.js:5574
-msgid "Export or Import Menu Theme Presets"
-msgstr "Exportera eller importera fördefinierade menyteman"
-
-#: prefs.js:5575
-msgid "Menu theme presets are located in the \"Menu Theme\" section"
-msgstr "Fördefinierade menyteman finns under \"Menytema\""
-
-#: prefs.js:5585 prefs.js:5591
-msgid "Import Theme Preset"
-msgstr "Importera fördefinierade teman"
-
-#: prefs.js:5627 prefs.js:5638
-msgid "Export Theme Preset"
-msgstr "Exportera fördefinierade teman"
-
-#: prefs.js:5670
-msgid "ArcMenu Settings Window Size"
-msgstr "ArcMenu-inställningars fönsterstorlek"
-
-#: prefs.js:5680
-msgid "Window Width"
-msgstr "Fönsterbredd"
-
-#: prefs.js:5704
-msgid "Window Height"
-msgstr "Fönsterhöjd"
-
-#: prefs.js:5733
-msgid "Reset all Settings"
-msgstr "Återställ alla inställningar"
-
-#: prefs.js:5739
-msgid "Restore Default Settings?"
-msgstr "Återställ standardinställningarna?"
-
-#: prefs.js:5739
-msgid "All ArcMenu settings will be reset to the default value."
-msgstr "Alla ArcMenu-inställningar återställs till standardvärden."
-
-#: prefs.js:5846
-msgid "ArcMenu Version"
-msgstr "ArcMenu-version"
-
-#: prefs.js:5863
-msgid "Git Commit"
-msgstr "Git-commit"
-
-#: prefs.js:5883
-msgid "GNOME Version"
-msgstr "GNOME-version"
-
-#: prefs.js:5901
-msgid "OS"
-msgstr "OS"
-
-#: prefs.js:5933
-msgid "Session Type"
-msgstr "Sessionstyp"
-
-#: prefs.js:5965
-msgid "Application Menu Extension for GNOME"
-msgstr "Applikationsmeny-tillägg för GNOME"
-
-#: prefs.js:6009
-msgid "Developers"
-msgstr "Utvecklare"
-
-#: prefs.js:6011
-msgid "Translators"
-msgstr "Översättare"
-
-#: prefs.js:6013
-msgid "Contributors"
-msgstr "Bidragsgivare"
-
-#: prefs.js:6015
-msgid "Artwork"
-msgstr "Grafik"
-
-#: prefs.js:6124
-msgid "General"
-msgstr "Allmänt"
-
-#: prefs.js:6125
-msgid "Menu Layout"
-msgstr "Menylayout"
-
-#: prefs.js:6126
-msgid "Menu Theme"
-msgstr "Menytema"
-
-#: prefs.js:6127
-msgid "Customize Menu"
-msgstr "Anpassa menyn"
-
-#: prefs.js:6129
-msgid "Misc"
-msgstr "Diverse"
-
-#: prefs.js:6135
-msgid "Menu Settings"
-msgstr "Menyinställningar"
-
-#: prefs.js:6137
-msgid "Directory Shortcuts"
-msgstr "Kataloggenvägar"
-
-#: prefs.js:6138 menulayouts/plasma.js:305 menulayouts/windows.js:289
-msgid "Application Shortcuts"
-msgstr "Programgenvägar"
-
-#: prefs.js:6139
-msgid "Power Options"
-msgstr "Energialternativ"
-
-#: prefs.js:6140
+#: prefs.js:2105
+msgid "Disable New Apps Tracker"
+msgstr "Inaktivera spårare för nya program"
+
+#: prefs.js:2115
+msgid "Clear All"
+msgstr "Rensa alla"
+
+#: prefs.js:2124
+msgid "Clear Apps Marked 'New'"
+msgstr "Rensa program markerade \"Ny\""
+
+#: prefs.js:2168
+msgid "Extra Search Providers"
+msgstr "Extra söktjänster"
+
+#: prefs.js:2179
+msgid "Search for open windows across all workspaces"
+msgstr "Sök efter öppna fönster i alla arbetsytor"
+
+#: prefs.js:2193
+msgid "Search for recent files"
+msgstr "Sök efter senaste filer"
+
+#: prefs.js:2201 prefs.js:2832
 msgid "Search Options"
 msgstr "Sökalternativ"
 
-#: prefs.js:6141
+#: prefs.js:2211
+msgid "Show descriptions of search results"
+msgstr "Visa beskrivningar av sökresultat"
+
+#: prefs.js:2226
+msgid "Highlight search result terms"
+msgstr "Markera sökresultattermer"
+
+#: prefs.js:2245
+msgid "Max Search Results"
+msgstr "Max antal sökresultat"
+
+#: prefs.js:2403
+msgid "Export or Import Settings"
+msgstr "Exportera eller importera inställningar"
+
+#: prefs.js:2413
+msgid "Export or Import ArcMenu Settings"
+msgstr "Exportera eller importera ArcMenu-inställningar"
+
+#: prefs.js:2414
+msgid "Importing will overwrite current settings."
+msgstr "Importering kommer att skriva över aktuella inställningar."
+
+#: prefs.js:2428
+msgid "Import"
+msgstr "Importera"
+
+#: prefs.js:2433
+msgid "Import settings"
+msgstr "Importera inställningar"
+
+#: prefs.js:2456
+msgid "Export"
+msgstr "Exportera"
+
+#: prefs.js:2461
+msgid "Export settings"
+msgstr "Exportera inställningar"
+
+#: prefs.js:2480
+msgid "ArcMenu Settings Window Size"
+msgstr "ArcMenu-inställningars fönsterstorlek"
+
+#: prefs.js:2496
+msgid "Window Width"
+msgstr "Fönsterbredd"
+
+#: prefs.js:2516
+msgid "Window Height"
+msgstr "Fönsterhöjd"
+
+#: prefs.js:2525
+msgid "Reset all ArcMenu Settings"
+msgstr "Återställ alla ArcMenu-inställningar"
+
+#: prefs.js:2531
+msgid "Reset all Settings"
+msgstr "Återställ alla inställningar"
+
+#: prefs.js:2537
+msgid "Reset all settings?"
+msgstr "Återställ alla inställningar?"
+
+#: prefs.js:2538
+msgid "All ArcMenu settings will be reset to the default value."
+msgstr "Alla ArcMenu-inställningar återställs till standardvärden."
+
+#: prefs.js:2614
+msgid "Application Menu Extension for GNOME"
+msgstr "Applikationsmeny-tillägg för GNOME"
+
+#: prefs.js:2628
+msgid "ArcMenu Version"
+msgstr "ArcMenu-version"
+
+#: prefs.js:2641
+msgid "Git Commit"
+msgstr "Git-commit"
+
+#: prefs.js:2654
+msgid "GNOME Version"
+msgstr "GNOME-version"
+
+#: prefs.js:2662
+msgid "OS"
+msgstr "OS"
+
+#: prefs.js:2685
+msgid "Session Type"
+msgstr "Sessionstyp"
+
+#: prefs.js:2702
+msgid "Credits"
+msgstr "Tack till"
+
+#: prefs.js:2801
+msgid "Customize"
+msgstr "Anpassa"
+
+#: prefs.js:2815 prefs.js:2826
+msgid "Menu Settings"
+msgstr "Menyinställningar"
+
+#: prefs.js:2829
+msgid "Directory Shortcuts"
+msgstr "Kataloggenvägar"
+
+#: prefs.js:2830 menulayouts/plasma.js:257 menulayouts/windows.js:253
+msgid "Application Shortcuts"
+msgstr "Programgenvägar"
+
+#: prefs.js:2831
+msgid "Power Options"
+msgstr "Energialternativ"
+
+#: prefs.js:2833
 msgid "Extra Categories"
 msgstr "Extra kategorier"
 
-#: prefs.js:6142
+#: prefs.js:2834
 msgid "Fine-Tune"
 msgstr "Finjustera"
 
-#: prefs.js:6264
+#: prefs.js:2857
+msgid "Reset"
+msgstr "Återställ"
+
+#: prefs.js:2868
+#, javascript-format
+msgid "Reset all %s?"
+msgstr "Återställ alla %s?"
+
+#: prefs.js:2869
+#, javascript-format
+msgid "All %s will be reset to the default value."
+msgstr "Alla %s återställs till standardvärden."
+
+#: prefs.js:3051
 msgid "Invalid Shortcut"
 msgstr "Ogiltig genväg"
 
-#: prefsWidgets.js:481
+#: prefsWidgets.js:244
 msgid "Modify"
 msgstr "Ändra"
 
-#: prefsWidgets.js:514
+#: prefsWidgets.js:279
 msgid "Move Up"
 msgstr "Flytta upp"
 
-#: prefsWidgets.js:530
+#: prefsWidgets.js:295
 msgid "Move Down"
 msgstr "Flytta ned"
 
-#: prefsWidgets.js:547
+#: prefsWidgets.js:313
 msgid "Delete"
 msgstr "Radera"
 
-#: search.js:673
+#: search.js:736
 msgid "Searching..."
 msgstr "Söker..."
 
-#: search.js:675
+#: search.js:738
 msgid "No results."
 msgstr "Inga resultat."
 
-#: search.js:808
+#: search.js:829
 #, javascript-format
 msgid "%d more"
 msgid_plural "%d more"
 msgstr[0] "%d till"
 msgstr[1] "%d till"
 
-#: menulayouts/arcmenu.js:196 menulayouts/baseMenuLayout.js:486
-#: menulayouts/mint.js:228 menulayouts/plasma.js:186 menulayouts/raven.js:171
-#: menulayouts/redmond.js:167 menulayouts/tognee.js:152
-#: menulayouts/unity.js:190 menulayouts/unity.js:233 menulayouts/windows.js:148
+#: menulayouts/arcmenu.js:178 menulayouts/baseMenuLayout.js:469
+#: menulayouts/baseMenuLayout.js:471 menulayouts/mint.js:217
+#: menulayouts/plasma.js:167 menulayouts/raven.js:166
+#: menulayouts/redmond.js:143 menulayouts/tognee.js:138
+#: menulayouts/unity.js:152 menulayouts/unity.js:200 menulayouts/windows.js:118
 msgid "Software"
 msgstr "Programvara"
 
-#: menulayouts/arcmenu.js:196 menulayouts/plasma.js:186
-#: menulayouts/raven.js:171 menulayouts/redmond.js:167
-#: menulayouts/tognee.js:152 menulayouts/unity.js:190
-#: menulayouts/windows.js:148
+#: menulayouts/arcmenu.js:178 menulayouts/eleven.js:150
+#: menulayouts/insider.js:58 menulayouts/mint.js:213 menulayouts/plasma.js:167
+#: menulayouts/raven.js:166 menulayouts/redmond.js:143
+#: menulayouts/tognee.js:138 menulayouts/unity.js:152 menulayouts/whisker.js:49
+#: menulayouts/windows.js:57 menulayouts/windows.js:118
+msgid "Settings"
+msgstr "Inställningar"
+
+#: menulayouts/arcmenu.js:178 menulayouts/plasma.js:167
+#: menulayouts/raven.js:166 menulayouts/redmond.js:143
+#: menulayouts/tognee.js:138 menulayouts/unity.js:152
+#: menulayouts/windows.js:118
 msgid "Tweaks"
 msgstr "Justeringar"
 
-#: menulayouts/baseMenuLayout.js:428 menulayouts/eleven.js:168
-#: menulayouts/insider.js:73 menulayouts/mint.js:230 menulayouts/unity.js:228
-#: menulayouts/windows.js:75
+#: menulayouts/baseMenuLayout.js:417 menulayouts/mint.js:219
+#: menulayouts/unity.js:195
 msgid "Documents"
 msgstr "Dokument"
 
-#: menulayouts/baseMenuLayout.js:428 menulayouts/eleven.js:161
-#: menulayouts/unity.js:229
+#: menulayouts/baseMenuLayout.js:417 menulayouts/unity.js:196
 msgid "Downloads"
 msgstr "Hämtningar"
 
-#: menulayouts/baseMenuLayout.js:428
+#: menulayouts/baseMenuLayout.js:417
 msgid "Music"
 msgstr "Musik"
 
-#: menulayouts/baseMenuLayout.js:428
+#: menulayouts/baseMenuLayout.js:417
 msgid "Pictures"
 msgstr "Bilder"
 
-#: menulayouts/baseMenuLayout.js:428
+#: menulayouts/baseMenuLayout.js:417
 msgid "Videos"
 msgstr "Video"
 
-#: menulayouts/eleven.js:205 menulayouts/eleven.js:290
-#: menulayouts/windows.js:383
-msgid "Frequent"
-msgstr "Vanliga"
-
-#: menulayouts/eleven.js:223 menulayouts/eleven.js:286
+#: menulayouts/eleven.js:159 menulayouts/eleven.js:206
+#: menulayouts/eleven.js:262
 msgid "Pinned"
 msgstr "Fästade"
 
-#: menulayouts/launcher.js:130
+#: menulayouts/eleven.js:160 menulayouts/eleven.js:182
+#: menulayouts/eleven.js:266 menulayouts/windows.js:322
+msgid "Frequent"
+msgstr "Vanliga"
+
+#: menulayouts/launcher.js:110
 msgid "More"
 msgstr "Mer"
 
-#: menulayouts/launcher.js:161
+#: menulayouts/launcher.js:141
 msgid "All"
 msgstr "Alla"
 
-#: menulayouts/launcher.js:298 menulayouts/launcher.js:361
+#: menulayouts/launcher.js:278 menulayouts/launcher.js:338
 msgid "Search"
 msgstr "Sök"
 
-#: menulayouts/mint.js:232 menulayouts/unity.js:237
-msgid "Files"
-msgstr "Filer"
-
-#: menulayouts/plasma.js:309 menulayouts/windows.js:293
+#: menulayouts/plasma.js:261 menulayouts/windows.js:257
 msgid "Places"
 msgstr "Platser"
 
-#: menulayouts/plasma.js:320 menulayouts/windows.js:198
-#: menulayouts/tweaks/tweaks.js:1009 menulayouts/tweaks/tweaks.js:1140
+#: menulayouts/plasma.js:273 menulayouts/windows.js:170
+#: menulayouts/tweaks/tweaks.js:662 menulayouts/tweaks/tweaks.js:764
 msgid "Bookmarks"
 msgstr "Bokmärken"
 
-#: menulayouts/plasma.js:328 menulayouts/windows.js:206
+#: menulayouts/plasma.js:281 menulayouts/windows.js:178
 msgid "Devices"
 msgstr "Enheter"
 
-#: menulayouts/raven.js:268 menulayouts/unity.js:402
+#: menulayouts/raven.js:57 menulayouts/raven.js:233 menulayouts/unity.js:39
+#: menulayouts/unity.js:287 menulayouts/tweaks/tweaks.js:460
+#: menulayouts/tweaks/tweaks.js:529 menulayouts/tweaks/tweaks.js:696
+#: menulayouts/tweaks/tweaks.js:720
+msgid "All Programs"
+msgstr "Alla program"
+
+#: menulayouts/raven.js:277 menulayouts/unity.js:343
 msgid "Shortcuts"
 msgstr "Genvägar"
 
-#: menulayouts/tweaks/tweaks.js:147
-msgid "Category Activation"
-msgstr "Kategoriaktivering"
-
-#: menulayouts/tweaks/tweaks.js:153
+#: menulayouts/tweaks/tweaks.js:117
 msgid "Mouse Click"
 msgstr "Klicka"
 
-#: menulayouts/tweaks/tweaks.js:154
+#: menulayouts/tweaks/tweaks.js:118
 msgid "Mouse Hover"
 msgstr "Håll över"
 
-#: menulayouts/tweaks/tweaks.js:173
+#: menulayouts/tweaks/tweaks.js:121
+msgid "Category Activation"
+msgstr "Kategoriaktivering"
+
+#: menulayouts/tweaks/tweaks.js:144
+msgid "Round"
+msgstr "Rund"
+
+#: menulayouts/tweaks/tweaks.js:147
 msgid "Avatar Icon Shape"
 msgstr "Avatarikonens form"
 
-#: menulayouts/tweaks/tweaks.js:178
-msgid "Circular"
-msgstr "Rund"
-
-#: menulayouts/tweaks/tweaks.js:179
-msgid "Square"
-msgstr "Kvadratisk"
-
-#: menulayouts/tweaks/tweaks.js:194 menulayouts/tweaks/tweaks.js:309
-msgid "Searchbar Location"
-msgstr "Sökfältets placering"
-
-#: menulayouts/tweaks/tweaks.js:200 menulayouts/tweaks/tweaks.js:315
+#: menulayouts/tweaks/tweaks.js:162 menulayouts/tweaks/tweaks.js:781
 msgid "Bottom"
 msgstr "Nederst"
 
-#: menulayouts/tweaks/tweaks.js:201 menulayouts/tweaks/tweaks.js:316
-#: menulayouts/tweaks/tweaks.js:507
+#: menulayouts/tweaks/tweaks.js:163 menulayouts/tweaks/tweaks.js:354
+#: menulayouts/tweaks/tweaks.js:782
 msgid "Top"
 msgstr "Överst"
 
-#: menulayouts/tweaks/tweaks.js:214
+#: menulayouts/tweaks/tweaks.js:166
+msgid "Searchbar Location"
+msgstr "Sökfältets placering"
+
+#: menulayouts/tweaks/tweaks.js:187
 msgid "Flip Layout Horizontally"
 msgstr "Spegelvänd layout horisontellt"
 
-#: menulayouts/tweaks/tweaks.js:231
+#: menulayouts/tweaks/tweaks.js:203
 msgid "Disable User Avatar"
 msgstr "Inaktivera användaravatar"
 
-#: menulayouts/tweaks/tweaks.js:249
-msgid "Show Applications Grid"
-msgstr "Visa programöversiktsvyn"
-
-#: menulayouts/tweaks/tweaks.js:269
+#: menulayouts/tweaks/tweaks.js:220 menulayouts/tweaks/tweaks.js:257
 msgid "Disable Frequent Apps"
 msgstr "Inaktivera vanliga appar"
 
-#: menulayouts/tweaks/tweaks.js:285
+#: menulayouts/tweaks/tweaks.js:238
+msgid "Show Applications Grid"
+msgstr "Visa programöversiktsvyn"
+
+#: menulayouts/tweaks/tweaks.js:271
 msgid "Disable Pinned Apps"
 msgstr "Inaktivera fästade appar"
 
-#: menulayouts/tweaks/tweaks.js:328
+#: menulayouts/tweaks/tweaks.js:292
 msgid "Activate on Hover"
 msgstr "Aktivera vid pekning"
 
-#: menulayouts/tweaks/tweaks.js:344
-msgid "Show Application Descriptions"
-msgstr "Visa programbeskrivningar"
-
-#: menulayouts/tweaks/tweaks.js:360
-msgid "Selected Button Border Color"
-msgstr "Ramfärg för vald knapp"
-
-#: menulayouts/tweaks/tweaks.js:378
-msgid "Selected Button Background Color"
-msgstr "Bakgrundsfärg för vald knapp"
-
-#: menulayouts/tweaks/tweaks.js:398
-msgid "Restore the default settings on this page"
-msgstr "Återställ standardinställningarna för den här sidan"
-
-#: menulayouts/tweaks/tweaks.js:436 menulayouts/tweaks/tweaks.js:684
-#: menulayouts/tweaks/tweaks.js:800
-msgid "Save"
-msgstr "Spara"
-
-#: menulayouts/tweaks/tweaks.js:455
+#: menulayouts/tweaks/tweaks.js:308
 msgid "Brisk Menu Shortcuts"
 msgstr "Brisk Menu-genvägar"
 
-#: menulayouts/tweaks/tweaks.js:483
+#: menulayouts/tweaks/tweaks.js:342
 msgid "Enable Activities Overview Shortcut"
 msgstr "Aktivera genväg till översiktsvyn Aktiviteter"
 
-#: menulayouts/tweaks/tweaks.js:502
-msgid "Position"
-msgstr "Placering"
-
-#: menulayouts/tweaks/tweaks.js:508
+#: menulayouts/tweaks/tweaks.js:355
 msgid "Centered"
 msgstr "Centrerad"
 
-#: menulayouts/tweaks/tweaks.js:519
+#: menulayouts/tweaks/tweaks.js:357
+msgid "Position"
+msgstr "Placering"
+
+#: menulayouts/tweaks/tweaks.js:384
 msgid "Width"
 msgstr "Bredd"
 
-#: menulayouts/tweaks/tweaks.js:550
-msgid "Height"
-msgstr "Höjd"
+#: menulayouts/tweaks/tweaks.js:430
+msgid "Font Size"
+msgstr "Textstorlek"
 
-#: menulayouts/tweaks/tweaks.js:614
+#: menulayouts/tweaks/tweaks.js:445
 msgid "Show Frequent Apps"
 msgstr "Visa vanliga appar"
 
-#: menulayouts/tweaks/tweaks.js:632
-msgid "Inherit Shell Theme Popup Gap"
-msgstr "Använd skaltemats popup-fönster-mellanrum"
-
-#: menulayouts/tweaks/tweaks.js:655 menulayouts/tweaks/tweaks.js:760
-#: menulayouts/tweaks/tweaks.js:1064 menulayouts/tweaks/tweaks.js:1091
-msgid "Default Screen"
-msgstr "Standardskärm"
-
-#: menulayouts/tweaks/tweaks.js:660 menulayouts/tweaks/tweaks.js:765
+#: menulayouts/tweaks/tweaks.js:459 menulayouts/tweaks/tweaks.js:528
 msgid "Home Screen"
 msgstr "Startskärm"
 
-#: menulayouts/tweaks/tweaks.js:703
+#: menulayouts/tweaks/tweaks.js:462 menulayouts/tweaks/tweaks.js:531
+#: menulayouts/tweaks/tweaks.js:698 menulayouts/tweaks/tweaks.js:722
+msgid "Default View"
+msgstr "Standardvy"
+
+#: menulayouts/tweaks/tweaks.js:476
 msgid "Unity Layout Buttons"
 msgstr "Ubuntu-layout-knappar"
 
-#: menulayouts/tweaks/tweaks.js:712
+#: menulayouts/tweaks/tweaks.js:483
 msgid "Button Separator Position"
 msgstr "Knappavgränsarens placering"
 
-#: menulayouts/tweaks/tweaks.js:721 menulayouts/tweaks/tweaks.js:831
-msgid "Separator Position"
-msgstr "Avgränsarens placering"
-
-#: menulayouts/tweaks/tweaks.js:742 menulayouts/tweaks/tweaks.js:852
+#: menulayouts/tweaks/tweaks.js:501 menulayouts/tweaks/tweaks.js:591
 msgid "Adjust the position of the separator in the button panel"
 msgstr "Justera avgränsarens placering i knappanelen"
 
-#: menulayouts/tweaks/tweaks.js:789
+#: menulayouts/tweaks/tweaks.js:514 menulayouts/tweaks/tweaks.js:604
+msgid "Separator Position"
+msgstr "Avgränsarens placering"
+
+#: menulayouts/tweaks/tweaks.js:545
+msgid "Position on Monitor"
+msgstr "Placering på monitor"
+
+#: menulayouts/tweaks/tweaks.js:566
 msgid "Mint Layout Shortcuts"
 msgstr "Mint-layout-genvägar"
 
-#: menulayouts/tweaks/tweaks.js:822
+#: menulayouts/tweaks/tweaks.js:573
 msgid "Shortcut Separator Position"
 msgstr "Genvägsavgränsarens placering"
 
-#: menulayouts/tweaks/tweaks.js:990 menulayouts/tweaks/tweaks.js:1121
-msgid "External Devices"
-msgstr "Externa enheter"
-
-#: menulayouts/tweaks/tweaks.js:996 menulayouts/tweaks/tweaks.js:1127
-msgid "Show all connected external devices in ArcMenu"
-msgstr "Visa alla anslutna externa enheter i ArcMenu"
-
-#: menulayouts/tweaks/tweaks.js:1015 menulayouts/tweaks/tweaks.js:1146
-msgid "Show all Nautilus bookmarks in ArcMenu"
-msgstr "Visa alla Nautilus-bokmärken i ArcMenu"
-
-#: menulayouts/tweaks/tweaks.js:1027 menulayouts/tweaks/tweaks.js:1158
+#: menulayouts/tweaks/tweaks.js:631 menulayouts/tweaks/tweaks.js:739
 msgid "Extra Shortcuts"
 msgstr "Extra genvägar"
 
-#: menulayouts/tweaks/tweaks.js:1050
+#: menulayouts/tweaks/tweaks.js:648 menulayouts/tweaks/tweaks.js:750
+msgid "External Devices"
+msgstr "Externa enheter"
+
+#: menulayouts/tweaks/tweaks.js:685
 msgid "Nothing Yet!"
 msgstr "Inga än så länge!"
 
-#: menulayouts/tweaks/tweaks.js:1071
-msgid "Choose the default screen for tognee Layout"
-msgstr "Välj standardskärm för tognee-layout"
-
-#: menulayouts/tweaks/tweaks.js:1073 menulayouts/tweaks/tweaks.js:1101
+#: menulayouts/tweaks/tweaks.js:695 menulayouts/tweaks/tweaks.js:718
 msgid "Categories List"
 msgstr "Kategorilista"
 
-#: menulayouts/tweaks/tweaks.js:1098
-msgid "Choose the default screen for ArcMenu"
-msgstr "Välj standardskärm för ArcMenu"
+#: menulayouts/tweaks/tweaks.js:772
+msgid "Extra Categories Quick Links"
+msgstr "Snabblänkar för extra kategorier"
 
-#: menulayouts/tweaks/tweaks.js:1180
+#: menulayouts/tweaks/tweaks.js:773
+msgid ""
+"Display quick links of extra categories on the home page\n"
+"See Customize Menu -> Extra Categories"
+msgstr ""
+"Visa snabblänkar för extra kategorier på startsidan\n"
+"Se Anpassa meny -> Extra kategorier"
+
+#: menulayouts/tweaks/tweaks.js:784
+msgid "Quick Links Location"
+msgstr "Plats för snabblänkar"
+
+#: menulayouts/tweaks/tweaks.js:817
 msgid "Enable Weather Widget"
 msgstr "Aktivera väderwidget"
 
-#: menulayouts/tweaks/tweaks.js:1198
+#: menulayouts/tweaks/tweaks.js:831
 msgid "Enable Clock Widget"
 msgstr "Aktivera klockwidget"
