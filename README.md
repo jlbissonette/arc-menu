@@ -96,7 +96,9 @@ Additional credits:
 
 ArcMenu is available under the terms of the GPL-2.0 license See [`COPYING`](https://gitlab.com/arcmenu/ArcMenu/blob/master/COPYING) for details.
 
-Most of ArcMenu's image assets including, but not limited to, custom menu button icons, wire frame svgs, and custom settings icons, are created by [LinxGem33](https://gitlab.com/LinxGem33) and licensed under; [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+Most of ArcMenu's image assets including, but not limited to, fallback category icons, custom menu button icons, wire frame svgs, and custom settings icons, are created by [LinxGem33](https://gitlab.com/LinxGem33) and licensed under; [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
+Some fallback category icons included in ArcMenu are copied from [Ubuntu Yaru Icons](https://github.com/ubuntu/yaru) licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 **Legal disclaimer for brand icons and trademarks:**
 
