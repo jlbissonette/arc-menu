@@ -340,11 +340,11 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             extraLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
             extraLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
             extraLinks.push([_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock"]);
-            extraLinks.push([_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut"]);
+            extraLinks.push([_("Log Out"), "system-log-out-symbolic", "ArcMenu_LogOut"]);
             extraLinks.push([_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
             extraLinks.push([_("Restart"), 'system-reboot-symbolic', "ArcMenu_Restart"]);
             extraLinks.push([_("Suspend"), "media-playback-pause-symbolic", "ArcMenu_Suspend"]);
-            extraLinks.push([_("Hybrid Sleep"), 'sleep-symbolic', "ArcMenu_HybridSleep"]);
+            extraLinks.push([_("Hybrid Sleep"), 'weather-clear-night-symbolic', "ArcMenu_HybridSleep"]);
             extraLinks.push([_("Hibernate"), "document-save-symbolic", "ArcMenu_Hibernate"]);
             this._loadExtraCategories(extraLinks);
             this._loadCategories();
@@ -603,7 +603,7 @@ var GeneralPage = GObject.registerClass(
         _init(settings) {
             super._init({
                 title: _('General'),
-                icon_name: 'homescreen-symbolic',
+                icon_name: 'go-home-symbolic',
                 name: 'GeneralSettingPage'
             });
             this._settings = settings;
@@ -1379,7 +1379,7 @@ class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
 
         let distroInfoButtonGroup = new Adw.PreferencesGroup();
         let distroInfoButton = new PW.Button({
-            icon_name: 'info-circle-symbolic',
+            icon_name: 'help-about-symbolic',
             halign: Gtk.Align.START
         });
         distroInfoButton.connect('clicked', ()=> {
@@ -1866,6 +1866,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         iconTypes.append(_('Symbolic'));
         let categoryIconTypeRow = new Adw.ComboRow({
             title: _('Category Icon Type'),
+            subtitle: _("*Some icon themes may not include selected icon type"),
             model: iconTypes,
             selected: this._settings.get_enum('category-icon-type')
         });
@@ -1876,6 +1877,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         let shortcutsIconTypeRow = new Adw.ComboRow({
             title: _('Shortcuts Icon Type'),
+            subtitle: _("*Some icon themes may not include selected icon type"),
             model: iconTypes,
             selected: this._settings.get_enum('shortcut-icon-type')
         });
@@ -2063,7 +2065,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
             this._settings.set_boolean('multi-lined-labels', widget.get_active());
         });
         let multiLinedLabelInfoButton = new PW.Button({
-                icon_name: 'info-circle-symbolic'
+                icon_name: 'help-about-symbolic'
         });
         multiLinedLabelInfoButton.connect('clicked', ()=> {
             let dialog = new Gtk.MessageDialog({
@@ -2324,10 +2326,7 @@ var MenuSettingsListOtherPage = GObject.registerClass(
             let name, iconString;
             if(this.listType === Constants.MenuSettingsListType.POWER_OPTIONS){
                 name = Constants.PowerOptions[categoryEnum].NAME;
-                if(categoryEnum === Constants.PowerType.HYBRID_SLEEP)
-                    iconString = 'sleep-symbolic';
-                else
-                    iconString = Constants.PowerOptions[categoryEnum].ICON;
+                iconString = Constants.PowerOptions[categoryEnum].ICON;
             }
             else {
                 name = Constants.Categories[categoryEnum].NAME;
@@ -2406,7 +2405,7 @@ var MiscPage = GObject.registerClass(
                 title: _("ArcMenu Settings")
             });
             let settingsImportInfoButton = new PW.Button({
-                icon_name: 'info-circle-symbolic'
+                icon_name: 'help-about-symbolic'
             });
             settingsImportInfoButton.connect('clicked', ()=> {
                 let dialog = new Gtk.MessageDialog({
@@ -2584,7 +2583,7 @@ var AboutPage = GObject.registerClass(
         _init(settings) {
             super._init({
                 title: _("About"),
-                icon_name: 'info-circle-symbolic',
+                icon_name: 'help-about-symbolic',
                 name: 'AboutPage'
             });
             this._settings = settings;
@@ -2825,12 +2824,12 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         context.add_class('background');
         this.menuSettingsStackListBox.addRow("MenuSettingsGeneral", _("Menu Settings"), 'menu-settings-symbolic');
         this.menuSettingsStackListBox.addRow("ButtonSettings", _("Button Settings"), 'arc-menu-symbolic');
-        this.menuSettingsStackListBox.addRow("MenuSettingsPinnedApps", _("Pinned Apps"), 'pinned-apps-symbolic');
+        this.menuSettingsStackListBox.addRow("MenuSettingsPinnedApps", _("Pinned Apps"), 'view-pin-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsShortcutDirectories", _("Directory Shortcuts"), 'folder-documents-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsShortcutApplications", _("Application Shortcuts"), 'preferences-desktop-apps-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsPowerOptions", _("Power Options"), 'gnome-power-manager-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsSearchOptions", _("Search Options"), 'preferences-system-search-symbolic');
-        this.menuSettingsStackListBox.addRow("MenuSettingsCategories", _("Extra Categories"), 'categories-symbolic');
+        this.menuSettingsStackListBox.addRow("MenuSettingsCategories", _("Extra Categories"), 'view-list-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), 'fine-tune-symbolic');
         this.menuSettingsStackListBox.setSeparatorIndices([2, 5, 8]);
 
@@ -2843,11 +2842,17 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
             fold_policy: Adw.FlapFoldPolicy.ALWAYS
         })
         let button = new Gtk.ToggleButton({
-            icon_name: 'sidebar-show',
+            icon_name: 'sidebar-show-right',
             hexpand: false,
             halign: Gtk.Align.START
         })
         button.bind_property('active', flap, 'reveal-flap', GObject.BindingFlags.BIDIRECTIONAL);
+        button.connect('toggled', (widget) => {
+            if(widget.active)
+                widget.icon_name = 'sidebar-show';
+            else
+                widget.icon_name = 'sidebar-show-right';
+        });
         let headerBox = new Gtk.Grid({
             orientation: Gtk.Orientation.HORIZONTAL,
             margin_bottom: 10

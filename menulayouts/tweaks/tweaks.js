@@ -494,7 +494,7 @@ var TweaksPage = GObject.registerClass({
         });
 
         let infoButton = new PW.Button({
-            icon_name: 'info-circle-symbolic'
+            icon_name: 'help-about-symbolic'
         });
         infoButton.connect('clicked', ()=> {
             let dialog = new Gtk.MessageDialog({
@@ -584,7 +584,7 @@ var TweaksPage = GObject.registerClass({
         });
 
         let infoButton = new PW.Button({
-            icon_name: 'info-circle-symbolic'
+            icon_name: 'help-about-symbolic'
         });
         infoButton.connect('clicked', ()=> {
             let dialog = new Gtk.MessageDialog({

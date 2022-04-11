@@ -48,21 +48,21 @@ function getMenuLayout(menuButton, layout, isStandaloneRunner){
         case Constants.MenuLayout.ARCMENU:
             return new MenuLayout.arcmenu.createMenu(menuButton);
         case Constants.MenuLayout.BRISK:
-            return new MenuLayout.brisk.createMenu(menuButton); 
+            return new MenuLayout.brisk.createMenu(menuButton);
         case Constants.MenuLayout.WHISKER:
-            return new MenuLayout.whisker.createMenu(menuButton); 
+            return new MenuLayout.whisker.createMenu(menuButton);
         case Constants.MenuLayout.GNOME_MENU:
-            return new MenuLayout.gnomemenu.createMenu(menuButton); 
+            return new MenuLayout.gnomemenu.createMenu(menuButton);
         case Constants.MenuLayout.MINT:
-            return new MenuLayout.mint.createMenu(menuButton); 
+            return new MenuLayout.mint.createMenu(menuButton);
         case Constants.MenuLayout.GNOME_OVERVIEW:
             return null;
         case Constants.MenuLayout.ELEMENTARY:
-            return new MenuLayout.elementary.createMenu(menuButton); 
+            return new MenuLayout.elementary.createMenu(menuButton);
         case Constants.MenuLayout.REDMOND:
-            return new MenuLayout.redmond.createMenu(menuButton); 
+            return new MenuLayout.redmond.createMenu(menuButton);
         case Constants.MenuLayout.UNITY:
-            return new MenuLayout.unity.createMenu(menuButton); 
+            return new MenuLayout.unity.createMenu(menuButton);
         case Constants.MenuLayout.BUDGIE:
             return new MenuLayout.budgie.createMenu(menuButton);
         case Constants.MenuLayout.INSIDER:
@@ -86,13 +86,13 @@ function getMenuLayout(menuButton, layout, isStandaloneRunner){
         case Constants.MenuLayout.AZ:
             return new MenuLayout.az.createMenu(menuButton);
         default:
-            return new MenuLayout.arcmenu.createMenu(menuButton);    
+            return new MenuLayout.arcmenu.createMenu(menuButton);
     }
 }
 
 function getSettings(schema, extensionUUID) {
     let extension = imports.ui.main.extensionManager.lookup(extensionUUID);
-  
+
     if (!extension)
         throw new Error('ArcMenu - getSettings() unable to find extension');
 
@@ -156,7 +156,7 @@ function convertToGridLayout(item){
     }
 
     const iconSizeEnum = settings.get_enum('menu-item-grid-icon-size');
-    let defaultIconStyle = layoutProperties.DefaultIconGridStyle;      
+    let defaultIconStyle = layoutProperties.DefaultIconGridStyle;
 
     iconSize = getGridIconStyle(iconSizeEnum, defaultIconStyle);
     item.name = iconSize;
@@ -192,7 +192,7 @@ function getGridIconSize(iconSizeEnum, defaultIconStyle){
     }
     else
         iconSize = Constants.GridIconInfo[iconSizeEnum - 1].ICON_SIZE;
-    
+
     return iconSize;
 }
 
@@ -217,31 +217,30 @@ function getGridIconStyle(iconSizeEnum, defaultIconStyle){
     return iconStyle;
 }
 
-function getCategoryDetails(currentCategory, categoryIconType){
-    let name, gicon, iconName, fallbackIconName;
+function getCategoryDetails(currentCategory){
+    let name, gicon, fallbackIcon = null;
+
     for(let entry of Constants.Categories){
         if(entry.CATEGORY === currentCategory){
             name = entry.NAME;
-            if(categoryIconType === Constants.CategoryIconType.FULL_COLOR)
-                iconName = entry.FULL_COLOR_ICON;
-            else
-                iconName = entry.ICON;
-            return [name, gicon, iconName, fallbackIconName];
+            gicon = Gio.icon_new_for_string(entry.ICON);
+            return [name, gicon, fallbackIcon];
         }
     }
+
     if(currentCategory === Constants.CategoryType.HOME_SCREEN){
-        name = _("Home Screen");  
-        gicon = Gio.icon_new_for_string(Me.path + '/media/icons/menu_icons/homescreen-symbolic.svg');
-        return [name, gicon, iconName, fallbackIconName];
+        name = _("Home Screen");
+        gicon = Gio.icon_new_for_string('go-home-symbolic');
+        return [name, gicon, fallbackIcon];
     }
     else{
         name = currentCategory.get_name();
-        if(categoryIconType === Constants.CategoryIconType.FULL_COLOR)
-            gicon = currentCategory.get_icon() ? currentCategory.get_icon() : null;
-        else
-            iconName = currentCategory.get_icon().to_string() + "-symbolic";
-        fallbackIconName = currentCategory.get_icon() ? currentCategory.get_icon().to_string() : null;
-        return [name, gicon, iconName, fallbackIconName];
+        gicon = currentCategory.get_icon() ? currentCategory.get_icon() : null;
+
+        let iconString = currentCategory.get_icon().to_string() + '-symbolic.svg';
+        fallbackIcon = Gio.icon_new_for_string(Me.path + '/media/icons/menu_icons/category_icons/' + iconString);
+
+        return [name, gicon, fallbackIcon];
     }
 }
 
@@ -261,9 +260,9 @@ function activateCategory(currentCategory, menuLayout, menuItem, extraParams = f
     else if(currentCategory === Constants.CategoryType.RECENT_FILES)
         menuLayout.displayRecentFiles();
     else
-        menuLayout.displayCategoryAppList(menuItem.appList, currentCategory, extraParams ? menuItem : null);          
+        menuLayout.displayCategoryAppList(menuItem.appList, currentCategory, extraParams ? menuItem : null);
 
-    menuLayout.activeCategoryType = currentCategory;  
+    menuLayout.activeCategoryType = currentCategory;
 }
 
 function getMenuButtonIcon(settings, path){
@@ -279,7 +278,7 @@ function getMenuButtonIcon(settings, path){
         if(Constants.DistroIcons[iconEnum].PATH === 'start-here-symbolic')
             return 'start-here-symbolic';
         else if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
-            return path;   
+            return path;
     }
     else{
         let iconEnum = settings.get_int('arc-menu-icon');
@@ -313,7 +312,7 @@ function areaOfTriangle(p1, p2, p3){
 function ensureActorVisibleInScrollView(actor) {
     let box = actor.get_allocation_box();
     let y1 = box.y1, y2 = box.y2;
-    
+
     let parent = actor.get_parent();
     while (!(parent instanceof imports.gi.St.ScrollView)) {
         if (!parent)
@@ -322,7 +321,7 @@ function ensureActorVisibleInScrollView(actor) {
         box = parent.get_allocation_box();
         y1 += box.y1;
         y2 += box.y1;
-        parent = parent.get_parent();    
+        parent = parent.get_parent();
     }
 
     let adjustment = parent.vscroll.adjustment;
@@ -339,7 +338,7 @@ function ensureActorVisibleInScrollView(actor) {
         value = Math.min(upper, y2 + offset - pageSize);
     else
         return;
-    adjustment.set_value(value);  
+    adjustment.set_value(value);
 }
 
 function getDashToPanelPosition(settings, index){
@@ -351,16 +350,16 @@ function getDashToPanelPosition(settings, index){
     } catch(e){
         log('Error parsing Dash to Panel positions: ' + e.message);
     }
-    
+
     if(!positions)
         side = settings.get_string('panel-position');
     else{
         side = positions[index];
     }
 
-    if (side === 'TOP') 
+    if (side === 'TOP')
         return imports.gi.St.Side.TOP;
-    else if (side === 'RIGHT') 
+    else if (side === 'RIGHT')
         return imports.gi.St.Side.RIGHT;
     else if (side === 'BOTTOM')
         return imports.gi.St.Side.BOTTOM;

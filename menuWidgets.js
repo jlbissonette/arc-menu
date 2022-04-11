@@ -458,7 +458,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             style_class: null,
             can_focus: true,
         });
-        super._init({ 
+        super._init({
             style_class: 'popup-menu-item arcmenu-menu-item',
             reactive: params.reactive,
             track_hover: params.reactive,
@@ -817,7 +817,7 @@ var ActivitiesMenuItem = GObject.registerClass(class Arc_Menu_ActivitiesMenuItem
 
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
-        
+
         this._updateIcon();
 
         this.label = new St.Label({
@@ -1060,7 +1060,7 @@ var ArcMenuButtonItem = GObject.registerClass(
         if(this.iconName !== null){
             this._iconBin = new St.Bin();
             this.add_child(this._iconBin);
-            
+
             this._updateIcon();
         }
     }
@@ -1108,7 +1108,7 @@ var RunnerTweaksButton = GObject.registerClass(class Arc_Menu_RunnerTweaksButton
 //'Insider' layout Pinned Apps hamburger button
 var PinnedAppsButton = GObject.registerClass(class Arc_Menu_PinnedAppsButton extends ArcMenuButtonItem {
     _init(menuLayout) {
-        super._init(menuLayout, _("Pinned Apps"), Me.path + Constants.HamburgerIcon.PATH);
+        super._init(menuLayout, _("Pinned Apps"), 'open-menu-symbolic');
         this.toggleMenuOnClick = false;
     }
     activate(event) {
@@ -1120,7 +1120,7 @@ var PinnedAppsButton = GObject.registerClass(class Arc_Menu_PinnedAppsButton ext
 //'Windows' layout extras hamburger button
 var ExtrasButton = GObject.registerClass(class Arc_Menu_ExtrasButton extends ArcMenuButtonItem {
     _init(menuLayout) {
-        super._init(menuLayout, _("Extras"), Me.path + Constants.HamburgerIcon.PATH);
+        super._init(menuLayout, _("Extras"), 'open-menu-symbolic');
         this.toggleMenuOnClick = false;
     }
     activate(event) {
@@ -1227,7 +1227,7 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
 //'Unity' layout categories hamburger button
 var CategoriesButton = GObject.registerClass(class Arc_Menu_CategoriesButton extends ArcMenuButtonItem {
     _init(menuLayout) {
-        super._init(menuLayout, _("Categories"), Me.path + Constants.HamburgerIcon.PATH);
+        super._init(menuLayout, _("Categories"), 'open-menu-symbolic');
         this.toggleMenuOnClick = false;
     }
     activate(event) {
@@ -1257,7 +1257,7 @@ var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends A
 
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
-        
+
         this._updateIcon();
 
         this.label = new St.Label({
@@ -1304,7 +1304,7 @@ var PlasmaMenuItem = GObject.registerClass(class Arc_Menu_PlasmaMenuItem extends
 
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
-        
+
         this._updateIcon();
 
         this.label = new St.Label({
@@ -1525,7 +1525,7 @@ var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends Arc
 
     activate(event) {
         if(this._layout === Constants.MenuLayout.ARCMENU){
-            //If the current page is inside a category and 
+            //If the current page is inside a category and
             //previous page was the categories page,
             //go back to categories page
             if(this._menuLayout.previousCategoryType === Constants.CategoryType.CATEGORIES_LIST && (this._menuLayout.activeCategoryType <= 4 || this._menuLayout.activeCategoryType instanceof GMenu.TreeDirectory))
@@ -1853,10 +1853,10 @@ var UserMenuIcon = class Arc_Menu_UserMenuIcon{
                 this.actor.child = null;
                 this.actor.add_style_class_name('user-avatar');
                 this.actor.style = 'background-image: url("%s");'.format(iconFile) + "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
-            } 
+            }
             else {
                 this.actor.style = "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
-                this.actor.child = new St.Icon({ 
+                this.actor.child = new St.Icon({
                     icon_name: 'avatar-default-symbolic',
                     icon_size: this.iconSize,
                     style: "padding: 5px; width: " + this.iconSize + "px; height: " + this.iconSize + "px;",
@@ -2300,7 +2300,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
             else{
                 this._menuLayout.arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
                 SystemActions.activateAction(metaInfo.id);
-            }   
+            }
         }
     }
 
@@ -2343,6 +2343,11 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
         this._horizontalFlip = this._settings.get_boolean('enable-horizontal-flip');
         this._displayType = displayType;
         this.layoutProps = this._menuLayout.layoutProperties;
+
+        if(this._settings.get_enum('category-icon-type') === Constants.CategoryIconType.FULL_COLOR)
+            this.add_style_class_name('regular-icons');
+        else
+            this.add_style_class_name('symbolic-icons');
 
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
@@ -2390,21 +2395,15 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
         }
 
+        let [name, gicon, fallbackIcon] = Utils.getCategoryDetails(this._category);
+        this._name = _(name);
+
         let icon = new St.Icon({
             style_class: this._displayType === Constants.DisplayType.BUTTON ? '' : 'popup-menu-icon',
-            icon_size: iconSize
+            icon_size: iconSize,
+            gicon: gicon,
+            fallback_gicon: fallbackIcon
         });
-
-        let categoryIconType = this._settings.get_enum('category-icon-type');
-        let [name, gicon, iconName, fallbackIconName] = Utils.getCategoryDetails(this._category, categoryIconType);
-        this._name = _(name);
-        if(gicon)
-            icon.gicon = gicon;
-        else if(iconName)
-            icon.icon_name = iconName;
-        else
-            icon.fallback_icon_name = fallbackIconName;
-
         return icon;
     }
 
@@ -2518,19 +2517,19 @@ var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends A
         this.isContainedInCategory = isContainedInCategory;
         this.hasContextMenu = false;
 
-        this.label = new St.Label({ 
-            text: _(info.name), 
+        this.label = new St.Label({
+            text: _(info.name),
             x_expand: true,
             y_expand: false,
             x_align: Clutter.ActorAlign.FILL,
-            y_align: Clutter.ActorAlign.CENTER 
+            y_align: Clutter.ActorAlign.CENTER
         });
 
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
 
         this._updateIcon();
-        
+
         if(this._displayType === Constants.DisplayType.BUTTON){
             this.tooltipLocation = Constants.TooltipLocation.TOP_CENTERED;
             this.style_class = 'popup-menu-item arcmenu-button';
@@ -2866,14 +2865,14 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
 
         this._locations = [];
 
-        let layout = new Clutter.GridLayout({ 
-            orientation: Clutter.Orientation.VERTICAL 
+        let layout = new Clutter.GridLayout({
+            orientation: Clutter.Orientation.VERTICAL
         });
 
-        this._grid = new St.Widget({ 
+        this._grid = new St.Widget({
             style_class: 'world-clocks-grid',
             x_expand: true,
-            layout_manager: layout 
+            layout_manager: layout
         });
         layout.hookup_style(this._grid);
 
@@ -2960,7 +2959,7 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
         let title = this._locations.length == 0
             ? _("Add world clocks…")
             : _("World Clocks");
-        let header = new St.Label({ 
+        let header = new St.Label({
             x_align: Clutter.ActorAlign.START,
             text: title,
             style: "font-weight: bold;"

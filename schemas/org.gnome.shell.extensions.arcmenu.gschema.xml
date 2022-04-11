@@ -166,7 +166,7 @@
       <description>Enable Clocks Widget Unity layout.</description>
     </key>
     <key enum="org.gnome.shell.extensions.arcmenu.category-icon-type" name="category-icon-type">
-      <default>'Full_Color'</default>
+      <default>'Symbolic'</default>
       <summary>Category icon type. Full_Color or Symbolic</summary>
       <description>Category icon type. Full_Color or Symbolic</description>
     </key>
