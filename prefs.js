@@ -1866,7 +1866,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         iconTypes.append(_('Symbolic'));
         let categoryIconTypeRow = new Adw.ComboRow({
             title: _('Category Icon Type'),
-            subtitle: _("*Some icon themes may not include selected icon type"),
+            subtitle: _("Some icon themes may not include selected icon type"),
             model: iconTypes,
             selected: this._settings.get_enum('category-icon-type')
         });
@@ -1877,7 +1877,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 
         let shortcutsIconTypeRow = new Adw.ComboRow({
             title: _('Shortcuts Icon Type'),
-            subtitle: _("*Some icon themes may not include selected icon type"),
+            subtitle: _("Some icon themes may not include selected icon type"),
             model: iconTypes,
             selected: this._settings.get_enum('shortcut-icon-type')
         });
