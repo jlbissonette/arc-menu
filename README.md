@@ -48,7 +48,7 @@ When reporting a bug, please provide as much information as you can about the is
 
 **@[AndrewZaech](https://gitlab.com/AndrewZaech) - Current Project Maintainer and Developer**
 
-**@[AndyC](https://gitlab.com/LinxGem33) - Founder of ArcMenu and former project maintainer**
+**@[AndyC](https://gitlab.com/LinxGem33) - ArcMenu Founder, Former Maintainer, Digital Art Designer**
 
 **@[lexruee](https://github.com/lexruee) - Former UI/UX Designer | @[Thomas Ingvarsson](https://gitlab.com/tingvarsson) -  Former Developer**
 
@@ -95,9 +95,13 @@ Additional credits:
 
 ArcMenu is available under the terms of the GPL-2.0 license See [`COPYING`](https://gitlab.com/arcmenu/ArcMenu/blob/master/COPYING) for details.
 
-Most of ArcMenu's image assets including, but not limited to, fallback category icons, custom menu button icons, wire frame svgs, and custom settings icons, are created by [LinxGem33](https://gitlab.com/LinxGem33) and licensed under; [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+#### Image/Icon Assets - Credits and License
+
+Most of ArcMenu's image assets including, but not limited to, fallback category icons, custom menu button icons, wire frame svgs, and custom settings icons, are created by [LinxGem33](https://gitlab.com/LinxGem33) and licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 Some fallback category icons included in ArcMenu are copied from [Ubuntu Yaru Icons](https://github.com/ubuntu/yaru) licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
+#### Distro Icons
 
 **Legal disclaimer for brand icons and trademarks:**
 
