@@ -8,7 +8,7 @@
 
 ### Introduction
 
-ArcMenu is an application menu for GNOME Shell, designed to provide a more traditional user experience and workflow. This extension has many features, including multiple menu layout styles, GNOME search, quick access to system shorctus, and more! If you are a new user to GNOME and are looking for a Windows style start menu, this extension will be perfect for you! 
+ArcMenu is an application menu for GNOME Shell, designed to provide a more familiar user experience and workflow. This extension has many features, including various menu layout styles, GNOME search, quick access to system shortcuts, and much more!
 
 **For ArcMenu to work properly, you may need [these dependencies](https://gitlab.com/arcmenu/ArcMenu/-/wikis/ArcMenu-Dependencies).**
 
@@ -22,7 +22,6 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 
 -----
-
 
 ### Installation
 
@@ -82,7 +81,7 @@ Additional credits:
  **@[Ivan](https://gitlab.com/vantu5z), @[Ser82-png](https://gitlab.com/Ser82-png) - Russian** | **@[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **@[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **@[jordim](https://gitlab.com/jordim) - Catalan** | **@[aylinux](https://gitlab.com/aylinux) - Turkish**
  
 
-**@[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **@[jiri.doubravsky](https://gitlab.com/jiri.doubravsky) - Czech** | **@[juanlucer](https://gitlab.com/juanlucer) - Spanish** | **@[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian**
+**@[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **@[jiri.doubravsky](https://gitlab.com/jiri.doubravsky), @[panmourovaty ](https://gitlab.com/panmourovaty) - Czech** | **@[juanlucer](https://gitlab.com/juanlucer) - Spanish** | **@[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian**
 
 **@[skygmin](https://gitlab.com/skygmin) - Simplified Chinese** | **@[Vistaus](https://gitlab.com/Vistaus), @[vinno97](https://gitlab.com/vinno97) - Dutch** | **@[artnay](https://gitlab.com/artnay) - Finnish** |  **@[rimasx](https://gitlab.com/rimasx) - Estonian** | **@[stevendobay](https://gitlab.com/stevendobay) - Hungarian** 
 
