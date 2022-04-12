@@ -193,63 +193,67 @@ StScrollView .small-vfade{
     background-color: rgba(196, 196, 196, 0.3);
 }
 
-/* Style varius elements of ArcMenu below */
-/* Uncomment each desired section and fill in desired options */
-/* -----------------------------------------------------------*/
-/* -----------------------------------------------------------*/
-/* -----------------------------------------------------------*/
-
-/* Menu Styling Section -----------------------------------------------------------------------------*/
-/* See https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/data/theme/gnome-shell-sass/widgets/_popovers.scss for more info*/
+/* FontSize of ArcMenu */
 /*
 .arcmenu-menu {
-    color: ;
     font-size: ;
 }
 */
 
+/* Background color of ArcMenu */
 /*
 .arcmenu-menu .popup-menu-content {
-    padding-top: 6px;
-    padding-bottom: 8px;
-    border-radius: ; 
-    border: ; 
-    box-shadow: ;
-    background-color: ; 
+    background-color: ;
 }
 */
 
+/* Colors of ArcMenu menu item - Normal State */
 /*
 .arcmenu-menu .popup-menu-item {
-    padding: 
-    border-radius: ;
-    transition: 0.2s all ease;
-    background-color: transparent;
-}
-
-.arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover  {
-    background-color: ;
-}
-
-.arcmenu-menu .popup-menu-item:checked {
-    background-color: ;
-    margin-bottom: ;
-    box-shadow: ;
-    border-radius: ;
-}
-
-.arcmenu-menu .popup-menu-item:active {
-    background-color: ;
     color: ;
-}
-
-.arcmenu-menu .popup-menu-item:insensitive {
     background-color: ;
-    color: ;
 }
 */
-/*End Menu Styling Section----------------------------------------------------------------------*/
 
+/* Colors of ArcMenu menu item - Focus State */
+/*
+.arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover  {
+    color: ;
+    background-color: ;
+}
+*/
+
+/* Colors of ArcMenu menu item - Hover State */
+/*
+.arcmenu-menu .popup-menu-item:hover {
+    color: ;
+    background-color: ;
+}
+*/
+
+/* Colors of ArcMenu menu item - Checked State */
+/*
+.arcmenu-menu .popup-menu-item:checked {
+    color: ;
+    background-color: ;
+}
+*/
+
+/* Colors of ArcMenu menu item - Active State */
+/*
+.arcmenu-menu .popup-menu-item:active {
+    color: ;
+    background-color: ;
+}
+*/
+
+/* Colors of ArcMenu menu item - Insensitive State */
+/*
+.arcmenu-menu .popup-menu-item:insensitive {
+    color: ;
+    background-color: ;
+}
+*/
 
 /* Separator Color */
 /*
@@ -280,7 +284,7 @@ StScrollView .small-vfade{
 */
 
 /* Button Background Hover Color */
-/* 
+/*
 .arcmenu-panel-menu:hover{
     background-color: ;
 }
