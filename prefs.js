@@ -2835,23 +2835,39 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
 
         this.populateSettingsFrameStack();
         this.menuSettingsStackListBox.selectFirstRow();
+
         let flap = new Adw.Flap({
             content: this.settingsFrameStack,
             flap: this.menuSettingsStackListBox,
             separator: Gtk.Separator.new(Gtk.Orientation.VERTICAL),
             fold_policy: Adw.FlapFoldPolicy.ALWAYS
-        })
+        });
+
+        this.menuSettingsStackListBox.connect('row-activated', () => {
+            flap.reveal_flap = false;
+        });
+
+        let buttonContent = new Adw.ButtonContent({
+            icon_name: 'sidebar-show',
+            label: _("View More..."),
+        });
         let button = new Gtk.ToggleButton({
-            icon_name: 'sidebar-show-right',
+            child: buttonContent,
             hexpand: false,
             halign: Gtk.Align.START
-        })
+        });
+        context = button.get_style_context();
+        context.add_class('suggested-action');
         button.bind_property('active', flap, 'reveal-flap', GObject.BindingFlags.BIDIRECTIONAL);
         button.connect('toggled', (widget) => {
-            if(widget.active)
-                widget.icon_name = 'sidebar-show';
-            else
-                widget.icon_name = 'sidebar-show-right';
+            if(widget.active){
+                buttonContent.icon_name = 'sidebar-show-right';
+                buttonContent.label = _("Collapse");
+            }
+            else{
+                buttonContent.icon_name = 'sidebar-show';
+                buttonContent.label = _("View More...");
+            }
         });
         let headerBox = new Gtk.Grid({
             orientation: Gtk.Orientation.HORIZONTAL,
