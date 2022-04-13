@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-04-11 20:15-0400\n"
-"PO-Revision-Date: 2022-04-12 17:02+0200\n"
+"PO-Revision-Date: 2022-04-13 09:43+0200\n"
 "Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
 "Language-Team: German <>\n"
 "Language: de\n"
@@ -200,7 +200,7 @@ msgstr "Menü anpassen"
 
 #: menuButton.js:645 prefs.js:2826
 msgid "Button Settings"
-msgstr "Schaltflächen-Einstellungen"
+msgstr "Knopf-Einstellungen"
 
 #: menuButton.js:648 prefs.js:2585
 msgid "About"
@@ -461,7 +461,7 @@ msgstr "Schriftgröße"
 #: menulayouts/tweaks/tweaks.js:431 prefs.js:1098
 #, javascript-format
 msgid "%d Default Theme Value"
-msgstr "%d Standard-Themenwert"
+msgstr "%d Voreingestellter Themenwert"
 
 #: menulayouts/tweaks/tweaks.js:445
 msgid "Show Frequent Apps"
@@ -479,7 +479,7 @@ msgstr "Standard-Ansicht"
 
 #: menulayouts/tweaks/tweaks.js:476
 msgid "Unity Layout Buttons"
-msgstr "Unity-Layout-Schaltflächen"
+msgstr "Unity-Layout-Knöpfe"
 
 #: menulayouts/tweaks/tweaks.js:483
 msgid "Button Separator Position"
@@ -487,7 +487,7 @@ msgstr "Anzeigeposition der Trennlinie"
 
 #: menulayouts/tweaks/tweaks.js:501 menulayouts/tweaks/tweaks.js:591
 msgid "Adjust the position of the separator in the button panel"
-msgstr "Anpassen der Trennstrich-Position in der Schaltflächenleiste"
+msgstr "Anpassen der Trennstrich-Position in der Knopfleiste"
 
 #: menulayouts/tweaks/tweaks.js:514 menulayouts/tweaks/tweaks.js:604
 msgid "Separator Position"
@@ -652,17 +652,17 @@ msgstr "Wetter-Standort wählen…"
 #: placeDisplay.js:49
 #, javascript-format
 msgid "Failed to launch “%s”"
-msgstr "Starten von “%s” fehlgeschlagen"
+msgstr "Starten von “%s” gescheitert"
 
 #: placeDisplay.js:64
 #, javascript-format
 msgid "Failed to mount volume for “%s”"
-msgstr "Einhängen von Speicher “%s” fehlgeschlagen"
+msgstr "Einhängen von Speicher “%s” gescheitert"
 
 #: placeDisplay.js:210
 #, javascript-format
 msgid "Ejecting drive “%s” failed:"
-msgstr "Auswerfen von Laufwerk “%s” fehlgeschlagen:"
+msgstr "Auswerfen von Laufwerk “%s” gescheitert:"
 
 #: prefs.js:34 prefs.js:56
 msgid "Add More Apps"
@@ -670,7 +670,7 @@ msgstr "Weitere Anwendungen hinzufügen"
 
 #: prefs.js:45
 msgid "Add Default User Directories"
-msgstr "Standard-Benutzerverzeichnisse hinzufügen"
+msgstr "Voreingestellte Benutzerverzeichnisse hinzufügen"
 
 #: prefs.js:121
 msgid "Add Custom Shortcut"
@@ -770,7 +770,7 @@ msgstr "Anzeigeoptionen"
 
 #: prefs.js:625
 msgid "Show Activities Button"
-msgstr "Aktivitäten-Schaltfläche anzeigen"
+msgstr "Aktivitäten-Knopf anzeigen"
 
 #: prefs.js:634 prefs.js:660
 msgid "Center"
@@ -870,7 +870,7 @@ msgstr "Neues Tastenkürzel"
 
 #: prefs.js:1048
 msgid "Menu Button"
-msgstr "Menüschaltfläche"
+msgstr "Menüknopf"
 
 #: prefs.js:1053 prefs.js:1137
 msgid "Text"
@@ -886,7 +886,7 @@ msgstr "Text und Symbol"
 
 #: prefs.js:1056
 msgid "Hidden"
-msgstr "Versteckt"
+msgstr "Verborgen"
 
 #: prefs.js:1058
 msgid "Appearance"
@@ -996,7 +996,7 @@ msgstr "Farbig"
 
 #: prefs.js:1866
 msgid "Symbolic"
-msgstr "Symbolisch"
+msgstr "Stilisiert"
 
 #: prefs.js:1868
 msgid "Category Icon Type"
@@ -1021,11 +1021,11 @@ msgstr "Symbolgrößen"
 
 #: prefs.js:1906
 msgid "Modify the icon size of various menu elements."
-msgstr "Symbolgröße von verschiedenen Menüeinträgen anpassen"
+msgstr "Symbolgröße von verschiedenen Menüeinträgen anpassen."
 
 #: prefs.js:1911 prefs.js:1957
 msgid "Default"
-msgstr "Standard"
+msgstr "Vorgabe"
 
 #: prefs.js:1912 prefs.js:1915 prefs.js:1959
 msgid "Small"
@@ -1053,7 +1053,7 @@ msgstr "Kategorien &amp; Anwendungen"
 
 #: prefs.js:1930
 msgid "Buttons"
-msgstr "Schaltflächen"
+msgstr "Knöpfe"
 
 #: prefs.js:1932
 msgid "Quick Links"
@@ -1077,7 +1077,7 @@ msgstr "ScrollView-Überblendeffekte deaktivieren"
 
 #: prefs.js:2020
 msgid "Disable Tooltips"
-msgstr "Hinweistexte deaktivieren"
+msgstr "Minihilfen deaktivieren"
 
 #: prefs.js:2036
 msgid "Alphabetize 'All Programs' Category"
@@ -1085,7 +1085,7 @@ msgstr "Kategorie 'Alle Programme' alphabetisch sortieren"
 
 #: prefs.js:2052
 msgid "Show Hidden Recent Files"
-msgstr "Zuletzt verwendete versteckte Dateien anzeigen"
+msgstr "Zuletzt verwendete verborgene Dateien anzeigen"
 
 #: prefs.js:2072 prefs.js:2085
 msgid "Multi-Lined Labels"
@@ -1192,7 +1192,7 @@ msgstr "Alle Einstellungen zurücksetzen?"
 #: prefs.js:2537
 msgid "All ArcMenu settings will be reset to the default value."
 msgstr ""
-"Alle Einstellungen von ArcMenü werden auf die Standardwerte zurückgesetzt."
+"Alle Einstellungen von ArcMenü werden auf die Vorgabewerte zurückgesetzt."
 
 #: prefs.js:2613
 msgid "Application Menu Extension for GNOME"
@@ -1259,7 +1259,7 @@ msgstr "Alle %s zurücksetzen?"
 #: prefs.js:2874
 #, javascript-format
 msgid "All %s will be reset to the default value."
-msgstr "Alle %s werden auf die Standardwerte zurückgesetzt."
+msgstr "Alle %s werden auf die Vorgabewerte zurückgesetzt."
 
 #: prefs.js:3056
 msgid "Invalid Shortcut"
@@ -1308,7 +1308,7 @@ msgstr "'%s' auf Arbeitsfläche %d"
 #: searchProviders/recentFiles.js:77
 #, javascript-format
 msgid "Failed to open “%s”"
-msgstr "Öffnen von “%s” fehlgeschlagen"
+msgstr "Öffnen von “%s” gescheitert"
 
 #: utils.js:27
 msgid "ArcMenu - Hibernate Error!"
