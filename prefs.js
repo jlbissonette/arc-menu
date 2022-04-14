@@ -2682,7 +2682,7 @@ var MiscPage = GObject.registerClass(
                 label: _("Reset all Settings"),
             });
             let context = resetSettingsButton.get_style_context();
-            context.add_class('suggested-action');
+            context.add_class('destructive-action');
             resetSettingsButton.connect('clicked', (widget) => {
                 let dialog = new Gtk.MessageDialog({
                     text: "<b>" + _("Reset all settings?") + '</b>',
@@ -3453,20 +3453,20 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         this.populateSettingsFrameStack();
         this.menuSettingsStackListBox.selectFirstRow();
 
-        let flap = new Adw.Flap({
+        this.flap = new Adw.Flap({
             content: this.settingsFrameStack,
             flap: this.menuSettingsStackListBox,
             separator: Gtk.Separator.new(Gtk.Orientation.VERTICAL),
-            fold_policy: Adw.FlapFoldPolicy.ALWAYS
+            fold_policy: Adw.FlapFoldPolicy.ALWAYS,
         });
 
         this.menuSettingsStackListBox.connect('row-activated', () => {
-            flap.reveal_flap = false;
+            this.flap.reveal_flap = false;
         });
 
         let buttonContent = new Adw.ButtonContent({
             icon_name: 'sidebar-show',
-            label: _("View More..."),
+            label: _("More Settings..."),
         });
         let button = new Gtk.ToggleButton({
             child: buttonContent,
@@ -3475,17 +3475,19 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         });
         context = button.get_style_context();
         context.add_class('suggested-action');
-        button.bind_property('active', flap, 'reveal-flap', GObject.BindingFlags.BIDIRECTIONAL);
+        button.bind_property('active', this.flap, 'reveal-flap', GObject.BindingFlags.BIDIRECTIONAL);
+
         button.connect('toggled', (widget) => {
             if(widget.active){
                 buttonContent.icon_name = 'sidebar-show-right';
-                buttonContent.label = _("Collapse");
+                buttonContent.label = _("Hide Sidebar");
             }
             else{
                 buttonContent.icon_name = 'sidebar-show';
-                buttonContent.label = _("View More...");
+                buttonContent.label = _("More Settings...");
             }
         });
+        //this.flap.reveal_flap = true;
         let headerBox = new Gtk.Grid({
             orientation: Gtk.Orientation.HORIZONTAL,
             margin_bottom: 10
@@ -3497,7 +3499,7 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
             halign: Gtk.Align.END
         });
         context = restoreDefaultsButton.get_style_context();
-        context.add_class('suggested-action');
+        context.add_class('destructive-action');
         restoreDefaultsButton.connect("clicked", () => {
             const currentPage = this.settingsFrameStack.get_visible_child();
             const currentSelectedRow = this.menuSettingsStackListBox.getSelectedRow();
@@ -3528,7 +3530,7 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         headerBox.attach(restoreDefaultsButton, 0, 0, 1, 1);
 
         this.mainGroup.add(headerBox);
-        this.mainGroup.add(flap);
+        this.mainGroup.add(this.flap);
     }
 
     populateSettingsFrameStack(){
@@ -3608,6 +3610,7 @@ function setVisiblePage(window){
         window.set_visible_page_name("MenuSettingsPage");
         let page = window.get_visible_page();
         page.menuSettingsStackListBox.selectRowByName("MenuSettingsGeneral");
+        //page.flap.reveal_flap = false;
     }
     else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MENU_LAYOUT){
         window.set_visible_page_name("MenuLayoutsPage");
@@ -3618,6 +3621,7 @@ function setVisiblePage(window){
         window.set_visible_page_name("MenuSettingsPage");
         let page = window.get_visible_page();
         page.menuSettingsStackListBox.selectRowByName("ButtonSettings");
+        //page.flap.reveal_flap = false;
     }
     else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.LAYOUT_TWEAKS){
         window.set_visible_page_name("MenuLayoutsPage");
