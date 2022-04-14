@@ -574,6 +574,9 @@ function updateStylesheet(settings){
         .arcmenu-small-button:hover{
             box-shadow: inset 0 0 0 100px ${modifyColorLuminance(itemHoverBGColor, -0.1)};
         }
+        .arcmenu-menu .user-icon{
+            border-color: ${modifyColorLuminance(menuFGColor, 0, .7)};
+        }
         `;
     }
 
