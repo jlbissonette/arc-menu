@@ -591,7 +591,7 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
                 this.newPinnedAppArray.push(nameEntry.get_text());
                 this.newPinnedAppArray.push(iconEntry.get_text());
                 this.newPinnedAppArray.push(cmdEntry.get_text());
-                this.emit('response', Gtk.ResponseType.APPLY)
+                this.emit('response', Gtk.ResponseType.APPLY);
             });
 
             this.headerGroup.add(addButton);
@@ -1195,18 +1195,170 @@ var ButtonAppearancePage = GObject.registerClass(
 
             this.append(menuButtonIconFrame);
 
+            let menuButtonGroup = new Adw.PreferencesGroup({
+                title: _("Menu Button Styling"),
+                description: _("Results may vary with third party themes")
+            });
+            this.append(menuButtonGroup);
+
+            let buttonFGColorRow = this._createButtonColorRow(_("Foreground Color"), 'menu-button-fg-color');
+            menuButtonGroup.add(buttonFGColorRow);
+
+            let buttonHoverBGColorRow = this._createButtonColorRow(_("Hover") + " " + _("Background Color"), 'menu-button-hover-bg-color');
+            menuButtonGroup.add(buttonHoverBGColorRow);
+
+            let buttonHoverFGColorRow = this._createButtonColorRow(_("Hover") + " " + _("Foreground Color"), 'menu-button-hover-fg-color');
+            menuButtonGroup.add(buttonHoverFGColorRow);
+
+            let buttonActiveBGColorRow = this._createButtonColorRow(_("Active") + " " + _("Background Color"), 'menu-button-active-bg-color');
+            menuButtonGroup.add(buttonActiveBGColorRow);
+
+            let buttonActiveFGColorRow = this._createButtonColorRow(_("Active") + " " + _("Foreground Color"), 'menu-button-active-fg-color');
+            menuButtonGroup.add(buttonActiveFGColorRow);
+
+            let buttonBorderRadiusRow = this._createSpinButtonToggleRow(_("Border Radius"), 'menu-button-border-radius', 0, 25, 'px');
+            menuButtonGroup.add(buttonBorderRadiusRow);
+
+            let buttonBorderWidthRow = this._createSpinButtonToggleRow(_("Border Width"), 'menu-button-border-width', 0, 5, 'px', _("Background colors required if set to 0"));
+            menuButtonGroup.add(buttonBorderWidthRow);
+
+            let buttonBorderColorRow = this._createButtonColorRow(_("Border Color"), 'menu-button-border-color');
+            menuButtonGroup.add(buttonBorderColorRow);
+
             this.restoreDefaults = () => {
                 menuButtonAppearanceRow.selected = 0;
                 menuButtonCustomTextEntry.set_text('Applications');
                 paddingScale.set_value(-1);
                 menuButtonIconSizeScale.set_value(20);
                 offsetScale.set_value(0);
+
+                buttonFGColorRow.restoreDefaults();
+                buttonHoverBGColorRow.restoreDefaults();
+                buttonHoverFGColorRow.restoreDefaults();
+                buttonActiveBGColorRow.restoreDefaults();
+                buttonActiveFGColorRow.restoreDefaults();
+                buttonBorderRadiusRow.restoreDefaults();
+                buttonBorderWidthRow.restoreDefaults();
+                buttonBorderColorRow.restoreDefaults();
+
                 this._settings.reset('menu-button-icon');
                 this._settings.reset('arc-menu-icon');
                 this._settings.reset('distro-icon');
                 this._settings.reset('custom-menu-button-icon');
                 this._settings.reset('menu-button-position-offset');
+                this._settings.reset('menu-button-fg-color');
+                this._settings.reset('menu-button-hover-bg-color');
+                this._settings.reset('menu-button-hover-fg-color');
+                this._settings.reset('menu-button-active-bg-color');
+                this._settings.reset('menu-button-active-fg-color');
+                this._settings.reset('menu-button-border-radius');
+                this._settings.reset('menu-button-border-width');
+                this._settings.reset('menu-button-border-color');
             };
+        }
+
+        _createSpinButtonToggleRow(title, setting, lower, upper, unit, subtitle = ''){
+            let [enabled, value] = this._settings.get_value(setting).deep_unpack();
+
+            let enabledSwitch = new Gtk.Switch({
+                valign: Gtk.Align.CENTER,
+            });
+            enabledSwitch.connect('notify::active', (widget) => {
+                let [oldEnabled_, oldValue] = this._settings.get_value(setting).deep_unpack();
+                this._settings.set_value(setting, new GLib.Variant('(bi)', [widget.get_active(), oldValue]));
+                if(widget.get_active())
+                    spinButton.set_sensitive(true);
+                else
+                    spinButton.set_sensitive(false);
+            });
+            let spinButton = new Gtk.SpinButton({
+                adjustment: new Gtk.Adjustment({
+                    lower,
+                    upper,
+                    step_increment: 1
+                }),
+                climb_rate: 1,
+                digits: 0,
+                numeric: true,
+                valign: Gtk.Align.CENTER,
+                value: value,
+                sensitive: enabled
+            });
+            spinButton.connect('value-changed', (widget) => {
+                let [oldEnabled, oldValue_] = this._settings.get_value(setting).deep_unpack();
+                this._settings.set_value(setting, new GLib.Variant('(bi)', [oldEnabled, widget.get_value()]));
+            });
+
+            let spinRow = new Adw.ActionRow({
+                title: _(title),
+                subtitle: _("Units in %s").format(unit) + (subtitle ? "\n" + _(subtitle) : ""),
+                activatable_widget: enabledSwitch
+            });
+            spinRow.add_suffix(enabledSwitch);
+            spinRow.add_suffix(new Gtk.Separator({
+                orientation: Gtk.Orientation.VERTICAL,
+                margin_top: 10,
+                margin_bottom: 10
+            }));
+            spinRow.add_suffix(spinButton);
+
+            enabledSwitch.set_active(enabled);
+
+            spinRow.restoreDefaults = () => {
+                let [defaultEnabled, defaultValue] = this._settings.get_default_value(setting).deep_unpack();
+                enabledSwitch.set_active(defaultEnabled);
+                spinButton.value = defaultValue;
+            }
+            return spinRow;
+        }
+
+        _createButtonColorRow(title, setting){
+            let [enabled, color] = this._settings.get_value(setting).deep_unpack();
+
+            let enabledSwitch = new Gtk.Switch({
+                valign: Gtk.Align.CENTER,
+            });
+            enabledSwitch.connect('notify::active', (widget) => {
+                let [oldEnabled_, oldColor] = this._settings.get_value(setting).deep_unpack();
+                this._settings.set_value(setting, new GLib.Variant('(bs)', [widget.get_active(), oldColor]));
+                if(widget.get_active())
+                    colorButton.set_sensitive(true);
+                else
+                    colorButton.set_sensitive(false);
+            });
+
+            let colorButton = new Gtk.ColorButton({
+                use_alpha: true,
+                valign: Gtk.Align.CENTER,
+                rgba: parseRGBA(color),
+                sensitive: enabled
+            });
+            colorButton.connect('color-set', (widget) => {
+                let colorString = widget.get_rgba().to_string();
+                let [oldEnabled, oldColor_] = this._settings.get_value(setting).deep_unpack();
+                this._settings.set_value(setting, new GLib.Variant('(bs)', [oldEnabled, colorString]));
+            });
+
+            let colorRow = new Adw.ActionRow({
+                title: _(title),
+                activatable_widget: enabledSwitch
+            });
+            colorRow.add_suffix(enabledSwitch);
+            colorRow.add_suffix(new Gtk.Separator({
+                orientation: Gtk.Orientation.VERTICAL,
+                margin_top: 10,
+                margin_bottom: 10
+            }));
+            colorRow.add_suffix(colorButton);
+
+            enabledSwitch.set_active(enabled);
+
+            colorRow.restoreDefaults = () => {
+                let [defaultEnabled, defaultColor] = this._settings.get_default_value(setting).deep_unpack();
+                enabledSwitch.set_active(defaultEnabled);
+                colorButton.rgba = parseRGBA(defaultColor);
+            }
+            return colorRow;
         }
 });
 
@@ -2793,6 +2945,471 @@ var AboutPage = GObject.registerClass(
         }
 });
 
+var ThemePage = GObject.registerClass(
+class Arc_Menu_ThemePage extends Adw.PreferencesPage {
+    _init(settings) {
+        super._init({
+            title: _("Theme"),
+            icon_name: 'menu-theme-symbolic',
+            name: 'ThemePage'
+        });
+        this._settings = settings;
+
+        let overrideThemeGroup = new Adw.PreferencesGroup();
+        this.add(overrideThemeGroup);
+
+        let overrideThemeSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER
+        });
+        overrideThemeSwitch.connect('notify::active', (widget) => {
+            if(widget.get_active()){
+                menuThemesGroup.show();
+                menuGroup.show();
+                menuItemsGroup.show();
+            }
+            else{
+                menuThemesGroup.hide();
+                menuGroup.hide();
+                menuItemsGroup.hide();
+            }
+            this._settings.set_boolean('override-menu-theme', widget.get_active());
+        });
+        let overrideThemeRow = new Adw.ActionRow({
+            title: _("Override Theme"),
+            subtitle: _("Results may vary with third party themes"),
+            activatable_widget: overrideThemeSwitch
+        });
+        overrideThemeRow.add_suffix(overrideThemeSwitch);
+        overrideThemeGroup.add(overrideThemeRow);
+
+        let menuThemesGroup = new Adw.PreferencesGroup({
+            title: _("Menu Themes")
+        });
+        this.add(menuThemesGroup);
+
+        //Theme Combo Box Section----------
+        let themeList = new Gtk.ListStore();
+        themeList.set_column_types([GdkPixbuf.Pixbuf, GObject.TYPE_STRING]);
+        this.createIconList(themeList);
+
+        let themeComboBox = new Gtk.ComboBox({
+            model: themeList,
+            valign: Gtk.Align.CENTER
+        });
+        let renderer = new Gtk.CellRendererPixbuf({xpad: 5});
+        themeComboBox.pack_start(renderer, false);
+        themeComboBox.add_attribute(renderer, "pixbuf", 0);
+        renderer = new Gtk.CellRendererText();
+        themeComboBox.pack_start(renderer, true);
+        themeComboBox.add_attribute(renderer, "text", 1);
+
+        themeComboBox.connect('changed', (widget) => {
+            const index = widget.get_active();
+            if(index < 0)
+                return;
+            //[Theme Name, menuBGColor, menuFGColor, menuBorderColor, menuBorderWidth, menuBorderRadius, menuFontSize, menuSeparatorColor, itemHoverBGColor, itemHoverFGColor, itemActiveBGColor, itemActiveFGColor]
+
+            let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
+
+            menuBGColorRow.setColor(menuThemes[index][1]);
+            menuFGColorRow.setColor(menuThemes[index][2]);
+            menuBorderColorRow.setColor(menuThemes[index][3]);
+
+            menuBorderWidthRow.setValue(menuThemes[index][4]);
+            menuBorderRadiusRow.setValue(menuThemes[index][5]);
+            menuFontSizeRow.setValue(menuThemes[index][6]);
+
+            menuSeparatorColorRow.setColor(menuThemes[index][7]);
+            itemHoverBGColorRow.setColor(menuThemes[index][8]);
+            itemHoverFGColorRow.setColor(menuThemes[index][9]);
+            itemActiveBGColorRow.setColor(menuThemes[index][10]);
+            itemActiveFGColorRow.setColor(menuThemes[index][11]);
+
+            this.checkIfThemeMatch();
+        });
+        let menuThemesRow = new Adw.ActionRow({
+            title: _("Current Theme"),
+            activatable_widget: themeComboBox
+        });
+        menuThemesGroup.add(menuThemesRow);
+        //---------------------------------
+
+        //Manage Themes Section------------
+        let manageThemesButton = new Gtk.Button({
+            icon_name: 'emblem-system-symbolic',
+            valign: Gtk.Align.CENTER
+        });
+        manageThemesButton.connect("clicked" , () => {
+            let manageThemesDialog = new ManageThemesDialogWindow(this._settings, this);
+            manageThemesDialog.show();
+            manageThemesDialog.connect('response', (_w, response) => {
+                if(response === Gtk.ResponseType.APPLY){
+                    themeList.clear();
+                    this.createIconList(themeList);
+                    this.checkIfThemeMatch();
+                }
+            });
+        });
+        menuThemesRow.add_suffix(manageThemesButton);
+        menuThemesRow.add_suffix(themeComboBox);
+        //---------------------------------
+
+        //Save Theme Section---------------
+        let menuThemeSaveButton = new Gtk.Button({
+            label: _("Save as Theme"),
+            valign: Gtk.Align.CENTER
+        });
+        let context = menuThemeSaveButton.get_style_context();
+        context.add_class('suggested-action');
+
+        menuThemeSaveButton.connect("clicked" , () => {
+            let saveThemeDialog = new ColorThemeDialogWindow(this._settings, this);
+            saveThemeDialog.show();
+            saveThemeDialog.connect('response', (_w, response) => {
+                if(response === Gtk.ResponseType.APPLY){
+                    let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
+                    let currentSettingsArray = [saveThemeDialog.themeName, menuBGColorRow.getColor(), menuFGColorRow.getColor(), menuBorderColorRow.getColor(), menuBorderWidthRow.getValue().toString(),
+                                                menuBorderRadiusRow.getValue().toString(), menuFontSizeRow.getValue().toString(), menuSeparatorColorRow.getColor(), itemHoverBGColorRow.getColor(),
+                                                itemHoverFGColorRow.getColor(), itemActiveBGColorRow.getColor(), itemActiveFGColorRow.getColor()];
+                    menuThemes.push(currentSettingsArray);
+                    this._settings.set_value('menu-themes', new GLib.Variant('aas', menuThemes));
+
+                    themeList.clear();
+                    this.createIconList(themeList);
+                    this.checkIfThemeMatch();
+
+                    saveThemeDialog.destroy();
+                }
+            });
+        });
+        //---------------------------------
+
+        let menuGroup = new Adw.PreferencesGroup({
+            title: _("Menu Styling"),
+            header_suffix: menuThemeSaveButton
+        });
+        this.add(menuGroup);
+
+        let menuBGColorRow = this._createColorRow(_("Background Color"), 'menu-background-color');
+        menuGroup.add(menuBGColorRow);
+
+        let menuFGColorRow = this._createColorRow(_("Foreground Color"), 'menu-foreground-color');
+        menuGroup.add(menuFGColorRow);
+
+        let menuBorderColorRow = this._createColorRow(_("Border Color"), 'menu-border-color');
+        menuGroup.add(menuBorderColorRow);
+
+        let menuBorderWidthRow = this._createSpinButtonRow(_("Border Width"), 'menu-border-width', 0, 5, 'px');
+        menuGroup.add(menuBorderWidthRow);
+
+        let menuBorderRadiusRow = this._createSpinButtonRow(_("Border Radius"), 'menu-border-radius', 0, 25, 'px');
+        menuGroup.add(menuBorderRadiusRow);
+
+        let menuFontSizeRow = this._createSpinButtonRow(_("Font Size"), 'menu-font-size', 8, 18, 'pt');
+        menuGroup.add(menuFontSizeRow);
+
+        let menuSeparatorColorRow = this._createColorRow(_("Separator Color"), 'menu-separator-color');
+        menuGroup.add(menuSeparatorColorRow);
+
+        let menuItemsGroup = new Adw.PreferencesGroup({
+            title: _("Menu Items Styling")
+        });
+        this.add(menuItemsGroup);
+
+        let itemHoverBGColorRow = this._createColorRow(_("Hover") + " " + _("Background Color"), 'menu-item-hover-bg-color');
+        menuItemsGroup.add(itemHoverBGColorRow);
+
+        let itemHoverFGColorRow = this._createColorRow(_("Hover") + " " + _("Foreground Color"), 'menu-item-hover-fg-color');
+        menuItemsGroup.add(itemHoverFGColorRow);
+
+        let itemActiveBGColorRow = this._createColorRow(_("Active") + " " + _("Background Color"), 'menu-item-active-bg-color');
+        menuItemsGroup.add(itemActiveBGColorRow);
+
+        let itemActiveFGColorRow = this._createColorRow(_("Active") + " " + _("Foreground Color"), 'menu-item-active-fg-color');
+        menuItemsGroup.add(itemActiveFGColorRow);
+
+        let overrideMenuTheme = this._settings.get_boolean('override-menu-theme');
+        overrideThemeSwitch.set_active(overrideMenuTheme);
+        if(!overrideMenuTheme){
+            menuThemesGroup.hide();
+            menuGroup.hide();
+            menuItemsGroup.hide();
+        }
+
+        this.checkIfThemeMatch = () => {
+            let currentSettingsArray = ['', menuBGColorRow.getColor(), menuFGColorRow.getColor(), menuBorderColorRow.getColor(), menuBorderWidthRow.getValue().toString(),
+                                        menuBorderRadiusRow.getValue().toString(), menuFontSizeRow.getValue().toString(), menuSeparatorColorRow.getColor(), itemHoverBGColorRow.getColor(),
+                                        itemHoverFGColorRow.getColor(), itemActiveBGColorRow.getColor(), itemActiveFGColorRow.getColor()];
+
+            let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
+            let index = 0;
+            let matchFound = false;
+            for(let theme of menuThemes){
+                for(let i = 1; i < currentSettingsArray.length - 1; i++){
+                    if(currentSettingsArray[i] !== theme[i]){
+                        matchFound = false;
+                        break;
+                    }
+                    matchFound = true;
+                }
+
+                if(matchFound){
+                    themeComboBox.set_active(index);
+                    menuThemeSaveButton.set_sensitive(false);
+                    break;
+                }
+                index ++;
+            }
+            if(!matchFound){
+                menuThemeSaveButton.set_sensitive(true);
+                themeComboBox.set_active(-1);
+            }
+        }
+
+        this.checkIfThemeMatch();
+
+        this.restoreDefaults = () => {
+            this._settings.reset('menu-background-color');
+            this._settings.reset('menu-foreground-color');
+            this._settings.reset('menu-border-color');
+            this._settings.reset('menu-border-width');
+            this._settings.reset('menu-border-radius');
+            this._settings.reset('menu-font-size');
+            this._settings.reset('menu-separator-color');
+            this._settings.reset('menu-item-hover-bg-color');
+            this._settings.reset('menu-item-hover-fg-color');
+            this._settings.reset('menu-item-active-bg-color');
+            this._settings.reset('menu-item-active-fg-color');
+
+            menuBGColorRow.setColor(this._settings.get_string('menu-background-color'));
+            menuFGColorRow.setColor(this._settings.get_string('menu-foreground-color'));
+            menuBorderColorRow.setColor(this._settings.get_string('menu-border-color'));
+            menuBorderWidthRow.setValue(this._settings.get_int('menu-border-width'));
+            menuBorderRadiusRow.setValue(this._settings.get_int('menu-border-radius'));
+            menuFontSizeRow.setValue(this._settings.get_int('menu-font-size'));
+            menuSeparatorColorRow.setColor(this._settings.get_string('menu-separator-color'));
+            itemHoverBGColorRow.setColor(this._settings.get_string('menu-item-hover-bg-color'));
+            itemHoverFGColorRow.setColor(this._settings.get_string('menu-item-hover-fg-color'));
+            itemActiveBGColorRow.setColor(this._settings.get_string('menu-item-active-bg-color'));
+            itemActiveFGColorRow.setColor(this._settings.get_string('menu-item-active-fg-color'));
+        };
+    }
+
+    createIconList(store){
+        //Order of elements in a theme in 'menu-themes' setting
+        //  [Theme Name, menuBGColor, menuFGColor, menuBorderColor, menuBorderWidth, menuBorderRadius, 
+        //      menuFontSize, menuSeparatorColor, itemHoverBGColor, itemHoverFGColor, itemActiveBGColor, itemActiveFGColor]
+        let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
+        for(let theme of menuThemes){
+            let xpm = createXpmImage(theme[1], theme[2], theme[3], theme[8]);
+            let pixbuf = GdkPixbuf.Pixbuf.new_from_xpm_data(xpm);
+
+            store.set(store.append(), [0, 1], [pixbuf, theme[0]]);
+        }
+    }
+
+    _createColorRow(title, setting){
+        let colorButton = new Gtk.ColorButton({
+            use_alpha: true,
+            valign: Gtk.Align.CENTER,
+            rgba: parseRGBA(this._settings.get_string(setting))
+        });
+        colorButton.connect('color-set', (widget) => {
+            let colorString = widget.get_rgba().to_string();
+            this._settings.set_string(setting, colorString);
+            this.checkIfThemeMatch();
+        });
+        let colorRow = new Adw.ActionRow({
+            title: _(title),
+            activatable_widget: colorButton,
+        });
+        colorRow.add_suffix(colorButton);
+        colorRow.setColor = (color) => {
+            let rgba = new Gdk.RGBA();
+            rgba.parse(color);
+            colorButton.set_rgba(rgba);
+
+            //todo why is this needed?
+            let colorString = colorButton.get_rgba().to_string();
+            this._settings.set_string(setting, colorString);
+        };
+        colorRow.getColor = () => {
+            return colorButton.get_rgba().to_string();
+        }
+        return colorRow;
+    }
+
+    _createSpinButtonRow(title, setting, lower, upper, unit){
+        let spinButton = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower,
+                upper,
+                step_increment: 1
+            }),
+            climb_rate: 1,
+            digits: 0,
+            numeric: true,
+            valign: Gtk.Align.CENTER,
+            value: this._settings.get_int(setting)
+        });
+        spinButton.connect('value-changed', (widget) => {
+            this.checkIfThemeMatch();
+            this._settings.set_int(setting, widget.get_value());
+        });
+
+        let spinRow = new Adw.ActionRow({
+            title: _(title),
+            subtitle: _("Units in %s").format(unit),
+            activatable_widget: spinButton,
+        });
+        spinRow.add_suffix(spinButton);
+        spinRow.setValue = (value) => {
+            spinButton.set_value(value);
+            //todo why is this needed?
+            this._settings.set_int(setting, spinButton.get_value());
+        };
+        spinRow.getValue = () => {
+            return spinButton.get_value();
+        }
+        return spinRow;
+    }
+});
+
+var ColorThemeDialogWindow = GObject.registerClass(
+class ArcMenu_ColorThemeDialogWindow extends PW.DialogWindow {
+    _init(settings, parent, themeName) {
+        super._init(_('Save Theme As...'), parent, Constants.MenuItemLocation.BOTTOM);
+        this._settings = settings;
+        this.themeName = themeName;
+        this.search_enabled = false;
+        this.set_default_size(550, 220);
+
+        let themeNameEntry = new Gtk.Entry({
+            valign: Gtk.Align.CENTER,
+            width_chars: 35
+        });
+        let themeNameRow = new Adw.ActionRow({
+            title: _("Theme Name:"),
+            activatable_widget: themeNameEntry,
+        });
+        themeNameRow.add_suffix(themeNameEntry);
+        this.pageGroup.add(themeNameRow);
+
+        if(this.themeName)
+            themeNameEntry.set_text(this.themeName);
+
+        themeNameEntry.connect('changed',() => {
+            if(themeNameEntry.get_text().length > 0)
+                saveButton.set_sensitive(true);
+            else
+                saveButton.set_sensitive(false);
+        });
+
+        let saveButton = new Gtk.Button({
+            label: _("Save Theme"),
+            sensitive: false,
+            halign: Gtk.Align.END
+        });
+
+        let context = saveButton.get_style_context();
+        context.add_class('suggested-action');
+
+        saveButton.connect('clicked', ()=> {
+            this.themeName = themeNameEntry.get_text();
+            this.emit('response', Gtk.ResponseType.APPLY);
+        });
+        this.headerGroup.add(saveButton);
+    }
+});
+
+var ManageThemesDialogWindow = GObject.registerClass(
+class ArcMenu_ManageThemesDialogWindow extends PW.DialogWindow {
+    _init(settings, parent) {
+        super._init(_('Manage Themes'), parent);
+        this._settings = settings;
+        this.frameRows = [];
+
+        let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
+        for(let i = 0; i < menuThemes.length; i++) {
+            let theme = menuThemes[i];
+
+            let themeRow = new PW.DragRow({
+                title: theme[0]
+            });
+            themeRow.theme = theme;
+
+            let xpm = createXpmImage(theme[1], theme[2], theme[3], theme[8]);
+            let themePreviewImage = new Gtk.Image({
+                hexpand: false,
+                margin_end: 5,
+                pixel_size: 42
+            });
+            themePreviewImage.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_xpm_data(xpm));
+
+            themeRow._gicon = xpm;
+            themeRow._name = theme[0];
+
+            let dragImage = new Gtk.Image( {
+                gicon: Gio.icon_new_for_string("drag-symbolic"),
+                pixel_size: 12
+            });
+            themeRow.add_prefix(themePreviewImage);
+            themeRow.add_prefix(dragImage);
+            this.pageGroup.add(themeRow);
+
+            let buttonBox = new PW.EditEntriesBox({
+                frameRow: themeRow,
+                modifyButton: true,
+                deleteButton: true
+            });
+            themeRow.activatable_widget = buttonBox.editButton;
+            buttonBox.connect('modify', () => {
+                let dialog = new ColorThemeDialogWindow(this._settings, this, theme[0]);
+                dialog.show();
+                dialog.connect('response', (_w, response) => {
+                    if(response === Gtk.ResponseType.APPLY) {
+                        theme.splice(0, 1, dialog.themeName);
+                        themeRow.title = dialog.themeName;
+                        themeRow.theme = theme;
+                        this.saveSettings();
+                        dialog.destroy();
+                    }
+                });
+            });
+
+            buttonBox.connect("row-changed", () =>{
+                this.saveSettings();
+            });
+            buttonBox.connect("row-deleted", () =>{
+                this.frameRows.splice(this.frameRows.indexOf(themeRow), 1);
+                this.saveSettings();
+            });
+            themeRow.connect("drag-drop-done", () => {
+                this.saveSettings();
+            });
+
+            themeRow.add_suffix(buttonBox);
+            this.frameRows.push(themeRow);
+        }
+    }
+
+    saveSettings(){
+        let array = [];
+
+        this.frameRows.sort((a, b) => {
+            return a.get_index() > b.get_index();
+        });
+
+        this.frameRows.forEach(child => {
+            array.push(child.theme);
+        });
+
+        this._settings.set_value('menu-themes', new GLib.Variant('aas', array));
+        this.emit('response', Gtk.ResponseType.APPLY);
+    }
+});
+
+
 var BuildMenuSettingsPages = GObject.registerClass(
 class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
     _init() {
@@ -2962,6 +3579,10 @@ function populateWindow(window){
     window.add(menuLayoutsPage);
     window.pages.push(menuLayoutsPage);
 
+    const themePage = new ThemePage(settings);
+    window.add(themePage);
+    window.pages.push(themePage);
+
     const menuSettingsPage = new BuildMenuSettingsPages();
     window.add(menuSettingsPage);
     window.pages.push(menuSettingsPage);
@@ -3013,6 +3634,9 @@ function setVisiblePage(window){
     }
     else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.GENERAL){
         window.set_visible_page_name("GeneralSettingPage");
+    }
+    else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MENU_THEME){
+        window.set_visible_page_name("ThemePage");
     }
     settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.MAIN);
 }
@@ -3071,6 +3695,39 @@ function checkIfValidShortcut(frameRow, icon){
         icon.icon_name = 'warning-symbolic';
         frameRow.title = "<b><i>" + _("Invalid Shortcut") + "</i></b> "+ _(frameRow.title);
     }
+}
+
+function parseRGBA(colorString){
+    let rgba = new Gdk.RGBA();
+    rgba.parse(colorString);
+    return rgba;
+}
+
+function createXpmImage(color1, color2, color3, color4){
+    color1 = rgbToHex(parseRGBA(color1));
+    color2 = rgbToHex(parseRGBA(color2));
+    color3 = rgbToHex(parseRGBA(color3));
+    color4 = rgbToHex(parseRGBA(color4));
+    let width = 42;
+    let height = 14;
+    let nColors = 5;
+
+    let xpmData = [`${width} ${height} ${nColors} 1`, `1 c ${color1}`, `2 c ${color2}`,
+                    `3 c ${color3}`, `4 c ${color4}`, `x c #AAAAAA`]
+
+    xpmData.push("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
+    for(let i = 0; i < height - 2; i++)
+        xpmData.push("x1111111111222222222233333333334444444444x");
+
+    xpmData.push("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
+    return xpmData;
+}
+
+function rgbToHex(color) {
+    let [r, g, b, a_] = [Math.round(color.red * 255), Math.round(color.green * 255), Math.round(color.blue * 255), Math.round(color.alpha * 255)];
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
 
 function getIconPath(listing){

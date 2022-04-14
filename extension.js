@@ -41,21 +41,19 @@ function init() {
 
 // Enable the extension
 function enable() {
-    if (ShellVersion < 3.39 && ShellVersion >= 3.36)
-        throw new Error(`ArcMenu v${Me.metadata.version} does not work on GNOME Shell version ${ShellVersion}. Please visit https://extensions.gnome.org/extension/3628/arcmenu/ and download ArcMenu v17`);
-    else if (ShellVersion < 3.36)
-        throw new Error(`GNOME Shell version ${ShellVersion} is not supported. Please visit https://extensions.gnome.org/extension/1228/arc-menu/ which supports GNOME Shell versions 3.14 - 3.34`);
-
-    enableTimeoutID = GLib.timeout_add(0, 300, () => {
+    enableTimeoutID = GLib.timeout_add(0, 100, () => {
         if(imports.gi.Meta.is_wayland_compositor())
             Me.metadata.isWayland = true;
         else
             Me.metadata.isWayland = false;
-
+        
         settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
         settings.connect('changed::multi-monitor', () => _reload());
         settingsControllers = [];
-    
+
+        Me.customStylesheet = Utils.getStylesheetFile();
+        Utils.updateStylesheet(settings);
+
         _enableButtons();
         
         // dash to panel might get enabled after Arc-Menu

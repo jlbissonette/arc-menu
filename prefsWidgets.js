@@ -96,7 +96,7 @@ var DragRow = GObject.registerClass({
             listBox.dragRow = this;
             this.listBox = listBox;
 
-            let alloc = self.get_widget().get_allocation();
+            let alloc = this.get_allocation();
             let dragWidget = self.get_widget().createDragRow(alloc);
             listBox.dragWidget = dragWidget;
 
@@ -161,14 +161,26 @@ var DragRow = GObject.registerClass({
         let dragWidget = new Gtk.ListBox();
         dragWidget.set_size_request(alloc.width, alloc.height);
 
-        let dragRow = new Adw.ActionRow();
+        let dragRow = new Adw.ActionRow({
+            title: _(this._name)
+        });
         dragWidget.append(dragRow);
         dragWidget.drag_highlight_row(dragRow);
 
-        let image = new Gtk.Image( {
-            gicon: this._gicon,
-            pixel_size: 22
-        });
+        let image;
+        if(this._gicon instanceof Gio.Icon){
+            image = new Gtk.Image( {
+                pixel_size: 22,
+                gicon: this._gicon
+            });
+        }
+        else{
+            image = new Gtk.Image( {
+                pixel_size: 42,
+            });
+            image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_xpm_data(this._gicon));
+        }
+
         let dragImage = new Gtk.Image( {
             gicon: Gio.icon_new_for_string("drag-symbolic"),
             pixel_size: 12
@@ -176,7 +188,6 @@ var DragRow = GObject.registerClass({
 
         dragRow.add_prefix(image);
         dragRow.add_prefix(dragImage);
-        dragRow.title = _(this._name);
 
         let grid = new Gtk.Grid({
             margin_top: 0,

@@ -36,7 +36,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         this.arcMenuContextMenu = new ArcMenuContextMenu(this, 0.5, St.Side.TOP);
         this.arcMenuContextMenu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
 
-        this.arcMenuContextMenu.actor.add_style_class_name('panel-menu');
+        this.arcMenuContextMenu.actor.add_style_class_name('app-menu');
         this.arcMenuContextMenu.actor.add_style_class_name('arcmenu-menu');
 
         this.arcMenu.actor.add_style_class_name('panel-menu');
@@ -634,11 +634,11 @@ var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.Pop
         this.actor.hide();
 
         let item = new PopupMenu.PopupSeparatorMenuItem(_("ArcMenu Settings"));
-        item.style = "font-weight: 700; font-size: 9pt;"
-        item.add_style_class_name("arcmenu-menu-item");
+        item.add_style_class_name("popup-inactive-menu-item arcmenu-menu-item");
         this.addMenuItem(item);
 
         this.addMenuItem(this.createQuickLinkItem(_("General Settings"), Constants.PrefsVisiblePage.GENERAL));
+        this.addMenuItem(this.createQuickLinkItem(_("Menu Theming"), Constants.PrefsVisiblePage.MENU_THEME));
         this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
         this.addMenuItem(this.createQuickLinkItem(_("Layout Tweaks"), Constants.PrefsVisiblePage.LAYOUT_TWEAKS));
         this.addMenuItem(this.createQuickLinkItem(_("Customize Menu"), Constants.PrefsVisiblePage.CUSTOMIZE_MENU));
