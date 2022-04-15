@@ -184,123 +184,15 @@ StScrollView .small-vfade{
 }
 
 /* Recently Installed App Indicator */
+/*
 .arcmenu-indicator{
     color: rgb(41, 165, 249);
 }
+*/
 
-/* Recently Installed App Indicator in parent category */
+/* Recently Installed App Indicator on parent category */
+/*
 .arcmenu-text-indicator{
     background-color: rgba(196, 196, 196, 0.3);
-}
-
-/* FontSize of ArcMenu */
-/*
-.arcmenu-menu {
-    font-size: ;
-}
-*/
-
-/* Background color of ArcMenu */
-/*
-.arcmenu-menu .popup-menu-content {
-    background-color: ;
-}
-*/
-
-/* Colors of ArcMenu menu item - Normal State */
-/*
-.arcmenu-menu .popup-menu-item {
-    color: ;
-    background-color: ;
-}
-*/
-
-/* Colors of ArcMenu menu item - Focus State */
-/*
-.arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover  {
-    color: ;
-    background-color: ;
-}
-*/
-
-/* Colors of ArcMenu menu item - Hover State */
-/*
-.arcmenu-menu .popup-menu-item:hover {
-    color: ;
-    background-color: ;
-}
-*/
-
-/* Colors of ArcMenu menu item - Checked State */
-/*
-.arcmenu-menu .popup-menu-item:checked {
-    color: ;
-    background-color: ;
-}
-*/
-
-/* Colors of ArcMenu menu item - Active State */
-/*
-.arcmenu-menu .popup-menu-item:active {
-    color: ;
-    background-color: ;
-}
-*/
-
-/* Colors of ArcMenu menu item - Insensitive State */
-/*
-.arcmenu-menu .popup-menu-item:insensitive {
-    color: ;
-    background-color: ;
-}
-*/
-
-/* Separator Color */
-/*
-.separator-color-style{
-    background-color: ;
-}
-*/
-
-/* Button Foreground Color */
-/*
-.arcmenu-menu-button{
-    color: ;
-}
-*/
-
-/* Button Foreground Hover Color */
-/*
-.arcmenu-panel-menu:hover .arcmenu-menu-button{
-    color: ;
-}
-*/
-
-/* Button Foreground Active Color */
-/*
-.arcmenu-menu-button:active{
-    color: ;
-}
-*/
-
-/* Button Background Hover Color */
-/*
-.arcmenu-panel-menu:hover{
-    background-color: ;
-}
-*/
-
-/* Button Background Active Color */
-/*
-.arcmenu-panel-menu:active{
-    background-color: ;
-}
-*/
-
-/* Button Border and Border Radius */
-/*
-.arcmenu-panel-menu{
-    border-radius: ;
-    border: ;
 }
 */

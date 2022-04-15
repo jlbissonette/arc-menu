@@ -358,7 +358,7 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
         this._menuButton = menuLayout.menuButton;
         this._app = app;
         this.layout = this._settings.get_enum('menu-layout');
-        this.actor.add_style_class_name("app-menu");
+        this.actor.add_style_class_name("arcmenu-menu app-menu");
         this._boxPointer.setSourceAlignment(0);
         this._boxPointer._border.queue_repaint();
         this.blockSourceEvents = true;
@@ -399,6 +399,7 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
     }
 
     open(animate){
+        
         if(this._menuButton.tooltipShowingID){
             GLib.source_remove(this._menuButton.tooltipShowingID);
             this._menuButton.tooltipShowingID = null;
@@ -410,12 +411,13 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
         }
 
         super.open(animate);
+        this.sourceActor.add_style_pseudo_class('active');
     }
 
     close(animate){
         super.close(animate);
+        this.sourceActor.remove_style_pseudo_class('active');
         this.sourceActor.sync_hover();
-        this.sourceActor.hovered = this.sourceActor.hover;
     }
 
     rebuildItems(){
@@ -427,7 +429,6 @@ var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends Popup
         if (symbol === Clutter.KEY_Menu){
             this.toggle();
             this.sourceActor.sync_hover();
-            this.sourceActor.hovered = this.sourceActor.hover;
         }
     }
 
@@ -855,7 +856,7 @@ var Tooltip = class Arc_Menu_Tooltip{
 
         this.actor = new St.BoxLayout({
             vertical: true,
-            style_class: 'dash-label arcmenu-tooltip',
+            style_class: 'dash-label arcmenu-tooltip arcmenu-custom-tooltip',
             opacity: 0
         });
 
@@ -2642,7 +2643,7 @@ class Arc_Menu_SearchBox extends St.Entry {
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
-            name: "ArcSearchEntry"
+            name: "ArcSearchEntry",
         });
         this.searchResults = menuLayout.searchResults;
         this._settings = menuLayout._settings;

@@ -50,6 +50,7 @@ var PrefsVisiblePage = {
     CUSTOMIZE_MENU: 5,
     RUNNER_TWEAKS: 6,
     GENERAL: 7,
+    MENU_THEME: 8
 }
 
 var DefaultMenuViewTognee = {
@@ -419,8 +420,8 @@ var CONTRIBUTORS = '<b>Thank you to all contributors and translators</b>\n\n' +
                     '<b><a href="https://gitlab.com/arcmenu/ArcMenu#contributors">Contributors</a></b> - ' +
                     '<b><a href="https://gitlab.com/arcmenu/ArcMenu#translators">Translators</a></b>';
 var ARTWORK = '<b>ArcMenu Artwork</b>\n\n' +
-                '<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - Menu Icons, Settings Icons, Wire-Frame Icons, other ArcMenu Assets' +
-                '\n\n<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Menu Icons, Wire-Frame Icons';
+                '<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - Majority of icons in ArcMenu and Settings, plus other ArcMenu Assets' +
+                '\n\n<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Some ArcMenu and Settings Icons';
 
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +

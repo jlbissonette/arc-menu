@@ -119,6 +119,37 @@ function getSettings(schema, extensionUUID) {
     return new Gio.Settings({ settings_schema: schemaObj });
 }
 
+var ConnectionsHandler = class ArcMenu_ConnectionsHandler {
+    constructor(){
+        this._connections = new Map();
+    }
+
+    connect(object, event, callback){
+        this._connections.set(object.connect(event, callback), object);
+    }
+
+    /**
+     * 
+     * @param {*} object the object to connect to
+     * @param {*} events the array of events that triggers the callback
+     * @param {*} callback action on event trigger
+     * @param {*} prefix optional event prefix. example "changed::", "notify::"
+     */
+    connectMultipleEvents(object, events, callback, prefix = ''){
+        for(let event of events)
+            this._connections.set(object.connect(prefix + event, callback), object);
+    }
+
+    destroy(){
+        this._connections.forEach((object, id) => {
+            object.disconnect(id);
+            id = null;
+        });
+
+        this._connections = null;
+    }
+}
+
 function convertToGridLayout(item){
     const Clutter = imports.gi.Clutter;
     const settings = item._settings;
@@ -367,4 +398,214 @@ function getDashToPanelPosition(settings, index){
         return imports.gi.St.Side.LEFT;
     else
         return imports.gi.St.Side.BOTTOM;
+}
+
+function modifyColorLuminance(colorString, luminanceFactor, overrideAlpha){
+    let Clutter = imports.gi.Clutter;
+    let color = Clutter.color_from_string(colorString)[1];
+    let [hue, lum, sat] = color.to_hls();
+    let modifiedLum;
+
+    if(luminanceFactor === 0)
+        modifiedLum = lum;
+    else if(lum >= .85) //if lum is too light, force darken
+        modifiedLum = Math.min((1 - Math.abs(luminanceFactor)) * lum, 1);
+    else if(lum <= .15) //if lum is too dark, force lighten
+        modifiedLum = Math.max((1 - Math.abs(luminanceFactor)) * lum, 0);
+    else if(luminanceFactor >= 0) //otherwise, darken or lighten based on luminanceFactor
+        modifiedLum = Math.min((1 + luminanceFactor) * lum, 1);
+    else
+        modifiedLum = Math.max((1 + luminanceFactor) * lum, 0);
+   
+    let alpha = (color.alpha / 255).toPrecision(3);
+    if(overrideAlpha)
+        alpha = overrideAlpha;
+
+    let modifiedColor = Clutter.color_from_hls(hue, modifiedLum, sat);
+
+    return `rgba(${modifiedColor.red}, ${modifiedColor.green}, ${modifiedColor.blue}, ${alpha})`
+}
+
+function getStylesheetFile(){
+    let stylesheet = Gio.File.new_for_path(GLib.get_home_dir() + "/.local/share/ArcMenu/stylesheet.css");
+
+    if(!stylesheet.query_exists(null)){
+        GLib.spawn_command_line_sync("mkdir " + GLib.get_home_dir() + "/.local/share/ArcMenu");
+        GLib.spawn_command_line_sync("touch " + GLib.get_home_dir() + "/.local/share/ArcMenu/stylesheet.css");
+        stylesheet = Gio.File.new_for_path(GLib.get_home_dir() + "/.local/share/ArcMenu/stylesheet.css");
+    }
+
+    return stylesheet;
+}
+
+function unloadStylesheet(){
+    if(!Me.customStylesheet)
+        return;
+
+    let theme = imports.gi.St.ThemeContext.get_for_stage(global.stage).get_theme();
+    theme.unload_stylesheet(Me.customStylesheet);
+}
+
+function updateStylesheet(settings){
+    let stylesheet = Me.customStylesheet;
+
+    if(!stylesheet){
+        log("ArcMenu - Custom stylesheet error!");
+        return;
+    }
+
+    let customMenuThemeCSS = ``;
+    let menuButtonStyleCSS = ``;
+
+    let menuBGColor = settings.get_string('menu-background-color');
+    let menuFGColor = settings.get_string('menu-foreground-color');
+    let menuBorderColor = settings.get_string('menu-border-color');
+    let menuBorderWidth = settings.get_int('menu-border-width');
+    let menuBorderRadius = settings.get_int('menu-border-radius');
+    let menuFontSize = settings.get_int('menu-font-size');
+    let menuSeparatorColor = settings.get_string('menu-separator-color');
+    let itemHoverBGColor = settings.get_string('menu-item-hover-bg-color');
+    let itemHoverFGColor = settings.get_string('menu-item-hover-fg-color');
+    let itemActiveBGColor = settings.get_string('menu-item-active-bg-color');
+    let itemActiveFGColor = settings.get_string('menu-item-active-fg-color');
+
+    let [buttonFG, buttonFGColor] = settings.get_value('menu-button-fg-color').deep_unpack();
+    let [buttonHoverBG, buttonHoverBGColor] = settings.get_value('menu-button-hover-bg-color').deep_unpack();
+    let [buttonHoverFG, buttonHoverFGColor] = settings.get_value('menu-button-hover-fg-color').deep_unpack();
+    let [buttonActiveBG, buttonActiveBGColor] = settings.get_value('menu-button-active-bg-color').deep_unpack();
+    let [buttonActiveFG, buttonActiveFGColor] = settings.get_value('menu-button-active-fg-color').deep_unpack();
+    let [buttonRadius, buttonRadiusValue] = settings.get_value('menu-button-border-radius').deep_unpack();
+    let [buttonWidth, buttonWidthValue] = settings.get_value('menu-button-border-width').deep_unpack();
+    let [buttonBorder, buttonBorderColor] = settings.get_value('menu-button-border-color').deep_unpack();
+
+    if(buttonFG)
+        menuButtonStyleCSS += `.arcmenu-menu-button{
+                                color: ${buttonFGColor};
+                            }`;
+    if(buttonHoverBG)
+        menuButtonStyleCSS += `.arcmenu-panel-menu:hover{
+                                box-shadow: inset 0 0 0 100px transparent;
+                                background-color: ${buttonHoverBGColor};
+                            }`;
+    if(buttonHoverFG)
+        menuButtonStyleCSS += `.arcmenu-panel-menu:hover .arcmenu-menu-button{
+                                color: ${buttonHoverFGColor};
+                            }`
+    if(buttonActiveFG)
+        menuButtonStyleCSS += `.arcmenu-menu-button:active{
+                                color: ${buttonActiveFGColor};
+                            }`;
+    if(buttonActiveBG)
+        menuButtonStyleCSS += `.arcmenu-panel-menu:active{
+                                box-shadow: inset 0 0 0 100px transparent;
+                                background-color: ${buttonActiveBGColor};
+                            }`;
+    if(buttonRadius){
+        menuButtonStyleCSS += `.arcmenu-panel-menu{
+                                border-radius: ${buttonRadiusValue}px;
+                            }`;
+    }
+    if(buttonWidth){
+        menuButtonStyleCSS += `.arcmenu-panel-menu{
+                                border-width: ${buttonWidthValue}px;
+                            }`;
+    }
+    if(buttonBorder){
+        menuButtonStyleCSS += `.arcmenu-panel-menu{
+                                border-color: ${buttonBorderColor};
+                            }`;
+    }
+    
+    if(settings.get_boolean('override-menu-theme')){
+        customMenuThemeCSS = `.arcmenu-menu{
+            font-size: ${menuFontSize}pt;
+            color: ${menuFGColor};
+        }
+       .arcmenu-menu .popup-menu-content {
+            background-color: ${menuBGColor};
+            border-color: ${menuBorderColor};
+            border-width: ${menuBorderWidth}px;
+            border-radius: ${menuBorderRadius}px;
+        }
+        .arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover, 
+        .arcmenu-menu .popup-menu-item:checked, .arcmenu-menu .popup-menu-item.selected  {
+            color: ${itemHoverFGColor};
+            background-color: ${itemHoverBGColor};
+        }
+        .arcmenu-menu .popup-menu-item:active {
+            color: ${itemActiveFGColor};
+            background-color: ${itemActiveBGColor};
+        }
+        .arcmenu-menu .popup-menu-item:insensitive{
+            color: ${modifyColorLuminance(menuFGColor, 0, 0.6)};
+            font-size: ${menuFontSize - 2}pt;
+        }
+        .arcmenu-menu .popup-separator-menu-item .popup-separator-menu-item-separator{
+            background-color: ${menuSeparatorColor};
+        }
+        .arcmenu-menu .popup-separator-menu-item StLabel{
+            color: ${menuFGColor};
+        }
+        .separator-color-style{
+            background-color: ${menuSeparatorColor};
+        }
+        .arcmenu-menu StEntry{
+            font-size: ${menuFontSize}pt;
+            border-color: ${modifyColorLuminance(menuSeparatorColor, 0, .1)};
+            color: ${menuFGColor};
+            background-color: ${modifyColorLuminance(menuBGColor, -0.1, .4)};
+        }
+        .arcmenu-menu StEntry:hover{
+            border-color: ${itemHoverBGColor};
+            background-color: ${modifyColorLuminance(menuBGColor, -0.15, .4)};
+        }
+        .arcmenu-menu StEntry:focus{
+            border-color: ${itemActiveBGColor};
+            background-color: ${modifyColorLuminance(menuBGColor, -0.2, .4)};
+        }
+        .arcmenu-menu StLabel.hint-text{
+            color: ${modifyColorLuminance(menuFGColor, 0, 0.6)};
+        }
+        .arcmenu-custom-tooltip{
+            font-size: ${menuFontSize}pt;
+            color: ${menuFGColor};
+            background-color: ${modifyColorLuminance(menuBGColor, 0.05, 1)};
+        }
+        .arcmenu-small-button:hover{
+            box-shadow: inset 0 0 0 100px ${modifyColorLuminance(itemHoverBGColor, -0.1)};
+        }
+        .arcmenu-menu .user-icon{
+            border-color: ${modifyColorLuminance(menuFGColor, 0, .7)};
+        }
+        `;
+    }
+
+    let customStylesheetCSS = customMenuThemeCSS + menuButtonStyleCSS;
+
+    //If customStylesheetCSS empty, unload custom stylesheet and return
+    if(customStylesheetCSS.length === 0){
+        unloadStylesheet();
+        return;
+    }
+
+    try{
+        let bytes = new GLib.Bytes(customStylesheetCSS);
+
+        stylesheet.replace_contents_bytes_async(bytes, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null, (stylesheet, res) => {
+            if(!stylesheet.replace_contents_finish(res))
+                throw new Error("ArcMenu - Error replacing contents of custom stylesheet file.");
+
+            let theme = imports.gi.St.ThemeContext.get_for_stage(global.stage).get_theme();
+
+            unloadStylesheet();
+            Me.customStylesheet = stylesheet;
+            theme.load_stylesheet(Me.customStylesheet);
+
+            return true;
+        });
+    }
+    catch(e){
+        log("ArcMenu - Error updating custom stylesheet. " + e.message);
+        return false;
+    }
 }
