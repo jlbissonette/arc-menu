@@ -3649,32 +3649,6 @@ function setVisiblePage(window){
 }
 
 function fillPreferencesWindow(window) {
-    initializeWindow(window);
-}
-
-//buildPrefsWidget() added for Pop!_OS 22.04 compatibility.
-//Pop!_OS 22.04 doesn't recognize fillPreferencesWindow(),
-//doesn't include the gir1.2-adw-1 package,
-//and is creating a Gtk.Window instead of Adw.PreferencesWindow?
-function buildPrefsWidget() {
-    const window = new Adw.PreferencesWindow();
-    window.connect('close-request', () => {
-        let parentWindow = dummyWidget.get_root();
-        parentWindow.close();
-    });
-
-    initializeWindow(window);
-
-    let dummyWidget = new Gtk.Box();
-    dummyWidget.connect('realize', () => {
-        window.transient_for = dummyWidget.get_root();
-        window.show();
-    });
-
-    return dummyWidget;
-}
-
-function initializeWindow(window){
     let iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default());
     if(!iconTheme.get_search_path().includes(Me.path + "/media/icons/prefs_icons"))
         iconTheme.add_search_path(Me.path + "/media/icons/prefs_icons");
