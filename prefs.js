@@ -1291,7 +1291,7 @@ var ButtonAppearancePage = GObject.registerClass(
 
             let spinRow = new Adw.ActionRow({
                 title: _(title),
-                subtitle: _("Units in %s").format(unit) + (subtitle ? "\n" + _(subtitle) : ""),
+                subtitle: subtitle ? _(subtitle) : "",
                 activatable_widget: enabledSwitch
             });
             spinRow.add_suffix(enabledSwitch);
@@ -2585,21 +2585,25 @@ var MiscPage = GObject.registerClass(
                     { action: Gtk.FileChooserAction.OPEN },
                     "_Open",
                     filename => {
-                        let settingsFile = Gio.File.new_for_path(filename);
-                        let [ success_, pid, stdin, stdout, stderr] =
-                            GLib.spawn_async_with_pipes(
-                                null,
-                                ['dconf', 'load', SCHEMA_PATH],
-                                null,
-                                GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
-                                null
-                            );
+                        if (filename && GLib.file_test(filename, GLib.FileTest.EXISTS)) {
+                            let settingsFile = Gio.File.new_for_path(filename);
+                            let [ success_, pid, stdin, stdout, stderr] =
+                                GLib.spawn_async_with_pipes(
+                                    null,
+                                    ['dconf', 'load', SCHEMA_PATH],
+                                    null,
+                                    GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+                                    null
+                                );
 
-                        stdin = new Gio.UnixOutputStream({ fd: stdin, close_fd: true });
-                        GLib.close(stdout);
-                        GLib.close(stderr);
+                            stdin = new Gio.UnixOutputStream({ fd: stdin, close_fd: true });
+                            GLib.close(stdout);
+                            GLib.close(stderr);
 
-                        stdin.splice(settingsFile.read(null), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE | Gio.OutputStreamSpliceFlags.CLOSE_TARGET, null);
+                            stdin.splice(settingsFile.read(null), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE | Gio.OutputStreamSpliceFlags.CLOSE_TARGET, null);
+
+                            populateWindow(preferencesWindow);
+                        }
                     }
                 );
             });
@@ -3197,7 +3201,7 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
 
     createIconList(store){
         //Order of elements in a theme in 'menu-themes' setting
-        //  [Theme Name, menuBGColor, menuFGColor, menuBorderColor, menuBorderWidth, menuBorderRadius, 
+        //  [Theme Name, menuBGColor, menuFGColor, menuBorderColor, menuBorderWidth, menuBorderRadius,
         //      menuFontSize, menuSeparatorColor, itemHoverBGColor, itemHoverFGColor, itemActiveBGColor, itemActiveFGColor]
         let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
         for(let theme of menuThemes){
