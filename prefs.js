@@ -3292,7 +3292,7 @@ class ArcMenu_ColorThemeDialogWindow extends PW.DialogWindow {
             width_chars: 35
         });
         let themeNameRow = new Adw.ActionRow({
-            title: _("Theme Name:"),
+            title: _("Theme Name"),
             activatable_widget: themeNameEntry,
         });
         themeNameRow.add_suffix(themeNameEntry);
