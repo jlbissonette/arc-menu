@@ -3103,13 +3103,13 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
         let menuBorderColorRow = this._createColorRow(_("Border Color"), 'menu-border-color');
         menuGroup.add(menuBorderColorRow);
 
-        let menuBorderWidthRow = this._createSpinButtonRow(_("Border Width"), 'menu-border-width', 0, 5, 'px');
+        let menuBorderWidthRow = this._createSpinButtonRow(_("Border Width"), 'menu-border-width', 0, 5);
         menuGroup.add(menuBorderWidthRow);
 
-        let menuBorderRadiusRow = this._createSpinButtonRow(_("Border Radius"), 'menu-border-radius', 0, 25, 'px');
+        let menuBorderRadiusRow = this._createSpinButtonRow(_("Border Radius"), 'menu-border-radius', 0, 25);
         menuGroup.add(menuBorderRadiusRow);
 
-        let menuFontSizeRow = this._createSpinButtonRow(_("Font Size"), 'menu-font-size', 8, 18, 'pt');
+        let menuFontSizeRow = this._createSpinButtonRow(_("Font Size"), 'menu-font-size', 8, 18);
         menuGroup.add(menuFontSizeRow);
 
         let menuSeparatorColorRow = this._createColorRow(_("Separator Color"), 'menu-separator-color');
@@ -3243,7 +3243,7 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
         return colorRow;
     }
 
-    _createSpinButtonRow(title, setting, lower, upper, unit){
+    _createSpinButtonRow(title, setting, lower, upper){
         let spinButton = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
                 lower,
@@ -3263,7 +3263,6 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
 
         let spinRow = new Adw.ActionRow({
             title: _(title),
-            subtitle: _("Units in %s").format(unit),
             activatable_widget: spinButton,
         });
         spinRow.add_suffix(spinButton);
