@@ -1333,7 +1333,7 @@ var ButtonAppearancePage = GObject.registerClass(
                 rgba: parseRGBA(color),
                 sensitive: enabled
             });
-            colorButton.connect('color-set', (widget) => {
+            colorButton.connect('notify::rgba', (widget) => {
                 let colorString = widget.get_rgba().to_string();
                 let [oldEnabled, oldColor_] = this._settings.get_value(setting).deep_unpack();
                 this._settings.set_value(setting, new GLib.Variant('(bs)', [oldEnabled, colorString]));
@@ -3011,7 +3011,6 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
             const index = widget.get_active();
             if(index < 0)
                 return;
-            //[Theme Name, menuBGColor, menuFGColor, menuBorderColor, menuBorderWidth, menuBorderRadius, menuFontSize, menuSeparatorColor, itemHoverBGColor, itemHoverFGColor, itemActiveBGColor, itemActiveFGColor]
 
             let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
 
@@ -3171,38 +3170,9 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
         }
 
         this.checkIfThemeMatch();
-
-        this.restoreDefaults = () => {
-            this._settings.reset('menu-background-color');
-            this._settings.reset('menu-foreground-color');
-            this._settings.reset('menu-border-color');
-            this._settings.reset('menu-border-width');
-            this._settings.reset('menu-border-radius');
-            this._settings.reset('menu-font-size');
-            this._settings.reset('menu-separator-color');
-            this._settings.reset('menu-item-hover-bg-color');
-            this._settings.reset('menu-item-hover-fg-color');
-            this._settings.reset('menu-item-active-bg-color');
-            this._settings.reset('menu-item-active-fg-color');
-
-            menuBGColorRow.setColor(this._settings.get_string('menu-background-color'));
-            menuFGColorRow.setColor(this._settings.get_string('menu-foreground-color'));
-            menuBorderColorRow.setColor(this._settings.get_string('menu-border-color'));
-            menuBorderWidthRow.setValue(this._settings.get_int('menu-border-width'));
-            menuBorderRadiusRow.setValue(this._settings.get_int('menu-border-radius'));
-            menuFontSizeRow.setValue(this._settings.get_int('menu-font-size'));
-            menuSeparatorColorRow.setColor(this._settings.get_string('menu-separator-color'));
-            itemHoverBGColorRow.setColor(this._settings.get_string('menu-item-hover-bg-color'));
-            itemHoverFGColorRow.setColor(this._settings.get_string('menu-item-hover-fg-color'));
-            itemActiveBGColorRow.setColor(this._settings.get_string('menu-item-active-bg-color'));
-            itemActiveFGColorRow.setColor(this._settings.get_string('menu-item-active-fg-color'));
-        };
     }
 
     createIconList(store){
-        //Order of elements in a theme in 'menu-themes' setting
-        //  [Theme Name, menuBGColor, menuFGColor, menuBorderColor, menuBorderWidth, menuBorderRadius,
-        //      menuFontSize, menuSeparatorColor, itemHoverBGColor, itemHoverFGColor, itemActiveBGColor, itemActiveFGColor]
         let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
         for(let theme of menuThemes){
             let xpm = createXpmImage(theme[1], theme[2], theme[3], theme[8]);
@@ -3218,7 +3188,7 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
             valign: Gtk.Align.CENTER,
             rgba: parseRGBA(this._settings.get_string(setting))
         });
-        colorButton.connect('color-set', (widget) => {
+        colorButton.connect('notify::rgba', (widget) => {
             let colorString = widget.get_rgba().to_string();
             this._settings.set_string(setting, colorString);
             this.checkIfThemeMatch();
@@ -3229,13 +3199,7 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
         });
         colorRow.add_suffix(colorButton);
         colorRow.setColor = (color) => {
-            let rgba = new Gdk.RGBA();
-            rgba.parse(color);
-            colorButton.set_rgba(rgba);
-
-            //todo why is this needed?
-            let colorString = colorButton.get_rgba().to_string();
-            this._settings.set_string(setting, colorString);
+            colorButton.set_rgba(parseRGBA(color));
         };
         colorRow.getColor = () => {
             return colorButton.get_rgba().to_string();
@@ -3256,7 +3220,7 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
             valign: Gtk.Align.CENTER,
             value: this._settings.get_int(setting)
         });
-        spinButton.connect('value-changed', (widget) => {
+        spinButton.connect('notify::value', (widget) => {
             this.checkIfThemeMatch();
             this._settings.set_int(setting, widget.get_value());
         });
@@ -3268,8 +3232,6 @@ class Arc_Menu_ThemePage extends Adw.PreferencesPage {
         spinRow.add_suffix(spinButton);
         spinRow.setValue = (value) => {
             spinButton.set_value(value);
-            //todo why is this needed?
-            this._settings.set_int(setting, spinButton.get_value());
         };
         spinRow.getValue = () => {
             return spinButton.get_value();
@@ -3490,7 +3452,6 @@ class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
                 buttonContent.label = _("More Settings...");
             }
         });
-        //this.flap.reveal_flap = true;
         let headerBox = new Gtk.Grid({
             orientation: Gtk.Orientation.HORIZONTAL,
             margin_bottom: 10
@@ -3613,7 +3574,6 @@ function setVisiblePage(window){
         window.set_visible_page_name("MenuSettingsPage");
         let page = window.get_visible_page();
         page.menuSettingsStackListBox.selectRowByName("MenuSettingsGeneral");
-        //page.flap.reveal_flap = false;
     }
     else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MENU_LAYOUT){
         window.set_visible_page_name("MenuLayoutsPage");
@@ -3624,7 +3584,6 @@ function setVisiblePage(window){
         window.set_visible_page_name("MenuSettingsPage");
         let page = window.get_visible_page();
         page.menuSettingsStackListBox.selectRowByName("ButtonSettings");
-        //page.flap.reveal_flap = false;
     }
     else if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.LAYOUT_TWEAKS){
         window.set_visible_page_name("MenuLayoutsPage");
