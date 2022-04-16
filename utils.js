@@ -119,25 +119,20 @@ function getSettings(schema, extensionUUID) {
     return new Gio.Settings({ settings_schema: schemaObj });
 }
 
-var ConnectionsHandler = class ArcMenu_ConnectionsHandler {
-    constructor(){
+var SettingsConnectionsHandler = class ArcMenu_SettingsConnectionsHandler {
+    constructor(settings){
+        this._settings = settings;
         this._connections = new Map();
+        this._eventPrefix = 'changed::';
     }
 
-    connect(object, event, callback){
-        this._connections.set(object.connect(event, callback), object);
+    connect(event, callback){
+        this._connections.set(this._settings.connect(this._eventPrefix + event, callback), this._settings);
     }
 
-    /**
-     * 
-     * @param {*} object the object to connect to
-     * @param {*} events the array of events that triggers the callback
-     * @param {*} callback action on event trigger
-     * @param {*} prefix optional event prefix. example "changed::", "notify::"
-     */
-    connectMultipleEvents(object, events, callback, prefix = ''){
+    connectMultipleEvents(events, callback){
         for(let event of events)
-            this._connections.set(object.connect(prefix + event, callback), object);
+            this._connections.set(this._settings.connect(this._eventPrefix + event, callback), this._settings);
     }
 
     destroy(){
@@ -416,7 +411,7 @@ function modifyColorLuminance(colorString, luminanceFactor, overrideAlpha){
         modifiedLum = Math.min((1 + luminanceFactor) * lum, 1);
     else
         modifiedLum = Math.max((1 + luminanceFactor) * lum, 0);
-   
+
     let alpha = (color.alpha / 255).toPrecision(3);
     if(overrideAlpha)
         alpha = overrideAlpha;
@@ -515,7 +510,7 @@ function updateStylesheet(settings){
                                 border-color: ${buttonBorderColor};
                             }`;
     }
-    
+
     if(settings.get_boolean('override-menu-theme')){
         customMenuThemeCSS = `.arcmenu-menu{
             font-size: ${menuFontSize}pt;
@@ -527,7 +522,7 @@ function updateStylesheet(settings){
             border-width: ${menuBorderWidth}px;
             border-radius: ${menuBorderRadius}px;
         }
-        .arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover, 
+        .arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover,
         .arcmenu-menu .popup-menu-item:checked, .arcmenu-menu .popup-menu-item.selected  {
             color: ${itemHoverFGColor};
             background-color: ${itemHoverBGColor};

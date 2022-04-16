@@ -99,7 +99,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.updateHeight();
         });
 
-        this.initiateRecentlyInstalledApps();
+        this.setRecentApps();
         this.setMenuPositionAlignment();
 
         //Create Basic Layout
@@ -147,7 +147,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
         }
     }
 
-    initiateRecentlyInstalledApps(){
+    setRecentApps(){
         if(this._installedChangedId){
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;

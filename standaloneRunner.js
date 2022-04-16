@@ -58,7 +58,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     initiate(){
-        this.initiateRecentlyInstalledApps();
+        this.setRecentApps();
 
         //Create Basic Layout
         this.createLayoutID = GLib.timeout_add(0, 100, () => {
@@ -68,7 +68,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         });
     }
 
-    initiateRecentlyInstalledApps(){
+    setRecentApps(){
         if(this._installedChangedId){
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;

@@ -1,7 +1,7 @@
 /*
  * ArcMenu - Application Menu Extension for GNOME
  * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
@@ -32,51 +32,42 @@ const Utils = Me.imports.utils;
 let settings;
 let settingsControllers;
 let extensionChangedId;
-let enableTimeoutID;
 
 // Initialize menu language translations
 function init() {
-    ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);      
+    ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);
 }
 
 // Enable the extension
 function enable() {
-    enableTimeoutID = GLib.timeout_add(0, 100, () => {
-        if(imports.gi.Meta.is_wayland_compositor())
-            Me.metadata.isWayland = true;
-        else
-            Me.metadata.isWayland = false;
-        
-        settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
-        settings.connect('changed::multi-monitor', () => _reload());
-        settingsControllers = [];
+    if(imports.gi.Meta.is_wayland_compositor())
+        Me.metadata.isWayland = true;
+    else
+        Me.metadata.isWayland = false;
 
-        Me.customStylesheet = Utils.getStylesheetFile();
-        Utils.updateStylesheet(settings);
+    settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+    settings.connect('changed::multi-monitor', () => _reload());
+    settingsControllers = [];
 
-        _enableButtons();
-        
-        // dash to panel might get enabled after Arc-Menu
-        extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-            if (extension.uuid === 'dash-to-panel@jderose9.github.com') {
-                _disconnectDtpSignals();
-                _connectDtpSignals();
-                _reload();
-            }
-        });
-    
-        // listen to dash to panel if they are compatible and already enabled
-        _connectDtpSignals();
-        enableTimeoutID = null;
-        return GLib.SOURCE_REMOVE;
+    Me.customStylesheet = Utils.getStylesheetFile();
+    Utils.updateStylesheet(settings);
+
+    _enableButtons();
+
+    // dash to panel might get enabled after Arc-Menu
+    extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
+        if (extension.uuid === 'dash-to-panel@jderose9.github.com') {
+            _disconnectDtpSignals();
+            _connectDtpSignals();
+            _reload();
+        }
     });
+
+    // listen to dash to panel if they are compatible and already enabled
+    _connectDtpSignals();
 }
 
 function disable() {
-    if(enableTimeoutID){
-        GLib.source_remove(enableTimeoutID);
-        enableTimeoutID = null;
-    }
     if(extensionChangedId){
         Main.extensionManager.disconnect(extensionChangedId);
         extensionChangedId = null;
@@ -128,7 +119,7 @@ function _enableButtons() {
         let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, isPrimaryPanel);
 
         settingsController.monitorIndex = panelParent.monitor?.index;
-        
+
         if(isDtPLoaded)
             panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController, 1) : null);
 
