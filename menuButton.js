@@ -4,6 +4,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const {Clutter, GLib, GObject, Shell, St} = imports.gi;
 const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
+const { ExtensionState } = ExtensionUtils;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
 const MW = Me.imports.menuWidgets;
@@ -73,21 +74,23 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         //Dash to Panel Integration
         this.dashToPanel = Main.extensionManager.lookup(DASH_TO_PANEL_UUID);
         this.extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-            if (extension.uuid === DASH_TO_PANEL_UUID && extension.state === 1) {
-                this.dashToPanel = Main.extensionManager.lookup(DASH_TO_PANEL_UUID);
-                this.syncWithDashToPanel();
-            }
-            if (extension.uuid === DASH_TO_PANEL_UUID && extension.state === 2) {
-                this.dashToPanel = null;
-                this.arcMenuContextMenu.removeExtensionSettings();
-                this.updateArrowSide(St.Side.TOP);
-                if(this.dtpPostionChangedID>0 && this.extensionSettingsItem){
-                    this.extensionSettingsItem.disconnect(this.dtpPostionChangedID);
-                    this.dtpPostionChangedID = 0;
+            if (extension.uuid === DASH_TO_PANEL_UUID) {
+                if (extension.state === ExtensionState.ENABLED) {
+                    this.dashToPanel = Main.extensionManager.lookup(DASH_TO_PANEL_UUID);
+                    this.syncWithDashToPanel();
+                }
+                else if (extension.state === ExtensionState.DISABLED) {
+                    this.dashToPanel = null;
+                    this.arcMenuContextMenu.removeExtensionSettings();
+                    this.updateArrowSide(St.Side.TOP);
+                    if(this.dtpPostionChangedID>0 && this.extensionSettingsItem){
+                        this.extensionSettingsItem.disconnect(this.dtpPostionChangedID);
+                        this.dtpPostionChangedID = 0;
+                    }
                 }
             }
         });
-        if(this.dashToPanel && this.dashToPanel.stateObj){
+        if(this.dashToPanel?.state === ExtensionState.ENABLED){
             this.syncWithDashToPanel();
         }
 
@@ -227,7 +230,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
                 this.arcMenuContextMenu._boxPointer.setSourceAlignment(.5);
                 this.arcMenu._boxPointer.setSourceAlignment(.5);
             }
-            else if(this.dashToPanel && this.dashToPanel.stateObj){
+            else if(this.dashToPanel?.state === ExtensionState.ENABLED){
                 let monitorIndex = Main.layoutManager.findIndexForActor(this);
                 let side = Utils.getDashToPanelPosition(this.extensionSettingsItem, monitorIndex);
                 this.updateArrowSide(side, false);

@@ -1,5 +1,6 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
+
 const {Atk, Clutter, Gio, GLib, GMenu, GObject, Gtk, Shell, St} = imports.gi;
 const AccountsService = imports.gi.AccountsService;
 const AppFavorites = imports.ui.appFavorites;
@@ -7,10 +8,10 @@ const BoxPointer = imports.ui.boxpointer;
 const Constants = Me.imports.constants;
 const Dash = imports.ui.dash;
 const DND = imports.ui.dnd;
+const { ExtensionState } = ExtensionUtils;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
-const Signals = imports.signals;
 const _SystemActions = imports.misc.systemActions;
 const SystemActions = _SystemActions.getDefault();
 const Util = imports.misc.util;
@@ -97,7 +98,7 @@ var ApplicationContextItems = GObject.registerClass({
         this.destroy_all_children();
         if(this._app instanceof Shell.App){
             this.appInfo = this._app.get_app_info();
-            let actions = this.appInfo.list_actions();
+            let actions = this.appInfo.list_actions() ?? [];
 
             let windows = this._app.get_windows().filter(
                 w => !w.skip_taskbar
@@ -108,8 +109,7 @@ var ApplicationContextItems = GObject.registerClass({
                 this.add_child(item);
 
                 windows.forEach(window => {
-                    let title = window.title ? window.title
-                                            : this._app.get_name();
+                    let title = window.title || this._app.get_name();
                     let item = this._appendMenuItem(title);
                     item.connect('activate', () => {
                         this.closeMenus();
@@ -119,153 +119,157 @@ var ApplicationContextItems = GObject.registerClass({
                 this._appendSeparator();
             }
 
-            if (!this._app.is_window_backed()) {
-                if (this._app.can_open_new_window() && !actions.includes('new-window')) {
-                    let newWindowItem = this._appendMenuItem(_("New Window"));
-                    newWindowItem.connect('activate', () => {
-                        this.closeMenus();
-                        this._app.open_new_window(-1);
-                    });
-                }
-                if (this.discreteGpuAvailable && this._app.state == Shell.AppState.STOPPED) {
-                    const appPrefersNonDefaultGPU = this.appInfo.get_boolean('PrefersNonDefaultGPU');
-                    const gpuPref = appPrefersNonDefaultGPU
-                        ? Shell.AppLaunchGpu.DEFAULT
-                        : Shell.AppLaunchGpu.DISCRETE;
-
-                    this._onGpuMenuItem = this._appendMenuItem(appPrefersNonDefaultGPU
-                        ? _('Launch using Integrated Graphics Card')
-                        : _('Launch using Discrete Graphics Card'));
-
-                    this._onGpuMenuItem.connect('activate', () => {
-                        this.closeMenus();
-                        this._app.launch(0, -1, gpuPref);
-                    });
-                }
-
-                for (let i = 0; i < actions.length; i++) {
-                    let action = actions[i];
-                    let item = this._appendMenuItem(this.appInfo.get_action_name(action));
-
-                    item.connect('activate', (emitter, event) => {
-                        this.closeMenus();
-                        this._app.launch_action(action, event.get_time(), -1);
-                    });
-                }
-
-                let desktopIcons = Main.extensionManager.lookup("desktop-icons@csoriano");
-                let desktopIconsNG = Main.extensionManager.lookup("ding@rastersoft.com");
-                if((desktopIcons && desktopIcons.stateObj) || (desktopIconsNG && desktopIconsNG.stateObj)){
-                    this._appendSeparator();
-                    let fileDestination = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP);
-                    let src = Gio.File.new_for_path(this.appInfo.get_filename());
-                    let dst = Gio.File.new_for_path(GLib.build_filenamev([fileDestination, src.get_basename()]));
-                    let exists = dst.query_exists(null);
-                    if(exists) {
-                        let item = this._appendMenuItem(_("Delete Desktop Shortcut"));
-                        item.connect('activate', () => {
-                            if(src && dst){
-                                try {
-                                    dst.delete(null);
-                                } catch (e) {
-                                    log(`Failed to delete shortcut: ${e.message}`);
-                                }
-                            }
-                            this.close();
-                        });
-                    }
-                    else {
-                        let item = this._appendMenuItem(_("Create Desktop Shortcut"));
-                        item.connect('activate', () => {
-                            if(src && dst){
-                                try {
-                                    // copy_async() isn't introspectable :-(
-                                    src.copy(dst, Gio.FileCopyFlags.OVERWRITE, null, null);
-                                    this._markTrusted(dst);
-                                } catch (e) {
-                                    log(`Failed to copy to desktop: ${e.message}`);
-                                }
-                            }
-                            this.close();
-                        });
-                    }
-                }
-
-                let canFavorite = global.settings.is_writable('favorite-apps');
-                if (canFavorite) {
-                    this._appendSeparator();
-                    let isFavorite = AppFavorites.getAppFavorites().isFavorite(this._app.get_id());
-                    if (isFavorite) {
-                        let item = this._appendMenuItem(_("Remove from Favorites"));
-                        item.connect('activate', () => {
-                            let favs = AppFavorites.getAppFavorites();
-                            favs.removeFavorite(this._app.get_id());
-                            this.close();
-                        });
-                    } else {
-                        let item = this._appendMenuItem(_("Add to Favorites"));
-                        item.connect('activate', () => {
-                            let favs = AppFavorites.getAppFavorites();
-                            favs.addFavorite(this._app.get_id());
-                            this.close();
-                        });
-                    }
-                }
-
-                let pinnedApps = this._settings.get_strv('pinned-app-list');
-                let pinnedAppID = [];
-
-                //filter pinnedApps list by every 3rd entry in list. 3rd entry contains an appID or command
-                for(let i = 2; i < pinnedApps.length; i += 3){
-                    pinnedAppID.push(pinnedApps[i]);
-                }
-                let isAppPinned = pinnedAppID.find((element) => {
-                    return element == this._app.get_id();
+            let needsAdditionalSeparator = false;
+            if (this._app.can_open_new_window() && !actions.includes('new-window')) {
+                let newWindowItem = this._appendMenuItem(_("New Window"));
+                newWindowItem.connect('activate', () => {
+                    this.closeMenus();
+                    this._app.open_new_window(-1);
                 });
+                needsAdditionalSeparator = true;
+            }
 
-                //if app is pinned and menulayout has PinnedApps category, show Unpin from ArcMenu entry
-                if(isAppPinned && this._menuLayout.hasPinnedApps) {
-                    let item = this._appendMenuItem(_("Unpin from ArcMenu"));
-                    item.connect('activate', ()=>{
-                        this.close();
-                        for(let i = 0; i < pinnedApps.length; i += 3){
-                            if(pinnedApps[i + 2] === this._app.get_id()){
-                                pinnedApps.splice(i, 3);
-                                this._settings.set_strv('pinned-app-list', pinnedApps);
-                                break;
+            actions.forEach(action => {
+                let item = this._appendMenuItem(this.appInfo.get_action_name(action));
+
+                item.connect('activate', (emitter, event) => {
+                    this.closeMenus();
+                    this._app.launch_action(action, event.get_time(), -1);
+                });
+                needsAdditionalSeparator = true;
+            });
+
+            if (this.discreteGpuAvailable && this._app.state == Shell.AppState.STOPPED) {
+                const appPrefersNonDefaultGPU = this.appInfo.get_boolean('PrefersNonDefaultGPU');
+                const gpuPref = appPrefersNonDefaultGPU
+                    ? Shell.AppLaunchGpu.DEFAULT
+                    : Shell.AppLaunchGpu.DISCRETE;
+
+                this._onGpuMenuItem = this._appendMenuItem(appPrefersNonDefaultGPU
+                    ? _('Launch using Integrated Graphics Card')
+                    : _('Launch using Discrete Graphics Card'));
+
+                this._onGpuMenuItem.connect('activate', () => {
+                    this.closeMenus();
+                    this._app.launch(0, -1, gpuPref);
+                });
+                needsAdditionalSeparator = true;
+            }
+
+            if(needsAdditionalSeparator)
+                this._appendSeparator();
+
+            let desktopIcons = Main.extensionManager.lookup("desktop-icons@csoriano");
+            let desktopIconsNG = Main.extensionManager.lookup("ding@rastersoft.com");
+            if(desktopIcons?.state === ExtensionState.ENABLED || desktopIconsNG?.state === ExtensionState.ENABLED){
+                let fileDestination = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DESKTOP);
+                let src = Gio.File.new_for_path(this.appInfo.get_filename());
+                let dst = Gio.File.new_for_path(GLib.build_filenamev([fileDestination, src.get_basename()]));
+                let exists = dst.query_exists(null);
+                if(exists) {
+                    let item = this._appendMenuItem(_("Delete Desktop Shortcut"));
+                    item.connect('activate', () => {
+                        if(src && dst){
+                            try {
+                                dst.delete(null);
+                            } catch (e) {
+                                log(`Failed to delete shortcut: ${e.message}`);
                             }
                         }
-                    });
-                }
-                else if(this._menuLayout.hasPinnedApps) {
-                    let item = this._appendMenuItem(_("Pin to ArcMenu"));
-                    item.connect('activate', ()=>{
                         this.close();
-                        pinnedApps.push(this.appInfo.get_display_name());
-                        pinnedApps.push('');
-                        pinnedApps.push(this._app.get_id());
-                        this._settings.set_strv('pinned-app-list',pinnedApps);
                     });
                 }
-
-                if (Shell.AppSystem.get_default().lookup_app('org.gnome.Software.desktop')) {
-                    this._appendSeparator();
-                    let item = this._appendMenuItem(_("Show Details"));
+                else {
+                    let item = this._appendMenuItem(_("Create Desktop Shortcut"));
                     item.connect('activate', () => {
-                        let id = this._app.get_id();
-                        let args = GLib.Variant.new('(ss)', [id, '']);
-                        Gio.DBus.get(Gio.BusType.SESSION, null, (o, res) => {
-                            let bus = Gio.DBus.get_finish(res);
-                            bus.call('org.gnome.Software',
-                                    '/org/gnome/Software',
-                                    'org.gtk.Actions', 'Activate',
-                                    GLib.Variant.new('(sava{sv})',
-                                                    ['details', [args], null]),
-                                    null, 0, -1, null, null);
-                            this.closeMenus();
-                        });
+                        if(src && dst){
+                            try {
+                                // copy_async() isn't introspectable :-(
+                                src.copy(dst, Gio.FileCopyFlags.OVERWRITE, null, null);
+                                this._markTrusted(dst);
+                            } catch (e) {
+                                log(`Failed to copy to desktop: ${e.message}`);
+                            }
+                        }
+                        this.close();
                     });
                 }
+                this._appendSeparator();
+            }
+
+            let canFavorite = global.settings.is_writable('favorite-apps');
+            if (canFavorite) {
+                let isFavorite = AppFavorites.getAppFavorites().isFavorite(this._app.get_id());
+                if (isFavorite) {
+                    let item = this._appendMenuItem(_("Remove from Favorites"));
+                    item.connect('activate', () => {
+                        let favs = AppFavorites.getAppFavorites();
+                        favs.removeFavorite(this._app.get_id());
+                        this.close();
+                    });
+                } else {
+                    let item = this._appendMenuItem(_("Add to Favorites"));
+                    item.connect('activate', () => {
+                        let favs = AppFavorites.getAppFavorites();
+                        favs.addFavorite(this._app.get_id());
+                        this.close();
+                    });
+                }
+            }
+
+            let pinnedApps = this._settings.get_strv('pinned-app-list');
+            let pinnedAppID = [];
+
+            //filter pinnedApps list by every 3rd entry in list. 3rd entry contains an appID or command
+            for(let i = 2; i < pinnedApps.length; i += 3){
+                pinnedAppID.push(pinnedApps[i]);
+            }
+            let isAppPinned = pinnedAppID.find((element) => {
+                return element == this._app.get_id();
+            });
+
+            //if app is pinned and menulayout has PinnedApps category, show Unpin from ArcMenu entry
+            if(isAppPinned && this._menuLayout.hasPinnedApps) {
+                let item = this._appendMenuItem(_("Unpin from ArcMenu"));
+                item.connect('activate', ()=>{
+                    this.close();
+                    for(let i = 0; i < pinnedApps.length; i += 3){
+                        if(pinnedApps[i + 2] === this._app.get_id()){
+                            pinnedApps.splice(i, 3);
+                            this._settings.set_strv('pinned-app-list', pinnedApps);
+                            break;
+                        }
+                    }
+                });
+            }
+            else if(this._menuLayout.hasPinnedApps) {
+                let item = this._appendMenuItem(_("Pin to ArcMenu"));
+                item.connect('activate', ()=>{
+                    this.close();
+                    pinnedApps.push(this.appInfo.get_display_name());
+                    pinnedApps.push('');
+                    pinnedApps.push(this._app.get_id());
+                    this._settings.set_strv('pinned-app-list',pinnedApps);
+                });
+            }
+
+            if (Shell.AppSystem.get_default().lookup_app('org.gnome.Software.desktop')) {
+                this._appendSeparator();
+                let item = this._appendMenuItem(_("Show Details"));
+                item.connect('activate', () => {
+                    let id = this._app.get_id();
+                    let args = GLib.Variant.new('(ss)', [id, '']);
+                    Gio.DBus.get(Gio.BusType.SESSION, null, (o, res) => {
+                        let bus = Gio.DBus.get_finish(res);
+                        bus.call('org.gnome.Software',
+                                '/org/gnome/Software',
+                                'org.gtk.Actions', 'Activate',
+                                GLib.Variant.new('(sava{sv})',
+                                                ['details', [args], null]),
+                                null, 0, -1, null, null);
+                        this.closeMenus();
+                    });
+                });
             }
         }
         else if(this._parentFolderPath){
