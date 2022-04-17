@@ -78,7 +78,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories() {
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
+        this.categoryDirectories = new Map();
         super.loadCategories();
     }
 }

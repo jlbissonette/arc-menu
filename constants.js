@@ -210,7 +210,7 @@ var MenuButtonAppearance = {
 };
 
 var MenuIcon = {
-    ARC_MENU: 0,
+    ARCMENU_ICON: 0,
     DISTRO_ICON: 1,
     CUSTOM: 2
 };

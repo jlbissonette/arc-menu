@@ -49,7 +49,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.mainBox.add_child(this.topBox);
         this.categoriesButton = new MW.CategoriesButton(this);
-        
+
         this.subMainBox= new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -96,7 +96,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.subMainBox.add_child(this.actionsContainerBox);
-        
+
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -118,8 +118,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style_class: 'datemenu-displays-box'
         });
-        
-        this.widgetBox.style = "margin: 0px; spacing: 10px; padding: 10px 50px;";   
+
+        this.widgetBox.style = "margin: 0px; spacing: 10px; padding: 10px 50px;";
         this._weatherItem = new MW.WeatherSection(this);
         this._weatherItem.style = "border-radius:4px; width: 350px; padding: 10px; margin: 0px";
         this._clocksItem = new MW.WorldClocksSection(this);
@@ -134,15 +134,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true
         });
 
-        let layout = new Clutter.GridLayout({ 
+        let layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL,
             column_spacing: this.layoutProperties.ColumnSpacing,
             row_spacing: this.layoutProperties.RowSpacing
         });
-        this.shortcutsGrid = new St.Widget({ 
+        this.shortcutsGrid = new St.Widget({
             x_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
-            layout_manager: layout 
+            layout_manager: layout
         });
         layout.hookup_style(this.shortcutsGrid);
 
@@ -190,7 +190,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _createExtraPinnedAppsList(){
-        let pinnedApps = [];      
+        let pinnedApps = [];
         pinnedApps.push(_("Home"), "ArcMenu_Home", "ArcMenu_Home");
         pinnedApps.push(_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents");
         pinnedApps.push(_("Downloads"), "ArcMenu_Downloads", "ArcMenu_Downloads");
@@ -200,7 +200,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             pinnedApps.push(_("Software"), '', software);
         else
             pinnedApps.push(_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer");
-        
+
         pinnedApps.push(_("Files"), "", "org.gnome.Nautilus.desktop");
         pinnedApps.push(_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut");
         pinnedApps.push(_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock");
@@ -209,7 +209,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shouldLoadPinnedApps = false; // We don't want to trigger a setting changed event
         this._settings.set_strv('unity-pinned-app-list', pinnedApps);
         this.shouldLoadPinnedApps = true;
-        return pinnedApps;  
+        return pinnedApps;
     }
 
     _createCategoriesMenu(){
@@ -235,33 +235,33 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
         });
         this.section = new PopupMenu.PopupMenuSection();
-        this.categoriesMenu.addMenuItem(this.section);  
-        
+        this.categoriesMenu.addMenuItem(this.section);
+
         this.leftPanelPopup = new St.BoxLayout({
             vertical: true
-        });   
+        });
         this.leftPanelPopup._delegate = this.leftPanelPopup;
         this.categoriesScrollBox = this._createScrollBox({
-            x_expand: true, 
+            x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive:true
-        });        
+        });
         this.leftPanelPopup.add_child(this.categoriesScrollBox);
-       
+
         this.categoriesBox = new St.BoxLayout({
             vertical: true,
-        });     
+        });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         this.categoriesScrollBox.clip_to_allocation = true;
-       
+
         let themeContext = St.ThemeContext.get_for_stage(global.stage);
         let scaleFactor = themeContext.scale_factor;
         let height =  Math.round(350 / scaleFactor);
-        this.leftPanelPopup.style = `max-height: ${height}px`;        
-        this.section.actor.add_child(this.leftPanelPopup); 
+        this.leftPanelPopup.style = `max-height: ${height}px`;
+        this.section.actor.add_child(this.leftPanelPopup);
         this._displayCategories();
         this.subMenuManager.addMenu(this.categoriesMenu);
         this.categoriesMenu.actor.hide();
@@ -274,7 +274,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.categoriesMenu.toggle();
     }
-    
+
     setDefaultMenuView(){
         super.setDefaultMenuView();
         let homeScreen = this._settings.get_boolean('enable-unity-homescreen');
@@ -305,7 +305,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories() {
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
+        this.categoryDirectories = new Map();
         let categoryMenuItem = new MW.CategoryMenuItem(this, Constants.CategoryType.HOME_SCREEN, Constants.DisplayType.LIST);
         this.categoryDirectories.set(Constants.CategoryType.HOME_SCREEN, categoryMenuItem);
         this.hasPinnedApps = true;
@@ -325,10 +325,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         super.loadCategories();
     }
-   
+
     _displayCategories(){
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            this.categoriesBox.add_actor(categoryMenuItem.actor);	 
+            this.categoriesBox.add_actor(categoryMenuItem.actor);
         }
     }
 
@@ -351,7 +351,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.widgetBox.add_child(this._weatherItem);
         if(!this.subMainBox.contains(this.widgetBox))
             this.subMainBox.add_child(this.widgetBox);
-        this.subMainBox.add_child(this.actionsContainerBox);     
+        this.subMainBox.add_child(this.actionsContainerBox);
     }
 
     displayRecentFiles(){
@@ -375,7 +375,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super._clearActorsFromBox(box);
     }
 
-    _displayAppList(apps, category, grid){      
+    _displayAppList(apps, category, grid){
         super._displayAppList(apps, category, grid);
 
         let label = this._createLabelWithSeparator(this.activeCategory);
@@ -384,13 +384,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         else
             this.applicationsBox.insert_child_at_index(label.actor, 2);
     }
-   
+
     destroy(){
         if(this._clocksItem)
             this._clocksItem.destroy();
         if(this._weatherItem)
             this._weatherItem.destroy();
-        
+
         this.arcMenu.box.style = null;
 
         super.destroy();

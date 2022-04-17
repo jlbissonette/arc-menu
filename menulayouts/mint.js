@@ -39,23 +39,23 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.CENTER,
             overlay_scrollbars: true,
             style_class: 'small-vfade'
-        });   
+        });
         this.actionsScrollBox.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
-        this.actionsBox = new St.BoxLayout({ 
+        this.actionsBox = new St.BoxLayout({
             vertical: true
         });
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
-        
+
         this.actionsScrollBox.style = "padding: 10px 0px; width: 62px; margin: 0px 8px 0px 0px; background-color:rgba(10, 10, 15, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 8px;";
         this.actionsBox.style = "spacing: 10px;";
 
         this.mainBox.add_child(this.actionsScrollBox);
-        this.rightMenuBox = new St.BoxLayout({ 
+        this.rightMenuBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            vertical: true 
+            vertical: true
         });
         this.mainBox.add_child(this.rightMenuBox);
 
@@ -67,7 +67,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
             this.rightMenuBox.add_child(separator);
         }
-        
+
         //Sub Main Box -- stores left and right box
         this.subMainBox = new St.BoxLayout({
             vertical: false,
@@ -92,7 +92,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
-        });   
+        });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.rightBox.add_child(this.applicationsScrollBox);
@@ -105,13 +105,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
         this.subMainBox.add_child(verticalSeparator);
         this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
-            x_expand: true, 
+            x_expand: true,
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
             style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
@@ -121,7 +121,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leftBox.add_child(this.categoriesScrollBox);
         this.categoriesBox = new St.BoxLayout({ vertical: true });
 
-        this.categoriesScrollBox.add_actor( this.categoriesBox);  
+        this.categoriesScrollBox.add_actor( this.categoriesBox);
         this.categoriesScrollBox.clip_to_allocation = true;
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
@@ -135,7 +135,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadCategories();
         this.loadPinnedApps();
         this.loadExtraPinnedApps();
-        this.setDefaultMenuView(); 
+        this.setDefaultMenuView();
     }
 
     updateWidth(setDefaultMenuView){
@@ -147,7 +147,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _addSeparator(){
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         this.actionsBox.add_child(separator);
-    }    
+    }
 
     setDefaultMenuView(){
         super.setDefaultMenuView();
@@ -160,7 +160,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories() {
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
+        this.categoryDirectories = new Map();
 
         let extraCategories = this._settings.get_value("extra-categories").deep_unpack();
 
@@ -184,7 +184,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _createExtraPinnedAppsList(){
         let pinnedApps = [];
         //Find the Default Web Browser, if found add to pinned apps list, if not found delete the placeholder.
-        //Will only run if placeholder is found. Placeholder only found with default settings set.  
+        //Will only run if placeholder is found. Placeholder only found with default settings set.
         let browserName = '';
         try{
             //user may not have xdg-utils package installed which will throw error
@@ -192,7 +192,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let webBrowser = String.fromCharCode(...stdout);
             browserName = webBrowser.split(".desktop")[0];
             browserName += ".desktop";
-        } 
+        }
         catch(error){
             global.log("ArcMenu Error - Failed to find default web browser. Removing placeholder pinned app.")
         }
@@ -217,7 +217,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             pinnedApps.push(_("Software"), '', software);
         else
             pinnedApps.push(_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents");
-        
+
         pinnedApps.push(_("Files"), "system-file-manager", "org.gnome.Nautilus.desktop");
         pinnedApps.push(_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut");
         pinnedApps.push(_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock");
@@ -226,8 +226,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shouldLoadPinnedApps = false; // We don't want to trigger a setting changed event
         this._settings.set_strv('mint-pinned-app-list', pinnedApps);
         this.shouldLoadPinnedApps = true;
-        return pinnedApps;  
-    }   
+        return pinnedApps;
+    }
 
     displayCategories(){
         super.displayCategories(this.categoriesBox);

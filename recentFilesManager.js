@@ -7,7 +7,7 @@ const LogEnabled = false;
 var isCanceled = false;
 var currentQueries = [];
 
-var RecentFilesManager = class Arc_Menu_RecentFilesManager {
+var RecentFilesManager = class ArcMenu_RecentFilesManager {
     constructor() {
         this._settings = ExtensionUtils.getSettings();
         this._recentManager = new Gtk.RecentManager();
@@ -28,25 +28,25 @@ var RecentFilesManager = class Arc_Menu_RecentFilesManager {
             });
         });
     }
-    
+
     queryFileExists(item) {
         return new Promise((resolve, reject) => {
             let file = Gio.File.new_for_uri(item.get_uri());
             let cancellable = new Gio.Cancellable();
-    
+
             if(file === null)
                 reject("Recent file is null. Rejected.");
-    
+
             //Create and store queryInfo to cancel any active queries when needed
-            let queryInfo = { 
-                timeOutID: null, 
-                cancellable, 
+            let queryInfo = {
+                timeOutID: null,
+                cancellable,
                 reject,
                 item
             };
-    
+
             currentQueries.push(queryInfo);
-    
+
             file.query_info_async('standard::type,standard::is-hidden', 0, 0, cancellable, (source, res) => {
                 try {
                     let fileInfo = source.query_info_finish(res);
@@ -62,20 +62,20 @@ var RecentFilesManager = class Arc_Menu_RecentFilesManager {
                 catch (err) {
                     if (err.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
                         this.debugLog("Cancel Called: " + item.get_display_name());
-    
+
                     this.removeQueryInfoFromList(queryInfo);
                     reject(err);
                 }
             });
         });
     }
-    
+
     removeQueryInfoFromList(queryInfo){
         let queryIndex = currentQueries.indexOf(queryInfo);
         if(queryIndex !== -1)
             currentQueries.splice(queryIndex, 1);
     }
-    
+
     cancelCurrentQueries(){
         if(currentQueries.length === 0)
             return;
@@ -91,7 +91,7 @@ var RecentFilesManager = class Arc_Menu_RecentFilesManager {
         currentQueries = [];
         this.debugLog("Cancel Finished");
     }
-    
+
     debugLog(message){
         if (!LogEnabled)
             return;

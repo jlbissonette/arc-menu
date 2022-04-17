@@ -76,13 +76,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'vfade',
-        });  
+        });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
         this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(10, 10, 15, 0.1) ; padding: 12px 5px;"+
                                         "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
-        
+
         this.actionsContainerBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -93,7 +93,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.subMainBox.add_child(this.actionsContainerBox);
-        
+
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -139,7 +139,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
     }
-    
+
     setDefaultMenuView(){
         this.setGridLayout(Constants.DisplayType.GRID, 4, 4);
         this.layoutProperties.IconGridSize = 42;
@@ -205,7 +205,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
     }
 
-    _displayAppList(apps, category, grid){      
+    _displayAppList(apps, category, grid){
         super._displayAppList(apps, category, grid);
 
         this._hideNavigationButtons();
@@ -236,10 +236,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _onSearchBoxChanged(searchBox, searchString){
         if(!searchBox.isEmpty())
             this._hideNavigationButtons();
-        super._onSearchBoxChanged(searchBox, searchString);       
+        super._onSearchBoxChanged(searchBox, searchString);
     }
 
-    destroy(){        
+    destroy(){
         this.arcMenu.box.style = null;
         this.leaveButton.destroy();
         this.backButton.destroy();

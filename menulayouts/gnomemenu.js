@@ -51,8 +51,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
-        }); 
-        
+        });
+
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.rightBox.add_child(this.applicationsScrollBox);
 
@@ -63,9 +63,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
         });
-        
+
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
         this.subMainBox.add_child(verticalSeparator);
         this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
@@ -82,9 +82,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
 
-        this.activitiesBox = new St.BoxLayout({ 
+        this.activitiesBox = new St.BoxLayout({
             vertical: true,
-            x_expand: true, 
+            x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.END
         });
@@ -95,7 +95,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
-        this.setDefaultMenuView(); 
+        this.setDefaultMenuView();
     }
 
     updateWidth(setDefaultMenuView){
@@ -115,8 +115,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories(){
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
-        
+        this.categoryDirectories = new Map();
+
         let extraCategories = this._settings.get_value("extra-categories").deep_unpack();
 
         for(let i = 0; i < extraCategories.length; i++){
@@ -135,7 +135,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             categoryMenuItem._iconBin.visible = false;
         }
     }
-    
+
     displayCategories(){
         super.displayCategories(this.categoriesBox);
     }

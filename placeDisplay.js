@@ -22,7 +22,7 @@ const Hostname1Iface = '<node> \
 </node>';
 const Hostname1 = Gio.DBusProxy.makeProxyWrapper(Hostname1Iface);
 
-var PlaceInfo = class Arc_Menu_PlaceInfo {
+var PlaceInfo = class ArcMenu_PlaceInfo {
     constructor(...params) {
         this._init(...params);
     }
@@ -120,7 +120,7 @@ var PlaceInfo = class Arc_Menu_PlaceInfo {
 }
 Signals.addSignalMethods(PlaceInfo.prototype);
 
-var RootInfo = class Arc_Menu_RootInfo extends PlaceInfo {
+var RootInfo = class ArcMenu_RootInfo extends PlaceInfo {
     _init() {
         super._init('devices', Gio.File.new_for_path('/'), _('Computer'));
 
@@ -160,7 +160,7 @@ var RootInfo = class Arc_Menu_RootInfo extends PlaceInfo {
 };
 
 
-var PlaceDeviceInfo = class Arc_Menu_PlaceDeviceInfo extends PlaceInfo {
+var PlaceDeviceInfo = class ArcMenu_PlaceDeviceInfo extends PlaceInfo {
     _init(kind, mount) {
         this._mount = mount;
         super._init(kind, mount.get_root(), mount.get_name());
@@ -212,7 +212,7 @@ var PlaceDeviceInfo = class Arc_Menu_PlaceDeviceInfo extends PlaceInfo {
     }
 };
 
-var PlaceVolumeInfo = class Arc_Menu_PlaceVolumeInfo extends PlaceInfo {
+var PlaceVolumeInfo = class ArcMenu_PlaceVolumeInfo extends PlaceInfo {
     _init(kind, volume) {
         this._volume = volume;
         super._init(kind, volume.get_activation_root(), volume.get_name());
@@ -246,7 +246,7 @@ const DEFAULT_DIRECTORIES = [
     GLib.UserDirectory.DIRECTORY_VIDEOS,
 ];
 
-var PlacesManager = class Arc_Menu_PlacesManager {
+var PlacesManager = class ArcMenu_PlacesManager {
     constructor() {
         this._places = {
             special: [],

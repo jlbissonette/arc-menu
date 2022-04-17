@@ -64,7 +64,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leftTopBox.add_child(this.user.actor);
         this.rightTopBox.add_child(this.user.label);
         this.user.label.style = "padding-left: 0.4em; margin: 0px 10px 0px 15px; font-weight: bold;";
-        this.user.label.y_expand = false; 
+        this.user.label.y_expand = false;
         this.user.label.x_expand = true;
         this.user.label.x_align = Clutter.ActorAlign.START;
         this.rightTopBox.add_child(this.searchBox.actor);
@@ -76,39 +76,39 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         //Applications Box - Contains Favorites, Categories or programs
         this.applicationsScrollBox = this._createScrollBox({
-            x_expand: true, 
+            x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive:true,
         });
-        
-        this.applicationsBox = new St.BoxLayout({ 
+
+        this.applicationsBox = new St.BoxLayout({
             vertical: true
         });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
-    
-        this.navigateBoxContainer = new St.BoxLayout({ 
+
+        this.navigateBoxContainer = new St.BoxLayout({
             x_expand: true,
             y_expand: false,
             vertical: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START
         });
-        this.navigateBox = new St.BoxLayout({ 
+        this.navigateBox = new St.BoxLayout({
             x_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
             style: "spacing: 6px;",
         });
-        let layout = new Clutter.GridLayout({ 
+        let layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL,
             column_homogeneous: true,
             column_spacing: 10,
             row_spacing: 10
         });
-        this.grid = new St.Widget({ 
+        this.grid = new St.Widget({
             layout_manager: layout
         });
         layout.hookup_style(this.grid);
@@ -136,7 +136,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.searchBarLocation === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 3px 10px 5px 10px;";
             this.topBox.style = 'padding-top: 0.5em;'
-            
+
             this.navigateBoxContainer.add_child(this.navigateBox);
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
             this.navigateBoxContainer.add_child(separator);
@@ -151,7 +151,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
         else if(this.searchBarLocation === Constants.SearchbarLocation.TOP){
             this.searchBox.style = "margin: 3px 10px 10px 10px;";
-            
+
             this.mainBox.add_child(this.topBox);
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
             this.mainBox.add_child(separator);
@@ -163,7 +163,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.navigateBoxContainer.add_child(this.navigateBox);
             this.mainBox.add_child(this.navigateBoxContainer);
         }
-           
+
         let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
         let applicationShortcutsList = this._settings.get_value('application-shortcuts-list').deep_unpack();
         this.applicationShortcuts = [];
@@ -176,19 +176,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let directoryShortcutsList = this._settings.get_value('directory-shortcuts-list').deep_unpack();
         this._loadPlaces(directoryShortcutsList);
-        
+
         this.externalDevicesBox = new St.BoxLayout({
             vertical: true,
             x_expand: true,
             y_expand: true
-        });	
+        });
         this._sections = { };
         this.placesManager = new PlaceDisplay.PlacesManager();
         for (let i = 0; i < Constants.SECTIONS.length; i++) {
             let id = Constants.SECTIONS[i];
             this._sections[id] = new St.BoxLayout({
                 vertical: true
-            });	
+            });
             this.placeManagerUpdatedID = this.placesManager.connect(`${id}-updated`, () => {
                 this._redisplayPlaces(id);
             });
@@ -247,7 +247,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.LIST);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
             }
-        }        
+        }
 
         super.loadCategories();
     }
@@ -273,15 +273,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._sections[id].add_child(this.createLabelRow(_("Bookmarks")));
             for (let i = 0; i < places.length; i++){
                 let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_child(item); 
-            } 
+                this._sections[id].add_child(item);
+            }
         }
 
         if(id === 'devices' && places.length > 0){
             this._sections[id].add_child(this.createLabelRow(_("Devices")));
             for (let i = 0; i < places.length; i++){
                 let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_child(item); 
+                this._sections[id].add_child(item);
             }
         }
 
@@ -289,10 +289,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._sections[id].add_child(this.createLabelRow(_("Network")));
             for (let i = 0; i < places.length; i++){
                 let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
-                this._sections[id].add_child(item); 
+                this._sections[id].add_child(item);
             }
         }
-    }   
+    }
 
     displayPinnedApps(){
         this.activeCategoryType = Constants.CategoryType.PINNED_APPS;
@@ -341,7 +341,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     displayPowerItems(){
-        this._clearActorsFromBox(this.applicationsBox);         
+        this._clearActorsFromBox(this.applicationsBox);
         if(this.hasSessionOption)
             this.applicationsBox.add_child(this.sessionBox);
         if(this.hasSystemOption)
@@ -349,7 +349,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     displayCategories(){
-        this.activeCategoryType = Constants.CategoryType.CATEGORIES_LIST;        
+        this.activeCategoryType = Constants.CategoryType.CATEGORIES_LIST;
         this._clearActorsFromBox(this.applicationsBox);
 
         this.categoryHeader.setActiveCategory(null);
@@ -357,11 +357,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let isActiveMenuItemSet = false;
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            this.applicationsBox.add_child(categoryMenuItem.actor);	
+            this.applicationsBox.add_child(categoryMenuItem.actor);
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;
                 this.activeMenuItem = categoryMenuItem;
-            }	 
+            }
         }
     }
 
@@ -391,22 +391,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayRecentFiles(){
         super.displayRecentFiles();
         this._insertCategoryHeader();
-        this.activeCategoryType = Constants.CategoryType.RECENT_FILES; 
+        this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
         this.categoryHeader.setActiveCategory(this.activeCategory);
     }
 
-    _onSearchBoxChanged(searchBox, searchString){  
-        super._onSearchBoxChanged(searchBox, searchString);  
+    _onSearchBoxChanged(searchBox, searchString){
+        super._onSearchBoxChanged(searchBox, searchString);
         if(!searchBox.isEmpty()){
             this.clearActiveItem();
-            this.activeCategoryType = Constants.CategoryType.SEARCH_RESULTS;   
-        }            
+            this.activeCategoryType = Constants.CategoryType.SEARCH_RESULTS;
+        }
     }
 
     destroy(){
         this.systemBox.destroy();
         this.sessionBox.destroy();
-    
+
         super.destroy();
     }
 }

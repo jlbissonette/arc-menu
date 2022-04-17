@@ -12,7 +12,7 @@ const PopupMenu = imports.ui.popupMenu;
 const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
-var StandaloneRunner = class Arc_Menu_StandaloneRunner{
+var StandaloneRunner = class ArcMenu_StandaloneRunner{
     constructor(settings) {
         this._settings = settings;
 
@@ -41,7 +41,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         let positionX = Math.round(rect.x + (rect.width / 2));
         let positionY = rect.y;
         this.dummyWidget.set_position(positionX, positionY);
-        
+
         //Context Menus for applications and other menu items
         this.contextMenuManager = new PopupMenu.PopupMenuManager(this.dummyWidget);
         this.contextMenuManager._changeMenu = (menu) => {};
@@ -93,7 +93,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
                 this._settings.set_strv('recently-installed-apps', newRecentApps);
                 this.MenuLayout.reloadApplications();
             }
-            
+
             this._appList = this._newAppList;
         });
     }
@@ -124,7 +124,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL
-        });        
+        });
         this.mainBox._delegate = this.mainBox;
         this.section.actor.add_child(this.mainBox);
 
@@ -258,16 +258,16 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     _onOpenStateChanged(menu, open) {
-        if(open){                
+        if(open){
             if(Main.panel.menuManager && Main.panel.menuManager.activeMenu)
                 Main.panel.menuManager.activeMenu.toggle();
-        }      
-        else{ 
+        }
+        else{
             if(!this.arcMenu.isOpen){
                 if (this.tooltipShowingID) {
                     GLib.source_remove(this.tooltipShowingID);
                     this.tooltipShowingID = null;
-                }     
+                }
                 this.tooltipShowing = false;
                 if(this.activeTooltip){
                     this.activeTooltip.hide();

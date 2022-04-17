@@ -48,7 +48,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
         });
         this.mainBox.add_child(this.subMainBox);
-        
+
         this.rightBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -76,7 +76,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
         this.subMainBox.add_child(verticalSeparator);
         this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
@@ -93,15 +93,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
-        
-        this.actionsBox = new St.BoxLayout({ 
+
+        this.actionsBox = new St.BoxLayout({
             vertical: true,
-            x_expand: true, 
+            x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.END
         });
         this.leftBox.add_child(this.actionsBox);
-        
+
         //create new section for Power, Lock, Logout, Suspend Buttons
         this.sessionBox = new St.BoxLayout({
             vertical: false,
@@ -109,7 +109,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: false,
             y_align: Clutter.ActorAlign.END,
             x_align: Clutter.ActorAlign.CENTER
-        });	
+        });
         this.sessionBox.style = "spacing: 6px;";
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();
@@ -122,10 +122,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
         }
         this.leftBox.add_child(this.sessionBox);
-        
+
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style_class = 'arcmenu-search-bottom';
-            this.mainBox.add_child(this.searchBox.actor); 
+            this.mainBox.add_child(this.searchBox.actor);
         }
 
         this.updateWidth();
@@ -150,13 +150,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         for(let i = 0;i < pinnedApps.length; i += 3){
             let isContainedInCategory = false;
-            let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);     
+            let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);
             if(placeMenuItem){
                 this.actionsBox.add_child(placeMenuItem.actor);
             }
         }
         separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        this.actionsBox.add_child(separator);  
+        this.actionsBox.add_child(separator);
     }
 
     setDefaultMenuView(){
@@ -167,10 +167,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         topCategory.displayAppList();
         this.setActiveCategory(topCategory);
     }
-    
+
     loadCategories(){
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
+        this.categoryDirectories = new Map();
 
         let extraCategories = this._settings.get_value("extra-categories").deep_unpack();
 
@@ -181,11 +181,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 let categoryMenuItem = new MW.CategoryMenuItem(this, categoryEnum, Constants.DisplayType.LIST);
                 this.categoryDirectories.set(categoryEnum, categoryMenuItem);
             }
-        }        
+        }
 
         super.loadCategories();
     }
-    
+
     displayCategories(){
         super.displayCategories(this.categoriesBox);
     }

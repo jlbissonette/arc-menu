@@ -38,7 +38,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             separator.style += "margin-bottom: 6px;";
             this.mainBox.add_child(separator);
         }
-        
+
         //Sub Main Box -- stores left and right box
         this.subMainBox = new St.BoxLayout({
             vertical: false,
@@ -63,7 +63,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
-        });  
+        });
 
         // Disable horizontal scrolling, hide vertical scrollbar, but allow vertical scrolling.
         this.applicationsScrollBox.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
@@ -77,9 +77,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL
         });
-        
+
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
         this.subMainBox.add_child(verticalSeparator);
         this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
@@ -91,15 +91,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
-        this.leftBox.add_child(this.categoriesScrollBox);   
-         
+        this.leftBox.add_child(this.categoriesScrollBox);
+
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
 
         if(this._settings.get_boolean('enable-activities-shortcut')){
-            this.activitiesBox = new St.BoxLayout({ 
+            this.activitiesBox = new St.BoxLayout({
                 vertical: true,
-                x_expand: true, 
+                x_expand: true,
                 y_expand: true,
                 y_align: Clutter.ActorAlign.END
             });
@@ -114,13 +114,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add_child(separator);
             this.searchBox.style_class = 'arcmenu-search-bottom';
             this.searchBox.style = "margin-top: 0px;";
-            this.mainBox.add_child(this.searchBox.actor); 
+            this.mainBox.add_child(this.searchBox.actor);
         }
-        
+
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
-        this.setDefaultMenuView(); 
+        this.setDefaultMenuView();
     }
 
     updateWidth(setDefaultMenuView){
@@ -137,10 +137,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         topCategory.displayAppList();
         this.setActiveCategory(topCategory);
     }
-    
+
     loadCategories(){
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
+        this.categoryDirectories = new Map();
 
         let extraCategories = this._settings.get_value("extra-categories").deep_unpack();
 
@@ -159,7 +159,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             categoryMenuItem._iconBin.visible = false;
         }
     }
-    
+
     displayCategories(){
         super.displayCategories(this.categoriesBox);
     }

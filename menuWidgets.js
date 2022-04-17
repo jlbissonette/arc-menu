@@ -50,7 +50,7 @@ var ApplicationContextItems = GObject.registerClass({
         'close-context-menu': { },
     },
 
-},   class Arc_Menu_ApplicationContextItems extends St.BoxLayout{
+},   class ArcMenu_ApplicationContextItems extends St.BoxLayout{
     _init(actor, app, menuLayout){
         super._init({
             vertical: true,
@@ -350,7 +350,7 @@ var ApplicationContextItems = GObject.registerClass({
     }
 });
 
-var ApplicationContextMenu = class Arc_Menu_ApplicationContextMenu extends PopupMenu.PopupMenu {
+var ApplicationContextMenu = class ArcMenu_ApplicationContextMenu extends PopupMenu.PopupMenu {
     constructor(actor, app, menuLayout){
         super(actor, 0.0, St.Side.TOP);
         this._menuLayout = menuLayout;
@@ -449,7 +449,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         'activate': { param_types: [Clutter.Event.$gtype] },
     },
 
-},   class Arc_Menu_PopupBaseMenuItem extends St.BoxLayout{
+},   class ArcMenu_PopupBaseMenuItem extends St.BoxLayout{
     _init(menuLayout, params){
         params = imports.misc.params.parse(params, {
             reactive: true,
@@ -729,7 +729,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
 });
 
 var ArcMenuSeparator = GObject.registerClass(
-class Arc_Menu_Separator extends PopupMenu.PopupBaseMenuItem {
+class ArcMenu_Separator extends PopupMenu.PopupBaseMenuItem {
     _init(separatorLength, separatorAlignment, text) {
         super._init({
             style_class: 'popup-separator-menu-item',
@@ -809,7 +809,7 @@ class Arc_Menu_Separator extends PopupMenu.PopupBaseMenuItem {
     }
 });
 
-var ActivitiesMenuItem = GObject.registerClass(class Arc_Menu_ActivitiesMenuItem extends ArcMenuPopupBaseMenuItem{
+var ActivitiesMenuItem = GObject.registerClass(class ArcMenu_ActivitiesMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout) {
         super._init(menuLayout);
         this._menuLayout = menuLayout;
@@ -848,7 +848,7 @@ var ActivitiesMenuItem = GObject.registerClass(class Arc_Menu_ActivitiesMenuItem
     }
 });
 
-var Tooltip = class Arc_Menu_Tooltip{
+var Tooltip = class ArcMenu_Tooltip{
     constructor(menuButton) {
         this._menuButton = menuButton;
         this._settings = this._menuButton._settings;
@@ -1039,7 +1039,7 @@ var Tooltip = class Arc_Menu_Tooltip{
 };
 
 var ArcMenuButtonItem = GObject.registerClass(
-    class Arc_Menu_ArcMenuButtonItem extends ArcMenuPopupBaseMenuItem {
+    class ArcMenu_ButtonItem extends ArcMenuPopupBaseMenuItem {
     _init(menuLayout, tooltipText, iconName, gicon) {
         super._init(menuLayout);
         this.tooltipLocation = Constants.TooltipLocation.TOP_CENTERED;
@@ -1093,7 +1093,7 @@ var ArcMenuButtonItem = GObject.registerClass(
 });
 
 // Runner Layout Tweaks Button
-var RunnerTweaksButton = GObject.registerClass(class Arc_Menu_RunnerTweaksButton extends ArcMenuButtonItem {
+var RunnerTweaksButton = GObject.registerClass(class ArcMenu_RunnerTweaksButton extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, _("Configure Runner"), 'emblem-system-symbolic');
         this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
@@ -1106,7 +1106,7 @@ var RunnerTweaksButton = GObject.registerClass(class Arc_Menu_RunnerTweaksButton
 });
 
 //'Insider' layout Pinned Apps hamburger button
-var PinnedAppsButton = GObject.registerClass(class Arc_Menu_PinnedAppsButton extends ArcMenuButtonItem {
+var PinnedAppsButton = GObject.registerClass(class ArcMenu_PinnedAppsButton extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, _("Pinned Apps"), 'open-menu-symbolic');
         this.toggleMenuOnClick = false;
@@ -1118,7 +1118,7 @@ var PinnedAppsButton = GObject.registerClass(class Arc_Menu_PinnedAppsButton ext
 });
 
 //'Windows' layout extras hamburger button
-var ExtrasButton = GObject.registerClass(class Arc_Menu_ExtrasButton extends ArcMenuButtonItem {
+var ExtrasButton = GObject.registerClass(class ArcMenu_ExtrasButton extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, _("Extras"), 'open-menu-symbolic');
         this.toggleMenuOnClick = false;
@@ -1130,7 +1130,7 @@ var ExtrasButton = GObject.registerClass(class Arc_Menu_ExtrasButton extends Arc
 });
 
 //"Leave" Button with popupmenu that shows lock, power off, restart, etc
-var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMenuButtonItem {
+var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, _("Leave"), 'system-shutdown-symbolic');
         this.toggleMenuOnClick = false;
@@ -1225,7 +1225,7 @@ var LeaveButton = GObject.registerClass(class Arc_Menu_LeaveButton extends ArcMe
 });
 
 //'Unity' layout categories hamburger button
-var CategoriesButton = GObject.registerClass(class Arc_Menu_CategoriesButton extends ArcMenuButtonItem {
+var CategoriesButton = GObject.registerClass(class ArcMenu_CategoriesButton extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, _("Categories"), 'open-menu-symbolic');
         this.toggleMenuOnClick = false;
@@ -1236,7 +1236,7 @@ var CategoriesButton = GObject.registerClass(class Arc_Menu_CategoriesButton ext
     }
 });
 
-var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends ArcMenuButtonItem {
+var PowerButton = GObject.registerClass(class ArcMenu_PowerButton extends ArcMenuButtonItem {
     _init(menuLayout, powerType) {
         super._init(menuLayout, Constants.PowerOptions[powerType].NAME, Constants.PowerOptions[powerType].ICON);
         this.powerType = powerType;
@@ -1246,7 +1246,7 @@ var PowerButton = GObject.registerClass(class Arc_Menu_PowerButton extends ArcMe
     }
 });
 
-var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends ArcMenuPopupBaseMenuItem{
+var PowerMenuItem = GObject.registerClass(class ArcMenu_PowerMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, type) {
         super._init(menuLayout);
         this.powerType = type;
@@ -1287,7 +1287,7 @@ var PowerMenuItem = GObject.registerClass(class Arc_Menu_PowerMenuItem extends A
     }
 });
 
-var PlasmaMenuItem = GObject.registerClass(class Arc_Menu_PlasmaMenuItem extends ArcMenuPopupBaseMenuItem{
+var PlasmaMenuItem = GObject.registerClass(class ArcMenu_PlasmaMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, title, iconPath) {
         super._init(menuLayout);
         this.remove_child(this._ornamentLabel);
@@ -1382,7 +1382,7 @@ var PlasmaMenuItem = GObject.registerClass(class Arc_Menu_PlasmaMenuItem extends
     }
 });
 
-var PlasmaCategoryHeader = GObject.registerClass(class Arc_Menu_PlasmaCategoryHeader extends St.BoxLayout{
+var PlasmaCategoryHeader = GObject.registerClass(class ArcMenu_PlasmaCategoryHeader extends St.BoxLayout{
     _init(menuLayout) {
         super._init({
             style_class: "popup-menu-item",
@@ -1430,7 +1430,7 @@ var PlasmaCategoryHeader = GObject.registerClass(class Arc_Menu_PlasmaCategoryHe
     }
 });
 
-var AllAppsButton = GObject.registerClass(class Arc_Menu_AllAppsButton extends ArcMenuButtonItem{
+var AllAppsButton = GObject.registerClass(class ArcMenu_AllAppsButton extends ArcMenuButtonItem{
     _init(menuLayout) {
         super._init(menuLayout, null, 'go-next-symbolic');
         this.setIconSize(Constants.EXTRA_SMALL_ICON_SIZE);
@@ -1458,7 +1458,7 @@ var AllAppsButton = GObject.registerClass(class Arc_Menu_AllAppsButton extends A
     }
 });
 
-var BackButton = GObject.registerClass(class Arc_Menu_BackButton extends ArcMenuButtonItem{
+var BackButton = GObject.registerClass(class ArcMenu_BackButton extends ArcMenuButtonItem{
     _init(menuLayout) {
         super._init(menuLayout, null, 'go-previous-symbolic');
         this.setIconSize(Constants.EXTRA_SMALL_ICON_SIZE);
@@ -1487,7 +1487,7 @@ var BackButton = GObject.registerClass(class Arc_Menu_BackButton extends ArcMenu
 });
 
 // Menu item to go back to category view
-var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends ArcMenuPopupBaseMenuItem{
+var BackMenuItem = GObject.registerClass(class ArcMenu_BackMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout) {
         super._init(menuLayout);
         this._menuLayout = menuLayout;
@@ -1540,7 +1540,7 @@ var BackMenuItem = GObject.registerClass(class Arc_Menu_BackMenuItem extends Arc
 });
 
 // Menu item to view all apps
-var ViewAllPrograms = GObject.registerClass(class Arc_Menu_ViewAllPrograms extends ArcMenuPopupBaseMenuItem{
+var ViewAllPrograms = GObject.registerClass(class ArcMenu_ViewAllPrograms extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout) {
         super._init(menuLayout);
         this._menuLayout = menuLayout;
@@ -1585,7 +1585,7 @@ var ViewAllPrograms = GObject.registerClass(class Arc_Menu_ViewAllPrograms exten
     }
 });
 
-var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem extends ArcMenuPopupBaseMenuItem{
+var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, name, icon, command, displayType, isContainedInCategory) {
         super._init(menuLayout);
         this._menuLayout = menuLayout;
@@ -1745,7 +1745,7 @@ var ShortcutMenuItem = GObject.registerClass(class Arc_Menu_ShortcutMenuItem ext
 });
 
 // Menu item which displays the current user
-var UserMenuItem = GObject.registerClass(class Arc_Menu_UserMenuItem extends ArcMenuPopupBaseMenuItem{
+var UserMenuItem = GObject.registerClass(class ArcMenu_UserMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, displayType) {
         super._init(menuLayout);
         this._menuLayout = menuLayout;
@@ -1793,7 +1793,7 @@ var UserMenuItem = GObject.registerClass(class Arc_Menu_UserMenuItem extends Arc
     }
 });
 
-var UserMenuIcon = class Arc_Menu_UserMenuIcon{
+var UserMenuIcon = class ArcMenu_UserMenuIcon{
     constructor(menuLayout, size, hasTooltip) {
         this._menuButton = menuLayout.menuButton;
         this._menuLayout = menuLayout;
@@ -1880,7 +1880,7 @@ var UserMenuIcon = class Arc_Menu_UserMenuIcon{
 // Menu pinned apps item class
 var PinnedAppsMenuItem = GObject.registerClass({
     Signals: {  'saveSettings': {}, },
-}, class Arc_Menu_PinnedAppsMenuItem extends ArcMenuPopupBaseMenuItem{
+}, class ArcMenu_PinnedAppsMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, name, icon, command, displayType, isContainedInCategory) {
         super._init(menuLayout);
         this._menuLayout = menuLayout;
@@ -2132,7 +2132,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
     }
 });
 
-var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuItem extends ArcMenuPopupBaseMenuItem{
+var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, app, displayType, metaInfo, isContainedInCategory) {
         super._init(menuLayout);
         this._app = app;
@@ -2331,7 +2331,7 @@ var ApplicationMenuItem = GObject.registerClass(class Arc_Menu_ApplicationMenuIt
 });
 
 // Menu Category item class
-var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem extends ArcMenuPopupBaseMenuItem{
+var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, category, displayType) {
         super._init(menuLayout);
         this.appList = [];
@@ -2507,7 +2507,7 @@ var CategoryMenuItem = GObject.registerClass(class Arc_Menu_CategoryMenuItem ext
 });
 
 // Menu Place Shortcut item class
-var PlaceMenuItem = GObject.registerClass(class Arc_Menu_PlaceMenuItem extends ArcMenuPopupBaseMenuItem{
+var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, info, displayType, isContainedInCategory) {
         super._init(menuLayout);
         this._menuLayout = menuLayout;
@@ -2633,7 +2633,7 @@ Signals: {
     'entry-key-focus-in': { },
     'entry-key-press': { param_types: [Clutter.Event.$gtype] },
 },},
-class Arc_Menu_SearchBox extends St.Entry {
+class ArcMenu_SearchBox extends St.Entry {
     _init(menuLayout) {
         super._init({
             hint_text: _("Search…"),
@@ -2782,7 +2782,7 @@ class Arc_Menu_SearchBox extends St.Entry {
 /**
  * This class is responsible for the appearance of the menu button.
  */
-var MenuButtonWidget = class Arc_Menu_MenuButtonWidget{
+var MenuButtonWidget = class ArcMenu_MenuButtonWidget{
     constructor() {
         this.actor = new St.BoxLayout({
             style_class: 'panel-status-menu-box',
@@ -2854,7 +2854,7 @@ var MenuButtonWidget = class Arc_Menu_MenuButtonWidget{
     }
 };
 
-var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection extends ArcMenuButtonItem {
+var WorldClocksSection = GObject.registerClass(class ArcMenu_WorldClocksSection extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, null, null);
 
@@ -3079,7 +3079,7 @@ var WorldClocksSection = GObject.registerClass(class Arc_Menu_WorldClocksSection
     }
 });
 
-var WeatherSection = GObject.registerClass(class Arc_Menu_WeatherSection extends ArcMenuButtonItem {
+var WeatherSection = GObject.registerClass(class ArcMenu_WeatherSection extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, null, null);
 

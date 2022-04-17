@@ -57,7 +57,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             overlay_scrollbars: true,
             style_class:  this.disableFadeEffect ? '' : 'vfade',
             reactive: true
-        });  
+        });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
 
         this.subMainBox.add_child(this.applicationsScrollBox);

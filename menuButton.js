@@ -15,7 +15,7 @@ const _ = Gettext.gettext;
 
 var DASH_TO_PANEL_UUID = 'dash-to-panel@jderose9.github.com';
 
-var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMenu.Button{
+var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMenu.Button{
     _init(settings, panel) {
         super._init(0.5, null, true);
         this._settings = settings;
@@ -108,17 +108,6 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
             this.createLayoutID = null;
             return GLib.SOURCE_REMOVE;
         });
-    }
-
-    setDragApp(){
-    }
-
-    handleDragOver(source, _actor, _x, _y, _time) {
-        return imports.ui.dnd.DragMotionResult.NO_DROP;
-    }
-
-    acceptDrop(source, _actor, _x, _y, _time) {
-        return false;
     }
 
     syncWithDashToPanel(){
@@ -584,7 +573,7 @@ var MenuButton = GObject.registerClass(class Arc_Menu_MenuButton extends PanelMe
     }
 });
 
-var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
+var ArcMenu = class ArcMenu_ArcMenu extends PopupMenu.PopupMenu{
     constructor(sourceActor, arrowAlignment, arrowSide, parent) {
         super(sourceActor, arrowAlignment, arrowSide);
         this._settings = sourceActor._settings;
@@ -622,7 +611,7 @@ var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
     }
 };
 
-var ArcMenuContextMenu = class Arc_Menu_ArcMenuContextMenu extends PopupMenu.PopupMenu {
+var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.PopupMenu {
     constructor(sourceActor, arrowAlignment, arrowSide) {
         super(sourceActor, arrowAlignment, arrowSide);
         this._settings = sourceActor._settings;

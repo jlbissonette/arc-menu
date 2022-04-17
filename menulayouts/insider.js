@@ -31,8 +31,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             DefaultPinnedIconSize: Constants.MEDIUM_ICON_SIZE,
         });
     }
-    createLayout(){  
-        super.createLayout();   
+    createLayout(){
+        super.createLayout();
         this.actionsBox = new St.BoxLayout({
             x_expand: false,
             y_expand: true,
@@ -57,7 +57,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
         this.actionsBox.add_child(settingsButton);
-    
+
         this.leaveButton = new MW.LeaveButton(this);
         this.actionsBox.add_child(this.leaveButton);
 
@@ -104,7 +104,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsScrollBox.add_actor( this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
-        
+
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
@@ -129,13 +129,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.pinnedAppsMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
 
         this.section = new PopupMenu.PopupMenuSection();
-        this.pinnedAppsMenu.addMenuItem(this.section);  
-        
+        this.pinnedAppsMenu.addMenuItem(this.section);
+
         this.leftPanelPopup = new St.BoxLayout({
             vertical: true,
-        });   
+        });
         this.leftPanelPopup._delegate = this.leftPanelPopup;
-        this.section.actor.add_child(this.leftPanelPopup); 
+        this.section.actor.add_child(this.leftPanelPopup);
 
         let headerBox = new St.BoxLayout({
             x_expand: false,
@@ -143,7 +143,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
             vertical: true
-        });    
+        });
         this.leftPanelPopup.add_child(headerBox);
 
         this.backButton = new MW.BackMenuItem(this);
@@ -155,30 +155,30 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         headerBox.add_child(this.createLabelRow(_("Pinned Apps")));
 
         this.pinnedAppsScrollBox = this._createScrollBox({
-            x_expand: true, 
+            x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive: true
-        });   
-        
+        });
+
         this.leftPanelPopup.add_child(this.pinnedAppsScrollBox);
-       
+
         this.pinnedAppsBox = new St.BoxLayout({
             vertical: true
-        });     
+        });
         this.pinnedAppsScrollBox.add_actor(this.pinnedAppsBox);
 
-        let layout = new Clutter.GridLayout({ 
+        let layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL,
             column_spacing: 0,
-            row_spacing: 0 
+            row_spacing: 0
         });
-        this.pinnedAppsGrid = new St.Widget({ 
+        this.pinnedAppsGrid = new St.Widget({
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL,
-            layout_manager: layout 
+            layout_manager: layout
         });
         layout.forceGridColumns = 1;
         layout.hookup_style(this.pinnedAppsGrid);
@@ -186,7 +186,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let themeContext = St.ThemeContext.get_for_stage(global.stage);
         let scaleFactor = themeContext.scale_factor;
         let height = Math.round(this._settings.get_int('menu-height') / scaleFactor) - 1;
-        this.leftPanelPopup.style = `height: ${height}px;`;   
+        this.leftPanelPopup.style = `height: ${height}px;`;
 
         this.displayPinnedApps();
         this.subMenuManager.addMenu(this.pinnedAppsMenu);
@@ -210,10 +210,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.actor.get_allocation_box();
         let [x, y] = this.arcMenu.actor.get_transformed_position();
         let rise = themeNode.get_length('-arrow-rise');
-    
+
         if(this.arcMenu._arrowSide === St.Side.TOP)
             y += 1;
-        else 
+        else
             y -= rise - 1;
 
         if(this.arcMenu._arrowSide === St.Side.LEFT)
@@ -226,7 +226,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.backButton.grab_key_focus();
         }
     }
-    
+
     setDefaultMenuView(){
         super.setDefaultMenuView();
         this.displayAllApps();
@@ -240,11 +240,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories() {
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
+        this.categoryDirectories = new Map();
         this.hasPinnedApps = true;
         super.loadCategories();
     }
-    
+
     _clearActorsFromBox(box){
         super._clearActorsFromBox(box);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;

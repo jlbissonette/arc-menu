@@ -14,7 +14,7 @@ const SCHEMA_PATH = '/org/gnome/shell/extensions/arcmenu/';
 const GSET = 'gnome-shell-extension-tool';
 
 var MenuSettingsListPage = GObject.registerClass(
-    class Arc_Menu_MenuSettingsListPage extends Gtk.Box {
+    class ArcMenu_MenuSettingsListPage extends Gtk.Box {
         _init(settings, listType, settingString) {
             super._init({
                 margin_top: 10,
@@ -297,7 +297,7 @@ var MenuSettingsListPage = GObject.registerClass(
 });
 
 var AddAppsToPinnedListWindow = GObject.registerClass(
-class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
+class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
     _init(settings, parent, dialogType, settingString) {
         this._settings = settings;
         this._dialogType = dialogType;
@@ -491,7 +491,7 @@ class Arc_Menu_AddAppsToPinnedListWindow extends PW.DialogWindow {
 });
 
 var AddCustomLinkDialogWindow = GObject.registerClass(
-    class Arc_Menu_AddCustomLinkDialogWindow extends PW.DialogWindow {
+    class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
         _init(settings, parent, dialogType, pinnedShortcut = null) {
             let title = _('Add a Custom Shortcut');
             let isPinnedApps = this._dialogType === Constants.MenuSettingsListType.PINNED_APPS || this._dialogType === Constants.MenuSettingsListType.OTHER;
@@ -599,7 +599,7 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
 });
 
 var GeneralPage = GObject.registerClass(
-    class Arc_Menu_GeneralPage extends Adw.PreferencesPage {
+    class ArcMenu_GeneralPage extends Adw.PreferencesPage {
         _init(settings) {
             super._init({
                 title: _('General'),
@@ -864,7 +864,7 @@ var CustomHotkeyDialogWindow = GObject.registerClass({
         'response': { param_types: [GObject.TYPE_INT] },
     },
 },
-    class Arc_Menu_CustomHotkeyDialogWindow extends Gtk.Window {
+    class ArcMenu_CustomHotkeyDialogWindow extends Gtk.Window {
         _init(settings, parent) {
             this._settings = settings;
             this.keyEventController = new Gtk.EventControllerKey();
@@ -1032,7 +1032,7 @@ function getIconPixbuf(filePath){
 }
 
 var ButtonAppearancePage = GObject.registerClass(
-    class Arc_Menu_ButtonAppearancePage extends Gtk.Box {
+    class ArcMenu_ButtonAppearancePage extends Gtk.Box {
         _init(settings) {
             super._init({
                 margin_top: 10,
@@ -1363,7 +1363,7 @@ var ButtonAppearancePage = GObject.registerClass(
 });
 
 var ArcMenuIconsDialogWindow = GObject.registerClass(
-class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
+class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
     _init(settings, parent) {
         this._settings = settings;
         super._init(_('ArcMenu Icons'), parent, Constants.MenuItemLocation.TOP);
@@ -1378,7 +1378,7 @@ class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             customIconFlowBox.unselect_all();
             let selectedChild = arcMenuIconsFlowBox.get_selected_children();
             let selectedChildIndex = selectedChild[0].get_index();
-            this._settings.set_enum('menu-button-icon', Constants.MenuIcon.ARC_MENU);
+            this._settings.set_enum('menu-button-icon', Constants.MenuIcon.ARCMENU_ICON);
             this._settings.set_int('arc-menu-icon', selectedChildIndex);
         });
         this.pageGroup.add(arcMenuIconsFlowBox);
@@ -1507,7 +1507,7 @@ class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         customIconBox.append(fileChooserFrame);
         customIconGroup.add(customIconBox);
 
-        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARC_MENU){
+        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARCMENU_ICON){
             let children = arcMenuIconsFlowBox.childrenCount;
             for(let i = 0; i < children; i++){
                 if(i === this._settings.get_int('arc-menu-icon')){
@@ -1547,7 +1547,7 @@ class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
     }
 
     setVisibleChild(){
-        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARC_MENU)
+        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARCMENU_ICON)
             this.set_visible_page(this.page);
         else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.DISTRO_ICON)
             this.set_visible_page(this.distroIconsPage);
@@ -1557,7 +1557,7 @@ class Arc_Menu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
 });
 
 var DistroIconsDisclaimerWindow = GObject.registerClass(
-    class Arc_Menu_DistroIconsDisclaimerWindow extends Gtk.MessageDialog {
+    class ArcMenu_DistroIconsDisclaimerWindow extends Gtk.MessageDialog {
         _init(settings, parent) {
             this._settings = settings;
             super._init({
@@ -1614,7 +1614,7 @@ var DistroIconsDisclaimerWindow = GObject.registerClass(
 });
 
 var MenuLayoutPage = GObject.registerClass(
-    class Arc_Menu_MenuLayoutPage extends Adw.PreferencesPage {
+    class ArcMenu_MenuLayoutPage extends Adw.PreferencesPage {
         _init(settings) {
             super._init({
                 title: _('Layouts'),
@@ -1760,7 +1760,7 @@ var MenuLayoutCategoryPage = GObject.registerClass({
     Signals: {
         'menu-layout-response': { param_types: [GObject.TYPE_INT] },
     },
-},  class Arc_Menu_MenuLayoutCategoryPage extends Adw.PreferencesGroup {
+},  class ArcMenu_MenuLayoutCategoryPage extends Adw.PreferencesGroup {
         _init(settings, parent, tile, title) {
             super._init();
 
@@ -1862,7 +1862,7 @@ var MenuLayoutCategoryPage = GObject.registerClass({
 });
 
 var MenuSettingsGeneralPage = GObject.registerClass(
-    class Arc_Menu_MenuSettingsGeneralPage extends Gtk.Box {
+    class ArcMenu_MenuSettingsGeneralPage extends Gtk.Box {
     _init(settings) {
         super._init({
             margin_top: 10,
@@ -2126,7 +2126,7 @@ var MenuSettingsGeneralPage = GObject.registerClass(
 });
 
 var MenuSettingsFineTunePage = GObject.registerClass(
-    class Arc_Menu_MenuSettingsFineTunePage extends Gtk.Box {
+    class ArcMenu_MenuSettingsFineTunePage extends Gtk.Box {
     _init(settings) {
         super._init({
             margin_top: 10,
@@ -2301,7 +2301,7 @@ var MenuSettingsFineTunePage = GObject.registerClass(
 });
 
 var MenuSettingsSearchOptionsPage = GObject.registerClass(
-    class Arc_Menu_MenuSettingsSearchOptionsPage extends Gtk.Box {
+    class ArcMenu_MenuSettingsSearchOptionsPage extends Gtk.Box {
     _init(settings) {
         super._init({
             margin_top: 10,
@@ -2423,7 +2423,7 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
 });
 
 var MenuSettingsListOtherPage = GObject.registerClass(
-    class Arc_Menu_MenuSettingsListOtherPage extends Gtk.Box {
+    class ArcMenu_MenuSettingsListOtherPage extends Gtk.Box {
     _init(settings, listType) {
         super._init({
             margin_top: 10,
@@ -2541,7 +2541,7 @@ var MenuSettingsListOtherPage = GObject.registerClass(
 });
 
 var MiscPage = GObject.registerClass(
-    class Arc_Menu_MiscPage extends Adw.PreferencesPage {
+    class ArcMenu_MiscPage extends Adw.PreferencesPage {
         _init(settings, preferencesWindow) {
             super._init({
                 title: _('Misc'),
@@ -2735,7 +2735,7 @@ var MiscPage = GObject.registerClass(
 });
 
 var AboutPage = GObject.registerClass(
-    class Arc_Menu_AboutPage extends Adw.PreferencesPage {
+    class ArcMenu_AboutPage extends Adw.PreferencesPage {
         _init(settings) {
             super._init({
                 title: _("About"),
@@ -2950,7 +2950,7 @@ var AboutPage = GObject.registerClass(
 });
 
 var ThemePage = GObject.registerClass(
-class Arc_Menu_ThemePage extends Adw.PreferencesPage {
+class ArcMenu_ThemePage extends Adw.PreferencesPage {
     _init(settings) {
         super._init({
             title: _("Theme"),
@@ -3376,7 +3376,7 @@ class ArcMenu_ManageThemesDialogWindow extends PW.DialogWindow {
 
 
 var BuildMenuSettingsPages = GObject.registerClass(
-class Arc_Menu_BuildMenuSettingsPages extends Adw.PreferencesPage {
+class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
     _init() {
         super._init({
             title: _('Customize'),

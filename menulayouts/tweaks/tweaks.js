@@ -11,7 +11,7 @@ var TweaksPage = GObject.registerClass({
     Signals: {
         'response': { param_types: [GObject.TYPE_INT] },
     },
-},  class Arc_Menu_TweaksPage extends Gtk.Box {
+},  class ArcMenu_TweaksPage extends Gtk.Box {
     _init(settings, layoutName) {
         this._settings = settings;
         this.addResponse = false;

@@ -42,7 +42,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP)
             this.subMainBox.add_child(this.searchBox.actor);
-        
+
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
             style: "margin: 2px 0px;"
@@ -55,7 +55,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'vfade',
-        });  
+        });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
 
         this.subMainBox.add_child(this.applicationsScrollBox);
@@ -63,7 +63,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchBox.style_class = 'arcmenu-search-bottom';
             this.subMainBox.add_child(this.searchBox.actor);
         }
-            
+
         this.rightBox = new St.BoxLayout({
             y_align: Clutter.ActorAlign.FILL,
             y_expand: true,
@@ -82,7 +82,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
             this.rightBox.add_child(separator);
         }
-        
+
         this.shortcutsBox = new St.BoxLayout({
             vertical: true
         });
@@ -91,11 +91,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
-        });     
+        });
 
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);
         this.rightBox.add_child(this.shortcutsScrollBox);
-        
+
         // Add place shortcuts to menu (Home,Documents,Downloads,Music,Pictures,Videos)
         this._displayPlaces();
 
@@ -107,10 +107,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this._settings.get_value('application-shortcuts-list').deep_unpack().length>0){
             this.softwareShortcuts = true;
         }
-        
+
         //check to see if should draw separator
         if(this.placesShortcuts && (this._settings.get_boolean('show-external-devices') || this.softwareShortcuts || this._settings.get_boolean('show-bookmarks'))  )
-            shouldDraw=true;  
+            shouldDraw=true;
         if(shouldDraw){
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
             this.shortcutsBox.add_child(separator);
@@ -121,8 +121,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true,
             x_expand: true,
             y_expand: true
-        });	
-        this.shortcutsBox.add_child(this.externalDevicesBox);   
+        });
+        this.shortcutsBox.add_child(this.externalDevicesBox);
 
         this._sections = { };
         this.placesManager = new PlaceDisplay.PlacesManager();
@@ -130,7 +130,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let id = Constants.SECTIONS[i];
             this._sections[id] = new St.BoxLayout({
                 vertical: true
-            });	
+            });
             this.placeManagerUpdatedID = this.placesManager.connect(`${id}-updated`, () => {
                 this._redisplayPlaces(id);
             });
@@ -157,7 +157,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.END,
             style: "spacing: 6px;"
-        });	
+        });
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();
         for(let i = 0; i < powerOptions.length; i++){
@@ -167,14 +167,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 let powerButton = new MW.PowerButton(this, powerType);
                 this.actionsBox.add_child(powerButton);
             }
-        } 
+        }
         this.rightBox.add_child(this.actionsBox);
-        
+
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.mainBox.add_child(horizonalFlip ? this.rightBox : this.subMainBox);
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
         this.mainBox.add_child(verticalSeparator);
-        this.mainBox.add_child(horizonalFlip ? this.subMainBox: this.rightBox);  
+        this.mainBox.add_child(horizonalFlip ? this.subMainBox: this.rightBox);
         horizonalFlip ? this.rightBox.style += "margin-right: 0px" : this.rightBox.style += "margin-left: 0px"
 
         this.updateWidth();
@@ -204,7 +204,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories() {
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
+        this.categoryDirectories = new Map();
         super.loadCategories();
     }
 }

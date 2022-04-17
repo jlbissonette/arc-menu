@@ -20,7 +20,7 @@ const { RecentFilesSearchProvider } = Me.imports.searchProviders.recentFiles;
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
-var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult extends MW.ApplicationMenuItem{
+var ListSearchResult = GObject.registerClass(class ArcMenu_ListSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
         let menulayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']);
@@ -91,7 +91,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
     }
 });
 
-var AppSearchResult = GObject.registerClass(class Arc_Menu_AppSearchResult extends MW.ApplicationMenuItem{
+var AppSearchResult = GObject.registerClass(class ArcMenu_AppSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
         let menulayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']) || appSys.lookup_app(provider.id);
@@ -800,7 +800,7 @@ var SearchResults = GObject.registerClass({
     }
 });
 
-var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem{
+var ArcSearchProviderInfo = GObject.registerClass(class ArcMenu_ArcSearchProviderInfo extends MW.ArcMenuPopupBaseMenuItem{
     _init(provider, menuLayout) {
         super._init(menuLayout);
         this.provider = provider;

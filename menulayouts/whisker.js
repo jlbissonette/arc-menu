@@ -45,7 +45,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.user.actor.x_expand = true;
         this.user.actor.x_align = Clutter.ActorAlign.FILL;
         this.actionsBox.add_child(this.user.actor);
-        
+
         let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, false);
         this.actionsBox.add_child(settingsButton);
 
@@ -102,15 +102,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
         });
-        
+
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
-        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);  
+        this.subMainBox.add_child(horizonalFlip ? this.rightBox : this.leftBox);
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
         this.subMainBox.add_child(verticalSeparator);
         this.subMainBox.add_child(horizonalFlip ? this.leftBox : this.rightBox);
 
         this.categoriesScrollBox = this._createScrollBox({
-            x_expand: true, 
+            x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
@@ -130,7 +130,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadPinnedApps();
         this.setDefaultMenuView();
     }
-   
+
     updateWidth(setDefaultMenuView){
         let leftPanelWidthOffset = 0;
         let rightPanelWidthOffset = 45;
@@ -148,8 +148,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories(){
         this.categoryDirectories = null;
-        this.categoryDirectories = new Map(); 
-        
+        this.categoryDirectories = new Map();
+
         let extraCategories = this._settings.get_value("extra-categories").deep_unpack();
 
         for(let i = 0; i < extraCategories.length; i++){
@@ -162,7 +162,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         super.loadCategories();
-    } 
+    }
 
     displayCategories(){
         super.displayCategories(this.categoriesBox);

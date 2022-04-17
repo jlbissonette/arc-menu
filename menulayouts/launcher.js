@@ -32,7 +32,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             DefaultPinnedIconSize: Constants.LARGE_ICON_SIZE,
         });
     }
-    createLayout(){     
+    createLayout(){
         super.createLayout();
         this.activeResult = null;
         this.arcMenu.box.style = "padding-top: 0px; padding-left: 0px; padding-right: 0px; margin: 0px;";
@@ -65,7 +65,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             if(this.subMainBox.contains(this.searchResultDetailsScrollBox))
                 this.subMainBox.remove_child(this.searchResultDetailsScrollBox);
         })
-        
+
         this.applicationsBox = new St.BoxLayout({
             vertical: true
         });
@@ -77,8 +77,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class:  this.disableFadeEffect ? '' : 'vfade',
-        }); 
-        this.subMainBox.style = "width:750px; spacing: 8px;";  
+        });
+        this.subMainBox.style = "width:750px; spacing: 8px;";
 
         this.searchResultDetailsBox = new St.BoxLayout({
             vertical: true,
@@ -94,7 +94,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
             style_class:  this.disableFadeEffect ? '' : 'vfade',
-        }); 
+        });
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.searchResultDetailsScrollBox.add_actor(this.searchResultDetailsBox);
@@ -156,7 +156,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 item.x_align = Clutter.ActorAlign.FILL;
                 this.moreProvidersBox.add_child(item);
             }
-                
+
             currentItems++;
         }
 
@@ -169,7 +169,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     createProviderMenuItem(provider, providerEnum){
         let providerName = provider.appInfo ? provider.appInfo.get_name() : provider;
-    
+
         let providerMenuItem = new MW.ArcMenuPopupBaseMenuItem(this);
         providerMenuItem.name = "arcmenu-launcher-button";
         providerMenuItem.x_expand = false;
@@ -268,7 +268,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
         });
-        let icon = new St.Icon({ 
+        let icon = new St.Icon({
             icon_size: 76,
             gicon: providerIcon,
             y_expand: true,
@@ -295,26 +295,26 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.section = new PopupMenu.PopupMenuSection();
-        this.moreProvidersMenu.addMenuItem(this.section);  
-        
+        this.moreProvidersMenu.addMenuItem(this.section);
+
         this.moreProvidersBox = new St.BoxLayout({
             vertical: true
-        });   
-        
+        });
+
         this.moreProvidersScrollBox = this._createScrollBox({
-            x_expand: true, 
+            x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             style_class:  this.disableFadeEffect ? '' : 'vfade',
             overlay_scrollbars: true,
             reactive: true
-        }); 
+        });
         this.moreProvidersScrollBox._delegate = this.moreProvidersBoxScrollBox;
         this.moreProvidersScrollBox.add_actor(this.moreProvidersBox);
         this.moreProvidersScrollBox.clip_to_allocation = true;
 
-        this.moreProvidersScrollBox.style = "max-height: 350px;";        
-        this.section.actor.add_child(this.moreProvidersScrollBox); 
+        this.moreProvidersScrollBox.style = "max-height: 350px;";
+        this.section.actor.add_child(this.moreProvidersScrollBox);
         this.subMenuManager.addMenu(this.moreProvidersMenu);
         this.moreProvidersMenu.actor.hide();
         Main.uiGroup.add_child(this.moreProvidersMenu.actor);
@@ -365,8 +365,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(!this.subMainBox.contains(this.searchResultDetailsScrollBox))
             this.subMainBox.add_child(this.searchResultDetailsScrollBox);
         if(this.activeResult === this.searchResults.getTopResult())
-            return;           
-        
+            return;
+
         this.activeResult = this.searchResults.getTopResult();
         if(!this.activeResult || this.activeResult === null){
             return;
@@ -402,7 +402,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let icon = activeResult.metaInfo ?activeResult.metaInfo['createIcon'](iconSize) : app.create_icon_texture(iconSize);
         this.activeResultMenuItem._iconBin.set_child(icon);
         if(!this.activeResultMenuItem._iconBin.get_child()){
-            let icon = new St.Icon({ 
+            let icon = new St.Icon({
                 icon_size: iconSize,
                 gicon: activeResult.provider.appInfo.get_icon()
             });
@@ -422,7 +422,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.searchResults.disconnect(this.searchTermsChangedID);
             this.searchTermsChangedID = null;
         }
-        
+
         if(this.searchNoResultsID){
             this.searchResults.disconnect(this.searchNoResultsID);
             this.searchNoResultsID = null;

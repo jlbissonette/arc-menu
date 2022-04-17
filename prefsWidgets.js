@@ -4,7 +4,7 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
-var Button = GObject.registerClass(class Arc_Menu_Button extends Gtk.Button {
+var Button = GObject.registerClass(class ArcMenu_Button extends Gtk.Button {
     _init(params) {
         super._init();
         this._params = params;
@@ -44,7 +44,7 @@ var DialogWindow = GObject.registerClass({
     Signals: {
         'response': { param_types: [GObject.TYPE_INT]},
     },
-},class Arc_Menu_DialogWindow extends Adw.PreferencesWindow {
+},class ArcMenu_DialogWindow extends Adw.PreferencesWindow {
     _init(title, parent, buttonLocation) {
         super._init({
             title: title,
@@ -74,7 +74,7 @@ var DragRow = GObject.registerClass({
     Signals: {
         'drag-drop-done': { },
     },
-},class Arc_Menu_DragRow extends Adw.ActionRow {
+},class ArcMenu_DragRow extends Adw.ActionRow {
     _init(params) {
         super._init(params);
         let dragSource = new Gtk.DragSource({
@@ -113,7 +113,7 @@ var DragRow = GObject.registerClass({
             //store drag start cursor location
             listBox.dragX = x;
             listBox.dragY = y;
-            return new Gdk.ContentProvider(Arc_Menu_DragRow);
+            return new Gdk.ContentProvider(ArcMenu_DragRow);
         });
 
         dragSource.connect("drag-end", (self, gdkDrag, deleteData) => {
@@ -140,7 +140,7 @@ var DragRow = GObject.registerClass({
             let listBox = this.get_parent();
             let index = this.get_index();
             if(index === listBox.dragRow.get_index()){
-                gdkDrop.read_value_async(Arc_Menu_DragRow, 1, null, () => {
+                gdkDrop.read_value_async(ArcMenu_DragRow, 1, null, () => {
                     gdkDrop.finish(Gdk.DragAction.MOVE);
                 });
                 return true;
@@ -149,7 +149,7 @@ var DragRow = GObject.registerClass({
             listBox.show();
             listBox.insert(listBox.dragRow, index);
 
-            gdkDrop.read_value_async(Arc_Menu_DragRow, 1, null, () => {
+            gdkDrop.read_value_async(ArcMenu_DragRow, 1, null, () => {
                 gdkDrop.finish(Gdk.DragAction.MOVE);
             });
             this.emit("drag-drop-done");
@@ -235,7 +235,7 @@ var EditEntriesBox = GObject.registerClass({
         'row-changed': {},
         'row-deleted': {}
     },
-},  class Arc_Menu_EditEntriesBox extends Gtk.Grid{
+},  class ArcMenu_EditEntriesBox extends Gtk.Grid{
     _init(params){
         super._init({
             margin_top: 0,
@@ -355,9 +355,9 @@ var EditEntriesBox = GObject.registerClass({
     }
 });
 
-var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk.ListBox{
-    _init(widget, params){
-        super._init(params);
+var StackListBox = GObject.registerClass(class ArcMenu_StackListBox extends Gtk.ListBox{
+    _init(widget){
+        super._init();
         this.settingsFrameStack = widget.settingsFrameStack;
         this.connect("row-selected", (self, row) => {
             if(row){
@@ -435,7 +435,7 @@ var StackListBox = GObject.registerClass(class Arc_Menu_StackListBox extends Gtk
     }
 });
 
-var IconGrid = GObject.registerClass(class Arc_Menu_IconGrid extends Gtk.FlowBox{
+var IconGrid = GObject.registerClass(class ArcMenu_IconGrid extends Gtk.FlowBox{
     _init() {
         super._init({
             max_children_per_line: 9,
@@ -457,7 +457,7 @@ var IconGrid = GObject.registerClass(class Arc_Menu_IconGrid extends Gtk.FlowBox
     }
 });
 
-var Tile = GObject.registerClass(class Arc_Menu_Tile extends Adw.PreferencesGroup{
+var Tile = GObject.registerClass(class ArcMenu_Tile extends Adw.PreferencesGroup{
     _init(name, file, width, height, layout) {
         super._init({
             hexpand: true,
@@ -497,7 +497,7 @@ var Tile = GObject.registerClass(class Arc_Menu_Tile extends Adw.PreferencesGrou
     }
 });
 
-var MenuLayoutRow = GObject.registerClass(class Arc_Menu_MenuLayoutRow extends Adw.ActionRow {
+var MenuLayoutRow = GObject.registerClass(class ArcMenu_MenuLayoutRow extends Adw.ActionRow {
     _init(title, imagePath, imageSize, layout) {
         super._init();
         this._grid = new Gtk.Grid({
