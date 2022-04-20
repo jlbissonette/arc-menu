@@ -18,9 +18,8 @@
         <value value='14' nick='Tognee'/>
         <value value='15' nick='Plasma'/>
         <value value='16' nick='Windows'/>
-        <value value='17' nick='Launcher'/>
-        <value value='18' nick='Eleven'/>
-        <value value='19' nick='AZ'/>
+        <value value='17' nick='Eleven'/>
+        <value value='18' nick='AZ'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.forcemenulocation'>
         <value value='0' nick='Off'/>
@@ -560,6 +559,11 @@
       <default>'Default'</default>
       <summary>Size of quicklink items in ArcMenu.</summary>
       <description>Size of quicklink items in ArcMenu. Includes places, shortcuts, external devices, bookmarks.</description>
+    </key>
+    <key type="b" name="dash-to-panel-standalone">
+      <default>false</default>
+      <summary>Force placement of ArcMenu on GNOME top panel.</summary>
+      <description>Force placement of ArcMenu on GNOME top panel. Useful when using "Keep original gnome-shell top panel" setting in dash to panel</description>
     </key>
     <key type="s" name="custom-menu-button-text">
       <default>'Applications'</default>

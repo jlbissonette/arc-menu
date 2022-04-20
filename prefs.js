@@ -690,10 +690,28 @@ var GeneralPage = GObject.registerClass(
             multiMonitorRow.add_suffix(multiMonitorSwitch);
             //--------------------------------------------------------------------------------------
 
+            //Prefer Top Panel -------------------------------------------------------------------
+            let preferTopPanelSwitch = new Gtk.Switch({
+                valign: Gtk.Align.CENTER,
+                active: this._settings.get_boolean('dash-to-panel-standalone')
+            });
+            preferTopPanelSwitch.connect('notify::active', (widget) => {
+                this._settings.set_boolean('dash-to-panel-standalone', widget.get_active());
+            });
+
+            let preferTopPanelRow = new Adw.ActionRow({
+                title: _("Always Prefer Top Panel"),
+                subtitle: _("Useful with Dash to Panel setting 'Keep original gnome-shell top panel'"),
+                activatable_widget: multiMonitorSwitch
+            });
+            preferTopPanelRow.add_suffix(preferTopPanelSwitch);
+            //--------------------------------------------------------------------------------------
+
             //Add the rows to the group
             menuDisplayGroup.add(menuPositionRow);
             menuDisplayGroup.add(menuAlignmentRow);
             menuDisplayGroup.add(multiMonitorRow);
+            menuDisplayGroup.add(preferTopPanelRow);
             menuDisplayGroup.add(showActivitiesRow);
 
             let menuHotkeyGroup = this._createHotkeyGroup(_("Hotkey Options"), true);

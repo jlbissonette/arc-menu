@@ -47,6 +47,7 @@ function enable() {
 
     settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
     settings.connect('changed::multi-monitor', () => _reload());
+    settings.connect('changed::dash-to-panel-standalone', () => _reload());
     settingsControllers = [];
 
     Me.customStylesheet = Utils.getStylesheetFile();
@@ -103,24 +104,29 @@ function _reload() {
 function _enableButtons() {
     let multiMonitor = settings.get_boolean('multi-monitor');
 
-    let isDtPLoaded = false;
+    let dashToPanelEnabled = false;
     let panelArray = [Main.panel];
     if(global.dashToPanel && global.dashToPanel.panels){
         panelArray = global.dashToPanel.panels.map(pw => pw);
-        isDtPLoaded = true;
+        dashToPanelEnabled = true;
     }
 
     let panelLength = multiMonitor ? panelArray.length : 1;
     for(var index = 0; index < panelLength; index++){
-        let panel = isDtPLoaded ? panelArray[index].panel : panelArray[index];
+        let panel = dashToPanelEnabled ? panelArray[index].panel : panelArray[index];
         let panelParent = panelArray[index];
 
+        //Place ArcMenu in top panel when Dash to Panel setting "Keep original gnome-shell top panel" is on
+        let isStandalone = settings.get_boolean('dash-to-panel-standalone') && dashToPanelEnabled;
+        if(isStandalone && ('isPrimary' in panelParent && panelParent.isPrimary) && panelParent.isStandalone)
+            panel = Main.panel;
+    
         let isPrimaryPanel = index === 0 ? true : false;
         let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, isPrimaryPanel);
 
         settingsController.monitorIndex = panelParent.monitor?.index;
 
-        if(isDtPLoaded)
+        if(dashToPanelEnabled)
             panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController, 1) : null);
 
         settingsController.enableButton();
