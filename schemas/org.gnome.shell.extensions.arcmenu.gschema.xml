@@ -18,8 +18,9 @@
         <value value='14' nick='Tognee'/>
         <value value='15' nick='Plasma'/>
         <value value='16' nick='Windows'/>
-        <value value='17' nick='Eleven'/>
-        <value value='18' nick='AZ'/>
+        <value value='17' nick='Launcher'/>
+        <value value='18' nick='Eleven'/>
+        <value value='19' nick='AZ'/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.forcemenulocation'>
         <value value='0' nick='Off'/>
