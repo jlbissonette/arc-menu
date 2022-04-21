@@ -3470,7 +3470,18 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         this.menuSettingsStackListBox.setSeparatorIndices([2, 5, 8]);
 
         this.populateSettingsLeaflet();
-        this.menuSettingsStackListBox.selectFirstRow();
+
+        this.settingsLeaflet.connect('notify::visible-child', () => {
+            const visibleChild = this.settingsLeaflet.get_visible_child();
+            const currentPage = this.settingsLeaflet.get_page(visibleChild);
+            const pageName = currentPage.translatableName;
+            this.headerLabel.label = "<b>" + _(pageName) + "</b>";
+            this.menuSettingsStackListBox.selectRowByName(currentPage.name);
+            let nextChild = this.settingsLeaflet.get_adjacent_child(Adw.NavigationDirection.FORWARD);
+            goNextButton.sensitive = nextChild ? true : false;
+            let previousChild = this.settingsLeaflet.get_adjacent_child(Adw.NavigationDirection.BACK);
+            goPreviousButton.sensitive = previousChild ? true : false;
+        });
 
         this.flap = new Adw.Flap({
             content: this.settingsLeaflet,
@@ -3483,38 +3494,33 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
             this.flap.reveal_flap = false;
         });
 
-        let buttonContent = new Adw.ButtonContent({
-            icon_name: 'sidebar-show',
-            label: _("More Settings..."),
+        let sidebarButton = new Gtk.ToggleButton({
+            icon_name: 'sidebar-show-symbolic',
+            vexpand: false,
+            valign: Gtk.Align.CENTER
         });
-        let button = new Gtk.ToggleButton({
-            child: buttonContent,
-            hexpand: false,
-            halign: Gtk.Align.START
-        });
-        context = button.get_style_context();
+        context = sidebarButton.get_style_context();
         context.add_class('suggested-action');
-        button.bind_property('active', this.flap, 'reveal-flap', GObject.BindingFlags.BIDIRECTIONAL);
+        sidebarButton.bind_property('active', this.flap, 'reveal-flap', GObject.BindingFlags.BIDIRECTIONAL);
 
-        button.connect('toggled', (widget) => {
+        sidebarButton.connect('toggled', (widget) => {
             if(widget.active){
-                buttonContent.icon_name = 'sidebar-show-right';
-                buttonContent.label = _("Hide Sidebar");
+                sidebarButton.icon_name = 'sidebar-show-right-symbolic';
             }
             else{
-                buttonContent.icon_name = 'sidebar-show';
-                buttonContent.label = _("More Settings...");
+                sidebarButton.icon_name = 'sidebar-show-symbolic';
             }
         });
-        let headerBox = new Gtk.Grid({
+        let headerBox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
-            margin_bottom: 10
+            margin_bottom: 2,
+            spacing: 6
         });
 
         let restoreDefaultsButton = new Gtk.Button({
-            label: _("Reset"),
-            hexpand: true,
-            halign: Gtk.Align.END
+            icon_name: 'view-refresh-symbolic',
+            vexpand: false,
+            valign: Gtk.Align.CENTER
         });
         context = restoreDefaultsButton.get_style_context();
         context.add_class('destructive-action');
@@ -3543,20 +3549,38 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
             dialog.show();
         });
 
-        headerBox.attach(button, 0, 0, 1, 1);
-        headerBox.attach(this.headerLabel, 0, 0, 1, 1);
-        headerBox.attach(restoreDefaultsButton, 0, 0, 1, 1);
+        let goNextButton = new Gtk.Button({
+            icon_name: 'go-next-symbolic',
+            halign: Gtk.Align.END
+        });
+        context = goNextButton.get_style_context();
+        context.add_class('osd');
+
+        goNextButton.connect('clicked', (widget) => {
+            this.settingsLeaflet.navigate(Adw.NavigationDirection.FORWARD);
+        });
+        let goPreviousButton = new Gtk.Button({
+            icon_name: 'go-previous-symbolic',
+            sensitive: false
+        });
+        context = goPreviousButton.get_style_context();
+        context.add_class('osd');
+
+        goPreviousButton.connect('clicked', (widget) => {
+            this.settingsLeaflet.navigate(Adw.NavigationDirection.BACK);
+        });
+
+        headerBox.append(goPreviousButton);
+        headerBox.append(sidebarButton);
+        headerBox.append(this.headerLabel);
+        headerBox.append(restoreDefaultsButton);
+        headerBox.append(goNextButton);
 
         this.mainGroup.add(headerBox);
         this.mainGroup.add(this.flap);
 
-        this.settingsLeaflet.connect('notify::visible-child', () => {
-            const visibleChild = this.settingsLeaflet.get_visible_child();
-            const currentPage = this.settingsLeaflet.get_page(visibleChild);
-            const pageName = currentPage.translatableName;
-            this.headerLabel.label = "<b>" + _(pageName) + "</b>";
-            this.menuSettingsStackListBox.selectRowByName(currentPage.name);
-        });
+        this.settingsLeaflet.set_visible_child_name("MenuSettingsGeneral");
+        this.menuSettingsStackListBox.selectFirstRow();
     }
 
     populateSettingsLeaflet(){
