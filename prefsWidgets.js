@@ -358,12 +358,13 @@ var EditEntriesBox = GObject.registerClass({
 var StackListBox = GObject.registerClass(class ArcMenu_StackListBox extends Gtk.ListBox{
     _init(widget){
         super._init();
-        this.settingsFrameStack = widget.settingsFrameStack;
         this.connect("row-selected", (self, row) => {
             if(row){
                 let stackName = row.stackName;
-                widget.headerLabel.label = "<b>" + _(row.translatableName) + "</b>",
-                this.settingsFrameStack.set_visible_child_name(stackName);
+
+                let currentPageName = widget.settingsLeaflet.get_visible_child_name();
+                if(currentPageName !== stackName)
+                    widget.settingsLeaflet.set_visible_child_name(stackName);
             }
         });
     }
@@ -384,7 +385,7 @@ var StackListBox = GObject.registerClass(class ArcMenu_StackListBox extends Gtk.
         }
     }
 
-    addRow(name, translatableName, iconName, nextPage){
+    addRow(name, translatableName, iconName){
         let row1 = new Gtk.ListBoxRow();
         this.append(row1);
 
@@ -409,16 +410,6 @@ var StackListBox = GObject.registerClass(class ArcMenu_StackListBox extends Gtk.
         });
         row.attach(image, 0, 0, 1, 1);
         row.attach(label, 1, 0, 1, 1);
-
-        if(nextPage){
-            row1.nextPage = nextPage;
-            let image2 = new Gtk.Image({
-                gicon: Gio.icon_new_for_string('go-next-symbolic'),
-                halign: Gtk.Align.END,
-                hexpand: true
-            });
-            row.attach(image2, 2, 0, 1, 1);
-        }
     }
 
     setSeparatorIndices(indexArray){

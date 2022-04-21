@@ -3405,9 +3405,12 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         this.mainGroup = new Adw.PreferencesGroup();
         this.add(this.mainGroup);
 
-        this.settingsFrameStack = new Gtk.Stack({
-            vhomogeneous: false,
-            transition_type: Gtk.StackTransitionType.CROSSFADE
+        this.settingsLeaflet = new Adw.Leaflet({
+            homogeneous: true,
+            transition_type: Adw.LeafletTransitionType.SLIDE,
+            can_navigate_back: true,
+            can_navigate_forward: true,
+            can_unfold: true,
         });
 
         this.headerLabel = new Gtk.Label({
@@ -3433,14 +3436,14 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         this.menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), 'fine-tune-symbolic');
         this.menuSettingsStackListBox.setSeparatorIndices([2, 5, 8]);
 
-        this.populateSettingsFrameStack();
+        this.populateSettingsLeaflet();
         this.menuSettingsStackListBox.selectFirstRow();
 
         this.flap = new Adw.Flap({
-            content: this.settingsFrameStack,
+            content: this.settingsLeaflet,
             flap: this.menuSettingsStackListBox,
             separator: Gtk.Separator.new(Gtk.Orientation.VERTICAL),
-            fold_policy: Adw.FlapFoldPolicy.ALWAYS,
+            fold_policy: Adw.FlapFoldPolicy.ALWAYS
         });
 
         this.menuSettingsStackListBox.connect('row-activated', () => {
@@ -3483,9 +3486,9 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
         context = restoreDefaultsButton.get_style_context();
         context.add_class('destructive-action');
         restoreDefaultsButton.connect("clicked", () => {
-            const currentPage = this.settingsFrameStack.get_visible_child();
-            const currentSelectedRow = this.menuSettingsStackListBox.getSelectedRow();
-            const pageName = currentSelectedRow.translatableName;
+            const visibleChild = this.settingsLeaflet.get_visible_child()
+            const currentPage = this.settingsLeaflet.get_page(visibleChild);
+            const pageName = currentPage.translatableName;
             let dialog = new Gtk.MessageDialog({
                 text: "<b>" + _("Reset all %s?").format(pageName) + '</b>',
                 secondary_text: _("All %s will be reset to the default value.").format(pageName),
@@ -3497,10 +3500,10 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
             });
             dialog.connect('response', (widget, response) => {
                 if(response == Gtk.ResponseType.YES){
-                    if(!currentPage)
+                    if(!visibleChild)
                         return;
-                    if(currentPage.restoreDefaults)
-                        currentPage.restoreDefaults();
+                    if(visibleChild.restoreDefaults)
+                        visibleChild.restoreDefaults();
                 }
                 dialog.destroy();
             });
@@ -3513,14 +3516,30 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
 
         this.mainGroup.add(headerBox);
         this.mainGroup.add(this.flap);
+
+        this.settingsLeaflet.connect('notify::visible-child', () => {
+            const visibleChild = this.settingsLeaflet.get_visible_child();
+            const currentPage = this.settingsLeaflet.get_page(visibleChild);
+            const pageName = currentPage.translatableName;
+            this.headerLabel.label = "<b>" + _(pageName) + "</b>";
+            this.menuSettingsStackListBox.selectRowByName(currentPage.name);
+        });
     }
 
-    populateSettingsFrameStack(){
-        this.settingsFrameStack.add_named(new MenuSettingsGeneralPage(this._settings), "MenuSettingsGeneral");
-        this.settingsFrameStack.add_named(new ButtonAppearancePage(this._settings), "ButtonSettings");
-        this.settingsFrameStack.add_named(new MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.PINNED_APPS), "MenuSettingsPinnedApps");
+    populateSettingsLeaflet(){
+        let leafletPage = this.settingsLeaflet.append(new MenuSettingsGeneralPage(this._settings));
+        leafletPage.name = "MenuSettingsGeneral";
+        leafletPage.translatableName = _("Menu Settings");
 
-        let pinnedPage = this.settingsFrameStack.get_child_by_name("MenuSettingsPinnedApps");
+        leafletPage = this.settingsLeaflet.append(new ButtonAppearancePage(this._settings));
+        leafletPage.name = "ButtonSettings";
+        leafletPage.translatableName = _("Button Settings");
+
+        leafletPage = this.settingsLeaflet.append(new MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.PINNED_APPS));
+        leafletPage.name = "MenuSettingsPinnedApps";
+        leafletPage.translatableName = _("Pinned Apps");
+
+        let pinnedPage = this.settingsLeaflet.get_child_by_name("MenuSettingsPinnedApps");
 
         if(this.pinnedAppsChangedID){
             this._settings.disconnect(this.pinnedAppsChangedID);
@@ -3535,12 +3554,29 @@ class ArcMenu_BuildMenuSettingsPages extends Adw.PreferencesPage {
             pinnedPage._createFrame(this._settings.get_strv('pinned-app-list'));
         });
 
-        this.settingsFrameStack.add_named(new MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.DIRECTORIES), "MenuSettingsShortcutDirectories");
-        this.settingsFrameStack.add_named(new MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.APPLICATIONS), "MenuSettingsShortcutApplications");
-        this.settingsFrameStack.add_named(new MenuSettingsListOtherPage(this._settings, Constants.MenuSettingsListType.POWER_OPTIONS), "MenuSettingsPowerOptions");
-        this.settingsFrameStack.add_named(new MenuSettingsSearchOptionsPage(this._settings), "MenuSettingsSearchOptions");
-        this.settingsFrameStack.add_named(new MenuSettingsListOtherPage(this._settings, Constants.MenuSettingsListType.EXTRA_CATEGORIES), "MenuSettingsCategories");
-        this.settingsFrameStack.add_named(new MenuSettingsFineTunePage(this._settings), "MenuSettingsFineTune");
+        leafletPage = this.settingsLeaflet.append(new MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.DIRECTORIES));
+        leafletPage.name = "MenuSettingsShortcutDirectories";
+        leafletPage.translatableName = _("Directory Shortcuts");
+
+        leafletPage = this.settingsLeaflet.append(new MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.APPLICATIONS));
+        leafletPage.name = "MenuSettingsShortcutApplications";
+        leafletPage.translatableName = _("Application Shortcuts");
+
+        leafletPage = this.settingsLeaflet.append(new MenuSettingsListOtherPage(this._settings, Constants.MenuSettingsListType.POWER_OPTIONS));
+        leafletPage.name = "MenuSettingsPowerOptions";
+        leafletPage.translatableName = _("Power Options");
+
+        leafletPage = this.settingsLeaflet.append(new MenuSettingsSearchOptionsPage(this._settings));
+        leafletPage.name = "MenuSettingsSearchOptions";
+        leafletPage.translatableName = _("Search Options");
+
+        leafletPage = this.settingsLeaflet.append(new MenuSettingsListOtherPage(this._settings, Constants.MenuSettingsListType.EXTRA_CATEGORIES));
+        leafletPage.name = "MenuSettingsCategories";
+        leafletPage.translatableName = _("Extra Categories");
+
+        leafletPage = this.settingsLeaflet.append(new MenuSettingsFineTunePage(this._settings));
+        leafletPage.name = "MenuSettingsFineTune";
+        leafletPage.translatableName = _("Fine-Tune");
     }
 });
 function init() {
