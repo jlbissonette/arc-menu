@@ -1651,12 +1651,29 @@ var MenuLayoutPage = GObject.registerClass(
                 valign: Gtk.Align.FILL
             });
 
-            this.stack = new Gtk.Stack({
-                hhomogeneous: true,
-                transition_type: Gtk.StackTransitionType.SLIDE_LEFT_RIGHT
+            this.mainLeaflet = new Adw.Leaflet({
+                homogeneous: true,
+                transition_type: Adw.LeafletTransitionType.SLIDE,
+                can_navigate_back: true,
+                can_navigate_forward: false,
+                can_unfold: false,
             });
-            this.stack.add_named(mainBox, "LayoutsBox");
-            mainGroup.add(this.stack);
+
+            this.subLeaflet = new Adw.Leaflet({
+                homogeneous: true,
+                transition_type: Adw.LeafletTransitionType.SLIDE,
+                can_navigate_back: false,
+                can_navigate_forward: false,
+                can_unfold: false,
+            });
+
+            let leafletPage = this.mainLeaflet.append(mainBox);
+            leafletPage.name = "MainView";
+
+            leafletPage = this.mainLeaflet.append(this.subLeaflet);
+            leafletPage.name = "SubView";
+
+            mainGroup.add(this.mainLeaflet);
 
             let currentLayoutGroup = new Adw.PreferencesGroup({
                 title: _("Current Menu Layout"),
@@ -1689,15 +1706,18 @@ var MenuLayoutPage = GObject.registerClass(
                         currentLayoutBoxRow.label.label = "<b>" + this.getMenuLayoutName(dialog.index) + "</b>";
                         tweaksLabel.label = this.getMenuLayoutTweaksName(dialog.index);
                         currentLayoutBoxRow.image.gicon = Gio.icon_new_for_string(this.getMenuLayoutImagePath(dialog.index));
-                        this.stack.set_visible_child_name("LayoutsBox");
+                        this.mainLeaflet.set_visible_child_name("MainView");
                     }
                     if(response === Gtk.ResponseType.CANCEL){
-                        this.stack.set_visible_child_name("LayoutsBox");
+                        this.mainLeaflet.set_visible_child_name("MainView");
+                        menuLayoutsBox.clearSelection();
                     }
                 });
-                this.stack.add_named(menuLayoutsBox, "Layout_" + style.TITLE);
+                leafletPage = this.subLeaflet.append(menuLayoutsBox);
+                leafletPage.name = `Layout_${style.TITLE}`;
                 tile.connect('activated', ()=> {
-                    this.stack.set_visible_child_name("Layout_" + style.TITLE);
+                    this.subLeaflet.set_visible_child_name(`Layout_${style.TITLE}`);
+                    this.mainLeaflet.set_visible_child_name("SubView");
                     menuLayoutsBox.enableSelectionMode();
                 });
             });
@@ -1705,7 +1725,7 @@ var MenuLayoutPage = GObject.registerClass(
             this.layoutsTweaksPage = new LayoutTweaks.tweaks.TweaksPage(this._settings, this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')));
             this.layoutsTweaksPage.connect("response", (page, response) => {
                 if(response === -20)
-                    this.stack.set_visible_child_name("LayoutsBox");
+                    this.mainLeaflet.set_visible_child_name("MainView");
             });
             let tweaksLabel = new Gtk.Label({
                 label: this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')),
@@ -1715,32 +1735,42 @@ var MenuLayoutPage = GObject.registerClass(
                 hexpand: true
             });
 
-            this.stack.add_named(this.layoutsTweaksPage, "LayoutsTweaks")
-            this.stack.set_visible_child_name("LayoutsBox");
+            leafletPage = this.subLeaflet.append(this.layoutsTweaksPage);
+            leafletPage.name = "LayoutsTweaks";
+            this.mainLeaflet.set_visible_child_name("MainView");
+
+            this.mainLeaflet.connect('notify::visible-child', () => {
+                const visibleChild = this.subLeaflet.get_visible_child();
+                if(visibleChild instanceof MenuLayoutCategoryPage)
+                    visibleChild.clearSelection();
+            })
     }
 
     displayLayoutTweaksPage(){
         let layoutName = this.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout'));
         this.layoutsTweaksPage.setActiveLayout(this._settings.get_enum('menu-layout'), layoutName);
-        this.stack.set_visible_child_name("LayoutsTweaks");
+        this.subLeaflet.set_visible_child_name("LayoutsTweaks");
+        this.mainLeaflet.set_visible_child_name("SubView");
     }
 
     displayLayouts(){
-        this.stack.set_visible_child_name("LayoutsBox");
+        this.mainLeaflet.set_visible_child_name("MainView");
     }
 
     displayRunnerTweaksPage(){
         if(!this.runnerTweaksPage){
             let activeLayoutName = this.getMenuLayoutTweaksName(Constants.MenuLayout.RUNNER);
             this.runnerTweaksPage = new LayoutTweaks.tweaks.TweaksPage(this._settings, activeLayoutName);
-            this.stack.add_named(this.runnerTweaksPage, "RunnerTweaks")
+            let leafletPage = this.subLeaflet.append(this.runnerTweaksPage);
+            leafletPage.name = "RunnerTweaks";
             this.runnerTweaksPage.connect("response", (page, response) => {
                 if(response === -20)
-                    this.stack.set_visible_child_name("LayoutsBox");
+                    this.mainLeaflet.set_visible_child_name("MainView");
             });
             this.runnerTweaksPage.setActiveLayout(Constants.MenuLayout.RUNNER);
         }
-        this.stack.set_visible_child_name("RunnerTweaks");
+        this.subLeaflet.set_visible_child_name("RunnerTweaks");
+        this.mainLeaflet.set_visible_child_name("SubView");
     }
 
     getMenuLayoutName(index){
@@ -1804,18 +1834,17 @@ var MenuLayoutCategoryPage = GObject.registerClass({
                 spacing: 10,
                 margin_bottom: 10
             });
-            let applyButton = new Gtk.Button({
+            this.applyButton = new Gtk.Button({
                 label: _("Apply"),
                 hexpand: false,
                 halign: Gtk.Align.END
             });
-            let context = applyButton.get_style_context();
+            let context = this.applyButton.get_style_context();
             context.add_class('suggested-action');
-            applyButton.connect('clicked', ()=> {
+            this.applyButton.connect('clicked', ()=> {
                 let selectedBox = this._tileGrid.get_selected_children();
                 this.index = selectedBox[0].get_child().layout;
-                this._tileGrid.unselect_all();
-                applyButton.set_sensitive(false);
+                this.clearSelection();
                 this.emit('menu-layout-response', Gtk.ResponseType.APPLY);
             });
             let backButton = new PW.Button({
@@ -1827,8 +1856,7 @@ var MenuLayoutCategoryPage = GObject.registerClass({
             context = backButton.get_style_context();
             context.add_class('suggested-action');
             backButton.connect('clicked', ()=> {
-                this._tileGrid.unselect_all();
-                applyButton.set_sensitive(false);
+                this.clearSelection();
                 this.emit('menu-layout-response', Gtk.ResponseType.CANCEL);
             });
             buttonBox.append(backButton);
@@ -1839,8 +1867,8 @@ var MenuLayoutCategoryPage = GObject.registerClass({
                 hexpand: true
             });
             buttonBox.append(chooseNewLayoutLabel);
-            buttonBox.append(applyButton);
-            applyButton.set_sensitive(false);
+            buttonBox.append(this.applyButton);
+            this.applyButton.set_sensitive(false);
 
             this.add(buttonBox);
             this.add(layoutsFrame);
@@ -1863,10 +1891,15 @@ var MenuLayoutCategoryPage = GObject.registerClass({
             layoutsRow.set_child(this._tileGrid);
 
             this._tileGrid.connect('selected-children-changed', () => {
-                applyButton.set_sensitive(true);
+                this.applyButton.set_sensitive(true);
             });
 
             this._tileGrid.set_selection_mode(Gtk.SelectionMode.NONE);
+        }
+
+        clearSelection(){
+            this._tileGrid.unselect_all();
+            this.applyButton.set_sensitive(false);
         }
 
         enableSelectionMode(){
