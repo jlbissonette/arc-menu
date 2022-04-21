@@ -16,6 +16,8 @@ var TweaksPage = GObject.registerClass({
         this._settings = settings;
         this.addResponse = false;
         super._init({
+            margin_start: 5,
+            margin_end: 5,
             orientation: Gtk.Orientation.VERTICAL,
         });
 

@@ -448,34 +448,34 @@ var IconGrid = GObject.registerClass(class ArcMenu_IconGrid extends Gtk.FlowBox{
     }
 });
 
-var Tile = GObject.registerClass(class ArcMenu_Tile extends Adw.PreferencesGroup{
-    _init(name, file, width, height, layout) {
+var Tile = GObject.registerClass(class ArcMenu_Tile extends Gtk.ToggleButton{
+    _init(name, file, layout) {
         super._init({
-            hexpand: true,
+            hexpand: false,
             vexpand: false,
-            halign: Gtk.Align.FILL,
+            halign: Gtk.Align.CENTER,
             valign: Gtk.Align.CENTER,
         });
+        let pixelSize = 155;
+        let context = this.get_style_context();
+        context.add_class('card');
+        context.add_class('raised');
         this.name = name;
         this.layout = layout;
 
-        this.box = new Adw.ActionRow({
-            activatable: true
-        });
         this._grid = new Gtk.Grid({
             orientation: Gtk.Orientation.VERTICAL,
-            margin_top: 5,
-            margin_bottom: 5,
-            margin_start: 5,
-            margin_end: 5,
-            column_spacing: 20,
-            row_spacing: 0
+            margin_top: 10,
+            margin_bottom: 10,
+            margin_start: 10,
+            margin_end: 10,
+            row_spacing: 5
         });
-        this.box.set_child(this._grid);
+        this.set_child(this._grid);
 
         this._image = new Gtk.Image({
             gicon: Gio.icon_new_for_string(file),
-            pixel_size: width
+            pixel_size: pixelSize
         });
 
         this._label = new Gtk.Label({
@@ -484,7 +484,6 @@ var Tile = GObject.registerClass(class ArcMenu_Tile extends Adw.PreferencesGroup
 
         this._grid.attach(this._image, 0, 0, 1, 1);
         this._grid.attach(this._label, 0, 1, 1, 1);
-        this.add(this.box);
     }
 });
 

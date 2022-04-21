@@ -1646,6 +1646,8 @@ var MenuLayoutPage = GObject.registerClass(
 
             let mainBox = new Gtk.Box({
                 orientation: Gtk.Orientation.VERTICAL,
+                margin_start: 5,
+                margin_end: 5,
                 spacing: 20,
                 vexpand: true,
                 valign: Gtk.Align.FILL
@@ -1702,10 +1704,10 @@ var MenuLayoutPage = GObject.registerClass(
                 let menuLayoutsBox = new MenuLayoutCategoryPage(this._settings, this, tile, style.TITLE);
                 menuLayoutsBox.connect('menu-layout-response', (dialog, response) => {
                     if(response === Gtk.ResponseType.APPLY) {
-                        this._settings.set_enum('menu-layout', dialog.index);
-                        currentLayoutBoxRow.label.label = "<b>" + this.getMenuLayoutName(dialog.index) + "</b>";
-                        tweaksLabel.label = this.getMenuLayoutTweaksName(dialog.index);
-                        currentLayoutBoxRow.image.gicon = Gio.icon_new_for_string(this.getMenuLayoutImagePath(dialog.index));
+                        this._settings.set_enum('menu-layout', dialog.menuLayout);
+                        currentLayoutBoxRow.label.label = "<b>" + this.getMenuLayoutName(dialog.menuLayout) + "</b>";
+                        tweaksLabel.label = this.getMenuLayoutTweaksName(dialog.menuLayout);
+                        currentLayoutBoxRow.image.gicon = Gio.icon_new_for_string(this.getMenuLayoutImagePath(dialog.menuLayout));
                         this.mainLeaflet.set_visible_child_name("MainView");
                     }
                     if(response === Gtk.ResponseType.CANCEL){
@@ -1718,7 +1720,6 @@ var MenuLayoutPage = GObject.registerClass(
                 tile.connect('activated', ()=> {
                     this.subLeaflet.set_visible_child_name(`Layout_${style.TITLE}`);
                     this.mainLeaflet.set_visible_child_name("SubView");
-                    menuLayoutsBox.enableSelectionMode();
                 });
             });
 
@@ -1808,32 +1809,34 @@ var MenuLayoutCategoryPage = GObject.registerClass({
     Signals: {
         'menu-layout-response': { param_types: [GObject.TYPE_INT] },
     },
-},  class ArcMenu_MenuLayoutCategoryPage extends Adw.PreferencesGroup {
+},  class ArcMenu_MenuLayoutCategoryPage extends Gtk.Box {
         _init(settings, parent, tile, title) {
-            super._init();
+            super._init({
+                margin_start: 5,
+                margin_end: 5,
+                spacing: 20,
+                orientation: Gtk.Orientation.VERTICAL
+            });
 
             this._parent = parent;
             this._settings = settings;
-            this.index = this._settings.get_enum('menu-layout');
+            this.menuLayout = this._settings.get_enum('menu-layout');
             this.layoutStyle = tile.layout;
 
-            this._params = {
-                maxColumns: tile.layout.length > 3 ? 3 : tile.layout.length,
-                imageHeight: 155,
-                imageWidth: 155,
-                styles: tile.layout
-            };
+            this.maxColumns = tile.layout.length > 3 ? 3 : tile.layout.length;
+            this.styles = tile.layout;
+
             let layoutsFrame = new Adw.PreferencesGroup();
             let layoutsRow = new Adw.PreferencesRow({
                 selectable: false,
                 activatable: false
             });
-            layoutsFrame.add(layoutsRow);
 
             let buttonBox = new Gtk.Box({
                 spacing: 10,
                 margin_bottom: 10
             });
+
             this.applyButton = new Gtk.Button({
                 label: _("Apply"),
                 hexpand: false,
@@ -1841,12 +1844,12 @@ var MenuLayoutCategoryPage = GObject.registerClass({
             });
             let context = this.applyButton.get_style_context();
             context.add_class('suggested-action');
+
             this.applyButton.connect('clicked', ()=> {
-                let selectedBox = this._tileGrid.get_selected_children();
-                this.index = selectedBox[0].get_child().layout;
                 this.clearSelection();
                 this.emit('menu-layout-response', Gtk.ResponseType.APPLY);
             });
+
             let backButton = new PW.Button({
                 icon_name: 'go-previous-symbolic',
                 title: _("Back"),
@@ -1855,11 +1858,13 @@ var MenuLayoutCategoryPage = GObject.registerClass({
             });
             context = backButton.get_style_context();
             context.add_class('suggested-action');
+
             backButton.connect('clicked', ()=> {
                 this.clearSelection();
                 this.emit('menu-layout-response', Gtk.ResponseType.CANCEL);
             });
             buttonBox.append(backButton);
+
             let chooseNewLayoutLabel = new Gtk.Label({
                 label: "<b>" +  _("%s Menu Layouts").format(title) + "</b>",
                 use_markup: true,
@@ -1868,46 +1873,55 @@ var MenuLayoutCategoryPage = GObject.registerClass({
             });
             buttonBox.append(chooseNewLayoutLabel);
             buttonBox.append(this.applyButton);
+
             this.applyButton.set_sensitive(false);
 
-            this.add(buttonBox);
-            this.add(layoutsFrame);
+            this.append(buttonBox);
+            this.append(layoutsFrame);
+
             this._tileGrid = new Gtk.FlowBox({
-                row_spacing: 5,
-                column_spacing: 5,
-                vexpand: true,
+                row_spacing: 4,
+                column_spacing: 4,
+                margin_bottom: 5,
+                margin_top: 5,
                 hexpand: true,
-                valign: Gtk.Align.CENTER,
                 halign: Gtk.Align.CENTER,
-                max_children_per_line: this._params.maxColumns,
+                max_children_per_line: this.maxColumns,
                 homogeneous: true,
                 selection_mode: Gtk.SelectionMode.NONE
             });
 
-            this._params.styles.forEach((style) => {
+            this.styles.forEach((style) => {
                 this._addTile(style.TITLE, style.IMAGE, style.LAYOUT);
             });
-
             layoutsRow.set_child(this._tileGrid);
+            layoutsFrame.add(layoutsRow);
 
             this._tileGrid.connect('selected-children-changed', () => {
                 this.applyButton.set_sensitive(true);
             });
-
-            this._tileGrid.set_selection_mode(Gtk.SelectionMode.NONE);
         }
 
         clearSelection(){
-            this._tileGrid.unselect_all();
+            if(this.activeButton)
+                this.activeButton.active = false;
             this.applyButton.set_sensitive(false);
         }
 
-        enableSelectionMode(){
-            this._tileGrid.set_selection_mode(Gtk.SelectionMode.SINGLE);
-        }
-
         _addTile(name, image, layout) {
-            let tile = new PW.Tile(name, image, this._params.imageWidth, this._params.imageHeight, layout);
+            let tile = new PW.Tile(name, image, layout);
+
+            if(!this.firstTileButton)
+                this.firstTileButton = tile;
+            else
+                tile.group = this.firstTileButton;
+
+            tile.connect("toggled", () => {
+                this.activeButton = tile;
+                this.menuLayout = tile.layout;
+                this.applyButton.set_sensitive(true);
+            });
+
             this._tileGrid.insert(tile, -1);
         }
 });
