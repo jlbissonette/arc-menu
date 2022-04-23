@@ -74,6 +74,9 @@ function disable() {
         extensionChangedId = null;
     }
 
+    Utils.unloadStylesheet();
+    delete Me.customStylesheet;
+
     _disconnectDtpSignals();
 
     _disableButtons();
@@ -124,10 +127,10 @@ function _enableButtons() {
         let isPrimaryPanel = index === 0 ? true : false;
         let settingsController = new Controller.MenuSettingsController(settings, settingsControllers, panel, isPrimaryPanel);
 
-        settingsController.monitorIndex = panelParent.monitor?.index;
+        settingsController.monitorIndex = panelParent.monitor?.index ?? 0;
 
         if(dashToPanelEnabled)
-            panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController, 1) : null);
+            panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController) : null);
 
         settingsController.enableButton();
         settingsController.bindSettingsChanges();
@@ -138,18 +141,16 @@ function _enableButtons() {
 function _disableButtons(){
     for (let i = settingsControllers.length - 1; i >= 0; --i) {
         let sc = settingsControllers[i];
-        _disableButton(sc, 1);
+        _disableButton(sc);
     }
 }
 
-function _disableButton(controller, remove) {
-    if(controller.panel._amDestroyId){
+function _disableButton(controller) {
+    if(controller.panel?._amDestroyId){
         controller.panel.disconnect(controller.panel._amDestroyId);
         delete controller.panel._amDestroyId;
     }
 
+    settingsControllers.splice(settingsControllers.indexOf(controller), 1);
     controller.destroy();
-
-    if(remove)
-        settingsControllers.splice(settingsControllers.indexOf(controller), 1);
 }

@@ -2667,7 +2667,7 @@ var MiscPage = GObject.registerClass(
 
                             stdin.splice(settingsFile.read(null), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE | Gio.OutputStreamSpliceFlags.CLOSE_TARGET, null);
 
-                            populateWindow(preferencesWindow);
+                            populateWindow(preferencesWindow, this._settings);
                         }
                     }
                 );
@@ -2765,7 +2765,7 @@ var MiscPage = GObject.registerClass(
                 dialog.connect('response', (widget, response) => {
                     if(response == Gtk.ResponseType.YES){
                         GLib.spawn_command_line_sync('dconf reset -f /org/gnome/shell/extensions/arcmenu/');
-                        populateWindow(preferencesWindow);
+                        populateWindow(preferencesWindow, this._settings);
                     }
                     dialog.destroy();
                 });
@@ -3654,8 +3654,7 @@ function init() {
     ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);
 }
 
-function populateWindow(window){
-    const settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+function populateWindow(window, settings){
     if(window.pages?.length > 0){
         window.pages.forEach(page => window.remove(page));
     }
@@ -3686,12 +3685,10 @@ function populateWindow(window){
     window.add(aboutPage);
     window.pages.push(aboutPage);
 
-    setVisiblePage(window);
+    setVisiblePage(window, settings);
 }
 
-function setVisiblePage(window){
-    const settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
-
+function setVisiblePage(window, settings){
     if(settings.get_int('prefs-visible-page') === Constants.PrefsVisiblePage.MAIN){
         window.set_visible_page_name("GeneralSettingPage");
     }
@@ -3733,26 +3730,39 @@ function setVisiblePage(window){
 }
 
 function fillPreferencesWindow(window) {
-    let iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default());
-    if(!iconTheme.get_search_path().includes(Me.path + "/media/icons/prefs_icons"))
-        iconTheme.add_search_path(Me.path + "/media/icons/prefs_icons");
+    let preferences = new Preferences(window);
+    window.connect('close-request', () => preferences.destroy());
+}
 
-    window.set_search_enabled(true);
-    window.arcMenuSettings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
+const Preferences = class {
+    constructor(window) {
+        this._settings = ExtensionUtils.getSettings();
 
-    const settings = window.arcMenuSettings;
+        let iconTheme = Gtk.IconTheme.get_for_display(Gdk.Display.get_default());
+        if(!iconTheme.get_search_path().includes(Me.path + "/media/icons/prefs_icons"))
+            iconTheme.add_search_path(Me.path + "/media/icons/prefs_icons");
+    
+        window.set_search_enabled(true);
 
-    settings.connect("changed::prefs-visible-page", () => {
-        if(settings.get_int('prefs-visible-page') !== Constants.PrefsVisiblePage.MAIN){
-            setVisiblePage(window);
+        this.pageChangedId = this._settings.connect("changed::prefs-visible-page", () => {
+            if(this._settings.get_int('prefs-visible-page') !== Constants.PrefsVisiblePage.MAIN){
+                setVisiblePage(window, this._settings);
+            }
+        });
+    
+        window.default_width = this._settings.get_int('settings-width');
+        window.default_height = this._settings.get_int('settings-height');
+        window.set_title(_("ArcMenu Settings"));
+    
+        populateWindow(window, this._settings);
+    }
+
+    destroy(){
+        if (this.pageChangedId) {
+            this._settings.disconnect(this.pageChangedId);
+            this.pageChangedId = null;
         }
-    });
-
-    window.default_width = settings.get_int('settings-width');
-    window.default_height = settings.get_int('settings-height');
-    window.set_title(_("ArcMenu Settings"));
-
-    populateWindow(window);
+    }
 }
 
 function checkIfValidShortcut(frameRow, icon){
