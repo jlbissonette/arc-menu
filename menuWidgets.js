@@ -917,17 +917,17 @@ var Tooltip = class ArcMenu_Tooltip{
 
         if(displayType !== Constants.DisplayType.BUTTON){
             if(isEllipsized && description){
-                this.titleLabel.text = titleText ? titleText : '';
-                this.descriptionLabel.text = description ? description : '';
+                this.titleLabel.text = titleText ? _(titleText) : '';
+                this.descriptionLabel.text = description ? _(description) : '';
                 this.titleLabel.style = 'font-weight: bold';
             }
             else if(isEllipsized && !description)
-                this.titleLabel.text = titleText ? titleText : '';
+                this.titleLabel.text = titleText ? _(titleText) : '';
             else if(!isEllipsized && description)
-                this.descriptionLabel.text = description ? description : '';
+                this.descriptionLabel.text = description ? _(description) : '';
         }
         else if(displayType === Constants.DisplayType.BUTTON){
-            this.titleLabel.text = titleText ? titleText : '';
+            this.titleLabel.text = titleText ? _(titleText) : '';
         }
 
         return this.titleLabel.text || this.descriptionLabel.text ? true : false;
