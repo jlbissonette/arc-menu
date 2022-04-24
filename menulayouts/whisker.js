@@ -46,8 +46,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.user.actor.x_align = Clutter.ActorAlign.FILL;
         this.actionsBox.add_child(this.user.actor);
 
-        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, false);
-        this.actionsBox.add_child(settingsButton);
+        let settingsButton = this.createMenuItem([_("Settings"), "", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, false);
+        if(settingsButton.shouldShow)
+            this.actionsBox.add_child(settingsButton);
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();
         for(let i = 0; i < powerOptions.length; i++){

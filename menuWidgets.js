@@ -1607,7 +1607,7 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
         //Check for default commands--------
         if(this._command == "ArcMenu_Software"){
             let softwareManager = Utils.findSoftwareManager();
-            this._command = softwareManager ? softwareManager : 'ArcMenu_unfound.desktop';
+            this._command = softwareManager ? softwareManager : 'ArcMenu_InvalidShortcut.desktop';
         }
         if(!this._app)
             this._app = Shell.AppSystem.get_default().lookup_app(this._command);

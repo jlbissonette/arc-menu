@@ -148,7 +148,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.quickLinksBox.add_child(terminalButton);
 
         let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        this.quickLinksBox.add_child(settingsButton);
+        if(settingsButton.shouldShow)
+            this.quickLinksBox.add_child(settingsButton);
 
         this.leaveButton = new MW.LeaveButton(this);
         this.quickLinksBox.add_child(this.leaveButton.actor);

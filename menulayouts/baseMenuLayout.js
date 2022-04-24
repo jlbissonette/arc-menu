@@ -437,11 +437,11 @@ var BaseLayout = class {
                 this._addSeparator();
             let isContainedInCategory = false;
             let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2]], Constants.DisplayType.BUTTON, isContainedInCategory);
-            placeMenuItem.actor.x_expand = false;
-            placeMenuItem.actor.y_expand = false;
-            placeMenuItem.actor.y_align = Clutter.ActorAlign.CENTER;
-            placeMenuItem.actor.x_align = Clutter.ActorAlign.CENTER;
-            this.actionsBox.add_child(placeMenuItem.actor);
+            placeMenuItem.x_expand = false;
+            placeMenuItem.y_expand = false;
+            placeMenuItem.y_align = Clutter.ActorAlign.CENTER;
+            placeMenuItem.x_align = Clutter.ActorAlign.CENTER;
+            this.actionsBox.add_child(placeMenuItem);
         }
     }
 
@@ -449,6 +449,12 @@ var BaseLayout = class {
         let placeInfo, placeMenuItem;
         let command = menuItemArray[2];
         let app = Shell.AppSystem.get_default().lookup_app(command);
+        
+        //Ubunutu 22.04 uses old version of GNOME settings
+        if(command === 'org.gnome.Settings.desktop' && !app){
+            command = 'gnome-control-center.desktop';
+            app = Shell.AppSystem.get_default().lookup_app(command);
+        }
 
         if(command === "ArcMenu_Home"){
             let homePath = GLib.get_home_dir();
@@ -468,12 +474,12 @@ var BaseLayout = class {
             if(software)
                 placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), menuItemArray[1], software, displayType, isContainedInCategory);
             else
-                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', 'ArcMenu_unfound.desktop', displayType, isContainedInCategory);
+                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', 'ArcMenu_InvalidShortcut.desktop', displayType, isContainedInCategory);
         }
         else if(command === Constants.ArcMenuSettingsCommand || command === "ArcMenu_Suspend" || command === "ArcMenu_LogOut" || command === "ArcMenu_PowerOff"
             || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || command === "ArcMenu_HybridSleep" || command === "ArcMenu_Hibernate" || app){
 
-                placeMenuItem = new MW.ShortcutMenuItem(this, menuItemArray[0], menuItemArray[1], menuItemArray[2], displayType, isContainedInCategory);
+                placeMenuItem = new MW.ShortcutMenuItem(this, menuItemArray[0], menuItemArray[1], command, displayType, isContainedInCategory);
         }
         else if(command === "ArcMenu_Recent"){
             let uri = "recent:///";
@@ -500,8 +506,13 @@ var BaseLayout = class {
                 placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
             }
         }
+        //All other directory shortcuts. Missing apps also fall-through here.
+        //Return empty placeholder shortcut if path doesn't exist
         else{
             let path = command;
+            let file = Gio.File.new_for_path(path);
+            if(!file.query_exists(null))
+                return new MW.ShortcutMenuItem(this, menuItemArray[0], '', 'ArcMenu_InvalidShortcut.desktop', displayType, isContainedInCategory);
             placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path));
             placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
         }
