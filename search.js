@@ -37,7 +37,7 @@ var ListSearchResult = GObject.registerClass(class ArcMenu_ListSearchResult exte
         this.layout = this._settings.get_enum('menu-layout');
 
         if(this.provider.id === 'org.gnome.Nautilus.desktop' || this.provider.id === 'arcmenu.recent-files')
-            this.parentFolderPath = this.metaInfo['description'];
+            this.folderPath = this.metaInfo['description'];
 
         let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
         if(highlightSearchResultTerms){
@@ -526,8 +526,6 @@ var SearchResults = GObject.registerClass({
 
         this.recentFilesManager.destroy();
         this.recentFilesManager = null;
-
-        this._content.destroy_all_children();
     }
 
     _reloadRemoteProviders() {
@@ -759,23 +757,6 @@ var SearchResults = GObject.registerClass({
 
     getTopResult(){
         return this._defaultResult;
-    }
-
-    getProviders(){
-        return this._providers;
-    }
-
-    setProvider(providerID){
-        if(!this._oldProviders)
-            this._oldProviders = this._providers;
-        this._clearDisplay();
-        this._providers = this._oldProviders;
-        if(providerID === Constants.CategoryType.ALL_PROGRAMS){
-            this._providers = this._providers.filter(p => (p.appInfo ? false : true));
-        }
-        else if(providerID !== Constants.CategoryType.SEARCH_RESULTS){
-            this._providers = this._providers.filter(p => (p.appInfo ? p.appInfo.get_id() : p) === providerID);
-        }
     }
 
     _setSelected(result, selected) {

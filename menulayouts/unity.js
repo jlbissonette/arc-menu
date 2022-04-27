@@ -68,7 +68,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
-            style: "padding-bottom: 10px;",
             style_class: 'arcmenu-margin-box'
         });
 
@@ -119,11 +118,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             style_class: 'datemenu-displays-box'
         });
 
-        this.widgetBox.style = "margin: 0px; spacing: 10px; padding: 10px 50px;";
+        this.widgetBox.style = "margin: 0px; spacing: 10px; padding-bottom: 6px;";
         this._weatherItem = new MW.WeatherSection(this);
-        this._weatherItem.style = "border-radius:4px; width: 350px; padding: 10px; margin: 0px";
         this._clocksItem = new MW.WorldClocksSection(this);
-        this._clocksItem.style = "border-radius:4px; padding: 10px; margin: 0px";
 
         this.appShortcuts = [];
         this.shortcutsBox = new St.BoxLayout({
@@ -166,6 +163,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadExtraPinnedApps();
 
         this.setDefaultMenuView();
+    }
+
+    updateWidth(setDefaultMenuView){
+        super.updateWidth(setDefaultMenuView);
+
+        if(!this.applicationsBox.get_stage())
+            return;
+
+        let width = this.layoutProperties.MenuWidth - 80;
+        this._weatherItem.style = `width: ${Math.round(5 * width / 8)}px;`;
+        this._clocksItem.style = `width: ${Math.round(3 * width / 8)}px;`;
     }
 
     _addSeparator(){

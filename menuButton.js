@@ -73,34 +73,14 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     initiate(){
         //Dash to Panel Integration
         this.dashToPanel = Main.extensionManager.lookup(DASH_TO_PANEL_UUID);
-        this.extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-            if (extension.uuid === DASH_TO_PANEL_UUID) {
-                if (extension.state === ExtensionState.ENABLED) {
-                    this.dashToPanel = Main.extensionManager.lookup(DASH_TO_PANEL_UUID);
-                    this.syncWithDashToPanel();
-                }
-                else if (extension.state === ExtensionState.DISABLED) {
-                    this.dashToPanel = null;
-                    this.arcMenuContextMenu.removeExtensionSettings();
-                    this.updateArrowSide(St.Side.TOP);
-                    if(this.dtpPostionChangedID>0 && this.extensionSettingsItem){
-                        this.extensionSettingsItem.disconnect(this.dtpPostionChangedID);
-                        this.dtpPostionChangedID = 0;
-                    }
-                }
-            }
-        });
-        if(this.dashToPanel?.state === ExtensionState.ENABLED){
+        if(this.dashToPanel?.state === ExtensionState.ENABLED)
             this.syncWithDashToPanel();
-        }
 
-        this._monitorsChangedId = Main.layoutManager.connect('monitors-changed', () => {
-            this.updateHeight();
-        });
+        this._monitorsChangedId = Main.layoutManager.connect('monitors-changed', () =>
+            this.updateHeight());
 
-        this._startupCompleteId = Main.layoutManager.connect('startup-complete', () => {
-            this.updateHeight();
-        });
+        this._startupCompleteId = Main.layoutManager.connect('startup-complete', () => 
+            this.updateHeight());
 
         this.setRecentApps();
         this.setMenuPositionAlignment();
@@ -115,22 +95,20 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
     syncWithDashToPanel(){
         this.arcMenuContextMenu.addExtensionSettings();
-        this.extensionSettingsItem = Utils.getSettings('org.gnome.shell.extensions.dash-to-panel', DASH_TO_PANEL_UUID);
+        this.dashToPanelSettings = Utils.getSettings('org.gnome.shell.extensions.dash-to-panel', DASH_TO_PANEL_UUID);
         let monitorIndex = Main.layoutManager.findIndexForActor(this);
-        let side = Utils.getDashToPanelPosition(this.extensionSettingsItem, monitorIndex);
+        let side = Utils.getDashToPanelPosition(this.dashToPanelSettings, monitorIndex);
         this.updateArrowSide(side);
-        let dashToPanelPositionSettings = 'panel-positions'
-        try{
-            this.extensionSettingsItem.get_string(dashToPanelPositionSettings);
-        } catch(e){
-            dashToPanelPositionSettings = 'panel-position'
-        }
-        this.dtpPostionChangedID = this.extensionSettingsItem.connect('changed::' + dashToPanelPositionSettings, ()=> {
+
+        this.dtpPostionChangedID = this.dashToPanelSettings.connect('changed::panel-positions', ()=> {
             let monitorIndex = Main.layoutManager.findIndexForActor(this);
-            let side = Utils.getDashToPanelPosition(this.extensionSettingsItem, monitorIndex);
+            let side = Utils.getDashToPanelPosition(this.dashToPanelSettings, monitorIndex);
             this.updateArrowSide(side);
         });
-        if(global.dashToPanel && global.dashToPanel.panels){
+
+        //Find the associated Dash to Panel panel.
+        //Needed to show/hide DtP if intellihide is on
+        if(global.dashToPanel?.panels){
             global.dashToPanel.panels.forEach(p => {
                 if(p.panel === this._panel){
                     this.dtpPanel = p;
@@ -232,7 +210,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             }
             else if(this.dashToPanel?.state === ExtensionState.ENABLED){
                 let monitorIndex = Main.layoutManager.findIndexForActor(this);
-                let side = Utils.getDashToPanelPosition(this.extensionSettingsItem, monitorIndex);
+                let side = Utils.getDashToPanelPosition(this.dashToPanelSettings, monitorIndex);
                 this.updateArrowSide(side, false);
             }
             else{
@@ -424,11 +402,11 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 
     _onDestroy(){
-        if (this._monitorsChangedId){
+        if(this._monitorsChangedId){
             Main.layoutManager.disconnect(this._monitorsChangedId);
             this._monitorsChangedId = null;
         }
-        if (this._startupCompleteId){
+        if(this._startupCompleteId){
             Main.layoutManager.disconnect(this._startupCompleteId);
             this._startupCompleteId = null;
         }
@@ -444,21 +422,16 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             GLib.source_remove(this.tooltipShowingID);
             this.tooltipShowingID = null;
         }
-        if(this.extensionChangedId){
-            Main.extensionManager.disconnect(this.extensionChangedId);
-            this.extensionChangedId = null;
-        }
-        if(this.dtpPostionChangedID && this.extensionSettingsItem){
-            this.extensionSettingsItem.disconnect(this.dtpPostionChangedID);
+        if(this.dtpPostionChangedID && this.dashToPanelSettings){
+            this.dashToPanelSettings.disconnect(this.dtpPostionChangedID);
             this.dtpPostionChangedID = null;
         }
         if(this._installedChangedId){
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;
         }
-        if(this.tooltip){
+        if(this.tooltip)
             this.tooltip.destroy();
-        }
         if(this.MenuLayout)
             this.MenuLayout.destroy();
         if(this.arcMenu)
@@ -619,7 +592,6 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         super(sourceActor, arrowAlignment, arrowSide);
         this._settings = sourceActor._settings;
         this._menuButton = sourceActor;
-        this.extensionSettingsItem = false;
 
         this.actor.add_style_class_name('panel-menu');
         Main.uiGroup.add_child(this.actor);
@@ -641,25 +613,14 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
     }
 
     addExtensionSettings(){
-        if(!this.extensionSettingsItem){
-            let extensionCommand = 'gnome-extensions prefs ' + DASH_TO_PANEL_UUID;
+        let extensionCommand = 'gnome-extensions prefs ' + DASH_TO_PANEL_UUID;
 
-            this.dashToPanelLink = new PopupMenu.PopupMenuItem(_("Dash to Panel Settings"));
-            this.dashToPanelLink.add_style_class_name("arcmenu-menu-item");
-            this.dashToPanelLink.connect('activate', ()=>{
-                Util.spawnCommandLine(extensionCommand);
-            });
-            this.addMenuItem(this.dashToPanelLink, 0);
-
-            this.extensionSettingsItem = true;
-        }
-    }
-
-    removeExtensionSettings(){
-        if(this.dashToPanelLink)
-            this.dashToPanelLink.destroy();
-
-        this.extensionSettingsItem = false;
+        let item = new PopupMenu.PopupMenuItem(_("Dash to Panel Settings"));
+        item.add_style_class_name("arcmenu-menu-item");
+        item.connect('activate', ()=>{
+            Util.spawnCommandLine(extensionCommand);
+        });
+        this.addMenuItem(item, 0);
     }
 
     createQuickLinkItem(title, prefsVisiblePage){

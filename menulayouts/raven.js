@@ -130,11 +130,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this._weatherItem = new MW.WeatherSection(this);
-        this._weatherItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
+        this._weatherItem.style = "margin: 0px 0px 25px 0px;";
         this._clocksItem = new MW.WorldClocksSection(this);
         this._clocksItem.x_expand = true;
         this._clocksItem.x_align = Clutter.ActorAlign.FILL;
-        this._clocksItem.style = "border-radius:4px; padding: 10px; margin: 0px 25px 25px 25px;";
+        this._clocksItem.style = "margin: 0px 0px 25px 0px;";
 
         this.weatherBox.add_child(this._clocksItem);
         this.weatherBox.add_child(this._weatherItem);

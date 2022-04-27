@@ -349,9 +349,8 @@ var MenuLayout = {
     TOGNEE: 14,
     PLASMA: 15,
     WINDOWS: 16,
-    LAUNCHER: 17,
-    ELEVEN: 18,
-    AZ: 19,
+    ELEVEN: 17,
+    AZ: 18,
 };
 
 var TraditionalMenus = [
@@ -377,7 +376,6 @@ var TouchMenus = [
     { IMAGE: 'chromebook-layout-symbolic', TITLE: _('Chromebook'), LAYOUT: MenuLayout.CHROMEBOOK}];
 
 var LauncherMenus = [
-    { IMAGE: 'launcher-layout-symbolic', TITLE: _('Launcher'), LAYOUT: MenuLayout.LAUNCHER},
     { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
     { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 

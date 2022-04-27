@@ -458,7 +458,7 @@ var TweaksPage = GObject.registerClass({
         this.mainBox.append(generalTweaksFrame);
 
         let defaulViews = new Gtk.StringList();
-        defaulViews.append(_("Home Screen"));
+        defaulViews.append(_("Home"));
         defaulViews.append(_("All Programs"));
         let defaultViewRow = new Adw.ComboRow({
             title: _("Default View"),
@@ -527,7 +527,7 @@ var TweaksPage = GObject.registerClass({
         this.mainBox.append(generalTweaksFrame);
 
         let defaulViews = new Gtk.StringList();
-        defaulViews.append(_("Home Screen"));
+        defaulViews.append(_("Home"));
         defaulViews.append(_("All Programs"));
         let defaultViewRow = new Adw.ComboRow({
             title: _("Default View"),

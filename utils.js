@@ -79,8 +79,6 @@ function getMenuLayout(menuButton, layout, isStandaloneRunner){
             return new MenuLayout.plasma.createMenu(menuButton);
         case Constants.MenuLayout.WINDOWS:
             return new MenuLayout.windows.createMenu(menuButton);
-        case Constants.MenuLayout.LAUNCHER:
-            return new MenuLayout.launcher.createMenu(menuButton);
         case Constants.MenuLayout.ELEVEN:
             return new MenuLayout.eleven.createMenu(menuButton);
         case Constants.MenuLayout.AZ:
@@ -255,7 +253,7 @@ function getCategoryDetails(currentCategory){
     }
 
     if(currentCategory === Constants.CategoryType.HOME_SCREEN){
-        name = _("Home Screen");
+        name = _("Home");
         gicon = Gio.icon_new_for_string('go-home-symbolic');
         return [name, gicon, fallbackIcon];
     }
@@ -369,18 +367,13 @@ function ensureActorVisibleInScrollView(actor) {
 
 function getDashToPanelPosition(settings, index){
     var positions = null;
-    var side;
+    var side = 'NONE';
 
     try{
-        positions = JSON.parse(settings.get_string('panel-positions'))
+        positions = JSON.parse(settings.get_string('panel-positions'));
+        side = positions[index];
     } catch(e){
         log('Error parsing Dash to Panel positions: ' + e.message);
-    }
-
-    if(!positions)
-        side = settings.get_string('panel-position');
-    else{
-        side = positions[index];
     }
 
     if (side === 'TOP')
@@ -522,18 +515,36 @@ function updateStylesheet(settings){
             border-width: ${menuBorderWidth}px;
             border-radius: ${menuBorderRadius}px;
         }
+        .arcmenu-menu StButton {
+            color: ${menuFGColor};
+            background-color: ${menuBGColor};
+            border-width: 0px;
+            box-shadow: none;
+            border-radius: 8px;
+        }
         .arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover,
-        .arcmenu-menu .popup-menu-item:checked, .arcmenu-menu .popup-menu-item.selected  {
+        .arcmenu-menu .popup-menu-item:checked, .arcmenu-menu .popup-menu-item.selected,
+        .arcmenu-menu StButton:focus, .arcmenu-menu StButton:hover, .arcmenu-menu StButton:checked {
             color: ${itemHoverFGColor};
             background-color: ${itemHoverBGColor};
         }
-        .arcmenu-menu .popup-menu-item:active {
+        .arcmenu-menu .popup-menu-item:active, .arcmenu-menu StButton:active {
             color: ${itemActiveFGColor};
             background-color: ${itemActiveBGColor};
         }
         .arcmenu-menu .popup-menu-item:insensitive{
             color: ${modifyColorLuminance(menuFGColor, 0, 0.6)};
             font-size: ${menuFontSize - 2}pt;
+        }
+        .arcmenu-menu .world-clocks-header, .arcmenu-menu .world-clocks-timezone,
+        .arcmenu-menu .weather-header{
+            color: ${modifyColorLuminance(menuFGColor, 0, 0.6)};
+        }
+        .arcmenu-menu .world-clocks-time, .arcmenu-menu .world-clocks-city{
+            color: ${menuFGColor};
+        }
+        .arcmenu-menu .weather-forecast-time{
+            color: ${modifyColorLuminance(menuFGColor, -0.1)};
         }
         .arcmenu-menu .popup-separator-menu-item .popup-separator-menu-item-separator{
             background-color: ${menuSeparatorColor};

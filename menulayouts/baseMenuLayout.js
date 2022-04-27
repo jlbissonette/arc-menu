@@ -449,7 +449,7 @@ var BaseLayout = class {
         let placeInfo, placeMenuItem;
         let command = menuItemArray[2];
         let app = Shell.AppSystem.get_default().lookup_app(command);
-        
+
         //Ubunutu 22.04 uses old version of GNOME settings
         if(command === 'org.gnome.Settings.desktop' && !app){
             command = 'gnome-control-center.desktop';
@@ -505,6 +505,8 @@ var BaseLayout = class {
                 placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _(menuItemArray[0]));
                 placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
             }
+            else
+                return new MW.ShortcutMenuItem(this, menuItemArray[0], '', 'ArcMenu_InvalidShortcut.desktop', displayType, isContainedInCategory);
         }
         //All other directory shortcuts. Missing apps also fall-through here.
         //Return empty placeholder shortcut if path doesn't exist
@@ -800,8 +802,6 @@ var BaseLayout = class {
             this._activeMenuItem = item;
             if(this.arcMenu.isOpen && item && this.layoutProperties.SupportsCategoryOnHover)
                 item.grab_key_focus();
-            if(this.layout === Constants.MenuLayout.LAUNCHER && !this.layoutProperties.StandaloneRunner && item)
-                this.createActiveSearchItemPanel(item);
         }
     }
 
