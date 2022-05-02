@@ -443,7 +443,7 @@ function updateStylesheet(settings){
     }
 
     let customMenuThemeCSS = ``;
-    let menuButtonStyleCSS = ``;
+    let extraStylingCSS = ``;
 
     let menuBGColor = settings.get_string('menu-background-color');
     let menuFGColor = settings.get_string('menu-foreground-color');
@@ -457,6 +457,8 @@ function updateStylesheet(settings){
     let itemActiveBGColor = settings.get_string('menu-item-active-bg-color');
     let itemActiveFGColor = settings.get_string('menu-item-active-fg-color');
 
+    let [menuRise, menuRiseValue] = settings.get_value('menu-arrow-rise').deep_unpack();
+
     let [buttonFG, buttonFGColor] = settings.get_value('menu-button-fg-color').deep_unpack();
     let [buttonHoverBG, buttonHoverBGColor] = settings.get_value('menu-button-hover-bg-color').deep_unpack();
     let [buttonHoverFG, buttonHoverFGColor] = settings.get_value('menu-button-hover-fg-color').deep_unpack();
@@ -467,40 +469,45 @@ function updateStylesheet(settings){
     let [buttonBorder, buttonBorderColor] = settings.get_value('menu-button-border-color').deep_unpack();
 
     if(buttonFG)
-        menuButtonStyleCSS += `.arcmenu-menu-button{
+        extraStylingCSS += `.arcmenu-menu-button{
                                 color: ${buttonFGColor};
                             }`;
     if(buttonHoverBG)
-        menuButtonStyleCSS += `.arcmenu-panel-menu:hover{
+        extraStylingCSS += `.arcmenu-panel-menu:hover{
                                 box-shadow: inset 0 0 0 100px transparent;
                                 background-color: ${buttonHoverBGColor};
                             }`;
     if(buttonHoverFG)
-        menuButtonStyleCSS += `.arcmenu-panel-menu:hover .arcmenu-menu-button{
+        extraStylingCSS += `.arcmenu-panel-menu:hover .arcmenu-menu-button{
                                 color: ${buttonHoverFGColor};
                             }`
     if(buttonActiveFG)
-        menuButtonStyleCSS += `.arcmenu-menu-button:active{
+        extraStylingCSS += `.arcmenu-menu-button:active{
                                 color: ${buttonActiveFGColor};
                             }`;
     if(buttonActiveBG)
-        menuButtonStyleCSS += `.arcmenu-panel-menu:active{
+        extraStylingCSS += `.arcmenu-panel-menu:active{
                                 box-shadow: inset 0 0 0 100px transparent;
                                 background-color: ${buttonActiveBGColor};
                             }`;
     if(buttonRadius){
-        menuButtonStyleCSS += `.arcmenu-panel-menu{
+        extraStylingCSS += `.arcmenu-panel-menu{
                                 border-radius: ${buttonRadiusValue}px;
                             }`;
     }
     if(buttonWidth){
-        menuButtonStyleCSS += `.arcmenu-panel-menu{
+        extraStylingCSS += `.arcmenu-panel-menu{
                                 border-width: ${buttonWidthValue}px;
                             }`;
     }
     if(buttonBorder){
-        menuButtonStyleCSS += `.arcmenu-panel-menu{
+        extraStylingCSS += `.arcmenu-panel-menu{
                                 border-color: ${buttonBorderColor};
+                            }`;
+    }
+    if(menuRise){
+        extraStylingCSS += `.arcmenu-menu{
+                                -arrow-rise: ${menuRiseValue}px;
                             }`;
     }
 
@@ -586,7 +593,7 @@ function updateStylesheet(settings){
         `;
     }
 
-    let customStylesheetCSS = customMenuThemeCSS + menuButtonStyleCSS;
+    let customStylesheetCSS = customMenuThemeCSS + extraStylingCSS;
 
     //If customStylesheetCSS empty, unload custom stylesheet and return
     if(customStylesheetCSS.length === 0){

@@ -2,7 +2,6 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, GObject, Shell, St} = imports.gi;
-const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
 const { ExtensionState } = ExtensionUtils;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
@@ -82,7 +81,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         this._startupCompleteId = Main.layoutManager.connect('startup-complete', () => 
             this.updateHeight());
 
-        this.setRecentApps();
         this.setMenuPositionAlignment();
 
         //Create Basic Layout
@@ -115,48 +113,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
                 }
             });
         }
-    }
-
-    setRecentApps(){
-        if(this._installedChangedId){
-            appSys.disconnect(this._installedChangedId);
-            this._installedChangedId = null;
-        }
-
-        if(this._settings.get_boolean('disable-recently-installed-apps'))
-            return;
-
-        this._appList = this.listAllApps();
-        //Update Categories on 'installed-changed' event-------------------------------------
-        this._installedChangedId = appSys.connect('installed-changed', () => {
-            this._newAppList = this.listAllApps();
-
-            //Filter to find if a new application has been installed
-            let newApps = this._newAppList.filter(app => !this._appList.includes(app));
-
-            //A New Application has been installed
-            //Save it in settings
-            if(newApps.length){
-                let recentApps = this._settings.get_strv('recently-installed-apps');
-                let newRecentApps = [...new Set(recentApps.concat(newApps))];
-                this._settings.set_strv('recently-installed-apps', newRecentApps);
-                this.MenuLayout.reloadApplications();
-            }
-
-            this._appList = this._newAppList;
-        });
-    }
-
-    listAllApps(){
-        let appList = appSys.get_installed().filter(appInfo => {
-            try {
-                appInfo.get_id(); // catch invalid file encodings
-            } catch (e) {
-                return false;
-            }
-            return appInfo.should_show();
-        });
-        return appList.map(app => app.get_id());
     }
 
     createMenuLayout(){
@@ -425,10 +381,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         if(this.dtpPostionChangedID && this.dashToPanelSettings){
             this.dashToPanelSettings.disconnect(this.dtpPostionChangedID);
             this.dtpPostionChangedID = null;
-        }
-        if(this._installedChangedId){
-            appSys.disconnect(this._installedChangedId);
-            this._installedChangedId = null;
         }
         if(this.tooltip)
             this.tooltip.destroy();

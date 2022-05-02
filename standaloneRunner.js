@@ -2,7 +2,6 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, Shell, St} = imports.gi;
-const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
@@ -58,56 +57,12 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
     }
 
     initiate(){
-        this.setRecentApps();
-
         //Create Basic Layout
         this.createLayoutID = GLib.timeout_add(0, 100, () => {
             this.createMenuLayout();
             this.createLayoutID = null;
             return GLib.SOURCE_REMOVE;
         });
-    }
-
-    setRecentApps(){
-        if(this._installedChangedId){
-            appSys.disconnect(this._installedChangedId);
-            this._installedChangedId = null;
-        }
-
-        if(this._settings.get_boolean('disable-recently-installed-apps'))
-            return;
-
-        this._appList = this.listAllApps();
-        //Update Categories on 'installed-changed' event-------------------------------------
-        this._installedChangedId = appSys.connect('installed-changed', () => {
-            this._newAppList = this.listAllApps();
-
-            //Filter to find if a new application has been installed
-            let newApps = this._newAppList.filter(app => !this._appList.includes(app));
-
-            //A New Application has been installed
-            //Save it in settings
-            if(newApps.length){
-                let recentApps = this._settings.get_strv('recently-installed-apps');
-                let newRecentApps = [...new Set(recentApps.concat(newApps))];
-                this._settings.set_strv('recently-installed-apps', newRecentApps);
-                this.MenuLayout.reloadApplications();
-            }
-
-            this._appList = this._newAppList;
-        });
-    }
-
-    listAllApps(){
-        let appList = appSys.get_installed().filter(appInfo => {
-            try {
-                appInfo.get_id(); // catch invalid file encodings
-            } catch (e) {
-                return false;
-            }
-            return appInfo.should_show();
-        });
-        return appList.map(app => app.get_id());
     }
 
     createMenuLayout(){
@@ -203,10 +158,6 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
 
         if(this.tooltip)
             this.tooltip.destroy();
-        if(this._installedChangedId){
-            appSys.disconnect(this._installedChangedId);
-            this._installedChangedId = null;
-        }
 
         if(this.MenuLayout)
             this.MenuLayout.destroy();

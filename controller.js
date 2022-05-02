@@ -1,11 +1,11 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-const {Gio, GLib, Gtk, St} = imports.gi;
+const { Gio, GLib, Gtk, Shell, St } = imports.gi;
 const Constants = Me.imports.constants;
 const Keybinder = Me.imports.keybinder;
 const Main = imports.ui.main;
 const MenuButton = Me.imports.menuButton;
-const {StandaloneRunner} = Me.imports.standaloneRunner;
+const { StandaloneRunner } = Me.imports.standaloneRunner;
 const Utils = Me.imports.utils;
 
 var MenuSettingsController = class {
@@ -34,7 +34,9 @@ var MenuSettingsController = class {
 
     _applySettings() {
         if(this.isPrimaryPanel){
+            this._appSystem = Shell.AppSystem.get_default();
             this._updateHotKeyBinder();
+            this._initRecentAppsTracker();
         }
 
         this._setButtonAppearance();
@@ -53,7 +55,7 @@ var MenuSettingsController = class {
                 'menu-item-hover-bg-color', 'menu-item-hover-fg-color', 'menu-item-active-bg-color',
                 'menu-item-active-fg-color', 'menu-button-fg-color', 'menu-button-hover-bg-color',
                 'menu-button-hover-fg-color', 'menu-button-active-bg-color', 'menu-button-active-fg-color',
-                'menu-button-border-radius', 'menu-button-border-width', 'menu-button-border-color'
+                'menu-button-border-radius', 'menu-button-border-width', 'menu-button-border-color', 'menu-arrow-rise'
             ],
             this._overrideMenuTheme.bind(this)
         );
@@ -158,12 +160,64 @@ var MenuSettingsController = class {
     }
 
     _setRecentApps(){
-        this._menuButton.setRecentApps();
-        this._menuButton.reload();
-        if(this.runnerMenu){
-            this.runnerMenu.setRecentApps();
-            this.runnerMenu.reload();
+        if(!this.isPrimaryPanel)
+            return;
+
+        this._initRecentAppsTracker();
+        for (let i = 0; i < this._settingsControllers.length; i++) {
+            let menuButton = this._settingsControllers[i]._menuButton;
+            menuButton.reload();
         }
+        if(this.runnerMenu)
+            this.runnerMenu.reload();
+    }
+
+    _initRecentAppsTracker(){
+        if(this._installedChangedId){
+            this._appSystem.disconnect(this._installedChangedId);
+            this._installedChangedId = null;
+        }
+
+        if(this._settings.get_boolean('disable-recently-installed-apps'))
+            return;
+
+        this._appList = this._listAllApps();
+
+        this._installedChangedId = this._appSystem.connect('installed-changed', () => {
+            let appList = this._listAllApps();
+
+            //Filter to find if a new application has been installed
+            let newAppsList = appList.filter(app => !this._appList.includes(app));
+            this._appList = appList;
+
+            if(!newAppsList.length)
+                return;
+
+            //A new app has been installed, Save it in settings
+            let recentApps = this._settings.get_strv('recently-installed-apps');
+            let newRecentApps = [...new Set(recentApps.concat(newAppsList))];
+            this._settings.set_strv('recently-installed-apps', newRecentApps);
+
+            for (let i = 0; i < this._settingsControllers.length; i++) {
+                let menuButton = this._settingsControllers[i]._menuButton;
+                menuButton.MenuLayout?.reloadApplications();
+            }
+
+            if(this.runnerMenu)
+                this.runnerMenu.MenuLayout?.reloadApplications();
+        });
+    }
+
+    _listAllApps(){
+        let appList = this._appSystem.get_installed().filter(appInfo => {
+            try {
+                appInfo.get_id(); // catch invalid file encodings
+            } catch (e) {
+                return false;
+            }
+            return appInfo.should_show();
+        });
+        return appList.map(app => app.get_id());
     }
 
     updateLocation(){
@@ -471,6 +525,11 @@ var MenuSettingsController = class {
         if(this._writeTimeoutId){
             GLib.source_remove(this._writeTimeoutId);
             this._writeTimeoutId = null;
+        }
+
+        if(this._installedChangedId){
+            this._appSystem.disconnect(this._installedChangedId);
+            this._installedChangedId = null;
         }
 
         if(this.runnerMenu)
