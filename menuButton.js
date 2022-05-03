@@ -189,19 +189,13 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         else
             arrowAlignment = 0.5;
 
-        this.arcMenuContextMenu._arrowSide = side;
-        this.arcMenuContextMenu._boxPointer._arrowSide = side;
-        this.arcMenuContextMenu._boxPointer._userArrowSide = side;
-        this.arcMenuContextMenu._boxPointer.setSourceAlignment(0.5);
-        this.arcMenuContextMenu._arrowAlignment = arrowAlignment;
-        this.arcMenuContextMenu._boxPointer._border.queue_repaint();
-
-        this.arcMenu._arrowSide = side;
-        this.arcMenu._boxPointer._arrowSide = side;
-        this.arcMenu._boxPointer._userArrowSide = side;
-        this.arcMenu._boxPointer.setSourceAlignment(0.5);
-        this.arcMenu._arrowAlignment = arrowAlignment;
-        this.arcMenu._boxPointer._border.queue_repaint();
+        let menus = [this.arcMenu, this.arcMenuContextMenu];
+        for(let menu of menus){
+            menu._boxPointer._userArrowSide = side;
+            menu._boxPointer.setSourceAlignment(0.5);
+            menu._arrowAlignment = arrowAlignment;
+            menu._boxPointer._border.queue_repaint();
+        }
 
         if(setAlignment)
             this.setMenuPositionAlignment();
@@ -284,9 +278,8 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         this.forceMenuLocation();
         let layout = this._settings.get_enum('menu-layout');
         if(layout === Constants.MenuLayout.GNOME_OVERVIEW){
-            if(this._settings.get_boolean('gnome-dash-show-applications')){
+            if(this._settings.get_boolean('gnome-dash-show-applications'))
                 Main.overview._overview._controls._toggleAppsPage();
-            }
             else
                 Main.overview.toggle();
         }
@@ -309,26 +302,11 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             }
 
             this.arcMenu.toggle();
-            if(this.arcMenu.isOpen && this.MenuLayout){
+            if(this.arcMenu.isOpen && this.MenuLayout)
                 this.mainBox.grab_key_focus();
-            }
         }
-        else if(this.arcMenu.isOpen){
-            this.arcMenu.toggle();
-        }
-    }
-
-    getActiveMenu(){
-        if(this.contextMenuManager.activeMenu)
-            return this.contextMenuManager.activeMenu;
-        else if(this.subMenuManager.activeMenu)
-            return this.subMenuManager.activeMenu;
         else if(this.arcMenu.isOpen)
-            return this.arcMenu;
-        else if(this.arcMenuContextMenu.isOpen)
-            return this.arcMenuContextMenu;
-        else
-            return null;
+            this.arcMenu.toggle();
     }
 
     toggleArcMenuContextMenu(){
@@ -382,16 +360,12 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             this.dashToPanelSettings.disconnect(this.dtpPostionChangedID);
             this.dtpPostionChangedID = null;
         }
-        if(this.tooltip)
-            this.tooltip.destroy();
-        if(this.MenuLayout)
-            this.MenuLayout.destroy();
-        if(this.arcMenu)
-            this.arcMenu.destroy();
-        if(this.arcMenuContextMenu)
-            this.arcMenuContextMenu.destroy();
-        if(this.dummyWidget)
-            this.dummyWidget.destroy();
+
+        this.tooltip?.destroy();
+        this.MenuLayout?.destroy();
+        this.arcMenu?.destroy();
+        this.arcMenuContextMenu?.destroy();
+        this.dummyWidget?.destroy();
 
         super._onDestroy();
     }
@@ -434,9 +408,8 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 
     reload(){
-        if(this.MenuLayout){
+        if(this.MenuLayout)
             this.reloadMenuLayout();
-        }
     }
 
     shouldLoadPinnedApps(){
@@ -451,12 +424,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
     _onOpenStateChanged(menu, open) {
         if(open){
-            //Avoid Super L hotkey conflicts with Pop Shell extension by
-            //setting 'overlay-key' mode  to  Shell.ActionMode.ALL.
-            let hotKeyPos = this._settings.get_enum('menu-hotkey');
-            if(hotKeyPos === Constants.HotKey.SUPER_L)
-                Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
-
             this.menuButtonWidget.setActiveStylePseudoClass(true);
             this.add_style_pseudo_class('active');
 

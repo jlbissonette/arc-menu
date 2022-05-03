@@ -129,17 +129,6 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
         }
     }
 
-    getActiveMenu(){
-        if(this.contextMenuManager.activeMenu)
-            return this.contextMenuManager.activeMenu;
-        else if(this.subMenuManager.activeMenu)
-            return this.subMenuManager.activeMenu;
-        else if(this.arcMenu.isOpen)
-            return this.arcMenu;
-        else
-            return null;
-    }
-
     destroy(){
         if(this.createLayoutID){
             GLib.source_remove(this.createLayoutID);
@@ -156,17 +145,10 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
             this.tooltipShowingID = null;
         }
 
-        if(this.tooltip)
-            this.tooltip.destroy();
-
-        if(this.MenuLayout)
-            this.MenuLayout.destroy();
-        if(this.arcMenu)
-            this.arcMenu.destroy();
-        if(this.dummyWidget){
-            Main.uiGroup.remove_child(this.dummyWidget);
-            this.dummyWidget.destroy();
-        }
+        this.tooltip?.destroy();
+        this.MenuLayout?.destroy();
+        this.arcMenu?.destroy();
+        this.dummyWidget?.destroy();
     }
 
     updateMenuLayout(){
@@ -193,9 +175,8 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
     }
 
     reload(){
-        if(this.MenuLayout){
+        if(this.MenuLayout)
             this.reloadMenuLayout();
-        }
     }
 
     shouldLoadPinnedApps(){
