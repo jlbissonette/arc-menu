@@ -2004,6 +2004,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         }
 
         let [name, gicon, fallbackIcon] = Utils.getCategoryDetails(this._category);
+        this._name = _(name);
         this.label.text = _(name);
 
         let icon = new St.Icon({
