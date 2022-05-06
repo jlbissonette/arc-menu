@@ -259,7 +259,14 @@ function getCategoryDetails(currentCategory){
     }
     else{
         name = currentCategory.get_name();
-        gicon = currentCategory.get_icon() ? currentCategory.get_icon() : null;
+
+        if(!currentCategory.get_icon()){
+            gicon = null;
+            fallbackIcon = Gio.icon_new_for_string(Me.path + '/media/icons/menu_icons/category_icons/applications-other-symbolic.svg');
+            return [name, gicon, fallbackIcon];
+        }
+
+        gicon = currentCategory.get_icon();
 
         let iconString = currentCategory.get_icon().to_string() + '-symbolic.svg';
         fallbackIcon = Gio.icon_new_for_string(Me.path + '/media/icons/menu_icons/category_icons/' + iconString);
