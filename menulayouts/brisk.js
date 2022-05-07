@@ -34,7 +34,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style_class = 'arcmenu-search-top';
             this.searchBox.style = "margin-bottom: 0px;";
-            this.mainBox.add_child(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox);
 
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
             this.mainBox.add_child(separator);
@@ -125,7 +125,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style_class = 'arcmenu-search-bottom';
-            this.mainBox.add_child(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox);
         }
 
         this.updateWidth();
@@ -152,7 +152,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let isContainedInCategory = false;
             let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);
             if(placeMenuItem){
-                this.actionsBox.add_child(placeMenuItem.actor);
+                this.actionsBox.add_child(placeMenuItem);
             }
         }
         separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);

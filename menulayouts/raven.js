@@ -100,7 +100,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 10px 10px 10px 10px;";
-        this.topBox.add_child(this.searchBox.actor);
+        this.topBox.add_child(this.searchBox);
 
         this.applicationsBox = new St.BoxLayout({
             x_align: Clutter.ActorAlign.FILL,
@@ -263,7 +263,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     displayCategories(){
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            this.actionsBox.add_child(categoryMenuItem.actor);
+            this.actionsBox.add_child(categoryMenuItem);
         }
     }
 
@@ -295,7 +295,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayRecentFiles(){
         super.displayRecentFiles();
         let label = this._createLabelWithSeparator(_("Recent Files"));
-        label.actor.style += "padding-left: 10px;";
+        label.style += "padding-left: 10px;";
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
     }
@@ -318,12 +318,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let label = this._createLabelWithSeparator(this.activeCategory);
 
         if(grid === this.applicationsGrid){
-            label.actor.style += "padding-left: 10px;";
-            this.applicationsBox.insert_child_at_index(label.actor, 0);
+            label.style += "padding-left: 10px;";
+            this.applicationsBox.insert_child_at_index(label, 0);
         }
         else{
-            label.actor.style += "padding-left: 10px; padding-top: 20px;";
-            this.applicationsBox.insert_child_at_index(label.actor, 2);
+            label.style += "padding-left: 10px; padding-top: 20px;";
+            this.applicationsBox.insert_child_at_index(label, 2);
         }
     }
 

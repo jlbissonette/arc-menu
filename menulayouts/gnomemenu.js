@@ -89,7 +89,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.END
         });
         let activities = new MW.ActivitiesMenuItem(this);
-        this.activitiesBox.add_child(activities.actor);
+        this.activitiesBox.add_child(activities);
         this.leftBox.add_child(this.activitiesBox);
 
         this.updateWidth();
@@ -131,7 +131,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.loadCategories();
 
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            categoryMenuItem.actor.style = "padding-top: 8px; padding-bottom: 8px;";
+            categoryMenuItem.style = "padding-top: 8px; padding-bottom: 8px;";
             categoryMenuItem._iconBin.visible = false;
         }
     }

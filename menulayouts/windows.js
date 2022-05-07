@@ -43,9 +43,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.actionsBox);
 
         this.extrasButton = new MW.ExtrasButton(this);
-        this.extrasButton.actor.y_expand = true;
-        this.extrasButton.actor.y_align= Clutter.ActorAlign.START;
-        this.actionsBox.add_child(this.extrasButton.actor);
+        this.extrasButton.y_expand = true;
+        this.extrasButton.y_align= Clutter.ActorAlign.START;
+        this.actionsBox.add_child(this.extrasButton);
 
         let isContainedInCategory = false;
         let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
@@ -59,7 +59,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.actionsBox.add_child(settingsButton);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add_child(this.leaveButton.actor);
+        this.actionsBox.add_child(this.leaveButton);
 
         this.subMainBox = new St.BoxLayout({
             x_expand: true,
@@ -113,7 +113,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
-        this.subMainBox.add_child(this.searchBox.actor);
+        this.subMainBox.add_child(this.searchBox);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
 
         let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
@@ -123,7 +123,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let applicationName = applicationShortcutsList[i][0];
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcutsList[i][1], applicationShortcutsList[i][2], Constants.DisplayType.LIST);
             if(shortcutMenuItem.shouldShow)
-                this.applicationShortcuts.push(shortcutMenuItem.actor);
+                this.applicationShortcuts.push(shortcutMenuItem);
         }
 
         let directoryShortcutsList = this._settings.get_value('directory-shortcuts-list').deep_unpack();
@@ -230,7 +230,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.backButton = new MW.BackMenuItem(this);
         this.backButton.connect("activate", () => this.toggleExtrasMenu());
-        headerBox.add_child(this.backButton.actor);
+        headerBox.add_child(this.backButton);
 
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         headerBox.add_child(separator);
@@ -334,13 +334,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             }
             const MaxItems = 8;
             if(this.frequentAppsList.length > 0){
-                this.applicationsBox.add_child(label.actor);
+                this.applicationsBox.add_child(label);
                 for (let i = 0; i < this.frequentAppsList.length && i < MaxItems; i++) {
                     let item = this.frequentAppsList[i];
-                    if(item.actor.get_parent())
-                        item.actor.get_parent().remove_child(item.actor);
-                    if (!item.actor.get_parent())
-                        this.applicationsBox.add_child(item.actor);
+                    if(item.get_parent())
+                        item.get_parent().remove_child(item);
+                    this.applicationsBox.add_child(item);
                     if(!this.activeMenuItemSet){
                         this._frequentActiveItem = item;
                         this.activeMenuItemSet = true;

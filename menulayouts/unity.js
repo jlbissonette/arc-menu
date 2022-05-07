@@ -59,12 +59,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.mainBox.add_child(this.subMainBox);
 
-        this.searchBox.actor.y_align = Clutter.ActorAlign.CENTER;
-        this.searchBox.actor.y_expand = true;
+        this.searchBox.y_align = Clutter.ActorAlign.CENTER;
+        this.searchBox.y_expand = true;
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 15px 0px 15px;";
-        this.topBox.add_child(this.searchBox.actor);
-        this.topBox.add_child(this.categoriesButton.actor);
+        this.topBox.add_child(this.searchBox);
+        this.topBox.add_child(this.categoriesButton);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
@@ -221,7 +221,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _createCategoriesMenu(){
-        this.categoriesMenu = new PopupMenu.PopupMenu(this.categoriesButton.actor, 0.5, St.Side.TOP);
+        this.categoriesMenu = new PopupMenu.PopupMenu(this.categoriesButton, 0.5, St.Side.TOP);
         this.categoriesMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
         this.categoriesMenu.blockSourceEvents = true;
         this.categoriesMenu.connect('open-state-changed', (menu, open) => {
@@ -336,7 +336,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _displayCategories(){
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            this.categoriesBox.add_actor(categoryMenuItem.actor);
+            this.categoriesBox.add_actor(categoryMenuItem);
         }
     }
 
@@ -388,9 +388,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let label = this._createLabelWithSeparator(this.activeCategory);
         if(grid === this.applicationsGrid)
-            this.applicationsBox.insert_child_at_index(label.actor, 0);
+            this.applicationsBox.insert_child_at_index(label, 0);
         else
-            this.applicationsBox.insert_child_at_index(label.actor, 2);
+            this.applicationsBox.insert_child_at_index(label, 2);
     }
 
     destroy(){

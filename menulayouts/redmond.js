@@ -41,7 +41,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true
         });
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP)
-            this.subMainBox.add_child(this.searchBox.actor);
+            this.subMainBox.add_child(this.searchBox);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
@@ -61,7 +61,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMainBox.add_child(this.applicationsScrollBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style_class = 'arcmenu-search-bottom';
-            this.subMainBox.add_child(this.searchBox.actor);
+            this.subMainBox.add_child(this.searchBox);
         }
 
         this.rightBox = new St.BoxLayout({
@@ -78,7 +78,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(!this._settings.get_boolean('disable-user-avatar')){
             this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-            this.rightBox.add_child(this.user.actor);
+            this.rightBox.add_child(this.user);
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
             this.rightBox.add_child(separator);
         }
@@ -146,7 +146,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let applicationName = applicationShortcuts[i][0];
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.LIST);
             if(shortcutMenuItem.shouldShow)
-                this.shortcutsBox.add_child(shortcutMenuItem.actor);
+                this.shortcutsBox.add_child(shortcutMenuItem);
         }
 
         //create new section for Power, Lock, Logout, Suspend Buttons

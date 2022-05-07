@@ -57,17 +57,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         this.user = new MW.UserMenuIcon(this, 55, true);
-        this.user.actor.x_expand = false;
-        this.user.actor.y_expand = true;
-        this.user.actor.x_align = Clutter.ActorAlign.CENTER;
-        this.user.actor.y_align = Clutter.ActorAlign.CENTER;
-        this.leftTopBox.add_child(this.user.actor);
+        this.user.x_expand = false;
+        this.user.y_expand = true;
+        this.user.x_align = Clutter.ActorAlign.CENTER;
+        this.user.y_align = Clutter.ActorAlign.CENTER;
+        this.leftTopBox.add_child(this.user);
         this.rightTopBox.add_child(this.user.label);
         this.user.label.style = "padding-left: 0.4em; margin: 0px 10px 0px 15px; font-weight: bold;";
         this.user.label.y_expand = false;
         this.user.label.x_expand = true;
         this.user.label.x_align = Clutter.ActorAlign.START;
-        this.rightTopBox.add_child(this.searchBox.actor);
+        this.rightTopBox.add_child(this.searchBox);
 
         this.topBox.add_child(this.leftTopBox);
         this.topBox.add_child(this.rightTopBox);
@@ -171,7 +171,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let applicationName = applicationShortcutsList[i][0];
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcutsList[i][1], applicationShortcutsList[i][2], Constants.DisplayType.LIST);
             if(shortcutMenuItem.shouldShow)
-                this.applicationShortcuts.push(shortcutMenuItem.actor);
+                this.applicationShortcuts.push(shortcutMenuItem);
         }
 
         let directoryShortcutsList = this._settings.get_value('directory-shortcuts-list').deep_unpack();
@@ -357,7 +357,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let isActiveMenuItemSet = false;
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            this.applicationsBox.add_child(categoryMenuItem.actor);
+            this.applicationsBox.add_child(categoryMenuItem);
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;
                 this.activeMenuItem = categoryMenuItem;

@@ -365,7 +365,7 @@ var MenuSettingsController = class {
         let menuButtonWidget = this._menuButton.menuButtonWidget;
         this._menuButton.container.set_width(-1);
         this._menuButton.container.set_height(-1);
-        menuButtonWidget.actor.show();
+        menuButtonWidget.show();
         switch (this._settings.get_enum('menu-button-appearance')) {
             case Constants.MenuButtonAppearance.TEXT:
                 menuButtonWidget.hidePanelIcon();
@@ -386,7 +386,7 @@ var MenuSettingsController = class {
                 menuButtonWidget.showPanelIcon();
                 break;
             case Constants.MenuButtonAppearance.NONE:
-                menuButtonWidget.actor.hide();
+                menuButtonWidget.hide();
                 this._menuButton.container.set_width(0);
                 this._menuButton.container.set_height(0);
                 break;

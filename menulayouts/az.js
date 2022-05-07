@@ -56,7 +56,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.style = "margin: 5px 15px 5px 15px;";
-        this.topBox.add_child(this.searchBox.actor);
+        this.topBox.add_child(this.searchBox);
         this.subMainBox.add_child(this.topBox);
 
         this.applicationsBox = new St.BoxLayout({

@@ -42,9 +42,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.actionsBox);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.user.actor.x_expand = true;
-        this.user.actor.x_align = Clutter.ActorAlign.FILL;
-        this.actionsBox.add_child(this.user.actor);
+        this.user.x_expand = true;
+        this.user.x_align = Clutter.ActorAlign.FILL;
+        this.actionsBox.add_child(this.user);
 
         let settingsButton = this.createMenuItem([_("Settings"), "", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, false);
         if(settingsButton.shouldShow)
@@ -63,7 +63,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style_class = 'arcmenu-search-top';
             this.searchBox.style = "margin-top: 6px; margin-bottom: 0px;";
-            this.mainBox.add_child(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox);
         }
 
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
@@ -123,7 +123,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style_class = 'arcmenu-search-bottom';
-            this.mainBox.add_child(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox);
         }
 
         this.updateWidth();

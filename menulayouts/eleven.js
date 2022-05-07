@@ -53,7 +53,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.searchBox.style = "margin: 5px 15px 10px 15px;";
 
-        this.topBox.add_child(this.searchBox.actor);
+        this.topBox.add_child(this.searchBox);
         this.mainBox.insert_child_at_index(this.topBox, 0);
 
         this.applicationsBox = new St.BoxLayout({
@@ -129,7 +129,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsBox.add_child(this.shortcutsGrid);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.actionsBox.add_child(this.user.actor);
+        this.actionsBox.add_child(this.user);
 
         this.quickLinksBox = new St.BoxLayout({
             x_expand: true,
@@ -152,7 +152,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.quickLinksBox.add_child(settingsButton);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.quickLinksBox.add_child(this.leaveButton.actor);
+        this.quickLinksBox.add_child(this.leaveButton);
 
         this.actionsBox.add_child(this.quickLinksBox);
 

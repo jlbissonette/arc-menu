@@ -44,8 +44,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.actionsBox);
 
         this.pinnedAppsButton = new MW.PinnedAppsButton(this);
-        this.pinnedAppsButton.actor.y_expand = true;
-        this.pinnedAppsButton.actor.y_align= Clutter.ActorAlign.START;
+        this.pinnedAppsButton.y_expand = true;
+        this.pinnedAppsButton.y_align= Clutter.ActorAlign.START;
         this.actionsBox.add_child(this.pinnedAppsButton);
 
         let isContainedInCategory = false;
@@ -78,17 +78,17 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
         })
         this.user = new MW.UserMenuIcon(this, 55, true);
-        this.user.actor.x_align = Clutter.ActorAlign.CENTER;
-        this.user.actor.y_align = Clutter.ActorAlign.CENTER;
+        this.user.x_align = Clutter.ActorAlign.CENTER;
+        this.user.y_align = Clutter.ActorAlign.CENTER;
         this.user.label.x_align = Clutter.ActorAlign.CENTER;
         this.user.label.style = "margin-left: 10px;"
-        userMenuBox.add_child(this.user.actor);
+        userMenuBox.add_child(this.user);
         userMenuBox.add_child(this.user.label);
         this.subMainBox.add_child(userMenuBox);
 
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 15px 10px 10px 10px;";
-        this.subMainBox.add_child(this.searchBox.actor);
+        this.subMainBox.add_child(this.searchBox);
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true
@@ -149,7 +149,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.backButton = new MW.BackMenuItem(this);
         this.backButton.connect("activate", () => this.togglePinnedAppsMenu());
-        headerBox.add_child(this.backButton.actor);
+        headerBox.add_child(this.backButton);
 
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         headerBox.add_child(separator);

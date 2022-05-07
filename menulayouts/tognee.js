@@ -66,7 +66,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style_class = 'arcmenu-search-top';
-            this.appBox.add_child(this.searchBox.actor);
+            this.appBox.add_child(this.searchBox);
         }
         this.appBox.add_child(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ vertical: true });
@@ -80,11 +80,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.backButton = new MW.BackMenuItem(this);
         this.navigateBox.add_child(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL));
-        this.navigateBox.add_child(this.backButton.actor);
+        this.navigateBox.add_child(this.backButton);
         this.appBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style_class = 'arcmenu-search-bottom';
-            this.appBox.add_child(this.searchBox.actor);
+            this.appBox.add_child(this.searchBox);
         }
 
         // The "Right Box"
@@ -142,7 +142,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let isContainedInCategory = false;
             let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.BUTTON, isContainedInCategory);
             if(shortcutMenuItem.shouldShow)
-                this.shortcutsBox.add_child(shortcutMenuItem.actor);
+                this.shortcutsBox.add_child(shortcutMenuItem);
         }
 
         // Bottom Section for Power etc...
@@ -164,7 +164,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
 
         let leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add_child(leaveButton.actor);
+        this.actionsBox.add_child(leaveButton);
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG, Constants.SeparatorAlignment.HORIZONTAL);
         this.actionsBox.insert_child_at_index(separator, 0);
         this.quickBox.add_child(this.actionsScrollBox);
@@ -192,7 +192,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let directory = directoryShortcuts[i];
             let isContainedInCategory = false;
             let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.shortcutsBox.add_child(placeMenuItem.actor);
+            this.shortcutsBox.add_child(placeMenuItem);
         }
     }
 

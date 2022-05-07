@@ -33,7 +33,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.searchBox.style_class = 'arcmenu-search-top';
             this.searchBox.style = "margin-bottom: 0px;";
-            this.mainBox.add_child(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox);
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
             separator.style += "margin-bottom: 6px;";
             this.mainBox.add_child(separator);
@@ -104,7 +104,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 y_align: Clutter.ActorAlign.END
             });
             this.activities = new MW.ActivitiesMenuItem(this);
-            this.activitiesBox.add_child(this.activities.actor);
+            this.activitiesBox.add_child(this.activities);
             this.leftBox.add_child(this.activitiesBox);
         }
 
@@ -114,7 +114,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.mainBox.add_child(separator);
             this.searchBox.style_class = 'arcmenu-search-bottom';
             this.searchBox.style = "margin-top: 0px;";
-            this.mainBox.add_child(this.searchBox.actor);
+            this.mainBox.add_child(this.searchBox);
         }
 
         this.updateWidth();
@@ -155,7 +155,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         super.loadCategories();
         for(let categoryMenuItem of this.categoryDirectories.values()){
-            categoryMenuItem.actor.style = "padding-top: 8px; padding-bottom: 8px; margin: 0; spacing: 0;";
+            categoryMenuItem.style = "padding-top: 8px; padding-bottom: 8px; margin: 0; spacing: 0;";
             categoryMenuItem._iconBin.visible = false;
         }
     }

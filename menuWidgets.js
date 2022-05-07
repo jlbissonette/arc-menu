@@ -96,7 +96,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             this.add_style_class_name(params.style_class);
 
         if(params.hover)
-            this.actor.connect('notify::hover', this._onHover.bind(this));
+            this.connect('notify::hover', this._onHover.bind(this));
         if (params.reactive && params.hover)
             this.bind_property('hover', this, 'active', GObject.BindingFlags.SYNC_CREATE);
 
@@ -232,8 +232,8 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
 
     vfunc_key_focus_in() {
         super.vfunc_key_focus_in();
-        if(!this.actor.hover)
-            this._menuLayout._keyFocusIn(this.actor);
+        if(!this.hover)
+            this._menuLayout._keyFocusIn(this);
         this.active = true;
     }
 
@@ -453,32 +453,32 @@ var ActivitiesMenuItem = GObject.registerClass(class ArcMenu_ActivitiesMenuItem 
     }
 });
 
-var Tooltip = class ArcMenu_Tooltip{
-    constructor(menuButton) {
-        this._menuButton = menuButton;
-        this._settings = this._menuButton._settings;
-
-        this.actor = new St.BoxLayout({
+var Tooltip = GObject.registerClass(class ArcMenu_Tooltip extends St.BoxLayout {
+    _init(menuButton) {
+        super._init({
             vertical: true,
             style_class: 'dash-label arcmenu-tooltip arcmenu-custom-tooltip',
             opacity: 0
         });
+        this._menuButton = menuButton;
+        this._settings = this._menuButton._settings;
 
         this.titleLabel = new St.Label({
             y_align: Clutter.ActorAlign.CENTER
         });
-        this.actor.add_child(this.titleLabel);
+        this.add_child(this.titleLabel);
 
         this.descriptionLabel = new St.Label({
             y_align: Clutter.ActorAlign.CENTER
         });
-        this.actor.add_child(this.descriptionLabel);
+        this.add_child(this.descriptionLabel);
 
-        global.stage.add_child(this.actor);
-        this.actor.hide();
+        global.stage.add_child(this);
+        this.hide();
 
         this._useTooltips = !this._settings.get_boolean('disable-tooltips');
         this.toggleID = this._settings.connect('changed::disable-tooltips', this.disableTooltips.bind(this));
+        this.connect('destroy', () => this._onDestroy());
     }
 
     showTooltip(sourceActor, location, titleLabel, description, displayType){
@@ -546,7 +546,7 @@ var Tooltip = class ArcMenu_Tooltip{
                     this.titleLabel.show();
                 if(this.descriptionLabel.text)
                     this.descriptionLabel.show();
-                this.show();
+                this._show();
                 this._menuButton.tooltipShowing = true;
                 this._menuButton.tooltipShowingID = null;
                 return GLib.SOURCE_REMOVE;
@@ -554,20 +554,20 @@ var Tooltip = class ArcMenu_Tooltip{
         }
     }
 
-    show() {
+    _show() {
         if(!this.sourceActor)
             return;
         if(this._useTooltips){
-            this.actor.opacity = 0;
-            this.actor.show();
+            this.opacity = 0;
+            this.show();
 
             let [stageX, stageY] = this.sourceActor.get_transformed_position();
 
             let itemWidth  = this.sourceActor.allocation.x2 - this.sourceActor.allocation.x1;
             let itemHeight = this.sourceActor.allocation.y2 - this.sourceActor.allocation.y1;
 
-            let labelWidth = this.actor.get_width();
-            let labelHeight = this.actor.get_height();
+            let labelWidth = this.get_width();
+            let labelHeight = this.get_height();
 
             let x, y;
             let gap = 5;
@@ -599,8 +599,8 @@ var Tooltip = class ArcMenu_Tooltip{
             else if (y + labelHeight > monitor.y + monitor.height - gap)
                 y -= y + labelHeight - (monitor.y + monitor.height) + gap;
 
-            this.actor.set_position(x, y);
-            this.actor.ease({
+            this.set_position(x, y);
+            this.ease({
                 opacity: 255,
                 duration: Dash.DASH_ITEM_LABEL_SHOW_TIME,
                 mode: Clutter.AnimationMode.EASE_OUT_QUAD,
@@ -615,17 +615,17 @@ var Tooltip = class ArcMenu_Tooltip{
                 this._menuButton.tooltipShowingID = null;
             }
             this.sourceActor = null;
-            this.actor.ease({
+            this.ease({
                 opacity: 0,
                 duration: Dash.DASH_ITEM_LABEL_HIDE_TIME,
                 mode: Clutter.AnimationMode.EASE_OUT_QUAD,
-                onComplete: () => this.actor.hide()
+                onComplete: () => super.hide()
             });
         }
     }
 
-    destroy() {
-        if (this._menuButton.tooltipShowingID) {
+    _onDestroy() {
+        if(this._menuButton.tooltipShowingID){
             GLib.source_remove(this._menuButton.tooltipShowingID);
             this._menuButton.tooltipShowingID = null;
         }
@@ -638,10 +638,9 @@ var Tooltip = class ArcMenu_Tooltip{
             this.hoverID = null;
         }
 
-        global.stage.remove_child(this.actor);
-        this.actor.destroy();
+        global.stage.remove_child(this);
     }
-};
+});
 
 var ArcMenuButtonItem = GObject.registerClass(
     class ArcMenu_ButtonItem extends ArcMenuPopupBaseMenuItem {
@@ -946,7 +945,7 @@ var PlasmaMenuItem = GObject.registerClass(class ArcMenu_PlasmaMenuItem extends 
             this._menuButton.tooltip.hide();
         }
         let shouldHover = this._settings.get_boolean('plasma-enable-hover');
-        if(shouldHover && this.actor.hover && !this.isActive){
+        if(shouldHover && this.hover && !this.isActive){
             this.activate(Clutter.get_current_event());
         }
     }
@@ -1299,7 +1298,7 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
 
     popupContextMenu(){
         if(this._app && this.contextMenu == undefined){
-            this.contextMenu = new AppContextMenu(this.actor, this._menuLayout);
+            this.contextMenu = new AppContextMenu(this, this._menuLayout);
             if(this.layoutProps.ShortcutContextMenuLocation === Constants.ContextMenuLocation.BOTTOM_CENTERED)
                 this.contextMenu.centerBoxPointerPosition();
             else if(this.layoutProps.ShortcutContextMenuLocation === Constants.ContextMenuLocation.RIGHT)
@@ -1384,8 +1383,8 @@ var UserMenuItem = GObject.registerClass(class ArcMenu_UserMenuItem extends ArcM
             this.avatarStyle = 'arcmenu-avatar-square';
 
         if(this._displayType === Constants.DisplayType.BUTTON)
-            this.userMenuIcon.actor.set_style_class_name(this.avatarStyle + ' user-icon');
-        this.add_child(this.userMenuIcon.actor);
+            this.userMenuIcon.set_style_class_name(this.avatarStyle + ' user-icon');
+        this.add_child(this.userMenuIcon);
         this.label = this.userMenuIcon.label;
         if(this._displayType !== Constants.DisplayType.BUTTON)
             this.add_child(this.label);
@@ -1398,48 +1397,48 @@ var UserMenuItem = GObject.registerClass(class ArcMenu_UserMenuItem extends ArcM
     }
 });
 
-var UserMenuIcon = class ArcMenu_UserMenuIcon{
-    constructor(menuLayout, size, hasTooltip) {
+var UserMenuIcon = GObject.registerClass(class ArcMenu_UserMenuIcon extends St.Bin{
+    _init(menuLayout, size, hasTooltip) {
+        let avatarStyle;
+        if(menuLayout._settings.get_enum('avatar-style') === Constants.AvatarStyle.ROUND)
+            avatarStyle = 'arcmenu-avatar-round';
+        else
+            avatarStyle = 'arcmenu-avatar-square';
+
+        super._init({
+            style_class: avatarStyle + ' user-icon popup-menu-icon',
+            track_hover: true,
+            reactive: true,
+            x_align: Clutter.ActorAlign.CENTER,
+            y_align: Clutter.ActorAlign.CENTER,
+            style: `width: ${this.iconSize}px; height: ${this.iconSize}px;`
+        });
+
         this._menuButton = menuLayout.menuButton;
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
         this.iconSize = size;
         this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
-        let username = GLib.get_user_name();
-        this._user = AccountsService.UserManager.get_default().get_user(username);
 
-        if(this._settings.get_enum('avatar-style') === Constants.AvatarStyle.ROUND)
-            this.avatarStyle = 'arcmenu-avatar-round';
-        else
-            this.avatarStyle = 'arcmenu-avatar-square';
-
-        this.actor = new St.Bin({
-            style_class: this.avatarStyle + ' user-icon popup-menu-icon',
-            track_hover: true,
-            reactive: true,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.CENTER
-        });
+        this._user = AccountsService.UserManager.get_default().get_user(GLib.get_user_name());
 
         this.label = new St.Label({
             text: GLib.get_real_name(),
             y_align: Clutter.ActorAlign.CENTER
         });
 
-        this.actor.style = "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
-
         this._userLoadedId = this._user.connect('notify::is-loaded', this._onUserChanged.bind(this));
         this._userChangedId = this._user.connect('changed', this._onUserChanged.bind(this));
-        this.actor.connect('destroy', this._onDestroy.bind(this));
+        this.connect('destroy', this._onDestroy.bind(this));
         if(hasTooltip)
-            this.actor.connect('notify::hover',this._onHover.bind(this));
+            this.connect('notify::hover',this._onHover.bind(this));
 
         this._onUserChanged();
     }
 
     _onHover() {
-        if(this.actor.hover)
-            this._menuButton.tooltip.showTooltip(this.actor, this.tooltipLocation, GLib.get_real_name(), null, Constants.DisplayType.BUTTON);
+        if(this.hover)
+            this._menuButton.tooltip.showTooltip(this, this.tooltipLocation, GLib.get_real_name(), null, Constants.DisplayType.BUTTON);
         else
             this._menuButton.tooltip.hide();
     }
@@ -1455,13 +1454,13 @@ var UserMenuIcon = class ArcMenu_UserMenuIcon{
                 iconFile = null;
 
             if (iconFile) {
-                this.actor.child = null;
-                this.actor.add_style_class_name('user-avatar');
-                this.actor.style = 'background-image: url("%s");'.format(iconFile) + "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
+                this.child = null;
+                this.add_style_class_name('user-avatar');
+                this.style = 'background-image: url("%s");'.format(iconFile) + "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
             }
             else {
-                this.actor.style = "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
-                this.actor.child = new St.Icon({
+                this.style = "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
+                this.child = new St.Icon({
                     icon_name: 'avatar-default-symbolic',
                     icon_size: this.iconSize,
                     style: "padding: 5px; width: " + this.iconSize + "px; height: " + this.iconSize + "px;",
@@ -1480,7 +1479,7 @@ var UserMenuIcon = class ArcMenu_UserMenuIcon{
             this._userChangedId = null;
         }
     }
-};
+});
 
 // Menu pinned apps item class
 var PinnedAppsMenuItem = GObject.registerClass({
@@ -1554,7 +1553,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
             this.add_child(this.label);
         }
 
-        this._draggable = DND.makeDraggable(this.actor);
+        this._draggable = DND.makeDraggable(this);
         this._draggable._animateDragEnd = (eventTime) => {
             this._draggable._animationInProgress = true;
             this._draggable._onAnimationComplete(this._draggable._dragActor, eventTime);
@@ -1593,7 +1592,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
 
     popupContextMenu(){
         if(this.contextMenu == undefined){
-            this.contextMenu = new AppContextMenu(this.actor, this._menuLayout);
+            this.contextMenu = new AppContextMenu(this, this._menuLayout);
             if(this._displayType === Constants.DisplayType.GRID)
                 this.contextMenu.centerBoxPointerPosition();
             if(this._app)
@@ -1627,12 +1626,12 @@ var PinnedAppsMenuItem = GObject.registerClass({
             dragMotion: this._onDragMotion.bind(this)
         };
         DND.addDragMonitor(this._dragMonitor);
-        this._parentBox = this.actor.get_parent();
+        this._parentBox = this.get_parent();
         let p = this._parentBox.get_transformed_position();
         this.posX = p[0];
         this.posY = p[1];
 
-        this.actor.opacity = 55;
+        this.opacity = 55;
         this.get_allocation_box();
         this.rowHeight = this.height;
         this.rowWidth = this.width;
@@ -1687,7 +1686,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
             DND.removeDragMonitor(this._dragMonitor);
             this._dragMonitor = null;
         }
-        this.actor.opacity = 255;
+        this.opacity = 255;
         let layoutManager = this._parentBox.layout_manager;
         if(layoutManager instanceof Clutter.GridLayout){
             let x = 0, y = 0;
@@ -1713,7 +1712,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
     }
 
     getDragActorSource() {
-        return this.actor;
+        return this;
     }
 
     gridLayoutIter(x, y, columns){
@@ -2386,9 +2385,9 @@ class ArcMenu_SearchBox extends St.Entry {
     }
 });
 
-var MenuButtonWidget = class ArcMenu_MenuButtonWidget{
-    constructor() {
-        this.actor = new St.BoxLayout({
+var MenuButtonWidget = GObject.registerClass(class ArcMenu_MenuButtonWidget extends St.BoxLayout {
+    _init() {
+        super._init({
             style_class: 'panel-status-menu-box',
             pack_start: false
         });
@@ -2405,8 +2404,8 @@ var MenuButtonWidget = class ArcMenu_MenuButtonWidget{
             y_align: Clutter.ActorAlign.CENTER,
         });
 
-        this.actor.add_child(this._icon);
-        this.actor.add_child(this._label);
+        this.add_child(this._icon);
+        this.add_child(this._label);
     }
 
     setActiveStylePseudoClass(enable){
@@ -2429,34 +2428,34 @@ var MenuButtonWidget = class ArcMenu_MenuButtonWidget{
     }
 
     showPanelIcon() {
-        if (!this.actor.contains(this._icon)) {
-            this.actor.add_child(this._icon);
+        if (!this.contains(this._icon)) {
+            this.add_child(this._icon);
         }
     }
 
     hidePanelIcon() {
-        if (this.actor.contains(this._icon)) {
-            this.actor.remove_child(this._icon);
+        if (this.contains(this._icon)) {
+            this.remove_child(this._icon);
         }
     }
 
     showPanelText() {
-        if (!this.actor.contains(this._label)) {
-            this.actor.add_child(this._label);
+        if (!this.contains(this._label)) {
+            this.add_child(this._label);
         }
     }
 
     hidePanelText() {
         this._label.style = null;
-        if (this.actor.contains(this._label)) {
-            this.actor.remove_child(this._label);
+        if (this.contains(this._label)) {
+            this.remove_child(this._label);
         }
     }
 
     setPanelTextStyle(style){
         this._label.style = style;
     }
-};
+});
 
 var WorldClocksSection = GObject.registerClass(class ArcMenu_WorldClocksSection extends DateMenu.WorldClocksSection {
     _init(menuLayout) {

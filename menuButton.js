@@ -66,7 +66,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         this.y_expand = false;
 
         //Add Menu Button Widget to Button
-        this.add_child(this.menuButtonWidget.actor);
+        this.add_child(this.menuButtonWidget);
     }
 
     initiate(){

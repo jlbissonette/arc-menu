@@ -333,7 +333,7 @@ var BaseLayout = class {
         for(let categoryMenuItem of this.categoryDirectories.values()){
             if(categoryMenuItem.get_parent())
                 continue;
-            categoriesBox.add_child(categoryMenuItem.actor);
+            categoriesBox.add_child(categoryMenuItem);
             if(!this._futureActiveItem){
                 this._futureActiveItem = categoryMenuItem;
             }
@@ -421,7 +421,7 @@ var BaseLayout = class {
             let isContainedInCategory = false;
             let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST, isContainedInCategory);
             if(placeMenuItem)
-                this.shortcutsBox.add_child(placeMenuItem.actor);
+                this.shortcutsBox.add_child(placeMenuItem);
         }
     }
 
@@ -727,8 +727,8 @@ var BaseLayout = class {
                 }
             }
 
-            if(item.actor.get_parent())
-                item.actor.get_parent().remove_child(item.actor);
+            if(item.get_parent())
+                item.get_parent().remove_child(item);
 
             if(shouldShow){
                 if(columns === -1){
@@ -917,11 +917,11 @@ var BaseLayout = class {
                 if(this.layoutProperties.Search && this.searchBox.hasKeyFocus() && this.searchResults.hasActiveResult() && this.searchResults.get_parent()){
                     const topSearchResult = this.searchResults.getTopResult();
                     if(topSearchResult.has_style_pseudo_class("active")){
-                        topSearchResult.actor.grab_key_focus();
+                        topSearchResult.grab_key_focus();
                         topSearchResult.remove_style_pseudo_class('active');
                         return actor.navigate_focus(global.stage.key_focus, direction, false);
                     }
-                    topSearchResult.actor.grab_key_focus();
+                    topSearchResult.grab_key_focus();
                     return Clutter.EVENT_STOP;
                 }
                 else if(global.stage.key_focus === this.mainBox && symbol === Clutter.KEY_Up){
