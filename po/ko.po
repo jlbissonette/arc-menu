@@ -967,7 +967,7 @@ msgstr ""
 
 #: prefs.js:2101
 msgid "Menu Distance from Panel and Screen Edge"
-msgstr "패널과 "
+msgstr ""
 
 #: prefs.js:2122
 msgid "Show Application Descriptions"
@@ -1328,7 +1328,7 @@ msgstr "창 열기"
 #: searchProviders/openWindows.js:39
 #, javascript-format
 msgid "'%s' on Workspace %d"
-msgstr "작업공간 %d의 '%s'"
+msgstr ""
 
 #: searchProviders/recentFiles.js:77
 #, javascript-format
