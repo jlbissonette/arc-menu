@@ -124,17 +124,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.weatherBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
-            x_align: Clutter.ActorAlign.CENTER,
+            x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.END,
-            vertical: true
+            vertical: true,
+            style: "margin: 0px 10px 10px 10px; spacing: 10px;"
         });
 
         this._weatherItem = new MW.WeatherSection(this);
-        this._weatherItem.style = "margin: 0px 0px 25px 0px;";
         this._clocksItem = new MW.WorldClocksSection(this);
         this._clocksItem.x_expand = true;
         this._clocksItem.x_align = Clutter.ActorAlign.FILL;
-        this._clocksItem.style = "margin: 0px 0px 25px 0px;";
 
         this.weatherBox.add_child(this._clocksItem);
         this.weatherBox.add_child(this._weatherItem);

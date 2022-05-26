@@ -191,6 +191,8 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
         let menus = [this.arcMenu, this.arcMenuContextMenu];
         for(let menu of menus){
+            menu._arrowSide = side;
+            menu._boxPointer._arrowSide = side;
             menu._boxPointer._userArrowSide = side;
             menu._boxPointer.setSourceAlignment(0.5);
             menu._arrowAlignment = arrowAlignment;
