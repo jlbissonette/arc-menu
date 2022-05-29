@@ -18,7 +18,6 @@ var MenuSettingsController = class {
         this._settingsConnections = new Utils.SettingsConnectionsHandler(this._settings);
 
         this.currentMonitorIndex = 0;
-        this._activitiesButton = Main.panel.statusArea.activities;
         this.isPrimaryPanel = isPrimaryPanel;
 
         this._menuButton = new MenuButton.MenuButton(settings, panel);
@@ -464,36 +463,8 @@ var MenuSettingsController = class {
     }
 
     _configureActivitiesButton(){
-        let isActivitiesButtonPresent = Main.panel.statusArea.activities && Main.panel.statusArea.activities.container && Main.panel._leftBox.contains(Main.panel.statusArea.activities.container);
         let showActivities = this._settings.get_boolean('show-activities-button');
-
-        let container = Main.panel.statusArea.activities.container;
-        let parent = container.get_parent();
-        let index = 0;
-        if(this._settings.get_enum('position-in-panel') === Constants.MenuPosition.LEFT &&
-            this._settings.get_int('menu-button-position-offset') == 0)
-            index = 1;
-
-        if(showActivities && !isActivitiesButtonPresent){
-            parent ? parent.remove_child(container) : null;
-            Main.panel._leftBox.insert_child_at_index(this._activitiesButton.container, index);
-        }
-        else if(!showActivities && isActivitiesButtonPresent)
-            Main.panel._leftBox.remove_child(Main.panel.statusArea.activities.container);
-    }
-
-    _isActivitiesButtonPresent() {
-        return (this._activitiesButton &&
-            this._activitiesButton.container &&
-            Main.panel._leftBox.contains(this._activitiesButton.container));
-    }
-
-    _addActivitiesButtonToMainPanel() {
-        if (!this._isActivitiesButtonPresent()) {
-            let parent = this._activitiesButton.container.get_parent();
-            if(!parent)
-                Main.panel._leftBox.insert_child_at_index(this._activitiesButton.container, 0);
-        }
+        Main.panel.statusArea.activities.visible = showActivities;
     }
 
     _addMenuButtonToMainPanel() {
@@ -511,9 +482,10 @@ var MenuSettingsController = class {
         this._addMenuButtonToMainPanel();
         this._menuButton.initiate();
     }
+
     _disableButton() {
         this._removeMenuButtonFromMainPanel();
-        this._addActivitiesButtonToMainPanel();
+        Main.panel.statusArea.activities.visible = true;
         this._menuButton.destroy();
     }
 
@@ -538,9 +510,9 @@ var MenuSettingsController = class {
         this._settingsConnections.destroy();
         this._settingsConnections = null;
 
-        if(this.panel == undefined)
+        if(this.panel === undefined)
             this._menuButton.destroy();
-        else if (this._isButtonEnabled())
+        else if(this._isButtonEnabled())
             this._disableButton();
 
         if(this.isPrimaryPanel){
@@ -549,7 +521,6 @@ var MenuSettingsController = class {
         }
 
         this._settings = null;
-        this._activitiesButton = null;
         this._menuButton = null;
         delete global.toggleArcMenu;
   }
