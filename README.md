@@ -25,9 +25,9 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 ### Installation
 
-#### To install the most recent official release: Visit ArcMenu on the [Official GNOME Extensions](https://extensions.gnome.org/extension/3628/arcmenu/) website.
+#### Visit the [GNOME Extensions](https://extensions.gnome.org/extension/3628/arcmenu/) website to install the most recent release of ArcMenu.
 
-- **To install ArcMenu from source**: Please see the: [Install From Source wiki Guide](https://gitlab.com/arcmenu/ArcMenu/-/wikis/Install-From-Source-Guide).
+- **To install ArcMenu from source**: Please see the [Install From Source wiki Guide](https://gitlab.com/arcmenu/ArcMenu/-/wikis/Install-From-Source-Guide).
 
 <p align="left">
        <a href="https://extensions.gnome.org/extension/3628/arcmenu/" >
@@ -36,7 +36,7 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 -----
 
-### Credits:
+### Credits
 
 **@[AndrewZaech](https://gitlab.com/AndrewZaech) - Current Project Maintainer and Developer**
 
@@ -50,9 +50,9 @@ Additional credits:
 
 -----
 
-### Contributors:
+### Contributors
 
-#### Thanks to the following people for contributing via pull requests:
+#### Thanks to the following people for contributing via pull requests
 
 **@[fishears](https://github.com/fishears/Arc-Menu)** | **@[JasonLG1979](https://github.com/JasonLG1979)** | **@[itmitica](https://github.com/itmitica)** | **@[vikaig](https://gitlab.com/vikaig)** | **@[MagneFire](https://gitlab.com/MagneFire)**
 
@@ -61,12 +61,12 @@ Additional credits:
 **@[charlesg99](https://github.com/charlesg99)** | **@[harshadgavali](https://gitlab.com/harshadgavali)** | **@[O. Giesmann ](https://gitlab.com/Etamuk)** | **@[aleayr ](https://gitlab.com/aleayr)**
 
 
-#### Bug Fixes:
+#### Bug Fixes
 
 **@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee/Arc-Menu)** | **@[aleayr ](https://gitlab.com/aleayr)**
 
 
-#### Translators:
+#### Translators
 
 **@[Nilvus](https://gitlab.com/Nilvus), @[steve.kossouho](https://gitlab.com/steve.kossouho) - French** | **@[Etamuk](https://gitlab.com/Etamuk) - German** | **@[alex4401](https://gitlab.com/alex4401) - Polish** | **@[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **@[sigbjokj](https://gitlab.com/sigbjokj), @[sssandum](https://gitlab.com/sssandum) - Norwegian**
 
@@ -95,9 +95,9 @@ Fallback category icons included in ArcMenu are copied from [Ubuntu Yaru Icons](
 
 #### Distro Icons
 
-**Legal disclaimer for brand icons and trademarks:**
+Legal disclaimer for brand icons and trademarks:
 
-*" All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer. "*
+*All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer.*
 
 <details>
 <summary><b>Read More...</b></summary>
