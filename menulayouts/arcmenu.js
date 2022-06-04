@@ -206,6 +206,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
         this.rightBox.add_child(this.actionsBox);
 
+        this.updateWidth();
+        this.loadCategories();
+        this.loadPinnedApps();
+        this.setDefaultMenuView();
+    }
+
+    _createExtraCategoriesLinks(){
         this.extraCategoriesLinksBox = new St.BoxLayout({
             vertical: true
         });
@@ -219,13 +226,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.navigateBox.insert_child_above(this.extraCategoriesLinksBox, this.navigateBox.get_child_at_index(0));
         this.extraCategoriesLinksBox.add_child(this.extraCategoriesSeparator);
 
-        this.updateWidth();
-        this.loadCategories();
-        this.loadPinnedApps();
-        this.setDefaultMenuView();
-    }
-
-    _createExtraCategoriesLinks(){
         this.showExtraCategoriesLinksBox = false;
         let extraCategories = this._settings.get_value("arcmenu-extra-categories-links").deep_unpack();
         let defaultMenuView = this._settings.get_enum('default-menu-view');
@@ -265,6 +265,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadCategories(){
+        if(this.extraCategoriesLinksBox)
+            this.extraCategoriesLinksBox.destroy();
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();
 
