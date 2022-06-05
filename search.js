@@ -138,7 +138,9 @@ var SearchResultsBase = GObject.registerClass({
                 'no-results': {} },
 }, class ArcMenu_SearchResultsBase extends St.BoxLayout {
     _init(provider, resultsView) {
-        super._init({ vertical: true });
+        super._init({ 
+            vertical: true,
+        });
         this.provider = provider;
         this.resultsView = resultsView;
         this._menuLayout = resultsView._menuLayout;
@@ -274,6 +276,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
             y_align: Clutter.ActorAlign.FILL,
             x_expand: true,
             y_expand: true,
+            style: 'margin-top: 8px;'
         });
 
         this.providerInfo = new ArcSearchProviderInfo(provider, this._menuLayout);
@@ -290,7 +293,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
             vertical: true,
             x_expand: true,
             y_expand: true,
-            x_align: Clutter.ActorAlign.FILL
+            x_align: Clutter.ActorAlign.FILL,
         });
 
         this._container.add_child(this._content);
@@ -360,7 +363,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         if(this.searchType === Constants.DisplayType.GRID){
             let spacing = this.layoutProperties.ColumnSpacing;
 
-            this._grid.style = "padding: 0px 0px 10px 0px; spacing: " + spacing + "px;";
+            this._grid.style = "spacing: " + spacing + "px;";
             this._resultDisplayBin.x_align = Clutter.ActorAlign.CENTER;
         }
 
@@ -787,6 +790,9 @@ var ArcSearchProviderInfo = GObject.registerClass(class ArcMenu_ArcSearchProvide
         this.provider = provider;
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
+        this.style = "padding-top: 6px; padding-bottom: 6px; margin-bottom: 2px;";
+        this.x_expand = false;
+        this.x_align = Clutter.ActorAlign.START;
 
         this.description = this.provider.appInfo.get_description();
         if(this.description)
@@ -796,22 +802,20 @@ var ArcSearchProviderInfo = GObject.registerClass(class ArcMenu_ArcSearchProvide
             text: provider.appInfo.get_name(),
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER,
-            style: 'text-align: left;'
+            style: 'font-weight: bold;'
         });
 
-        this.label.style = 'font-weight: bold;';
-        this.style = "padding: 10px 12px;";
-        this.add_child(this.label);
+        this._moreLabel = new St.Label({ 
+            x_align: Clutter.ActorAlign.END,
+            y_align: Clutter.ActorAlign.CENTER,
+        });
 
-        this._moreText = "";
+        this.add_child(this.label);
+        this.add_child(this._moreLabel);
     }
 
     setMoreCount(count) {
-        this._moreText = ngettext("%d more", "%d more", count).format(count);
-
-        if(count > 0)
-            this.label.text = this.provider.appInfo.get_name() + "  (" + this._moreText + ")";
-        else
-            this.label.text = this.provider.appInfo.get_name();
+        this._moreLabel.text = _("+ %d more", "+ %d more", count).format(count);
+        this._moreLabel.visible = count > 0;
     }
 });

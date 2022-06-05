@@ -825,9 +825,12 @@ var BaseLayout = class {
             }
 
             searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
-            if (searchString === '')
+            if(searchString === '')
                 this.searchResults.setTerms([]);
-            this.searchResults.setTerms(searchString.split(/\s+/));
+            else{
+                this.ignoreHover = true;
+                this.searchResults.setTerms(searchString.split(/\s+/));
+            }
         }
     }
 
@@ -861,6 +864,7 @@ var BaseLayout = class {
                         navigateActor = this.searchResults.getTopResult();
                         if(navigateActor.has_style_pseudo_class("active")){
                             navigateActor.grab_key_focus();
+                            navigateActor.remove_style_pseudo_class('active');
                             return this.mainBox.navigate_focus(navigateActor, direction, false);
                         }
                         navigateActor.grab_key_focus();
