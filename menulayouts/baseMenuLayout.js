@@ -881,14 +881,19 @@ var BaseLayout = class {
     }
 
     _onMainBoxKeyPress(actor, event) {
-        if (event.has_control_modifier()) {
-            if(this.searchBox)
-                this.searchBox.grab_key_focus();
-            return Clutter.EVENT_PROPAGATE;
-        }
-
         let symbol = event.get_key_symbol();
         let unicode = Clutter.keysym_to_unicode(symbol);
+
+        /* 
+        * Pass ctrl key event to searchbox.
+        * Useful for paste event (ctrl+v),
+        * if searchbox entry doesn't have key focus
+        */
+        if (this.searchBox && (symbol === Clutter.KEY_Control_L || symbol === Clutter.KEY_Control_R)) {
+            global.stage.set_key_focus(this.searchBox.clutter_text);
+            this.searchBox.clutter_text.event(event, false);
+            return Clutter.EVENT_PROPAGATE;
+        }
 
         switch (symbol) {
             case Clutter.KEY_BackSpace:
@@ -935,7 +940,6 @@ var BaseLayout = class {
                     this.activeMenuItem.grab_key_focus();
                     return Clutter.EVENT_STOP;
                 }
-
                 return actor.navigate_focus(global.stage.key_focus, direction, false);
             case Clutter.KEY_KP_Enter:
             case Clutter.KEY_Return:
@@ -944,9 +948,7 @@ var BaseLayout = class {
             default:
                 if (unicode !== 0 && this.searchBox) {
                     global.stage.set_key_focus(this.searchBox.clutter_text);
-                    let synthEvent = event.copy();
-                    synthEvent.set_source(this.searchBox.clutter_text);
-                    this.searchBox.clutter_text.event(synthEvent, false);
+                    this.searchBox.clutter_text.event(event, false);
                 }
         }
         return Clutter.EVENT_PROPAGATE;
