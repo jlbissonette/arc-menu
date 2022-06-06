@@ -623,6 +623,21 @@ var TweaksPage = GObject.registerClass({
 
     _loadRedmondMenuTweaks(){
         let redmondMenuTweaksFrame = new Adw.PreferencesGroup();
+
+        let defaulViews = new Gtk.StringList();
+        defaulViews.append(_("All Programs"));
+        defaulViews.append(_("Pinned Apps"));
+        
+        let defaultViewRow = new Adw.ComboRow({
+            title: _("Default View"),
+            model: defaulViews,
+            selected: this._settings.get_enum('default-menu-view-redmond')
+        });
+        defaultViewRow.connect('notify::selected', (widget) => {
+            this._settings.set_enum('default-menu-view-redmond', widget.selected);
+        });
+        redmondMenuTweaksFrame.add(defaultViewRow);
+
         redmondMenuTweaksFrame.add(this._createAvatarShapeRow());
         redmondMenuTweaksFrame.add(this._createSearchBarLocationRow());
         redmondMenuTweaksFrame.add(this._createFlipHorizontalRow());

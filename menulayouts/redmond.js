@@ -34,9 +34,20 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style_class = 'arcmenu-search-top';
 
+        this.navBox = new St.BoxLayout({
+            x_expand: true,
+            x_align: Clutter.ActorAlign.FILL,
+            vertical: true
+        });
+        this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton);
+        this.viewProgramsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
+        this.navBox.add_child(this.backButton);
+        this.navBox.add_child(this.viewProgramsButton);
+
         this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
+            x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
@@ -58,7 +69,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
 
+        this.subMainBox.add_child(this.navBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
+
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style_class = 'arcmenu-search-bottom';
             this.subMainBox.add_child(this.searchBox);
@@ -175,13 +188,24 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.VERTICAL);
         this.mainBox.add_child(verticalSeparator);
         this.mainBox.add_child(horizonalFlip ? this.subMainBox: this.rightBox);
-        horizonalFlip ? this.rightBox.style += "margin-right: 0px" : this.rightBox.style += "margin-left: 0px"
+        horizonalFlip ? this.rightBox.style += "margin-right: 0px" : this.rightBox.style += "margin-left: 0px";
 
         this.updateWidth();
         this.loadCategories();
+        this.loadPinnedApps();
         this.setDefaultMenuView();
     }
 
+    loadPinnedApps(){
+        let defaultMenuView = this._settings.get_enum('default-menu-view-redmond');
+        if(defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
+            this.hasPinnedApps = true;
+            super.loadPinnedApps();
+        }
+        else
+            this.navBox.hide();
+    }
+    
     updateWidth(setDefaultMenuView){
         const rightPanelWidth = this._settings.get_int("right-panel-width");
         this.rightBox.style = `width: ${rightPanelWidth}px;`;
@@ -199,12 +223,53 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     setDefaultMenuView(){
         super.setDefaultMenuView();
-        this.displayAllApps();
+        let defaultMenuView = this._settings.get_enum('default-menu-view-redmond');
+
+        if(defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
+            this.navBox.show();
+            this.displayPinnedApps();
+        }
+        else if(defaultMenuView === Constants.DefaultMenuViewRedmond.ALL_PROGRAMS)
+            this.displayAllApps(false);
+    }
+
+    displayPinnedApps(){
+        let defaultMenuView = this._settings.get_enum('default-menu-view-redmond');
+        if(defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
+            this.viewProgramsButton.show();
+            this.backButton.hide();
+        }
+        super.displayPinnedApps();
+        this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
+    }
+
+    displayAllApps(showBackButton = true){
+        super.displayAllApps();
+        this.viewProgramsButton.hide();
+
+        if(showBackButton)
+            this.backButton.show();
+        else
+            this.backButton.hide();
     }
 
     loadCategories() {
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();
         super.loadCategories();
+    }
+
+    _onSearchBoxChanged(searchBox, searchString){
+        if(!searchBox.isEmpty())
+            this.navBox.hide();
+        super._onSearchBoxChanged(searchBox, searchString);
+    }
+
+    _createNavigationButtons(buttonTitle, ButtonClass){
+        let navButton = this.createLabelRow(buttonTitle);
+        navButton.label.y_align = Clutter.ActorAlign.CENTER;
+        navButton.style = 'padding: 0px 15px 10px 15px;'
+        navButton.add_child(new ButtonClass(this));
+        return navButton;
     }
 }

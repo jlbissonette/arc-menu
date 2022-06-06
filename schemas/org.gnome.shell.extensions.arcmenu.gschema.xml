@@ -70,6 +70,10 @@
         <value value="0" nick="Categories_List"/>
         <value value="1" nick="All_Programs"/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.default-menu-view-redmond'>
+        <value value="0" nick="All_Programs"/>
+        <value value="1" nick="Pinned_Apps"/>
+    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.runner-position'>
         <value value="0" nick="Top"/>
         <value value="1" nick="Centered"/>
@@ -369,6 +373,11 @@
       <default>'Categories_List'</default>
       <summary>Set Tognee Layout Default View</summary>
       <description>Set Tognee Layout Default View.</description>
+    </key>
+    <key enum="org.gnome.shell.extensions.arcmenu.default-menu-view-redmond" name="default-menu-view-redmond">
+      <default>'All_Programs'</default>
+      <summary>Set Redmond Layout Default View</summary>
+      <description>Set Redmond  Layout Default View.</description>
     </key>
     <key type="b" name="enable-unity-homescreen">
       <default>true</default>
