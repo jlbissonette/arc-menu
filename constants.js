@@ -178,6 +178,11 @@ var SECTIONS = [
     'bookmarks',
 ];
 
+var Direction = {
+    GO_NEXT: 0,
+    GO_PREVIOUS: 1,
+};
+
 var MenuPosition = {
     LEFT: 0,
     CENTER: 1,
@@ -228,6 +233,12 @@ var PowerType = {
     SUSPEND: 4,
     HYBRID_SLEEP: 5,
     HIBERNATE: 6,
+};
+
+var PowerDisplayStyle = {
+    DEFAULT: 0,
+    IN_LINE: 1,
+    MENU: 2,
 };
 
 var PowerOptions = [

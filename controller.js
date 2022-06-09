@@ -84,7 +84,7 @@ var MenuSettingsController = class {
             [
                 'directory-shortcuts-list', 'application-shortcuts-list', 'extra-categories',
                 'power-options','show-external-devices', 'show-bookmarks', 'disable-user-avatar',
-                'avatar-style', 'enable-activities-shortcut', 'enable-horizontal-flip',
+                'avatar-style', 'enable-activities-shortcut', 'enable-horizontal-flip', 'power-display-style',
                 'searchbar-default-bottom-location', 'searchbar-default-top-location', 'multi-lined-labels',
                 'apps-show-extra-details', 'show-search-result-details', 'search-provider-open-windows',
                 'search-provider-recent-files', 'misc-item-icon-size', 'windows-disable-pinned-apps',

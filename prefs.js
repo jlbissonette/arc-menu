@@ -2064,7 +2064,6 @@ var MenuSettingsGeneralPage = GObject.registerClass(
         });
         generalSettingsFrame.add(menuLocationRow);
 
-
         let [menuArrowRiseEnabled, menuArrowRiseValue] = this._settings.get_value('menu-arrow-rise').deep_unpack();
 
         let menuArrowRiseSwitch = new Gtk.Switch({
@@ -2563,6 +2562,25 @@ var MenuSettingsListOtherPage = GObject.registerClass(
 
         this._createFrame(this._settings.get_value(this.settingString).deep_unpack());
         this.append(this.categoriesFrame);
+        if(this.listType === Constants.MenuSettingsListType.POWER_OPTIONS){
+            let powerDisplayStyleGroup = new Adw.PreferencesGroup({
+                title: _("Power Off / Log Out Buttons")
+            });
+            let powerDisplayStyles = new Gtk.StringList();
+            powerDisplayStyles.append(_('Default'));
+            powerDisplayStyles.append(_('In-Line'));
+            powerDisplayStyles.append(_('Sub Menu'));
+            let powerDisplayStyleRow = new Adw.ComboRow({
+                title: _("Display Style"),
+                model: powerDisplayStyles,
+                selected: this._settings.get_enum('power-display-style')
+            });
+            powerDisplayStyleRow.connect("notify::selected", (widget) => {
+                this._settings.set_enum('power-display-style', widget.selected)
+            });
+            powerDisplayStyleGroup.add(powerDisplayStyleRow);
+            this.append(powerDisplayStyleGroup);
+        }
 
         this.restoreDefaults = () => {
             this.frameRows.forEach(child => {

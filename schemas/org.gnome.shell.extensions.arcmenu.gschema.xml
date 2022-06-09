@@ -86,6 +86,11 @@
         <value value="0" nick="Bottom"/>
         <value value="1" nick="Top"/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.power-display-style'>
+        <value value="0" nick="Default"/>
+        <value value="1" nick="In_Line"/>
+        <value value="2" nick="Menu"/>
+    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.icon-sizes'>
         <value value="0" nick="Default"/>
         <value value="1" nick="ExtraSmall"/>
@@ -493,6 +498,11 @@
       <default>[(0, true), (1, true), (2, true), (3, true), (4, false), (5, false), (6, false)]</default>
       <summary>Power Options</summary>
       <description>See Constants.js PowerOptions</description>
+    </key>
+    <key name="power-display-style" enum="org.gnome.shell.extensions.arcmenu.power-display-style">
+      <default>'Default'</default>
+      <summary>Display type for power options</summary>
+      <description>Display type for power options.</description>
     </key>
     <key type="b" name="multi-monitor">
       <default>false</default>

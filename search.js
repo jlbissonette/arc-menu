@@ -138,7 +138,7 @@ var SearchResultsBase = GObject.registerClass({
                 'no-results': {} },
 }, class ArcMenu_SearchResultsBase extends St.BoxLayout {
     _init(provider, resultsView) {
-        super._init({ 
+        super._init({
             vertical: true,
         });
         this.provider = provider;
@@ -805,7 +805,7 @@ var ArcSearchProviderInfo = GObject.registerClass(class ArcMenu_ArcSearchProvide
             style: 'font-weight: bold;'
         });
 
-        this._moreLabel = new St.Label({ 
+        this._moreLabel = new St.Label({
             x_align: Clutter.ActorAlign.END,
             y_align: Clutter.ActorAlign.CENTER,
         });

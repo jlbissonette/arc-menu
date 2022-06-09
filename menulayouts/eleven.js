@@ -151,14 +151,21 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(settingsButton.shouldShow)
             this.quickLinksBox.add_child(settingsButton);
 
-        this.leaveButton = new MW.LeaveButton(this);
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
+            this.leaveButton = new MW.PowerOptionsBox(this, 10);
+        else
+            this.leaveButton = new MW.LeaveButton(this);
+
         this.quickLinksBox.add_child(this.leaveButton);
 
         this.actionsBox.add_child(this.quickLinksBox);
 
-        this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton);
-        this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
-        this.frequentAppsHeader = this._createNavigationButtons(_("Frequent"), null);
+        this.backButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_PREVIOUS, _("Back"), () => this.setDefaultMenuView());
+        this.allAppsButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_NEXT, _("All Apps"), () => this.displayAllApps());
+        this.frequentAppsHeader = this.createLabelRow(_("Frequent"));
+        this.frequentAppsHeader.label.y_align = Clutter.ActorAlign.CENTER;
+        this.frequentAppsHeader.style = 'padding: 9px 25px;'
 
         this.updateStyle();
         this.updateWidth();
@@ -295,15 +302,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _hideNavigationButtons(){
         if(this.mainBox.contains(this.backButton))
             this.mainBox.remove_child(this.backButton);
-    }
-
-    _createNavigationButtons(buttonTitle, ButtonClass){
-        let navButton = this.createLabelRow(buttonTitle);
-        navButton.label.y_align = Clutter.ActorAlign.CENTER;
-        navButton.style = 'padding: 0px 25px;'
-        if(ButtonClass)
-            navButton.add_child(new ButtonClass(this));
-        return navButton;
     }
 
     _onSearchBoxChanged(searchBox, searchString){

@@ -91,7 +91,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         // Contains some useful shortcuts
         this.quickBox = new St.BoxLayout({
             vertical: true,
-            style: "margin: 0px 1px;",
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL
         });
@@ -159,12 +158,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsBox = new St.BoxLayout({
             vertical: true,
             x_align: Clutter.ActorAlign.CENTER,
-            style: "spacing: 3px;"
+            style: "spacing: 5px;"
         });
         this.actionsScrollBox.add_actor(this.actionsBox);
 
-        let leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add_child(leaveButton);
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
+            this.leaveButton = new MW.PowerOptionsBox(this, 5, true);
+        else
+            this.leaveButton = new MW.LeaveButton(this);
+
+        this.actionsBox.add_child(this.leaveButton);
+
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.LONG, Constants.SeparatorAlignment.HORIZONTAL);
         this.actionsBox.insert_child_at_index(separator, 0);
         this.quickBox.add_child(this.actionsScrollBox);

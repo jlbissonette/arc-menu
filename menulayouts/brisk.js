@@ -102,26 +102,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.leftBox.add_child(this.actionsBox);
 
-        //create new section for Power, Lock, Logout, Suspend Buttons
-        this.sessionBox = new St.BoxLayout({
-            vertical: false,
-            x_expand: false,
-            y_expand: false,
-            y_align: Clutter.ActorAlign.END,
-            x_align: Clutter.ActorAlign.CENTER
-        });
-        this.sessionBox.style = "spacing: 6px;";
-
-        let powerOptions = this._settings.get_value("power-options").deep_unpack();
-        for(let i = 0; i < powerOptions.length; i++){
-            let powerType = powerOptions[i][0];
-            let shouldShow = powerOptions[i][1];
-            if(shouldShow){
-                let powerButton = new MW.PowerButton(this, powerType);
-                this.sessionBox.add_child(powerButton);
-            }
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.MENU)
+            this.powerOptionsBox = new MW.LeaveButton(this, true);
+        else{
+            this.powerOptionsBox = new MW.PowerOptionsBox(this, 6);
+            this.powerOptionsBox.x_align = Clutter.ActorAlign.CENTER;
         }
-        this.leftBox.add_child(this.sessionBox);
+
+        this.powerOptionsBox.y_align = Clutter.ActorAlign.END;
+        this.leftBox.add_child(this.powerOptionsBox);
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style_class = 'arcmenu-search-bottom';

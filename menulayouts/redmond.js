@@ -18,7 +18,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             SearchDisplayType: Constants.DisplayType.GRID,
             ColumnSpacing: 10,
             RowSpacing: 10,
-            DefaultMenuWidth: 450,
+            DefaultMenuWidth: 400,
             DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: false,
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
@@ -37,10 +37,21 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navBox = new St.BoxLayout({
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL,
-            vertical: true
+            vertical: true,
+            style: 'padding-bottom: 5px;'
         });
-        this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton);
-        this.viewProgramsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
+
+        this.defaultMenuView = this._settings.get_enum('default-menu-view-redmond');
+
+        if(this.defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
+            this.backButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_PREVIOUS, _("Back"), () => this.setDefaultMenuView());
+            this.viewProgramsButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_NEXT, _("All Apps"), () => this.displayAllApps());
+        }
+        else if(this.defaultMenuView === Constants.DefaultMenuViewRedmond.ALL_PROGRAMS){
+            this.backButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_PREVIOUS, _("Back"), () => this.setDefaultMenuView());
+            this.viewProgramsButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_NEXT, _("Pinned"), () => this.displayPinnedApps());
+        }
+
         this.navBox.add_child(this.backButton);
         this.navBox.add_child(this.viewProgramsButton);
 
@@ -162,26 +173,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 this.shortcutsBox.add_child(shortcutMenuItem);
         }
 
-        //create new section for Power, Lock, Logout, Suspend Buttons
-        this.actionsBox = new St.BoxLayout({
-            vertical: false,
-            x_expand: true,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_expand: true,
-            y_align: Clutter.ActorAlign.END,
-            style: "spacing: 6px;"
-        });
-
-        let powerOptions = this._settings.get_value("power-options").deep_unpack();
-        for(let i = 0; i < powerOptions.length; i++){
-            let powerType = powerOptions[i][0];
-            let shouldShow = powerOptions[i][1];
-            if(shouldShow){
-                let powerButton = new MW.PowerButton(this, powerType);
-                this.actionsBox.add_child(powerButton);
-            }
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.MENU)
+            this.powerOptionsBox = new MW.LeaveButton(this, true);
+        else{
+            this.powerOptionsBox = new MW.PowerOptionsBox(this, 6);
+            this.powerOptionsBox.x_expand = true;
+            this.powerOptionsBox.x_align = Clutter.ActorAlign.CENTER;
         }
-        this.rightBox.add_child(this.actionsBox);
+
+        this.powerOptionsBox.y_expand = true;
+        this.powerOptionsBox.y_align = Clutter.ActorAlign.END;
+
+        this.rightBox.add_child(this.powerOptionsBox);
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
         this.mainBox.add_child(horizonalFlip ? this.rightBox : this.subMainBox);
@@ -190,22 +194,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(horizonalFlip ? this.subMainBox: this.rightBox);
         horizonalFlip ? this.rightBox.style += "margin-right: 0px" : this.rightBox.style += "margin-left: 0px";
 
+        this.hasPinnedApps = true;
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
     }
 
-    loadPinnedApps(){
-        let defaultMenuView = this._settings.get_enum('default-menu-view-redmond');
-        if(defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
-            this.hasPinnedApps = true;
-            super.loadPinnedApps();
-        }
-        else
-            this.navBox.hide();
-    }
-    
     updateWidth(setDefaultMenuView){
         const rightPanelWidth = this._settings.get_int("right-panel-width");
         this.rightBox.style = `width: ${rightPanelWidth}px;`;
@@ -223,34 +218,43 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     setDefaultMenuView(){
         super.setDefaultMenuView();
-        let defaultMenuView = this._settings.get_enum('default-menu-view-redmond');
 
-        if(defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
-            this.navBox.show();
+        this.navBox.show();
+        this.viewProgramsButton.show();
+        this.backButton.hide();
+
+        if(this.defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
             this.displayPinnedApps();
         }
-        else if(defaultMenuView === Constants.DefaultMenuViewRedmond.ALL_PROGRAMS)
-            this.displayAllApps(false);
+        else if(this.defaultMenuView === Constants.DefaultMenuViewRedmond.ALL_PROGRAMS){
+            this.displayAllApps();
+        }
     }
 
     displayPinnedApps(){
-        let defaultMenuView = this._settings.get_enum('default-menu-view-redmond');
-        if(defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
+        if(this.defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
             this.viewProgramsButton.show();
             this.backButton.hide();
+        }
+        else if(this.defaultMenuView === Constants.DefaultMenuViewRedmond.ALL_PROGRAMS){
+            this.viewProgramsButton.hide();
+            this.backButton.show();
         }
         super.displayPinnedApps();
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
     }
 
-    displayAllApps(showBackButton = true){
+    displayAllApps(){
         super.displayAllApps();
-        this.viewProgramsButton.hide();
 
-        if(showBackButton)
+        if(this.defaultMenuView === Constants.DefaultMenuViewRedmond.PINNED_APPS){
+            this.viewProgramsButton.hide();
             this.backButton.show();
-        else
+        }
+        else if(this.defaultMenuView === Constants.DefaultMenuViewRedmond.ALL_PROGRAMS){
+            this.viewProgramsButton.show();
             this.backButton.hide();
+        }
     }
 
     loadCategories() {
@@ -263,13 +267,5 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(!searchBox.isEmpty())
             this.navBox.hide();
         super._onSearchBoxChanged(searchBox, searchString);
-    }
-
-    _createNavigationButtons(buttonTitle, ButtonClass){
-        let navButton = this.createLabelRow(buttonTitle);
-        navButton.label.y_align = Clutter.ActorAlign.CENTER;
-        navButton.style = 'padding: 0px 15px 10px 15px;'
-        navButton.add_child(new ButtonClass(this));
-        return navButton;
     }
 }

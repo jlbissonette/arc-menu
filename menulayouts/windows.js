@@ -58,7 +58,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(settingsButton.shouldShow)
             this.actionsBox.add_child(settingsButton);
 
-        this.leaveButton = new MW.LeaveButton(this);
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
+            this.leaveButton = new MW.PowerOptionsBox(this, 6, true);
+        else
+            this.leaveButton = new MW.LeaveButton(this);
+
         this.actionsBox.add_child(this.leaveButton);
 
         this.subMainBox = new St.BoxLayout({

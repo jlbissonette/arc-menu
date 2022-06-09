@@ -365,13 +365,15 @@ class ArcMenu_Separator extends PopupMenu.PopupBaseMenuItem {
         });
         this.add_child(this._separator);
         if(separatorAlignment === Constants.SeparatorAlignment.HORIZONTAL){
-            this.style = "padding: 0px 5px;"
+            this.style = "padding: 0px 5px; margin-left: 0px; margin-right: 0px;";
             if(separatorLength === Constants.SeparatorStyle.SHORT)
                 this._separator.style = "margin: 0px 45px;";
             else if(separatorLength === Constants.SeparatorStyle.MEDIUM)
                 this._separator.style = "margin: 0px 15px;";
-            else if(separatorLength === Constants.SeparatorStyle.LONG)
+            else if(separatorLength === Constants.SeparatorStyle.LONG){
                 this._separator.style = "margin: 0px 5px;";
+                this.style = "padding: 0px 5px; margin: 1px 0px;";
+            }
             else if(separatorLength === Constants.SeparatorStyle.MAX)
                 this._separator.style = "margin: 0px; padding: 0px;";
             else if(separatorLength === Constants.SeparatorStyle.HEADER_LABEL){
@@ -733,15 +735,85 @@ var ExtrasButton = GObject.registerClass(class ArcMenu_ExtrasButton extends ArcM
     }
 });
 
-//"Leave" Button with popupmenu that shows lock, power off, restart, etc
-var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMenuButtonItem {
-    _init(menuLayout) {
-        super._init(menuLayout, _("Leave"), 'system-shutdown-symbolic');
+var PowerOptionsBox = GObject.registerClass(class ArcMenu_PowerOptionsBox extends St.BoxLayout{
+    _init(menuLayout, spacing, vertical = false){
+        this._settings = menuLayout._settings;
+        super._init({
+            vertical,
+            style: `spacing: ${spacing}px;`
+        });
+
+        let powerOptions = this._settings.get_value("power-options").deep_unpack();
+        for(let i = 0; i < powerOptions.length; i++){
+            let powerType = powerOptions[i][0];
+            let shouldShow = powerOptions[i][1];
+            if(shouldShow){
+                let powerButton = new PowerButton(menuLayout, powerType);
+                powerButton.style = "margin: 0px;";
+                this.add_child(powerButton);
+            }
+        }
+    }
+});
+
+//'Power Off / Log Out' button with popupmenu that shows lock, power off, restart, etc
+var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMenuPopupBaseMenuItem {
+    _init(menuLayout, showLabel) {
+        super._init(menuLayout);
         this.toggleMenuOnClick = false;
         this._menuLayout = menuLayout;
         this.menuButton = menuLayout.menuButton;
         this._settings = menuLayout._settings;
+        this.iconName = 'system-shutdown-symbolic';
+        this.showLabel = showLabel;
+
         this._createLeaveMenu();
+
+        this._iconBin = new St.Bin();
+        this.add_child(this._iconBin);
+
+        this._updateIcon();
+
+        if(showLabel){
+            this.label = new St.Label({
+                text: _('Power Off / Log Out'),
+                y_expand: false,
+                y_align: Clutter.ActorAlign.START,
+            });
+            this.add_child(this.label);
+        }
+        else{
+            this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
+            this.style_class = 'popup-menu-item arcmenu-button';
+            this.remove_child(this._ornamentLabel);
+            this.x_expand = false;
+            this.x_align = Clutter.ActorAlign.CENTER;
+            this.y_expand = false;
+            this.y_align = Clutter.ActorAlign.CENTER;
+            this.toggleMenuOnClick = true;
+            this._displayType = Constants.DisplayType.BUTTON;
+            this.tooltipText = _('Power Off / Log Out');
+        }
+    }
+
+    createIcon(overrideIconSize){
+        const IconSizeEnum = this._settings.get_enum('button-item-icon-size');
+        const LayoutProps = this._menuLayout.layoutProperties;
+        let defaultIconSize = LayoutProps.DefaultButtonsIconSize;
+        let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+
+        return new St.Icon({
+            gicon: Gio.icon_new_for_string(this.iconName),
+            icon_size: overrideIconSize ? overrideIconSize : iconSize,
+            x_expand: this.showLabel ? false : true,
+            x_align: this.showLabel ? Clutter.ActorAlign.START : Clutter.ActorAlign.CENTER
+        });
+    }
+
+    setIconSize(size){
+        if(!this._iconBin)
+            return;
+        this._iconBin.set_child(this.createIcon(size));
     }
 
     _createLeaveMenu(){
@@ -799,6 +871,7 @@ var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMen
         Main.uiGroup.add_child(this.leaveMenu.actor);
         this.leaveMenu.connect('open-state-changed', (menu, open) => {
             if(open){
+                this.add_style_pseudo_class('active');
                 if(this.menuButton.tooltipShowingID){
                     GLib.source_remove(this.menuButton.tooltipShowingID);
                     this.menuButton.tooltipShowingID = null;
@@ -810,6 +883,7 @@ var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMen
                 }
             }
             else{
+                this.remove_style_pseudo_class('active');
                 this.active = false;
                 this.sync_hover();
                 this.hovered = this.hover;
@@ -1034,11 +1108,12 @@ var PlasmaCategoryHeader = GObject.registerClass(class ArcMenu_PlasmaCategoryHea
     }
 });
 
-var AllAppsButton = GObject.registerClass(class ArcMenu_AllAppsButton extends ArcMenuButtonItem{
-    _init(menuLayout) {
-        super._init(menuLayout, null, 'go-next-symbolic');
+var NavigationButton = GObject.registerClass(class ArcMenu_NavigationButton extends ArcMenuButtonItem{
+    _init(menuLayout, text, arrowSymbolic, activateAction, arrowSide) {
+        super._init(menuLayout, null, arrowSymbolic);
         this.setIconSize(Constants.EXTRA_SMALL_ICON_SIZE);
         this.toggleMenuOnClick = false;
+        this.activateAction = activateAction;
         this.style = 'min-height: 28px; padding: 0px 8px;'
         this._menuLayout = menuLayout;
         this._layout = this._menuLayout.layout;
@@ -1046,47 +1121,34 @@ var AllAppsButton = GObject.registerClass(class ArcMenu_AllAppsButton extends Ar
         this.x_expand = true;
         this.x_align = Clutter.ActorAlign.END;
         this._label = new St.Label({
-            text: _("All Apps"),
+            text: _(text),
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER
         });
 
-        this.insert_child_at_index(this._label, 0);
+        if(arrowSide === St.Side.LEFT)
+            this.add_child(this._label);
+        else
+            this.insert_child_at_index(this._label, 0);
     }
 
     activate(event){
         super.activate(event);
-        this._menuLayout.displayAllApps();
+        this.activateAction();
     }
 });
 
-var BackButton = GObject.registerClass(class ArcMenu_BackButton extends ArcMenuButtonItem{
-    _init(menuLayout) {
-        super._init(menuLayout, null, 'go-previous-symbolic');
-        this.setIconSize(Constants.EXTRA_SMALL_ICON_SIZE);
-        this.toggleMenuOnClick = false;
-        this.style = 'min-height: 28px; padding: 0px 8px;'
-        this._menuLayout = menuLayout;
-        this._layout = this._menuLayout.layout;
-        this._settings = this._menuLayout._settings;
-        this.x_expand = true;
-        this.x_align = Clutter.ActorAlign.END;
-        this._label = new St.Label({
-            text: _("Back"),
-            x_expand: true,
-            x_align: Clutter.ActorAlign.FILL,
-            y_expand: false,
-            y_align: Clutter.ActorAlign.CENTER
-        });
-
-        this.add_child(this._label);
+var GoNextButton = GObject.registerClass(class ArcMenu_GoNextButton extends NavigationButton{
+    _init(menuLayout, title, activateAction) {
+        super._init(menuLayout, _(title), 'go-next-symbolic', () => activateAction());
     }
+});
 
-    activate(event){
-        super.activate(event);
-        this._menuLayout.setDefaultMenuView();
+var GoPreviousButton = GObject.registerClass(class ArcMenu_GoPreviousButton extends NavigationButton{
+    _init(menuLayout, activateAction) {
+        super._init(menuLayout, _("Back"), 'go-previous-symbolic', () => activateAction(), St.Side.LEFT);
     }
 });
 
@@ -1307,7 +1369,7 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
             if(this._app)
                 this.contextMenu.setApp(this._app);
             else if(this.folderPath)
-                this.contextMenu.setFolderPath(this.folderPath);    
+                this.contextMenu.setFolderPath(this.folderPath);
         }
         if(this.contextMenu !== undefined){
             if(this.tooltip !== undefined)

@@ -122,11 +122,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(settingsButton.shouldShow)
             this.actionsBox.add_child(settingsButton);
 
-        this.leaveButton = new MW.LeaveButton(this);
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
+            this.leaveButton = new MW.PowerOptionsBox(this, 10);
+        else
+            this.leaveButton = new MW.LeaveButton(this);
+
         this.actionsBox.add_child(this.leaveButton);
 
-        this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton)
-        this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton)
+        this.backButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_PREVIOUS, _("Back"), () => this.setDefaultMenuView());
+        this.allAppsButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_NEXT, _("All Apps"), () => this.displayAllApps());
 
         this.updateStyle();
         this.updateWidth();
@@ -209,7 +214,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     _displayAppList(apps, category, grid){
         super._displayAppList(apps, category, grid);
 
-        this._hideNavigationButtons();
+        this._hideNavigationRow();
 
         if(category === Constants.CategoryType.PINNED_APPS){
             this.subMainBox.insert_child_at_index(this.allAppsButton, 1);
@@ -219,24 +224,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
     }
 
-    _hideNavigationButtons(){
+    _hideNavigationRow(){
         if(this.subMainBox.contains(this.backButton))
             this.subMainBox.remove_child(this.backButton);
         if(this.subMainBox.contains(this.allAppsButton))
             this.subMainBox.remove_child(this.allAppsButton);
     }
 
-    _createNavigationButtons(buttonTitle, ButtonClass){
-        let navButton = this.createLabelRow(buttonTitle);
-        navButton.label.y_align = Clutter.ActorAlign.CENTER;
-        navButton.style = 'padding: 0px 15px 10px 15px;'
-        navButton.add_child(new ButtonClass(this));
-        return navButton;
-    }
-
     _onSearchBoxChanged(searchBox, searchString){
         if(!searchBox.isEmpty())
-            this._hideNavigationButtons();
+            this._hideNavigationRow();
         super._onSearchBoxChanged(searchBox, searchString);
     }
 

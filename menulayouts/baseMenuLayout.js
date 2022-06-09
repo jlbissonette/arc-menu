@@ -884,7 +884,7 @@ var BaseLayout = class {
         let symbol = event.get_key_symbol();
         let unicode = Clutter.keysym_to_unicode(symbol);
 
-        /* 
+        /*
         * Pass ctrl key event to searchbox.
         * Useful for paste event (ctrl+v),
         * if searchbox entry doesn't have key focus
@@ -1076,6 +1076,8 @@ var BaseLayout = class {
     createLabelRow(title){
         let labelRow = new St.BoxLayout({
             style: "padding: 9px 12px;",
+            x_expand: true,
+            x_align: Clutter.ActorAlign.FILL
         });
         let label = new St.Label({
             text:_(title),
@@ -1085,6 +1087,20 @@ var BaseLayout = class {
         labelRow.add_child(label);
         labelRow.label = label;
         return labelRow;
+    }
+
+    _createNavigationRow(labelTitle, buttonDirection, buttonTitle, buttonAction){
+        let navButton = this.createLabelRow(labelTitle);
+        navButton.style = 'padding: 0px 25px;';
+
+        let button;
+        if(buttonDirection === Constants.Direction.GO_NEXT)
+            button = new MW.GoNextButton(this, buttonTitle, buttonAction);
+        else if(buttonDirection === Constants.Direction.GO_PREVIOUS)
+            button = new MW.GoPreviousButton(this, buttonAction);
+
+        navButton.add_child(button);
+        return navButton;
     }
 
     _keyFocusIn(actor) {

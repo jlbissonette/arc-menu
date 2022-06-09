@@ -184,27 +184,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 this.shortcutsBox.add_child(shortcutMenuItem);
         }
 
-        //create new section for Power, Lock, Logout, Suspend Buttons
-        this.actionsBox = new St.BoxLayout({
-            vertical: false,
-            x_expand: true,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_expand: true,
-            y_align: Clutter.ActorAlign.END,
-            style: "spacing: 6px;"
-        });
-
-        let powerOptions = this._settings.get_value("power-options").deep_unpack();
-        for(let i = 0; i < powerOptions.length; i++){
-            let powerType = powerOptions[i][0];
-            let shouldShow = powerOptions[i][1];
-            if(shouldShow){
-                let powerButton = new MW.PowerButton(this, powerType);
-                powerButton.style = "margin: 0px;"
-                this.actionsBox.add_child(powerButton);
-            }
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.MENU)
+            this.powerOptionsBox = new MW.LeaveButton(this, true);
+        else{
+            this.powerOptionsBox = new MW.PowerOptionsBox(this, 6);
+            this.powerOptionsBox.x_expand = true;
+            this.powerOptionsBox.x_align = Clutter.ActorAlign.CENTER;
         }
-        this.rightBox.add_child(this.actionsBox);
+
+        this.powerOptionsBox.y_expand = true;
+        this.powerOptionsBox.y_align = Clutter.ActorAlign.END;
+
+        this.rightBox.add_child(this.powerOptionsBox);
 
         this.updateWidth();
         this.loadCategories();
