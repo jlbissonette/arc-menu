@@ -1114,7 +1114,7 @@ var NavigationButton = GObject.registerClass(class ArcMenu_NavigationButton exte
         this.setIconSize(Constants.EXTRA_SMALL_ICON_SIZE);
         this.toggleMenuOnClick = false;
         this.activateAction = activateAction;
-        this.style = 'min-height: 28px; padding: 0px 8px;'
+        this.style = 'min-height: 28px; padding: 0px 8px;';
         this._menuLayout = menuLayout;
         this._layout = this._menuLayout.layout;
         this._settings = this._menuLayout._settings;

@@ -131,7 +131,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsBox.add_child(this.leaveButton);
 
         this.backButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_PREVIOUS, _("Back"), () => this.setDefaultMenuView());
+        this.backButton.style = 'padding: 0px 15px 10px 15px;';
         this.allAppsButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_NEXT, _("All Apps"), () => this.displayAllApps());
+        this.allAppsButton.style = 'padding: 0px 15px 10px 15px;';
 
         this.updateStyle();
         this.updateWidth();

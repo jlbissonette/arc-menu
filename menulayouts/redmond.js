@@ -52,6 +52,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.viewProgramsButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_NEXT, _("Pinned"), () => this.displayPinnedApps());
         }
 
+        this.backButton.style = 'padding: 0px 15px;';
+        this.viewProgramsButton.style = 'padding: 0px 15px;';
+
         this.navBox.add_child(this.backButton);
         this.navBox.add_child(this.viewProgramsButton);
 
