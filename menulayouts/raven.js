@@ -98,7 +98,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMainBox.add_child(this.topBox);
         this.mainBox.add_child(this.subMainBox);
 
-        this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 10px 10px 10px 10px;";
         this.topBox.add_child(this.searchBox);
 

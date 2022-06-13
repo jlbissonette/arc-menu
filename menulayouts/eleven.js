@@ -99,9 +99,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false
         });
         this.actionsBox.style = "spacing: 10px;";
-        this.appsBox = new St.BoxLayout({
-            vertical: true
-        });
         this.actionsContainerBox.add_child(this.actionsBox);
 
         this.shortcutsBox = new St.BoxLayout({

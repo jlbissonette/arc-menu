@@ -2521,6 +2521,51 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
         searchOptionsFrame.add(maxSearchResultsRow);
         this.append(searchOptionsFrame);
 
+        let [searchBorderEnabled, searchBorderValue] = this._settings.get_value('search-entry-border-radius').deep_unpack();
+
+        let searchBorderSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+        });
+        searchBorderSwitch.connect('notify::active', (widget) => {
+            let [oldEnabled_, oldValue] = this._settings.get_value('search-entry-border-radius').deep_unpack();
+            this._settings.set_value('search-entry-border-radius', new GLib.Variant('(bi)', [widget.get_active(), oldValue]));
+            if(widget.get_active())
+                searchBorderSpinButton.set_sensitive(true);
+            else
+                searchBorderSpinButton.set_sensitive(false);
+        });
+        let searchBorderSpinButton = new Gtk.SpinButton({
+            adjustment: new Gtk.Adjustment({
+                lower: 0,
+                upper: 25,
+                step_increment: 1
+            }),
+            climb_rate: 1,
+            digits: 0,
+            numeric: true,
+            valign: Gtk.Align.CENTER,
+            value: searchBorderValue,
+            sensitive: searchBorderEnabled
+        });
+        searchBorderSpinButton.connect('value-changed', (widget) => {
+            let [oldEnabled, oldValue_] = this._settings.get_value('search-entry-border-radius').deep_unpack();
+            this._settings.set_value('search-entry-border-radius', new GLib.Variant('(bi)', [oldEnabled, widget.get_value()]));
+        });
+
+        let searchBorderRow = new Adw.ActionRow({
+            title: _("Search Box Border Radius"),
+            activatable_widget: searchBorderSwitch
+        });
+        searchBorderRow.add_suffix(searchBorderSwitch);
+        searchBorderRow.add_suffix(new Gtk.Separator({
+            orientation: Gtk.Orientation.VERTICAL,
+            margin_top: 10,
+            margin_bottom: 10
+        }));
+        searchBorderRow.add_suffix(searchBorderSpinButton);
+        searchBorderSwitch.set_active(searchBorderEnabled);
+        searchOptionsFrame.add(searchBorderRow);
+
         this.restoreDefaults = () => {
             this.searchResultsDetails = this._settings.get_default_value('show-search-result-details').unpack();
             this.openWindowsSearchProvider = this._settings.get_default_value('search-provider-open-windows').unpack();
@@ -2532,6 +2577,9 @@ var MenuSettingsSearchOptionsPage = GObject.registerClass(
             recentFilesSwitch.set_active(this.recentFilesSearchProvider);
             highlightSearchResultSwitch.set_active(this.highlightSearchResultTerms);
             maxSearchResultsScale.set_value(this.maxSearchResults);
+            let [searchBorderEnabled, searchBorderValue] = this._settings.get_default_value('search-entry-border-radius').deep_unpack();
+            searchBorderSpinButton.set_value(searchBorderValue);
+            searchBorderSwitch.set_active(false);
         };
     }
 });

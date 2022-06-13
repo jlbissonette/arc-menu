@@ -61,7 +61,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.searchBox.y_align = Clutter.ActorAlign.CENTER;
         this.searchBox.y_expand = true;
-        this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 0px 15px 0px 15px;";
         this.topBox.add_child(this.searchBox);
         this.topBox.add_child(this.categoriesButton);
@@ -104,9 +103,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false
         });
         this.actionsBox.style = "spacing: 10px;";
-        this.appsBox = new St.BoxLayout({
-            vertical: true
-        });
         this.actionsContainerBox.add_child(this.actionsBox);
 
         this.widgetBox = new St.BoxLayout({
@@ -226,6 +222,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesMenu.blockSourceEvents = true;
         this.categoriesMenu.connect('open-state-changed', (menu, open) => {
             if(open){
+                this.categoriesButton.add_style_pseudo_class('active');
                 if(this.menuButton.tooltipShowingID){
                     GLib.source_remove(this.menuButton.tooltipShowingID);
                     this.menuButton.tooltipShowingID = null;
@@ -237,6 +234,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
                 }
             }
             else{
+                this.categoriesButton.remove_style_pseudo_class('active');
                 this.categoriesButton.active = false;
                 this.categoriesButton.sync_hover();
                 this.categoriesButton.hovered = this.categoriesButton.hover;

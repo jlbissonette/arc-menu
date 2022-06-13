@@ -2310,7 +2310,8 @@ class ArcMenu_SearchBox extends St.Entry {
             x_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.START,
-            name: "ArcSearchEntry",
+            name: "ArcMenuSearchEntry",
+            style_class: 'arcmenu-search-entry'
         });
         this.searchResults = menuLayout.searchResults;
         this._settings = menuLayout._settings;
@@ -2373,7 +2374,7 @@ class ArcMenu_SearchBox extends St.Entry {
     }
 
     isEmpty() {
-        return this.get_text() == '';
+        return this.get_text() === '';
     }
 
     _onKeyFocusOut(){

@@ -339,6 +339,11 @@
       <summary>Show custom search provider - recent files</summary>
       <description>Show custom search provider - recent files.</description>
     </key>
+    <key type="(bi)" name="search-entry-border-radius">
+      <default>(false, 8)</default>
+      <summary>Search entry border radius</summary>
+      <description>Search entry border radius.</description>
+    </key>
     <key type="b" name="show-hidden-recent-files">
       <default>false</default>
       <summary>Show hidden recent files</summary>

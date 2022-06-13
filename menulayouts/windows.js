@@ -100,7 +100,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         layout.hookup_style(this.pinnedAppsGrid);
 
-        this.searchBox.name = "ArcSearchEntryRound";
         this.searchBox.style = "margin: 15px 10px 0px 10px;";
 
         this.applicationsBox = new St.BoxLayout({

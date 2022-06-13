@@ -62,25 +62,18 @@
     margin: 0px;
 }
 
-#ArcSearchEntry{
+.arcmenu-search-entry{
     min-height: 0px;
-    border-radius: 8px;
     border-width: 1px;
     padding: 7px 9px;
 }
-#ArcSearchEntryRound{
-    min-height: 0px;
-    border-radius: 18px;
-    border-width: 1px;
-    padding: 7px 12px;
-}
 
 .arcmenu-search-top{
-    margin: 0px 10px 6px 10px;
+    margin: 0px 0px 6px 0px;
 }
 
 .arcmenu-search-bottom{
-    margin: 6px 10px 0px 10px;
+    margin: 6px 0px 0px 0px;
 }
 
 .symbolic-icons{

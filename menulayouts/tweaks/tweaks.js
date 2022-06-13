@@ -110,6 +110,8 @@ var TweaksPage = GObject.registerClass({
             this._loadWindowsTweaks();
         else if(menuLayout == Constants.MenuLayout.ELEVEN)
             this._loadElevenTweaks();
+        else if(menuLayout == Constants.MenuLayout.AZ)
+            this._loadAZTweaks();
         else
             this._loadPlaceHolderTweaks();
     }
@@ -225,6 +227,12 @@ var TweaksPage = GObject.registerClass({
         disableFrequentAppsRow.add_suffix(disableFrequentAppsSwitch);
         elevenTweaksFrame.add(disableFrequentAppsRow);
         this.mainBox.append(elevenTweaksFrame);
+    }
+
+    _loadAZTweaks(){
+        let azTweaksFrame = new Adw.PreferencesGroup();
+        azTweaksFrame.add(this._createSearchBarLocationRow());
+        this.mainBox.append(azTweaksFrame);
     }
 
     _loadGnomeOverviewTweaks(){

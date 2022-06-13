@@ -474,6 +474,7 @@ function updateStylesheet(settings){
     let [buttonRadius, buttonRadiusValue] = settings.get_value('menu-button-border-radius').deep_unpack();
     let [buttonWidth, buttonWidthValue] = settings.get_value('menu-button-border-width').deep_unpack();
     let [buttonBorder, buttonBorderColor] = settings.get_value('menu-button-border-color').deep_unpack();
+    let [searchBorder, searchBorderValue] = settings.get_value('search-entry-border-radius').deep_unpack();
 
     if(buttonFG)
         extraStylingCSS += `.arcmenu-menu-button{
@@ -515,6 +516,11 @@ function updateStylesheet(settings){
     if(menuRise){
         extraStylingCSS += `.arcmenu-menu{
                                 -arrow-rise: ${menuRiseValue}px;
+                            }`;
+    }
+    if(searchBorder){
+        extraStylingCSS += `#ArcMenuSearchEntry{
+                                border-radius: ${searchBorderValue}px;
                             }`;
     }
 

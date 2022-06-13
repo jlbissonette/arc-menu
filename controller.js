@@ -54,7 +54,8 @@ var MenuSettingsController = class {
                 'menu-item-hover-bg-color', 'menu-item-hover-fg-color', 'menu-item-active-bg-color',
                 'menu-item-active-fg-color', 'menu-button-fg-color', 'menu-button-hover-bg-color',
                 'menu-button-hover-fg-color', 'menu-button-active-bg-color', 'menu-button-active-fg-color',
-                'menu-button-border-radius', 'menu-button-border-width', 'menu-button-border-color', 'menu-arrow-rise'
+                'menu-button-border-radius', 'menu-button-border-width', 'menu-button-border-color', 'menu-arrow-rise',
+                'search-entry-border-radius'
             ],
             this._overrideMenuTheme.bind(this)
         );

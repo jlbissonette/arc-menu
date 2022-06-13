@@ -33,8 +33,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     createLayout(){
         super.createLayout();
 
-        this.searchBox.name = "ArcSearchEntryRound";
-
         //subMainBox stores left and right box
         this.subMainBox = new St.BoxLayout({
             vertical: false,
@@ -65,7 +63,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style_class = 'arcmenu-search-top';
+            this.searchBox.add_style_class_name('arcmenu-search-top');
             this.appBox.add_child(this.searchBox);
         }
         this.appBox.add_child(this.applicationsScrollBox);
@@ -83,7 +81,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add_child(this.backButton);
         this.appBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style_class = 'arcmenu-search-bottom';
+            this.searchBox.add_style_class_name('arcmenu-search-bottom');
             this.appBox.add_child(this.searchBox);
         }
 

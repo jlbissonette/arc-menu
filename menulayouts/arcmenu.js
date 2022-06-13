@@ -33,7 +33,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style_class = 'arcmenu-search-top';
+            this.searchBox.add_style_class_name('arcmenu-search-top');
             this.mainBox.add_child(this.searchBox);
         }
 
@@ -91,7 +91,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add_child(this.viewProgramsButton);
         this.leftBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style_class = 'arcmenu-search-bottom';
+            this.searchBox.add_style_class_name('arcmenu-search-bottom');
             this.leftBox.add_child(this.searchBox);
         }
 

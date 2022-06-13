@@ -33,8 +33,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     createLayout(){
         super.createLayout();
 
+        this.searchBox.style = "margin: 5px 10px;";
         this.topBoxStyle = "margin: 0px 0px 10px 0px; spacing: 0px; background-color: rgba(10, 10, 15, 0.1); padding: 11px 5px;"+
                             "border-color:rgba(186, 196,201, 0.2); border-bottom-width: 1px;";
+        this.arcMenu.box.style = "padding: 0px; margin: 0px;";
+
+        this.subMainBox = new St.BoxLayout({
+            x_expand: true,
+            y_expand: true,
+            x_align: Clutter.ActorAlign.FILL,
+            y_align: Clutter.ActorAlign.FILL,
+            vertical: true
+        });
+        this.mainBox.add_child(this.subMainBox);
 
         this.topBox = new St.BoxLayout({
             x_expand: false,
@@ -44,19 +55,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style: this.topBoxStyle
         });
-        this.arcMenu.box.style = "padding: 0px; margin: 0px;";
-
-        this.subMainBox= new St.BoxLayout({
-            x_expand: true,
-            y_expand: true,
-            x_align: Clutter.ActorAlign.FILL,
-            y_align: Clutter.ActorAlign.FILL,
-            vertical: true
-        });
-        this.mainBox.add_child(this.subMainBox);
-
-        this.searchBox.style = "margin: 5px 15px 5px 15px;";
-        this.topBox.add_child(this.searchBox);
         this.subMainBox.add_child(this.topBox);
 
         this.applicationsBox = new St.BoxLayout({
@@ -80,19 +78,18 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
-        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(10, 10, 15, 0.1) ; padding: 12px 5px;"+
-                                        "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
+        this.bottomBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(10, 10, 15, 0.1); padding: 12px 5px;"+
+                                        "border-color:rgba(186, 196,201, 0.2); border-top-width: 1px;";
 
-        this.actionsContainerBox = new St.BoxLayout({
+        this.bottomBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.END,
             vertical: false,
-            style: this.actionsContainerBoxStyle
+            style: this.bottomBoxStyle
         });
-
-        this.subMainBox.add_child(this.actionsContainerBox);
+        this.subMainBox.add_child(this.bottomBox);
 
         this.actionsBox = new St.BoxLayout({
             x_expand: true,
@@ -102,10 +99,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false
         });
         this.actionsBox.style = "margin: 0px 15px; spacing: 10px;";
-        this.appsBox = new St.BoxLayout({
-            vertical: true
-        });
-        this.actionsContainerBox.add_child(this.actionsBox);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
         this.actionsBox.add_child(this.user);
@@ -134,6 +127,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.backButton.style = 'padding: 0px 15px 10px 15px;';
         this.allAppsButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_NEXT, _("All Apps"), () => this.displayAllApps());
         this.allAppsButton.style = 'padding: 0px 15px 10px 15px;';
+
+        if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
+            this.topBox.add_child(this.searchBox);
+            this.bottomBox.add_child(this.actionsBox);
+        }
+        else{
+            this.topBox.add_child(this.actionsBox);
+            this.bottomBox.add_child(this.searchBox);
+        }
 
         this.updateStyle();
         this.updateWidth();
@@ -183,7 +185,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         const RoundBottomBorder = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
         const RoundTopBorder = "border-radius: " + borderRadius + "px " + borderRadius + "px 0px 0px;";
-        this.actionsContainerBox.style = this.actionsContainerBoxStyle + RoundBottomBorder;
+        this.bottomBox.style = this.bottomBoxStyle + RoundBottomBorder;
         this.topBox.style = this.topBoxStyle + RoundTopBorder;
         this.arcMenu.box.style = "padding: 0px; margin: 0px;";
     }

@@ -59,7 +59,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsBox.add_child(this.powerOptionsBox);
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style_class = 'arcmenu-search-top';
+            this.searchBox.add_style_class_name('arcmenu-search-top');
             this.searchBox.style = "margin-top: 6px; margin-bottom: 0px;";
             this.mainBox.add_child(this.searchBox);
         }
@@ -120,7 +120,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesBox = new St.BoxLayout({ vertical: true });
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style_class = 'arcmenu-search-bottom';
+            this.searchBox.add_style_class_name('arcmenu-search-bottom');
             this.mainBox.add_child(this.searchBox);
         }
 
