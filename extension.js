@@ -25,6 +25,7 @@ const Config = imports.misc.config;
 const ShellVersion = parseFloat(Config.PACKAGE_VERSION);
 
 const Main = imports.ui.main;
+const Theming = Me.imports.theming;
 const Util = imports.misc.util;
 const Utils = Me.imports.utils;
 
@@ -50,8 +51,8 @@ function enable() {
     settings.connect('changed::dash-to-panel-standalone', () => _reload());
     settingsControllers = [];
 
-    Me.customStylesheet = Utils.getStylesheetFile();
-    Utils.updateStylesheet(settings);
+    Me.customStylesheet = Theming.getStylesheetFile();
+    Theming.updateStylesheet(settings);
 
     _enableButtons();
 
@@ -74,7 +75,7 @@ function disable() {
         extensionChangedId = null;
     }
 
-    Utils.unloadStylesheet();
+    Theming.unloadStylesheet();
     delete Me.customStylesheet;
 
     _disconnectDtpSignals();

@@ -2,16 +2,18 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const {Adw, Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const Prefs = Me.imports.prefs;
 const PW = Me.imports.prefsWidgets;
 const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
-var TweaksPage = GObject.registerClass({
+const { ListPinnedPage } = Me.imports.settings.MenuSettingsPages.ListPinnedPage;
+const { ListOtherPage } = Me.imports.settings.MenuSettingsPages.ListOtherPage;
+
+var LayoutTweaksPage = GObject.registerClass({
     Signals: {
         'response': { param_types: [GObject.TYPE_INT] },
     },
-},  class ArcMenu_TweaksPage extends Gtk.Box {
+},  class ArcMenu_LayoutTweaksPage extends Gtk.Box {
     _init(settings, layoutName) {
         this._settings = settings;
         this.addResponse = false;
@@ -317,7 +319,7 @@ var TweaksPage = GObject.registerClass({
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Brisk Menu Shortcuts")
         });
-        let pinnedApps = new Prefs.MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.OTHER, 'brisk-shortcuts-list');
+        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.OTHER, 'brisk-shortcuts-list');
         pinnedAppsFrame.add(pinnedApps);
         this.mainBox.append(briskMenuTweaksFrame);
         this.mainBox.append(pinnedAppsFrame);
@@ -485,7 +487,7 @@ var TweaksPage = GObject.registerClass({
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Unity Layout Buttons")
         });
-        let pinnedApps = new Prefs.MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.OTHER, 'unity-pinned-app-list');
+        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.OTHER, 'unity-pinned-app-list');
         pinnedAppsFrame.add(pinnedApps);
         this.mainBox.append(pinnedAppsFrame);
 
@@ -575,7 +577,7 @@ var TweaksPage = GObject.registerClass({
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Mint Layout Shortcuts")
         });
-        let pinnedApps = new Prefs.MenuSettingsListPage(this._settings, Constants.MenuSettingsListType.OTHER, 'mint-pinned-app-list');
+        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.OTHER, 'mint-pinned-app-list');
         pinnedAppsFrame.add(pinnedApps);
         this.mainBox.append(pinnedAppsFrame);
 
@@ -797,7 +799,7 @@ var TweaksPage = GObject.registerClass({
             title: _("Extra Categories Quick Links"),
             description: _("Display quick links of extra categories on the home page\nSee Customize Menu -> Extra Categories")
         });
-        let extraCategoriesLinksBox = new Prefs.MenuSettingsListOtherPage(this._settings, Constants.MenuSettingsListType.QUICK_LINKS);
+        let extraCategoriesLinksBox = new ListOtherPage(this._settings, Constants.MenuSettingsListType.QUICK_LINKS);
         extraCategoriesFrame.add(extraCategoriesLinksBox);
         this.mainBox.append(extraCategoriesFrame);
 

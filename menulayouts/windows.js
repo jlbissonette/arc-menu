@@ -11,6 +11,8 @@ const PopupMenu = imports.ui.popupMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
+function getMenuLayoutEnum() { return Constants.MenuLayout.WINDOWS; }
+
 var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {

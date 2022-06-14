@@ -6,6 +6,7 @@ const Keybinder = Me.imports.keybinder;
 const Main = imports.ui.main;
 const MenuButton = Me.imports.menuButton;
 const { StandaloneRunner } = Me.imports.standaloneRunner;
+const Theming = Me.imports.theming;
 const Utils = Me.imports.utils;
 
 var MenuSettingsController = class {
@@ -143,7 +144,7 @@ var MenuSettingsController = class {
             GLib.source_remove(this._writeTimeoutId);
 
         this._writeTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, () => {
-            Utils.updateStylesheet(this._settings);
+            Theming.updateStylesheet(this._settings);
             this._writeTimeoutId = null;
             return GLib.SOURCE_REMOVE;
         });

@@ -14,6 +14,8 @@ const PopupMenu = imports.ui.popupMenu;
 const { RecentFilesManager } = Me.imports.recentFilesManager;
 const Utils =  Me.imports.utils;
 
+function getMenuLayoutEnum() { return null; }
+
 //This class handles the core functionality of all the menu layouts.
 //Each menu layout extends this class.
 var BaseLayout = class {
