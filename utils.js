@@ -1,6 +1,9 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const Constants = Me.imports.constants;
+
 const {Gio, GLib} = imports.gi;
+const Constants = Me.imports.constants;
+const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const _ = Gettext.gettext;
 
 const PowerManagerInterface = `<node>
   <interface name="org.freedesktop.login1.Manager">
