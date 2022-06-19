@@ -29,7 +29,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         this.tooltip = new MW.Tooltip(this);
         this.dtpNeedsRelease = false;
 
-        //Create Main Menus - ArcMenu and arcMenu's context menu
+        //Create Main Menus - ArcMenu and ArcMenu's context menu
         this.arcMenu = new ArcMenu(this, 0.5, St.Side.TOP);
         this.arcMenu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
 
@@ -70,7 +70,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 
     initiate(){
-        //Dash to Panel Integration
         this.dashToPanel = Main.extensionManager.lookup(DASH_TO_PANEL_UUID);
         if(this.dashToPanel?.state === ExtensionState.ENABLED)
             this.syncWithDashToPanel();
@@ -83,7 +82,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
         this.setMenuPositionAlignment();
 
-        //Create Basic Layout
         this.createLayoutID = GLib.timeout_add(0, 100, () => {
             this.createMenuLayout();
             this.createLayoutID = null;
@@ -324,9 +322,13 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(monitorIndex);
         let height = Math.round(this._settings.get_int('menu-height') / scaleFactor);
 
-        if(height > monitorWorkArea.height){
-            height = (monitorWorkArea.height * 8) / 10;
-        }
+        let monitorWorkHeight = Math.round(monitorWorkArea.height / scaleFactor);
+
+        //Cap menu height to 9/10th of screen height.
+        let maxHeight = (monitorWorkHeight * 9) / 10;
+        
+        if(height > maxHeight)
+            height = maxHeight;
 
         if(layout !== Constants.MenuLayout.RUNNER && this.MenuLayout)
             this.mainBox.style = `height: ${height}px`;

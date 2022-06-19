@@ -57,28 +57,33 @@ function updateStylesheet(settings){
     let [buttonBorder, buttonBorderColor] = settings.get_value('menu-button-border-color').deep_unpack();
     let [searchBorder, searchBorderValue] = settings.get_value('search-entry-border-radius').deep_unpack();
 
-    if(buttonFG)
+    if(buttonFG){
         extraStylingCSS += `.arcmenu-menu-button{
                                 color: ${buttonFGColor};
                             }`;
-    if(buttonHoverBG)
+    }
+    if(buttonHoverBG){
         extraStylingCSS += `.arcmenu-panel-menu:hover{
                                 box-shadow: inset 0 0 0 100px transparent;
                                 background-color: ${buttonHoverBGColor};
                             }`;
-    if(buttonHoverFG)
+    }
+    if(buttonHoverFG){
         extraStylingCSS += `.arcmenu-panel-menu:hover .arcmenu-menu-button{
                                 color: ${buttonHoverFGColor};
                             }`
-    if(buttonActiveFG)
+    }
+    if(buttonActiveFG){
         extraStylingCSS += `.arcmenu-menu-button:active{
                                 color: ${buttonActiveFGColor};
                             }`;
-    if(buttonActiveBG)
+    }
+    if(buttonActiveBG){
         extraStylingCSS += `.arcmenu-panel-menu:active{
                                 box-shadow: inset 0 0 0 100px transparent;
                                 background-color: ${buttonActiveBGColor};
                             }`;
+    }
     if(buttonRadius){
         extraStylingCSS += `.arcmenu-panel-menu{
                                 border-radius: ${buttonRadiusValue}px;

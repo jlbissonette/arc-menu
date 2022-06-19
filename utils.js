@@ -367,10 +367,10 @@ function getDashToPanelPosition(settings, index){
         return imports.gi.St.Side.BOTTOM;
 }
 
-function checkIfValidShortcut(frameRow, icon){
-    if(frameRow._cmd.endsWith(".desktop") && !Gio.DesktopAppInfo.new(frameRow._cmd)){
+function checkIfValidShortcut(item, icon){
+    if(item._cmd.endsWith(".desktop") && !Gio.DesktopAppInfo.new(item._cmd)){
         icon.icon_name = 'warning-symbolic';
-        frameRow.title = "<b><i>" + _("Invalid Shortcut") + "</i></b> "+ _(frameRow.title);
+        item.title = "<b><i>" + _("Invalid Shortcut") + "</i></b> "+ _(item.title);
     }
 }
 

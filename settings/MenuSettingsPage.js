@@ -36,15 +36,17 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
         });
 
         this.headerLabel = new Gtk.Label({
-            label: "<b>" + _("Menu Settings") + "</b>",
+            label: _("Menu Settings"),
             use_markup: true,
             justify: Gtk.Justification.CENTER,
             hexpand: true,
             halign: Gtk.Align.CENTER
         });
+        let context = this.headerLabel.get_style_context();
+        context.add_class('title-4');
 
         this.menuSettingsStackListBox = new PW.StackListBox(this);
-        let context = this.menuSettingsStackListBox.get_style_context();
+        context = this.menuSettingsStackListBox.get_style_context();
         context.add_class('navigation-sidebar');
         context.add_class('background');
         this.menuSettingsStackListBox.addRow("MenuSettingsGeneral", _("Menu Settings"), 'menu-settings-symbolic');
@@ -64,7 +66,7 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
             const visibleChild = this.settingsLeaflet.get_visible_child();
             const currentPage = this.settingsLeaflet.get_page(visibleChild);
             const pageName = currentPage.translatableName;
-            this.headerLabel.label = "<b>" + _(pageName) + "</b>";
+            this.headerLabel.label = _(pageName);
             this.menuSettingsStackListBox.selectRowByName(currentPage.name);
             let nextChild = this.settingsLeaflet.get_adjacent_child(Adw.NavigationDirection.FORWARD);
             goNextButton.sensitive = nextChild ? true : false;
@@ -76,7 +78,8 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
             content: this.settingsLeaflet,
             flap: this.menuSettingsStackListBox,
             separator: Gtk.Separator.new(Gtk.Orientation.VERTICAL),
-            fold_policy: Adw.FlapFoldPolicy.ALWAYS
+            fold_policy: Adw.FlapFoldPolicy.ALWAYS,
+            flap_position: Gtk.PackType.END
         });
 
         this.menuSettingsStackListBox.connect('row-activated', () => {
@@ -84,32 +87,30 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
         });
 
         let sidebarButton = new Gtk.ToggleButton({
-            icon_name: 'sidebar-show-symbolic',
+            icon_name: 'view-more-symbolic',
+            hexpand: true,
             vexpand: false,
-            valign: Gtk.Align.CENTER
+            halign: Gtk.Align.END,
+            valign: Gtk.Align.CENTER,
+            tooltip_text: _("View Sidebar")
         });
         context = sidebarButton.get_style_context();
         context.add_class('suggested-action');
         sidebarButton.bind_property('active', this.flap, 'reveal-flap', GObject.BindingFlags.BIDIRECTIONAL);
 
-        sidebarButton.connect('toggled', (widget) => {
-            if(widget.active){
-                sidebarButton.icon_name = 'sidebar-show-right-symbolic';
-            }
-            else{
-                sidebarButton.icon_name = 'sidebar-show-symbolic';
-            }
+        let navBox = new Gtk.Box({
+            orientation: Gtk.Orientation.HORIZONTAL,
+            margin_bottom: 15,
         });
         let headerBox = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
-            margin_bottom: 2,
-            spacing: 6
         });
 
         let restoreDefaultsButton = new Gtk.Button({
             icon_name: 'view-refresh-symbolic',
             vexpand: false,
-            valign: Gtk.Align.CENTER
+            valign: Gtk.Align.CENTER,
+            tooltip_text: _("Reset settings")
         });
         context = restoreDefaultsButton.get_style_context();
         context.add_class('destructive-action');
@@ -140,31 +141,37 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
 
         let goNextButton = new Gtk.Button({
             icon_name: 'go-next-symbolic',
-            halign: Gtk.Align.END
+            halign: Gtk.Align.END,
+            tooltip_text: _("Next Page")
         });
         context = goNextButton.get_style_context();
-        context.add_class('osd');
+        context.add_class('pill');
+        context.add_class('suggested-action');
 
         goNextButton.connect('clicked', (widget) => {
             this.settingsLeaflet.navigate(Adw.NavigationDirection.FORWARD);
         });
         let goPreviousButton = new Gtk.Button({
             icon_name: 'go-previous-symbolic',
-            sensitive: false
+            sensitive: false,
+            tooltip_text: _("Previous Page")
         });
         context = goPreviousButton.get_style_context();
-        context.add_class('osd');
+        context.add_class('pill');
+        context.add_class('suggested-action');
 
         goPreviousButton.connect('clicked', (widget) => {
             this.settingsLeaflet.navigate(Adw.NavigationDirection.BACK);
         });
 
-        headerBox.append(goPreviousButton);
-        headerBox.append(sidebarButton);
-        headerBox.append(this.headerLabel);
-        headerBox.append(restoreDefaultsButton);
-        headerBox.append(goNextButton);
+        navBox.append(goPreviousButton);
+        navBox.append(this.headerLabel);
+        navBox.append(goNextButton);
 
+        headerBox.append(restoreDefaultsButton);
+        headerBox.append(sidebarButton);
+
+        this.mainGroup.add(navBox);
         this.mainGroup.add(headerBox);
         this.mainGroup.add(this.flap);
 

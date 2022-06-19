@@ -23,27 +23,9 @@ var GeneralPage = GObject.registerClass(
         });
         this.append(menuSizeFrame);
 
-        //find the greatest screen height of all monitors
-        //use that value to set Menu Height cap
-        let display = Gdk.Display.get_default();
-        let monitors = display.get_monitors();
-        let nMonitors = monitors.get_n_items();
-        let greatestHeight = 0;
-        let scaleFactor = 1;
-        for (let i = 0; i < nMonitors; i++) {
-            let monitor = monitors.get_item(i);
-            let monitorHeight = monitor.get_geometry().height;
-            if(monitorHeight > greatestHeight){
-                scaleFactor = monitor.get_scale_factor();
-                greatestHeight = monitorHeight;
-            }
-        }
-        let monitorHeight = greatestHeight * scaleFactor;
-        monitorHeight = Math.round((monitorHeight * 8) / 10);
-
         let heightSpinButton = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
-                lower: 300, upper: monitorHeight, step_increment: 25, page_increment: 50, page_size: 0,
+                lower: 300, upper: 4320, step_increment: 25, page_increment: 50, page_size: 0,
             }),
             climb_rate: 25,
             digits: 0,
