@@ -249,8 +249,10 @@ var GeneralPage = GObject.registerClass(
         });
         iconsSizeFrame.add(gridIconsSizeRow);
 
-        let menuItemIconSizeRow = this.createIconSizeRow(_("Categories &amp; Applications"), 'menu-item-icon-size');
+        let menuItemIconSizeRow = this.createIconSizeRow(_("Applications"), 'menu-item-icon-size');
         iconsSizeFrame.add(menuItemIconSizeRow);
+        let menuCategoryIconSizeRow = this.createIconSizeRow(_("Categories"), 'menu-item-category-icon-size');
+        iconsSizeFrame.add(menuCategoryIconSizeRow);
         let buttonIconSizeRow = this.createIconSizeRow(_("Buttons"), 'button-item-icon-size');
         iconsSizeFrame.add(buttonIconSizeRow);
         let quicklinksIconSizeRow = this.createIconSizeRow(_("Quick Links"),'quicklinks-item-icon-size');
@@ -266,6 +268,7 @@ var GeneralPage = GObject.registerClass(
             vertSeparatorSwitch.set_active(this._settings.get_default_value('vert-separator').unpack());
             gridIconsSizeRow.selected = 0;
             menuItemIconSizeRow.selected = 0;
+            menuCategoryIconSizeRow.selected = 0;
             buttonIconSizeRow.selected = 0;
             quicklinksIconSizeRow.selected = 0;
             miscIconSizeRow.selected = 0;
@@ -287,6 +290,9 @@ var GeneralPage = GObject.registerClass(
         iconSizes.append(_('Medium'));
         iconSizes.append(_('Large'));
         iconSizes.append(_('Extra Large'));
+
+        if(setting === 'menu-item-category-icon-size')
+            iconSizes.append(_('Hidden'));
 
         let iconsSizeRow = new Adw.ComboRow({
             title: _(title),

@@ -98,6 +98,7 @@
         <value value="3" nick="Medium"/>
         <value value="4" nick="Large"/>
         <value value="5" nick="Extralarge"/>
+        <value value="6" nick="Hidden"/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.grid-icon-sizes'>
         <value value="0" nick="Default"/>
@@ -567,7 +568,12 @@
     <key name="menu-item-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
       <default>'Default'</default>
       <summary>Size of the menu items icon.</summary>
-      <description>Size of the menu items icon. Includes all application items, category items, search results.</description>
+      <description>Size of the menu items icon. Includes all application items, search results.</description>
+    </key>
+    <key name="menu-item-category-icon-size" enum="org.gnome.shell.extensions.arcmenu.icon-sizes">
+      <default>'Default'</default>
+      <summary>Size of the category icons.</summary>
+      <description>Size of the category icons.</description>
     </key>
     <key name="menu-item-grid-icon-size" enum="org.gnome.shell.extensions.arcmenu.grid-icon-sizes">
       <default>'Default'</default>

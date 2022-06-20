@@ -161,6 +161,7 @@ function convertToGridLayout(item){
 function getIconSize(iconSizeEnum, defaultIconSize){
     const IconSizeEnum = iconSizeEnum;
     let iconSize = defaultIconSize;
+
     if(IconSizeEnum === Constants.IconSize.DEFAULT)
         iconSize = defaultIconSize;
     else if(IconSizeEnum === Constants.IconSize.EXTRA_SMALL)
@@ -173,6 +174,8 @@ function getIconSize(iconSizeEnum, defaultIconSize){
         iconSize = Constants.LARGE_ICON_SIZE;
     else if(IconSizeEnum === Constants.IconSize.EXTRA_LARGE)
         iconSize = Constants.EXTRA_LARGE_ICON_SIZE;
+    else if(IconSizeEnum === Constants.IconSize.HIDDEN)
+        iconSize = Constants.ICON_HIDDEN;
 
     return iconSize;
 }

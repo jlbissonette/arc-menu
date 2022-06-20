@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-20 07:14-0400\n"
+"POT-Creation-Date: 2022-06-20 15:56-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -58,7 +58,7 @@ msgstr ""
 #: menulayouts/windows.js:386 menuWidgets.js:717
 #: settings/LayoutTweaksPage.js:639 settings/LayoutTweaksPage.js:744
 #: settings/MenuSettingsPage.js:54 settings/MenuSettingsPage.js:194
-#: utils.js:252
+#: utils.js:255
 msgid "Pinned Apps"
 msgstr ""
 
@@ -67,130 +67,130 @@ msgstr ""
 msgid "Recent Files"
 msgstr ""
 
-#: constants.js:246 menulayouts/mint.js:224 menulayouts/unity.js:211
+#: constants.js:248 menulayouts/mint.js:224 menulayouts/unity.js:211
 #: settings/MenuSettingsPages/ListPinnedPage.js:338
 msgid "Log Out"
 msgstr ""
 
-#: constants.js:247 menulayouts/mint.js:225 menulayouts/unity.js:212
+#: constants.js:249 menulayouts/mint.js:225 menulayouts/unity.js:212
 #: settings/MenuSettingsPages/ListPinnedPage.js:337
 msgid "Lock"
 msgstr ""
 
-#: constants.js:248 settings/MenuSettingsPages/ListPinnedPage.js:340
+#: constants.js:250 settings/MenuSettingsPages/ListPinnedPage.js:340
 msgid "Restart"
 msgstr ""
 
-#: constants.js:249 menulayouts/mint.js:226 menulayouts/unity.js:213
+#: constants.js:251 menulayouts/mint.js:226 menulayouts/unity.js:213
 #: settings/MenuSettingsPages/ListPinnedPage.js:339
 msgid "Power Off"
 msgstr ""
 
-#: constants.js:250 settings/MenuSettingsPages/ListPinnedPage.js:341
+#: constants.js:252 settings/MenuSettingsPages/ListPinnedPage.js:341
 msgid "Suspend"
 msgstr ""
 
-#: constants.js:251 settings/MenuSettingsPages/ListPinnedPage.js:342
+#: constants.js:253 settings/MenuSettingsPages/ListPinnedPage.js:342
 msgid "Hybrid Sleep"
 msgstr ""
 
-#: constants.js:252 settings/MenuSettingsPages/ListPinnedPage.js:343
+#: constants.js:254 settings/MenuSettingsPages/ListPinnedPage.js:343
 msgid "Hibernate"
 msgstr ""
 
-#: constants.js:374 settings/AboutPage.js:34
+#: constants.js:376 settings/AboutPage.js:34
 msgid "ArcMenu"
 msgstr ""
 
-#: constants.js:375
+#: constants.js:377
 msgid "Brisk"
 msgstr ""
 
-#: constants.js:376
+#: constants.js:378
 msgid "Whisker"
 msgstr ""
 
-#: constants.js:377
+#: constants.js:379
 msgid "GNOME Menu"
 msgstr ""
 
-#: constants.js:378
+#: constants.js:380
 msgid "Mint"
 msgstr ""
 
-#: constants.js:379
+#: constants.js:381
 msgid "Budgie"
 msgstr ""
 
-#: constants.js:382
+#: constants.js:384
 msgid "Unity"
 msgstr ""
 
-#: constants.js:383
+#: constants.js:385
 msgid "Plasma"
 msgstr ""
 
-#: constants.js:384
+#: constants.js:386
 msgid "tognee"
 msgstr ""
 
-#: constants.js:385
+#: constants.js:387
 msgid "Insider"
 msgstr ""
 
-#: constants.js:386
+#: constants.js:388
 msgid "Redmond"
 msgstr ""
 
-#: constants.js:387
+#: constants.js:389
 msgid "Windows"
 msgstr ""
 
-#: constants.js:388
+#: constants.js:390
 msgid "11"
 msgstr ""
 
-#: constants.js:389
+#: constants.js:391
 msgid "a.z."
 msgstr ""
 
-#: constants.js:392
+#: constants.js:394
 msgid "Elementary"
 msgstr ""
 
-#: constants.js:393
+#: constants.js:395
 msgid "Chromebook"
 msgstr ""
 
-#: constants.js:396
+#: constants.js:398
 msgid "Runner"
 msgstr ""
 
-#: constants.js:397
+#: constants.js:399
 msgid "GNOME Overview"
 msgstr ""
 
-#: constants.js:400
+#: constants.js:402
 msgid "Raven"
 msgstr ""
 
-#: constants.js:404
+#: constants.js:406
 msgid "Traditional"
 msgstr ""
 
-#: constants.js:405
+#: constants.js:407
 msgid "Modern"
 msgstr ""
 
-#: constants.js:406
+#: constants.js:408
 msgid "Touch"
 msgstr ""
 
-#: constants.js:407
+#: constants.js:409
 msgid "Launcher"
 msgstr ""
 
-#: constants.js:408
+#: constants.js:410
 msgid "Alternative"
 msgstr ""
 
@@ -297,7 +297,7 @@ msgstr ""
 #: menulayouts/baseMenuLayout.js:419 menulayouts/baseMenuLayout.js:463
 #: menulayouts/mint.js:212 menulayouts/unity.js:200 placeDisplay.js:336
 #: settings/LayoutTweaksPage.js:471 settings/LayoutTweaksPage.js:540
-#: utils.js:228
+#: utils.js:231
 msgid "Home"
 msgstr ""
 
@@ -341,7 +341,8 @@ msgstr ""
 msgid "Frequent"
 msgstr ""
 
-#: menulayouts/plasma.js:124 menuWidgets.js:1081 menuWidgets.js:2464
+#: menulayouts/plasma.js:124 menuWidgets.js:1081 menuWidgets.js:2471
+#: settings/MenuSettingsPages/GeneralPage.js:252
 msgid "Applications"
 msgstr ""
 
@@ -398,7 +399,7 @@ msgstr ""
 msgid "Power Off / Log Out"
 msgstr ""
 
-#: menuWidgets.js:908
+#: menuWidgets.js:908 settings/MenuSettingsPages/GeneralPage.js:254
 msgid "Categories"
 msgstr ""
 
@@ -410,7 +411,7 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: menuWidgets.js:2307
+#: menuWidgets.js:2314
 msgid "Search…"
 msgstr ""
 
@@ -1044,26 +1045,26 @@ msgid "Modify the icon size of various menu elements."
 msgstr ""
 
 #: settings/MenuSettingsPages/GeneralPage.js:235
-#: settings/MenuSettingsPages/GeneralPage.js:284
+#: settings/MenuSettingsPages/GeneralPage.js:287
 #: settings/MenuSettingsPages/ListOtherPage.js:42
 msgid "Default"
 msgstr ""
 
 #: settings/MenuSettingsPages/GeneralPage.js:236
 #: settings/MenuSettingsPages/GeneralPage.js:239
-#: settings/MenuSettingsPages/GeneralPage.js:286
+#: settings/MenuSettingsPages/GeneralPage.js:289
 msgid "Small"
 msgstr ""
 
 #: settings/MenuSettingsPages/GeneralPage.js:237
 #: settings/MenuSettingsPages/GeneralPage.js:240
-#: settings/MenuSettingsPages/GeneralPage.js:287
+#: settings/MenuSettingsPages/GeneralPage.js:290
 msgid "Medium"
 msgstr ""
 
 #: settings/MenuSettingsPages/GeneralPage.js:238
 #: settings/MenuSettingsPages/GeneralPage.js:241
-#: settings/MenuSettingsPages/GeneralPage.js:288
+#: settings/MenuSettingsPages/GeneralPage.js:291
 msgid "Large"
 msgstr ""
 
@@ -1077,28 +1078,29 @@ msgstr ""
 msgid "Grid Icons"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:252
-msgid "Categories &amp; Applications"
-msgstr ""
-
-#: settings/MenuSettingsPages/GeneralPage.js:254
+#: settings/MenuSettingsPages/GeneralPage.js:256
 msgid "Buttons"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:256
+#: settings/MenuSettingsPages/GeneralPage.js:258
 msgid "Quick Links"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:258 settings/MiscPage.js:17
+#: settings/MenuSettingsPages/GeneralPage.js:260 settings/MiscPage.js:17
 msgid "Misc"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:285
+#: settings/MenuSettingsPages/GeneralPage.js:288
 msgid "Extra Small"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:289
+#: settings/MenuSettingsPages/GeneralPage.js:292
 msgid "Extra Large"
+msgstr ""
+
+#: settings/MenuSettingsPages/GeneralPage.js:295
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:33
+msgid "Hidden"
 msgstr ""
 
 #: settings/MenuSettingsPages/ButtonAppearancePage.js:25
@@ -1122,10 +1124,6 @@ msgstr ""
 
 #: settings/MenuSettingsPages/ButtonAppearancePage.js:32
 msgid "Text and Icon"
-msgstr ""
-
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:33
-msgid "Hidden"
 msgstr ""
 
 #: settings/MenuSettingsPages/ButtonAppearancePage.js:35
@@ -1444,6 +1442,6 @@ msgstr ""
 msgid "System unable to hybrid sleep."
 msgstr ""
 
-#: utils.js:373
+#: utils.js:376
 msgid "Invalid Shortcut"
 msgstr ""

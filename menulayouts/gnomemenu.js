@@ -22,7 +22,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             RowSpacing: 0,
             SupportsCategoryOnHover: true,
             VerticalMainBox: true,
-            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultCategoryIconSize: Constants.ICON_HIDDEN,
             DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultQuickLinksIconSize: Constants.SMALL_ICON_SIZE,
             DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
@@ -31,7 +31,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
     createLayout(){
         super.createLayout();
-        this.subMainBox= new St.BoxLayout({
+        this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
@@ -131,11 +131,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         super.loadCategories();
-
-        for(let categoryMenuItem of this.categoryDirectories.values()){
-            categoryMenuItem.style = "padding-top: 8px; padding-bottom: 8px;";
-            categoryMenuItem._iconBin.visible = false;
-        }
     }
 
     displayCategories(){

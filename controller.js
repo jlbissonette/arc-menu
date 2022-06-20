@@ -93,8 +93,9 @@ var MenuSettingsController = class {
                 'disable-scrollview-fade-effect', 'windows-disable-frequent-apps', 'default-menu-view',
                 'default-menu-view-tognee', 'alphabetize-all-programs', 'menu-item-grid-icon-size',
                 'menu-item-icon-size', 'button-item-icon-size', 'quicklinks-item-icon-size',
-                'category-icon-type', 'shortcut-icon-type', 'arcmenu-extra-categories-links',
-                'arcmenu-extra-categories-links-location', 'runner-show-frequent-apps', 'default-menu-view-redmond'
+                'menu-item-category-icon-size', 'category-icon-type', 'shortcut-icon-type', 
+                'arcmenu-extra-categories-links', 'arcmenu-extra-categories-links-location', 'runner-show-frequent-apps',
+                'default-menu-view-redmond'
             ],
             this._reload.bind(this)
         );
