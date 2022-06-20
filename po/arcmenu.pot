@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-14 14:49-0400\n"
+"POT-Creation-Date: 2022-06-20 07:14-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 #: menulayouts/unity.js:39 menulayouts/unity.js:290 menulayouts/unity.js:349
 #: menulayouts/windows.js:386 menuWidgets.js:717
 #: settings/LayoutTweaksPage.js:639 settings/LayoutTweaksPage.js:744
-#: settings/MenuSettingsPage.js:52 settings/MenuSettingsPage.js:186
+#: settings/MenuSettingsPage.js:54 settings/MenuSettingsPage.js:194
 #: utils.js:252
 msgid "Pinned Apps"
 msgstr ""
@@ -194,7 +194,7 @@ msgstr ""
 msgid "Alternative"
 msgstr ""
 
-#: menuButton.js:521 menulayouts/arcmenu.js:180 menulayouts/plasma.js:169
+#: menuButton.js:523 menulayouts/arcmenu.js:180 menulayouts/plasma.js:169
 #: menulayouts/raven.js:166 menulayouts/redmond.js:171
 #: menulayouts/tognee.js:137 menulayouts/unity.js:147
 #: menulayouts/windows.js:125 menuWidgets.js:1566 prefs.js:118
@@ -203,36 +203,36 @@ msgstr ""
 msgid "ArcMenu Settings"
 msgstr ""
 
-#: menuButton.js:525 settings/MenuSettingsPages/GeneralPage.js:128
+#: menuButton.js:527 settings/MenuSettingsPages/GeneralPage.js:110
 msgid "General Settings"
 msgstr ""
 
-#: menuButton.js:526
+#: menuButton.js:528
 msgid "Menu Theming"
 msgstr ""
 
-#: menuButton.js:527
+#: menuButton.js:529
 msgid "Change Menu Layout"
 msgstr ""
 
-#: menuButton.js:528
+#: menuButton.js:530
 msgid "Layout Tweaks"
 msgstr ""
 
-#: menuButton.js:529
+#: menuButton.js:531
 msgid "Customize Menu"
 msgstr ""
 
-#: menuButton.js:530 settings/MenuSettingsPage.js:51
-#: settings/MenuSettingsPage.js:182
+#: menuButton.js:532 settings/MenuSettingsPage.js:53
+#: settings/MenuSettingsPage.js:190
 msgid "Button Settings"
 msgstr ""
 
-#: menuButton.js:533 settings/AboutPage.js:13
+#: menuButton.js:535 settings/AboutPage.js:13
 msgid "About"
 msgstr ""
 
-#: menuButton.js:539
+#: menuButton.js:541
 msgid "Dash to Panel Settings"
 msgstr ""
 
@@ -350,7 +350,7 @@ msgid "Leave"
 msgstr ""
 
 #: menulayouts/plasma.js:259 menulayouts/windows.js:260
-#: settings/MenuSettingsPage.js:54 settings/MenuSettingsPage.js:209
+#: settings/MenuSettingsPage.js:56 settings/MenuSettingsPage.js:217
 msgid "Application Shortcuts"
 msgstr ""
 
@@ -647,9 +647,9 @@ msgid "Round"
 msgstr ""
 
 #: settings/LayoutTweaksPage.js:151
-#: settings/MenuSettingsPages/GeneralPage.js:254
-#: settings/MenuSettingsPages/GeneralPage.js:255
-#: settings/MenuSettingsPages/GeneralPage.js:256
+#: settings/MenuSettingsPages/GeneralPage.js:236
+#: settings/MenuSettingsPages/GeneralPage.js:237
+#: settings/MenuSettingsPages/GeneralPage.js:238
 msgid "Square"
 msgstr ""
 
@@ -715,7 +715,7 @@ msgid "Width"
 msgstr ""
 
 #: settings/LayoutTweaksPage.js:419
-#: settings/MenuSettingsPages/GeneralPage.js:58
+#: settings/MenuSettingsPages/GeneralPage.js:40
 msgid "Height"
 msgstr ""
 
@@ -904,184 +904,200 @@ msgstr ""
 msgid "Customize"
 msgstr ""
 
-#: settings/MenuSettingsPage.js:39 settings/MenuSettingsPage.js:50
-#: settings/MenuSettingsPage.js:178
+#: settings/MenuSettingsPage.js:39 settings/MenuSettingsPage.js:52
+#: settings/MenuSettingsPage.js:186
 msgid "Menu Settings"
 msgstr ""
 
-#: settings/MenuSettingsPage.js:53 settings/MenuSettingsPage.js:205
+#: settings/MenuSettingsPage.js:55 settings/MenuSettingsPage.js:213
 msgid "Directory Shortcuts"
 msgstr ""
 
-#: settings/MenuSettingsPage.js:55 settings/MenuSettingsPage.js:213
+#: settings/MenuSettingsPage.js:57 settings/MenuSettingsPage.js:221
 msgid "Power Options"
 msgstr ""
 
-#: settings/MenuSettingsPage.js:56 settings/MenuSettingsPage.js:217
+#: settings/MenuSettingsPage.js:58 settings/MenuSettingsPage.js:225
 #: settings/MenuSettingsPages/SearchOptionsPage.js:61
 msgid "Search Options"
 msgstr ""
 
-#: settings/MenuSettingsPage.js:57 settings/MenuSettingsPage.js:221
+#: settings/MenuSettingsPage.js:59 settings/MenuSettingsPage.js:229
 msgid "Extra Categories"
 msgstr ""
 
-#: settings/MenuSettingsPage.js:58 settings/MenuSettingsPage.js:225
+#: settings/MenuSettingsPage.js:60 settings/MenuSettingsPage.js:233
 msgid "Fine-Tune"
 msgstr ""
 
-#: settings/MenuSettingsPage.js:121
-#, javascript-format
-msgid "Reset all %s?"
+#: settings/MenuSettingsPage.js:95
+msgid "View Sidebar"
+msgstr ""
+
+#: settings/MenuSettingsPage.js:113
+msgid "Reset settings"
 msgstr ""
 
 #: settings/MenuSettingsPage.js:122
 #, javascript-format
+msgid "Reset all %s?"
+msgstr ""
+
+#: settings/MenuSettingsPage.js:123
+#, javascript-format
 msgid "All %s will be reset to the default value."
+msgstr ""
+
+#: settings/MenuSettingsPage.js:145
+msgid "Next Page"
+msgstr ""
+
+#: settings/MenuSettingsPage.js:157
+msgid "Previous Page"
 msgstr ""
 
 #: settings/MenuSettingsPages/GeneralPage.js:22
 msgid "Menu Size"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:78
+#: settings/MenuSettingsPages/GeneralPage.js:60
 msgid "Left-Panel Width"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:79
-#: settings/MenuSettingsPages/GeneralPage.js:100
-#: settings/MenuSettingsPages/GeneralPage.js:240
+#: settings/MenuSettingsPages/GeneralPage.js:61
+#: settings/MenuSettingsPages/GeneralPage.js:82
+#: settings/MenuSettingsPages/GeneralPage.js:222
 msgid "Traditional Layouts"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:99
+#: settings/MenuSettingsPages/GeneralPage.js:81
 msgid "Right-Panel Width"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:120
+#: settings/MenuSettingsPages/GeneralPage.js:102
 msgid "Width Offset"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:121
+#: settings/MenuSettingsPages/GeneralPage.js:103
 msgid "Non-Traditional Layouts"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:133
+#: settings/MenuSettingsPages/GeneralPage.js:115
 msgid "Off"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:134
+#: settings/MenuSettingsPages/GeneralPage.js:116
 msgid "Top Centered"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:135
+#: settings/MenuSettingsPages/GeneralPage.js:117
 msgid "Bottom Centered"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:137
+#: settings/MenuSettingsPages/GeneralPage.js:119
 msgid "Override Menu Location"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:178
+#: settings/MenuSettingsPages/GeneralPage.js:160
 msgid "Override Menu Rise"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:179
+#: settings/MenuSettingsPages/GeneralPage.js:161
 msgid "Menu Distance from Panel and Screen Edge"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:200
+#: settings/MenuSettingsPages/GeneralPage.js:182
 msgid "Show Application Descriptions"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:207
+#: settings/MenuSettingsPages/GeneralPage.js:189
 msgid "Full Color"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:208
+#: settings/MenuSettingsPages/GeneralPage.js:190
 msgid "Symbolic"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:210
+#: settings/MenuSettingsPages/GeneralPage.js:192
 msgid "Category Icon Type"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:211
-#: settings/MenuSettingsPages/GeneralPage.js:222
+#: settings/MenuSettingsPages/GeneralPage.js:193
+#: settings/MenuSettingsPages/GeneralPage.js:204
 msgid "Some icon themes may not include selected icon type"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:221
+#: settings/MenuSettingsPages/GeneralPage.js:203
 msgid "Shortcuts Icon Type"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:239
+#: settings/MenuSettingsPages/GeneralPage.js:221
 msgid "Vertical Separator"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:247
+#: settings/MenuSettingsPages/GeneralPage.js:229
 msgid "Icon Sizes"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:248
+#: settings/MenuSettingsPages/GeneralPage.js:230
 msgid "Modify the icon size of various menu elements."
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:253
-#: settings/MenuSettingsPages/GeneralPage.js:302
+#: settings/MenuSettingsPages/GeneralPage.js:235
+#: settings/MenuSettingsPages/GeneralPage.js:284
 #: settings/MenuSettingsPages/ListOtherPage.js:42
 msgid "Default"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:254
-#: settings/MenuSettingsPages/GeneralPage.js:257
-#: settings/MenuSettingsPages/GeneralPage.js:304
+#: settings/MenuSettingsPages/GeneralPage.js:236
+#: settings/MenuSettingsPages/GeneralPage.js:239
+#: settings/MenuSettingsPages/GeneralPage.js:286
 msgid "Small"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:255
-#: settings/MenuSettingsPages/GeneralPage.js:258
-#: settings/MenuSettingsPages/GeneralPage.js:305
+#: settings/MenuSettingsPages/GeneralPage.js:237
+#: settings/MenuSettingsPages/GeneralPage.js:240
+#: settings/MenuSettingsPages/GeneralPage.js:287
 msgid "Medium"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:256
-#: settings/MenuSettingsPages/GeneralPage.js:259
-#: settings/MenuSettingsPages/GeneralPage.js:306
+#: settings/MenuSettingsPages/GeneralPage.js:238
+#: settings/MenuSettingsPages/GeneralPage.js:241
+#: settings/MenuSettingsPages/GeneralPage.js:288
 msgid "Large"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:257
-#: settings/MenuSettingsPages/GeneralPage.js:258
-#: settings/MenuSettingsPages/GeneralPage.js:259
+#: settings/MenuSettingsPages/GeneralPage.js:239
+#: settings/MenuSettingsPages/GeneralPage.js:240
+#: settings/MenuSettingsPages/GeneralPage.js:241
 msgid "Wide"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:261
+#: settings/MenuSettingsPages/GeneralPage.js:243
 msgid "Grid Icons"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:270
+#: settings/MenuSettingsPages/GeneralPage.js:252
 msgid "Categories &amp; Applications"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:272
+#: settings/MenuSettingsPages/GeneralPage.js:254
 msgid "Buttons"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:274
+#: settings/MenuSettingsPages/GeneralPage.js:256
 msgid "Quick Links"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:276 settings/MiscPage.js:17
+#: settings/MenuSettingsPages/GeneralPage.js:258 settings/MiscPage.js:17
 msgid "Misc"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:303
+#: settings/MenuSettingsPages/GeneralPage.js:285
 msgid "Extra Small"
 msgstr ""
 
-#: settings/MenuSettingsPages/GeneralPage.js:307
+#: settings/MenuSettingsPages/GeneralPage.js:289
 msgid "Extra Large"
 msgstr ""
 
