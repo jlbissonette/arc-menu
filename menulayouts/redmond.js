@@ -10,6 +10,8 @@ const PopupMenu = imports.ui.popupMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
+function getMenuLayoutEnum() { return Constants.MenuLayout.REDMOND; }
+
 var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
@@ -49,8 +51,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.viewProgramsButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_NEXT, _("Pinned"), () => this.displayPinnedApps());
         }
 
-        this.backButton.style = 'padding: 0px 15px;';
-        this.viewProgramsButton.style = 'padding: 0px 15px;';
+        this.backButton.style = 'padding: 0px 10px;';
+        this.viewProgramsButton.style = 'padding: 0px 10px;';
 
         this.navBox.add_child(this.backButton);
         this.navBox.add_child(this.viewProgramsButton);

@@ -2053,15 +2053,22 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
     }
 
     createIcon(){
-        const IconSizeEnum = this._settings.get_enum('menu-item-icon-size');
-
-        let defaultIconSize = this.layoutProps.DefaultCategoryIconSize;
-        let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
-
+        let iconSize;
         if(this._displayType === Constants.DisplayType.BUTTON){
             const IconSizeEnum = this._settings.get_enum('button-item-icon-size');
             let defaultIconSize = this.layoutProps.DefaultButtonsIconSize;
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+        }
+        else{
+            const IconSizeEnum = this._settings.get_enum('menu-item-category-icon-size');
+            let defaultIconSize = this.layoutProps.DefaultCategoryIconSize;
+            iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+
+            if(iconSize === Constants.ICON_HIDDEN){
+                this._iconBin.hide();
+                //Todo: padding
+                this.style = "padding-top: 8px; padding-bottom: 8px;";
+            }
         }
 
         let [name, gicon, fallbackIcon] = Utils.getCategoryDetails(this._category);

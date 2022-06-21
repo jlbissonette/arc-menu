@@ -10,6 +10,8 @@ const PopupMenu = imports.ui.popupMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
+function getMenuLayoutEnum() { return Constants.MenuLayout.AZ; }
+
 var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
@@ -34,8 +36,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         this.searchBox.style = "margin: 5px 10px;";
-        this.topBoxStyle = "margin: 0px 0px 10px 0px; spacing: 0px; background-color: rgba(10, 10, 15, 0.1); padding: 11px 5px;"+
-                            "border-color:rgba(186, 196,201, 0.2); border-bottom-width: 1px;";
+        this.topBoxStyle = "margin: 0px 0px 10px 0px; spacing: 0px; background-color: rgba(10, 10, 15, 0.1); padding: 11px 0px;"+
+                           "border-color:rgba(186, 196,201, 0.2); border-bottom-width: 1px;";
         this.arcMenu.box.style = "padding: 0px; margin: 0px;";
 
         this.subMainBox = new St.BoxLayout({
@@ -78,8 +80,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
-        this.bottomBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(10, 10, 15, 0.1); padding: 12px 5px;"+
-                                        "border-color:rgba(186, 196,201, 0.2); border-top-width: 1px;";
+        this.bottomBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(10, 10, 15, 0.1); padding: 12px 0px;" +
+                              "border-color:rgba(186, 196,201, 0.2); border-top-width: 1px;";
 
         this.bottomBox = new St.BoxLayout({
             x_expand: true,
@@ -98,7 +100,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.CENTER,
             vertical: false
         });
-        this.actionsBox.style = "margin: 0px 15px; spacing: 10px;";
+        this.actionsBox.style = "margin: 0px 10px; spacing: 10px;";
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
         this.actionsBox.add_child(this.user);
@@ -124,9 +126,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsBox.add_child(this.leaveButton);
 
         this.backButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_PREVIOUS, _("Back"), () => this.setDefaultMenuView());
-        this.backButton.style = 'padding: 0px 15px 10px 15px;';
+        this.backButton.style = 'padding: 0px 10px 10px 15px;';
         this.allAppsButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_NEXT, _("All Apps"), () => this.displayAllApps());
-        this.allAppsButton.style = 'padding: 0px 15px 10px 15px;';
+        this.allAppsButton.style = 'padding: 0px 10px 10px 15px;';
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
             this.topBox.add_child(this.searchBox);

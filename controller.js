@@ -6,6 +6,7 @@ const Keybinder = Me.imports.keybinder;
 const Main = imports.ui.main;
 const MenuButton = Me.imports.menuButton;
 const { StandaloneRunner } = Me.imports.standaloneRunner;
+const Theming = Me.imports.theming;
 const Utils = Me.imports.utils;
 
 var MenuSettingsController = class {
@@ -92,8 +93,9 @@ var MenuSettingsController = class {
                 'disable-scrollview-fade-effect', 'windows-disable-frequent-apps', 'default-menu-view',
                 'default-menu-view-tognee', 'alphabetize-all-programs', 'menu-item-grid-icon-size',
                 'menu-item-icon-size', 'button-item-icon-size', 'quicklinks-item-icon-size',
-                'category-icon-type', 'shortcut-icon-type', 'arcmenu-extra-categories-links',
-                'arcmenu-extra-categories-links-location', 'runner-show-frequent-apps', 'default-menu-view-redmond'
+                'menu-item-category-icon-size', 'category-icon-type', 'shortcut-icon-type', 
+                'arcmenu-extra-categories-links', 'arcmenu-extra-categories-links-location', 'runner-show-frequent-apps',
+                'default-menu-view-redmond'
             ],
             this._reload.bind(this)
         );
@@ -143,7 +145,7 @@ var MenuSettingsController = class {
             GLib.source_remove(this._writeTimeoutId);
 
         this._writeTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, () => {
-            Utils.updateStylesheet(this._settings);
+            Theming.updateStylesheet(this._settings);
             this._writeTimeoutId = null;
             return GLib.SOURCE_REMOVE;
         });

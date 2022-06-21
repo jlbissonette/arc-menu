@@ -9,6 +9,8 @@ const PlaceDisplay = Me.imports.placeDisplay;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
+function getMenuLayoutEnum() { return Constants.MenuLayout.BRISK; }
+
 var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {

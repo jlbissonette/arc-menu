@@ -26,8 +26,8 @@ var OverrideOverlayKey = class {
         this._mainStartUpComplete = Main.layoutManager.connect('startup-complete', () => this._overrideOverlayKey());
     }
 
-    enable(menuToggler){
-        this._menuToggler = menuToggler;
+    enable(toggleMenu){
+        this._toggleMenu = toggleMenu;
 
         this._ignoreHotKeyChangedEvent = true;
 
@@ -73,7 +73,7 @@ var OverrideOverlayKey = class {
             if(this.defaultOverlayKeyID){
                 GObject.signal_handler_block(global.display, this.defaultOverlayKeyID);
                 this.overlayKeyID = global.display.connect('overlay-key', () => {
-                    this._menuToggler();
+                    this._toggleMenu();
                 });
             }
             else

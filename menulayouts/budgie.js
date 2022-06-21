@@ -8,6 +8,8 @@ const MW = Me.imports.menuWidgets;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
+function getMenuLayoutEnum() { return Constants.MenuLayout.BUDGIE; }
+
 var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
@@ -20,7 +22,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             RowSpacing: 0,
             SupportsCategoryOnHover: true,
             VerticalMainBox: true,
-            DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
+            DefaultCategoryIconSize: Constants.ICON_HIDDEN,
             DefaultApplicationIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
             DefaultQuickLinksIconSize: Constants.SMALL_ICON_SIZE,
             DefaultButtonsIconSize: Constants.EXTRA_SMALL_ICON_SIZE,
@@ -154,10 +156,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
 
         super.loadCategories();
-        for(let categoryMenuItem of this.categoryDirectories.values()){
-            categoryMenuItem.style = "padding-top: 8px; padding-bottom: 8px; margin: 0; spacing: 0;";
-            categoryMenuItem._iconBin.visible = false;
-        }
     }
 
     displayCategories(){

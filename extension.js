@@ -25,20 +25,18 @@ const Config = imports.misc.config;
 const ShellVersion = parseFloat(Config.PACKAGE_VERSION);
 
 const Main = imports.ui.main;
+const Theming = Me.imports.theming;
 const Util = imports.misc.util;
 const Utils = Me.imports.utils;
 
-// Initialize panel button variables
 let settings;
 let settingsControllers;
 let extensionChangedId;
 
-// Initialize menu language translations
 function init() {
     ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);
 }
 
-// Enable the extension
 function enable() {
     if(imports.gi.Meta.is_wayland_compositor())
         Me.metadata.isWayland = true;
@@ -50,8 +48,8 @@ function enable() {
     settings.connect('changed::dash-to-panel-standalone', () => _reload());
     settingsControllers = [];
 
-    Me.customStylesheet = Utils.getStylesheetFile();
-    Utils.updateStylesheet(settings);
+    Me.customStylesheet = Theming.getStylesheetFile();
+    Theming.updateStylesheet(settings);
 
     _enableButtons();
 
@@ -74,7 +72,7 @@ function disable() {
         extensionChangedId = null;
     }
 
-    Utils.unloadStylesheet();
+    Theming.unloadStylesheet();
     delete Me.customStylesheet;
 
     _disconnectDtpSignals();

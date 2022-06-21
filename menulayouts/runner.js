@@ -10,6 +10,8 @@ const PanelMenu = imports.ui.panelMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
+function getMenuLayoutEnum() { return Constants.MenuLayout.RUNNER; }
+
 var createMenu =  class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton, isStandalone) {
         super(menuButton, {

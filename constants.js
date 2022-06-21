@@ -125,6 +125,7 @@ var IconSize = {
     MEDIUM: 3,
     LARGE: 4,
     EXTRA_LARGE: 5,
+    HIDDEN: 6,
 }
 
 var GridIconSize = {
@@ -146,6 +147,7 @@ var GridIconInfo = [
     { NAME: 'LargeRectIconGrid', SIZE: 105, ICON_SIZE: 42, ENUM: GridIconSize.LARGE_RECT },
 ]
 
+var ICON_HIDDEN = -1;
 var EXTRA_SMALL_ICON_SIZE = 16;
 var SMALL_ICON_SIZE = 20;
 var MEDIUM_ICON_SIZE = 25;
