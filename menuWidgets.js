@@ -2066,7 +2066,6 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
 
             if(iconSize === Constants.ICON_HIDDEN){
                 this._iconBin.hide();
-                //Todo: padding
                 this.style = "padding-top: 8px; padding-bottom: 8px;";
             }
         }
