@@ -1,24 +1,32 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Constants = Me.imports.constants;
-const {Gio, GLib} = imports.gi;
+const {Clutter, Gio, GLib, St} = imports.gi;
 
 function getStylesheetFile(){
-    let stylesheet = Gio.File.new_for_path(GLib.get_home_dir() + "/.local/share/ArcMenu/stylesheet.css");
+    try {
+        const directoryPath = GLib.build_filenamev([GLib.get_home_dir(), ".local/share/ArcMenu"]);
+        const stylesheetPath = GLib.build_filenamev([directoryPath, "stylesheet.css"]);
 
-    if(!stylesheet.query_exists(null)){
-        GLib.spawn_command_line_sync("mkdir " + GLib.get_home_dir() + "/.local/share/ArcMenu");
-        GLib.spawn_command_line_sync("touch " + GLib.get_home_dir() + "/.local/share/ArcMenu/stylesheet.css");
-        stylesheet = Gio.File.new_for_path(GLib.get_home_dir() + "/.local/share/ArcMenu/stylesheet.css");
+        let dir = Gio.File.new_for_path(directoryPath);
+        if(!dir.query_exists(null))
+            dir.make_directory(null);
+
+        let stylesheet = Gio.File.new_for_path(stylesheetPath);
+        if(!stylesheet.query_exists(null))
+            stylesheet.create(Gio.FileCreateFlags.NONE, null);
+
+        return stylesheet;
+    } catch (e) {
+        log(`ArcMenu - Custom stylesheet error: ${e.message}`);
+        return null;
     }
-
-    return stylesheet;
 }
 
 function unloadStylesheet(){
     if(!Me.customStylesheet)
         return;
 
-    let theme = imports.gi.St.ThemeContext.get_for_stage(global.stage).get_theme();
+    let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
     theme.unload_stylesheet(Me.customStylesheet);
 }
 
@@ -207,7 +215,7 @@ function updateStylesheet(settings){
             if(!stylesheet.replace_contents_finish(res))
                 throw new Error("ArcMenu - Error replacing contents of custom stylesheet file.");
 
-            let theme = imports.gi.St.ThemeContext.get_for_stage(global.stage).get_theme();
+            let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
 
             unloadStylesheet();
             Me.customStylesheet = stylesheet;
@@ -223,7 +231,6 @@ function updateStylesheet(settings){
 }
 
 function modifyColorLuminance(colorString, luminanceFactor, overrideAlpha){
-    let Clutter = imports.gi.Clutter;
     let color = Clutter.color_from_string(colorString)[1];
     let [hue, lum, sat] = color.to_hls();
     let modifiedLum;
