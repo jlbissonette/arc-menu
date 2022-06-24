@@ -121,7 +121,7 @@ msgstr "Budgie"
 
 #: constants.js:365
 msgid "Unity"
-msgstr "Unity"
+msgstr "유니티"
 
 #: constants.js:366
 msgid "Plasma"
@@ -533,7 +533,7 @@ msgstr "분류 목록"
 
 #: menulayouts/tweaks/tweaks.js:774
 msgid "Extra Categories Quick Links"
-msgstr ""
+msgstr "기타 분류 단축 링크"
 
 #: menulayouts/tweaks/tweaks.js:775
 msgid ""
@@ -853,7 +853,7 @@ msgstr ""
 #: prefs.js:1222 prefs.js:1228 prefs.js:1234 prefs.js:3214 prefs.js:3240
 #: prefs.js:3246
 msgid "Foreground Color"
-msgstr ""
+msgstr "글씨 색상"
 
 #: prefs.js:1225 prefs.js:1228 prefs.js:3237 prefs.js:3240
 msgid "Hover"
@@ -861,7 +861,7 @@ msgstr ""
 
 #: prefs.js:1225 prefs.js:1231 prefs.js:3211 prefs.js:3237 prefs.js:3243
 msgid "Background Color"
-msgstr ""
+msgstr "배경 색상"
 
 #: prefs.js:1231 prefs.js:1234 prefs.js:3243 prefs.js:3246
 msgid "Active"
@@ -1071,7 +1071,7 @@ msgstr "숨겨진 최근 파일 표시"
 
 #: prefs.js:2339 prefs.js:2352
 msgid "Multi-Lined Labels"
-msgstr ""
+msgstr "여러 줄로 된 레이블"
 
 #: prefs.js:2339
 msgid "Enable/Disable multi-lined labels on large application icon layouts."
