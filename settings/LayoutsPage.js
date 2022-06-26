@@ -75,7 +75,7 @@ class ArcMenu_LayoutsPage extends Adw.PreferencesPage {
         mainBox.append(availableLayoutGroup);
 
         Constants.MenuStyles.STYLES.forEach((style) => {
-            let tile = new PW.MenuLayoutRow(_("%s Menu Layouts").format(style.TITLE) , style.IMAGE, 46, style);
+            let tile = new PW.MenuLayoutRow(_("%s Menu Layouts").format(_(style.TITLE)) , style.IMAGE, 46, style);
             availableLayoutGroup.add(tile);
 
             let menuLayoutsBox = new LayoutsCategoryPage(this._settings, this, tile, style.TITLE);
@@ -165,7 +165,7 @@ class ArcMenu_LayoutsPage extends Adw.PreferencesPage {
         for(let styles of Constants.MenuStyles.STYLES){
             for(let style of styles.MENU_TYPE){
                 if(style.LAYOUT == index){
-                    return _("%s Layout Tweaks").format(style.TITLE);
+                    return _("%s Layout Tweaks").format(_(style.TITLE));
                 }
             }
         }
@@ -217,10 +217,9 @@ var LayoutsCategoryPage = GObject.registerClass({
         this.applyButton = new Gtk.Button({
             label: _("Apply"),
             hexpand: false,
-            halign: Gtk.Align.END
+            halign: Gtk.Align.END,
+            css_classes: ['suggested-action']
         });
-        let context = this.applyButton.get_style_context();
-        context.add_class('suggested-action');
 
         this.applyButton.connect('clicked', ()=> {
             this.clearSelection();
@@ -231,10 +230,9 @@ var LayoutsCategoryPage = GObject.registerClass({
             icon_name: 'go-previous-symbolic',
             title: _("Back"),
             icon_first: true,
-            halign: Gtk.Align.START
+            halign: Gtk.Align.START,
+            css_classes: ['suggested-action']
         });
-        context = backButton.get_style_context();
-        context.add_class('suggested-action');
 
         backButton.connect('clicked', ()=> {
             this.clearSelection();
@@ -243,7 +241,7 @@ var LayoutsCategoryPage = GObject.registerClass({
         buttonBox.append(backButton);
 
         let chooseNewLayoutLabel = new Gtk.Label({
-            label: "<b>" +  _("%s Menu Layouts").format(title) + "</b>",
+            label: "<b>" +  _("%s Menu Layouts").format(_(title)) + "</b>",
             use_markup: true,
             halign: Gtk.Align.CENTER,
             hexpand: true
