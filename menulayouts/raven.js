@@ -21,7 +21,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ShortcutContextMenuLocation: Constants.ContextMenuLocation.BOTTOM_CENTERED,
             ColumnSpacing: 10,
             RowSpacing: 10,
-            DefaultMenuWidth: 410,
+            DefaultMenuWidth: 415,
             DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: false,
             SupportsCategoryOnHover: true,
@@ -54,7 +54,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let homeScreen = this._settings.get_boolean('enable-unity-homescreen');
         if(homeScreen)
-            this.activeCategory = _("Pinned Apps");
+            this.activeCategory = _("Pinned");
         else
             this.activeCategory = _("All Programs");
 
@@ -107,7 +107,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             vertical: true,
             style: "padding-bottom: 10px;",
-            style_class: 'arcmenu-margin-box'
         });
 
         this.applicationsScrollBox = this._createScrollBox({
@@ -223,7 +222,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.setDefaultMenuView();
         let homeScreen = this._settings.get_boolean('enable-unity-homescreen');
         if(homeScreen){
-            this.activeCategory = _("Pinned Apps");
+            this.activeCategory = _("Pinned");
             this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
             this.displayPinnedApps();
             let topCategory = this.categoryDirectories.values().next().value;
@@ -272,7 +271,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._clearActorsFromBox(this.applicationsBox);
         else
             this._clearActorsFromBox();
-        this.activeCategory = _("Pinned Apps");
+        this.activeCategory = _("Pinned");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
         this.activeCategory = _("Shortcuts");
         this._displayAppList(this.appShortcuts, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);

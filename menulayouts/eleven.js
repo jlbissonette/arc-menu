@@ -44,7 +44,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false
         });
 
-        this.subMainBox= new St.BoxLayout({
+        this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
@@ -65,7 +65,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             style: "padding-bottom: 10px; spacing: 8px;",
-            style_class: 'arcmenu-margin-box'
         });
         this.applicationsScrollBox = this._createScrollBox({
             clip_to_allocation: true,
@@ -206,8 +205,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     setDefaultMenuView(){
-        this.layoutProperties.IconGridSize = 34;
-        this.setGridLayout(Constants.DisplayType.GRID, 6, 0);
+        this.setGridLayout(Constants.DisplayType.GRID, 0);
         super.setDefaultMenuView();
         this.loadFrequentApps();
         this.activeCategory = _("Pinned");
@@ -223,7 +221,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeCategory = _("All Apps");
         this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
 
-        this.setGridLayout(Constants.DisplayType.LIST, 1, 5);
+        this.setGridLayout(Constants.DisplayType.LIST, 5);
         let appList = [];
         this.applicationsMap.forEach((value,key,map) => {
             appList.push(key);
@@ -233,7 +231,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this._clearActorsFromBox();
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
-        this.setGridLayout(Constants.DisplayType.GRID, 6, 0, false);
+        this.setGridLayout(Constants.DisplayType.GRID, 0, false);
     }
 
     updateStyle(){
@@ -247,7 +245,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.box.style = "padding-bottom: 0px; padding-left: 0px; padding-right: 0px;";
     }
 
-    setGridLayout(displayType, columns, spacing, setStyle = true){
+    setGridLayout(displayType, spacing, setStyle = true){
         if(setStyle){
             this.applicationsGrid.x_align = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
         }
@@ -271,9 +269,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         if(this.frequentAppsList.length > 0 && !this._settings.get_boolean("eleven-disable-frequent-apps")){
             this.activeCategory = _("Frequent");
-            this.setGridLayout(Constants.DisplayType.GRID, 2, 0);
+            this.setGridLayout(Constants.DisplayType.GRID, 0);
             this._displayAppList(this.frequentAppsList, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);
-            this.setGridLayout(Constants.DisplayType.GRID, 6, 0);
+            this.setGridLayout(Constants.DisplayType.GRID, 0);
             if(!this.applicationsBox.contains(this.shortcutsBox))
                 this.applicationsBox.add_child(this.shortcutsBox);
         }

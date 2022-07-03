@@ -357,7 +357,9 @@ var EditEntriesBox = GObject.registerClass({
 
 var StackListBox = GObject.registerClass(class ArcMenu_StackListBox extends Gtk.ListBox{
     _init(widget){
-        super._init();
+        super._init({
+            css_classes: ['navigation-sidebar', 'background']
+        });
         this.connect("row-selected", (self, row) => {
             if(row){
                 let stackName = row.stackName;

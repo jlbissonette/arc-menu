@@ -122,11 +122,9 @@ class ArcMenu_ThemingPage extends Adw.PreferencesPage {
         //Save Theme Section---------------
         let menuThemeSaveButton = new Gtk.Button({
             label: _("Save as Theme"),
-            valign: Gtk.Align.CENTER
+            valign: Gtk.Align.CENTER,
+            css_classes: ['suggested-action']
         });
-        let context = menuThemeSaveButton.get_style_context();
-        context.add_class('suggested-action');
-
         menuThemeSaveButton.connect("clicked" , () => {
             let saveThemeDialog = new SaveThemeDialog(this._settings, this);
             saveThemeDialog.show();

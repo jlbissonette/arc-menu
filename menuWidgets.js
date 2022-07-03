@@ -610,7 +610,7 @@ var Tooltip = GObject.registerClass(class ArcMenu_Tooltip extends St.BoxLayout {
         }
     }
 
-    hide() {
+    hide(instantHide) {
         if(this._useTooltips){
             if(this._menuButton.tooltipShowingID){
                 GLib.source_remove(this._menuButton.tooltipShowingID);
@@ -619,7 +619,7 @@ var Tooltip = GObject.registerClass(class ArcMenu_Tooltip extends St.BoxLayout {
             this.sourceActor = null;
             this.ease({
                 opacity: 0,
-                duration: Dash.DASH_ITEM_LABEL_HIDE_TIME,
+                duration: instantHide ? 0 : Dash.DASH_ITEM_LABEL_HIDE_TIME,
                 mode: Clutter.AnimationMode.EASE_OUT_QUAD,
                 onComplete: () => super.hide()
             });
@@ -2345,7 +2345,6 @@ class ArcMenu_SearchBox extends St.Entry {
         this._keyPressId = this._text.connect('key-press-event', this._onKeyPress.bind(this));
         this._keyFocusInId = this._text.connect('key-focus-in', this._onKeyFocusIn.bind(this));
         this._keyFocusInId = this._text.connect('key-focus-out', this._onKeyFocusOut.bind(this));
-        this._searchIconClickedId = this.connect('secondary-icon-clicked', () => this.clear());
         this.connect('destroy', this._onDestroy.bind(this));
     }
 
@@ -2380,7 +2379,7 @@ class ArcMenu_SearchBox extends St.Entry {
     }
 
     isEmpty() {
-        return this.get_text() === '';
+        return this.get_text().length === 0;
     }
 
     _onKeyFocusOut(){
@@ -2391,23 +2390,28 @@ class ArcMenu_SearchBox extends St.Entry {
     }
 
     _onTextChanged() {
-        let searchString = this.get_text();
         if(!this.isEmpty()){
+            this.set_secondary_icon(this._clearIcon);
+            if(!this._iconClickedId)
+                this._iconClickedId = this.connect('secondary-icon-clicked', () => this.clear());
             if(!this.hasKeyFocus())
                 this.grab_key_focus();
             if (!this.searchResults.getTopResult()?.has_style_pseudo_class('active'))
                 this.searchResults.getTopResult()?.add_style_pseudo_class('active')
             this.add_style_pseudo_class('focus');
-            this.set_secondary_icon(this._clearIcon);
         }
         else{
+            if(this._iconClickedId){
+                this.disconnect(this._iconClickedId);
+                this._iconClickedId = null;
+            }
             if(!this.hasKeyFocus())
                 this.remove_style_pseudo_class('focus');
             this.set_secondary_icon(null);
         }
 
         if(this.triggerSearchChangeEvent)
-            this.emit('search-changed', searchString);
+            this.emit('search-changed', this.get_text());    
     }
 
     _onKeyPress(actor, event) {
@@ -2447,9 +2451,9 @@ class ArcMenu_SearchBox extends St.Entry {
             this._text.disconnect(this._keyFocusInId);
             this._keyFocusInId = null;
         }
-        if(this._searchIconClickedId){
-            this.disconnect(this._searchIconClickedId);
-            this._searchIconClickedId = null;
+        if(this._iconClickedId){
+            this.disconnect(this._iconClickedId);
+            this._iconClickedId = null;
         }
     }
 });

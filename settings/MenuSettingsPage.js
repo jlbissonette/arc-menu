@@ -40,15 +40,11 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
             use_markup: true,
             justify: Gtk.Justification.CENTER,
             hexpand: true,
-            halign: Gtk.Align.CENTER
+            halign: Gtk.Align.CENTER,
+            css_classes: ['title-4']
         });
-        let context = this.headerLabel.get_style_context();
-        context.add_class('title-4');
 
         this.menuSettingsStackListBox = new PW.StackListBox(this);
-        context = this.menuSettingsStackListBox.get_style_context();
-        context.add_class('navigation-sidebar');
-        context.add_class('background');
         this.menuSettingsStackListBox.addRow("MenuSettingsGeneral", _("Menu Settings"), 'menu-settings-symbolic');
         this.menuSettingsStackListBox.addRow("ButtonSettings", _("Button Settings"), 'arc-menu-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsPinnedApps", _("Pinned Apps"), 'view-pin-symbolic');
@@ -92,10 +88,9 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
             vexpand: false,
             halign: Gtk.Align.END,
             valign: Gtk.Align.CENTER,
-            tooltip_text: _("View Sidebar")
+            tooltip_text: _("View Sidebar"),
+            css_classes: ['suggested-action']
         });
-        context = sidebarButton.get_style_context();
-        context.add_class('suggested-action');
         sidebarButton.bind_property('active', this.flap, 'reveal-flap', GObject.BindingFlags.BIDIRECTIONAL);
 
         let navBox = new Gtk.Box({
@@ -110,10 +105,9 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
             icon_name: 'view-refresh-symbolic',
             vexpand: false,
             valign: Gtk.Align.CENTER,
-            tooltip_text: _("Reset settings")
+            tooltip_text: _("Reset settings"),
+            css_classes: ['destructive-action']
         });
-        context = restoreDefaultsButton.get_style_context();
-        context.add_class('destructive-action');
         restoreDefaultsButton.connect("clicked", () => {
             const visibleChild = this.settingsLeaflet.get_visible_child()
             const currentPage = this.settingsLeaflet.get_page(visibleChild);
@@ -142,11 +136,9 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
         let goNextButton = new Gtk.Button({
             icon_name: 'go-next-symbolic',
             halign: Gtk.Align.END,
-            tooltip_text: _("Next Page")
+            tooltip_text: _("Next Page"),
+            css_classes: ['pill', 'suggested-action']
         });
-        context = goNextButton.get_style_context();
-        context.add_class('pill');
-        context.add_class('suggested-action');
 
         goNextButton.connect('clicked', (widget) => {
             this.settingsLeaflet.navigate(Adw.NavigationDirection.FORWARD);
@@ -154,11 +146,9 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
         let goPreviousButton = new Gtk.Button({
             icon_name: 'go-previous-symbolic',
             sensitive: false,
-            tooltip_text: _("Previous Page")
+            tooltip_text: _("Previous Page"),
+            css_classes: ['pill', 'suggested-action']
         });
-        context = goPreviousButton.get_style_context();
-        context.add_class('pill');
-        context.add_class('suggested-action');
 
         goPreviousButton.connect('clicked', (widget) => {
             this.settingsLeaflet.navigate(Adw.NavigationDirection.BACK);

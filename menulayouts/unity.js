@@ -36,7 +36,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
         let homeScreen = this._settings.get_boolean('enable-unity-homescreen');
         if(homeScreen)
-            this.activeCategory = _("Pinned Apps");
+            this.activeCategory = _("Pinned");
         else
             this.activeCategory = _("All Programs");
 
@@ -69,7 +69,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'arcmenu-margin-box'
         });
 
         this.applicationsScrollBox = this._createScrollBox({
@@ -287,7 +286,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.setDefaultMenuView();
         let homeScreen = this._settings.get_boolean('enable-unity-homescreen');
         if(homeScreen){
-            this.activeCategory = _("Pinned Apps");
+            this.activeCategory = _("Pinned");
             this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
             this.displayPinnedApps();
         }
@@ -346,7 +345,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         else
             this._clearActorsFromBox();
         this.subMainBox.remove_child(this.actionsContainerBox);
-        this.activeCategory = _("Pinned Apps");
+        this.activeCategory = _("Pinned");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
         this.activeCategory = _("Shortcuts");
         this._displayAppList(this.appShortcuts, Constants.CategoryType.HOME_SCREEN, this.shortcutsGrid);

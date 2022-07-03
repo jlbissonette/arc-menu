@@ -6,125 +6,116 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
+const PROJECT_TITLE = _('ArcMenu');
+const PROJECT_DESCRIPTION = _('Application Menu Extension for GNOME');
+const PROJECT_IMAGE = 'arc-menu-logo';
+
 var AboutPage = GObject.registerClass(
-class ArcMenu_AboutPage extends Adw.PreferencesPage {
+class extends Adw.PreferencesPage {
     _init(settings) {
         super._init({
-            title: _("About"),
+            title: _('About'),
             icon_name: 'help-about-symbolic',
             name: 'AboutPage'
         });
         this._settings = settings;
 
-        //ArcMenu Logo and project description-------------------------------------
-        let arcMenuLogoGroup = new Adw.PreferencesGroup();
-        let arcMenuImage = new Gtk.Image({
-            margin_bottom: 5,
-            icon_name: 'arc-menu-logo',
-            pixel_size: 100,
-        });
-        let arcMenuImageBox = new Gtk.Box( {
+        //Project Logo, title, description-------------------------------------
+        let projectHeaderGroup = new Adw.PreferencesGroup();
+        let projectHeaderBox = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
             hexpand: false,
             vexpand: false
         });
-        arcMenuImageBox.append(arcMenuImage);
 
-        let arcMenuLabel = new Gtk.Label({
-            label: '<span size="large"><b>' + _('ArcMenu') + '</b></span>',
-            use_markup: true,
+        let projectImage = new Gtk.Image({
+            margin_bottom: 5,
+            icon_name: PROJECT_IMAGE,
+            pixel_size: 100,
+        });
+
+        let projectTitleLabel = new Gtk.Label({
+            label: PROJECT_TITLE,
+            css_classes: ['title-1'],
             vexpand: true,
             valign: Gtk.Align.FILL
         });
 
         let projectDescriptionLabel = new Gtk.Label({
-            label: _('Application Menu Extension for GNOME'),
+            label: PROJECT_DESCRIPTION,
             hexpand: false,
             vexpand: false,
         });
-        arcMenuImageBox.append(arcMenuLabel);
-        arcMenuImageBox.append(projectDescriptionLabel);
-        arcMenuLogoGroup.add(arcMenuImageBox);
+        projectHeaderBox.append(projectImage);
+        projectHeaderBox.append(projectTitleLabel);
+        projectHeaderBox.append(projectDescriptionLabel);
+        projectHeaderGroup.add(projectHeaderBox);
 
-        this.add(arcMenuLogoGroup);
+        this.add(projectHeaderGroup);
         //-----------------------------------------------------------------------
 
         //Extension/OS Info Group------------------------------------------------
-        let extensionInfoGroup = new Adw.PreferencesGroup();
-        let arcMenuVersionRow = new Adw.ActionRow({
-            title: _("ArcMenu Version"),
-        });
-        let releaseVersion;
-        if(Me.metadata.version)
-            releaseVersion = Me.metadata.version;
-        else
-            releaseVersion = 'unknown';
-        arcMenuVersionRow.add_suffix(new Gtk.Label({
-            label: releaseVersion + ''
-        }));
-        extensionInfoGroup.add(arcMenuVersionRow);
+        let infoGroup = new Adw.PreferencesGroup();
 
-        let commitRow = new Adw.ActionRow({
-            title: _('Git Commit')
+        let projectVersionRow = new Adw.ActionRow({
+            title: `${PROJECT_TITLE} ${_('Version')}`,
         });
-        let commitVersion;
-        if(Me.metadata.commit)
-            commitVersion = Me.metadata.commit;
-        commitRow.add_suffix(new Gtk.Label({
-            label: commitVersion ? commitVersion : '',
+        projectVersionRow.add_suffix(new Gtk.Label({
+            label: Me.metadata.version.toString()
         }));
-        if(commitVersion){
-            extensionInfoGroup.add(commitRow);
+        infoGroup.add(projectVersionRow);
+
+        if(Me.metadata.commit){
+            let commitRow = new Adw.ActionRow({
+                title: _('Git Commit')
+            });
+            commitRow.add_suffix(new Gtk.Label({
+                label: Me.metadata.commit.toString(),
+            }));
+            infoGroup.add(commitRow);
         }
 
         let gnomeVersionRow = new Adw.ActionRow({
             title: _('GNOME Version'),
         });
         gnomeVersionRow.add_suffix(new Gtk.Label({
-            label: imports.misc.config.PACKAGE_VERSION + '',
+            label: imports.misc.config.PACKAGE_VERSION.toString(),
         }));
-        extensionInfoGroup.add(gnomeVersionRow);
+        infoGroup.add(gnomeVersionRow);
 
         let osRow = new Adw.ActionRow({
             title: _('OS'),
         });
-        let osInfoText;
+
         let name = GLib.get_os_info("NAME");
         let prettyName = GLib.get_os_info("PRETTY_NAME");
-        if(prettyName)
-            osInfoText = prettyName;
-        else
-            osInfoText = name;
-        let versionID = GLib.get_os_info("VERSION_ID");
-        if(versionID)
-            osInfoText += "; Version ID: " + versionID;
         let buildID = GLib.get_os_info("BUILD_ID");
+        let versionID = GLib.get_os_info("VERSION_ID");
+
+        let osInfoText = prettyName ? prettyName : name;
+        if(versionID)
+            osInfoText += `; Version ID: ${versionID}`;
         if(buildID)
-            osInfoText += "; " + "Build ID: " +buildID;
+            osInfoText += `; Build ID: ${buildID}`;
+
         osRow.add_suffix(new Gtk.Label({
             label: osInfoText,
             single_line_mode: false,
             wrap: true,
         }));
-        extensionInfoGroup.add(osRow);
+        infoGroup.add(osRow);
 
         let sessionTypeRow = new Adw.ActionRow({
             title: _('Session Type'),
         });
-        let windowingLabel;
-        if(Me.metadata.isWayland)
-            windowingLabel = "Wayland";
-        else
-            windowingLabel = "X11";
         sessionTypeRow.add_suffix(new Gtk.Label({
-            label: windowingLabel,
+            label: GLib.getenv('XDG_SESSION_TYPE') === "wayland" ? 'Wayland' : 'X11',
         }));
-        extensionInfoGroup.add(sessionTypeRow);
-
-        this.add(extensionInfoGroup);
+        infoGroup.add(sessionTypeRow);
+        this.add(infoGroup);
         //-----------------------------------------------------------------------
 
-        //CREDTIS----------------------------------------------------------------
+        //Credits----------------------------------------------------------------
         let creditsGroup = new Adw.PreferencesGroup({
             title: _("Credits")
         });

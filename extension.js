@@ -38,11 +38,6 @@ function init() {
 }
 
 function enable() {
-    if(imports.gi.Meta.is_wayland_compositor())
-        Me.metadata.isWayland = true;
-    else
-        Me.metadata.isWayland = false;
-
     settings = ExtensionUtils.getSettings(Me.metadata['settings-schema']);
     settings.connect('changed::multi-monitor', () => _reload());
     settings.connect('changed::dash-to-panel-standalone', () => _reload());
@@ -131,7 +126,7 @@ function _enableButtons() {
             panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController) : null);
 
         settingsController.enableButton();
-        settingsController.bindSettingsChanges();
+        settingsController.connectSettingsEvents();
         settingsControllers.push(settingsController);
     }
 }

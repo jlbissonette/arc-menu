@@ -128,12 +128,9 @@ class ArcMenu_SaveThemeDialog extends PW.DialogWindow {
         let saveButton = new Gtk.Button({
             label: _("Save Theme"),
             sensitive: false,
-            halign: Gtk.Align.END
+            halign: Gtk.Align.END,
+            css_classes: ['suggested-action']
         });
-
-        let context = saveButton.get_style_context();
-        context.add_class('suggested-action');
-
         saveButton.connect('clicked', ()=> {
             this.themeName = themeNameEntry.get_text();
             this.emit('response', Gtk.ResponseType.APPLY);

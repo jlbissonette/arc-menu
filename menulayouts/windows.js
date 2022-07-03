@@ -22,7 +22,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             ShortcutContextMenuLocation: Constants.ContextMenuLocation.RIGHT,
             ColumnSpacing: 0,
             RowSpacing: 0,
-            DefaultMenuWidth: 300,
+            DefaultMenuWidth: 315,
             DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: false,
             DefaultCategoryIconSize: Constants.LARGE_ICON_SIZE,
@@ -41,7 +41,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_align: Clutter.ActorAlign.FILL,
             vertical: true
         });
-        this.actionsBox.style = "margin: 0px 0px 0px 0px; spacing: 6px;";
+        this.actionsBox.style = "margin-right: 6px; spacing: 6px;";
         this.mainBox.add_child(this.actionsBox);
 
         this.extrasButton = new MW.ExtrasButton(this);
@@ -73,6 +73,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
+            style: 'spacing: 6px;'
         });
         this.mainBox.add_child(this.subMainBox);
 
@@ -101,8 +102,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             layout_manager: layout
         });
         layout.hookup_style(this.pinnedAppsGrid);
-
-        this.searchBox.style = "margin: 15px 10px 0px 10px;";
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true
@@ -163,10 +162,24 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.setDefaultMenuView();
     }
 
+    updateWidth(setDefaultMenuView){
+        const leftPanelWidth = this._settings.get_int("left-panel-width");
+        this.applicationsScrollBox.style = `width: ${leftPanelWidth}px;`;
+        
+        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
+        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
+        //Set a 300px minimum limit for the menu width
+        menuWidth = Math.max(300, menuWidth);
+        this.pinnedAppsScrollBox.style = `width: ${menuWidth}px; margin-left: 6px;`;
+        this.layoutProperties.MenuWidth = menuWidth;
+
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
+    }
+
     loadPinnedApps(){
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
-        this.pinnedAppsGrid.layout_manager.forceGridColumns = this.getColumnsFromGridIconSizeSetting();
         this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
     }
 
@@ -285,7 +298,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     toggleExtrasMenu(){
-        let appsScrollBoxAdj = this.pinnedAppsScrollBox.get_vscroll_bar().get_adjustment();
+        let appsScrollBoxAdj = this.computerScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
 
         let themeNode = this.arcMenu.actor.get_theme_node();
@@ -383,9 +396,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     displayPinnedApps() {
         super._clearActorsFromBox(this.pinnedAppsBox);
         this.pinnedAppsGrid.remove_all_children();
-        let label = this.createLabelRow(_("Pinned Apps"));
+        let label = this.createLabelRow(_("Pinned"));
         this.pinnedAppsBox.add_child(label);
+        this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.HOME_SCREEN, this.pinnedAppsGrid);
+        this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
             this.pinnedAppsBox.add_child(this.pinnedAppsGrid);
 

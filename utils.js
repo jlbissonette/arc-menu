@@ -60,35 +60,6 @@ function getMenuLayout(menuButton, layoutEnum, isStandaloneRunner){
     return new MenuLayouts.arcmenu.createMenu(menuButton, isStandaloneRunner);
 }
 
-function getSettings(schema, extensionUUID) {
-    let extension = imports.ui.main.extensionManager.lookup(extensionUUID);
-
-    if (!extension)
-        throw new Error('ArcMenu - getSettings() unable to find extension');
-
-    schema = schema || extension.metadata['settings-schema'];
-
-    const GioSSS = Gio.SettingsSchemaSource;
-
-    // Expect USER extensions to have a schemas/ subfolder, otherwise assume a
-    // SYSTEM extension that has been installed in the same prefix as the shell
-    let schemaDir = extension.dir.get_child('schemas');
-    let schemaSource;
-    if (schemaDir.query_exists(null)) {
-        schemaSource = GioSSS.new_from_directory(schemaDir.get_path(),
-                                                GioSSS.get_default(),
-                                                false);
-    } else {
-        schemaSource = GioSSS.get_default();
-    }
-
-    let schemaObj = schemaSource.lookup(schema, true);
-    if (!schemaObj)
-        throw new Error(`Schema ${schema} could not be found for extension ${extension.metadata.uuid}. Please check your installation`);
-
-    return new Gio.Settings({ settings_schema: schemaObj });
-}
-
 var SettingsConnectionsHandler = class ArcMenu_SettingsConnectionsHandler {
     constructor(settings){
         this._settings = settings;
@@ -252,7 +223,7 @@ function getCategoryDetails(currentCategory){
 
 function activateCategory(currentCategory, menuLayout, menuItem, extraParams = false){
     if(currentCategory === Constants.CategoryType.HOME_SCREEN){
-        menuLayout.activeCategory = _("Pinned Apps");
+        menuLayout.activeCategory = _("Pinned");
         menuLayout.displayPinnedApps();
     }
     else if(currentCategory === Constants.CategoryType.PINNED_APPS)
@@ -368,13 +339,6 @@ function getDashToPanelPosition(settings, index){
         return imports.gi.St.Side.LEFT;
     else
         return imports.gi.St.Side.BOTTOM;
-}
-
-function checkIfValidShortcut(item, icon){
-    if(item._cmd.endsWith(".desktop") && !Gio.DesktopAppInfo.new(item._cmd)){
-        icon.icon_name = 'warning-symbolic';
-        item.title = "<b><i>" + _("Invalid Shortcut") + "</i></b> "+ _(item.title);
-    }
 }
 
 function parseRGBA(colorString){

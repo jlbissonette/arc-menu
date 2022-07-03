@@ -71,7 +71,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
     initiate(){
         this.dashToPanel = Main.extensionManager.lookup(DASH_TO_PANEL_UUID);
-        if(this.dashToPanel?.state === ExtensionState.ENABLED)
+        if(this.dashToPanel?.state === ExtensionState.ENABLED && global.dashToPanel)
             this.syncWithDashToPanel();
 
         this._monitorsChangedId = Main.layoutManager.connect('monitors-changed', () =>
@@ -91,26 +91,24 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
     syncWithDashToPanel(){
         this.arcMenuContextMenu.addExtensionSettings();
-        this.dashToPanelSettings = Utils.getSettings('org.gnome.shell.extensions.dash-to-panel', DASH_TO_PANEL_UUID);
+
         let monitorIndex = Main.layoutManager.findIndexForActor(this);
-        let side = Utils.getDashToPanelPosition(this.dashToPanelSettings, monitorIndex);
+        let side = Utils.getDashToPanelPosition(this.dashToPanel.settings, monitorIndex);
         this.updateArrowSide(side);
 
-        this.dtpPostionChangedID = this.dashToPanelSettings.connect('changed::panel-positions', ()=> {
+        this.dtpPostionChangedID = this.dashToPanel.settings.connect('changed::panel-positions', ()=> {
             let monitorIndex = Main.layoutManager.findIndexForActor(this);
-            let side = Utils.getDashToPanelPosition(this.dashToPanelSettings, monitorIndex);
+            let side = Utils.getDashToPanelPosition(this.dashToPanel.settings, monitorIndex);
             this.updateArrowSide(side);
         });
 
         //Find the associated Dash to Panel panel.
         //Needed to show/hide DtP if intellihide is on
-        if(global.dashToPanel?.panels){
-            global.dashToPanel.panels.forEach(p => {
-                if(p.panel === this._panel){
-                    this.dtpPanel = p;
-                }
-            });
-        }
+        global.dashToPanel.panels.forEach(p => {
+            if(p.panel === this._panel){
+                this.dtpPanel = p;
+            }
+        });
     }
 
     createMenuLayout(){
@@ -164,7 +162,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             }
             else if(this.dashToPanel?.state === ExtensionState.ENABLED){
                 let monitorIndex = Main.layoutManager.findIndexForActor(this);
-                let side = Utils.getDashToPanelPosition(this.dashToPanelSettings, monitorIndex);
+                let side = Utils.getDashToPanelPosition(this.dashToPanel.settings, monitorIndex);
                 this.updateArrowSide(side, false);
             }
             else{
@@ -360,8 +358,8 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             GLib.source_remove(this.tooltipShowingID);
             this.tooltipShowingID = null;
         }
-        if(this.dtpPostionChangedID && this.dashToPanelSettings){
-            this.dashToPanelSettings.disconnect(this.dtpPostionChangedID);
+        if(this.dtpPostionChangedID && this.dashToPanel.settings){
+            this.dashToPanel.settings.disconnect(this.dtpPostionChangedID);
             this.dtpPostionChangedID = null;
         }
 

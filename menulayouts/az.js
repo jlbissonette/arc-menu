@@ -66,7 +66,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             style: "padding-bottom: 10px;",
-            style_class: 'arcmenu-margin-box'
         });
         this.applicationsScrollBox = this._createScrollBox({
             clip_to_allocation: true,
@@ -147,14 +146,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     loadPinnedApps(){
-        this.layoutProperties.IconGridSize = 42;
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         super.loadPinnedApps();
     }
 
     setDefaultMenuView(){
-        this.setGridLayout(Constants.DisplayType.GRID, 4, 4);
-        this.layoutProperties.IconGridSize = 42;
+        this.setGridLayout(Constants.DisplayType.GRID, 4);
         super.setDefaultMenuView();
         this.activeCategory = _("Pinned");
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
@@ -165,7 +162,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activeCategory = _("All Apps");
         this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
 
-        this.setGridLayout(Constants.DisplayType.LIST, 1, 3);
+        this.setGridLayout(Constants.DisplayType.LIST, 3);
         let appList = [];
         this.applicationsMap.forEach((value,key,map) => {
             appList.push(key);
@@ -175,7 +172,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this._clearActorsFromBox();
         this._displayAppList(appList, Constants.CategoryType.ALL_PROGRAMS, this.applicationsGrid);
-        this.setGridLayout(Constants.DisplayType.GRID, 4, 4, false);
+        this.setGridLayout(Constants.DisplayType.GRID, 4, false);
     }
 
     updateStyle(){
@@ -192,7 +189,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.arcMenu.box.style = "padding: 0px; margin: 0px;";
     }
 
-    setGridLayout(displayType, columns, spacing, setStyle = true){
+    setGridLayout(displayType, spacing, setStyle = true){
         if(setStyle){
             this.applicationsGrid.x_align = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
         }
@@ -204,7 +201,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     loadCategories() {
         this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
-        this.layoutProperties.IconGridSize = 26;
         this.categoryDirectories = null;
         this.categoryDirectories = new Map();
         this.hasPinnedApps = true;
@@ -212,7 +208,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     displayPinnedApps() {
-        this._clearActorsFromBox(this.applicationsBox);
+        this._clearActorsFromBox();
         this.activeCategory = _("Pinned");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
     }

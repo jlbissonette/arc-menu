@@ -159,7 +159,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         headerBox.add_child(separator);
-        headerBox.add_child(this.createLabelRow(_("Pinned Apps")));
+        headerBox.add_child(this.createLabelRow(_("Pinned")));
 
         this.pinnedAppsScrollBox = this._createScrollBox({
             x_expand: true,

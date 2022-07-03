@@ -104,17 +104,20 @@ var BaseLayout = class {
             this.setDefaultMenuView();
     }
 
-    getColumnsFromActor(actor){
-        let gridIconWidth = this.getActorWidthFromStyleClass(actor.name);
-        return this.getBestFitColumns(gridIconWidth);
+    getBestFitColumnsForGrid(iconWidth, grid){
+        const padding = 12;
+        let width = this.layoutProperties.MenuWidth - padding;
+        let spacing = grid.layout_manager.column_spacing;
+        let columns = Math.floor(width / (iconWidth + spacing));
+        return columns;
     }
 
-    getColumnsFromGridIconSizeSetting(){
+    getIconWidthFromSetting(){
         let gridIconWidth;
         let iconSizeEnum = this._settings.get_enum("menu-item-grid-icon-size");
 
         if(iconSizeEnum === Constants.GridIconSize.DEFAULT)
-            gridIconWidth = this.getActorWidthFromStyleClass(this.layoutProperties.DefaultIconGridStyle);
+            gridIconWidth = this.getIconWidthFromStyleClass(this.layoutProperties.DefaultIconGridStyle);
         else{
             Constants.GridIconInfo.forEach((info) => {
                 if(iconSizeEnum === info.ENUM){
@@ -123,26 +126,19 @@ var BaseLayout = class {
                 }
             });
         }
-        return this.getBestFitColumns(gridIconWidth);
+        return gridIconWidth;
     }
 
-    getBestFitColumns(gridIconWidth){
-        let width = this.layoutProperties.MenuWidth;
-        let spacing = this.layoutProperties.ColumnSpacing;
-        let columns = Math.floor(width / (gridIconWidth + spacing));
-        return columns;
-    }
-
-    getActorWidthFromStyleClass(name){
-        let size;
+    getIconWidthFromStyleClass(name){
+        let gridIconWidth;
 
         Constants.GridIconInfo.forEach((info) => {
             if(name === info.NAME){
-                size = info.SIZE;
+                gridIconWidth = info.SIZE;
                 return;
             }
         });
-        return size;
+        return gridIconWidth;
     }
 
     resetScrollBarPosition(){
@@ -183,6 +179,8 @@ var BaseLayout = class {
             }
             return;
         }
+
+        this.searchResults.setTerms([]);
 
         if(this.applicationsMap){
             this.applicationsMap.forEach((value,key,map)=>{
@@ -736,8 +734,10 @@ var BaseLayout = class {
                 if(columns === -1){
                     if(grid.layout_manager.forceGridColumns)
                         columns = grid.layout_manager.forceGridColumns;
-                    else if(this.layoutProperties.DisplayType === Constants.DisplayType.GRID)
-                        columns = this.getColumnsFromActor(item);
+                    else if(this.layoutProperties.DisplayType === Constants.DisplayType.GRID){
+                        let iconWidth = this.getIconWidthFromStyleClass(item.name);
+                        columns = this.getBestFitColumnsForGrid(iconWidth, grid);
+                    }
                     else
                         columns = 1;
                     grid.layout_manager.gridColumns = columns;
@@ -1058,6 +1058,12 @@ var BaseLayout = class {
         let panAction = new Clutter.PanAction({ interpolate: false });
         panAction.connect('pan', (action) => {
             this._blockActivateEvent = true;
+            if(this.menuButton.tooltipShowingID) {
+                GLib.source_remove(this.menuButton.tooltipShowingID);
+                this.menuButton.tooltipShowingID = null;
+            }
+            if(this.menuButton.tooltip.visible)
+                this.menuButton.tooltip.hide(true);
             this.onPan(action, scrollBox);
         });
         panAction.connect('gesture-cancel',(action) => this.onPanEnd(action, scrollBox));

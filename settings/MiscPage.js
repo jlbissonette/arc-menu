@@ -154,9 +154,8 @@ class ArcMenu_MiscPage extends Adw.PreferencesPage {
             valign: Gtk.Align.CENTER,
             hexpand: false,
             label: _("Reset all Settings"),
+            css_classes: ['destructive-action']
         });
-        let context = resetSettingsButton.get_style_context();
-        context.add_class('destructive-action');
         resetSettingsButton.connect('clicked', (widget) => {
             let dialog = new Gtk.MessageDialog({
                 text: "<b>" + _("Reset all settings?") + '</b>',

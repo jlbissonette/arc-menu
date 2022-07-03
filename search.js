@@ -372,8 +372,10 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
 
     _getMaxDisplayedResults() {
         let maxDisplayedResults;
-        if(this.searchType === Constants.DisplayType.GRID)
-            maxDisplayedResults = this._menuLayout.getColumnsFromGridIconSizeSetting();
+        if(this.searchType === Constants.DisplayType.GRID){
+            let iconWidth = this._menuLayout.getIconWidthFromSetting();
+            maxDisplayedResults = this._menuLayout.getBestFitColumnsForGrid(iconWidth, this._grid);
+        }
         else
             maxDisplayedResults = this._settings.get_int('max-search-results');
         return maxDisplayedResults;
@@ -391,7 +393,15 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
     }
 
     _addItem(display) {
-        const GridColumns = this.searchType === Constants.DisplayType.LIST ? 1 : this._menuLayout.getColumnsFromGridIconSizeSetting();
+        let colums;
+        if(this.searchType === Constants.DisplayType.LIST)
+            colums = 1;
+        else{
+            let iconWidth = this._menuLayout.getIconWidthFromSetting();
+            colums = this._menuLayout.getBestFitColumnsForGrid(iconWidth, this._grid);
+        }
+
+        const GridColumns = colums;
         if(!this.rtl && (this.itemCount % GridColumns === 0)){
             this.gridTop++;
             this.gridLeft = 0;
@@ -639,7 +649,7 @@ var SearchResults = GObject.registerClass({
         // search while the previous search is still active.
         let searchString = terms.join(' ');
         let previousSearchString = this._terms.join(' ');
-        if (searchString == previousSearchString)
+        if (searchString === previousSearchString)
             return;
 
         this._startingSearch = true;
@@ -649,7 +659,7 @@ var SearchResults = GObject.registerClass({
         this._cancellable.cancel();
         this._cancellable.reset();
 
-        if (terms.length == 0) {
+        if (terms.length === 0) {
             this._reset();
             return;
         }

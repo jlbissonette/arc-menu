@@ -200,19 +200,23 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
             }
             //frameRow._gicon used in PW.DragRow
             frameRow._gicon = Gio.icon_new_for_string(iconString ? iconString : "");
-            let arcMenuImage = new Gtk.Image( {
+            let appIcon = new Gtk.Image( {
                 gicon: frameRow._gicon,
                 pixel_size: 22
             });
-            let dragImage = new Gtk.Image( {
+            let dragIcon = new Gtk.Image( {
                 gicon: Gio.icon_new_for_string("drag-symbolic"),
                 pixel_size: 12
             });
-            frameRow.add_prefix(arcMenuImage);
-            frameRow.add_prefix(dragImage);
+            frameRow.add_prefix(appIcon);
+            frameRow.add_prefix(dragIcon);
             frameRow.title = _(frameRow._name);
 
-            Utils.checkIfValidShortcut(frameRow, arcMenuImage);
+            if(frameRow._cmd.endsWith('.desktop') && !Gio.DesktopAppInfo.new(frameRow._cmd)){
+                appIcon.icon_name = 'warning-symbolic';
+                frameRow.title = '<b><i>' + _('Invalid Shortcut') + '</i></b> - '+ _(frameRow.title);
+                frameRow.css_classes = ['error'];
+            }
 
             let buttonBox;
             if(this.listType === Constants.MenuSettingsListType.OTHER){
@@ -245,9 +249,9 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
                         frameRow._cmd = newPinnedApps[2];
                         frameRow.title = _(frameRow._name);
                         if(frameRow._icon === "" && Gio.DesktopAppInfo.new(frameRow._cmd))
-                            arcMenuImage.gicon = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon();
+                            appIcon.gicon = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon();
                         else
-                            arcMenuImage.gicon = Gio.icon_new_for_string(frameRow._icon);
+                            appIcon.gicon = Gio.icon_new_for_string(frameRow._icon);
                         dialog.destroy();
                         this.saveSettings();
                     }
@@ -268,7 +272,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
                             iconString = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon() ? Gio.DesktopAppInfo.new(frameRow._cmd).get_icon().to_string() : "";
                         }
                         let icon = Utils.getIconPath(newPinnedApps);
-                        arcMenuImage.gicon = Gio.icon_new_for_string(iconString ? iconString : icon);
+                        appIcon.gicon = Gio.icon_new_for_string(iconString ? iconString : icon);
                         dialog.destroy();
                         this.saveSettings();
                     }
@@ -573,10 +577,10 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
 
         let addButton = new Gtk.Button({
             label: this.pinnedShortcut ?_("Apply") :_("Add"),
-            halign: Gtk.Align.END
+            halign: Gtk.Align.END,
+            css_classes: ['suggested-action']
         });
-        let context = addButton.get_style_context();
-        context.add_class('suggested-action');
+
         if(this.pinnedShortcut !== null) {
             nameEntry.text = this.pinnedShortcut[0];
             iconEntry.text = this.pinnedShortcut[1];

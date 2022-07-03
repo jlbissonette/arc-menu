@@ -35,9 +35,8 @@ var LayoutTweaksPage = GObject.registerClass({
             icon_name: 'go-previous-symbolic',
             title: _("Back"),
             icon_first: true,
+            css_classes: ['suggested-action']
         });
-        let context = backButton.get_style_context();
-        context.add_class('suggested-action');
         backButton.halign = Gtk.Align.START;
         backButton.connect('clicked', ()=> {
             this.emit('response', -20);

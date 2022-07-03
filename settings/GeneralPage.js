@@ -423,10 +423,9 @@ class ArcMenu_HotkeyDialog extends Gtk.Window {
 
         let applyButton = new Gtk.Button({
             label: _("Apply"),
-            halign: Gtk.Align.END
+            halign: Gtk.Align.END,
+            css_classes: ['suggested-action']
         });
-        let context = applyButton.get_style_context();
-        context.add_class('suggested-action');
         applyButton.connect('clicked', () => {
             this.emit("response", Gtk.ResponseType.APPLY);
         });

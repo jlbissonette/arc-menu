@@ -20,7 +20,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             SearchDisplayType: Constants.DisplayType.GRID,
             ColumnSpacing: 10,
             RowSpacing: 10,
-            DefaultMenuWidth: 400,
+            DefaultMenuWidth: 415,
             DefaultIconGridStyle: "SmallIconGrid",
             VerticalMainBox: false,
             DefaultCategoryIconSize: Constants.MEDIUM_ICON_SIZE,
