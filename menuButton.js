@@ -313,23 +313,16 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 
     updateHeight(){
+        if(!this.MenuLayout)
+            return;
+
         let layout = this._settings.get_enum('menu-layout');
+        let height = this._settings.get_int('menu-height');
 
-        let monitorIndex = Main.layoutManager.findIndexForActor(this);
-        let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
-        let monitorWorkArea = Main.layoutManager.getWorkAreaForMonitor(monitorIndex);
-        let height = Math.round(this._settings.get_int('menu-height') / scaleFactor);
+        if(layout === Constants.MenuLayout.RUNNER || layout === Constants.MenuLayout.RAVEN)
+            return;
 
-        let monitorWorkHeight = Math.round(monitorWorkArea.height / scaleFactor);
-
-        //Cap menu height to 9/10th of screen height.
-        let maxHeight = (monitorWorkHeight * 9) / 10;
-        
-        if(height > maxHeight)
-            height = maxHeight;
-
-        if(layout !== Constants.MenuLayout.RUNNER && this.MenuLayout)
-            this.mainBox.style = `height: ${height}px`;
+        this.mainBox.style = `height: ${height}px;`;
     }
 
     updateWidth(){
