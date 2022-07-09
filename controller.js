@@ -31,6 +31,7 @@ var MenuSettingsController = class {
             this._appSystem = Shell.AppSystem.get_default();
             this._updateHotKeyBinder();
             this._initRecentAppsTracker();
+            this._connectArcMenuOpenState();
         }
         this._setButtonAppearance();
         this._setButtonText();
@@ -119,6 +120,23 @@ var MenuSettingsController = class {
         this._settingsConnections.connect('runner-position', this._updateLocation.bind(this));
         this._settingsConnections.connect('show-activities-button', this._configureActivitiesButton.bind(this));
         this._settingsConnections.connect('force-menu-location', this._forceMenuLocation.bind(this));
+    }
+
+    _connectArcMenuOpenState(){
+        /*
+        * Workaround for PopShell extension conflicting with ArcMenu SUPER_L hotkey.
+        * PopShell extension removes ActionMode.POPUP from 'overlay-key',
+        * which prevents the use of the SUPER_L hotkey when popup menus are opened.
+        * Set 'overlay-key' action mode to ActionMode.ALL when ArcMenu is opened.
+        */
+        this._openStateChangedId = this._menuButton.arcMenu.connect('open-state-changed', (_menu, open) => {
+            if(!open)
+                return;
+
+            const menuHotkey = this._settings.get_enum('menu-hotkey');
+            if(menuHotkey === Constants.HotKey.SUPER_L)
+                Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
+        });
     }
 
     _overrideMenuTheme(){
@@ -463,6 +481,11 @@ var MenuSettingsController = class {
         if(this._writeTimeoutId){
             GLib.source_remove(this._writeTimeoutId);
             this._writeTimeoutId = null;
+        }
+
+        if(this._openStateChangedId){
+            this._menuButton.arcMenu.disconnect(this._openStateChangedId);
+            this._openStateChangedId = null;
         }
 
         if(this._installedChangedId){
