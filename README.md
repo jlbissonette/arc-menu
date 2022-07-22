@@ -73,7 +73,7 @@ Additional credits:
  **@[Ivan](https://gitlab.com/vantu5z), @[Ser82-png](https://gitlab.com/Ser82-png) - Russian** | **@[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **@[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **@[jordim](https://gitlab.com/jordim) - Catalan** | **@[aylinux](https://gitlab.com/aylinux), @[libreajans](https://gitlab.com/libreajans) - Turkish**
  
 
-**@[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **@[jiri.doubravsky](https://gitlab.com/jiri.doubravsky), @[panmourovaty ](https://gitlab.com/panmourovaty) - Czech** | **@[juanlucer](https://gitlab.com/juanlucer), @[pjunyent](https://gitlab.com/pjunyent) - Spanish** | **@[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian**
+**@[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **@[jiri.doubravsky](https://gitlab.com/jiri.doubravsky), @[panmourovaty ](https://gitlab.com/panmourovaty) - Czech** | **@[juanlucer](https://gitlab.com/juanlucer), @[pjunyent](https://gitlab.com/pjunyent), @[Sergio](https://gitlab.com/IngrownMink4) - Spanish** | **@[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian**
 
 **@[skygmin](https://gitlab.com/skygmin), @[doufu3344](https://gitlab.com/doufu3344) - Simplified Chinese** | **@[Vistaus](https://gitlab.com/Vistaus), @[vinno97](https://gitlab.com/vinno97) - Dutch** | **@[artnay](https://gitlab.com/artnay) - Finnish** |  **@[rimasx](https://gitlab.com/rimasx) - Estonian** | **@[stevendobay](https://gitlab.com/stevendobay) - Hungarian** 
 
