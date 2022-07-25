@@ -65,7 +65,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         this.x_expand = false;
         this.y_expand = false;
 
-        //Add Menu Button Widget to Button
         this.add_child(this.menuButtonWidget);
     }
 
@@ -211,7 +210,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             this.arcMenu.sourceActor = this;
             this.arcMenu.focusActor = this;
             this.arcMenu._boxPointer.setPosition(this, 0.5);
-            this.arcMenu.actor.style = null
             this.setMenuPositionAlignment();
             this._menuInForcedLocation = false;
             return;
@@ -240,13 +238,11 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         if(forcedMenuLocation === Constants.ForcedMenuLocation.TOP_CENTERED){
             this.updateArrowSide(St.Side.TOP);
             positionY = rect.y;
-            this.arcMenu.actor.style = null;
         }
 
         else if(forcedMenuLocation === Constants.ForcedMenuLocation.BOTTOM_CENTERED){
             this.updateArrowSide(St.Side.BOTTOM);
             positionY = rect.y + rect.height;
-            this.arcMenu.actor.style = 'margin-bottom: 0px;';
         }
 
         this.dummyWidget.set_position(positionX, positionY);
@@ -322,7 +318,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         if(layout === Constants.MenuLayout.RUNNER || layout === Constants.MenuLayout.RAVEN)
             return;
 
-        this.mainBox.style = `height: ${height}px;`;
+        this.arcMenu.actor.style = `height: ${height}px;`;
     }
 
     updateWidth(){
@@ -383,8 +379,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 
     loadExtraPinnedApps(){
-        if(this.MenuLayout)
-            this.MenuLayout.loadExtraPinnedApps();
+        this.MenuLayout?.loadExtraPinnedApps();
     }
 
     updateLocation(){
@@ -392,14 +387,12 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             this.MenuLayout.updateLocation();
     }
 
-    displayPinnedApps() {
-        if(this.MenuLayout)
-            this.MenuLayout.displayPinnedApps();
+    displayPinnedApps(){
+        this.MenuLayout?.displayPinnedApps();
     }
 
-    loadPinnedApps() {
-        if(this.MenuLayout)
-            this.MenuLayout.loadPinnedApps();
+    loadPinnedApps(){
+        this.MenuLayout?.loadPinnedApps();
     }
 
     reload(){
@@ -413,11 +406,10 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 
     setDefaultMenuView(){
-        if(this.MenuLayout)
-            this.MenuLayout.setDefaultMenuView();
+        this.MenuLayout?.setDefaultMenuView();
     }
 
-    _onOpenStateChanged(menu, open) {
+    _onOpenStateChanged(_menu, open){
         if(open){
             this.menuButtonWidget.setActiveStylePseudoClass(true);
             this.add_style_pseudo_class('active');
@@ -542,7 +534,7 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         item.add_style_class_name("arcmenu-menu-item");
         item.connect('activate', () => {
             this._settings.set_int('prefs-visible-page', prefsVisiblePage);
-            Util.spawnCommandLine(Constants.ArcMenuSettingsCommand);
+            Util.spawnCommandLine(Constants.ShortcutCommands.ARCMENU_SETTINGS);
         });
         return item;
     }

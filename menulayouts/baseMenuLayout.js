@@ -142,31 +142,14 @@ var BaseLayout = class {
     }
 
     resetScrollBarPosition(){
-        let appsScrollBoxAdj;
-
-        if(this.applicationsScrollBox){
-            appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
-            appsScrollBoxAdj.set_value(0);
-        }
-        if(this.categoriesScrollBox){
-            appsScrollBoxAdj = this.categoriesScrollBox.get_vscroll_bar().get_adjustment();
-            appsScrollBoxAdj.set_value(0);
-        }
-        if(this.shortcutsScrollBox){
-            appsScrollBoxAdj = this.shortcutsScrollBox.get_vscroll_bar().get_adjustment();
-            appsScrollBoxAdj.set_value(0);
-        }
-        if(this.actionsScrollBox){
-            appsScrollBoxAdj = this.actionsScrollBox.get_vscroll_bar().get_adjustment();
-            appsScrollBoxAdj.set_value(0);
-        }
+        this.applicationsScrollBox?.vscroll.adjustment.set_value(0);
+        this.categoriesScrollBox?.vscroll.adjustment.set_value(0);
+        this.shortcutsScrollBox?.vscroll.adjustment.set_value(0);
+        this.actionsScrollBox?.vscroll.adjustment.set_value(0);
     }
 
     reloadApplications(){
-        //Don't reload applications if the menu is open.
-        //Instead, reload on menu-closed event.
-        //Prevents the menu from jumping to its default view
-        //when reloadApplications() is called.
+        //Only reload applications if the menu is closed.
         if(this.arcMenu.isOpen){
             if(!this._menuClosedID){
                 this._menuClosedID = this.arcMenu.connect('menu-closed', () => {
@@ -206,22 +189,18 @@ var BaseLayout = class {
         let root = this._tree.get_root_directory();
         let iter = root.iter();
         let nextType;
-        while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
-            if (nextType == GMenu.TreeItemType.DIRECTORY) {
+        while ((nextType = iter.next()) !== GMenu.TreeItemType.INVALID) {
+            if (nextType === GMenu.TreeItemType.DIRECTORY) {
                 let dir = iter.get_directory();
                 if (!dir.get_is_nodisplay()) {
                     let categoryId = dir.get_menu_id();
                     let categoryMenuItem = new MW.CategoryMenuItem(this, dir, displayType);
                     this.categoryDirectories.set(categoryId, categoryMenuItem);
-                    let foundRecentlyInstallApp = this._loadCategory(categoryId, dir);
-                    categoryMenuItem.setRecentlyInstalledIndicator(foundRecentlyInstallApp);
-                    //Sort the App List Alphabetically
-                    categoryMenuItem.appList.sort((a, b) => {
-                        return a.get_name().toLowerCase() > b.get_name().toLowerCase();
-                    });
+                    this._loadCategory(categoryMenuItem, dir);
                 }
             }
         }
+
         let categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.ALL_PROGRAMS);
         if(categoryMenuItem){
             let appList = [];
@@ -229,17 +208,18 @@ var BaseLayout = class {
                 appList.push(key);
                 //Show Recently Installed Indicator on All Programs category
                 if(value.isRecentlyInstalled && !categoryMenuItem.isRecentlyInstalled)
-                    categoryMenuItem.setRecentlyInstalledIndicator(true);
+                    categoryMenuItem.setNewAppIndicator(true);
             });
             appList.sort((a, b) => {
                 return a.get_name().toLowerCase() > b.get_name().toLowerCase();
             });
             categoryMenuItem.appList = appList;
         }
+
         categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.FAVORITES);
-        if(categoryMenuItem){
+        if(categoryMenuItem)
             this._loadGnomeFavorites(categoryMenuItem);
-        }
+
         categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.FREQUENT_APPS);
         if(categoryMenuItem){
             let mostUsed = Shell.AppUsage.get_default().get_most_used();
@@ -248,73 +228,66 @@ var BaseLayout = class {
                     categoryMenuItem.appList.push(mostUsed[i]);
             }
         }
+
         categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.PINNED_APPS);
         if(categoryMenuItem){
             this.hasPinnedApps = true;
             categoryMenuItem.appList = categoryMenuItem.appList.concat(this.pinnedAppsArray);
         }
-        categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.RECENT_FILES);
-        if(categoryMenuItem){
-            this._loadRecentFiles(categoryMenuItem);
-        }
 
+        categoryMenuItem = this.categoryDirectories.get(Constants.CategoryType.RECENT_FILES);
+        if(categoryMenuItem)
+            this._loadRecentFiles(categoryMenuItem);
     }
 
-    _loadCategory(categoryId, dir) {
+    _loadCategory(categoryMenuItem, dir){
+        const showNewAppsIndicator = !this._settings.get_boolean("disable-recently-installed-apps");
         let iter = dir.iter();
         let nextType;
-        let foundRecentlyInstallApp = false;
-        while ((nextType = iter.next()) != GMenu.TreeItemType.INVALID) {
-            if (nextType == GMenu.TreeItemType.ENTRY) {
+        while((nextType = iter.next()) !== GMenu.TreeItemType.INVALID){
+            if(nextType === GMenu.TreeItemType.ENTRY){
                 let entry = iter.get_entry();
                 let id;
-                try {
+                try{
                     id = entry.get_desktop_file_id();
-                } catch (e) {
+                } catch(e){
                     continue;
                 }
                 let app = appSys.lookup_app(id);
-                if (!app)
+                if(!app)
                     app = new Shell.App({ app_info: entry.get_app_info() });
-                if (app.get_app_info().should_show()){
+                if(app.get_app_info().should_show()){
                     let item = this.applicationsMap.get(app);
-                    if (!item) {
+                    if(!item){
                         let isContainedInCategory = true;
                         item = new MW.ApplicationMenuItem(this, app, this.layoutProperties.DisplayType, null, isContainedInCategory);
                     }
-
-                    let disabled = this._settings.get_boolean("disable-recently-installed-apps")
-                    if(!disabled && item.isRecentlyInstalled)
-                        foundRecentlyInstallApp = true;
-
-                    let categoryMenuItem = this.categoryDirectories.get(categoryId);
                     categoryMenuItem.appList.push(app);
                     this.applicationsMap.set(app, item);
+
+                    if(showNewAppsIndicator && item.isRecentlyInstalled)
+                        categoryMenuItem.setNewAppIndicator(true);
                 }
             }
-            else if (nextType == GMenu.TreeItemType.DIRECTORY) {
+            else if(nextType === GMenu.TreeItemType.DIRECTORY){
                 let subdir = iter.get_directory();
-                if (!subdir.get_is_nodisplay()){
-                    let recentlyInstallApp = this._loadCategory(categoryId, subdir);
-                    if(recentlyInstallApp)
-                        foundRecentlyInstallApp = true;
-                }
+                if(!subdir.get_is_nodisplay())
+                    this._loadCategory(categoryId, subdir);
             }
         }
-        return foundRecentlyInstallApp;
     }
 
-    setRecentlyInstalledIndicator(){
+    setNewAppIndicator(){
         let disabled = this._settings.get_boolean("disable-recently-installed-apps")
         if(!disabled){
             for(let categoryMenuItem of this.categoryDirectories.values()){
-                categoryMenuItem.setRecentlyInstalledIndicator(false);
+                categoryMenuItem.setNewAppIndicator(false);
                 for(let i = 0; i < categoryMenuItem.appList.length; i++){
                     let item = this.applicationsMap.get(categoryMenuItem.appList[i]);
                     if(!item)
                         continue;
                     if(item.isRecentlyInstalled){
-                        categoryMenuItem.setRecentlyInstalledIndicator(true);
+                        categoryMenuItem.setNewAppIndicator(true);
                         break;
                     }
                 }
@@ -349,7 +322,7 @@ var BaseLayout = class {
         for(let i = 0; i < appList.length; i++){
             let item = this.applicationsMap.get(appList[i]);
             if(item && item.isRecentlyInstalled && !categoryMenuItem.isRecentlyInstalled)
-                categoryMenuItem.setRecentlyInstalledIndicator(true);
+                categoryMenuItem.setNewAppIndicator(true);
         }
 
         categoryMenuItem.appList = appList;
@@ -414,7 +387,6 @@ var BaseLayout = class {
     }
 
     _displayPlaces() {
-        var SHORTCUT_TRANSLATIONS = [_("Home"), _("Documents"), _("Downloads"), _("Music"), _("Pictures"), _("Videos"), _("Computer"), _("Network")];
         let directoryShortcuts = this._settings.get_value('directory-shortcuts-list').deep_unpack();
         for (let i = 0; i < directoryShortcuts.length; i++) {
             let directory = directoryShortcuts[i];
@@ -446,79 +418,76 @@ var BaseLayout = class {
     }
 
     createMenuItem(menuItemArray, displayType, isContainedInCategory){
-        let placeInfo, placeMenuItem;
-        let command = menuItemArray[2];
-        let app = Shell.AppSystem.get_default().lookup_app(command);
+        let [shortcutName, shortcutIcon, shortcutCommand] = menuItemArray;
+        let app = Shell.AppSystem.get_default().lookup_app(shortcutCommand);
 
         //Ubunutu 22.04 uses old version of GNOME settings
-        if(command === 'org.gnome.Settings.desktop' && !app){
-            command = 'gnome-control-center.desktop';
-            app = Shell.AppSystem.get_default().lookup_app(command);
+        if(shortcutCommand === 'org.gnome.Settings.desktop' && !app){
+            shortcutCommand = 'gnome-control-center.desktop';
+            app = Shell.AppSystem.get_default().lookup_app(shortcutCommand);
         }
 
-        if(command === "ArcMenu_Home"){
-            let homePath = GLib.get_home_dir();
-            placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(homePath), _("Home"));
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
-        }
-        else if(command === "ArcMenu_Computer"){
-            placeInfo = new PlaceDisplay.RootInfo();
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
-        }
-        else if(command === "ArcMenu_Network"){
-            placeInfo = new PlaceDisplay.PlaceInfo('network', Gio.File.new_for_uri('network:///'), _('Network'),'network-workgroup-symbolic');
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
-        }
-        else if(command === "ArcMenu_Software"){
-            let software = Utils.findSoftwareManager();
-            if(software)
-                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), menuItemArray[1], software, displayType, isContainedInCategory);
-            else
-                placeMenuItem = new MW.ShortcutMenuItem(this, _("Software"), 'system-software-install-symbolic', 'ArcMenu_InvalidShortcut.desktop', displayType, isContainedInCategory);
-        }
-        else if(command === Constants.ArcMenuSettingsCommand || command === "ArcMenu_Suspend" || command === "ArcMenu_LogOut" || command === "ArcMenu_PowerOff"
-            || command === "ArcMenu_Lock" || command === "ArcMenu_Restart" || command === "ArcMenu_HybridSleep" || command === "ArcMenu_Hibernate" || app){
+        if(app)
+            return new MW.ShortcutMenuItem(this, shortcutName, shortcutIcon, shortcutCommand, displayType, isContainedInCategory);
 
-                placeMenuItem = new MW.ShortcutMenuItem(this, menuItemArray[0], menuItemArray[1], command, displayType, isContainedInCategory);
+        switch(shortcutCommand){
+            case Constants.ShortcutCommands.SOFTWARE:
+                let software = Utils.findSoftwareManager();
+                return new MW.ShortcutMenuItem(this, shortcutName, shortcutIcon, software, displayType, isContainedInCategory);
+            case Constants.ShortcutCommands.ARCMENU_SETTINGS:
+            case Constants.ShortcutCommands.SUSPEND:
+            case Constants.ShortcutCommands.LOG_OUT:
+            case Constants.ShortcutCommands.POWER_OFF:
+            case Constants.ShortcutCommands.LOCK:
+            case Constants.ShortcutCommands.RESTART:
+            case Constants.ShortcutCommands.HYBRID_SLEEP:
+            case Constants.ShortcutCommands.HIBERNATE:
+                return new MW.ShortcutMenuItem(this, shortcutName, shortcutIcon, shortcutCommand, displayType, isContainedInCategory);
+            default:
+                let placeInfo = this._getPlaceInfoFromCommand(shortcutCommand);
+                if(placeInfo)
+                    return new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
+                else
+                    return new MW.ShortcutMenuItem(this, shortcutName, '', 'ArcMenu_InvalidShortcut.desktop', displayType, isContainedInCategory);
         }
-        else if(command === "ArcMenu_Recent"){
-            let uri = "recent:///";
-            placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_uri(uri), _(menuItemArray[0]));
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
-        }
-        else if(command.startsWith("ArcMenu_")){
-            let path = command.replace("ArcMenu_",'');
+    }
 
-            if(path === "Documents")
-                path = imports.gi.GLib.UserDirectory.DIRECTORY_DOCUMENTS;
-            else if(path === "Downloads")
-                path = imports.gi.GLib.UserDirectory.DIRECTORY_DOWNLOAD;
-            else if(path === "Music")
-                path = imports.gi.GLib.UserDirectory.DIRECTORY_MUSIC;
-            else if(path === "Pictures")
-                path = imports.gi.GLib.UserDirectory.DIRECTORY_PICTURES;
-            else if(path === "Videos")
-                path = imports.gi.GLib.UserDirectory.DIRECTORY_VIDEOS;
+    _getPlaceInfoFromCommand(shortcutCommand){
+        let path;
+        switch(shortcutCommand){
+            case Constants.ShortcutCommands.DOCUMENTS:
+                path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
+                break;
+            case Constants.ShortcutCommands.DOWNLOADS:
+                path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
+                break;
+            case Constants.ShortcutCommands.MUSIC:
+                path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC);
+                break;
+            case Constants.ShortcutCommands.PICTURES:
+                path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
+                break;
+            case Constants.ShortcutCommands.VIDEOS:
+                path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS);
+                break;
+            case Constants.ShortcutCommands.HOME:
+                path = GLib.get_home_dir();
+                break;
+            case Constants.ShortcutCommands.NETWORK:
+                return new PlaceDisplay.PlaceInfo('network', Gio.File.new_for_uri('network:///'));
+            case Constants.ShortcutCommands.RECENT:
+                return new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_uri("recent:///"));
+            case Constants.ShortcutCommands.COMPUTER:
+                return new PlaceDisplay.RootInfo();
+            default:
+                let file = Gio.File.new_for_path(shortcutCommand);
+                if(file.query_exists(null))
+                    return new PlaceDisplay.PlaceInfo('special', file);
+                else
+                    return null;
+        }
 
-            path = GLib.get_user_special_dir(path);
-            if (path !== null){
-                placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path), _(menuItemArray[0]));
-                placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
-            }
-            else
-                return new MW.ShortcutMenuItem(this, menuItemArray[0], '', 'ArcMenu_InvalidShortcut.desktop', displayType, isContainedInCategory);
-        }
-        //All other directory shortcuts. Missing apps also fall-through here.
-        //Return empty placeholder shortcut if path doesn't exist
-        else{
-            let path = command;
-            let file = Gio.File.new_for_path(path);
-            if(!file.query_exists(null))
-                return new MW.ShortcutMenuItem(this, menuItemArray[0], '', 'ArcMenu_InvalidShortcut.desktop', displayType, isContainedInCategory);
-            placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path));
-            placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
-        }
-        return placeMenuItem;
+        return new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path));
     }
 
     loadPinnedApps(){
@@ -681,10 +650,8 @@ var BaseLayout = class {
             this.activeCategoryType = -1;
         }
         let parent = box.get_parent();
-        if(parent instanceof St.ScrollView){
-            let scrollBoxAdj = parent.get_vscroll_bar().get_adjustment();
-            scrollBoxAdj.set_value(0);
-        }
+        if(parent && parent instanceof St.ScrollView)
+            parent.vscroll.adjustment.set_value(0);
         let actors = box.get_children();
         for (let i = 0; i < actors.length; i++) {
             let actor = actors[i];
@@ -818,8 +785,7 @@ var BaseLayout = class {
             if(this.activeCategoryItem)
                 this.setActiveCategory(null, false);
 
-            let appsScrollBoxAdj = this.applicationsScrollBox.get_vscroll_bar().get_adjustment();
-            appsScrollBoxAdj.set_value(0);
+            this.applicationsScrollBox.vscroll.adjustment.set_value(0);
 
             if(!this.applicationsBox.contains(this.searchResults)){
                 this._clearActorsFromBox();
@@ -1120,14 +1086,14 @@ var BaseLayout = class {
 
     onPan(action, scrollbox) {
         let [dist_, dx_, dy] = action.get_motion_delta(0);
-        let adjustment = scrollbox.get_vscroll_bar().get_adjustment();
+        let adjustment = scrollbox.vscroll.adjustment;
         adjustment.value -=  dy;
         return false;
     }
 
     onPanEnd(action, scrollbox) {
         let velocity = -action.get_velocity(0)[2];
-        let adjustment = scrollbox.get_vscroll_bar().get_adjustment();
+        let adjustment = scrollbox.vscroll.adjustment;
         let endPanValue = adjustment.value + velocity * 2;
         adjustment.value = endPanValue;
     }

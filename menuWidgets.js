@@ -707,7 +707,7 @@ var RunnerTweaksButton = GObject.registerClass(class ArcMenu_RunnerTweaksButton 
     activate(event) {
         super.activate(event);
         this._menuLayout._settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.RUNNER_TWEAKS);
-        Util.spawnCommandLine(Constants.ArcMenuSettingsCommand);
+        Util.spawnCommandLine(Constants.ShortcutCommands.ARCMENU_SETTINGS);
     }
 });
 
@@ -1290,7 +1290,8 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
         this._updateIcon();
 
         this.label = new St.Label({
-            text: _(name), y_expand: true,
+            text: _(name),
+            y_expand: true,
             y_align: Clutter.ActorAlign.CENTER
         });
 
@@ -1926,7 +1927,7 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
             this._settings.set_strv('recently-installed-apps', recentApps);
 
             this._indicator.hide();
-            this._menuLayout.setRecentlyInstalledIndicator();
+            this._menuLayout.setNewAppIndicator();
         }
     }
 
@@ -2031,7 +2032,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         this._updateIcon();
 
         if(this.isRecentlyInstalled)
-            this.setRecentlyInstalledIndicator(true);
+            this.setNewAppIndicator(true);
 
         if(this._displayType === Constants.DisplayType.BUTTON){
             this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
@@ -2083,7 +2084,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         return icon;
     }
 
-    setRecentlyInstalledIndicator(shouldShow){
+    setNewAppIndicator(shouldShow){
         if(this._displayType === Constants.DisplayType.BUTTON)
             return;
         this.isRecentlyInstalled = shouldShow;

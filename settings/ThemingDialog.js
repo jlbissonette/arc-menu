@@ -5,7 +5,7 @@ const {Adw, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
-const Utils = Me.imports.utils;
+const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
 var ManageThemesDialog = GObject.registerClass(
@@ -24,7 +24,7 @@ class ArcMenu_ManageThemesDialog extends PW.DialogWindow {
             });
             themeRow.theme = theme;
 
-            let xpm = Utils.createXpmImage(theme[1], theme[2], theme[3], theme[8]);
+            let xpm = SettingsUtils.createXpmImage(theme[1], theme[2], theme[3], theme[8]);
             let themePreviewImage = new Gtk.Image({
                 hexpand: false,
                 margin_end: 5,

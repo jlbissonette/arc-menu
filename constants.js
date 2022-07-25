@@ -410,7 +410,27 @@ var MenuStyles = {
     ]
 };
 
-var ArcMenuSettingsCommand = 'gnome-extensions prefs arcmenu@arcmenu.com';
+var ShortcutCommands = {
+    SUSPEND: 'ArcMenu_Suspend',
+    LOG_OUT: 'ArcMenu_LogOut',
+    POWER_OFF: 'ArcMenu_PowerOff',
+    LOCK: 'ArcMenu_Lock',
+    RESTART: 'ArcMenu_Restart',
+    HYBRID_SLEEP: 'ArcMenu_HybridSleep',
+    HIBERNATE: 'ArcMenu_Hibernate',
+    COMPUTER: 'ArcMenu_Computer',
+    NETWORK: 'ArcMenu_Network',
+    RECENT: 'ArcMenu_Recent',
+    SOFTWARE: 'ArcMenu_Software',
+    HOME: 'ArcMenu_Home',
+    DOCUMENTS: 'ArcMenu_Documents',
+    DOWNLOADS: 'ArcMenu_Downloads',
+    MUSIC: 'ArcMenu_Music',
+    PICTURES: 'ArcMenu_Pictures',
+    VIDEOS: 'ArcMenu_Videos',
+    ARCMENU_SETTINGS: 'gnome-extensions prefs arcmenu@arcmenu.com',
+    FOLDER: 'ArcMenu_Folder',
+}
 
 var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."</i>'+
                                 '\n\n•   <b>Ubuntu®</b> - Ubuntu name and Ubuntu logo are trademarks of Canonical© Ltd.'+

@@ -3,7 +3,6 @@ const {Adw, Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
-const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
 const { ListPinnedPage } = Me.imports.settings.MenuSettingsPages.ListPinnedPage;

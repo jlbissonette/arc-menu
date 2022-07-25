@@ -6,12 +6,13 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
-const { AboutPage } = Me.imports.settings.AboutPage;
-const { GeneralPage } = Me.imports.settings.GeneralPage;
-const { LayoutsPage } = Me.imports.settings.LayoutsPage;
-const { MenuSettingsPage } = Me.imports.settings.MenuSettingsPage;
-const { MiscPage } = Me.imports.settings.MiscPage;
-const { ThemingPage } = Me.imports.settings.ThemingPage;
+const Settings = Me.imports.settings;
+const { AboutPage } = Settings.AboutPage;
+const { GeneralPage } = Settings.GeneralPage;
+const { LayoutsPage } = Settings.LayoutsPage;
+const { MenuSettingsPage } = Settings.MenuSettingsPage;
+const { MiscPage } = Settings.MiscPage;
+const { ThemingPage } = Settings.ThemingPage;
 
 function init() {
     ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);

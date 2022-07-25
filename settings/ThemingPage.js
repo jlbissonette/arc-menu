@@ -5,7 +5,7 @@ const {Adw, GdkPixbuf, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
-const Utils = Me.imports.utils;
+const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
 const { SaveThemeDialog } = Me.imports.settings.ThemingDialog;
@@ -235,7 +235,7 @@ class ArcMenu_ThemingPage extends Adw.PreferencesPage {
     createIconList(store){
         let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
         for(let theme of menuThemes){
-            let xpm = Utils.createXpmImage(theme[1], theme[2], theme[3], theme[8]);
+            let xpm = SettingsUtils.createXpmImage(theme[1], theme[2], theme[3], theme[8]);
             let pixbuf = GdkPixbuf.Pixbuf.new_from_xpm_data(xpm);
 
             store.set(store.append(), [0, 1], [pixbuf, theme[0]]);
@@ -246,7 +246,7 @@ class ArcMenu_ThemingPage extends Adw.PreferencesPage {
         let colorButton = new Gtk.ColorButton({
             use_alpha: true,
             valign: Gtk.Align.CENTER,
-            rgba: Utils.parseRGBA(this._settings.get_string(setting))
+            rgba: SettingsUtils.parseRGBA(this._settings.get_string(setting))
         });
         colorButton.connect('notify::rgba', (widget) => {
             let colorString = widget.get_rgba().to_string();
@@ -259,7 +259,7 @@ class ArcMenu_ThemingPage extends Adw.PreferencesPage {
         });
         colorRow.add_suffix(colorButton);
         colorRow.setColor = (color) => {
-            colorButton.set_rgba(Utils.parseRGBA(color));
+            colorButton.set_rgba(SettingsUtils.parseRGBA(color));
         };
         colorRow.getColor = () => {
             return colorButton.get_rgba().to_string();

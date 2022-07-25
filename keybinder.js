@@ -32,8 +32,7 @@ var OverrideOverlayKey = class {
         this._ignoreHotKeyChangedEvent = true;
 
         this._mutterSettings.set_string('overlay-key', Constants.SUPER_L);
-        Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
-            Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
+        Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
 
         this.isOverrideOverlayEnabled = true;
 
@@ -62,8 +61,7 @@ var OverrideOverlayKey = class {
 
     _overrideOverlayKey(){
         if(this.isOverrideOverlayEnabled){
-            Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.NORMAL |
-                Shell.ActionMode.OVERVIEW | Shell.ActionMode.POPUP);
+            Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
 
             //Find signal ID in Main.js that connects 'overlay-key' to global.display and toggles Main.overview
             let [bool, signal_id, detail] = GObject.signal_parse_name('overlay-key', global.display, true);
@@ -72,9 +70,7 @@ var OverrideOverlayKey = class {
             //If signal ID found, block it and connect new 'overlay-key' to toggle ArcMenu.
             if(this.defaultOverlayKeyID){
                 GObject.signal_handler_block(global.display, this.defaultOverlayKeyID);
-                this.overlayKeyID = global.display.connect('overlay-key', () => {
-                    this._toggleMenu();
-                });
+                this.overlayKeyID = global.display.connect('overlay-key', () => this._toggleMenu());
             }
             else
                 global.log("ArcMenu Error - Failed to set Super_L hotkey");

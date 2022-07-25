@@ -297,35 +297,32 @@ var MenuSettingsController = class {
 
     _updateHotKeyBinder() {
         if (this.isPrimaryPanel) {
-            const RunnerHotKey = this._settings.get_enum('runner-menu-hotkey');
-            const HotKey = this._settings.get_enum('menu-hotkey');
-            const EnableStandaloneRunnerMenu = this._settings.get_boolean('enable-standlone-runner-menu');
+            const runnerHotKey = this._settings.get_enum('runner-menu-hotkey');
+            const menuHotkey = this._settings.get_enum('menu-hotkey');
+            const enableStandaloneRunnerMenu = this._settings.get_boolean('enable-standlone-runner-menu');
 
             this._customKeybinding.unbind('ToggleArcMenu');
             this._customKeybinding.unbind('ToggleRunnerMenu');
             this._overrideOverlayKey.disable();
 
-            if(EnableStandaloneRunnerMenu){
+            if(enableStandaloneRunnerMenu){
                 if(!this.runnerMenu){
                     this.runnerMenu = new StandaloneRunner(this._settings);
                     this.runnerMenu.initiate();
                 }
-                if(RunnerHotKey === Constants.RunnerHotKey.CUSTOM){
+                if(runnerHotKey === Constants.RunnerHotKey.CUSTOM)
                     this._customKeybinding.bind('ToggleRunnerMenu', 'toggle-runner-menu', () => this.toggleStandaloneRunner());
-                }
-                else if(RunnerHotKey === Constants.RunnerHotKey.SUPER_L){
+                else if(runnerHotKey === Constants.RunnerHotKey.SUPER_L)
                     this._overrideOverlayKey.enable(() => this.toggleStandaloneRunner());
-                }
             }
             else if(this.runnerMenu){
                 this.runnerMenu.destroy();
                 this.runnerMenu = null;
             }
 
-            if(HotKey === Constants.HotKey.CUSTOM){
+            if(menuHotkey === Constants.HotKey.CUSTOM)
                 this._customKeybinding.bind('ToggleArcMenu', 'toggle-arcmenu', () => this.toggleMenus());
-            }
-            else if(HotKey === Constants.HotKey.SUPER_L){
+            else if(menuHotkey === Constants.HotKey.SUPER_L){
                 this._overrideOverlayKey.disable();
                 this._overrideOverlayKey.enable(() => this.toggleMenus());
             }

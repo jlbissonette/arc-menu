@@ -108,6 +108,8 @@ var PlaceInfo = class ArcMenu_PlaceInfo {
     }
 
     _getFileName() {
+        if(this.file.get_path() === GLib.get_home_dir())
+            return _('Home');
         try {
             let info = this.file.query_info('standard::display-name', 0, null);
             return info.get_display_name();

@@ -58,7 +58,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         else
             this.activeCategory = _("All Programs");
 
-        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px; margin: 0px;";
+        this.ravenMenuActorStyle = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px; margin: 0px;";
         this.arcMenu.box.style = "padding: 0px; margin: 0px; border-radius: 0px;";
 
         this.actionsBoxContainer = new St.BoxLayout({
@@ -211,11 +211,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         let screenHeight = monitorWorkArea.height;
 
-        let themeNode = this.arcMenu.actor.get_theme_node();
-        let borderWidth = themeNode.get_length('-arrow-border-width');
-
-        let height = Math.round((screenHeight - borderWidth * 2) / scaleFactor);
-        this.mainBox.style = `height: ${height}px;`;
+        let height = Math.round(screenHeight / scaleFactor);
+        this.arcMenu.actor.style = `height: ${height}px;` + this.ravenMenuActorStyle;
     }
 
     setDefaultMenuView(){

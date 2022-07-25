@@ -1,8 +1,10 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-const {Gio, GLib} = imports.gi;
+const {Clutter, Gio, GLib, Pango, Shell, St} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const Main = imports.ui.main;
+const MenuLayouts = Me.imports.menulayouts;
 const _ = Gettext.gettext;
 
 const PowerManagerInterface = `<node>
@@ -27,10 +29,9 @@ function activateHibernate(){
     let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
     proxy.CanHibernateRemote((result, error) => {
         if(error || result[0] !== 'yes')
-            imports.ui.main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
-        else{
+            Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
+        else
             proxy.HibernateRemote(true);
-        }
     });
 }
 
@@ -38,16 +39,13 @@ function activateHybridSleep(){
     let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
     proxy.CanHybridSleepRemote((result, error) => {
         if(error || result[0] !== 'yes')
-            imports.ui.main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
-        else{
+            Main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
+        else
             proxy.HybridSleepRemote(true);
-        }
     });
 }
 
 function getMenuLayout(menuButton, layoutEnum, isStandaloneRunner){
-    let MenuLayouts = Me.imports.menulayouts;
-
     if(layoutEnum === Constants.MenuLayout.GNOME_OVERVIEW)
         return null;
 
@@ -56,7 +54,7 @@ function getMenuLayout(menuButton, layoutEnum, isStandaloneRunner){
         if(layoutClass.getMenuLayoutEnum() === layoutEnum)
             return new layoutClass.createMenu(menuButton, isStandaloneRunner);
     }
-    
+
     return new MenuLayouts.arcmenu.createMenu(menuButton, isStandaloneRunner);
 }
 
@@ -87,7 +85,6 @@ var SettingsConnectionsHandler = class ArcMenu_SettingsConnectionsHandler {
 }
 
 function convertToGridLayout(item){
-    const Clutter = imports.gi.Clutter;
     const settings = item._settings;
     const layoutProperties = item._menuLayout.layoutProperties;
 
@@ -110,7 +107,7 @@ function convertToGridLayout(item){
         let clutterText = item.label.get_clutter_text();
         clutterText.set({
             line_wrap: true,
-            line_wrap_mode: imports.gi.Pango.WrapMode.WORD_CHAR,
+            line_wrap_mode: Pango.WrapMode.WORD_CHAR,
         });
     }
 
@@ -269,8 +266,8 @@ function getMenuButtonIcon(settings, path){
 }
 
 function findSoftwareManager(){
-    let softwareManager = null;
-    let appSys = imports.gi.Shell.AppSystem.get_default();
+    let softwareManager = 'ArcMenu_InvalidShortcut.desktop';
+    let appSys = Shell.AppSystem.get_default();
 
     for(let softwareManagerID of Constants.SoftwareManagerIDs){
         if(appSys.lookup_app(softwareManagerID)){
@@ -291,7 +288,7 @@ function ensureActorVisibleInScrollView(actor) {
     let y1 = box.y1, y2 = box.y2;
 
     let parent = actor.get_parent();
-    while (!(parent instanceof imports.gi.St.ScrollView)) {
+    while (!(parent instanceof St.ScrollView)) {
         if (!parent)
             return;
 
@@ -330,103 +327,13 @@ function getDashToPanelPosition(settings, index){
     }
 
     if (side === 'TOP')
-        return imports.gi.St.Side.TOP;
+        return St.Side.TOP;
     else if (side === 'RIGHT')
-        return imports.gi.St.Side.RIGHT;
+        return St.Side.RIGHT;
     else if (side === 'BOTTOM')
-        return imports.gi.St.Side.BOTTOM;
+        return St.Side.BOTTOM;
     else if (side === 'LEFT')
-        return imports.gi.St.Side.LEFT;
+        return St.Side.LEFT;
     else
-        return imports.gi.St.Side.BOTTOM;
-}
-
-function parseRGBA(colorString){
-    let rgba = new imports.gi.Gdk.RGBA();
-    rgba.parse(colorString);
-    return rgba;
-}
-
-function createXpmImage(color1, color2, color3, color4){
-    color1 = rgbToHex(parseRGBA(color1));
-    color2 = rgbToHex(parseRGBA(color2));
-    color3 = rgbToHex(parseRGBA(color3));
-    color4 = rgbToHex(parseRGBA(color4));
-    let width = 42;
-    let height = 14;
-    let nColors = 5;
-
-    let xpmData = [`${width} ${height} ${nColors} 1`, `1 c ${color1}`, `2 c ${color2}`,
-                    `3 c ${color3}`, `4 c ${color4}`, `x c #AAAAAA`]
-
-    xpmData.push("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-
-    for(let i = 0; i < height - 2; i++)
-        xpmData.push("x1111111111222222222233333333334444444444x");
-
-    xpmData.push("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-
-    return xpmData;
-}
-
-function rgbToHex(color) {
-    let [r, g, b, a_] = [Math.round(color.red * 255), Math.round(color.green * 255), Math.round(color.blue * 255), Math.round(color.alpha * 255)];
-    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
-}
-
-function getIconPath(listing){
-    let path, icon;
-    const shortcutCommand = listing[2];
-    const shortcutIconName = listing[1];
-
-    if(shortcutCommand === "ArcMenu_Home")
-        path = GLib.get_home_dir();
-    else if(shortcutCommand.startsWith("ArcMenu_")){
-        let string = shortcutCommand;
-        path = string.replace("ArcMenu_",'');
-        if(path === "Documents")
-            path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
-        else if(path === "Downloads")
-            path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
-        else if(path === "Music")
-            path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_MUSIC);
-        else if(path === "Pictures")
-            path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_PICTURES);
-        else if(path === "Videos")
-            path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_VIDEOS);
-        else
-            path = null;
-    }
-    else if(shortcutIconName === shortcutCommand)
-        path = shortcutIconName;
-    else if(shortcutIconName === "ArcMenu_Folder"){
-        path = shortcutIconName;
-    }
-    else
-        path = null;
-
-    if(path){
-        let file = Gio.File.new_for_path(path);
-        try {
-            let info = file.query_info('standard::symbolic-icon', 0, null);
-            icon = info.get_symbolic_icon();
-        } catch (e) {
-            if (e instanceof Gio.IOErrorEnum) {
-                if (!file.is_native()) {
-                    icon = new Gio.ThemedIcon({ name: 'folder-remote-symbolic' });
-                } else {
-                    icon = new Gio.ThemedIcon({ name: 'folder-symbolic' });
-                }
-            }
-        }
-        return icon.to_string();
-    }
-    else{
-        if(shortcutCommand === "ArcMenu_Network")
-            return 'network-workgroup-symbolic';
-        else if(shortcutCommand === "ArcMenu_Computer")
-            return 'drive-harddisk-symbolic';
-        else
-            return shortcutIconName;
-    }
+        return St.Side.BOTTOM;
 }

@@ -5,7 +5,7 @@ const {Adw, Gio, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
-const Utils = Me.imports.utils;
+const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
 var ListPinnedPage = GObject.registerClass(
@@ -191,7 +191,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
                 }
             }
             else if(this.listType === Constants.MenuSettingsListType.DIRECTORIES || this.listType === Constants.MenuSettingsListType.OTHER){
-                frameRow._icon = Utils.getIconPath([array[i], array[i + 1], array[i + 2]]);
+                frameRow._icon = SettingsUtils.getIconStringFromListing([array[i], array[i + 1], array[i + 2]]);
             }
 
             iconString = frameRow._icon;
@@ -271,7 +271,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
                         if(frameRow._icon === "" && Gio.DesktopAppInfo.new(frameRow._cmd)){
                             iconString = Gio.DesktopAppInfo.new(frameRow._cmd).get_icon() ? Gio.DesktopAppInfo.new(frameRow._cmd).get_icon().to_string() : "";
                         }
-                        let icon = Utils.getIconPath(newPinnedApps);
+                        let icon = SettingsUtils.getIconStringFromListing(newPinnedApps);
                         appIcon.gicon = Gio.icon_new_for_string(iconString ? iconString : icon);
                         dialog.destroy();
                         this.saveSettings();
@@ -314,7 +314,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         this._createPinnedAppsList();
 
         if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS){
-            let extraItem = [[_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ArcMenuSettingsCommand]];
+            let extraItem = [[_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ShortcutCommands.ARCMENU_SETTINGS]];
             this._loadExtraCategories(extraItem);
             this._loadCategories();
         }
@@ -328,7 +328,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         else if(this._dialogType == Constants.MenuSettingsListType.APPLICATIONS){
             let extraLinks = [];
             extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
-            extraLinks.push([_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ArcMenuSettingsCommand]);
+            extraLinks.push([_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ShortcutCommands.ARCMENU_SETTINGS]);
             extraLinks.push([_("Run Command..."), "system-run-symbolic", "ArcMenu_RunCommand"]);
             extraLinks.push([_("Show All Applications"), "view-fullscreen-symbolic", "ArcMenu_ShowAllApplications"]);
             this._loadExtraCategories(extraLinks);
@@ -380,7 +380,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
 
             let iconString;
             if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES || this._dialogType === Constants.MenuSettingsListType.OTHER)
-                iconString = Utils.getIconPath([item[0], item[1], item[2]]);
+                iconString = SettingsUtils.getIconStringFromListing([item[0], item[1], item[2]]);
             else
                 iconString = item[1];
 

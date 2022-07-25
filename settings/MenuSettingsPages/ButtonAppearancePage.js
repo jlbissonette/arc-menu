@@ -5,7 +5,7 @@ const {Adw, Gio, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
-const Utils = Me.imports.utils;
+const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
 var ButtonAppearancePage = GObject.registerClass(
@@ -307,7 +307,7 @@ class ArcMenu_ButtonAppearancePage extends Gtk.Box {
         let colorButton = new Gtk.ColorButton({
             use_alpha: true,
             valign: Gtk.Align.CENTER,
-            rgba: Utils.parseRGBA(color),
+            rgba: SettingsUtils.parseRGBA(color),
             sensitive: enabled
         });
         colorButton.connect('notify::rgba', (widget) => {
@@ -333,7 +333,7 @@ class ArcMenu_ButtonAppearancePage extends Gtk.Box {
         colorRow.restoreDefaults = () => {
             let [defaultEnabled, defaultColor] = this._settings.get_default_value(setting).deep_unpack();
             enabledSwitch.set_active(defaultEnabled);
-            colorButton.rgba = Utils.parseRGBA(defaultColor);
+            colorButton.rgba = SettingsUtils.parseRGBA(defaultColor);
         }
         return colorRow;
     }

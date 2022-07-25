@@ -165,10 +165,6 @@ var SearchResultsBase = GObject.registerClass({
     }
 
     _createResultDisplay(meta) {
-        if (this.provider.createResultObject)
-            return this.provider.createResultObject(meta, this.resultsView);
-
-        return null;
     }
 
     clear() {
@@ -313,8 +309,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
     }
 
     _createResultDisplay(meta) {
-        return super._createResultDisplay(meta, this.resultsView) ||
-               new ListSearchResult(this.provider, meta, this.resultsView);
+        return new ListSearchResult(this.provider, meta, this.resultsView);
     }
 
     _addItem(display) {

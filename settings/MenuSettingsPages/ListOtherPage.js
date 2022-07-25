@@ -5,7 +5,6 @@ const {Adw, Gio, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
-const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
 var ListOtherPage = GObject.registerClass(

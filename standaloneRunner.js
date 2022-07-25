@@ -57,7 +57,6 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
     }
 
     initiate(){
-        //Create Basic Layout
         this.createLayoutID = GLib.timeout_add(0, 100, () => {
             this.createMenuLayout();
             this.createLayoutID = null;
@@ -155,23 +154,19 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
     }
 
     loadExtraPinnedApps(){
-        if(this.MenuLayout)
-            this.MenuLayout.loadExtraPinnedApps();
+        this.MenuLayout?.loadExtraPinnedApps();
     }
 
     updateLocation(){
-        if(this.MenuLayout)
-            this.MenuLayout.updateLocation();
+        this.MenuLayout?.updateLocation();
     }
 
     displayPinnedApps() {
-        if(this.MenuLayout)
-            this.MenuLayout.displayPinnedApps();
+        this.MenuLayout?.displayPinnedApps();
     }
 
     loadPinnedApps() {
-        if(this.MenuLayout)
-            this.MenuLayout.loadPinnedApps();
+        this.MenuLayout?.loadPinnedApps();
     }
 
     reload(){
@@ -185,8 +180,7 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
     }
 
     setDefaultMenuView(){
-        if(this.MenuLayout)
-            this.MenuLayout.setDefaultMenuView();
+        this.MenuLayout?.setDefaultMenuView();
     }
 
     _onOpenStateChanged(menu, open) {
