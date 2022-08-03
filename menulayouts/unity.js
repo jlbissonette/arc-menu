@@ -69,6 +69,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
+            style_class: 'arcmenu-margin-box'
         });
 
         this.applicationsScrollBox = this._createScrollBox({

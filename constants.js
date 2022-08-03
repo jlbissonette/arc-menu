@@ -430,6 +430,9 @@ var ShortcutCommands = {
     VIDEOS: 'ArcMenu_Videos',
     ARCMENU_SETTINGS: 'gnome-extensions prefs arcmenu@arcmenu.com',
     FOLDER: 'ArcMenu_Folder',
+    OVERVIEW: 'ArcMenu_ActivitiesOverview',
+    SHOW_APPS: 'ArcMenu_ShowAllApplications',
+    RUN_COMMAND: 'ArcMenu_RunCommand',
 }
 
 var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."</i>'+

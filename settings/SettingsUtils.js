@@ -39,6 +39,7 @@ function rgbToHex(color) {
 function getIconStringFromListing(listing){
     let path;
     const shortcutCommand = listing[2];
+    const shortcutIconName = listing[1];
 
     switch(shortcutCommand){
         case Constants.ShortcutCommands.DOCUMENTS:
@@ -70,6 +71,10 @@ function getIconStringFromListing(listing){
     }
 
     let file = Gio.File.new_for_path(path);
+
+    if(!file.query_exists(null))
+        return shortcutIconName;
+
     try{
         let info = file.query_info('standard::symbolic-icon', 0, null);
         return info.get_symbolic_icon().to_string();

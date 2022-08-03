@@ -66,6 +66,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             style: "padding-bottom: 10px;",
+            style_class: 'arcmenu-margin-box'
         });
         this.applicationsScrollBox = this._createScrollBox({
             clip_to_allocation: true,

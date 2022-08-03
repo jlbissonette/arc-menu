@@ -527,8 +527,8 @@ var SearchResults = GObject.registerClass({
             appSys.disconnect(this.installChangedID);
             this.installChangedID = null;
         }
-        let remoteProviders = this._providers.filter(p => p.isRemoteProvider);
-        remoteProviders.forEach(provider => {
+
+        this._providers.forEach(provider => {
             this._unregisterProvider(provider);
         });
 

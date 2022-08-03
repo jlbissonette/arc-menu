@@ -91,7 +91,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
 
         //Sub Main Box -- stores left and right box
-        this.subMainBox= new St.BoxLayout({
+        this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
@@ -107,6 +107,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             vertical: true,
             style: "padding-bottom: 10px;",
+            style_class: 'arcmenu-margin-box'
         });
 
         this.applicationsScrollBox = this._createScrollBox({

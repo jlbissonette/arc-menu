@@ -315,8 +315,10 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         let layout = this._settings.get_enum('menu-layout');
         let height = this._settings.get_int('menu-height');
 
-        if(layout === Constants.MenuLayout.RUNNER || layout === Constants.MenuLayout.RAVEN)
+        if(layout === Constants.MenuLayout.RUNNER || layout === Constants.MenuLayout.RAVEN){
+            this.arcMenu.actor.style = '';
             return;
+        }
 
         this.arcMenu.actor.style = `height: ${height}px;`;
     }
@@ -406,7 +408,11 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 
     setDefaultMenuView(){
-        this.MenuLayout?.setDefaultMenuView();
+        if(!this.MenuLayout)
+            return;
+
+        if(!this.MenuLayout.reloadQueued)
+            this.MenuLayout.setDefaultMenuView();
     }
 
     _onOpenStateChanged(_menu, open){

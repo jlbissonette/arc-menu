@@ -226,7 +226,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         Main.uiGroup.add_child(this.dummyCursor);
 
         this.extrasMenu = new PopupMenu.PopupMenu(this.dummyCursor, 0, St.Side.TOP);
-        this.extrasMenu.box.style = "box-shadow: 3px 0px 4px 0 rgba(0, 0, 0, 0.2);";
         this.extrasMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
 
         this.section = new PopupMenu.PopupMenuSection();
@@ -280,10 +279,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         }
         this.computerBox.add_child(this.externalDevicesBox);
 
-        let themeContext = St.ThemeContext.get_for_stage(global.stage);
-        let scaleFactor = themeContext.scale_factor;
-        let height = Math.round(this._settings.get_int('menu-height') / scaleFactor) - 1;
-        this.leftPanelPopup.style = `height: ${height}px;`;
+        let height = this._settings.get_int('menu-height');
+        this.extrasMenu.actor.style = `height: ${height}px;`;
 
         this.subMenuManager.addMenu(this.extrasMenu);
         this.extrasMenu.actor.hide();
@@ -303,17 +300,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let themeNode = this.arcMenu.actor.get_theme_node();
 
-        this.arcMenu.actor.get_allocation_box();
         let [x, y] = this.arcMenu.actor.get_transformed_position();
         let rise = themeNode.get_length('-arrow-rise');
 
-        if(this.arcMenu._arrowSide === St.Side.TOP)
-            y += 1;
-        else
-            y -= rise - 1;
-
+        if(this.arcMenu._arrowSide != St.Side.TOP)
+            y -= rise;
         if(this.arcMenu._arrowSide === St.Side.LEFT)
-            x += rise + 1;
+            x += rise;
 
         this.dummyCursor.set_position(x, y);
         this.extrasMenu.toggle();

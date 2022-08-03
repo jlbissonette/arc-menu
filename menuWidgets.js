@@ -14,8 +14,7 @@ const { ExtensionState } = ExtensionUtils;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
-const _SystemActions = imports.misc.systemActions;
-const SystemActions = _SystemActions.getDefault();
+const SystemActions = imports.misc.systemActions;
 const Util = imports.misc.util;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
@@ -24,17 +23,18 @@ const INDICATOR_ICON_SIZE = 18;
 const USER_AVATAR_SIZE = 28;
 
 function activatePowerOption(powerType, arcMenu){
+    let systemActions = SystemActions.getDefault();
     arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
     if(powerType === Constants.PowerType.POWER_OFF)
-        SystemActions.activatePowerOff();
+        systemActions.activatePowerOff();
     else if(powerType === Constants.PowerType.RESTART)
-        SystemActions.activateRestart ? SystemActions.activateRestart() : SystemActions.activatePowerOff();
+        systemActions.activateRestart();
     else if(powerType === Constants.PowerType.LOCK)
-        SystemActions.activateLockScreen();
+        systemActions.activateLockScreen();
     else if(powerType === Constants.PowerType.LOGOUT)
-        SystemActions.activateLogout();
+        systemActions.activateLogout();
     else if(powerType === Constants.PowerType.SUSPEND)
-        SystemActions.activateSuspend();
+        systemActions.activateSuspend();
     else if(powerType === Constants.PowerType.HYBRID_SLEEP)
         Utils.activateHybridSleep();
     else if(powerType === Constants.PowerType.HIBERNATE)
@@ -383,12 +383,12 @@ class ArcMenu_Separator extends PopupMenu.PopupBaseMenuItem {
         }
         else if(separatorAlignment === Constants.SeparatorAlignment.VERTICAL){
             if(separatorLength === Constants.SeparatorStyle.ALWAYS_SHOW){
-                this.style = "padding: 8px 4px;"
+                this.style = "padding: 8px 4px; margin: 1px 0px;"
             }
             else{
                 this._syncVisibility();
                 this.vertSeparatorChangedID = this._settings.connect('changed::vert-separator', this._syncVisibility.bind(this));
-                this.style = "padding: 0px 4px;"
+                this.style = "padding: 0px 4px; margin: 6px 0px;"
             }
 
             this._separator.style = "margin: 0px; width: 1px; height: -1px;";
@@ -1267,7 +1267,7 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
         this.iconName = icon;
 
         //Check for default commands--------
-        if(this._command == "ArcMenu_Software"){
+        if(this._command === Constants.ShortcutCommands.SOFTWARE){
             let softwareManager = Utils.findSoftwareManager();
             this._command = softwareManager ? softwareManager : 'ArcMenu_InvalidShortcut.desktop';
         }
@@ -1380,28 +1380,27 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
     }
 
     activate(event) {
-        if(this._command === "ArcMenu_LogOut")
+        if(this._command === Constants.ShortcutCommands.LOG_OUT)
             activatePowerOption(Constants.PowerType.LOGOUT, this._menuLayout.arcMenu);
-        else if(this._command === "ArcMenu_Lock")
+        else if(this._command === Constants.ShortcutCommands.LOCK)
             activatePowerOption(Constants.PowerType.LOCK, this._menuLayout.arcMenu);
-        else if(this._command === "ArcMenu_PowerOff")
+        else if(this._command === Constants.ShortcutCommands.POWER_OFF)
             activatePowerOption(Constants.PowerType.POWER_OFF, this._menuLayout.arcMenu);
-        else if(this._command === "ArcMenu_Restart")
+        else if(this._command === Constants.ShortcutCommands.RESTART)
             activatePowerOption(Constants.PowerType.RESTART, this._menuLayout.arcMenu);
-        else if(this._command === "ArcMenu_Suspend")
+        else if(this._command === Constants.ShortcutCommands.SUSPEND)
             activatePowerOption(Constants.PowerType.SUSPEND, this._menuLayout.arcMenu);
-        else if(this._command === "ArcMenu_HybridSleep")
+        else if(this._command === Constants.ShortcutCommands.HYBRID_SLEEP)
             activatePowerOption(Constants.PowerType.HYBRID_SLEEP, this._menuLayout.arcMenu);
-        else if(this._command === "ArcMenu_Hibernate")
+        else if(this._command === Constants.ShortcutCommands.HIBERNATE)
             activatePowerOption(Constants.PowerType.HIBERNATE, this._menuLayout.arcMenu);
-
         else{
             this._menuLayout.arcMenu.toggle();
-            if(this._command === "ArcMenu_ActivitiesOverview")
+            if(this._command === Constants.ShortcutCommands.OVERVIEW)
                 Main.overview.show();
-            else if(this._command === "ArcMenu_RunCommand")
+            else if(this._command === Constants.ShortcutCommands.RUN_COMMAND)
                 Main.openRunDialog();
-            else if(this._command === "ArcMenu_ShowAllApplications")
+            else if(this._command === Constants.ShortcutCommands.SHOW_APPS)
                 Main.overview._overview._controls._toggleAppsPage();
             else if(this._app)
                 this._app.open_new_window(-1);
@@ -1790,7 +1789,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
     activate(event) {
         if(this._app)
             this._app.open_new_window(-1);
-        else if(this._command === "ArcMenu_ShowAllApplications")
+        else if(this._command === Constants.ShortcutCommands.SHOW_APPS)
             Main.overview._overview._controls._toggleAppsPage();
         else
             Util.spawnCommandLine(this._command);
@@ -1969,7 +1968,8 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
             }
             else{
                 this._menuLayout.arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
-                SystemActions.activateAction(metaInfo.id);
+                let systemActions = SystemActions.getDefault();
+                systemActions.activateAction(metaInfo.id);
             }
         }
     }
@@ -2239,6 +2239,33 @@ var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends Ar
 
     get folderPath(){
         return this._folderPath;
+    }
+
+    setAsRecentFile(recentFile, removeRecentFile){
+        const homeRegExp = new RegExp('^(' + GLib.get_home_dir() + ')');
+        let file = Gio.File.new_for_uri(recentFile.get_uri());
+
+        this.folderPath = file.get_parent()?.get_path() // can be null
+        this.style = "padding-right: 15px;";
+        this.description = recentFile.get_uri_display().replace(homeRegExp, '~');
+        this.fileUri = recentFile.get_uri();
+
+        this._deleteButton = new ArcMenuButtonItem(this._menuLayout, null, 'edit-delete-symbolic');
+        this._deleteButton.toggleMenuOnClick = false;
+        this._deleteButton.x_align = Clutter.ActorAlign.END;
+        this._deleteButton.x_expand = true;
+        this._deleteButton.add_style_class_name("arcmenu-small-button");
+        this._deleteButton.setIconSize(14);
+        this._deleteButton.connect('activate', () => {
+            this.cancelPopupTimeout();
+            this.contextMenu?.close();
+
+            removeRecentFile();
+
+            this.destroy();
+        });
+
+        this.add_child(this._deleteButton);
     }
 
     _onDestroy() {

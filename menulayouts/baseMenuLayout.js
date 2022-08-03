@@ -151,9 +151,11 @@ var BaseLayout = class {
     reloadApplications(){
         //Only reload applications if the menu is closed.
         if(this.arcMenu.isOpen){
+            this.reloadQueued = true;
             if(!this._menuClosedID){
                 this._menuClosedID = this.arcMenu.connect('menu-closed', () => {
                     this.reloadApplications();
+                    this.reloadQueued = false;
                     if(this._menuClosedID){
                         this.arcMenu.disconnect(this._menuClosedID);
                         this._menuClosedID = null;
@@ -178,6 +180,8 @@ var BaseLayout = class {
             });
             this.categoryDirectories = null;
         }
+        this.activeCategoryItem = null;
+        this.activeMenuItem = null;
 
         this.loadCategories();
         this.setDefaultMenuView();
@@ -336,7 +340,6 @@ var BaseLayout = class {
     }
 
     displayRecentFiles(box = this.applicationsBox, callback){
-        const homeRegExp = new RegExp('^(' + GLib.get_home_dir() + ')');
         this._clearActorsFromBox(box);
         this._futureActiveItem = false;
 
@@ -348,32 +351,16 @@ var BaseLayout = class {
             let isContainedInCategory = true;
 
             let placeMenuItem = this.createMenuItem([name, icon, filePath], Constants.DisplayType.LIST, isContainedInCategory);
-            placeMenuItem.parentFolderPath = file.get_parent()?.get_path() // can be null
-            placeMenuItem.style = "padding-right: 15px;";
-            placeMenuItem.description = recentFile.get_uri_display().replace(homeRegExp, '~');
-            placeMenuItem.fileUri = recentFile.get_uri();
-
-            placeMenuItem._removeBtn = new MW.ArcMenuButtonItem(this, null, 'edit-delete-symbolic');
-            placeMenuItem._removeBtn.toggleMenuOnClick = false;
-            placeMenuItem._removeBtn.x_align = Clutter.ActorAlign.END;
-            placeMenuItem._removeBtn.x_expand = true;
-            placeMenuItem._removeBtn.add_style_class_name("arcmenu-small-button");
-            placeMenuItem._removeBtn.setIconSize(14);
-            placeMenuItem._removeBtn.connect('activate', () =>  {
+            placeMenuItem.setAsRecentFile(recentFile, () => {
                 try {
                     let recentManager = this.recentFilesManager.getRecentManager();
                     recentManager.remove_item(placeMenuItem.fileUri);
                 } catch(err) {
                     log(err);
                 }
-
-                placeMenuItem.cancelPopupTimeout();
-                placeMenuItem.contextMenu?.close();
                 box.remove_child(placeMenuItem);
-                placeMenuItem.destroy();
+                box.queue_relayout();
             });
-
-            placeMenuItem.add_child(placeMenuItem._removeBtn);
             box.add_child(placeMenuItem);
 
             if(!this._futureActiveItem){
@@ -444,7 +431,7 @@ var BaseLayout = class {
             case Constants.ShortcutCommands.HIBERNATE:
                 return new MW.ShortcutMenuItem(this, shortcutName, shortcutIcon, shortcutCommand, displayType, isContainedInCategory);
             default:
-                let placeInfo = this._getPlaceInfoFromCommand(shortcutCommand);
+                let placeInfo = this._getPlaceInfo(shortcutCommand, shortcutName);
                 if(placeInfo)
                     return new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
                 else
@@ -452,7 +439,7 @@ var BaseLayout = class {
         }
     }
 
-    _getPlaceInfoFromCommand(shortcutCommand){
+    _getPlaceInfo(shortcutCommand, shortcutName){
         let path;
         switch(shortcutCommand){
             case Constants.ShortcutCommands.DOCUMENTS:
@@ -482,7 +469,7 @@ var BaseLayout = class {
             default:
                 let file = Gio.File.new_for_path(shortcutCommand);
                 if(file.query_exists(null))
-                    return new PlaceDisplay.PlaceInfo('special', file);
+                    return new PlaceDisplay.PlaceInfo('special', file, _(shortcutName));
                 else
                     return null;
         }
@@ -579,7 +566,7 @@ var BaseLayout = class {
         if(this.placesManager.get('network').length > 0)
             this.networkDevicesShorctus = true;
         if(this.placesManager.get('devices').length > 0)
-            this.externalDevicesShorctus=true;
+            this.externalDevicesShorctus = true;
         if(this.placesManager.get('bookmarks').length > 0)
             this.bookmarksShorctus = true;
 

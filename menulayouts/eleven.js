@@ -54,7 +54,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.style = "margin: 5px 15px 10px 15px;";
-
         this.topBox.add_child(this.searchBox);
         this.mainBox.insert_child_at_index(this.topBox, 0);
 
@@ -65,6 +64,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             style: "padding-bottom: 10px; spacing: 8px;",
+            style_class: 'arcmenu-margin-box'
         });
         this.applicationsScrollBox = this._createScrollBox({
             clip_to_allocation: true,
