@@ -1,6 +1,4 @@
-# Spanish translation file for Arc Menu by @juanlucer.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
+# Japanese translation file for Arc Menu by @hayao0819.
 # Yamada Hayao <hayao@fascode.net>, 2020.
 #
 msgid ""
