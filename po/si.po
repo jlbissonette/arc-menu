@@ -472,7 +472,7 @@ msgstr "කවුළු අරින්න"
 #: searchProviders/openWindows.js:39
 #, javascript-format
 msgid "'%s' on Workspace %d"
-msgstr "%d වැඩබිමේ '%s'"
+msgstr "'%s' තිබෙන්නේ වැඩබිම %d"
 
 #: searchProviders/recentFiles.js:77
 #, javascript-format
