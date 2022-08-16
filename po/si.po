@@ -695,7 +695,7 @@ msgstr "ඇමිණූ යෙදුම් අබල කරන්න"
 
 #: settings/LayoutTweaksPage.js:304
 msgid "Activate on Hover"
-msgstr ""
+msgstr "සුනංගුවේදී සක්‍රිය වන්න"
 
 #: settings/LayoutTweaksPage.js:320
 msgid "Brisk Menu Shortcuts"
@@ -730,7 +730,7 @@ msgstr "මුද්‍රණඅකුරේ ප්‍රමාණය"
 #: settings/MenuSettingsPages/ButtonAppearancePage.js:75
 #, javascript-format
 msgid "%d Default Theme Value"
-msgstr "%d පෙරනිම් තේමා අගය"
+msgstr "%d පෙරනිමි තේමා අගය"
 
 #: settings/LayoutTweaksPage.js:457
 msgid "Show Frequent Apps"
@@ -1192,7 +1192,7 @@ msgstr "තවත් යෙදුම් යොදන්න"
 
 #: settings/MenuSettingsPages/ListPinnedPage.js:40
 msgid "Add Default User Directories"
-msgstr "පෙරනිම් පරිශීලක ශබ්දකෝෂ යොදන්න"
+msgstr "පෙරනිමි පරිශීලක ශබ්දකෝෂ යොදන්න"
 
 #: settings/MenuSettingsPages/ListPinnedPage.js:116
 msgid "Add Custom Shortcut"
@@ -1294,7 +1294,7 @@ msgstr "මෑත ගොනු සඳහා සොයන්න"
 
 #: settings/MenuSettingsPages/SearchOptionsPage.js:71
 msgid "Show descriptions of search results"
-msgstr "සෙවුම් ප්‍රතිඵලවප සවිස්තරය පෙන්වන්න"
+msgstr "සෙවුම් ප්‍රතිඵලවල සවිස්තර පෙන්වන්න"
 
 #: settings/MenuSettingsPages/SearchOptionsPage.js:86
 msgid "Highlight search result terms"
@@ -1343,7 +1343,7 @@ msgstr "සියල්ල මකන්න"
 
 #: settings/MenuSettingsPages/FineTunePage.js:159
 msgid "Clear Apps Marked 'New'"
-msgstr "'නව' යන්න යෙදවුම් මකන්න"
+msgstr "'නව' යන්න යෙදීම් මකන්න"
 
 #: settings/MiscPage.js:24
 msgid "Export or Import Settings"
@@ -1399,7 +1399,7 @@ msgstr "සියළුම සැකසුම් යළි සකසන්න �
 
 #: settings/MiscPage.js:163
 msgid "All ArcMenu settings will be reset to the default value."
-msgstr "සියළුම ආර්ක් මෙනු සැකසුම් පෙරනිම් අගයන් වලට සැකසෙනු ඇත"
+msgstr "සියළුම ආර්ක් මෙනු සැකසුම් පෙරනිමි අගයන් වලට සැකසෙනු ඇත"
 
 #: settings/AboutPage.js:41
 msgid "Application Menu Extension for GNOME"
