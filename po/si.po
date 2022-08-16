@@ -77,7 +77,7 @@ msgstr "නික්මෙන්න"
 #: constants.js:249 menulayouts/mint.js:225 menulayouts/unity.js:212
 #: settings/MenuSettingsPages/ListPinnedPage.js:337
 msgid "Lock"
-msgstr "අගුල"
+msgstr "අගුළු දමන්න"
 
 #: constants.js:250 settings/MenuSettingsPages/ListPinnedPage.js:340
 msgid "Restart"
@@ -631,7 +631,7 @@ msgstr "වට්ටෝරු පිරිසැලසුම් %s"
 #: settings/LayoutsPage.js:168
 #, javascript-format
 msgid "%s Layout Tweaks"
-msgstr "පිරිසැලසුම ගැඩගැන්නුම්"
+msgstr "පිරිසැලසුම ගැඩගැන්නුම් %s"
 
 #: settings/LayoutTweaksPage.js:123
 msgid "Mouse Click"
@@ -1387,15 +1387,15 @@ msgstr "කවුළුවේ උස"
 
 #: settings/MiscPage.js:150
 msgid "Reset all ArcMenu Settings"
-msgstr "සියළු ආර්ක්මෙනු සැකසුම් යළි සකසන්න"
+msgstr "සියළුම ආර්ක්මෙනු සැකසුම් යළි සකසන්න"
 
 #: settings/MiscPage.js:156
 msgid "Reset all Settings"
-msgstr "සියළුම සැකසුම් යළි සකසන්න"
+msgstr "යළි සකසන්න"
 
 #: settings/MiscPage.js:162
 msgid "Reset all settings?"
-msgstr "සියළු සැකසුම් යළි සකසන්න"
+msgstr "සියළුම සැකසුම් යළි සකසන්න ද?"
 
 #: settings/MiscPage.js:163
 msgid "All ArcMenu settings will be reset to the default value."
