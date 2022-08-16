@@ -276,7 +276,7 @@ var BaseLayout = class {
             else if(nextType === GMenu.TreeItemType.DIRECTORY){
                 let subdir = iter.get_directory();
                 if(!subdir.get_is_nodisplay())
-                    this._loadCategory(categoryId, subdir);
+                    this._loadCategory(categoryMenuItem, subdir);
             }
         }
     }
