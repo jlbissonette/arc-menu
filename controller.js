@@ -2,6 +2,7 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const { Gio, GLib, Gtk, Shell, St } = imports.gi;
 const Constants = Me.imports.constants;
+const { InputSourceManager } = imports.ui.status.keyboard;
 const Keybinder = Me.imports.keybinder;
 const Main = imports.ui.main;
 const MenuButton = Me.imports.menuButton;
@@ -31,7 +32,7 @@ var MenuSettingsController = class {
             this._appSystem = Shell.AppSystem.get_default();
             this._updateHotKeyBinder();
             this._initRecentAppsTracker();
-            this._connectArcMenuOpenState();
+            this._inputSourceManagerOverride();
         }
         this._setButtonAppearance();
         this._setButtonText();
@@ -41,17 +42,65 @@ var MenuSettingsController = class {
         this._configureActivitiesButton();
     }
 
+    _inputSourceManagerOverride(){
+        //Add ArcMenu as a valid option for "per window" input source switching.
+        this._inputSourcesSettings = new Gio.Settings({ schema_id: 'org.gnome.desktop.input-sources' });
+        this._perWindowChangedId = this._inputSourcesSettings.connect('changed::per-window', () => {
+            if(this._inputSourcesSettings.get_boolean('per-window'))
+                return;
+
+            const menus = this._getAllMenus();
+            menus.forEach(menu => {
+                delete menu._inputSources;
+                delete menu._currentSource;
+            });
+        });
+
+        this._inputSourceManagerProto = InputSourceManager.prototype;
+        this._origGetCurrentWindow = this._inputSourceManagerProto._getCurrentWindow;
+
+        this._inputSourceManagerProto._getCurrentWindow = () => {
+            let openedArcMenu = this._getOpenedArcMenu();
+            if (openedArcMenu)
+                return openedArcMenu;
+            else if (Main.overview.visible)
+                return Main.overview;
+            else
+                return global.display.focus_window;
+        }
+    }
+
+    _getOpenedArcMenu(){
+        const menus = this._getAllMenus();
+        for (let i = 0; i < menus.length; i++) {
+            if (menus[i].isOpen)
+                return menus[i];
+        }
+
+        return null;
+    }
+
+    _getAllMenus(){
+        let menus = [];
+        for (let i = 0; i < this._settingsControllers.length; i++) {
+            let menuButton = this._settingsControllers[i]._menuButton;
+            menus.push(menuButton.arcMenu)
+        }
+        if(this.runnerMenu)
+            menus.push(this.runnerMenu.arcMenu)
+
+        return menus;
+    }
+
     connectSettingsEvents() {
         this._settingsConnections.connectMultipleEvents(
-            [
-                'override-menu-theme', 'menu-background-color', 'menu-foreground-color', 'menu-border-color',
-                'menu-border-width', 'menu-border-radius', 'menu-font-size', 'menu-separator-color',
-                'menu-item-hover-bg-color', 'menu-item-hover-fg-color', 'menu-item-active-bg-color',
-                'menu-item-active-fg-color', 'menu-button-fg-color', 'menu-button-hover-bg-color',
-                'menu-button-hover-fg-color', 'menu-button-active-bg-color', 'menu-button-active-fg-color',
-                'menu-button-border-radius', 'menu-button-border-width', 'menu-button-border-color', 'menu-arrow-rise',
-                'search-entry-border-radius'
-            ],
+            ['override-menu-theme', 'menu-background-color', 'menu-foreground-color', 'menu-border-color',
+            'menu-border-width', 'menu-border-radius', 'menu-font-size', 'menu-separator-color',
+            'menu-item-hover-bg-color', 'menu-item-hover-fg-color', 'menu-item-active-bg-color',
+            'menu-item-active-fg-color', 'menu-button-fg-color', 'menu-button-hover-bg-color',
+            'menu-button-hover-fg-color', 'menu-button-active-bg-color', 'menu-button-active-fg-color',
+            'menu-button-border-radius', 'menu-button-border-width', 'menu-button-border-color', 'menu-arrow-rise',
+            'search-entry-border-radius'],
             this._overrideMenuTheme.bind(this)
         );
 
@@ -71,20 +120,18 @@ var MenuSettingsController = class {
         );
 
         this._settingsConnections.connectMultipleEvents(
-            [
-                'directory-shortcuts-list', 'application-shortcuts-list', 'extra-categories',
-                'power-options','show-external-devices', 'show-bookmarks', 'disable-user-avatar',
-                'avatar-style', 'enable-activities-shortcut', 'enable-horizontal-flip', 'power-display-style',
-                'searchbar-default-bottom-location', 'searchbar-default-top-location', 'multi-lined-labels',
-                'apps-show-extra-details', 'show-search-result-details', 'search-provider-open-windows',
-                'search-provider-recent-files', 'misc-item-icon-size', 'windows-disable-pinned-apps',
-                'disable-scrollview-fade-effect', 'windows-disable-frequent-apps', 'default-menu-view',
-                'default-menu-view-tognee', 'alphabetize-all-programs', 'menu-item-grid-icon-size',
-                'menu-item-icon-size', 'button-item-icon-size', 'quicklinks-item-icon-size',
-                'menu-item-category-icon-size', 'category-icon-type', 'shortcut-icon-type',
-                'arcmenu-extra-categories-links', 'arcmenu-extra-categories-links-location', 'runner-show-frequent-apps',
-                'default-menu-view-redmond', 'disable-recently-installed-apps'
-            ],
+            ['directory-shortcuts-list', 'application-shortcuts-list', 'extra-categories',
+            'power-options','show-external-devices', 'show-bookmarks', 'disable-user-avatar',
+            'avatar-style', 'enable-activities-shortcut', 'enable-horizontal-flip', 'power-display-style',
+            'searchbar-default-bottom-location', 'searchbar-default-top-location', 'multi-lined-labels',
+            'apps-show-extra-details', 'show-search-result-details', 'search-provider-open-windows',
+            'search-provider-recent-files', 'misc-item-icon-size', 'windows-disable-pinned-apps',
+            'disable-scrollview-fade-effect', 'windows-disable-frequent-apps', 'default-menu-view',
+            'default-menu-view-tognee', 'alphabetize-all-programs', 'menu-item-grid-icon-size',
+            'menu-item-icon-size', 'button-item-icon-size', 'quicklinks-item-icon-size',
+            'menu-item-category-icon-size', 'category-icon-type', 'shortcut-icon-type',
+            'arcmenu-extra-categories-links', 'arcmenu-extra-categories-links-location', 'runner-show-frequent-apps',
+            'default-menu-view-redmond', 'disable-recently-installed-apps'],
             this._reload.bind(this)
         );
 
@@ -94,18 +141,14 @@ var MenuSettingsController = class {
         );
 
         this._settingsConnections.connectMultipleEvents(
-            [
-                'pinned-app-list', 'enable-weather-widget-unity', 'enable-clock-widget-unity',
-                'enable-weather-widget-raven', 'enable-clock-widget-raven'
-            ],
+            ['pinned-app-list', 'enable-weather-widget-unity', 'enable-clock-widget-unity',
+            'enable-weather-widget-raven', 'enable-clock-widget-raven'],
             this._updatePinnedApps.bind(this)
         );
 
         this._settingsConnections.connectMultipleEvents(
-            [
-                'brisk-shortcuts-list', 'mint-pinned-app-list', 'mint-separator-index',
-                'unity-pinned-app-list', 'unity-separator-index'
-            ],
+            ['brisk-shortcuts-list', 'mint-pinned-app-list', 'mint-separator-index',
+            'unity-pinned-app-list', 'unity-separator-index'],
             this._updateExtraPinnedApps.bind(this)
         );
 
@@ -120,23 +163,6 @@ var MenuSettingsController = class {
         this._settingsConnections.connect('runner-position', this._updateLocation.bind(this));
         this._settingsConnections.connect('show-activities-button', this._configureActivitiesButton.bind(this));
         this._settingsConnections.connect('force-menu-location', this._forceMenuLocation.bind(this));
-    }
-
-    _connectArcMenuOpenState(){
-        /*
-        * Workaround for PopShell extension conflicting with ArcMenu SUPER_L hotkey.
-        * PopShell extension removes ActionMode.POPUP from 'overlay-key',
-        * which prevents the use of the SUPER_L hotkey when popup menus are opened.
-        * Set 'overlay-key' action mode to ActionMode.ALL when ArcMenu is opened.
-        */
-        this._openStateChangedId = this._menuButton.arcMenu.connect('open-state-changed', (_menu, open) => {
-            if(!open)
-                return;
-
-            const menuHotkey = this._settings.get_enum('menu-hotkey');
-            if(menuHotkey === Constants.HotKey.SUPER_L)
-                Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
-        });
     }
 
     _overrideMenuTheme(){
@@ -475,14 +501,19 @@ var MenuSettingsController = class {
     }
 
     destroy() {
+        if(this._inputSourceManagerProto){
+            this._inputSourceManagerProto._getCurrentWindow = this._origGetCurrentWindow;
+            delete this._inputSourceManagerProto;
+        }
+        
+        if(this._perWindowChangedId){
+            this._inputSourcesSettings.disconnect(this._perWindowChangedId);
+            this._perWindowChangedId = null;
+        }
+
         if(this._writeTimeoutId){
             GLib.source_remove(this._writeTimeoutId);
             this._writeTimeoutId = null;
-        }
-
-        if(this._openStateChangedId){
-            this._menuButton.arcMenu.disconnect(this._openStateChangedId);
-            this._openStateChangedId = null;
         }
 
         if(this._installedChangedId){

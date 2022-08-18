@@ -70,7 +70,14 @@ var OverrideOverlayKey = class {
             //If signal ID found, block it and connect new 'overlay-key' to toggle ArcMenu.
             if(this.defaultOverlayKeyID){
                 GObject.signal_handler_block(global.display, this.defaultOverlayKeyID);
-                this.overlayKeyID = global.display.connect('overlay-key', () => this._toggleMenu());
+                this.overlayKeyID = global.display.connect('overlay-key', () => {
+                    this._toggleMenu();
+                    // Workaround for PopShell extension conflicting with ArcMenu SUPER_L hotkey.
+                    // PopShell extension removes ActionMode.POPUP from 'overlay-key',
+                    // which prevents the use of the SUPER_L hotkey when popup menus are opened.
+                    // Set 'overlay-key' action mode to ActionMode.ALL when ArcMenu is opened.
+                    Main.wm.allowKeybinding('overlay-key', Shell.ActionMode.ALL);
+                });
             }
             else
                 global.log("ArcMenu Error - Failed to set Super_L hotkey");
