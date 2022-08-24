@@ -237,9 +237,9 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
                 frameRow.activatable_widget = buttonBox.editButton;
             }
 
-            buttonBox.connect('modify', ()=> {
+            buttonBox.connect('modify', () => {
                 let pinnedShortcut = [frameRow._name, frameRow._icon, frameRow._cmd];
-                let dialog = new AddCustomLinkDialogWindow(this._settings, this, Constants.MenuSettingsListType.PINNED_APPS, pinnedShortcut);
+                let dialog = new AddCustomLinkDialogWindow(this._settings, this, this.listType, pinnedShortcut);
                 dialog.show();
                 dialog.connect('response', (_w, response) => {
                     if(response === Gtk.ResponseType.APPLY) {
@@ -403,8 +403,8 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
     _loadCategories() {
         let allApps = Gio.app_info_get_all();
         allApps.sort((a, b) => {
-            let _a = a.get_display_name();
-            let _b = b.get_display_name();
+            let _a = a.get_display_name().toLowerCase();
+            let _b = b.get_display_name().toLowerCase();
             return GLib.strcmp0(_a, _b);
         });
 
@@ -493,14 +493,18 @@ var AddCustomLinkDialogWindow = GObject.registerClass(
 class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
     _init(settings, parent, dialogType, pinnedShortcut = null) {
         let title = _('Add a Custom Shortcut');
-        let isPinnedApps = this._dialogType === Constants.MenuSettingsListType.PINNED_APPS || this._dialogType === Constants.MenuSettingsListType.OTHER;
-        if (pinnedShortcut && isPinnedApps)
-            title = _('Edit Pinned App');
-        else if (pinnedShortcut)
-            title = _('Edit Shortcut');
 
-        super._init(_(title), parent, Constants.MenuItemLocation.BOTTOM);
-        this.set_default_size(550, 220);
+        let isPinnedApps = dialogType === Constants.MenuSettingsListType.PINNED_APPS || dialogType === Constants.MenuSettingsListType.OTHER;
+        if (pinnedShortcut !== null) {
+            if(isPinnedApps)
+                title = _('Edit Pinned App');
+            else 
+                title = _('Edit Shortcut');
+        }
+
+        super._init(_(title), parent);
+        this.set_default_size(575, 325);
+        this.search_enabled = false;
         this._settings = settings;
         this.newPinnedAppArray = [];
         this._dialogType = dialogType;
@@ -576,7 +580,7 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
         this.pageGroup.add(cmdFrameRow);
 
         let addButton = new Gtk.Button({
-            label: this.pinnedShortcut ?_("Apply") :_("Add"),
+            label: this.pinnedShortcut ? _("Apply") : _("Add"),
             halign: Gtk.Align.END,
             css_classes: ['suggested-action']
         });
@@ -593,6 +597,6 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
             this.emit('response', Gtk.ResponseType.APPLY);
         });
 
-        this.headerGroup.add(addButton);
+        this.pageGroup.set_header_suffix(addButton);
     }
 });

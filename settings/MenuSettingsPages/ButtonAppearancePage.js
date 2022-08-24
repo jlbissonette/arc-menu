@@ -343,7 +343,7 @@ var ArcMenuIconsDialogWindow = GObject.registerClass(
 class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
     _init(settings, parent) {
         this._settings = settings;
-        super._init(_('ArcMenu Icons'), parent, Constants.MenuItemLocation.TOP);
+        super._init(_('ArcMenu Icons'), parent);
         this.set_default_size(475, 400);
         this.search_enabled = false;
 
@@ -518,7 +518,6 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         });
         distroInfoButtonGroup.add(distroInfoButton);
         this.distroIconsPage.add(distroInfoButtonGroup);
-        this.page.remove(this.headerGroup);
 
         this.setVisibleChild();
     }

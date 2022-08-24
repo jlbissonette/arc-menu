@@ -98,7 +98,7 @@ class ArcMenu_ManageThemesDialog extends PW.DialogWindow {
 var SaveThemeDialog = GObject.registerClass(
 class ArcMenu_SaveThemeDialog extends PW.DialogWindow {
     _init(settings, parent, themeName) {
-        super._init(_('Save Theme As...'), parent, Constants.MenuItemLocation.BOTTOM);
+        super._init(_('Save Theme As...'), parent);
         this._settings = settings;
         this.themeName = themeName;
         this.search_enabled = false;
@@ -135,7 +135,7 @@ class ArcMenu_SaveThemeDialog extends PW.DialogWindow {
             this.themeName = themeNameEntry.get_text();
             this.emit('response', Gtk.ResponseType.APPLY);
         });
-        this.headerGroup.add(saveButton);
+        this.pageGroup.set_header_suffix(saveButton);
     }
 });
         

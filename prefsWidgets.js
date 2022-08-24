@@ -6,7 +6,9 @@ const _ = Gettext.gettext;
 
 var Button = GObject.registerClass(class ArcMenu_Button extends Gtk.Button {
     _init(params) {
-        super._init();
+        super._init({
+            css_classes: params.css_classes ?? null
+        });
         this._params = params;
         this.halign = Gtk.Align.END;
         this.valign = Gtk.Align.CENTER;
@@ -45,7 +47,7 @@ var DialogWindow = GObject.registerClass({
         'response': { param_types: [GObject.TYPE_INT]},
     },
 },class ArcMenu_DialogWindow extends Adw.PreferencesWindow {
-    _init(title, parent, buttonLocation) {
+    _init(title, parent) {
         super._init({
             title: title,
             transient_for: parent.get_root(),
@@ -54,19 +56,9 @@ var DialogWindow = GObject.registerClass({
         });
         this.page = new Adw.PreferencesPage();
         this.pageGroup = new Adw.PreferencesGroup();
-        this.headerGroup = new Adw.PreferencesGroup();
+
         this.add(this.page);
-        if(buttonLocation === Constants.MenuItemLocation.TOP){
-            this.page.add(this.headerGroup);
-            this.page.add(this.pageGroup);
-        }
-        else if(buttonLocation === Constants.MenuItemLocation.BOTTOM){
-            this.page.add(this.pageGroup);
-            this.page.add(this.headerGroup);
-        }
-        else{
-            this.page.add(this.pageGroup);
-        }
+        this.page.add(this.pageGroup);
     }
 });
 
