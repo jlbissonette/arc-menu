@@ -210,7 +210,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
             });
             frameRow.add_prefix(appIcon);
             frameRow.add_prefix(dragIcon);
-            frameRow.title = _(frameRow._name);
+            frameRow.title = GLib.markup_escape_text(_(frameRow._name), -1);
 
             if(frameRow._cmd.endsWith('.desktop') && !Gio.DesktopAppInfo.new(frameRow._cmd)){
                 appIcon.icon_name = 'warning-symbolic';
@@ -410,12 +410,13 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
 
         for(let i = 0; i < allApps.length; i++) {
             if(allApps[i].should_show()) {
-                let frameRow = new Adw.ActionRow();
+                let frameRow = new Adw.ActionRow({
+                    title: GLib.markup_escape_text(allApps[i].get_display_name(), -1)
+                });
                 frameRow._app = allApps[i];
                 frameRow._name = allApps[i].get_display_name();
                 frameRow._icon = '';
                 frameRow._cmd = allApps[i].get_id();
-                frameRow.title = frameRow._name;
 
                 let icon = allApps[i].get_icon() ? allApps[i].get_icon().to_string() : "dialog-information";
 
@@ -447,7 +448,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
                     this.currentToast?.dismiss();
 
                     this.currentToast = new Adw.Toast({
-                        title: _("%s has been pinned to ArcMenu").format(frameRow._name),
+                        title: _("%s has been pinned to ArcMenu").format(frameRow.title),
                         timeout: 2
                     });
                     this.currentToast.connect("dismissed", () => this.currentToast = null);
@@ -459,7 +460,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
                     this.currentToast?.dismiss();
 
                     this.currentToast = new Adw.Toast({
-                        title: _("%s has been unpinned from ArcMenu").format(frameRow._name),
+                        title: _("%s has been unpinned from ArcMenu").format(frameRow.title),
                         timeout: 2
                     });
                     this.currentToast.connect("dismissed", () => this.currentToast = null);
