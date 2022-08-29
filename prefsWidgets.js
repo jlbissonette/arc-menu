@@ -313,7 +313,7 @@ var EditEntriesBox = GObject.registerClass({
 
         if(params.deleteButton){
             deleteButton = new Gtk.Button({
-                label: _("Delete"),
+                label: _("Remove"),
                 has_frame: false,
             });
             deleteButton.connect('clicked', ()=> {
