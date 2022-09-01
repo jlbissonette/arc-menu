@@ -67,8 +67,11 @@ function getIconStringFromListing(listing){
         case Constants.ShortcutCommands.RECENT:
             return 'document-open-recent-symbolic';
         default:
-            path = shortcutCommand;
+            path = shortcutCommand ?? shortcutIconName;
     }
+
+    if(!path)
+        return shortcutIconName;
 
     let file = Gio.File.new_for_path(path);
 

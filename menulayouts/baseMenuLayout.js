@@ -2,7 +2,6 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, Gio, GMenu, Gtk, Shell, St} = imports.gi;
 const AppFavorites = imports.ui.appFavorites;
-const appSys = Shell.AppSystem.get_default();
 const ArcSearch = Me.imports.search;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
@@ -257,7 +256,7 @@ var BaseLayout = class {
                 } catch(e){
                     continue;
                 }
-                let app = appSys.lookup_app(id);
+                let app = Shell.AppSystem.get_default().lookup_app(id);
                 if(!app)
                     app = new Shell.App({ app_info: entry.get_app_info() });
                 if(app.get_app_info().should_show()){
@@ -467,12 +466,17 @@ var BaseLayout = class {
             case Constants.ShortcutCommands.COMPUTER:
                 return new PlaceDisplay.RootInfo();
             default:
+                if(!shortcutCommand)
+                    return null;
+
                 let file = Gio.File.new_for_path(shortcutCommand);
                 if(file.query_exists(null))
                     return new PlaceDisplay.PlaceInfo('special', file, _(shortcutName));
                 else
                     return null;
         }
+        if(!path)
+            return null;
 
         return new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_path(path));
     }
@@ -526,15 +530,15 @@ var BaseLayout = class {
                 global.log("ArcMenu Error - Failed to find default web browser. Removing placeholder pinned app.")
             }
 
-            this._app = appSys.lookup_app(browserName);
-            if(this._app){
-                pinnedApps[0] = this._app.get_name();
+            const app = Shell.AppSystem.get_default().lookup_app(browserName);
+            if(app){
+                pinnedApps[0] = app.get_name();
                 pinnedApps[1] = '';
-                pinnedApps[2] = this._app.get_id();
+                pinnedApps[2] = app.get_id();
             }
-            else{
+            else
                 pinnedApps.splice(0,3);
-            }
+
             this.shouldLoadPinnedApps = false; // We don't want to trigger a setting changed event
             this._settings.set_strv('pinned-app-list', pinnedApps);
             this.shouldLoadPinnedApps = true;
