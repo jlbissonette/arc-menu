@@ -28,7 +28,7 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
         this.add(this.mainGroup);
 
         this.settingsLeaflet = new Adw.Leaflet({
-            homogeneous: true,
+            homogeneous: false,
             transition_type: Adw.LeafletTransitionType.SLIDE,
             can_navigate_back: true,
             can_navigate_forward: true,

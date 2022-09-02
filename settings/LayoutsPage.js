@@ -31,7 +31,7 @@ class ArcMenu_LayoutsPage extends Adw.PreferencesPage {
         });
 
         this.mainLeaflet = new Adw.Leaflet({
-            homogeneous: true,
+            homogeneous: false,
             transition_type: Adw.LeafletTransitionType.SLIDE,
             can_navigate_back: true,
             can_navigate_forward: false,
@@ -39,7 +39,7 @@ class ArcMenu_LayoutsPage extends Adw.PreferencesPage {
         });
 
         this.subLeaflet = new Adw.Leaflet({
-            homogeneous: true,
+            homogeneous: false,
             transition_type: Adw.LeafletTransitionType.SLIDE,
             can_navigate_back: false,
             can_navigate_forward: false,
