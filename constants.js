@@ -2,6 +2,9 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
+var DASH_TO_PANEL_UUID = 'dash-to-panel@jderose9.github.com';
+var AZTASKBAR_UUID = 'aztaskbar@aztaskbar.gitlab.com';
+
 var SearchbarLocation = {
     BOTTOM: 0,
     TOP: 1

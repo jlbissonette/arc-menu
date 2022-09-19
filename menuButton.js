@@ -13,8 +13,6 @@ const Util = imports.misc.util;
 const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
-var DASH_TO_PANEL_UUID = 'dash-to-panel@jderose9.github.com';
-
 var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMenu.Button{
     _init(settings, panel) {
         super._init(0.5, null, true);
@@ -69,9 +67,14 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     }
 
     initiate(){
-        this.dashToPanel = Main.extensionManager.lookup(DASH_TO_PANEL_UUID);
+        this.dashToPanel = Main.extensionManager.lookup(Constants.DASH_TO_PANEL_UUID);
+        this.azTaskbar = Main.extensionManager.lookup(Constants.AZTASKBAR_UUID);
+
         if(this.dashToPanel?.state === ExtensionState.ENABLED && global.dashToPanel)
             this.syncWithDashToPanel();
+
+        if(this.azTaskbar?.state === ExtensionState.ENABLED && global.azTaskbar)
+            this.syncWithAzTaskbar();
 
         this._monitorsChangedId = Main.layoutManager.connect('monitors-changed', () =>
             this.updateHeight());
@@ -88,8 +91,12 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         });
     }
 
+    syncWithAzTaskbar(){
+        this.arcMenuContextMenu.addExtensionSettings(_('App Icons Taskbar Settings'), Constants.AZTASKBAR_UUID);
+    }
+
     syncWithDashToPanel(){
-        this.arcMenuContextMenu.addExtensionSettings();
+        this.arcMenuContextMenu.addExtensionSettings(_('Dash to Panel Settings'), Constants.DASH_TO_PANEL_UUID);
 
         let monitorIndex = Main.layoutManager.findIndexForActor(this);
         let side = Utils.getDashToPanelPosition(this.dashToPanel.settings, monitorIndex);
@@ -524,10 +531,10 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         this.addMenuItem(this.createQuickLinkItem(_("About"), Constants.PrefsVisiblePage.ABOUT));
     }
 
-    addExtensionSettings(){
-        let extensionCommand = 'gnome-extensions prefs ' + DASH_TO_PANEL_UUID;
+    addExtensionSettings(extensionName, uuid){
+        let extensionCommand = 'gnome-extensions prefs ' + uuid;
 
-        let item = new PopupMenu.PopupMenuItem(_("Dash to Panel Settings"));
+        let item = new PopupMenu.PopupMenuItem(_(extensionName));
         item.add_style_class_name("arcmenu-menu-item");
         item.connect('activate', ()=>{
             Util.spawnCommandLine(extensionCommand);

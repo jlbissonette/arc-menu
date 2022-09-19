@@ -50,15 +50,15 @@ function enable() {
 
     // dash to panel might get enabled after ArcMenu
     extensionChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-        if (extension.uuid === 'dash-to-panel@jderose9.github.com') {
-            _disconnectDtpSignals();
-            _connectDtpSignals();
+        if (extension.uuid === Constants.DASH_TO_PANEL_UUID || extension.uuid === Constants.AZTASKBAR_UUID) {
+            _disconnectExtensionSignals();
+            _connectExtensionSignals();
             _reload();
         }
     });
 
     // listen to dash to panel if they are compatible and already enabled
-    _connectDtpSignals();
+    _connectExtensionSignals();
 }
 
 function disable() {
@@ -70,7 +70,7 @@ function disable() {
     Theming.unloadStylesheet();
     delete Me.customStylesheet;
 
-    _disconnectDtpSignals();
+    _disconnectExtensionSignals();
 
     _disableButtons();
     settingsControllers = null;
@@ -80,15 +80,22 @@ function disable() {
 }
 
 
-function _connectDtpSignals() {
+function _connectExtensionSignals() {
     if(global.dashToPanel)
-        global.dashToPanel._amPanelsCreatedId = global.dashToPanel.connect('panels-created', () => _reload());
+        global.dashToPanel._panelsCreatedId = global.dashToPanel.connect('panels-created', () => _reload());
+
+    if(global.azTaskbar)
+        global.azTaskbar._panelsCreatedId = global.azTaskbar.connect('panels-created', () => _reload());
 }
 
-function _disconnectDtpSignals() {
-    if(global.dashToPanel?._amPanelsCreatedId){
-        global.dashToPanel.disconnect(global.dashToPanel._amPanelsCreatedId);
-        delete global.dashToPanel._amPanelsCreatedId;
+function _disconnectExtensionSignals() {
+    if(global.dashToPanel?._panelsCreatedId){
+        global.dashToPanel.disconnect(global.dashToPanel._panelsCreatedId);
+        delete global.dashToPanel._panelsCreatedId;
+    }
+    if(global.azTaskbar?._panelsCreatedId){
+        global.azTaskbar.disconnect(global.azTaskbar._panelsCreatedId);
+        delete global.azTaskbar._panelsCreatedId;
     }
 }
 
@@ -100,20 +107,25 @@ function _reload() {
 function _enableButtons() {
     let multiMonitor = settings.get_boolean('multi-monitor');
 
-    let dashToPanelEnabled = false;
+    let panelExtensionEnabled = false;
     let panelArray = [Main.panel];
+
     if(global.dashToPanel && global.dashToPanel.panels){
         panelArray = global.dashToPanel.panels.map(pw => pw);
-        dashToPanelEnabled = true;
+        panelExtensionEnabled = true;
+    }
+    if(global.azTaskbar && global.azTaskbar.panels){
+        panelArray = panelArray.concat(global.azTaskbar.panels.map(pw => pw));
+        panelExtensionEnabled = true;
     }
 
     let panelLength = multiMonitor ? panelArray.length : 1;
     for(var index = 0; index < panelLength; index++){
-        let panel = dashToPanelEnabled ? panelArray[index].panel : panelArray[index];
+        let panel = panelArray[index].panel ?? panelArray[index];
         let panelParent = panelArray[index];
 
         //Place ArcMenu in top panel when Dash to Panel setting "Keep original gnome-shell top panel" is on
-        let isStandalone = settings.get_boolean('dash-to-panel-standalone') && dashToPanelEnabled;
+        let isStandalone = settings.get_boolean('dash-to-panel-standalone') && global.dashToPanel && panelExtensionEnabled;
         if(isStandalone && ('isPrimary' in panelParent && panelParent.isPrimary) && panelParent.isStandalone)
             panel = Main.panel;
     
@@ -122,7 +134,7 @@ function _enableButtons() {
 
         settingsController.monitorIndex = panelParent.monitor?.index ?? 0;
 
-        if(dashToPanelEnabled)
+        if(panelExtensionEnabled)
             panel._amDestroyId = panel.connect('destroy', () => extensionChangedId ? _disableButton(settingsController) : null);
 
         settingsController.enableButton();

@@ -92,7 +92,7 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
 
         let multiMonitorRow = new Adw.ActionRow({
             title: _("Display ArcMenu on all Panels"),
-            subtitle: _("Dash to Panel extension required"),
+            subtitle: _("Dash to Panel or App Icons Taskbar extension required"),
             activatable_widget: multiMonitorSwitch
         });
         multiMonitorRow.add_suffix(multiMonitorSwitch);

@@ -252,7 +252,7 @@ var MenuSettingsController = class {
     toggleMenus(){
         if(this.runnerMenu && this.runnerMenu.arcMenu.isOpen)
             this.runnerMenu.toggleMenu();
-        if(global.dashToPanel){
+        if(global.dashToPanel || global.azTaskbar){
             const MultipleArcMenus = this._settingsControllers.length > 1;
             const ShowArcMenuOnPrimaryMonitor = this._settings.get_boolean('hotkey-open-primary-monitor');
             if(MultipleArcMenus && ShowArcMenuOnPrimaryMonitor)
@@ -456,8 +456,8 @@ var MenuSettingsController = class {
                 return [offset, 'center'];
             case Constants.MenuPosition.RIGHT:
                 // get number of childrens in rightBox (without arcmenu)
-                let n_children = Main.panel._rightBox.get_n_children();
-                n_children -= Main.panel.statusArea.ArcMenu !== undefined;
+                let n_children = this.panel._rightBox.get_n_children();
+                n_children -= this.panel.statusArea.ArcMenu !== undefined;
                 // position where icon should go,
                 // offset = 0, icon should be last
                 // offset = 1, icon should be second last
@@ -471,7 +471,8 @@ var MenuSettingsController = class {
 
     _configureActivitiesButton(){
         let showActivities = this._settings.get_boolean('show-activities-button');
-        Main.panel.statusArea.activities.visible = showActivities;
+        if(this.panel.statusArea.activities)
+            this.panel.statusArea.activities.visible = showActivities;
     }
 
     _addMenuButtonToMainPanel() {
@@ -492,7 +493,8 @@ var MenuSettingsController = class {
 
     _disableButton() {
         this._removeMenuButtonFromMainPanel();
-        Main.panel.statusArea.activities.visible = true;
+        if(this.panel.statusArea.activities)
+            this.panel.statusArea.activities.visible = true;
         this._menuButton.destroy();
     }
 
