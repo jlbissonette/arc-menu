@@ -103,8 +103,9 @@ class ArcMenu_ButtonAppearancePage extends Gtk.Box {
 
         let menuButtonCustomTextEntry = new Gtk.Entry({
             valign: Gtk.Align.CENTER,
+            hexpand: true,
+            halign: Gtk.Align.FILL
         });
-        menuButtonCustomTextEntry.set_width_chars(30);
         menuButtonCustomTextEntry.set_text(this._settings.get_string('custom-menu-button-text'));
         menuButtonCustomTextEntry.connect('changed', (widget) => {
             let customMenuButtonText = widget.get_text();

@@ -504,7 +504,7 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
         }
 
         super._init(_(title), parent);
-        this.set_default_size(575, 325);
+        this.set_default_size(600, 325);
         this.search_enabled = false;
         this._settings = settings;
         this.newPinnedAppArray = [];
@@ -517,7 +517,8 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
 
         let nameEntry = new Gtk.Entry({
             valign: Gtk.Align.CENTER,
-            width_chars: 35
+            hexpand: true,
+            halign: Gtk.Align.FILL
         });
         nameFrameRow.add_suffix(nameEntry);
         this.pageGroup.add(nameFrameRow);
@@ -527,13 +528,15 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
         });
         let iconEntry = new Gtk.Entry({
             valign: Gtk.Align.CENTER,
-            width_chars: 35
+            hexpand: true,
+            halign: Gtk.Align.FILL
         });
 
         let fileFilter = new Gtk.FileFilter();
         fileFilter.add_pixbuf_formats();
-        let fileChooserButton = new Gtk.Button({
-            label: _('Browse...'),
+        let fileChooserButton = new PW.Button({
+            icon_name: 'search-symbolic',
+            tooltip_text: _('Browse...'),
             valign: Gtk.Align.CENTER,
         });
 
@@ -575,7 +578,8 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
 
         let cmdEntry = new Gtk.Entry({
             valign: Gtk.Align.CENTER,
-            width_chars: 35
+            hexpand: true,
+            halign: Gtk.Align.FILL
         });
         cmdFrameRow.add_suffix(cmdEntry);
         this.pageGroup.add(cmdFrameRow);

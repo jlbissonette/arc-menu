@@ -106,7 +106,8 @@ class ArcMenu_SaveThemeDialog extends PW.DialogWindow {
 
         let themeNameEntry = new Gtk.Entry({
             valign: Gtk.Align.CENTER,
-            width_chars: 35
+            hexpand: true,
+            halign: Gtk.Align.FILL
         });
         let themeNameRow = new Adw.ActionRow({
             title: _("Theme Name"),
