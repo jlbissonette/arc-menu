@@ -4,9 +4,9 @@ UUID = arcmenu@arcmenu.com
 BASE_MODULES = COPYING extension.js keybinder.js metadata.json README.md stylesheet.css theming.js
 EXTRA_MODULES = appMenu.js constants.js controller.js menuButton.js menuWidgets.js placeDisplay.js prefs.js prefsWidgets.js recentFilesManager.js search.js standaloneRunner.js utils.js
 
-TOLOCALIZE = $(EXTRA_MODULES) menulayouts/* settings/*
+TOLOCALIZE = $(EXTRA_MODULES) gnome43/* menulayouts/* settings/*
 
-EXTRA_DIRECTORIES = media menulayouts searchProviders settings
+EXTRA_DIRECTORIES = gnome43 media menulayouts searchProviders settings
 
 MSGSRC = $(wildcard po/*.po)
 ifeq ($(strip $(DESTDIR)),)

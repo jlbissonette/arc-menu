@@ -2,7 +2,8 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, Gio, GMenu, Gtk, Shell, St} = imports.gi;
 const AppFavorites = imports.ui.appFavorites;
-const ArcSearch = Me.imports.search;
+
+const Config = imports.misc.config;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
@@ -10,8 +11,11 @@ const MenuLayouts = Me.imports.menulayouts;
 const MW = Me.imports.menuWidgets;
 const PlaceDisplay = Me.imports.placeDisplay;
 const PopupMenu = imports.ui.popupMenu;
-const { RecentFilesManager } = Me.imports.recentFilesManager;
+
 const Utils =  Me.imports.utils;
+
+const Search = (Config.PACKAGE_VERSION < '43') ? Me.imports.search : Me.imports.gnome43.search;
+const { RecentFilesManager } = (Config.PACKAGE_VERSION < '43') ? Me.imports.recentFilesManager : Me.imports.gnome43.recentFilesManager;
 
 function getMenuLayoutEnum() { return null; }
 
@@ -33,7 +37,7 @@ var BaseLayout = class {
         this.hasPinnedApps = false;
 
         if(this.layoutProperties.Search){
-            this.searchResults = new ArcSearch.SearchResults(this);
+            this.searchResults = new Search.SearchResults(this);
             this.searchBox = new MW.SearchBox(this);
             this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
             this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
