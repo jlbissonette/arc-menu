@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-29 13:54-0400\n"
-"PO-Revision-Date: 2022-09-06 20:40+0200\n"
+"POT-Creation-Date: 2022-09-20 08:15-0400\n"
+"PO-Revision-Date: 2022-09-23 14:02+0200\n"
 "Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
 "Language-Team: German <>\n"
 "Language: de\n"
@@ -39,161 +39,169 @@ msgstr "Nicht mehr in ArcMenü anheften"
 msgid "Open Folder Location"
 msgstr "Ordnerpfad öffnen"
 
-#: constants.js:70
+#: constants.js:73
 msgid "Favorites"
 msgstr "Favoriten"
 
-#: constants.js:71 menulayouts/runner.js:94 settings/LayoutTweaksPage.js:744
+#: constants.js:74 menulayouts/runner.js:94 settings/LayoutTweaksPage.js:744
 msgid "Frequent Apps"
 msgstr "Häufige Anwendungen"
 
-#: constants.js:72 menulayouts/az.js:128 menulayouts/az.js:130
+#: constants.js:75 menulayouts/az.js:128 menulayouts/az.js:130
 #: menulayouts/az.js:163 menulayouts/eleven.js:162 menulayouts/eleven.js:163
 #: menulayouts/eleven.js:221 menulayouts/redmond.js:46
 #: menulayouts/redmond.js:47 menulayouts/redmond.js:51
 msgid "All Apps"
 msgstr "Alle Anwendungen"
 
-#: constants.js:73 menuWidgets.js:717 settings/LayoutTweaksPage.js:637
+#: constants.js:76 menuWidgets.js:717 settings/LayoutTweaksPage.js:637
 #: settings/LayoutTweaksPage.js:742 settings/MenuSettingsPage.js:50
 #: settings/MenuSettingsPage.js:183
 msgid "Pinned Apps"
 msgstr "Angeheftete Anwendungen"
 
 # Wortlaut der deutschen Übersetzung aus dem Menüeintrag in "Dateien" (Gnome Files) übernommen, um eine einheitliche Übersetzung zu erhalten.
-#: constants.js:74 menulayouts/raven.js:294 menulayouts/unity.js:367
+#: constants.js:77 menulayouts/raven.js:294 menulayouts/unity.js:367
 #: searchProviders/recentFiles.js:26 searchProviders/recentFiles.js:27
 msgid "Recent Files"
 msgstr "Zuletzt verwendet"
 
-#: constants.js:247 menulayouts/mint.js:224 menulayouts/unity.js:211
+#: constants.js:250 menulayouts/mint.js:224 menulayouts/unity.js:211
 #: settings/MenuSettingsPages/ListPinnedPage.js:342
 msgid "Log Out"
 msgstr "Abmelden"
 
-#: constants.js:248 menulayouts/mint.js:225 menulayouts/unity.js:212
+#: constants.js:251 menulayouts/mint.js:225 menulayouts/unity.js:212
 #: settings/MenuSettingsPages/ListPinnedPage.js:341
 msgid "Lock"
 msgstr "Sperren"
 
-#: constants.js:249 settings/MenuSettingsPages/ListPinnedPage.js:344
+#: constants.js:252 settings/MenuSettingsPages/ListPinnedPage.js:344
 msgid "Restart"
 msgstr "Neu starten"
 
-#: constants.js:250 menulayouts/mint.js:226 menulayouts/unity.js:213
+#: constants.js:253 menulayouts/mint.js:226 menulayouts/unity.js:213
 #: settings/MenuSettingsPages/ListPinnedPage.js:343
 msgid "Power Off"
 msgstr "Ausschalten"
 
-#: constants.js:251 settings/MenuSettingsPages/ListPinnedPage.js:345
+#: constants.js:254 settings/MenuSettingsPages/ListPinnedPage.js:345
 msgid "Suspend"
 msgstr "Bereitschaft"
 
-#: constants.js:252 settings/MenuSettingsPages/ListPinnedPage.js:346
+#: constants.js:255 settings/MenuSettingsPages/ListPinnedPage.js:346
 msgid "Hybrid Sleep"
 msgstr "Hybrid-Schlaf"
 
-#: constants.js:253 settings/MenuSettingsPages/ListPinnedPage.js:347
+#: constants.js:256 settings/MenuSettingsPages/ListPinnedPage.js:347
 msgid "Hibernate"
 msgstr "Ruhezustand"
 
-#: constants.js:375 settings/AboutPage.js:9
+#: constants.js:378 settings/AboutPage.js:9
 msgid "ArcMenu"
 msgstr "ArcMenü"
 
-#: constants.js:376
+#: constants.js:379
 msgid "Brisk"
 msgstr "Brisk"
 
-#: constants.js:377
+#: constants.js:380
 msgid "Whisker"
 msgstr "Whisker"
 
-#: constants.js:378
+#: constants.js:381
 msgid "GNOME Menu"
 msgstr "GNOME-Menü"
 
-#: constants.js:379
+#: constants.js:382
 msgid "Mint"
 msgstr "Mint"
 
-#: constants.js:380
+#: constants.js:383
 msgid "Budgie"
 msgstr "Budgie"
 
-#: constants.js:383
+#: constants.js:386
 msgid "Unity"
 msgstr "Unity"
 
-#: constants.js:384
+#: constants.js:387
 msgid "Plasma"
 msgstr "Plasma"
 
-#: constants.js:385
+#: constants.js:388
 msgid "tognee"
 msgstr "Tognee"
 
-#: constants.js:386
+#: constants.js:389
 msgid "Insider"
 msgstr "Insider"
 
-#: constants.js:387
+#: constants.js:390
 msgid "Redmond"
 msgstr "Redmond"
 
-#: constants.js:388
+#: constants.js:391
 msgid "Windows"
 msgstr "Windows"
 
-#: constants.js:389
+#: constants.js:392
 msgid "11"
 msgstr "11"
 
-#: constants.js:390
+#: constants.js:393
 msgid "a.z."
 msgstr "a.z."
 
-#: constants.js:393
+#: constants.js:396
 msgid "Elementary"
 msgstr "Elementary"
 
-#: constants.js:394
+#: constants.js:397
 msgid "Chromebook"
 msgstr "Chromebook"
 
-#: constants.js:397
+#: constants.js:400
 msgid "Runner"
 msgstr "Runner"
 
-#: constants.js:398
+#: constants.js:401
 msgid "GNOME Overview"
 msgstr "GNOME-Übersicht"
 
-#: constants.js:401
+#: constants.js:404
 msgid "Raven"
 msgstr "Raven"
 
-#: constants.js:405
+#: constants.js:408
 msgid "Traditional"
 msgstr "Traditionell"
 
-#: constants.js:406
+#: constants.js:409
 msgid "Modern"
 msgstr "Modern"
 
-#: constants.js:407
+#: constants.js:410
 msgid "Touch"
 msgstr "Touch"
 
-#: constants.js:408
+#: constants.js:411
 msgid "Launcher"
 msgstr "Starter"
 
-#: constants.js:409
+#: constants.js:412
 msgid "Alternative"
 msgstr "Alternativ"
 
-#: menuButton.js:512 menulayouts/arcmenu.js:180 menulayouts/plasma.js:169
+#: menuButton.js:95
+msgid "App Icons Taskbar Settings"
+msgstr "Einstellungen für App Icons Taskbar"
+
+#: menuButton.js:99
+msgid "Dash to Panel Settings"
+msgstr "Dash to Panel-Einstellungen"
+
+#: menuButton.js:519 menulayouts/arcmenu.js:180 menulayouts/plasma.js:169
 #: menulayouts/raven.js:166 menulayouts/redmond.js:171
 #: menulayouts/tognee.js:137 menulayouts/unity.js:147
 #: menulayouts/windows.js:124 menuWidgets.js:1566 prefs.js:119
@@ -202,38 +210,34 @@ msgstr "Alternativ"
 msgid "ArcMenu Settings"
 msgstr "ArcMenü-Einstellungen"
 
-#: menuButton.js:516 settings/MenuSettingsPages/GeneralPage.js:110
+#: menuButton.js:523 settings/MenuSettingsPages/GeneralPage.js:110
 msgid "General Settings"
 msgstr "Allgemeine Einstellungen"
 
-#: menuButton.js:517
+#: menuButton.js:524
 msgid "Menu Theming"
 msgstr "Menüthemen"
 
-#: menuButton.js:518
+#: menuButton.js:525
 msgid "Change Menu Layout"
 msgstr "Menü-Layout anpassen"
 
-#: menuButton.js:519
+#: menuButton.js:526
 msgid "Layout Tweaks"
 msgstr "Optimierungen für Layouts"
 
-#: menuButton.js:520
+#: menuButton.js:527
 msgid "Customize Menu"
 msgstr "Menü anpassen"
 
-#: menuButton.js:521 settings/MenuSettingsPage.js:49
+#: menuButton.js:528 settings/MenuSettingsPage.js:49
 #: settings/MenuSettingsPage.js:179
 msgid "Button Settings"
 msgstr "Knopf-Einstellungen"
 
-#: menuButton.js:524 settings/AboutPage.js:17
+#: menuButton.js:531 settings/AboutPage.js:17
 msgid "About"
 msgstr "Info"
-
-#: menuButton.js:530
-msgid "Dash to Panel Settings"
-msgstr "Dash to Panel-Einstellungen"
 
 #: menulayouts/arcmenu.js:180 menulayouts/mint.js:219 menulayouts/plasma.js:169
 #: menulayouts/raven.js:166 menulayouts/redmond.js:171
@@ -530,8 +534,8 @@ msgid "Display ArcMenu on all Panels"
 msgstr "ArcMenü auf allen Leisten anzeigen"
 
 #: settings/GeneralPage.js:95
-msgid "Dash to Panel extension required"
-msgstr "Dash to Panel muss neu gestartet werden"
+msgid "Dash to Panel or App Icons Taskbar extension required"
+msgstr "Dash to Panel oder App Icons Taskbar müssen neu gestartet werden"
 
 #: settings/GeneralPage.js:111
 msgid "Always Prefer Top Panel"
@@ -620,7 +624,7 @@ msgid "New Hotkey"
 msgstr "Neues Tastenkürzel"
 
 #: settings/GeneralPage.js:425 settings/LayoutsPage.js:218
-#: settings/MenuSettingsPages/ListPinnedPage.js:584
+#: settings/MenuSettingsPages/ListPinnedPage.js:588
 msgid "Apply"
 msgstr "Anwenden"
 
@@ -884,13 +888,13 @@ msgid "Menu Button"
 msgstr "Menüknopf"
 
 #: settings/MenuSettingsPages/ButtonAppearancePage.js:29
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:142
-#: settings/MenuSettingsPages/ListPinnedPage.js:526
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:143
+#: settings/MenuSettingsPages/ListPinnedPage.js:527
 msgid "Icon"
 msgstr "Symbol"
 
 #: settings/MenuSettingsPages/ButtonAppearancePage.js:30
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:114
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:115
 msgid "Text"
 msgstr "Text"
 
@@ -915,98 +919,98 @@ msgstr "Erscheinungsbild"
 msgid "Padding"
 msgstr "Einbettung"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:126
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:127
 msgid "Icon Settings"
 msgstr "Symbol-Einstellungen"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:129
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:130
 msgid "Browse Icons"
 msgstr "Symbole ansehen"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:165
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:166
 msgid "Icon Size"
 msgstr "Symbolgröße"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:176
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:177
 msgid "Menu Button Styling"
 msgstr "Gestaltung der Menüschaltfläche"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:177
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:178
 #: settings/ThemingPage.js:45
 msgid "Results may vary with third party themes"
 msgstr "Die Ergebnisse können bei Themen von Drittanbietern variieren"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:181
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:187
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:193
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:182
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:188
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:194
 #: settings/ThemingPage.js:159 settings/ThemingPage.js:185
 #: settings/ThemingPage.js:191
 msgid "Foreground Color"
 msgstr "Vordergrundfarbe"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:184
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:187
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:185
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:188
 #: settings/ThemingPage.js:182 settings/ThemingPage.js:185
 msgid "Hover"
 msgstr "Berühren"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:184
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:190
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:185
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:191
 #: settings/ThemingPage.js:156 settings/ThemingPage.js:182
 #: settings/ThemingPage.js:188
 msgid "Background Color"
 msgstr "Hintergrundfarbe"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:190
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:193
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:191
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:194
 #: settings/ThemingPage.js:188 settings/ThemingPage.js:191
 msgid "Active"
 msgstr "Aktiv"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:196
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:197
 #: settings/ThemingPage.js:168
 msgid "Border Radius"
 msgstr "Eckenabrundung"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:199
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:200
 #: settings/ThemingPage.js:165
 msgid "Border Width"
 msgstr "Rahmengröße"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:199
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:200
 msgid "Background colors required if set to 0"
 msgstr "Hintergrundfarben erforderlich, wenn auf 0 gesetzt"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:202
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:203
 #: settings/ThemingPage.js:162
 msgid "Border Color"
 msgstr "Rahmenfarbe"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:346
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:351
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:347
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:352
 msgid "ArcMenu Icons"
 msgstr "ArcMenü-Symbole"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:374
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:375
 msgid "Distro Icons"
 msgstr "Distro-Symbole"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:410
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:443
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:411
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:444
 msgid "Custom Icon"
 msgstr "Benutzerdefiniertes Symbol"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:449
-#: settings/MenuSettingsPages/ListPinnedPage.js:536
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:450
+#: settings/MenuSettingsPages/ListPinnedPage.js:539
 msgid "Browse..."
 msgstr "Wählen..."
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:454
-#: settings/MenuSettingsPages/ListPinnedPage.js:542
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:455
+#: settings/MenuSettingsPages/ListPinnedPage.js:545
 msgid "Select an Icon"
 msgstr "Symbol auswählen"
 
-#: settings/MenuSettingsPages/ButtonAppearancePage.js:540
+#: settings/MenuSettingsPages/ButtonAppearancePage.js:541
 msgid "Legal disclaimer for Distro Icons"
 msgstr "Haftungsausschluss für Distro-Symbole"
 
@@ -1279,15 +1283,15 @@ msgstr "Verknüpfung bearbeiten"
 msgid "Title"
 msgstr "Titel"
 
-#: settings/MenuSettingsPages/ListPinnedPage.js:571
+#: settings/MenuSettingsPages/ListPinnedPage.js:574
 msgid "Command"
 msgstr "Befehl"
 
-#: settings/MenuSettingsPages/ListPinnedPage.js:574
+#: settings/MenuSettingsPages/ListPinnedPage.js:577
 msgid "Shortcut Path"
 msgstr "Pfad der Verknüpfung"
 
-#: settings/MenuSettingsPages/ListPinnedPage.js:584
+#: settings/MenuSettingsPages/ListPinnedPage.js:588
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -1384,11 +1388,11 @@ msgstr "Themen verwalten"
 msgid "Save Theme As..."
 msgstr "Thema speichern als…"
 
-#: settings/ThemingDialog.js:112
+#: settings/ThemingDialog.js:113
 msgid "Theme Name"
 msgstr "Name des Farbthemas"
 
-#: settings/ThemingDialog.js:129
+#: settings/ThemingDialog.js:130
 msgid "Save Theme"
 msgstr "Thema speichern"
 
