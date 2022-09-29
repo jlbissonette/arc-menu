@@ -193,8 +193,17 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
                 pinnedPage.frame.remove(child);
             });
 
+            let shortcutsArray = this._settings.get_strv('pinned-app-list');
             pinnedPage.frameRows = [];
-            pinnedPage._createFrame(this._settings.get_strv('pinned-app-list'));
+            let shortcutsDataArray = [];
+            for(let i = 0; i < shortcutsArray.length; i+=3){
+                shortcutsDataArray.push({
+                    name: shortcutsArray[i],
+                    icon: shortcutsArray[i + 1],
+                    command: shortcutsArray[i + 2]
+                });
+            }
+            pinnedPage._addRowsToFrame(shortcutsDataArray);
         });
 
         leafletPage = this.settingsLeaflet.append(new ListPinnedPage(this._settings, Constants.MenuSettingsListType.DIRECTORIES));

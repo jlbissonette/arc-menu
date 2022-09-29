@@ -317,7 +317,7 @@ var LayoutTweaksPage = GObject.registerClass({
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Brisk Menu Shortcuts")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.OTHER, 'brisk-shortcuts-list');
+        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.EXTRA_SHORTCUTS, 'brisk-shortcuts-list');
         pinnedAppsFrame.add(pinnedApps);
         this.mainBox.append(briskMenuTweaksFrame);
         this.mainBox.append(pinnedAppsFrame);
@@ -485,7 +485,7 @@ var LayoutTweaksPage = GObject.registerClass({
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Unity Layout Buttons")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.OTHER, 'unity-pinned-app-list');
+        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.EXTRA_SHORTCUTS, 'unity-pinned-app-list');
         pinnedAppsFrame.add(pinnedApps);
         this.mainBox.append(pinnedAppsFrame);
 
@@ -575,7 +575,7 @@ var LayoutTweaksPage = GObject.registerClass({
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Mint Layout Shortcuts")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.OTHER, 'mint-pinned-app-list');
+        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.EXTRA_SHORTCUTS, 'mint-pinned-app-list');
         pinnedAppsFrame.add(pinnedApps);
         this.mainBox.append(pinnedAppsFrame);
 

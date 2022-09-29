@@ -31,7 +31,7 @@ var ListOtherPage = GObject.registerClass(
         this._settings = settings;
         this.categoriesFrame = new Adw.PreferencesGroup();
 
-        this._createFrame(this._settings.get_value(this.settingString).deep_unpack());
+        this._addRowsToFrame(this._settings.get_value(this.settingString).deep_unpack());
         this.append(this.categoriesFrame);
         if(this.listType === Constants.MenuSettingsListType.POWER_OPTIONS){
             let powerDisplayStyleGroup = new Adw.PreferencesGroup({
@@ -41,15 +41,15 @@ var ListOtherPage = GObject.registerClass(
             powerDisplayStyles.append(_('Default'));
             powerDisplayStyles.append(_('In-Line'));
             powerDisplayStyles.append(_('Sub Menu'));
-            let powerDisplayStyleRow = new Adw.ComboRow({
+            this.powerDisplayStyleRow = new Adw.ComboRow({
                 title: _("Display Style"),
                 model: powerDisplayStyles,
                 selected: this._settings.get_enum('power-display-style')
             });
-            powerDisplayStyleRow.connect("notify::selected", (widget) => {
+            this.powerDisplayStyleRow.connect("notify::selected", (widget) => {
                 this._settings.set_enum('power-display-style', widget.selected)
             });
-            powerDisplayStyleGroup.add(powerDisplayStyleRow);
+            powerDisplayStyleGroup.add(this.powerDisplayStyleRow);
             this.append(powerDisplayStyleGroup);
         }
 
@@ -59,7 +59,10 @@ var ListOtherPage = GObject.registerClass(
             });
             this.frameRows = [];
 
-            this._createFrame(this._settings.get_default_value(this.settingString).deep_unpack());
+            if(this.powerDisplayStyleRow)
+                this.powerDisplayStyleRow.selected = 0;
+
+            this._addRowsToFrame(this._settings.get_default_value(this.settingString).deep_unpack());
             this.saveSettings();
         };
     }
@@ -70,13 +73,13 @@ var ListOtherPage = GObject.registerClass(
             return a.get_index() > b.get_index();
         })
         this.frameRows.forEach(child => {
-            array.push([child._enum, child._shouldShow]);
+            array.push([child.setting_type, child.switch_active]);
         });
 
         this._settings.set_value(this.settingString, new GLib.Variant('a(ib)', array));
     }
 
-    _createFrame(extraCategories){
+    _addRowsToFrame(extraCategories){
         for(let i = 0; i < extraCategories.length; i++){
             let categoryEnum = extraCategories[i][0];
             let name, iconString;
@@ -89,57 +92,24 @@ var ListOtherPage = GObject.registerClass(
                 iconString = Constants.Categories[categoryEnum].ICON
             }
 
-            let frameRow = new PW.DragRow();
-            frameRow._enum = extraCategories[i][0];
-            frameRow._shouldShow = extraCategories[i][1];
-            frameRow._name = _(name);
-            //frameRow._gicon used in PW.DragRow
-            frameRow._gicon = Gio.icon_new_for_string(iconString);
-            frameRow.hasSwitch = true;
-            frameRow.switchActive = frameRow._shouldShow;
+            const row = new PW.DragRow({
+                gicon: Gio.icon_new_for_string(iconString),
+                switch_enabled: true,
+                switch_active: extraCategories[i][1],
+            });
+            row.activatable_widget = row.switch;
+            row.setting_type = extraCategories[i][0];
+            row.title = _(name);
 
-            let applicationIcon = new Gtk.Image( {
-                gicon: frameRow._gicon,
-                pixel_size: 22
-            });
-            let dragImage = new Gtk.Image( {
-                gicon: Gio.icon_new_for_string("drag-symbolic"),
-                pixel_size: 12
-            });
-            frameRow.add_prefix(applicationIcon);
-            frameRow.add_prefix(dragImage);
-            frameRow.title = _(name);
+            row.connect("drag-drop-done", () => this.saveSettings() );
+            row.connect('switch-toggled', () => this.saveSettings() );
 
-            let buttonBox = new PW.EditEntriesBox({
-                frameRow: frameRow,
-                frame: this.categoriesFrame
-            });
+            const editEntryButton = new PW.EditEntriesBox({ row: row });
+            editEntryButton.connect("row-changed", () => this.saveSettings() );
 
-            let modifyButton = new Gtk.Switch({
-                valign: Gtk.Align.CENTER,
-                margin_start: 10,
-            });
-
-            frameRow.activatable_widget = modifyButton;
-            modifyButton.set_active(frameRow._shouldShow);
-            modifyButton.connect('notify::active', ()=> {
-                frameRow._shouldShow = modifyButton.get_active();
-                this.saveSettings();
-            });
-            buttonBox.connect("row-changed", () =>{
-                this.saveSettings();
-            });
-            frameRow.connect("drag-drop-done", () => {
-                this.saveSettings();
-            });
-            buttonBox.insert_column(0);
-            buttonBox.attach(Gtk.Separator.new(Gtk.Orientation.VERTICAL), 0, 0, 1, 1);
-            buttonBox.insert_column(0);
-            buttonBox.attach(modifyButton, 0, 0, 1, 1);
-
-            frameRow.add_suffix(buttonBox);
-            this.frameRows.push(frameRow);
-            this.categoriesFrame.add(frameRow);
+            row.add_suffix(editEntryButton);
+            this.frameRows.push(row);
+            this.categoriesFrame.add(row);
         }
     }
 });

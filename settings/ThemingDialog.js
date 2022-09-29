@@ -18,64 +18,48 @@ class ArcMenu_ManageThemesDialog extends PW.DialogWindow {
         let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
         for(let i = 0; i < menuThemes.length; i++) {
             let theme = menuThemes[i];
-
-            let themeRow = new PW.DragRow({
-                title: theme[0]
-            });
-            themeRow.theme = theme;
-
             let xpm = SettingsUtils.createXpmImage(theme[1], theme[2], theme[3], theme[8]);
-            let themePreviewImage = new Gtk.Image({
-                hexpand: false,
-                margin_end: 5,
-                pixel_size: 42
-            });
-            themePreviewImage.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_xpm_data(xpm));
 
-            themeRow._gicon = xpm;
-            themeRow._name = theme[0];
-
-            let dragImage = new Gtk.Image( {
-                gicon: Gio.icon_new_for_string("drag-symbolic"),
-                pixel_size: 12
+            const row = new PW.DragRow({
+                title: theme[0],
+                xpm_pixbuf: GdkPixbuf.Pixbuf.new_from_xpm_data(xpm),
+                icon_pixel_size: 42
             });
-            themeRow.add_prefix(themePreviewImage);
-            themeRow.add_prefix(dragImage);
-            this.pageGroup.add(themeRow);
+            this.pageGroup.add(row);
+            
+            row.theme = theme;
+ 
+            row.connect("drag-drop-done", () => this.saveSettings() );
 
-            let buttonBox = new PW.EditEntriesBox({
-                frameRow: themeRow,
-                modifyButton: true,
-                deleteButton: true
+            const editEntryButton = new PW.EditEntriesBox({
+                row: row,
+                allow_modify: true,
+                allow_delete: true
             });
-            themeRow.activatable_widget = buttonBox.editButton;
-            buttonBox.connect('modify', () => {
+            row.activatable_widget = editEntryButton;
+            row.add_suffix(editEntryButton);
+
+            editEntryButton.connect('modify', () => {
                 let dialog = new SaveThemeDialog(this._settings, this, theme[0]);
                 dialog.show();
                 dialog.connect('response', (_w, response) => {
                     if(response === Gtk.ResponseType.APPLY) {
                         theme.splice(0, 1, dialog.themeName);
-                        themeRow.title = dialog.themeName;
-                        themeRow.theme = theme;
+                        row.title = dialog.themeName;
+                        row.theme = theme;
                         this.saveSettings();
                         dialog.destroy();
                     }
                 });
             });
 
-            buttonBox.connect("row-changed", () =>{
-                this.saveSettings();
-            });
-            buttonBox.connect("row-deleted", () =>{
-                this.frameRows.splice(this.frameRows.indexOf(themeRow), 1);
-                this.saveSettings();
-            });
-            themeRow.connect("drag-drop-done", () => {
+            editEntryButton.connect("row-changed", () => this.saveSettings() );
+            editEntryButton.connect("row-deleted", () => {
+                this.frameRows.splice(this.frameRows.indexOf(row), 1);
                 this.saveSettings();
             });
 
-            themeRow.add_suffix(buttonBox);
-            this.frameRows.push(themeRow);
+            this.frameRows.push(row);
         }
     }
 
@@ -119,7 +103,7 @@ class ArcMenu_SaveThemeDialog extends PW.DialogWindow {
         if(this.themeName)
             themeNameEntry.set_text(this.themeName);
 
-        themeNameEntry.connect('changed',() => {
+        themeNameEntry.connect('changed', () => {
             if(themeNameEntry.get_text().length > 0)
                 saveButton.set_sensitive(true);
             else

@@ -63,8 +63,48 @@ var DialogWindow = GObject.registerClass({
 });
 
 var DragRow = GObject.registerClass({
+    Properties: {
+        'shortcut-name':  GObject.ParamSpec.string(
+            'shortcut-name', 'shortcut-name', 'shortcut-name',
+            GObject.ParamFlags.READWRITE,
+            ''),
+        'shortcut-icon':  GObject.ParamSpec.string(
+            'shortcut-icon', 'shortcut-icon', 'shortcut-icon',
+            GObject.ParamFlags.READWRITE,
+            ''),
+        'shortcut-command':  GObject.ParamSpec.string(
+            'shortcut-command', 'shortcut-command', 'shortcut-command',
+            GObject.ParamFlags.READWRITE,
+            ''),
+        'gicon':  GObject.ParamSpec.object(
+            'gicon', 'gicon', 'gicon',
+            GObject.ParamFlags.READWRITE,
+            Gio.Icon.$gtype),
+        'xpm-pixbuf':  GObject.ParamSpec.object(
+            'xpm-pixbuf', 'xpm-pixbuf', 'xpm-pixbuf',
+            GObject.ParamFlags.READWRITE,
+            GdkPixbuf.Pixbuf.$gtype),
+        'icon-pixel-size':  GObject.ParamSpec.int(
+            'icon-pixel-size', 'icon-pixel-size', 'icon-pixel-size',
+            GObject.ParamFlags.READWRITE,
+            1, GLib.MAXINT32, 22),
+        'switch-enabled':  GObject.ParamSpec.boolean(
+            'switch-enabled', 'switch-enabled', 'switch-enabled',
+            GObject.ParamFlags.READWRITE,
+            false),
+        'switch-active':  GObject.ParamSpec.boolean(
+            'switch-active', 'switch-active', 'switch-active',
+            GObject.ParamFlags.READWRITE,
+            false),
+        'change-enabled':  GObject.ParamSpec.boolean(
+            'change-enabled', 'change-enabled', 'change-enabled',
+            GObject.ParamFlags.READWRITE,
+            false),
+    },
     Signals: {
         'drag-drop-done': { },
+        'change-button-clicked': { },
+        'switch-toggled': { },
     },
 },class ArcMenu_DragRow extends Adw.ActionRow {
     _init(params) {
@@ -74,12 +114,61 @@ var DragRow = GObject.registerClass({
         });
         this.add_controller(dragSource);
 
+        this.icon = new Gtk.Image( {
+            gicon: this.gicon,
+            pixel_size: this.icon_pixel_size
+        });
+
+        if(this.xpm_pixbuf)
+            this.icon.set_from_pixbuf(this.xpm_pixbuf);
+
+        this.dragIcon = new Gtk.Image( {
+            gicon: Gio.icon_new_for_string("drag-symbolic"),
+            pixel_size: 12
+        });
+        this.add_prefix(this.icon);
+        this.add_prefix(this.dragIcon);
+
+        this.connect('notify::gicon', () => this.icon.gicon = this.gicon)
+    
         let dropTarget = new Gtk.DropTargetAsync({
             actions: Gdk.DragAction.MOVE
         });
         this.add_controller(dropTarget);
 
-        this.x = 0;
+        if(this.switch_enabled){
+            this.switch = new Gtk.Switch({
+                valign: Gtk.Align.CENTER,
+                vexpand: false,
+                margin_start: 10,
+                active: this.switch_active
+            });
+            this.switch.connect("notify::active", () => {
+                this.switch_active = this.switch.get_active();
+                this.emit('switch-toggled');
+            })
+            this.add_suffix(this.switch);
+            this.add_suffix(new Gtk.Separator({
+                orientation: Gtk.Orientation.VERTICAL,
+                margin_top: 10,
+                margin_bottom: 10
+            }));
+        }
+
+        if(this.change_enabled){
+            this.changeButton = new Button({
+                icon_name: 'text-editor-symbolic',
+            });
+            this.changeButton.connect('clicked', () => {
+                this.emit('change-button-clicked');
+            });
+            this.add_suffix(this.changeButton);
+            this.add_suffix(new Gtk.Separator({
+                orientation: Gtk.Orientation.VERTICAL,
+                margin_top: 10,
+                margin_bottom: 10
+            }));
+        }
 
         dragSource.connect("drag-begin", (self, gdkDrag) => {
             //get listbox parent
@@ -154,196 +243,174 @@ var DragRow = GObject.registerClass({
         dragWidget.set_size_request(alloc.width, alloc.height);
 
         let dragRow = new Adw.ActionRow({
-            title: _(this._name)
+            title: _(this.title),
+            css_classes: this.css_classes
         });
         dragWidget.append(dragRow);
         dragWidget.drag_highlight_row(dragRow);
 
-        let image;
-        if(this._gicon instanceof Gio.Icon){
-            image = new Gtk.Image( {
-                pixel_size: 22,
-                gicon: this._gicon
-            });
-        }
-        else{
-            image = new Gtk.Image( {
-                pixel_size: 42,
-            });
-            image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_xpm_data(this._gicon));
-        }
+        let icon = new Gtk.Image( {
+            pixel_size: this.icon_pixel_size,
+            gicon: this.gicon
+        });
+        dragRow.add_prefix(icon);
+
+        if(this.xpm_pixbuf)
+            icon.set_from_pixbuf(this.xpm_pixbuf);
 
         let dragImage = new Gtk.Image( {
             gicon: Gio.icon_new_for_string("drag-symbolic"),
             pixel_size: 12
         });
-
-        dragRow.add_prefix(image);
         dragRow.add_prefix(dragImage);
 
-        let grid = new Gtk.Grid({
-            margin_top: 0,
-            margin_bottom: 0,
-            vexpand: false,
-            valign: Gtk.Align.CENTER,
-            hexpand: false,
-            column_spacing: 10
-        })
-        let editButton = new Button({
-            icon_name: 'view-more-symbolic'
-        });
-        grid.attach(editButton, 0, 0, 1, 1);
-
-        if(this.hasSwitch){
+        if(this.switch_enabled){
             let modifyButton = new Gtk.Switch({
                 valign: Gtk.Align.CENTER,
                 margin_start: 10,
-                active: this.switchActive
+                active: this.switch_active
             });
-            grid.insert_column(0);
-            grid.attach(Gtk.Separator.new(Gtk.Orientation.VERTICAL), 0, 0, 1, 1);
-            grid.insert_column(0);
-            grid.attach(modifyButton, 0, 0, 1, 1);
+            dragRow.add_suffix(modifyButton);
+            dragRow.add_suffix(new Gtk.Separator({
+                orientation: Gtk.Orientation.VERTICAL,
+                margin_top: 10,
+                margin_bottom: 10
+            }));
         }
-        if(this.hasEditButton){
-            let editButton = new Button({
+
+        if(this.change_enabled){
+            let changeButton = new Button({
                 icon_name: 'text-editor-symbolic',
             });
-            grid.insert_column(0);
-            grid.attach(Gtk.Separator.new(Gtk.Orientation.VERTICAL), 0, 0, 1, 1);
-            grid.insert_column(0);
-            grid.attach(editButton, 0, 0, 1, 1);
+            dragRow.add_suffix(changeButton);
+            dragRow.add_suffix(new Gtk.Separator({
+                orientation: Gtk.Orientation.VERTICAL,
+                margin_top: 10,
+                margin_bottom: 10
+            }));
         }
-        dragRow.add_suffix(grid);
+
+        let editButton = new Button({
+            icon_name: 'view-more-symbolic'
+        });
+        dragRow.add_suffix(editButton);
 
         return dragWidget;
     }
 });
 
 var EditEntriesBox = GObject.registerClass({
+    Properties : {
+        'allow-modify':  GObject.ParamSpec.boolean(
+            'allow-modify', 'allow-modify', 'allow-modify',
+            GObject.ParamFlags.READWRITE,
+            false),
+        'allow-delete':  GObject.ParamSpec.boolean(
+            'allow-delete', 'allow-delete', 'allow-delete',
+            GObject.ParamFlags.READWRITE,
+            false),
+        'row':  GObject.ParamSpec.object(
+            'row', 'row', 'row',
+            GObject.ParamFlags.READWRITE,
+            Gtk.Widget.$gtype),
+    },
     Signals: {
         'modify': {},
         'change': {},
         'row-changed': {},
         'row-deleted': {}
     },
-},  class ArcMenu_EditEntriesBox extends Gtk.Grid{
+},  class ArcMenu_EditEntriesBox extends Gtk.MenuButton{
     _init(params){
         super._init({
-            margin_top: 0,
-            margin_bottom: 0,
-            vexpand: false,
-            valign: Gtk.Align.CENTER,
-            hexpand: false,
-            column_spacing: 10
-        });
-        let editPopover = new Gtk.Popover();
-        let frameRow = params.frameRow;
-
-        let modifyButton, deleteButton, changeButton;
-
-        if(params.modifyButton){
-            modifyButton = new Gtk.Button({
-                label: _("Modify"),
-                has_frame: false
-            });
-            modifyButton.connect('clicked', () => {
-                editPopover.popdown();
-                this.emit('modify');
-            });
-        }
-
-        if(params.changeButton){
-            changeButton = new Button({
-                icon_name: 'text-editor-symbolic',
-            });
-            changeButton.connect('clicked', () => {
-                editPopover.popdown();
-                this.emit('change');
-            });
-            this.changeAppButton = changeButton;
-        }
-
-        let editButton = new Gtk.MenuButton({
             icon_name: 'view-more-symbolic',
-            popover: editPopover,
-        });
-        this.editButton = editButton;
-
-        this.attach(editButton, 0, 0, 1, 1);
-
-        let editPopoverBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL
+            valign: Gtk.Align.CENTER,
+            popover: new Gtk.Popover(),
+            ...params
         });
 
-        editPopover.set_child(editPopoverBox);
+        let popoverBox = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            spacing: 3
+        });
+        this.popover.set_child(popoverBox);
+
+        this.modifyEntry = new Gtk.Button({
+            label: _("Modify"),
+            has_frame: false,
+        });
+        this.modifyEntry.connect('clicked', () => {
+            this.popover.popdown();
+            this.emit('modify');
+        });
+
+        let modifyEntryBox = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            visible: this.allow_modify,
+            spacing: 3
+        });
+        modifyEntryBox.append(this.modifyEntry);
+        modifyEntryBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+        popoverBox.append(modifyEntryBox);
 
         let moveUpButton = new Gtk.Button({
             label: _("Move Up"),
             has_frame: false
         });
         moveUpButton.connect('clicked', ()=> {
-            let parent = frameRow.get_parent();
-            let index = frameRow.get_index();
+            let parent = this.row.get_parent();
+            let index = this.row.get_index();
             if(index > 0){
-                parent.remove(frameRow);
-                parent.insert(frameRow, index - 1);
+                parent.remove(this.row);
+                parent.insert(this.row, index - 1);
             }
             parent.show();
-            editPopover.popdown();
+            this.popover.popdown();
             this.emit('row-changed');
         });
+        popoverBox.append(moveUpButton);
 
         let moveDownButton = new Gtk.Button({
             label: _("Move Down"),
             has_frame: false
         });
         moveDownButton.connect('clicked', ()=> {
-            let parent = frameRow.get_parent();
+            let parent = this.row.get_parent();
             let children = [...parent];
-            let index = frameRow.get_index();
+            let index = this.row.get_index();
             if(index + 1 < children.length) {
-                parent.remove(frameRow);
-                parent.insert(frameRow, index + 1);
+                parent.remove(this.row);
+                parent.insert(this.row, index + 1);
             }
             parent.show();
-            editPopover.popdown();
+            this.popover.popdown();
             this.emit('row-changed');
         });
+        popoverBox.append(moveDownButton);
 
-        if(params.deleteButton){
-            deleteButton = new Gtk.Button({
-                label: _("Remove"),
-                has_frame: false,
-            });
-            deleteButton.connect('clicked', ()=> {
-                let parent = frameRow.get_parent();
-                parent.remove(frameRow);
-                parent.show();
-                editPopover.popdown();
-                this.emit('row-deleted');
-            });
-        }
+        this.deleteEntry = new Gtk.Button({
+            label: _("Remove"),
+            has_frame: false,
+        });
+        this.deleteEntry.connect('clicked', ()=> {
+            let parent = this.row.get_parent();
+            parent.remove(this.row);
+            parent.show();
+            this.popover.popdown();
+            this.emit('row-deleted');
+        });
 
-        if(params.changeButton){
-            this.insert_column(0);
-            this.attach(Gtk.Separator.new(Gtk.Orientation.VERTICAL), 0, 0, 1, 1);
-            this.insert_column(0);
-            this.attach(changeButton, 0, 0, 1, 1);
-        }
+        let deleteEntryBox = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            visible: this.allow_delete,
+            spacing: 3
+        });
+        deleteEntryBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+        deleteEntryBox.append(this.deleteEntry);
+        popoverBox.append(deleteEntryBox);
 
-        if(params.modifyButton){
-            editPopoverBox.append(modifyButton);
-            editPopoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
-        }
-
-        editPopoverBox.append(moveUpButton);
-        editPopoverBox.append(moveDownButton);
-
-        if(params.deleteButton){
-            editPopoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
-            editPopoverBox.append(deleteButton);
-        }
+        this.connect('notify::allow-modify', () => modifyEntryBox.visible = this.allow_modify );
+        this.connect('notify::allow-delete', () => deleteEntryBox.visible = this.allow_delete );
     }
 });
 

@@ -210,7 +210,7 @@ var MenuSettingsListType = {
     PINNED_APPS: 0,
     APPLICATIONS: 1,
     DIRECTORIES: 2,
-    OTHER: 3,
+    EXTRA_SHORTCUTS: 3,
     POWER_OPTIONS: 4,
     EXTRA_CATEGORIES: 5,
     QUICK_LINKS: 6
