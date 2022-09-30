@@ -64,7 +64,7 @@ Additional credits:
 
 ### Translators
 
-**@[Nilvus](https://gitlab.com/Nilvus), @[steve.kossouho](https://gitlab.com/steve.kossouho) - French** | **@[Etamuk](https://gitlab.com/Etamuk) - German** | **@[alex4401](https://gitlab.com/alex4401) - Polish** | **@[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **@[sigbjokj](https://gitlab.com/sigbjokj), @[sssandum](https://gitlab.com/sssandum) - Norwegian**
+**@[Nilvus](https://gitlab.com/Nilvus), @[steve.kossouho](https://gitlab.com/steve.kossouho) - French** | **@[Etamuk](https://gitlab.com/Etamuk) - German** | **@[alex4401](https://gitlab.com/alex4401), @[Karpfly](https://gitlab.com/MacKarp) - Polish** | **@[frnogueira](https://gitlab.com/frnogueira), @[Z Bed](https://gitlab.com/zbed) - Brazilian Portuguese** | **@[sigbjokj](https://gitlab.com/sigbjokj), @[sssandum](https://gitlab.com/sssandum) - Norwegian**
 
  **@[Ivan](https://gitlab.com/vantu5z), @[Ser82-png](https://gitlab.com/Ser82-png) - Russian** | **@[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **@[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **@[jordim](https://gitlab.com/jordim) - Catalan** | **@[aylinux](https://gitlab.com/aylinux), @[libreajans](https://gitlab.com/libreajans) - Turkish**
  
