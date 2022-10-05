@@ -351,7 +351,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         let arcMenuIconsFlowBox = new PW.IconGrid();
         this.page.title = _("ArcMenu Icons");
         this.page.icon_name = 'arcmenu-logo-symbolic';
-        arcMenuIconsFlowBox.connect('child-activated', ()=> {
+        arcMenuIconsFlowBox.connect('child-activated', () => {
             distroIconsBox.unselect_all();
             customIconFlowBox.unselect_all();
             let selectedChild = arcMenuIconsFlowBox.get_selected_children();
@@ -361,8 +361,8 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         });
         this.pageGroup.add(arcMenuIconsFlowBox);
 
-        Constants.MenuIcons.forEach((icon)=>{
-            let iconName = icon.PATH.replace("/media/icons/menu_button_icons/icons/", '');
+        Constants.MenuIcons.forEach(icon => {
+            let iconName = icon.PATH.replace(Constants.MenuIconsPath, '');
             iconName = iconName.replace(".svg", '');
             let iconImage = new Gtk.Image({
                 icon_name: iconName,
@@ -379,7 +379,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         this.distroIconsPage.add(distroIconsGroup)
         this.add(this.distroIconsPage);
         let distroIconsBox = new PW.IconGrid();
-        distroIconsBox.connect('child-activated', ()=> {
+        distroIconsBox.connect('child-activated', () => {
             arcMenuIconsFlowBox.unselect_all();
             customIconFlowBox.unselect_all();
             let selectedChild = distroIconsBox.get_selected_children();
@@ -387,7 +387,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             this._settings.set_enum('menu-button-icon', Constants.MenuIcon.DISTRO_ICON);
             this._settings.set_int('distro-icon', selectedChildIndex);
         });
-        Constants.DistroIcons.forEach((icon)=>{
+        Constants.DistroIcons.forEach(icon => {
             let iconImage;
             if(icon.PATH === 'start-here-symbolic'){
                 iconImage = new Gtk.Image({
@@ -396,10 +396,10 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
                 });
             }
             else{
-                let iconName1 = icon.PATH.replace("/media/icons/menu_button_icons/distro_icons/", '');
-                iconName1 = iconName1.replace(".svg", '');
+                let iconName = icon.PATH.replace(Constants.DistroIconsPath, '');
+                iconName = iconName.replace(".svg", '');
                 iconImage = new Gtk.Image({
-                    icon_name: iconName1,
+                    icon_name: iconName,
                     pixel_size: 36
                 });
             }
@@ -421,7 +421,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         let customIconFlowBox = new PW.IconGrid();
         customIconFlowBox.vexpand = false;
         customIconFlowBox.homogeneous = false;
-        customIconFlowBox.connect('child-activated', ()=> {
+        customIconFlowBox.connect('child-activated', () => {
             arcMenuIconsFlowBox.unselect_all();
             distroIconsBox.unselect_all();
             let customIconPath = this._settings.get_string('custom-menu-button-icon');
@@ -512,9 +512,9 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             icon_name: 'help-about-symbolic',
             halign: Gtk.Align.START
         });
-        distroInfoButton.connect('clicked', ()=> {
+        distroInfoButton.connect('clicked', () => {
             let dialog = new DistroIconsDisclaimerWindow(this._settings, this);
-            dialog.connect ('response', ()=> dialog.destroy());
+            dialog.connect ('response', () => dialog.destroy());
             dialog.show();
         });
         distroInfoButtonGroup.add(distroInfoButton);

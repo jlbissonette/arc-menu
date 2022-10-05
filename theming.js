@@ -2,6 +2,8 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Constants = Me.imports.constants;
 const {Clutter, Gio, GLib, St} = imports.gi;
 
+Gio._promisify(Gio.File.prototype, 'replace_contents_bytes_async', 'replace_contents_finish');
+
 function getStylesheetFile(){
     try {
         const directoryPath = GLib.build_filenamev([GLib.get_home_dir(), ".local/share/ArcMenu"]);
@@ -30,7 +32,7 @@ function unloadStylesheet(){
     theme.unload_stylesheet(Me.customStylesheet);
 }
 
-function updateStylesheet(settings){
+async function updateStylesheet(settings){
     let stylesheet = Me.customStylesheet;
 
     if(!stylesheet){
@@ -119,7 +121,8 @@ function updateStylesheet(settings){
     }
 
     if(settings.get_boolean('override-menu-theme')){
-        customMenuThemeCSS = `.arcmenu-menu{
+        customMenuThemeCSS = `
+        .arcmenu-menu{
             font-size: ${menuFontSize}pt;
             color: ${menuFGColor};
         }
@@ -211,18 +214,20 @@ function updateStylesheet(settings){
     try{
         let bytes = new GLib.Bytes(customStylesheetCSS);
 
-        stylesheet.replace_contents_bytes_async(bytes, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null, (stylesheet, res) => {
-            if(!stylesheet.replace_contents_finish(res))
-                throw new Error("ArcMenu - Error replacing contents of custom stylesheet file.");
+        const [success, _etag] = await stylesheet.replace_contents_bytes_async(bytes, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
 
-            let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
+        if(!success){
+            log("ArcMenu - Error replacing contents of custom stylesheet file. " + e.message);
+            return false;
+        }
 
-            unloadStylesheet();
-            Me.customStylesheet = stylesheet;
-            theme.load_stylesheet(Me.customStylesheet);
+        let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
 
-            return true;
-        });
+        unloadStylesheet();
+        Me.customStylesheet = stylesheet;
+        theme.load_stylesheet(Me.customStylesheet);
+
+        return true;
     }
     catch(e){
         log("ArcMenu - Error updating custom stylesheet. " + e.message);

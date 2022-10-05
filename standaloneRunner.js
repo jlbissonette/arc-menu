@@ -27,9 +27,6 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
         this.arcMenu = new MenuButton.ArcMenu(this.dummyWidget, 0.5, St.Side.TOP, this);
         this.arcMenu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
 
-        this.arcMenu.actor.add_style_class_name('panel-menu');
-        this.arcMenu.actor.add_style_class_name('arcmenu-menu');
-
         this.menuManager = new PopupMenu.PopupMenuManager(Main.panel);
         this.menuManager._changeMenu = (menu) => {};
         this.menuManager.addMenu(this.arcMenu);

@@ -94,7 +94,7 @@ class ArcMenu_LayoutsPage extends Adw.PreferencesPage {
             });
             leafletPage = this.subLeaflet.append(menuLayoutsBox);
             leafletPage.name = `Layout_${style.TITLE}`;
-            tile.connect('activated', ()=> {
+            tile.connect('activated', () => {
                 this.subLeaflet.set_visible_child_name(`Layout_${style.TITLE}`);
                 this.mainLeaflet.set_visible_child_name("SubView");
             });
@@ -221,7 +221,7 @@ var LayoutsCategoryPage = GObject.registerClass({
             css_classes: ['suggested-action']
         });
 
-        this.applyButton.connect('clicked', ()=> {
+        this.applyButton.connect('clicked', () => {
             this.clearSelection();
             this.emit('menu-layout-response', Gtk.ResponseType.APPLY);
         });
@@ -234,7 +234,7 @@ var LayoutsCategoryPage = GObject.registerClass({
             css_classes: ['suggested-action']
         });
 
-        backButton.connect('clicked', ()=> {
+        backButton.connect('clicked', () => {
             this.clearSelection();
             this.emit('menu-layout-response', Gtk.ResponseType.CANCEL);
         });

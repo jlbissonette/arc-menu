@@ -29,7 +29,7 @@ class ArcMenu_MiscPage extends Adw.PreferencesPage {
         let settingsImportInfoButton = new PW.Button({
             icon_name: 'help-about-symbolic'
         });
-        settingsImportInfoButton.connect('clicked', ()=> {
+        settingsImportInfoButton.connect('clicked', () => {
             let dialog = new Gtk.MessageDialog({
                 text: "<b>" + _("Export or Import ArcMenu Settings") + '</b>',
                 secondary_text:_('Importing will overwrite current settings.'),
@@ -49,7 +49,7 @@ class ArcMenu_MiscPage extends Adw.PreferencesPage {
             label: _("Import"),
             valign: Gtk.Align.CENTER
         });
-        importButton.connect('clicked', ()=> {
+        importButton.connect('clicked', () => {
             this._showFileChooser(
                 _('Import settings'),
                 { action: Gtk.FileChooserAction.OPEN },
@@ -81,7 +81,7 @@ class ArcMenu_MiscPage extends Adw.PreferencesPage {
             label: _("Export"),
             valign: Gtk.Align.CENTER
         });
-        exportButton.connect('clicked', ()=> {
+        exportButton.connect('clicked', () => {
             this._showFileChooser(
                 _('Export settings'),
                 { action: Gtk.FileChooserAction.SAVE},

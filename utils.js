@@ -240,25 +240,25 @@ function activateCategory(currentCategory, menuLayout, menuItem, extraParams = f
 }
 
 function getMenuButtonIcon(settings, path){
-    let iconType = settings.get_enum('menu-button-icon');
+    const iconType = settings.get_enum('menu-button-icon');
 
     if(iconType === Constants.MenuIcon.CUSTOM){
         if(path && GLib.file_test(path, GLib.FileTest.IS_REGULAR))
             return path;
     }
     else if(iconType === Constants.MenuIcon.DISTRO_ICON){
-        let iconEnum = settings.get_int('distro-icon');
-        path = Me.path + Constants.DistroIcons[iconEnum].PATH;
+        const iconEnum = settings.get_int('distro-icon');
+        const iconPath = Me.path + Constants.DistroIcons[iconEnum].PATH;
         if(Constants.DistroIcons[iconEnum].PATH === 'start-here-symbolic')
             return 'start-here-symbolic';
-        else if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
-            return path;
+        else if(GLib.file_test(iconPath, GLib.FileTest.IS_REGULAR))
+            return iconPath;
     }
     else{
-        let iconEnum = settings.get_int('arc-menu-icon');
-        path = Me.path + Constants.MenuIcons[iconEnum].PATH;
-        if(GLib.file_test(path, GLib.FileTest.IS_REGULAR))
-            return path;
+        const iconEnum = settings.get_int('arc-menu-icon');
+        const iconPath = Me.path + Constants.MenuIcons[iconEnum].PATH;
+        if(GLib.file_test(iconPath, GLib.FileTest.IS_REGULAR))
+            return iconPath;
     }
 
     global.log("ArcMenu Error - Failed to set menu button icon. Set to System Default.");
@@ -283,6 +283,7 @@ function areaOfTriangle(p1, p2, p3){
     return Math.abs((p1[0] * (p2[1] - p3[1]) + p2[0] * (p3[1] - p1[1]) + p3[0] * (p1[1] - p2[1])) / 2.0);
 }
 
+//modified from GNOME shell's ensureActorVisibleInScrollView()
 function ensureActorVisibleInScrollView(actor) {
     let box = actor.get_allocation_box();
     let y1 = box.y1, y2 = box.y2;
@@ -313,6 +314,18 @@ function ensureActorVisibleInScrollView(actor) {
     else
         return;
     adjustment.set_value(value);
+}
+
+//modified from GNOME shell to allow opening other extension setttings
+function openPrefs(uuid) {
+    try {
+        const extensionManager = imports.ui.main.extensionManager;
+        extensionManager.openExtensionPrefs(uuid, '', {});
+    } catch (e) {
+        if (e.name === 'ImportError')
+            throw new Error('openPrefs() cannot be called from preferences');
+        logError(e, 'Failed to open extension preferences');
+    }
 }
 
 function getDashToPanelPosition(settings, index){

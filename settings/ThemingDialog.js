@@ -116,7 +116,7 @@ class ArcMenu_SaveThemeDialog extends PW.DialogWindow {
             halign: Gtk.Align.END,
             css_classes: ['suggested-action']
         });
-        saveButton.connect('clicked', ()=> {
+        saveButton.connect('clicked', () => {
             this.themeName = themeNameEntry.get_text();
             this.emit('response', Gtk.ResponseType.APPLY);
         });

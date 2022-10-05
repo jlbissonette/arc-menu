@@ -499,7 +499,7 @@ var BaseLayout = class {
                 this._updatePinnedAppsWebBrowser(pinnedApps);
 
             let pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2], this.layoutProperties.DisplayType, isContainedInCategory);
-            pinnedAppsMenuItem.connect('saveSettings', ()=> {
+            pinnedAppsMenuItem.connect('saveSettings', () => {
                 let array = [];
                 for(let i = 0; i < this.pinnedAppsArray.length; i++){
                     array.push(this.pinnedAppsArray[i]._name);

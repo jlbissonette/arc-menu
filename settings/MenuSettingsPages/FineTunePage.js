@@ -100,7 +100,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         let multiLinedLabelInfoButton = new PW.Button({
                 icon_name: 'help-about-symbolic'
         });
-        multiLinedLabelInfoButton.connect('clicked', ()=> {
+        multiLinedLabelInfoButton.connect('clicked', () => {
             let dialog = new Gtk.MessageDialog({
                 text: "<b>" + _("Multi-Lined Labels") + '</b>\n' + _('Enable/Disable multi-lined labels on large application icon layouts.'),
                 use_markup: true,

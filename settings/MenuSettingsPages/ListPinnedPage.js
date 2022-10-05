@@ -71,7 +71,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
             let addMoreButton = new PW.Button({
                 icon_name: 'list-add-symbolic',
             });
-            addMoreButton.connect('clicked', ()=> {
+            addMoreButton.connect('clicked', () => {
                 let dialog = new AddAppsToPinnedListWindow(this._settings, this, this.listType, this.settingString);
                 dialog.show();
                 dialog.connect('response', (_w, response) => {
@@ -105,7 +105,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
             let addCustomButton = new PW.Button({
                 icon_name: 'list-add-symbolic',
             });
-            addCustomButton.connect('clicked', ()=> {
+            addCustomButton.connect('clicked', () => {
                 let dialog = new AddCustomLinkDialogWindow(this._settings, this, this.listType);
                 dialog.show();
                 dialog.connect('response', (_w, response) => {
@@ -583,7 +583,7 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
             cmdEntry.text = this.shortcutData.command;
         }
 
-        addButton.connect('clicked', ()=> {
+        addButton.connect('clicked', () => {
             this.shortcutData = {
                 name: nameEntry.get_text(),
                 icon: iconEntry.get_text(),

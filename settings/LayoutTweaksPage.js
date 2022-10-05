@@ -37,7 +37,7 @@ var LayoutTweaksPage = GObject.registerClass({
             css_classes: ['suggested-action']
         });
         backButton.halign = Gtk.Align.START;
-        backButton.connect('clicked', ()=> {
+        backButton.connect('clicked', () => {
             this.emit('response', -20);
         });
         this.headerBox = new Gtk.Grid({
@@ -506,7 +506,7 @@ var LayoutTweaksPage = GObject.registerClass({
         let infoButton = new PW.Button({
             icon_name: 'help-about-symbolic'
         });
-        infoButton.connect('clicked', ()=> {
+        infoButton.connect('clicked', () => {
             let dialog = new Gtk.MessageDialog({
                 text: "<b>" + _("Adjust the position of the separator in the button panel") + '</b>',
                 use_markup: true,
@@ -596,7 +596,7 @@ var LayoutTweaksPage = GObject.registerClass({
         let infoButton = new PW.Button({
             icon_name: 'help-about-symbolic'
         });
-        infoButton.connect('clicked', ()=> {
+        infoButton.connect('clicked', () => {
             let dialog = new Gtk.MessageDialog({
                 text: "<b>" + _("Adjust the position of the separator in the button panel") + '</b>',
                 use_markup: true,

@@ -707,7 +707,7 @@ var RunnerTweaksButton = GObject.registerClass(class ArcMenu_RunnerTweaksButton 
     activate(event) {
         super.activate(event);
         this._menuLayout._settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.RUNNER_TWEAKS);
-        Util.spawnCommandLine(Constants.ShortcutCommands.ARCMENU_SETTINGS);
+        ExtensionUtils.openPrefs();
     }
 });
 

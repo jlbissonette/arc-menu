@@ -357,7 +357,7 @@ var EditEntriesBox = GObject.registerClass({
             label: _("Move Up"),
             has_frame: false
         });
-        moveUpButton.connect('clicked', ()=> {
+        moveUpButton.connect('clicked', () => {
             let parent = this.row.get_parent();
             let index = this.row.get_index();
             if(index > 0){
@@ -374,7 +374,7 @@ var EditEntriesBox = GObject.registerClass({
             label: _("Move Down"),
             has_frame: false
         });
-        moveDownButton.connect('clicked', ()=> {
+        moveDownButton.connect('clicked', () => {
             let parent = this.row.get_parent();
             let children = [...parent];
             let index = this.row.get_index();
@@ -392,7 +392,7 @@ var EditEntriesBox = GObject.registerClass({
             label: _("Remove"),
             has_frame: false,
         });
-        this.deleteEntry.connect('clicked', ()=> {
+        this.deleteEntry.connect('clicked', () => {
             let parent = this.row.get_parent();
             parent.remove(this.row);
             parent.show();
