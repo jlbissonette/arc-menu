@@ -350,6 +350,7 @@ var DistroIcons = [
     { PATH: '/media/icons/menu_button_icons/distro_icons/voyager-logo-symbolic.svg'},
     { PATH: '/media/icons/menu_button_icons/distro_icons/zorin-logo-symbolic.svg'},
     { PATH: '/media/icons/menu_button_icons/distro_icons/endeavour-logo-symbolic.svg'},
+    { PATH: '/media/icons/menu_button_icons/distro_icons/nobara-logo-symbolic.svg'},
 ]
 
 var MenuLayout = {
