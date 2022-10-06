@@ -345,7 +345,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
     _init(settings, parent) {
         this._settings = settings;
         super._init(_('ArcMenu Icons'), parent);
-        this.set_default_size(475, 400);
+        this.set_default_size(475, 475);
         this.search_enabled = false;
 
         let arcMenuIconsFlowBox = new PW.IconGrid();
@@ -388,22 +388,28 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             this._settings.set_int('distro-icon', selectedChildIndex);
         });
         Constants.DistroIcons.forEach(icon => {
-            let iconImage;
-            if(icon.PATH === 'start-here-symbolic'){
-                iconImage = new Gtk.Image({
-                    icon_name: 'start-here-symbolic',
-                    pixel_size: 36
-                });
-            }
-            else{
-                let iconName = icon.PATH.replace(Constants.DistroIconsPath, '');
-                iconName = iconName.replace(".svg", '');
-                iconImage = new Gtk.Image({
-                    icon_name: iconName,
-                    pixel_size: 36
-                });
-            }
-            distroIconsBox.add(iconImage);
+            let iconName = icon.PATH;
+
+            if(icon.PATH !== 'start-here-symbolic')
+                iconName = iconName.replace(Constants.DistroIconsPath, '').replace('.svg', '');
+
+            let box = new Gtk.Box({
+                orientation: Gtk.Orientation.VERTICAL,
+                spacing: 4,
+                margin_top: 4,
+                margin_bottom: 4,
+                margin_start: 4,
+                margin_end: 4,
+            });
+            box.append(new Gtk.Image({
+                icon_name: iconName,
+                pixel_size: 36,
+            }));
+            box.append(new Gtk.Label({
+                label: icon.NAME,
+                css_classes: ['caption']
+            }));
+            distroIconsBox.add(box);
         });
         distroIconsGroup.add(distroIconsBox);
 
