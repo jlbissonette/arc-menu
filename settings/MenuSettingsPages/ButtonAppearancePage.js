@@ -351,7 +351,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
 
         let arcMenuIconsFlowBox = new PW.IconGrid();
         this.page.title = _("ArcMenu Icons");
-        this.page.icon_name = 'arcmenu-logo-symbolic';
+        this.page.icon_name = 'icon-arcmenu-logo-symbolic';
         arcMenuIconsFlowBox.connect('child-activated', () => {
             distroIconsBox.unselect_all();
             customIconFlowBox.unselect_all();

@@ -46,7 +46,7 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
 
         this.menuSettingsStackListBox = new PW.StackListBox(this);
         this.menuSettingsStackListBox.addRow("MenuSettingsGeneral", _("Menu Settings"), 'settings-settings-symbolic');
-        this.menuSettingsStackListBox.addRow("ButtonSettings", _("Button Settings"), 'arcmenu-logo-symbolic');
+        this.menuSettingsStackListBox.addRow("ButtonSettings", _("Button Settings"), 'icon-arcmenu-logo-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsPinnedApps", _("Pinned Apps"), 'view-pin-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsShortcutDirectories", _("Directory Shortcuts"), 'folder-documents-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsShortcutApplications", _("Application Shortcuts"), 'preferences-desktop-apps-symbolic');

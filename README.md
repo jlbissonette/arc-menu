@@ -52,13 +52,13 @@ Additional credits:
 
 ### Contributors
 
-**@[fishears](https://github.com/fishears/Arc-Menu)** | **@[JasonLG1979](https://github.com/JasonLG1979)** | **@[itmitica](https://github.com/itmitica)** | **@[vikaig](https://gitlab.com/vikaig)** | **@[MagneFire](https://gitlab.com/MagneFire)**
+**@[fishears](https://github.com/fishears)** | **@[JasonLG1979](https://github.com/JasonLG1979)** | **@[itmitica](https://github.com/itmitica)** | **@[vikaig](https://gitlab.com/vikaig)** | **@[MagneFire](https://gitlab.com/MagneFire)**
 
 **@[tognee](https://gitlab.com/tognee)** | **@[hlechner](https://gitlab.com/hlechner)** | **@[vanillajonathan](https://gitlab.com/vanillajonathan)** | **@[epskampie](https://gitlab.com/epskampie)** | **@[GnomeBook](https://gitlab.com/GnomeBook)** 
 
 **@[charlesg99](https://github.com/charlesg99)** | **@[harshadgavali](https://gitlab.com/harshadgavali)** | **@[O. Giesmann ](https://gitlab.com/Etamuk)** | **@[aleayr ](https://gitlab.com/aleayr)**
 
-**@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee/Arc-Menu)** | **@[aleayr ](https://gitlab.com/aleayr)**
+**@[JasonLG1979](https://github.com/JasonLG1979)**  | **@[lexruee](https://github.com/lexruee)** | **@[aleayr ](https://gitlab.com/aleayr)**
 
 -----
 
