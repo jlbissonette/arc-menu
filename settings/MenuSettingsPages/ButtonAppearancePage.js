@@ -8,6 +8,8 @@ const PW = Me.imports.prefsWidgets;
 const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
+const ICON_SIZE = 32;
+
 var ButtonAppearancePage = GObject.registerClass(
 class ArcMenu_ButtonAppearancePage extends Gtk.Box {
     _init(settings) {
@@ -356,7 +358,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             customIconFlowBox.unselect_all();
             let selectedChild = arcMenuIconsFlowBox.get_selected_children();
             let selectedChildIndex = selectedChild[0].get_index();
-            this._settings.set_enum('menu-button-icon', Constants.MenuIcon.ARCMENU_ICON);
+            this._settings.set_enum('menu-button-icon', Constants.MenuIconType.MENU_ICON);
             this._settings.set_int('arc-menu-icon', selectedChildIndex);
         });
         this.pageGroup.add(arcMenuIconsFlowBox);
@@ -366,7 +368,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             iconName = iconName.replace(".svg", '');
             let iconImage = new Gtk.Image({
                 icon_name: iconName,
-                pixel_size: 36
+                pixel_size: ICON_SIZE
             });
             arcMenuIconsFlowBox.add(iconImage);
         });
@@ -384,7 +386,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             customIconFlowBox.unselect_all();
             let selectedChild = distroIconsBox.get_selected_children();
             let selectedChildIndex = selectedChild[0].get_index();
-            this._settings.set_enum('menu-button-icon', Constants.MenuIcon.DISTRO_ICON);
+            this._settings.set_enum('menu-button-icon', Constants.MenuIconType.DISTRO_ICON);
             this._settings.set_int('distro-icon', selectedChildIndex);
         });
         Constants.DistroIcons.forEach(icon => {
@@ -396,14 +398,10 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             let box = new Gtk.Box({
                 orientation: Gtk.Orientation.VERTICAL,
                 spacing: 4,
-                margin_top: 4,
-                margin_bottom: 4,
-                margin_start: 4,
-                margin_end: 4,
             });
             box.append(new Gtk.Image({
                 icon_name: iconName,
-                pixel_size: 36,
+                pixel_size: ICON_SIZE,
             }));
             box.append(new Gtk.Label({
                 label: icon.NAME,
@@ -432,12 +430,12 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             distroIconsBox.unselect_all();
             let customIconPath = this._settings.get_string('custom-menu-button-icon');
             this._settings.set_string('custom-menu-button-icon', customIconPath)
-            this._settings.set_enum('menu-button-icon', Constants.MenuIcon.CUSTOM);
+            this._settings.set_enum('menu-button-icon', Constants.MenuIconType.CUSTOM);
         });
         customIconBox.append(customIconFlowBox);
         let customIconImage = new Gtk.Image({
             gicon: Gio.icon_new_for_string(this._settings.get_string('custom-menu-button-icon')),
-            pixel_size: 36
+            pixel_size: ICON_SIZE
         });
         customIconFlowBox.add(customIconImage);
 
@@ -476,7 +474,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
                     distroIconsBox.unselect_all();
                     customIconImage.gicon = Gio.icon_new_for_string(dialog.get_file().get_path());
                     this._settings.set_string('custom-menu-button-icon', dialog.get_file().get_path());
-                    this._settings.set_enum('menu-button-icon', Constants.MenuIcon.CUSTOM);
+                    this._settings.set_enum('menu-button-icon', Constants.MenuIconType.CUSTOM);
                     customIconFlowBox.select_child(customIconFlowBox.get_child_at_index(0));
                     dialog.destroy();
                 }
@@ -491,7 +489,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         customIconBox.append(fileChooserFrame);
         customIconGroup.add(customIconBox);
 
-        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARCMENU_ICON){
+        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIconType.MENU_ICON){
             let children = arcMenuIconsFlowBox.childrenCount;
             for(let i = 0; i < children; i++){
                 if(i === this._settings.get_int('arc-menu-icon')){
@@ -500,7 +498,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
                 }
             }
         }
-        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.DISTRO_ICON){
+        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIconType.DISTRO_ICON){
             let children = distroIconsBox.childrenCount;
             for(let i = 0; i < children; i++){
                 if(i === this._settings.get_int('distro-icon')){
@@ -509,7 +507,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
                 }
             }
         }
-        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.CUSTOM){
+        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIconType.CUSTOM){
             customIconFlowBox.select_child(customIconFlowBox.get_child_at_index(0));
         }
 
@@ -530,11 +528,11 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
     }
 
     setVisibleChild(){
-        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.ARCMENU_ICON)
+        if(this._settings.get_enum('menu-button-icon') === Constants.MenuIconType.MENU_ICON)
             this.set_visible_page(this.page);
-        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.DISTRO_ICON)
+        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIconType.DISTRO_ICON)
             this.set_visible_page(this.distroIconsPage);
-        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIcon.CUSTOM)
+        else if(this._settings.get_enum('menu-button-icon') === Constants.MenuIconType.CUSTOM)
             this.set_visible_page(this.customIconPage);
     }
 });

@@ -242,11 +242,11 @@ function activateCategory(currentCategory, menuLayout, menuItem, extraParams = f
 function getMenuButtonIcon(settings, path){
     const iconType = settings.get_enum('menu-button-icon');
 
-    if(iconType === Constants.MenuIcon.CUSTOM){
+    if(iconType === Constants.MenuIconType.CUSTOM){
         if(path && GLib.file_test(path, GLib.FileTest.IS_REGULAR))
             return path;
     }
-    else if(iconType === Constants.MenuIcon.DISTRO_ICON){
+    else if(iconType === Constants.MenuIconType.DISTRO_ICON){
         const iconEnum = settings.get_int('distro-icon');
         const iconPath = Me.path + Constants.DistroIcons[iconEnum].PATH;
         if(Constants.DistroIcons[iconEnum].PATH === 'start-here-symbolic')
@@ -261,7 +261,7 @@ function getMenuButtonIcon(settings, path){
             return iconPath;
     }
 
-    global.log("ArcMenu Error - Failed to set menu button icon. Set to System Default.");
+    log("ArcMenu Error - Failed to set menu button icon. Set to System Default.");
     return 'start-here-symbolic';
 }
 

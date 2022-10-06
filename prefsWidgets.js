@@ -490,21 +490,24 @@ var StackListBox = GObject.registerClass(class ArcMenu_StackListBox extends Gtk.
 var IconGrid = GObject.registerClass(class ArcMenu_IconGrid extends Gtk.FlowBox{
     _init() {
         super._init({
-            max_children_per_line: 9,
-            row_spacing: 10,
-            column_spacing: 10,
+            max_children_per_line: 7,
+            row_spacing: 4,
+            column_spacing: 4,
             vexpand: true,
             hexpand: false,
             valign: Gtk.Align.START,
             halign: Gtk.Align.CENTER,
             homogeneous: true,
-            selection_mode: Gtk.SelectionMode.SINGLE
+            selection_mode: Gtk.SelectionMode.SINGLE,
         });
         this.childrenCount = 0;
     }
 
     add(widget){
-        this.insert(widget, -1);
+        widget.margin_top = widget.margin_bottom = 
+                widget.margin_start = widget.margin_end = 4;
+
+        this.append(widget);
         this.childrenCount++;
     }
 });

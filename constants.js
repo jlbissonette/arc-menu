@@ -213,7 +213,7 @@ var MenuSettingsListType = {
     EXTRA_SHORTCUTS: 3,
     POWER_OPTIONS: 4,
     EXTRA_CATEGORIES: 5,
-    QUICK_LINKS: 6
+    QUICK_LINKS: 6,
 };
 
 var MenuButtonAppearance = {
@@ -222,12 +222,6 @@ var MenuButtonAppearance = {
     ICON_TEXT: 2,
     TEXT_ICON: 3,
     NONE: 4
-};
-
-var MenuIcon = {
-    ARCMENU_ICON: 0,
-    DISTRO_ICON: 1,
-    CUSTOM: 2
 };
 
 var PowerType = {
@@ -256,7 +250,17 @@ var PowerOptions = [
     { TYPE: PowerType.HIBERNATE, ICON: 'document-save-symbolic', NAME: _("Hibernate") },
 ];
 
+//Icon type for the menu button
+//set 'menu-button-icon' enum setting to value of desired icon type.
+var MenuIconType = {
+    MENU_ICON: 0,
+    DISTRO_ICON: 1,
+    CUSTOM: 2
+};
+
 var MenuIconsPath = '/media/icons/menu_button_icons/icons/';
+//Object order in MenuIcons array corresponds to the integer value of 'arc-menu-icon' setting
+//i.e 'arc-menu-icon' value of 0 is arcmenu-logo-symbolic.
 var MenuIcons = [
     { PATH: MenuIconsPath + 'arcmenu-logo-symbolic.svg'},
     { PATH: MenuIconsPath + 'arcmenu-logo-alt-symbolic.svg'},
@@ -332,8 +336,10 @@ var MenuIcons = [
 ]
 
 var DistroIconsPath = '/media/icons/menu_button_icons/distro_icons/';
+//Object order in DistroIcons array corresponds to the integer value of 'distro-icon' setting
+//i.e 'distro-icon' value of 3 is manjaro-logo.
 var DistroIcons = [
-    { PATH: 'start-here-symbolic', NAME: _('Default') },
+    { PATH: 'start-here-symbolic', NAME: _('System') },
     { PATH: DistroIconsPath + 'debian-logo-symbolic.svg', NAME: 'Debian' },
     { PATH: DistroIconsPath + 'fedora-logo-symbolic.svg', NAME: 'Fedora' },
     { PATH: DistroIconsPath + 'manjaro-logo-symbolic.svg', NAME: 'Manjaro' },

@@ -531,7 +531,7 @@ var BaseLayout = class {
                 browserName += ".desktop";
             }
             catch(error){
-                global.log("ArcMenu Error - Failed to find default web browser. Removing placeholder pinned app.")
+                log("ArcMenu Error - Failed to find default web browser. Removing placeholder pinned app.")
             }
 
             const app = Shell.AppSystem.get_default().lookup_app(browserName);

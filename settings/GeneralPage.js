@@ -403,13 +403,14 @@ class ArcMenu_HotkeyDialog extends Gtk.Window {
             halign: Gtk.Align.CENTER
         });
         vbox.append(keyLabel);
+
         let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(Me.path + '/media/icons/prefs_icons/keyboard-symbolic.svg', 256, 72);
         let keyboardImage = Gtk.Picture.new_for_pixbuf(pixbuf);
         keyboardImage.hexpand = true;
         keyboardImage.vexpand = true;
         keyboardImage.halign = Gtk.Align.CENTER;
         keyboardImage.valign = Gtk.Align.CENTER;
-        vbox.append(keyboardImage)
+        vbox.append(keyboardImage);
 
         let resultsRow = new Adw.ActionRow({
             title: _("New Hotkey")
