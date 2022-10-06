@@ -129,8 +129,7 @@ class ArcMenu_ButtonAppearancePage extends Gtk.Box {
             title: _('Icon Settings')
         });
         let menuButtonIconButton = new PW.Button({
-            title: _("Browse Icons") + " ",
-            icon_name: 'icon-preview-symbolic',
+            title: _("Browse...") + " ",
             icon_first: true,
             valign: Gtk.Align.CENTER,
         });
@@ -413,7 +412,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
 
         this.customIconPage = new Adw.PreferencesPage({
             title: _("Custom Icon"),
-            icon_name: 'icon-preview-symbolic'
+            icon_name: 'settings-customicon-symbolic'
         });
         let customIconGroup = new Adw.PreferencesGroup();
         this.customIconPage.add(customIconGroup);

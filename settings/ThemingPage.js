@@ -16,7 +16,7 @@ class ArcMenu_ThemingPage extends Adw.PreferencesPage {
     _init(settings) {
         super._init({
             title: _("Theme"),
-            icon_name: 'menu-theme-symbolic',
+            icon_name: 'settings-theme-symbolic',
             name: 'ThemingPage'
         });
         this._settings = settings;

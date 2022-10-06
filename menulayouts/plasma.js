@@ -116,7 +116,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         layout.hookup_style(this.grid);
         this.navigateBox.add_child(this.grid);
 
-        this.pinnedAppsButton = new MW.PlasmaMenuItem(this, _("Pinned"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg');
+        this.pinnedAppsButton = new MW.PlasmaMenuItem(this, _("Pinned"), Me.path + '/media/icons/menu_icons/arcmenu-logo-symbolic.svg');
         this.pinnedAppsButton.connect("activate", () => this.displayPinnedApps() );
         this.grid.layout_manager.attach(this.pinnedAppsButton, 0, 0, 1, 1);
         this.pinnedAppsButton.set_style_pseudo_class("active-item");

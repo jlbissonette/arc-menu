@@ -1571,8 +1571,8 @@ var PinnedAppsMenuItem = GObject.registerClass({
         else if(this._name == "Files"){
             this._name = _("Files");
         }
-        if(this._iconPath === "ArcMenu_ArcMenuIcon" || this._iconPath ===  Me.path + '/media/icons/arc-menu-symbolic.svg'){
-            this._iconString = this._iconPath = Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg';
+        if(this._iconPath === "ArcMenu_ArcMenuIcon" || this._iconPath ===  Me.path + '/media/icons/arcmenu-logo-symbolic.svg'){
+            this._iconString = this._iconPath = Me.path + '/media/icons/menu_icons/arcmenu-logo-symbolic.svg';
         }
         //-------------------------------------------------------
 

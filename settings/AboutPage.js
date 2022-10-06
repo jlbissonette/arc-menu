@@ -8,7 +8,7 @@ const _ = Gettext.gettext;
 
 const PROJECT_TITLE = _('ArcMenu');
 const PROJECT_DESCRIPTION = _('Application Menu Extension for GNOME');
-const PROJECT_IMAGE = 'arc-menu-logo';
+const PROJECT_IMAGE = 'settings-arcmenu-logo';
 
 var AboutPage = GObject.registerClass(
 class extends Adw.PreferencesPage {

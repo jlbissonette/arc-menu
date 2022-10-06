@@ -15,7 +15,7 @@ class ArcMenu_MiscPage extends Adw.PreferencesPage {
     _init(settings, preferencesWindow) {
         super._init({
             title: _('Misc'),
-            icon_name: 'misc-symbolic',
+            icon_name: 'settings-misc-symbolic',
             name: "MiscPage"
         });
         this._settings = settings;

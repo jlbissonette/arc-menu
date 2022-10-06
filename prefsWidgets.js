@@ -123,7 +123,7 @@ var DragRow = GObject.registerClass({
             this.icon.set_from_pixbuf(this.xpm_pixbuf);
 
         this.dragIcon = new Gtk.Image( {
-            gicon: Gio.icon_new_for_string("drag-symbolic"),
+            gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
             pixel_size: 12
         });
         this.add_prefix(this.icon);
@@ -259,7 +259,7 @@ var DragRow = GObject.registerClass({
             icon.set_from_pixbuf(this.xpm_pixbuf);
 
         let dragImage = new Gtk.Image( {
-            gicon: Gio.icon_new_for_string("drag-symbolic"),
+            gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
             pixel_size: 12
         });
         dragRow.add_prefix(dragImage);

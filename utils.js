@@ -197,7 +197,7 @@ function getCategoryDetails(currentCategory){
 
     if(currentCategory === Constants.CategoryType.HOME_SCREEN){
         name = _("Home");
-        gicon = Gio.icon_new_for_string('go-home-symbolic');
+        gicon = Gio.icon_new_for_string('computer-symbolic');
         return [name, gicon, fallbackIcon];
     }
     else{

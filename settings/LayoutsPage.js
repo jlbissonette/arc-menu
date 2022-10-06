@@ -13,7 +13,7 @@ class ArcMenu_LayoutsPage extends Adw.PreferencesPage {
     _init(settings) {
         super._init({
             title: _('Layouts'),
-            icon_name: 'menu-layouts-symbolic',
+            icon_name: 'settings-layouts-symbolic',
             name: 'LayoutsPage'
         });
         this._settings = settings;

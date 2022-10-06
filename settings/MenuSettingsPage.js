@@ -20,7 +20,7 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
     _init(settings) {
         super._init({
             title: _('Customize'),
-            icon_name: 'menu-settings-symbolic',
+            icon_name: 'settings-settings-symbolic',
             name: 'MenuSettingsPage'
         });
         this._settings = settings;
@@ -45,15 +45,15 @@ class ArcMenu_MenuSettingsPage extends Adw.PreferencesPage {
         });
 
         this.menuSettingsStackListBox = new PW.StackListBox(this);
-        this.menuSettingsStackListBox.addRow("MenuSettingsGeneral", _("Menu Settings"), 'menu-settings-symbolic');
-        this.menuSettingsStackListBox.addRow("ButtonSettings", _("Button Settings"), 'arc-menu-symbolic');
+        this.menuSettingsStackListBox.addRow("MenuSettingsGeneral", _("Menu Settings"), 'settings-settings-symbolic');
+        this.menuSettingsStackListBox.addRow("ButtonSettings", _("Button Settings"), 'arcmenu-logo-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsPinnedApps", _("Pinned Apps"), 'view-pin-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsShortcutDirectories", _("Directory Shortcuts"), 'folder-documents-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsShortcutApplications", _("Application Shortcuts"), 'preferences-desktop-apps-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsPowerOptions", _("Power Options"), 'gnome-power-manager-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsSearchOptions", _("Search Options"), 'preferences-system-search-symbolic');
         this.menuSettingsStackListBox.addRow("MenuSettingsCategories", _("Extra Categories"), 'view-list-symbolic');
-        this.menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), 'fine-tune-symbolic');
+        this.menuSettingsStackListBox.addRow("MenuSettingsFineTune", _("Fine-Tune"), 'settings-finetune-symbolic');
         this.menuSettingsStackListBox.setSeparatorIndices([2, 5, 8]);
 
         this.populateSettingsLeaflet();

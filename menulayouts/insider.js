@@ -82,18 +82,19 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.START,
-            vertical: false,
+            vertical: true,
+            style: 'padding-top: 9px;'
         })
-        this.user = new MW.UserMenuIcon(this, 55, true);
+        this.user = new MW.UserMenuIcon(this, 75, true);
         this.user.x_align = Clutter.ActorAlign.CENTER;
         this.user.y_align = Clutter.ActorAlign.CENTER;
         this.user.label.x_align = Clutter.ActorAlign.CENTER;
-        this.user.label.style = "margin-left: 10px;"
+        this.user.label.style = "font-size: large;"
         userMenuBox.add_child(this.user);
         userMenuBox.add_child(this.user.label);
         this.subMainBox.add_child(userMenuBox);
 
-        this.searchBox.style = "margin: 15px 10px 10px 10px;";
+        this.searchBox.style = "margin: 10px;";
         this.subMainBox.add_child(this.searchBox);
 
         this.applicationsBox = new St.BoxLayout({

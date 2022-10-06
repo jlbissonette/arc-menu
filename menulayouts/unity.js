@@ -52,7 +52,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.topBox);
         this.categoriesButton = new MW.CategoriesButton(this);
 
-        this.subMainBox= new St.BoxLayout({
+        this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
@@ -69,7 +69,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'arcmenu-margin-box'
+            style_class: 'arcmenu-margin-box',
+            y_align: Clutter.ActorAlign.START,
         });
 
         this.applicationsScrollBox = this._createScrollBox({

@@ -186,7 +186,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
         let shortcutIcon = shortcutData.icon;
 
         if(shortcutIcon === "ArcMenu_ArcMenuIcon")
-            shortcutIcon = Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg';
+            shortcutIcon = Me.path + '/media/icons/menu_icons/arcmenu-logo-symbolic.svg';
         else if(row.shortcut_command === 'org.gnome.Settings.desktop' && !appInfo)
             appInfo = Gio.DesktopAppInfo.new('gnome-control-center.desktop');
         else if(row.shortcut_command === 'ArcMenu_Software'){
@@ -209,7 +209,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
         row.title = GLib.markup_escape_text(_(row.shortcut_name), -1);
 
         if(row.shortcut_command.endsWith('.desktop') && !appInfo){
-            row.gicon = Gio.icon_new_for_string('warning-symbolic');
+            row.gicon = Gio.icon_new_for_string('settings-warning-symbolic');
             row.title = '<b><i>' + _('Invalid Shortcut') + '</i></b> - '+ _(row.title);
             row.css_classes = ['error'];
         }
@@ -297,7 +297,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         this._createShortcutsArray();
 
         if(this._dialogType === Constants.MenuSettingsListType.PINNED_APPS){
-            let extraItem = [[_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ShortcutCommands.ARCMENU_SETTINGS]];
+            let extraItem = [[_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arcmenu-logo-symbolic.svg', Constants.ShortcutCommands.ARCMENU_SETTINGS]];
             this._loadExtraCategories(extraItem);
             this._loadCategories();
         }
@@ -311,7 +311,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         else if(this._dialogType === Constants.MenuSettingsListType.APPLICATIONS){
             let extraLinks = [];
             extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
-            extraLinks.push([_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arc-menu-symbolic.svg', Constants.ShortcutCommands.ARCMENU_SETTINGS]);
+            extraLinks.push([_("ArcMenu Settings"), Me.path + '/media/icons/menu_icons/arcmenu-logo-symbolic.svg', Constants.ShortcutCommands.ARCMENU_SETTINGS]);
             extraLinks.push([_("Run Command..."), "system-run-symbolic", "ArcMenu_RunCommand"]);
             extraLinks.push([_("Show All Applications"), "view-fullscreen-symbolic", "ArcMenu_ShowAllApplications"]);
             this._loadExtraCategories(extraLinks);

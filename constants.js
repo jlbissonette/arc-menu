@@ -72,7 +72,7 @@ var SoftwareManagerIDs = ['org.manjaro.pamac.manager.desktop', 'pamac-manager.de
 var Categories = [
     {CATEGORY: CategoryType.FAVORITES, NAME: _("Favorites"), ICON: 'emblem-favorite-symbolic'},
     {CATEGORY: CategoryType.FREQUENT_APPS, NAME: _("Frequent Apps"), ICON: 'user-bookmarks-symbolic'},
-    {CATEGORY: CategoryType.ALL_PROGRAMS, NAME: _("All Apps"), ICON: 'view-grid-symbolic'},
+    {CATEGORY: CategoryType.ALL_PROGRAMS, NAME: _("All Apps"), ICON: 'view-app-grid-symbolic'},
     {CATEGORY: CategoryType.PINNED_APPS, NAME: _("Pinned Apps"), ICON: 'view-pin-symbolic'},
     {CATEGORY: CategoryType.RECENT_FILES, NAME: _("Recent Files"), ICON: 'document-open-recent-symbolic'}
 ]
@@ -264,9 +264,9 @@ var MenuIconsPath = '/media/icons/menu_button_icons/icons/';
 var MenuIcons = [
     { PATH: MenuIconsPath + 'arcmenu-logo-symbolic.svg'},
     { PATH: MenuIconsPath + 'arcmenu-logo-alt-symbolic.svg'},
-    { PATH: MenuIconsPath + 'arc-menu-old-symbolic.svg'},
-    { PATH: MenuIconsPath + 'arc-menu-alt-symbolic.svg'},
-    { PATH: MenuIconsPath + 'arc-menu-old2-symbolic.svg'},
+    { PATH: MenuIconsPath + 'arcmenu-old-symbolic.svg'},
+    { PATH: MenuIconsPath + 'arcmenu-old-alt-symbolic.svg'},
+    { PATH: MenuIconsPath + 'arcmenu-oldest-symbolic.svg'},
     { PATH: MenuIconsPath + 'curved-a-symbolic.svg'},
     { PATH: MenuIconsPath + 'focus-symbolic.svg'},
     { PATH: MenuIconsPath + 'triple-dash-symbolic.svg'},
@@ -277,9 +277,9 @@ var MenuIcons = [
     { PATH: MenuIconsPath + 'lins-symbolic.svg'},
     { PATH: MenuIconsPath + 'diamond-square-symbolic.svg'},
     { PATH: MenuIconsPath + 'octo-maze-symbolic.svg'},
-    { PATH: MenuIconsPath + 'search-symbolic.svg'},
+    { PATH: MenuIconsPath + 'search-glass-symbolic.svg'},
     { PATH: MenuIconsPath + 'transform-symbolic.svg'},
-    { PATH: MenuIconsPath + '3d-symbolic.svg'},
+    { PATH: MenuIconsPath + 'toxic2-symbolic.svg'},
     { PATH: MenuIconsPath + 'alien-symbolic.svg'},
     { PATH: MenuIconsPath + 'cloud-symbolic.svg'},
     { PATH: MenuIconsPath + 'dragon-symbolic.svg'},
@@ -299,7 +299,7 @@ var MenuIcons = [
     { PATH: MenuIconsPath + 'football-symbolic.svg'},
     { PATH: MenuIconsPath + 'heddy-symbolic.svg'},
     { PATH: MenuIconsPath + 'helmet-symbolic.svg'},
-    { PATH: MenuIconsPath + 'palette-symbolic.svg'},
+    { PATH: MenuIconsPath + 'paint-palette-symbolic.svg'},
     { PATH: MenuIconsPath + 'peeks-symbolic.svg'},
     { PATH: MenuIconsPath + 'record-symbolic.svg'},
     { PATH: MenuIconsPath + 'saucer-symbolic.svg'},
@@ -316,7 +316,7 @@ var MenuIcons = [
     { PATH: MenuIconsPath + 'rewind-symbolic.svg'},
     { PATH: MenuIconsPath + 'snap-symbolic.svg'},
     { PATH: MenuIconsPath + 'time-symbolic.svg'},
-    { PATH: MenuIconsPath + '3D-symbolic.svg'},
+    { PATH: MenuIconsPath + '3d-symbolic.svg'},
     { PATH: MenuIconsPath + 'a-symbolic.svg'},
     { PATH: MenuIconsPath + 'app-launcher-symbolic.svg'},
     { PATH: MenuIconsPath + 'bat-symbolic.svg'},
@@ -384,41 +384,41 @@ var MenuLayout = {
 };
 
 var TraditionalMenus = [
-    { IMAGE: 'arcmenu-layout-symbolic', TITLE: _('ArcMenu'), LAYOUT: MenuLayout.ARCMENU},
-    { IMAGE: 'brisk-layout-symbolic', TITLE: _('Brisk'), LAYOUT: MenuLayout.BRISK},
-    { IMAGE: 'whisker-layout-symbolic', TITLE: _('Whisker'), LAYOUT: MenuLayout.WHISKER},
-    { IMAGE: 'gnomemenu-layout-symbolic', TITLE: _('GNOME Menu'), LAYOUT: MenuLayout.GNOME_MENU},
-    { IMAGE: 'mint-layout-symbolic', TITLE: _('Mint'), LAYOUT: MenuLayout.MINT},
-    { IMAGE: 'budgie-layout-symbolic', TITLE: _('Budgie'), LAYOUT: MenuLayout.BUDGIE}];
+    { IMAGE: 'menu-arcmenu-symbolic', TITLE: _('ArcMenu'), LAYOUT: MenuLayout.ARCMENU},
+    { IMAGE: 'menu-brisk-symbolic', TITLE: _('Brisk'), LAYOUT: MenuLayout.BRISK},
+    { IMAGE: 'menu-whisker-symbolic', TITLE: _('Whisker'), LAYOUT: MenuLayout.WHISKER},
+    { IMAGE: 'menu-gnomemenu-symbolic', TITLE: _('GNOME Menu'), LAYOUT: MenuLayout.GNOME_MENU},
+    { IMAGE: 'menu-mint-symbolic', TITLE: _('Mint'), LAYOUT: MenuLayout.MINT},
+    { IMAGE: 'menu-budgie-symbolic', TITLE: _('Budgie'), LAYOUT: MenuLayout.BUDGIE}];
 
 var ModernMenus = [
-    { IMAGE: 'unity-layout-symbolic', TITLE: _('Unity'), LAYOUT: MenuLayout.UNITY},
-    { IMAGE: 'plasma-layout-symbolic', TITLE: _('Plasma'), LAYOUT: MenuLayout.PLASMA},
-    { IMAGE: 'tognee-layout-symbolic', TITLE: _('tognee'), LAYOUT: MenuLayout.TOGNEE},
-    { IMAGE: 'insider-layout-symbolic', TITLE: _('Insider'), LAYOUT: MenuLayout.INSIDER},
-    { IMAGE: 'redmond-layout-symbolic', TITLE: _('Redmond'), LAYOUT: MenuLayout.REDMOND},
-    { IMAGE: 'windows-layout-symbolic', TITLE: _('Windows'), LAYOUT: MenuLayout.WINDOWS},
-    { IMAGE: 'eleven-layout-symbolic', TITLE: _('11'), LAYOUT: MenuLayout.ELEVEN},
-    { IMAGE: 'az-layout-symbolic', TITLE: _('a.z.'), LAYOUT: MenuLayout.AZ}];
+    { IMAGE: 'menu-unity-symbolic', TITLE: _('Unity'), LAYOUT: MenuLayout.UNITY},
+    { IMAGE: 'menu-plasma-symbolic', TITLE: _('Plasma'), LAYOUT: MenuLayout.PLASMA},
+    { IMAGE: 'menu-tognee-symbolic', TITLE: _('tognee'), LAYOUT: MenuLayout.TOGNEE},
+    { IMAGE: 'menu-insider-symbolic', TITLE: _('Insider'), LAYOUT: MenuLayout.INSIDER},
+    { IMAGE: 'menu-redmond-symbolic', TITLE: _('Redmond'), LAYOUT: MenuLayout.REDMOND},
+    { IMAGE: 'menu-windows-symbolic', TITLE: _('Windows'), LAYOUT: MenuLayout.WINDOWS},
+    { IMAGE: 'menu-eleven-symbolic', TITLE: _('11'), LAYOUT: MenuLayout.ELEVEN},
+    { IMAGE: 'menu-az-symbolic', TITLE: _('a.z.'), LAYOUT: MenuLayout.AZ}];
 
 var TouchMenus = [
-    { IMAGE: 'elementary-layout-symbolic', TITLE: _('Elementary'), LAYOUT: MenuLayout.ELEMENTARY},
-    { IMAGE: 'chromebook-layout-symbolic', TITLE: _('Chromebook'), LAYOUT: MenuLayout.CHROMEBOOK}];
+    { IMAGE: 'menu-elementary-symbolic', TITLE: _('Elementary'), LAYOUT: MenuLayout.ELEMENTARY},
+    { IMAGE: 'menu-chromebook-symbolic', TITLE: _('Chromebook'), LAYOUT: MenuLayout.CHROMEBOOK}];
 
 var LauncherMenus = [
-    { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
-    { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
+    { IMAGE: 'menu-runner-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
+    { IMAGE: 'menu-gnomeoverview-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 
 var AlternativeMenus = [
-    { IMAGE: 'raven-layout-symbolic', TITLE: _('Raven'), LAYOUT: MenuLayout.RAVEN}];
+    { IMAGE: 'menu-raven-symbolic', TITLE: _('Raven'), LAYOUT: MenuLayout.RAVEN}];
 
 var MenuStyles = {
     STYLES: [
-        { IMAGE: 'traditional-category-symbolic', TITLE: _("Traditional"), MENU_TYPE: TraditionalMenus },
-        { IMAGE: 'modern-category-symbolic', TITLE: _("Modern"), MENU_TYPE: ModernMenus },
-        { IMAGE: 'touch-category-symbolic', TITLE: _("Touch"), MENU_TYPE: TouchMenus },
-        { IMAGE: 'launcher-category-symbolic', TITLE: _("Launcher"), MENU_TYPE: LauncherMenus },
-        { IMAGE: 'alternative-category-symbolic', TITLE: _("Alternative"), MENU_TYPE: AlternativeMenus }
+        { IMAGE: 'menustyle-traditional-symbolic', TITLE: _("Traditional"), MENU_TYPE: TraditionalMenus },
+        { IMAGE: 'menustyle-modern-symbolic', TITLE: _("Modern"), MENU_TYPE: ModernMenus },
+        { IMAGE: 'menustyle-touch-symbolic', TITLE: _("Touch"), MENU_TYPE: TouchMenus },
+        { IMAGE: 'menustyle-launcher-symbolic', TITLE: _("Launcher"), MENU_TYPE: LauncherMenus },
+        { IMAGE: 'menustyle-alternative-symbolic', TITLE: _("Alternative"), MENU_TYPE: AlternativeMenus }
     ]
 };
 
