@@ -50,12 +50,15 @@ function getMenuLayout(menuButton, layoutEnum, isStandaloneRunner){
         return null;
 
     for(let menuLayout in MenuLayouts){
-        const layoutClass = MenuLayouts[menuLayout];
-        if(layoutClass.getMenuLayoutEnum() === layoutEnum)
-            return new layoutClass.createMenu(menuButton, isStandaloneRunner);
+        const LayoutClass = MenuLayouts[menuLayout];
+        if(LayoutClass.getMenuLayoutEnum() === layoutEnum){
+            const { Menu } = LayoutClass;
+            return new Menu(menuButton, isStandaloneRunner);
+        }
     }
 
-    return new MenuLayouts.arcmenu.createMenu(menuButton, isStandaloneRunner);
+    const { Menu } = MenuLayouts.arcmenu;
+    return new Menu(menuButton, isStandaloneRunner);
 }
 
 var SettingsConnectionsHandler = class ArcMenu_SettingsConnectionsHandler {

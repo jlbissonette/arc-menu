@@ -778,7 +778,7 @@ var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMen
             this.label = new St.Label({
                 text: _('Power Off / Log Out'),
                 y_expand: false,
-                y_align: Clutter.ActorAlign.START,
+                y_align: Clutter.ActorAlign.CENTER,
             });
             this.add_child(this.label);
         }
@@ -797,9 +797,9 @@ var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMen
     }
 
     createIcon(overrideIconSize){
-        const IconSizeEnum = this._settings.get_enum('button-item-icon-size');
+        const IconSizeEnum = this.showLabel ? this._settings.get_enum('quicklinks-item-icon-size') : this._settings.get_enum('button-item-icon-size');
         const LayoutProps = this._menuLayout.layoutProperties;
-        let defaultIconSize = LayoutProps.DefaultButtonsIconSize;
+        let defaultIconSize = this.showLabel ?  LayoutProps.DefaultQuickLinksIconSize : LayoutProps.DefaultButtonsIconSize;
         let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
 
         return new St.Icon({
@@ -1111,7 +1111,6 @@ var PlasmaCategoryHeader = GObject.registerClass(class ArcMenu_PlasmaCategoryHea
 var NavigationButton = GObject.registerClass(class ArcMenu_NavigationButton extends ArcMenuButtonItem{
     _init(menuLayout, text, arrowSymbolic, activateAction, arrowSide) {
         super._init(menuLayout, null, arrowSymbolic);
-        this.setIconSize(Constants.EXTRA_SMALL_ICON_SIZE);
         this.toggleMenuOnClick = false;
         this.activateAction = activateAction;
         this.style = 'min-height: 28px; padding: 0px 8px;';
@@ -1132,6 +1131,18 @@ var NavigationButton = GObject.registerClass(class ArcMenu_NavigationButton exte
             this.add_child(this._label);
         else
             this.insert_child_at_index(this._label, 0);
+    }
+
+    createIcon(){
+        const IconSizeEnum = this._settings.get_enum('misc-item-icon-size');
+        let iconSize = Utils.getIconSize(IconSizeEnum, Constants.EXTRA_SMALL_ICON_SIZE);
+
+        return new St.Icon({
+            gicon: this.gicon ? this.gicon : Gio.icon_new_for_string(this.iconName),
+            icon_size: iconSize,
+            x_expand: true,
+            x_align: Clutter.ActorAlign.CENTER
+        });
     }
 
     activate(event){
@@ -1553,7 +1564,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
         this._menuButton = menuLayout.menuButton;
         this._settings = this._menuLayout._settings;
         this._command = command;
-        this._iconString = this._iconPath = icon;
+        this._iconString = this._icon = icon;
         this._name = name;
         this._displayType = displayType;
         this._app = Shell.AppSystem.get_default().lookup_app(this._command);
@@ -1562,21 +1573,17 @@ var PinnedAppsMenuItem = GObject.registerClass({
         this.isContainedInCategory = isContainedInCategory;
 
         //Modifiy the Default Pinned Apps---------------------
-        if(this._name == "ArcMenu Settings"){
+        if(this._name === "ArcMenu Settings")
             this._name = _("ArcMenu Settings");
-        }
-        else if(this._name == "Terminal"){
+        else if(this._name === "Terminal")
             this._name = _("Terminal");
-        }
-        else if(this._name == "Files"){
+        else if(this._name === "Files")
             this._name = _("Files");
-        }
-        if(this._iconPath === "ArcMenu_ArcMenuIcon" || this._iconPath ===  Me.path + '/media/icons/arcmenu-logo-symbolic.svg'){
-            this._iconString = this._iconPath = Me.path + '/media/icons/menu_icons/arcmenu-logo-symbolic.svg';
-        }
+        if(this._iconString === "ArcMenu_ArcMenuIcon" || this._iconString === Me.path + '/media/icons/arcmenu-logo-symbolic.svg')
+            this._iconString = Constants.ArcMenuLogoSymbolic;
         //-------------------------------------------------------
 
-        if(this._app && this._iconPath === ''){
+        if(this._app && this._iconString === ''){
             let appIcon = this._app.create_icon_texture(Constants.MEDIUM_ICON_SIZE);
             if(appIcon instanceof St.Icon){
                 this._iconString = appIcon.gicon ? appIcon.gicon.to_string() : appIcon.fallback_icon_name;

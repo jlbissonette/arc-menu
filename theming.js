@@ -3,24 +3,33 @@ const Constants = Me.imports.constants;
 const {Clutter, Gio, GLib, St} = imports.gi;
 
 Gio._promisify(Gio.File.prototype, 'replace_contents_bytes_async', 'replace_contents_finish');
+Gio._promisify(Gio.File.prototype, 'create_async');
+Gio._promisify(Gio.File.prototype, 'make_directory_async');
+Gio._promisify(Gio.File.prototype, 'delete_async');
 
-function getStylesheetFile(){
+function getStylesheetFiles(){
+    const directoryPath = GLib.build_filenamev([GLib.get_home_dir(), ".local/share/arcmenu"]);
+    const stylesheetPath = GLib.build_filenamev([directoryPath, "stylesheet.css"]);
+
+    const directory = Gio.File.new_for_path(directoryPath);
+    const stylesheet = Gio.File.new_for_path(stylesheetPath);
+
+    return [directory, stylesheet];
+}
+
+async function createStylesheet(settings){
     try {
-        const directoryPath = GLib.build_filenamev([GLib.get_home_dir(), ".local/share/ArcMenu"]);
-        const stylesheetPath = GLib.build_filenamev([directoryPath, "stylesheet.css"]);
+        const [directory, stylesheet] = getStylesheetFiles();
 
-        let dir = Gio.File.new_for_path(directoryPath);
-        if(!dir.query_exists(null))
-            dir.make_directory(null);
-
-        let stylesheet = Gio.File.new_for_path(stylesheetPath);
+        if(!directory.query_exists(null))
+            await directory.make_directory_async(0, null);
         if(!stylesheet.query_exists(null))
-            stylesheet.create(Gio.FileCreateFlags.NONE, null);
+            await stylesheet.create_async(Gio.FileCreateFlags.NONE, 0, null);
 
-        return stylesheet;
+        Me.customStylesheet = stylesheet;
+        updateStylesheet(settings);
     } catch (e) {
-        log(`ArcMenu - Custom stylesheet error: ${e.message}`);
-        return null;
+        log(`ArcMenu - Error creating custom stylesheet: ${e}`);
     }
 }
 
@@ -32,13 +41,32 @@ function unloadStylesheet(){
     theme.unload_stylesheet(Me.customStylesheet);
 }
 
+async function deleteStylesheet(){
+    unloadStylesheet();
+
+    try {
+        const [directory, stylesheet] = getStylesheetFiles();
+
+        if(stylesheet.query_exists(null))
+            await stylesheet.delete_async(0, null);
+        if(directory.query_exists(null))
+            await directory.delete_async(0, null);
+
+    } catch (e) {
+        if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.NOT_FOUND))
+            log(`ArcMenu - Error deleting custom stylesheet: ${e}`);
+    }
+}
+
 async function updateStylesheet(settings){
     let stylesheet = Me.customStylesheet;
 
     if(!stylesheet){
-        log("ArcMenu - Custom stylesheet error!");
+        log("ArcMenu - Warning: Custom stylesheet not found! Unable to set contents of custom stylesheet.");
         return;
     }
+
+    unloadStylesheet();
 
     let customMenuThemeCSS = ``;
     let extraStylingCSS = ``;
@@ -203,13 +231,10 @@ async function updateStylesheet(settings){
         `;
     }
 
-    let customStylesheetCSS = customMenuThemeCSS + extraStylingCSS;
+    const customStylesheetCSS = customMenuThemeCSS + extraStylingCSS;
 
-    //If customStylesheetCSS empty, unload custom stylesheet and return
-    if(customStylesheetCSS.length === 0){
-        unloadStylesheet();
+    if(customStylesheetCSS.length === 0)
         return;
-    }
 
     try{
         let bytes = new GLib.Bytes(customStylesheetCSS);
@@ -217,21 +242,16 @@ async function updateStylesheet(settings){
         const [success, _etag] = await stylesheet.replace_contents_bytes_async(bytes, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null);
 
         if(!success){
-            log("ArcMenu - Error replacing contents of custom stylesheet file. " + e.message);
-            return false;
+            log("ArcMenu - Failed to replace contents of custom stylesheet.");
+            return;
         }
 
-        let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
-
-        unloadStylesheet();
         Me.customStylesheet = stylesheet;
+        let theme = St.ThemeContext.get_for_stage(global.stage).get_theme();
         theme.load_stylesheet(Me.customStylesheet);
-
-        return true;
     }
     catch(e){
-        log("ArcMenu - Error updating custom stylesheet. " + e.message);
-        return false;
+        log(`ArcMenu - Error replacing contents of custom stylesheet: ${e}`);
     }
 }
 

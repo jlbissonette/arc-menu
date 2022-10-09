@@ -43,8 +43,7 @@ function enable() {
     settings.connect('changed::dash-to-panel-standalone', () => _reload());
     settingsControllers = [];
 
-    Me.customStylesheet = Theming.getStylesheetFile();
-    Theming.updateStylesheet(settings);
+    Theming.createStylesheet(settings);
 
     _enableButtons();
 
@@ -67,7 +66,7 @@ function disable() {
         extensionChangedId = null;
     }
 
-    Theming.unloadStylesheet();
+    Theming.deleteStylesheet();
     delete Me.customStylesheet;
 
     _disconnectExtensionSignals();

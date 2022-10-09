@@ -1,8 +1,7 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-const {Clutter, GLib, Gio, GMenu, Gtk, Shell, St} = imports.gi;
+const { Clutter, GLib, Gio, GMenu, Gtk, Shell, St } = imports.gi;
 const AppFavorites = imports.ui.appFavorites;
-
 const Config = imports.misc.config;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
@@ -11,7 +10,6 @@ const MenuLayouts = Me.imports.menulayouts;
 const MW = Me.imports.menuWidgets;
 const PlaceDisplay = Me.imports.placeDisplay;
 const PopupMenu = imports.ui.popupMenu;
-
 const Utils =  Me.imports.utils;
 
 const Search = (Config.PACKAGE_VERSION < '43') ? Me.imports.search : Me.imports.gnome43.search;
@@ -21,7 +19,7 @@ function getMenuLayoutEnum() { return null; }
 
 //This class handles the core functionality of all the menu layouts.
 //Each menu layout extends this class.
-var BaseLayout = class {
+var BaseMenuLayout = class {
     constructor(menuButton, layoutProperties){
         this.menuButton = menuButton;
         this._settings = menuButton._settings;
@@ -503,7 +501,7 @@ var BaseLayout = class {
                 let array = [];
                 for(let i = 0; i < this.pinnedAppsArray.length; i++){
                     array.push(this.pinnedAppsArray[i]._name);
-                    array.push(this.pinnedAppsArray[i]._iconPath);
+                    array.push(this.pinnedAppsArray[i]._icon);
                     array.push(this.pinnedAppsArray[i]._command);
                 }
                 this._settings.set_strv('pinned-app-list',array);

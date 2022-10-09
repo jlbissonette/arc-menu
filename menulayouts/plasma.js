@@ -1,7 +1,7 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-const {Clutter, Gio, GLib, Gtk, Shell, St} = imports.gi;
-const BaseMenuLayout = Me.imports.menulayouts.baseMenuLayout;
+const { Clutter, Gio, GLib, Gtk, Shell, St } = imports.gi;
+const { BaseMenuLayout } = Me.imports.menulayouts.baseMenuLayout;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const MW = Me.imports.menuWidgets;
@@ -12,7 +12,7 @@ const _ = Gettext.gettext;
 
 function getMenuLayoutEnum() { return Constants.MenuLayout.PLASMA; }
 
-var createMenu = class extends BaseMenuLayout.BaseLayout{
+var Menu = class extends BaseMenuLayout{
     constructor(menuButton) {
         super(menuButton, {
             Search: true,
@@ -116,7 +116,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         layout.hookup_style(this.grid);
         this.navigateBox.add_child(this.grid);
 
-        this.pinnedAppsButton = new MW.PlasmaMenuItem(this, _("Pinned"), Me.path + '/media/icons/menu_icons/arcmenu-logo-symbolic.svg');
+        this.pinnedAppsButton = new MW.PlasmaMenuItem(this, _("Pinned"), Constants.ArcMenuLogoSymbolic);
         this.pinnedAppsButton.connect("activate", () => this.displayPinnedApps() );
         this.grid.layout_manager.attach(this.pinnedAppsButton, 0, 0, 1, 1);
         this.pinnedAppsButton.set_style_pseudo_class("active-item");

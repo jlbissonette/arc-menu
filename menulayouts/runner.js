@@ -1,7 +1,7 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
-const {Clutter, Gtk, Shell, St} = imports.gi;
-const BaseMenuLayout = Me.imports.menulayouts.baseMenuLayout;
+const { Clutter, Gtk, Shell, St } = imports.gi;
+const { BaseMenuLayout } = Me.imports.menulayouts.baseMenuLayout;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
@@ -12,7 +12,7 @@ const _ = Gettext.gettext;
 
 function getMenuLayoutEnum() { return Constants.MenuLayout.RUNNER; }
 
-var createMenu =  class extends BaseMenuLayout.BaseLayout{
+var Menu =  class extends BaseMenuLayout{
     constructor(menuButton, isStandalone) {
         super(menuButton, {
             Search: true,
