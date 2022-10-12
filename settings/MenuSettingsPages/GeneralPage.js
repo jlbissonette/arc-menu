@@ -225,12 +225,12 @@ var GeneralPage = GObject.registerClass(
         iconSizes.append(_('Medium') + " - " + _('Wide'));
         iconSizes.append(_('Large') + " - " + _('Wide'));
         let gridIconsSizeRow = new Adw.ComboRow({
-            use_markup: true,
             title: _('Grid Menu Items') + ' <i><span size="small">(' + _('Non-Traditional Layouts') + ')</span></i>',
             subtitle: _('Apps, Pinned Apps, Shortcuts, Grid Search Results'),
             model: iconSizes,
             selected: this._settings.get_enum('menu-item-grid-icon-size')
         });
+        gridIconsSizeRow.use_markup = true;
         gridIconsSizeRow.connect('notify::selected', (widget) => {
             this._settings.set_enum('menu-item-grid-icon-size', widget.selected);
         });
@@ -304,12 +304,12 @@ var GeneralPage = GObject.registerClass(
             iconSizes.append(_('Hidden'));
 
         let iconsSizeRow = new Adw.ComboRow({
-            use_markup: true,
             title: _(rowDetails.title),
             subtitle: rowDetails.subtitle ? _(rowDetails.subtitle) : null,
             model: iconSizes,
             selected: this._settings.get_enum(rowDetails.setting)
         });
+        iconsSizeRow.use_markup = true;
         iconsSizeRow.connect('notify::selected', (widget) => {
             this._settings.set_enum(rowDetails.setting, widget.selected);
         });
