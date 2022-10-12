@@ -38,11 +38,11 @@ var ListOtherPage = GObject.registerClass(
                 title: _("Power Off / Log Out Buttons")
             });
             let powerDisplayStyles = new Gtk.StringList();
-            powerDisplayStyles.append(_('Default'));
-            powerDisplayStyles.append(_('In-Line'));
-            powerDisplayStyles.append(_('Sub Menu'));
+            powerDisplayStyles.append(_('Off'));
+            powerDisplayStyles.append(_('Power Buttons'));
+            powerDisplayStyles.append(_('Power Menu'));
             this.powerDisplayStyleRow = new Adw.ComboRow({
-                title: _("Display Style"),
+                title: _("Override Display Style"),
                 model: powerDisplayStyles,
                 selected: this._settings.get_enum('power-display-style')
             });

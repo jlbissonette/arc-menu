@@ -17,7 +17,7 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
         this._settings = settings;
 
         let menuDisplayGroup = new Adw.PreferencesGroup({
-            title: _("Display Options")
+            title: _("Panel Display Options")
         });
         this.add(menuDisplayGroup);
 
@@ -86,8 +86,8 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
         });
         multiMonitorSwitch.connect('notify::active', (widget) => {
             this._settings.set_boolean('multi-monitor', widget.get_active());
-            menuHotkeyGroup.displayRows();
-            runnerHotkeyGroup.displayRows();
+            menuHotkeyRow.displayRows();
+            standaloneRunnerRow.displayRows();
         });
 
         let multiMonitorRow = new Adw.ActionRow({
@@ -122,58 +122,34 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
         menuDisplayGroup.add(preferTopPanelRow);
         menuDisplayGroup.add(showActivitiesRow);
 
-        let menuHotkeyGroup = this._createHotkeyGroup(_("Hotkey Options"), true);
-        this.add(menuHotkeyGroup);
+        let generalGroup = new Adw.PreferencesGroup({
+            title: _('General Settings')
+        });
+        this.add(generalGroup);
 
-        let runnerHotkeyGroup = this._createHotkeyGroup(_("Standalone Runner Menu"), false);
-        this.add(runnerHotkeyGroup);
+        const menuHotkeyRow = this._createExpanderRow('ArcMenu Hotkey', true);
+        const standaloneRunnerRow = this._createExpanderRow('Standalone Runner Menu', false);
+        generalGroup.add(menuHotkeyRow);
+        generalGroup.add(standaloneRunnerRow);
     }
 
-    _createHotkeyGroup(title, isMenuHotkey){
-        let hotkeyGroup = new Adw.PreferencesGroup({
-            title: _(title)
+    _createExpanderRow(title, isMenuHotkey){
+        let hotkeySetting = isMenuHotkey ? 'menu-hotkey-type' : 'runner-menu-hotkey-type';
+        let customHotkeySetting = isMenuHotkey ? 'arcmenu-custom-hotkey' : 'runner-menu-custom-hotkey';
+        let primaryMonitorSetting = isMenuHotkey ? 'hotkey-open-primary-monitor' : 'runner-hotkey-open-primary-monitor';
+        let enabledSetting = isMenuHotkey ? 'enable-menu-hotkey' : 'enable-standlone-runner-menu'
+
+        let enabled = this._settings.get_boolean(enabledSetting);
+
+        let expanderRow = new Adw.ExpanderRow({
+            title: _(title),
+            show_enable_switch: true,
+            enable_expansion: enabled
         });
-        let enableRunnerMenuSwitch, hotkeyEnumSetting, customHotkeySetting, primaryMonitorSetting;
-        if(isMenuHotkey){
-            hotkeyEnumSetting = 'menu-hotkey';
-            customHotkeySetting = 'toggle-arcmenu';
-            primaryMonitorSetting = 'hotkey-open-primary-monitor';
-        }
-        else{
-            hotkeyEnumSetting = 'runner-menu-hotkey';
-            customHotkeySetting = 'toggle-runner-menu';
-            primaryMonitorSetting = 'runner-hotkey-open-primary-monitor';
 
-            enableRunnerMenuSwitch = new Gtk.Switch({
-                halign: Gtk.Align.END,
-                valign: Gtk.Align.CENTER,
-                active: this._settings.get_boolean('enable-standlone-runner-menu')
-            });
-            enableRunnerMenuSwitch.connect('notify::active', (widget) => {
-                this._settings.set_boolean('enable-standlone-runner-menu', widget.get_active());
-                if(!widget.get_active()){
-                    customHotkeyRow.hide();
-                    hotkeyRow.hide();
-                    primaryMonitorRow.hide();
-                }
-                else{
-                    hotkeyRow.show();
-                    if(this._settings.get_boolean('multi-monitor'))
-                        primaryMonitorRow.show();
-
-                    if(this._settings.get_enum(hotkeyEnumSetting) === 0)
-                        customHotkeyRow.hide();
-                    else
-                        customHotkeyRow.show();
-                }
-            });
-            let enableRunnerMenuRow = new Adw.ActionRow({
-                title: _("Enable a standalone Runner menu"),
-                activatable_widget: enableRunnerMenuSwitch
-            });
-            enableRunnerMenuRow.add_suffix(enableRunnerMenuSwitch);
-            hotkeyGroup.add(enableRunnerMenuRow);
-        }
+        expanderRow.connect("notify::enable-expansion", (widget) => {
+            this._settings.set_boolean(enabledSetting, widget.enable_expansion);
+        });
 
         let primaryMonitorSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
@@ -189,15 +165,12 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
         primaryMonitorRow.add_suffix(primaryMonitorSwitch);
 
         let hotKeyOptions = new Gtk.StringList();
-        if(isMenuHotkey)
-            hotKeyOptions.append(_("None"));
         hotKeyOptions.append(_("Left Super Key"));
         hotKeyOptions.append(_("Custom Hotkey"));
-
         let hotkeyRow = new Adw.ComboRow({
-            title: isMenuHotkey ? _("Menu Hotkey") : _("Runner Hotkey"),
+            title: _("Hotkey"),
             model: hotKeyOptions,
-            selected: this._settings.get_enum(hotkeyEnumSetting)
+            selected: this._settings.get_enum(hotkeySetting)
         });
 
         let shortcutCell = new Gtk.ShortcutsShortcut({
@@ -222,66 +195,36 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
             let dialog = new HotkeyDialog(this._settings, this);
             dialog.show();
             dialog.connect('response', (_w, response) => {
-                let customHotKeyEnum = isMenuHotkey ? 2 : 1;
                 if(response === Gtk.ResponseType.APPLY) {
-                    this._settings.set_enum(hotkeyEnumSetting, 0);
                     this._settings.set_strv(customHotkeySetting, [dialog.resultsText]);
-                    this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
                     shortcutCell.accelerator = dialog.resultsText;
-                    dialog.destroy();
                 }
-                else {
-                    shortcutCell.accelerator = this._settings.get_strv(customHotkeySetting).toString();
-                    this._settings.set_enum(hotkeyEnumSetting, customHotKeyEnum);
-                    dialog.destroy();
-                }
+                dialog.destroy();
             });
         });
 
-        hotkeyGroup.add(hotkeyRow);
-        hotkeyGroup.add(customHotkeyRow);
-        hotkeyGroup.add(primaryMonitorRow);
+        expanderRow.add_row(hotkeyRow);
+        expanderRow.add_row(customHotkeyRow);
+        expanderRow.add_row(primaryMonitorRow);
 
-        hotkeyGroup.displayRows = () => {
-            if(!isMenuHotkey && !enableRunnerMenuSwitch.get_active())
-                return;
-
+        expanderRow.displayRows = () => {
             customHotkeyRow.hide();
             primaryMonitorRow.hide();
 
-            let selected = hotkeyRow.selected;
-            if(!isMenuHotkey){
-                hotkeyRow.hide();
-                selected++;
-            }
-            if(selected === Constants.HotKey.SUPER_L){
-                customHotkeyRow.hide();
-                if(this._settings.get_boolean('multi-monitor'))
-                    primaryMonitorRow.show();
-                if(!isMenuHotkey)
-                    hotkeyRow.show();
-            }
-            else if(selected === Constants.HotKey.CUSTOM){
+            if(hotkeyRow.selected === Constants.HotkeyType.CUSTOM)
                 customHotkeyRow.show();
-                if(this._settings.get_boolean('multi-monitor'))
-                    primaryMonitorRow.show();
-                if(!isMenuHotkey)
-                    hotkeyRow.show();
-            }
+
+            if(this._settings.get_boolean('multi-monitor'))
+                primaryMonitorRow.show();
         }
 
         hotkeyRow.connect('notify::selected', (widget) => {
-            hotkeyGroup.displayRows();
-            this._settings.set_enum(hotkeyEnumSetting, widget.selected);
+            expanderRow.displayRows();
+            this._settings.set_enum(hotkeySetting, widget.selected);
         });
-        hotkeyGroup.displayRows();
+        expanderRow.displayRows();
 
-        if(!isMenuHotkey && !enableRunnerMenuSwitch.get_active()){
-            customHotkeyRow.hide();
-            primaryMonitorRow.hide();
-            hotkeyRow.hide();
-        }
-        return hotkeyGroup;
+        return expanderRow;
     }
 });
 

@@ -116,6 +116,22 @@ var LayoutTweaksPage = GObject.registerClass({
             this._loadPlaceHolderTweaks();
     }
 
+    _createVertSeparatorRow(){
+        let vertSeparatorSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+            active: this._settings.get_boolean('vert-separator')
+        });
+        vertSeparatorSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('vert-separator', widget.get_active());
+        });
+        let vertSeparatorRow = new Adw.ActionRow({
+            title: _('Vertical Separator'),
+            activatable_widget:  vertSeparatorSwitch
+        });
+        vertSeparatorRow.add_suffix(vertSeparatorSwitch);
+        return vertSeparatorRow;
+    }
+
     _createActivateOnHoverRow(){
         let hoverOptions = new Gtk.StringList();
         hoverOptions.append(_("Mouse Click"));
@@ -313,6 +329,7 @@ var LayoutTweaksPage = GObject.registerClass({
         briskMenuTweaksFrame.add(this._createActivateOnHoverRow());
         briskMenuTweaksFrame.add(this._createSearchBarLocationRow());
         briskMenuTweaksFrame.add(this._createFlipHorizontalRow());
+        briskMenuTweaksFrame.add(this._createVertSeparatorRow());
 
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Brisk Menu Shortcuts")
@@ -340,7 +357,8 @@ var LayoutTweaksPage = GObject.registerClass({
         budgieMenuTweaksFrame.add(this._createActivateOnHoverRow());
         budgieMenuTweaksFrame.add(this._createSearchBarLocationRow());
         budgieMenuTweaksFrame.add(this._createFlipHorizontalRow());
-
+        budgieMenuTweaksFrame.add(this._createVertSeparatorRow());
+        
         let enableActivitiesSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
         });
@@ -570,6 +588,7 @@ var LayoutTweaksPage = GObject.registerClass({
         mintMenuTweaksFrame.add(this._createActivateOnHoverRow());
         mintMenuTweaksFrame.add(this._createSearchBarLocationRow());
         mintMenuTweaksFrame.add(this._createFlipHorizontalRow());
+        mintMenuTweaksFrame.add(this._createVertSeparatorRow());
         this.mainBox.append(mintMenuTweaksFrame);
 
         let pinnedAppsFrame = new Adw.PreferencesGroup({
@@ -626,6 +645,7 @@ var LayoutTweaksPage = GObject.registerClass({
         whiskerMenuTweaksFrame.add(this._createAvatarShapeRow());
         whiskerMenuTweaksFrame.add(this._createSearchBarLocationRow());
         whiskerMenuTweaksFrame.add(this._createFlipHorizontalRow());
+        whiskerMenuTweaksFrame.add(this._createVertSeparatorRow());
         this.mainBox.append(whiskerMenuTweaksFrame);
     }
 
@@ -650,6 +670,7 @@ var LayoutTweaksPage = GObject.registerClass({
         redmondMenuTweaksFrame.add(this._createSearchBarLocationRow());
         redmondMenuTweaksFrame.add(this._createFlipHorizontalRow());
         redmondMenuTweaksFrame.add(this._disableAvatarRow());
+        redmondMenuTweaksFrame.add(this._createVertSeparatorRow());
 
         this.mainBox.append(redmondMenuTweaksFrame);
         this.mainBox.append(new Gtk.Label({
@@ -701,6 +722,7 @@ var LayoutTweaksPage = GObject.registerClass({
         let gnomeMenuTweaksFrame = new Adw.PreferencesGroup();
         gnomeMenuTweaksFrame.add(this._createActivateOnHoverRow());
         gnomeMenuTweaksFrame.add(this._createFlipHorizontalRow());
+        gnomeMenuTweaksFrame.add(this._createVertSeparatorRow());
         this.mainBox.append(gnomeMenuTweaksFrame);
     }
 
@@ -732,6 +754,7 @@ var LayoutTweaksPage = GObject.registerClass({
         let searchBarBottomDefault = true;
         togneeMenuTweaksFrame.add(this._createSearchBarLocationRow(searchBarBottomDefault));
         togneeMenuTweaksFrame.add(this._createFlipHorizontalRow());
+        togneeMenuTweaksFrame.add(this._createVertSeparatorRow());
         this.mainBox.append(togneeMenuTweaksFrame);
     }
 
@@ -758,6 +781,7 @@ var LayoutTweaksPage = GObject.registerClass({
         arcMenuTweaksFrame.add(this._createSearchBarLocationRow(searchBarBottomDefault));
         arcMenuTweaksFrame.add(this._createFlipHorizontalRow());
         arcMenuTweaksFrame.add(this._disableAvatarRow());
+        arcMenuTweaksFrame.add(this._createVertSeparatorRow());
         this.mainBox.append(arcMenuTweaksFrame);
 
         let placesFrame = new Adw.PreferencesGroup({

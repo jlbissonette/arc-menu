@@ -189,10 +189,10 @@ var LayoutsCategoryPage = GObject.registerClass({
 },  class ArcMenu_LayoutsCategoryPage extends Gtk.Box {
     _init(settings, parent, tile, title) {
         super._init({
-            margin_start: 5,
-            margin_end: 5,
             spacing: 20,
-            orientation: Gtk.Orientation.VERTICAL
+            orientation: Gtk.Orientation.VERTICAL,
+            halign: Gtk.Align.FILL,
+            hexpand: true,
         });
 
         this._parent = parent;
@@ -200,13 +200,22 @@ var LayoutsCategoryPage = GObject.registerClass({
         this.menuLayout = this._settings.get_enum('menu-layout');
         this.layoutStyle = tile.layout;
 
-        this.maxColumns = tile.layout.length > 3 ? 3 : tile.layout.length;
+        const maxColumns = tile.layout.length > 3 ? 3 : tile.layout.length;
         this.styles = tile.layout;
 
-        let layoutsFrame = new Adw.PreferencesGroup();
-        let layoutsRow = new Adw.PreferencesRow({
-            selectable: false,
-            activatable: false
+        this.layoutsGrid = new PW.IconGrid();
+        this.layoutsGrid.max_children_per_line = maxColumns;
+        this.layoutsGrid.connect('child-activated', () => {
+            const selectedChildren = this.layoutsGrid.get_selected_children();
+            const selectedChild = selectedChildren[0];
+            if(this.selectedChild && this.selectedChild !== selectedChild){
+                this.selectedChild.setActive(false);
+            }
+            this.selectedChild = selectedChild;
+            selectedChild.setActive(true);
+            this.activeButton = selectedChild;
+            this.menuLayout = selectedChild.layout;
+            this.applyButton.set_sensitive(true);
         });
 
         let buttonBox = new Gtk.Box({
@@ -252,51 +261,20 @@ var LayoutsCategoryPage = GObject.registerClass({
         this.applyButton.set_sensitive(false);
 
         this.append(buttonBox);
-        this.append(layoutsFrame);
-
-        this._tileGrid = new Gtk.FlowBox({
-            row_spacing: 4,
-            column_spacing: 4,
-            margin_bottom: 5,
-            margin_top: 5,
-            hexpand: true,
-            halign: Gtk.Align.CENTER,
-            max_children_per_line: this.maxColumns,
-            homogeneous: true,
-            selection_mode: Gtk.SelectionMode.NONE
-        });
+        this.append(this.layoutsGrid);
 
         this.styles.forEach((style) => {
-            this._addTile(style.TITLE, style.IMAGE, style.LAYOUT);
-        });
-        layoutsRow.set_child(this._tileGrid);
-        layoutsFrame.add(layoutsRow);
-
-        this._tileGrid.connect('selected-children-changed', () => {
-            this.applyButton.set_sensitive(true);
+            let tile = new PW.Tile(style.TITLE, style.IMAGE, style.LAYOUT);
+            this.layoutsGrid.add(tile);
         });
     }
 
     clearSelection(){
+        this.layoutsGrid.unselect_all();
+        if(this.selectedChild)
+            this.selectedChild.setActive(false);
         if(this.activeButton)
             this.activeButton.active = false;
         this.applyButton.set_sensitive(false);
-    }
-
-    _addTile(name, image, layout) {
-        let tile = new PW.Tile(name, image, layout);
-
-        if(!this.firstTileButton)
-            this.firstTileButton = tile;
-        else
-            tile.group = this.firstTileButton;
-
-        tile.connect("toggled", () => {
-            this.activeButton = tile;
-            this.menuLayout = tile.layout;
-            this.applyButton.set_sensitive(true);
-        });
-
-        this._tileGrid.insert(tile, -1);
     }
 });

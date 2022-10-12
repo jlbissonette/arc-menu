@@ -799,7 +799,7 @@ var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMen
     createIcon(overrideIconSize){
         const IconSizeEnum = this.showLabel ? this._settings.get_enum('quicklinks-item-icon-size') : this._settings.get_enum('button-item-icon-size');
         const LayoutProps = this._menuLayout.layoutProperties;
-        let defaultIconSize = this.showLabel ?  LayoutProps.DefaultQuickLinksIconSize : LayoutProps.DefaultButtonsIconSize;
+        let defaultIconSize = this.showLabel ? LayoutProps.DefaultQuickLinksIconSize : LayoutProps.DefaultButtonsIconSize;
         let iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
 
         return new St.Icon({

@@ -26,12 +26,7 @@
         <value value='1' nick='TopCentered'/>
         <value value='2' nick='BottomCentered'/>
     </enum>
-    <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey'>
-        <value value='0' nick='Undefined'/>
-        <value value='1' nick='Super_L'/>
-        <value value='2' nick='Custom'/>
-    </enum>
-    <enum id='org.gnome.shell.extensions.arcmenu.runner-menu-hotkey'>
+    <enum id='org.gnome.shell.extensions.arcmenu.menu-hotkey-type'>
         <value value='0' nick='Super_L'/>
         <value value='1' nick='Custom'/>
     </enum>
@@ -261,12 +256,12 @@
       <description>show standalone Runner menu monitor when using hotkey.</description>
     </key>
     <key type="i" name="settings-width">
-      <default>775</default>
+      <default>750</default>
       <summary>ArcMenu Settings Width</summary>
       <description>ArcMenu Settings Width.</description>
     </key>
     <key type="i" name="settings-height">
-      <default>725</default>
+      <default>800</default>
       <summary>ArcMenu Settings Height</summary>
       <description>ArcMenu Settings Height.</description>
     </key>
@@ -520,12 +515,17 @@
       <summary>Show/Hide Activities Button in panel</summary>
       <description>Show/Hide Activities Button in panel.</description>
     </key>
-    <key name="menu-hotkey" enum="org.gnome.shell.extensions.arcmenu.menu-hotkey">
-      <default>'Undefined'</default>
+      <key type="b" name="enable-menu-hotkey">
+      <default>true</default>
+      <summary>Enable a hotkey to open ArcMenu.</summary>
+      <description>Enable a hotkey to open ArcMenu.</description>
+    </key>
+    <key name="menu-hotkey-type" enum="org.gnome.shell.extensions.arcmenu.menu-hotkey-type">
+      <default>'Super_L'</default>
       <summary>Set a hotkey to open ArcMenu</summary>
       <description>Set a hotkey to open ArcMenu.</description>
     </key>
-    <key name="toggle-arcmenu" type="as">
+    <key name="arcmenu-custom-hotkey" type="as">
       <default>["&lt;Super&gt;x"]</default>
       <summary>Custom keybind to open ArcMenu</summary>
       <description>Custom keybind to open ArcMenu.</description>
@@ -535,12 +535,12 @@
       <summary>Enable a standalone Runner menu.</summary>
       <description>Enable a standalone Runner menu.</description>
     </key>
-    <key name="runner-menu-hotkey" enum="org.gnome.shell.extensions.arcmenu.runner-menu-hotkey">
+    <key name="runner-menu-hotkey-type" enum="org.gnome.shell.extensions.arcmenu.menu-hotkey-type">
       <default>'Custom'</default>
       <summary>Set a hotkey to open the standalone Runner menu.</summary>
       <description>Set a hotkey to open the standalone Runner menu.</description>
     </key>
-    <key name="toggle-runner-menu" type="as">
+    <key name="runner-menu-custom-hotkey" type="as">
       <default>["&lt;Alt&gt;1"]</default>
       <summary>Keybinding to open the standalone runner menu</summary>
       <description>Keybinding to open the standalone runner menu.</description>

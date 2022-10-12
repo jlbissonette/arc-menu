@@ -105,7 +105,7 @@ var MenuSettingsController = class {
         );
 
         this._settingsConnections.connectMultipleEvents(
-            ['menu-hotkey', 'runner-menu-hotkey', 'enable-standlone-runner-menu'],
+            ['enable-menu-hotkey', 'menu-hotkey-type', 'runner-menu-hotkey-type', 'enable-standlone-runner-menu'],
             this._updateHotKeyBinder.bind(this)
         );
 
@@ -323,9 +323,11 @@ var MenuSettingsController = class {
 
     _updateHotKeyBinder() {
         if (this.isPrimaryPanel) {
-            const runnerHotKey = this._settings.get_enum('runner-menu-hotkey');
-            const menuHotkey = this._settings.get_enum('menu-hotkey');
+            const enableMenuHotkey = this._settings.get_boolean('enable-menu-hotkey');
             const enableStandaloneRunnerMenu = this._settings.get_boolean('enable-standlone-runner-menu');
+
+            const runnerHotKey = this._settings.get_enum('runner-menu-hotkey-type');
+            const menuHotkey = this._settings.get_enum('menu-hotkey-type');
 
             this._customKeybinding.unbind('ToggleArcMenu');
             this._customKeybinding.unbind('ToggleRunnerMenu');
@@ -336,9 +338,9 @@ var MenuSettingsController = class {
                     this.runnerMenu = new StandaloneRunner(this._settings);
                     this.runnerMenu.initiate();
                 }
-                if(runnerHotKey === Constants.RunnerHotKey.CUSTOM)
-                    this._customKeybinding.bind('ToggleRunnerMenu', 'toggle-runner-menu', () => this.toggleStandaloneRunner());
-                else if(runnerHotKey === Constants.RunnerHotKey.SUPER_L)
+                if(runnerHotKey === Constants.HotkeyType.CUSTOM)
+                    this._customKeybinding.bind('ToggleRunnerMenu', 'runner-menu-custom-hotkey', () => this.toggleStandaloneRunner());
+                else if(runnerHotKey === Constants.HotkeyType.SUPER_L)
                     this._overrideOverlayKey.enable(() => this.toggleStandaloneRunner());
             }
             else if(this.runnerMenu){
@@ -346,11 +348,13 @@ var MenuSettingsController = class {
                 this.runnerMenu = null;
             }
 
-            if(menuHotkey === Constants.HotKey.CUSTOM)
-                this._customKeybinding.bind('ToggleArcMenu', 'toggle-arcmenu', () => this.toggleMenus());
-            else if(menuHotkey === Constants.HotKey.SUPER_L){
-                this._overrideOverlayKey.disable();
-                this._overrideOverlayKey.enable(() => this.toggleMenus());
+            if(enableMenuHotkey){
+                if(menuHotkey === Constants.HotkeyType.CUSTOM)
+                    this._customKeybinding.bind('ToggleArcMenu', 'arcmenu-custom-hotkey', () => this.toggleMenus());
+                else if(menuHotkey === Constants.HotkeyType.SUPER_L){
+                    this._overrideOverlayKey.disable();
+                    this._overrideOverlayKey.enable(() => this.toggleMenus());
+                }
             }
         }
     }

@@ -490,11 +490,9 @@ var StackListBox = GObject.registerClass(class ArcMenu_StackListBox extends Gtk.
 var IconGrid = GObject.registerClass(class ArcMenu_IconGrid extends Gtk.FlowBox{
     _init() {
         super._init({
-            max_children_per_line: 7,
+            max_children_per_line: 15,
             row_spacing: 4,
             column_spacing: 4,
-            vexpand: true,
-            hexpand: false,
             valign: Gtk.Align.START,
             halign: Gtk.Align.CENTER,
             homogeneous: true,
@@ -512,42 +510,48 @@ var IconGrid = GObject.registerClass(class ArcMenu_IconGrid extends Gtk.FlowBox{
     }
 });
 
-var Tile = GObject.registerClass(class ArcMenu_Tile extends Gtk.ToggleButton{
+var Tile = GObject.registerClass(class ArcMenu_Tile extends Gtk.FlowBoxChild{
     _init(name, file, layout) {
         super._init({
-            hexpand: false,
-            vexpand: false,
-            halign: Gtk.Align.CENTER,
-            valign: Gtk.Align.CENTER,
+            css_classes: ['card'],
+            margin_top: 4,
+            margin_bottom: 4,
+            margin_start: 4,
+            margin_end: 4,
+            halign: Gtk.Align.FILL,
+            hexpand: true,
         });
-        let pixelSize = 155;
-        let context = this.get_style_context();
-        context.add_class('card');
-        context.add_class('raised');
+
+        let box = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            margin_top: 4,
+            margin_bottom: 4,
+            margin_start: 4,
+            margin_end: 4,
+        });
+        this.set_child(box);
+
         this.name = name;
         this.layout = layout;
 
-        this._grid = new Gtk.Grid({
-            orientation: Gtk.Orientation.VERTICAL,
-            margin_top: 10,
-            margin_bottom: 10,
-            margin_start: 10,
-            margin_end: 10,
-            row_spacing: 5
-        });
-        this.set_child(this._grid);
-
         this._image = new Gtk.Image({
             gicon: Gio.icon_new_for_string(file),
-            pixel_size: pixelSize
+            pixel_size: 155,
         });
 
         this._label = new Gtk.Label({
             label: _(this.name)
         });
 
-        this._grid.attach(this._image, 0, 0, 1, 1);
-        this._grid.attach(this._label, 0, 1, 1, 1);
+        box.append(this._image);
+        box.append(this._label);
+    }
+
+    setActive(active){
+        if(active)
+            this._image.css_classes = this._label.css_classes = ['accent'];
+        else
+            this._image.css_classes = this._label.css_classes = [];
     }
 });
 

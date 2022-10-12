@@ -159,22 +159,10 @@ var EXTRA_LARGE_ICON_SIZE = 35;
 var MISC_ICON_SIZE = 24;
 
 var SUPER_L = 'Super_L';
-var SUPER_R = 'Super_R';
-var EMPTY_STRING = '';
 
-var HotKey = {
-    UNDEFINED: 0,
-    SUPER_L: 1,
-    CUSTOM: 2,
-    // Inverse mapping
-    0: EMPTY_STRING,
-    1: SUPER_L,
-};
-
-var RunnerHotKey = {
+var HotkeyType = {
     SUPER_L: 0,
     CUSTOM: 1,
-    0: SUPER_L,
 };
 
 var SECTIONS = [

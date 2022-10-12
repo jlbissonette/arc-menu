@@ -1,18 +1,23 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const {Adw, GdkPixbuf, GLib, GObject, Gtk} = imports.gi;
+const {Adw, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const Prefs = Me.imports.prefs;
+const PW = Me.imports.prefsWidgets;
 const _ = Gettext.gettext;
 
 const PROJECT_TITLE = _('ArcMenu');
 const PROJECT_DESCRIPTION = _('Application Menu Extension for GNOME');
 const PROJECT_IMAGE = 'settings-arcmenu-logo';
 
+const SCHEMA_PATH = '/org/gnome/shell/extensions/arcmenu/';
+const GSET = 'gnome-shell-extension-tool';
+
 var AboutPage = GObject.registerClass(
 class extends Adw.PreferencesPage {
-    _init(settings) {
+    _init(settings, preferencesWindow) {
         super._init({
             title: _('About'),
             icon_name: 'help-about-symbolic',
@@ -115,6 +120,89 @@ class extends Adw.PreferencesPage {
         this.add(infoGroup);
         //-----------------------------------------------------------------------
 
+        //Import/Export----------------------------------------------------------
+        let importFrame = new Adw.PreferencesGroup({
+            title: _('Export or Import Settings')
+        });
+        let importRow = new Adw.ActionRow({
+            title: _("ArcMenu Settings")
+        });
+        let settingsImportInfoButton = new PW.Button({
+            icon_name: 'help-about-symbolic'
+        });
+        settingsImportInfoButton.connect('clicked', () => {
+            let dialog = new Gtk.MessageDialog({
+                text: "<b>" + _("Export or Import ArcMenu Settings") + '</b>',
+                secondary_text:_('Importing will overwrite current settings.'),
+                use_markup: true,
+                buttons: Gtk.ButtonsType.OK,
+                message_type: Gtk.MessageType.WARNING,
+                transient_for: this.get_root(),
+                modal: true
+            });
+            dialog.connect('response', (widget, response) => {
+                dialog.destroy();
+            });
+            dialog.show();
+        });
+
+        let importButton = new Gtk.Button({
+            label: _("Import"),
+            valign: Gtk.Align.CENTER
+        });
+        importButton.connect('clicked', () => {
+            this._showFileChooser(
+                _('Import settings'),
+                { action: Gtk.FileChooserAction.OPEN },
+                "_Open",
+                filename => {
+                    if (filename && GLib.file_test(filename, GLib.FileTest.EXISTS)) {
+                        let settingsFile = Gio.File.new_for_path(filename);
+                        let [ success_, pid, stdin, stdout, stderr] =
+                            GLib.spawn_async_with_pipes(
+                                null,
+                                ['dconf', 'load', SCHEMA_PATH],
+                                null,
+                                GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+                                null
+                            );
+
+                        stdin = new Gio.UnixOutputStream({ fd: stdin, close_fd: true });
+                        GLib.close(stdout);
+                        GLib.close(stderr);
+
+                        stdin.splice(settingsFile.read(null), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE | Gio.OutputStreamSpliceFlags.CLOSE_TARGET, null);
+
+                        Prefs.populateWindow(preferencesWindow, this._settings);
+                    }
+                }
+            );
+        });
+        let exportButton = new Gtk.Button({
+            label: _("Export"),
+            valign: Gtk.Align.CENTER
+        });
+        exportButton.connect('clicked', () => {
+            this._showFileChooser(
+                _('Export settings'),
+                { action: Gtk.FileChooserAction.SAVE},
+                "_Save",
+                (filename) => {
+                    let file = Gio.file_new_for_path(filename);
+                    let raw = file.replace(null, false, Gio.FileCreateFlags.NONE, null);
+                    let out = Gio.BufferedOutputStream.new_sized(raw, 4096);
+                    out.write_all(GLib.spawn_command_line_sync('dconf dump ' + SCHEMA_PATH)[1], null);
+                    out.close(null);
+                }
+            );
+        });
+        importRow.add_suffix(importButton);
+        importRow.add_suffix(exportButton);
+        importRow.add_suffix(settingsImportInfoButton);
+        importFrame.add(importRow);
+        this.add(importFrame);
+        //-----------------------------------------------------------------------
+
         //Credits----------------------------------------------------------------
         let creditsGroup = new Adw.PreferencesGroup({
             title: _("Credits")
@@ -209,6 +297,30 @@ class extends Adw.PreferencesPage {
         gnuSofwareLabelBox.append(gnuSofwareLabel);
         gnuSoftwareGroup.add(gnuSofwareLabelBox);
         this.add(gnuSoftwareGroup);
+    }
+
+    _showFileChooser(title, params, acceptBtn, acceptHandler) {
+        let dialog = new Gtk.FileChooserDialog({
+            title: _(title),
+            transient_for: this.get_root(),
+            modal: true,
+            action: params.action,
+        });
+        dialog.add_button("_Cancel", Gtk.ResponseType.CANCEL);
+        dialog.add_button(acceptBtn, Gtk.ResponseType.ACCEPT);
+
+        dialog.connect("response", (self, response) => {
+            if(response === Gtk.ResponseType.ACCEPT){
+                try {
+                    acceptHandler(dialog.get_file().get_path());
+                } catch(e) {
+                    log('ArcMenu - Filechooser error: ' + e);
+                }
+            }
+            dialog.destroy();
+        });
+
+        dialog.show();
     }
 });
     

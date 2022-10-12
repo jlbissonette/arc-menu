@@ -210,24 +210,9 @@ var GeneralPage = GObject.registerClass(
         });
         generalSettingsFrame.add(shortcutsIconTypeRow);
 
-        let vertSeparatorSwitch = new Gtk.Switch({
-            valign: Gtk.Align.CENTER,
-            active: this._settings.get_boolean('vert-separator')
-        });
-        vertSeparatorSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('vert-separator', widget.get_active());
-        });
-        let vertSeparatorRow = new Adw.ActionRow({
-            title: _('Vertical Separator'),
-            subtitle: _("Traditional Layouts"),
-            activatable_widget:  vertSeparatorSwitch
-        });
-        vertSeparatorRow.add_suffix(vertSeparatorSwitch);
-        generalSettingsFrame.add(vertSeparatorRow);
-
         let iconsSizeFrame = new Adw.PreferencesGroup({
             title: _("Icon Sizes"),
-            description: _("Modify the icon size of various menu elements.")
+            description: _("Override the icon size of various menu items")
         });
         this.append(iconsSizeFrame);
 
@@ -240,7 +225,9 @@ var GeneralPage = GObject.registerClass(
         iconSizes.append(_('Medium') + " - " + _('Wide'));
         iconSizes.append(_('Large') + " - " + _('Wide'));
         let gridIconsSizeRow = new Adw.ComboRow({
-            title: _("Grid Icons"),
+            use_markup: true,
+            title: _('Grid Menu Items') + ' <i><span size="small">(' + _('Non-Traditional Layouts') + ')</span></i>',
+            subtitle: _('Apps, Pinned Apps, Shortcuts, Grid Search Results'),
             model: iconSizes,
             selected: this._settings.get_enum('menu-item-grid-icon-size')
         });
@@ -249,15 +236,38 @@ var GeneralPage = GObject.registerClass(
         });
         iconsSizeFrame.add(gridIconsSizeRow);
 
-        let menuItemIconSizeRow = this.createIconSizeRow(_("Applications"), 'menu-item-icon-size');
+        let menuItemIconSizeRow = this.createIconSizeRow({
+            title: _('Applications'),
+            subtitle: _('Apps, Pinned Apps, Items within Category, List Search Results'),
+            setting: 'menu-item-icon-size'
+        });
         iconsSizeFrame.add(menuItemIconSizeRow);
-        let menuCategoryIconSizeRow = this.createIconSizeRow(_("Categories"), 'menu-item-category-icon-size');
+
+        let quickLinksIconSizeRow = this.createIconSizeRow({
+            title: _('Shortcuts'),
+            subtitle: _('Directory / Application / Other Shortcuts, Power Menu'),
+            setting: 'quicklinks-item-icon-size'
+        });
+        iconsSizeFrame.add(quickLinksIconSizeRow);
+
+        let menuCategoryIconSizeRow = this.createIconSizeRow({
+            title: _('Application Categories'),
+            setting: 'menu-item-category-icon-size'
+        });
         iconsSizeFrame.add(menuCategoryIconSizeRow);
-        let buttonIconSizeRow = this.createIconSizeRow(_("Buttons"), 'button-item-icon-size');
+
+        let buttonIconSizeRow = this.createIconSizeRow({
+            title: _('Button Widgets'),
+            subtitle: _('Power Buttons, Unity Bottom Bar, Mint Side Bar, etc'),
+            setting: 'button-item-icon-size'
+        });
         iconsSizeFrame.add(buttonIconSizeRow);
-        let quicklinksIconSizeRow = this.createIconSizeRow(_("Quick Links"),'quicklinks-item-icon-size');
-        iconsSizeFrame.add(quicklinksIconSizeRow);
-        let miscIconSizeRow = this.createIconSizeRow(_("Misc"), 'misc-item-icon-size');
+
+        let miscIconSizeRow = this.createIconSizeRow({
+            title: _('Miscellaneous'),
+            subtitle: _('Avatar, Search, Navigation Icons'),
+            setting: 'misc-item-icon-size'
+        });
         iconsSizeFrame.add(miscIconSizeRow);
 
         this.restoreDefaults = () => {
@@ -265,16 +275,15 @@ var GeneralPage = GObject.registerClass(
             widthSpinButton.set_value(this._settings.get_default_value('menu-width-adjustment').unpack());
             menuWidthSpinButton.set_value(this._settings.get_default_value('left-panel-width').unpack());
             rightPanelWidthSpinButton.set_value(this._settings.get_default_value('right-panel-width').unpack());
-            vertSeparatorSwitch.set_active(this._settings.get_default_value('vert-separator').unpack());
             gridIconsSizeRow.selected = 0;
             menuItemIconSizeRow.selected = 0;
             menuCategoryIconSizeRow.selected = 0;
             buttonIconSizeRow.selected = 0;
-            quicklinksIconSizeRow.selected = 0;
+            quickLinksIconSizeRow.selected = 0;
             miscIconSizeRow.selected = 0;
             appDescriptionsSwitch.set_active(this._settings.get_default_value('apps-show-extra-details').unpack());
             menuLocationRow.selected = 0;
-            let [menuRiseEnabled_, menuRiseDefault] = this._settings.get_default_value('menu-arrow-rise').deep_unpack();
+            let [_menuRiseEnabled, menuRiseDefault] = this._settings.get_default_value('menu-arrow-rise').deep_unpack();
             menuArrowRiseSpinButton.set_value(menuRiseDefault);
             menuArrowRiseSwitch.set_active(false);
             categoryIconTypeRow.selected = 0;
@@ -282,7 +291,7 @@ var GeneralPage = GObject.registerClass(
         };
     }
 
-    createIconSizeRow(title, setting){
+    createIconSizeRow(rowDetails){
         let iconSizes = new Gtk.StringList();
         iconSizes.append(_('Default'));
         iconSizes.append(_('Extra Small'));
@@ -291,16 +300,18 @@ var GeneralPage = GObject.registerClass(
         iconSizes.append(_('Large'));
         iconSizes.append(_('Extra Large'));
 
-        if(setting === 'menu-item-category-icon-size')
+        if(rowDetails.setting === 'menu-item-category-icon-size')
             iconSizes.append(_('Hidden'));
 
         let iconsSizeRow = new Adw.ComboRow({
-            title: _(title),
+            use_markup: true,
+            title: _(rowDetails.title),
+            subtitle: rowDetails.subtitle ? _(rowDetails.subtitle) : null,
             model: iconSizes,
-            selected: this._settings.get_enum(setting)
+            selected: this._settings.get_enum(rowDetails.setting)
         });
         iconsSizeRow.connect('notify::selected', (widget) => {
-            this._settings.set_enum(setting, widget.selected);
+            this._settings.set_enum(rowDetails.setting, widget.selected);
         });
         return iconsSizeRow;
     }
