@@ -133,7 +133,7 @@ var RootInfo = class ArcMenu_RootInfo extends PlaceInfo {
                 return;
 
             this._proxy = obj;
-            this._proxy.connect('g-properties-changed',
+            this._propChangedId = this._proxy.connect('g-properties-changed',
                 this._propertiesChanged.bind(this));
             this._propertiesChanged(obj);
         });
@@ -154,6 +154,10 @@ var RootInfo = class ArcMenu_RootInfo extends PlaceInfo {
 
     destroy() {
         if (this._proxy) {
+            if(this._propChangedId){
+                this._proxy.disconnect(this._propChangedId);
+                this._propChangedId = null;
+            }
             this._proxy.run_dispose();
             this._proxy = null;
         }

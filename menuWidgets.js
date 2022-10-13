@@ -131,10 +131,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     set active(active) {
-        if(this._menuLayout.ignoreHover){
-            this.hover = false;
-            return;
-        }
         if(this.isDestroyed)
             return;
         let activeChanged = active != this.active;
@@ -182,13 +178,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         }
     }
 
-    vfunc_motion_event(event){
-        if(this._menuLayout.ignoreHover){
-            this._menuLayout.ignoreHover = false;
-            this.hover = true;
-        }
-        return Clutter.EVENT_PROPAGATE;
-    }
 
     vfunc_button_press_event(){
         let event = Clutter.get_current_event();
@@ -2053,8 +2042,6 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         }
 
         this.label_actor = this.label;
-        this._menuLayout._oldX = -1;
-        this._menuLayout._oldY = -1;
         this.connect('motion-event', this._onMotionEvent.bind(this));
         this.connect('enter-event', this._onEnterEvent.bind(this));
         this.connect('leave-event', this._onLeaveEvent.bind(this));
@@ -2126,17 +2113,18 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
     }
 
     _onEnterEvent(actor, event) {
-        if(this._menuLayout.navigatingCategoryLeaveEventID){
-            GLib.source_remove(this._menuLayout.navigatingCategoryLeaveEventID);
-            this._menuLayout.navigatingCategoryLeaveEventID = null;
+        if(this._menuLayout.initialMotionEventItemLeaveEventID){
+            GLib.source_remove(this._menuLayout.initialMotionEventItemLeaveEventID);
+            this._menuLayout.initialMotionEventItemLeaveEventID = null;
         }
     }
 
     _onLeaveEvent(actor, event) {
-        if(!this._menuLayout.navigatingCategoryLeaveEventID){
-            this._menuLayout.navigatingCategoryLeaveEventID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
-                this._menuLayout.navigatingCategory = null;
-                this._menuLayout.navigatingCategoryLeaveEventID = null;
+        if(!this._menuLayout.initialMotionEventItemLeaveEventID){
+            this._menuLayout.initialMotionEventItemLeaveEventID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
+                this._menuLayout.initialMotionEventItem = null;
+                this._menuLayout.activeCategoryType = -1;
+                this._menuLayout.initialMotionEventItemLeaveEventID = null;
                 return GLib.SOURCE_REMOVE;
             });
         }
@@ -2144,35 +2132,42 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
 
     _onMotionEvent(actor, event) {
         if(this.layoutProps.SupportsCategoryOnHover && this._settings.get_boolean('activate-on-hover')){
-            if (!this._menuLayout.navigatingCategory) {
-                this._menuLayout.navigatingCategory = this;
-            }
+            if(!this._menuLayout.initialMotionEventItem)
+                this._menuLayout.initialMotionEventItem = this;
 
-            if (this._isInTriangle(event.get_coords())){
-                if(this._menuLayout.activeCategoryType !== this._category && this._menuLayout.navigatingCategory === this)
-                    this.activate(Clutter.get_current_event());
-                return true;
+            const inActivationZone = this._inActivationZone(event.get_coords());
+            if(inActivationZone){
+                this.activate(Clutter.get_current_event());
+                this._menuLayout.initialMotionEventItem = this;
+                return;
             }
-            this._menuLayout.navigatingCategory = this;
-            return true;
         }
     }
 
-    _isInTriangle([x, y]){
-        let [posX, posY] = this._menuLayout.navigatingCategory.get_transformed_position();
-
-        //the mouse is still in the active category
-        if (this._menuLayout.navigatingCategory === this){
+    _inActivationZone([x, y]){
+        //no need to activate the category if its already active
+        if(this._menuLayout.activeCategoryType === this._category){
             this._menuLayout._oldX = x;
             this._menuLayout._oldY = y;
-            return true;
+            return false;
         }
 
-        if(!this._menuLayout.navigatingCategory)
+        if(!this._menuLayout.initialMotionEventItem)
             return false;
 
-        let width = this._menuLayout.navigatingCategory.width;
-        let height = this._menuLayout.navigatingCategory.height;
+        let [posX, posY] = this._menuLayout.initialMotionEventItem.get_transformed_position();
+
+        //the mouse is on the initialMotionEventItem
+        const onInitialMotionEventItem = this._menuLayout.initialMotionEventItem === this;
+        if (onInitialMotionEventItem){
+            this._menuLayout._oldX = x;
+            this._menuLayout._oldY = y;
+            if(this._menuLayout.activeCategoryType !== Constants.CategoryType.SEARCH_RESULTS)
+                return true;
+        }
+
+        let width = this._menuLayout.initialMotionEventItem.width;
+        let height = this._menuLayout.initialMotionEventItem.height;
 
         let maxX = this._horizontalFlip ? posX : posX + width;
         let maxY = posY + height;
@@ -2186,7 +2181,9 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         let a1 = Utils.areaOfTriangle([x, y], point2, point3);
         let a2 = Utils.areaOfTriangle(point1, [x, y], point3);
         let a3 = Utils.areaOfTriangle(point1, point2, [x, y]);
-        return area === a1 + a2 + a3;
+        const outsideTriangle = area !== a1 + a2 + a3;
+
+        return outsideTriangle;
     }
 });
 
@@ -2446,7 +2443,7 @@ class ArcMenu_SearchBox extends St.Entry {
         }
 
         if(this.triggerSearchChangeEvent)
-            this.emit('search-changed', this.get_text());    
+            this.emit('search-changed', this.get_text());
     }
 
     _onKeyPress(actor, event) {

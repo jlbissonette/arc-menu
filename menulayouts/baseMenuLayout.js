@@ -636,7 +636,6 @@ var BaseMenuLayout = class {
     }
 
     _clearActorsFromBox(box){
-        this.ignoreHover = true;
         this.recentFilesManager?.cancelCurrentQueries();
         if(!box){
             box = this.applicationsBox;
@@ -785,11 +784,12 @@ var BaseMenuLayout = class {
                 this.applicationsBox.add_child(this.searchResults);
             }
 
+            this.activeCategoryType = Constants.CategoryType.SEARCH_RESULTS;
+
             searchString = searchString.replace(/^\s+/g, '').replace(/\s+$/g, '');
             if(searchString === '')
                 this.searchResults.setTerms([]);
             else{
-                this.ignoreHover = true;
                 this.searchResults.setTerms(searchString.split(/\s+/));
             }
         }
