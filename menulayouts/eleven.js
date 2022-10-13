@@ -185,15 +185,19 @@ var Menu = class extends BaseMenuLayout{
         if(this._settings.get_boolean("eleven-disable-frequent-apps"))
             return;
 
-        let labelRow = this.createLabelRow(_("Frequent"));
-        this.applicationsBox.add_child(labelRow);
         let mostUsed = Shell.AppUsage.get_default().get_most_used();
 
         if(mostUsed.length < 1)
             return;
 
+        const pinnedApps = this._settings.get_strv('pinned-app-list');
+
         for (let i = 0; i < mostUsed.length; i++) {
-            if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
+            if(!mostUsed[i])
+                continue;
+    
+            const appInfo = mostUsed[i].get_app_info();
+            if(appInfo.should_show() && !pinnedApps.includes(appInfo.get_id())){
                 let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.DisplayType.LIST);
                 this.frequentAppsList.push(item);
             }
@@ -207,7 +211,6 @@ var Menu = class extends BaseMenuLayout{
     setDefaultMenuView(){
         this.setGridLayout(Constants.DisplayType.GRID, 0);
         super.setDefaultMenuView();
-        this.loadFrequentApps();
         this.activeCategory = _("Pinned");
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
         this.displayPinnedApps();
@@ -263,6 +266,7 @@ var Menu = class extends BaseMenuLayout{
     }
 
     displayPinnedApps() {
+        this.loadFrequentApps();
         this._clearActorsFromBox(this.applicationsBox);
         this.activeCategory = _("Pinned");
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.applicationsGrid);
