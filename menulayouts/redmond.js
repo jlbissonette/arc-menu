@@ -130,7 +130,7 @@ var Menu = class extends BaseMenuLayout{
         //draw bottom right horizontal separator + logic to determine if should show
         let shouldDraw = false;
         if(this._settings.get_value('directory-shortcuts-list').deep_unpack().length>0){
-            this.placesShortcuts=true;
+            this.placesShortcuts = true;
         }
         if(this._settings.get_value('application-shortcuts-list').deep_unpack().length>0){
             this.softwareShortcuts = true;
@@ -138,7 +138,7 @@ var Menu = class extends BaseMenuLayout{
 
         //check to see if should draw separator
         if(this.placesShortcuts && (this._settings.get_boolean('show-external-devices') || this.softwareShortcuts || this._settings.get_boolean('show-bookmarks'))  )
-            shouldDraw=true;
+            shouldDraw = true;
         if(shouldDraw){
             let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.SHORT, Constants.SeparatorAlignment.HORIZONTAL);
             this.shortcutsBox.add_child(separator);
@@ -167,12 +167,9 @@ var Menu = class extends BaseMenuLayout{
             this.externalDevicesBox.add_child(this._sections[id]);
         }
 
-        //Add Application Shortcuts to menu (Software, Settings, Tweaks, Terminal)
-        let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
         let applicationShortcuts = this._settings.get_value('application-shortcuts-list').deep_unpack();
         for(let i = 0; i < applicationShortcuts.length; i++){
-            let applicationName = applicationShortcuts[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcuts[i][1], applicationShortcuts[i][2], Constants.DisplayType.LIST);
+            let shortcutMenuItem = this.createMenuItem(applicationShortcuts[i], Constants.DisplayType.LIST, false);
             if(shortcutMenuItem.shouldShow)
                 this.shortcutsBox.add_child(shortcutMenuItem);
         }

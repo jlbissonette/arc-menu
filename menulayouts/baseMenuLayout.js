@@ -430,6 +430,9 @@ var BaseMenuLayout = class {
             case Constants.ShortcutCommands.RESTART:
             case Constants.ShortcutCommands.HYBRID_SLEEP:
             case Constants.ShortcutCommands.HIBERNATE:
+            case Constants.ShortcutCommands.OVERVIEW:
+            case Constants.ShortcutCommands.SHOW_APPS:
+            case Constants.ShortcutCommands.RUN_COMMAND:
                 return new MW.ShortcutMenuItem(this, shortcutName, shortcutIcon, shortcutCommand, displayType, isContainedInCategory);
             default:
                 let placeInfo = this._getPlaceInfo(shortcutCommand, shortcutName);

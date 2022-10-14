@@ -412,6 +412,9 @@ var MenuStyles = {
 
 var ArcMenuLogoSymbolic = Me.path + '/media/icons/menu_icons/arcmenu-logo-symbolic.svg';
 
+var TranslatableSettingsStrings = [_('Software'), _('Settings'), _('Tweaks'), _('Terminal'), 
+                                        _('Activities Overview'), _('ArcMenu Settings'), _('Files')];
+
 var ShortcutCommands = {
     SUSPEND: 'ArcMenu_Suspend',
     LOG_OUT: 'ArcMenu_LogOut',

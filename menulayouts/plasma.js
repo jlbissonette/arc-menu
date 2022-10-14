@@ -166,12 +166,10 @@ var Menu = class extends BaseMenuLayout{
             this.mainBox.add_child(this.navigateBoxContainer);
         }
 
-        let SOFTWARE_TRANSLATIONS = [_("Software"), _("Settings"), _("Tweaks"), _("Terminal"), _("Activities Overview"), _("ArcMenu Settings")];
         let applicationShortcutsList = this._settings.get_value('application-shortcuts-list').deep_unpack();
         this.applicationShortcuts = [];
         for(let i = 0; i < applicationShortcutsList.length; i++){
-            let applicationName = applicationShortcutsList[i][0];
-            let shortcutMenuItem = new MW.ShortcutMenuItem(this, _(applicationName), applicationShortcutsList[i][1], applicationShortcutsList[i][2], Constants.DisplayType.LIST);
+            let shortcutMenuItem = this.createMenuItem(applicationShortcutsList[i], Constants.DisplayType.LIST, false)
             if(shortcutMenuItem.shouldShow)
                 this.applicationShortcuts.push(shortcutMenuItem);
         }

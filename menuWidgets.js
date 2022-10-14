@@ -1544,7 +1544,7 @@ var UserMenuIcon = GObject.registerClass(class ArcMenu_UserMenuIcon extends St.B
 
 // Menu pinned apps item class
 var PinnedAppsMenuItem = GObject.registerClass({
-    Signals: {  'saveSettings': {}, },
+    Signals: { 'saveSettings': {} },
 }, class ArcMenu_PinnedAppsMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, name, icon, command, displayType, isContainedInCategory) {
         super._init(menuLayout);
@@ -1560,16 +1560,8 @@ var PinnedAppsMenuItem = GObject.registerClass({
         this.gridLocation = [-1, -1];
         this.isContainedInCategory = isContainedInCategory;
 
-        //Modifiy the Default Pinned Apps---------------------
-        if(this._name === "ArcMenu Settings")
-            this._name = _("ArcMenu Settings");
-        else if(this._name === "Terminal")
-            this._name = _("Terminal");
-        else if(this._name === "Files")
-            this._name = _("Files");
         if(this._iconString === "ArcMenu_ArcMenuIcon" || this._iconString === Me.path + '/media/icons/arcmenu-logo-symbolic.svg')
             this._iconString = Constants.ArcMenuLogoSymbolic;
-        //-------------------------------------------------------
 
         if(this._app && this._iconString === ''){
             let appIcon = this._app.create_icon_texture(Constants.MEDIUM_ICON_SIZE);
