@@ -178,7 +178,6 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         }
     }
 
-
     vfunc_button_press_event(){
         let event = Clutter.get_current_event();
         this.pressed = false;
@@ -2123,7 +2122,10 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         if(!this._menuLayout.initialMotionEventItemLeaveEventID){
             this._menuLayout.initialMotionEventItemLeaveEventID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
                 this._menuLayout.initialMotionEventItem = null;
-                this._menuLayout.activeCategoryType = -1;
+
+                if(this._menuLayout.activeCategoryType === Constants.CategoryType.SEARCH_RESULTS)
+                    this._menuLayout.activeCategoryType = -1;
+
                 this._menuLayout.initialMotionEventItemLeaveEventID = null;
                 return GLib.SOURCE_REMOVE;
             });
