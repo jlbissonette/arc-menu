@@ -133,6 +133,13 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     set active(active) {
         if(this.isDestroyed)
             return;
+
+        //Prevent a mouse hover event from setting a new active menu item, until next mouse move event.
+        if(this._menuLayout.blockActiveState){
+            this.hover = false;
+            return;
+        }
+
         let activeChanged = active != this.active;
         if(activeChanged){
             this._active = active;
@@ -176,6 +183,15 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         else if(!this.hover){
             this._menuButton.tooltip.hide();
         }
+    }
+
+    vfunc_motion_event(event){
+        //Prevent a mouse hover event from setting a new active menu item, until next mouse move event.
+        if(this._menuLayout.blockActiveState){
+            this._menuLayout.blockActiveState = false;
+            this.hover = true;
+        }
+        return Clutter.EVENT_PROPAGATE;
     }
 
     vfunc_button_press_event(){

@@ -793,6 +793,11 @@ var BaseMenuLayout = class {
             if(searchString === '')
                 this.searchResults.setTerms([]);
             else{
+                //Prevent a mouse hover event from setting a new active menu item, until next mouse move event.
+                //Used to prevent the top search result from instantly changing
+                //if users mouse is over a differnt menu item.
+                this.blockActiveState = true;
+
                 this.searchResults.setTerms(searchString.split(/\s+/));
             }
         }
