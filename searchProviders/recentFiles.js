@@ -52,10 +52,19 @@ var RecentFilesSearchProvider = class {
     getInitialResultSet(terms, callback, _cancellable) {
         this.recentFilesManager.cancelCurrentQueries();
         this._recentFiles = [];
-        this.recentFilesManager.filterRecentFiles(recentFile => {
-            this._recentFiles.push(recentFile);
-            callback(this._getFilteredFileUris(terms, this._recentFiles));
-        });
+
+        const recentFiles = this.recentFilesManager.getRecentFiles();
+
+        for(const file of recentFiles) {
+                this.recentFilesManager.queryInfoAsync(file).then(result => {
+                const recentFile = result.recentFile;
+
+                if(recentFile) {
+                    this._recentFiles.push(recentFile);
+                    callback(this._getFilteredFileUris(terms, this._recentFiles));
+                }
+            }).catch(error => log(error));
+        }
     }
 
     getSubsearchResultSet(previousResults, terms, callback, _cancellable) {

@@ -52,19 +52,21 @@ var RecentFilesSearchProvider = class {
     async getInitialResultSet(terms, cancellable) {
         this.recentFilesManager.cancelCurrentQueries();
         this._recentFiles = [];
+        const recentFiles = this.recentFilesManager.getRecentFiles();
 
-        let promises = this.recentFilesManager.createQueryPromises();
+        await Promise.all(recentFiles.map(async (file) => {
+            try{
+                let result = await this.recentFilesManager.queryInfoAsync(file);
+                const recentFile = result.recentFile;
 
-        await Promise.allSettled(promises)
-        .then(results => {
-            if(results.length === 0)
-                return this._recentFiles;
+                if(recentFile)
+                    this._recentFiles.push(recentFile);
 
-            results.forEach(result => {
-                if(result.status === 'fulfilled' && result.value)
-                    this._recentFiles.push(result.value);    
-            });
-        });
+            } catch(e){
+                log(e)
+            }
+        }));
+
         return this._getFilteredFileUris(terms, this._recentFiles);
     }
 

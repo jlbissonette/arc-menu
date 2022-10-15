@@ -10,10 +10,10 @@ const MenuLayouts = Me.imports.menulayouts;
 const MW = Me.imports.menuWidgets;
 const PlaceDisplay = Me.imports.placeDisplay;
 const PopupMenu = imports.ui.popupMenu;
+const { RecentFilesManager } = Me.imports.recentFilesManager;
 const Utils =  Me.imports.utils;
 
 const Search = (Config.PACKAGE_VERSION < '43') ? Me.imports.search : Me.imports.gnome43.search;
-const { RecentFilesManager } = (Config.PACKAGE_VERSION < '43') ? Me.imports.recentFilesManager : Me.imports.gnome43.recentFilesManager;
 
 function getMenuLayoutEnum() { return null; }
 
@@ -340,37 +340,46 @@ var BaseMenuLayout = class {
             this.recentFilesManager = new RecentFilesManager();
     }
 
-    displayRecentFiles(box = this.applicationsBox, callback){
+    displayRecentFiles(box = this.applicationsBox){
         this._clearActorsFromBox(box);
         this._futureActiveItem = false;
 
-        this.recentFilesManager.filterRecentFiles(recentFile => {
-            let file = Gio.File.new_for_uri(recentFile.get_uri());
-            let filePath = file.get_path();
-            let name = recentFile.get_display_name();
-            let icon = Gio.content_type_get_symbolic_icon(recentFile.get_mime_type()).to_string();
-            let isContainedInCategory = true;
+        const recentFiles = this.recentFilesManager.getRecentFiles();
 
-            let placeMenuItem = this.createMenuItem([name, icon, filePath], Constants.DisplayType.LIST, isContainedInCategory);
-            placeMenuItem.setAsRecentFile(recentFile, () => {
-                try {
-                    let recentManager = this.recentFilesManager.getRecentManager();
-                    recentManager.remove_item(placeMenuItem.fileUri);
-                } catch(err) {
-                    log(err);
-                }
-                box.remove_child(placeMenuItem);
-                box.queue_relayout();
+        recentFiles.forEach(file => {
+            this.recentFilesManager.queryInfoAsync(file).then(value => {
+                const recentFile = value.recentFile;
+                const error = value.error;
+
+                if (error)
+                    return;
+
+                let file = Gio.File.new_for_uri(recentFile.get_uri());
+                let filePath = file.get_path();
+                let name = recentFile.get_display_name();
+                let icon = Gio.content_type_get_symbolic_icon(recentFile.get_mime_type()).to_string();
+                let isContainedInCategory = true;
+    
+                let placeMenuItem = this.createMenuItem([name, icon, filePath], Constants.DisplayType.LIST, isContainedInCategory);
+                placeMenuItem.setAsRecentFile(recentFile, () => {
+                    try {
+                        let recentManager = this.recentFilesManager.recentManager;
+                        recentManager.remove_item(placeMenuItem.fileUri);
+                    } catch(err) {
+                        log(err);
+                    }
+                    box.remove_child(placeMenuItem);
+                    box.queue_relayout();
+                });
+                box.add_child(placeMenuItem);
+    
+                if(!this._futureActiveItem){
+                    this._futureActiveItem = placeMenuItem;
+                    this.activeMenuItem = this._futureActiveItem;
+                }    
+            }).catch(err => {
+                log(err)
             });
-            box.add_child(placeMenuItem);
-
-            if(!this._futureActiveItem){
-                this._futureActiveItem = placeMenuItem;
-                this.activeMenuItem = this._futureActiveItem;
-            }
-
-            if(callback)
-                callback();
         });
     }
 
