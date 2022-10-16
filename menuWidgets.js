@@ -2089,7 +2089,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         if(this._displayType === Constants.DisplayType.BUTTON)
             return;
         this.isRecentlyInstalled = shouldShow;
-        if(shouldShow){
+        if(shouldShow && !this._indicator){
             this._indicator = new St.Icon({
                 icon_name: 'message-indicator-symbolic',
                 style_class: 'arcmenu-indicator',
@@ -2101,7 +2101,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
             });
             this.add_child(this._indicator);
         }
-        else if(this._indicator && this.contains(this._indicator))
+        else if(!shouldShow && this._indicator && this.contains(this._indicator))
             this.remove_child(this._indicator);
     }
 
