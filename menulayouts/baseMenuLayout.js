@@ -346,19 +346,19 @@ var BaseMenuLayout = class {
 
         const recentFiles = this.recentFilesManager.getRecentFiles();
 
-        recentFiles.forEach(file => {
-            this.recentFilesManager.queryInfoAsync(file).then(value => {
-                const recentFile = value.recentFile;
-                const error = value.error;
+        for(const file of recentFiles) {
+            this.recentFilesManager.queryInfoAsync(file).then(result => {
+                const recentFile = result.recentFile;
+                const error = result.error;
 
                 if (error)
                     return;
 
-                let file = Gio.File.new_for_uri(recentFile.get_uri());
-                let filePath = file.get_path();
-                let name = recentFile.get_display_name();
-                let icon = Gio.content_type_get_symbolic_icon(recentFile.get_mime_type()).to_string();
-                let isContainedInCategory = true;
+                const gioFile = Gio.File.new_for_uri(recentFile.get_uri());
+                const filePath = gioFile.get_path();
+                const name = recentFile.get_display_name();
+                const icon = Gio.content_type_get_symbolic_icon(recentFile.get_mime_type()).to_string();
+                const isContainedInCategory = true;
     
                 let placeMenuItem = this.createMenuItem([name, icon, filePath], Constants.DisplayType.LIST, isContainedInCategory);
                 placeMenuItem.setAsRecentFile(recentFile, () => {
@@ -376,11 +376,9 @@ var BaseMenuLayout = class {
                 if(!this._futureActiveItem){
                     this._futureActiveItem = placeMenuItem;
                     this.activeMenuItem = this._futureActiveItem;
-                }    
-            }).catch(err => {
-                log(err)
-            });
-        });
+                }
+            }).catch(error => log(error));
+        }
     }
 
     _displayPlaces() {
@@ -648,6 +646,7 @@ var BaseMenuLayout = class {
     }
 
     _clearActorsFromBox(box){
+        this.blockActiveState = true;
         this.recentFilesManager?.cancelCurrentQueries();
         if(!box){
             box = this.applicationsBox;
@@ -1033,7 +1032,8 @@ var BaseMenuLayout = class {
         let scrollBox = new St.ScrollView(params);
         let panAction = new Clutter.PanAction({ interpolate: false });
         panAction.connect('pan', (action) => {
-            this._blockActivateEvent = true;
+            //blocks activate event while panning scroll view
+            this.blockActivateEvent = true;
             if(this.menuButton.tooltipShowingID) {
                 GLib.source_remove(this.menuButton.tooltipShowingID);
                 this.menuButton.tooltipShowingID = null;

@@ -56,7 +56,7 @@ var RecentFilesSearchProvider = class {
         const recentFiles = this.recentFilesManager.getRecentFiles();
 
         for(const file of recentFiles) {
-                this.recentFilesManager.queryInfoAsync(file).then(result => {
+            this.recentFilesManager.queryInfoAsync(file).then(result => {
                 const recentFile = result.recentFile;
 
                 if(recentFile) {

@@ -197,14 +197,14 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     vfunc_button_press_event(){
         let event = Clutter.get_current_event();
         this.pressed = false;
-        if(event.get_button() == 1){
-            this._menuLayout._blockActivateEvent = false;
+        if(event.get_button() === 1){
+            this._menuLayout.blockActivateEvent = false;
             this.pressed = true;
             this.add_style_pseudo_class('active');
             if(this.hasContextMenu)
                 this.contextMenuTimeOut();
         }
-        else if(event.get_button() == 3){
+        else if(event.get_button() === 3){
             this.pressed = true;
             this.add_style_pseudo_class('active');
         }
@@ -213,7 +213,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
 
     vfunc_button_release_event(){
         let event = Clutter.get_current_event();
-        if(event.get_button() == 1 && !this._menuLayout._blockActivateEvent && this.pressed){
+        if(event.get_button() === 1 && !this._menuLayout.blockActivateEvent && this.pressed){
             this.pressed = false;
             this.active = false;
             this._menuLayout.mainBox.grab_key_focus();
@@ -222,7 +222,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
 
             return Clutter.EVENT_STOP;
         }
-        if(event.get_button() == 3 && this.pressed){
+        if(event.get_button() === 3 && this.pressed){
             this.pressed = false;
             if(this.hasContextMenu)
                 this.popupContextMenu();
@@ -272,7 +272,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             return Clutter.EVENT_PROPAGATE;
 
         let symbol = keyEvent.keyval;
-        if ( symbol == Clutter.KEY_Return || symbol == Clutter.KEY_KP_Enter) {
+        if ( symbol === Clutter.KEY_Return || symbol === Clutter.KEY_KP_Enter) {
             this.active = false;
             this._menuLayout.mainBox.grab_key_focus();
             this.activate(Clutter.get_current_event());
@@ -285,7 +285,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
     }
 
     vfunc_touch_event(event){
-        if(event.type == Clutter.EventType.TOUCH_END && !this._menuLayout._blockActivateEvent && this.pressed){
+        if(event.type === Clutter.EventType.TOUCH_END && !this._menuLayout.blockActivateEvent && this.pressed){
             this.remove_style_pseudo_class('active');
             this.active = false;
             this._menuLayout.mainBox.grab_key_focus();
@@ -293,16 +293,16 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
             this.pressed = false;
             return Clutter.EVENT_STOP;
         }
-        else if(event.type == Clutter.EventType.TOUCH_BEGIN && !this._menuLayout.contextMenuManager.activeMenu){
+        else if(event.type === Clutter.EventType.TOUCH_BEGIN && !this._menuLayout.contextMenuManager.activeMenu){
             this.pressed = true;
-            this._menuLayout._blockActivateEvent = false;
+            this._menuLayout.blockActivateEvent = false;
             if(this.hasContextMenu)
                 this.contextMenuTimeOut();
             this.add_style_pseudo_class('active');
         }
-        else if(event.type == Clutter.EventType.TOUCH_BEGIN && this._menuLayout.contextMenuManager.activeMenu){
+        else if(event.type === Clutter.EventType.TOUCH_BEGIN && this._menuLayout.contextMenuManager.activeMenu){
             this.pressed = false;
-            this._menuLayout._blockActivateEvent = false;
+            this._menuLayout.blockActivateEvent = false;
             this._menuLayout.contextMenuManager.activeMenu.toggle();
         }
         return Clutter.EVENT_PROPAGATE;
@@ -312,7 +312,7 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         this._popupTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 600, () => {
             this.pressed = false;
             this._popupTimeoutId = null;
-            if(this.hasContextMenu && this._menuLayout.arcMenu.isOpen && !this._menuLayout._blockActivateEvent) {
+            if(this.hasContextMenu && this._menuLayout.arcMenu.isOpen && !this._menuLayout.blockActivateEvent) {
                 this.popupContextMenu();
                 this._menuLayout.contextMenuManager.ignoreRelease();
             }
@@ -1558,7 +1558,6 @@ var UserMenuIcon = GObject.registerClass(class ArcMenu_UserMenuIcon extends St.B
     }
 });
 
-// Menu pinned apps item class
 var PinnedAppsMenuItem = GObject.registerClass({
     Signals: { 'saveSettings': {} },
 }, class ArcMenu_PinnedAppsMenuItem extends ArcMenuPopupBaseMenuItem{
@@ -2003,7 +2002,6 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
     }
 });
 
-// Menu Category item class
 var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, category, displayType) {
         super._init(menuLayout);
@@ -2119,38 +2117,52 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
             this._menuLayout.setActiveCategory(this);
     }
 
+    _shouldActivateOnHover(){
+        const activateOnHover = this._settings.get_boolean('activate-on-hover');
+        const supportsActivateOnHover = this.layoutProps.SupportsCategoryOnHover;
+
+        return activateOnHover && supportsActivateOnHover;
+    }
+
     _onEnterEvent(actor, event) {
-        if(this._menuLayout.initialMotionEventItemLeaveEventID){
-            GLib.source_remove(this._menuLayout.initialMotionEventItemLeaveEventID);
-            this._menuLayout.initialMotionEventItemLeaveEventID = null;
+        if(!this._shouldActivateOnHover())
+            return;
+
+        if(this._menuLayout.leaveEventTimeoutId){
+            GLib.source_remove(this._menuLayout.leaveEventTimeoutId);
+            this._menuLayout.leaveEventTimeoutId = null;
         }
     }
 
     _onLeaveEvent(actor, event) {
-        if(!this._menuLayout.initialMotionEventItemLeaveEventID){
-            this._menuLayout.initialMotionEventItemLeaveEventID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
+        if(!this._shouldActivateOnHover())
+            return;
+
+        if(!this._menuLayout.leaveEventTimeoutId){
+            this._menuLayout.leaveEventTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
                 this._menuLayout.initialMotionEventItem = null;
 
                 if(this._menuLayout.activeCategoryType === Constants.CategoryType.SEARCH_RESULTS)
                     this._menuLayout.activeCategoryType = -1;
 
-                this._menuLayout.initialMotionEventItemLeaveEventID = null;
+                this._menuLayout.leaveEventTimeoutId = null;
                 return GLib.SOURCE_REMOVE;
             });
         }
     }
 
     _onMotionEvent(actor, event) {
-        if(this.layoutProps.SupportsCategoryOnHover && this._settings.get_boolean('activate-on-hover')){
-            if(!this._menuLayout.initialMotionEventItem)
-                this._menuLayout.initialMotionEventItem = this;
+        if(!this._shouldActivateOnHover())
+            return;
 
-            const inActivationZone = this._inActivationZone(event.get_coords());
-            if(inActivationZone){
-                this.activate(Clutter.get_current_event());
-                this._menuLayout.initialMotionEventItem = this;
-                return;
-            }
+        if(!this._menuLayout.initialMotionEventItem)
+            this._menuLayout.initialMotionEventItem = this;
+
+        const inActivationZone = this._inActivationZone(event.get_coords());
+        if(inActivationZone){
+            this.activate(Clutter.get_current_event());
+            this._menuLayout.initialMotionEventItem = this;
+            return;
         }
     }
 
@@ -2197,7 +2209,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
     }
 });
 
-// Menu Place Shortcut item class
+//Directory shorctuts. Home, Documents, Downloads, etc
 var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends ArcMenuPopupBaseMenuItem{
     _init(menuLayout, info, displayType, isContainedInCategory) {
         super._init(menuLayout);

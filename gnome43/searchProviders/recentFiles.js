@@ -54,7 +54,7 @@ var RecentFilesSearchProvider = class {
         this._recentFiles = [];
         const recentFiles = this.recentFilesManager.getRecentFiles();
 
-        await Promise.all(recentFiles.map(async (file) => {
+        await Promise.all(recentFiles.map(async file => {
             try{
                 let result = await this.recentFilesManager.queryInfoAsync(file);
                 const recentFile = result.recentFile;
