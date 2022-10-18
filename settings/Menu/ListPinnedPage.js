@@ -12,10 +12,6 @@ var ListPinnedPage = GObject.registerClass(
 class ArcMenu_ListPinnedPage extends Gtk.Box {
     _init(settings, listType, settingString) {
         super._init({
-            margin_top: 10,
-            margin_bottom: 10,
-            margin_start: 5,
-            margin_end: 5,
             spacing: 20,
             orientation: Gtk.Orientation.VERTICAL
         });

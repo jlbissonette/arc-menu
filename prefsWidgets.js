@@ -536,11 +536,12 @@ var Tile = GObject.registerClass(class ArcMenu_Tile extends Gtk.FlowBoxChild{
 
         this._image = new Gtk.Image({
             gicon: Gio.icon_new_for_string(file),
-            pixel_size: 155,
+            pixel_size: 115,
         });
 
         this._label = new Gtk.Label({
-            label: _(this.name)
+            label: _(this.name),
+            css_classes: ['caption']
         });
 
         box.append(this._image);
@@ -548,10 +549,14 @@ var Tile = GObject.registerClass(class ArcMenu_Tile extends Gtk.FlowBoxChild{
     }
 
     setActive(active){
-        if(active)
-            this._image.css_classes = this._label.css_classes = ['accent'];
-        else
-            this._image.css_classes = this._label.css_classes = [];
+        if(active){
+            this._image.css_classes = ['accent']; 
+            this._label.css_classes = ['caption', 'accent'];
+        }
+        else{
+            this._image.css_classes = []; 
+            this._label.css_classes = ['caption'];
+        }
     }
 });
 

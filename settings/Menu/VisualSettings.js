@@ -5,14 +5,10 @@ const {Adw, Gdk, GLib, GObject, Gtk} = imports.gi;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
-var GeneralPage = GObject.registerClass(
-    class ArcMenu_MenuSettingsGeneralPage extends Gtk.Box {
+var VisualSettingsPage = GObject.registerClass(
+    class ArcMenu_VisualSettingsPage extends Gtk.Box {
     _init(settings) {
         super._init({
-            margin_top: 10,
-            margin_bottom: 10,
-            margin_start: 5,
-            margin_end: 5,
             spacing: 20,
             orientation: Gtk.Orientation.VERTICAL
         });
@@ -107,7 +103,7 @@ var GeneralPage = GObject.registerClass(
         menuSizeFrame.add(widthRow);
 
         let generalSettingsFrame = new Adw.PreferencesGroup({
-            title: _('General Settings')
+            title: _('Menu Location')
         });
         this.append(generalSettingsFrame);
 
@@ -171,47 +167,8 @@ var GeneralPage = GObject.registerClass(
         menuArrowRiseSwitch.set_active(menuArrowRiseEnabled);
         generalSettingsFrame.add(menuArrowRiseRow);
 
-        let appDescriptionsSwitch = new Gtk.Switch({
-            valign: Gtk.Align.CENTER,
-        });
-        appDescriptionsSwitch.set_active(this._settings.get_boolean('apps-show-extra-details'));
-        appDescriptionsSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('apps-show-extra-details', widget.get_active())
-        });
-        let appDescriptionsRow = new Adw.ActionRow({
-            title: _("Show Application Descriptions"),
-            activatable_widget: appDescriptionsSwitch
-        });
-        appDescriptionsRow.add_suffix(appDescriptionsSwitch);
-        generalSettingsFrame.add(appDescriptionsRow);
-
-        let iconTypes = new Gtk.StringList();
-        iconTypes.append(_('Full Color'));
-        iconTypes.append(_('Symbolic'));
-        let categoryIconTypeRow = new Adw.ComboRow({
-            title: _('Category Icon Type'),
-            subtitle: _("Some icon themes may not include selected icon type"),
-            model: iconTypes,
-            selected: this._settings.get_enum('category-icon-type')
-        });
-        categoryIconTypeRow.connect('notify::selected', (widget) => {
-            this._settings.set_enum('category-icon-type', widget.selected);
-        });
-        generalSettingsFrame.add(categoryIconTypeRow);
-
-        let shortcutsIconTypeRow = new Adw.ComboRow({
-            title: _('Shortcuts Icon Type'),
-            subtitle: _("Some icon themes may not include selected icon type"),
-            model: iconTypes,
-            selected: this._settings.get_enum('shortcut-icon-type')
-        });
-        shortcutsIconTypeRow.connect('notify::selected', (widget) => {
-            this._settings.set_enum('shortcut-icon-type', widget.selected);
-        });
-        generalSettingsFrame.add(shortcutsIconTypeRow);
-
         let iconsSizeFrame = new Adw.PreferencesGroup({
-            title: _("Icon Sizes"),
+            title: _("Menu Icon Sizes"),
             description: _("Override the icon size of various menu items")
         });
         this.append(iconsSizeFrame);
@@ -281,13 +238,10 @@ var GeneralPage = GObject.registerClass(
             buttonIconSizeRow.selected = 0;
             quickLinksIconSizeRow.selected = 0;
             miscIconSizeRow.selected = 0;
-            appDescriptionsSwitch.set_active(this._settings.get_default_value('apps-show-extra-details').unpack());
             menuLocationRow.selected = 0;
             let [_menuRiseEnabled, menuRiseDefault] = this._settings.get_default_value('menu-arrow-rise').deep_unpack();
             menuArrowRiseSpinButton.set_value(menuRiseDefault);
             menuArrowRiseSwitch.set_active(false);
-            categoryIconTypeRow.selected = 0;
-            shortcutsIconTypeRow.selected = 1;
         };
     }
 

@@ -8,21 +8,20 @@ const PW = Me.imports.prefsWidgets;
 const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
-const { SaveThemeDialog } = Me.imports.settings.ThemingDialog;
-const { ManageThemesDialog } = Me.imports.settings.ThemingDialog;
+const { SaveThemeDialog } = Me.imports.settings.Menu.ThemingDialog;
+const { ManageThemesDialog } = Me.imports.settings.Menu.ThemingDialog;
 
-var ThemingPage = GObject.registerClass(
-class ArcMenu_ThemingPage extends Adw.PreferencesPage {
+var ThemePage = GObject.registerClass(
+class ArcMenu_ThemePage extends Gtk.Box {
     _init(settings) {
         super._init({
-            title: _("Theme"),
-            icon_name: 'settings-theme-symbolic',
-            name: 'ThemingPage'
+            spacing: 20,
+            orientation: Gtk.Orientation.VERTICAL
         });
         this._settings = settings;
 
         let overrideThemeGroup = new Adw.PreferencesGroup();
-        this.add(overrideThemeGroup);
+        this.append(overrideThemeGroup);
 
         let overrideThemeSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
@@ -51,7 +50,7 @@ class ArcMenu_ThemingPage extends Adw.PreferencesPage {
         let menuThemesGroup = new Adw.PreferencesGroup({
             title: _("Menu Themes")
         });
-        this.add(menuThemesGroup);
+        this.append(menuThemesGroup);
 
         //Theme Combo Box Section----------
         let themeList = new Gtk.ListStore();
@@ -151,7 +150,7 @@ class ArcMenu_ThemingPage extends Adw.PreferencesPage {
             title: _("Menu Styling"),
             header_suffix: menuThemeSaveButton
         });
-        this.add(menuGroup);
+        this.append(menuGroup);
 
         let menuBGColorRow = this._createColorRow(_("Background Color"), 'menu-background-color');
         menuGroup.add(menuBGColorRow);
@@ -177,7 +176,7 @@ class ArcMenu_ThemingPage extends Adw.PreferencesPage {
         let menuItemsGroup = new Adw.PreferencesGroup({
             title: _("Menu Items Styling")
         });
-        this.add(menuItemsGroup);
+        this.append(menuItemsGroup);
 
         let itemHoverBGColorRow = this._createColorRow(_("Hover") + " " + _("Background Color"), 'menu-item-hover-bg-color');
         menuItemsGroup.add(itemHoverBGColorRow);
