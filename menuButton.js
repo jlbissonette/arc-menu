@@ -520,11 +520,9 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         this.addMenuItem(item);
 
         this.addMenuItem(this.createQuickLinkItem(_("General Settings"), Constants.PrefsVisiblePage.GENERAL));
-        this.addMenuItem(this.createQuickLinkItem(_("Menu Theming"), Constants.PrefsVisiblePage.MENU_THEME));
-        this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
-        this.addMenuItem(this.createQuickLinkItem(_("Layout Tweaks"), Constants.PrefsVisiblePage.LAYOUT_TWEAKS));
         this.addMenuItem(this.createQuickLinkItem(_("Customize Menu"), Constants.PrefsVisiblePage.CUSTOMIZE_MENU));
-        this.addMenuItem(this.createQuickLinkItem(_("Button Settings"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
+        this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
+        this.addMenuItem(this.createQuickLinkItem(_("Menu Button Settings"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
         this.addMenuItem(this.createQuickLinkItem(_("About"), Constants.PrefsVisiblePage.ABOUT));
     }
 

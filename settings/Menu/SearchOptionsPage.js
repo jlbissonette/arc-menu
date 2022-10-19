@@ -56,19 +56,6 @@ class ArcMenu_SearchOptionsPage extends Gtk.Box {
         let searchOptionsFrame = new Adw.PreferencesGroup({
             title: _("Search Options")
         });
-        let descriptionsSwitch = new Gtk.Switch({
-            valign: Gtk.Align.CENTER
-        });
-        descriptionsSwitch.set_active(this.searchResultsDetails);
-        descriptionsSwitch.connect('notify::active', (widget) => {
-            this._settings.set_boolean('show-search-result-details', widget.get_active());
-        });
-        let descriptionsRow = new Adw.ActionRow({
-            title: _("Show descriptions of search results"),
-            activatable_widget: descriptionsSwitch
-        });
-        descriptionsRow.add_suffix(descriptionsSwitch);
-        searchOptionsFrame.add(descriptionsRow);
 
         let highlightSearchResultSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
@@ -160,7 +147,6 @@ class ArcMenu_SearchOptionsPage extends Gtk.Box {
             this.recentFilesSearchProvider = this._settings.get_default_value('search-provider-recent-files').unpack();
             this.highlightSearchResultTerms = this._settings.get_default_value('highlight-search-result-terms').unpack();
             this.maxSearchResults = this._settings.get_default_value('max-search-results').unpack();
-            descriptionsSwitch.set_active(this.searchResultsDetails);
             openWindowsSwitch.set_active(this.openWindowsSearchProvider);
             recentFilesSwitch.set_active(this.recentFilesSearchProvider);
             highlightSearchResultSwitch.set_active(this.highlightSearchResultTerms);

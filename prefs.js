@@ -1,17 +1,16 @@
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
-const {Gdk, Gtk} = imports.gi;
+const { Gdk, Gtk } = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const _ = Gettext.gettext;
-
 const Settings = Me.imports.settings;
+const _ = Gettext.gettext;
 
 const { AboutPage } = Settings.AboutPage;
 const { GeneralPage } = Settings.GeneralPage;
-const { MenuPage } = Settings.MenuPage;
-const { MenuButtonPage } = Settings.MenuButtonPage;
+const { MenuButtonPage } = Me.imports.settings.MenuButtonPage;
+const { MenuPage } = Me.imports.settings.MenuPage;
 
 function init() {
     ExtensionUtils.initTranslations(Me.metadata['gettext-domain']);

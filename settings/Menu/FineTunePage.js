@@ -22,7 +22,23 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         this.showHiddenRecentFiles = this._settings.get_boolean('show-hidden-recent-files');
 
         let miscGroup = new Adw.PreferencesGroup();
-        this.append(miscGroup);
+
+        let descriptionsGroup = new Adw.PreferencesGroup();
+        this.append(descriptionsGroup);
+
+        let searchDescriptionsSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER
+        });
+        searchDescriptionsSwitch.set_active(this.searchResultsDetails);
+        searchDescriptionsSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('show-search-result-details', widget.get_active());
+        });
+        let searchDescriptionsRow = new Adw.ActionRow({
+            title: _("Show Search Result Descriptions"),
+            activatable_widget: searchDescriptionsSwitch
+        });
+        searchDescriptionsRow.add_suffix(searchDescriptionsSwitch);
+        descriptionsGroup.add(searchDescriptionsRow);
 
         let appDescriptionsSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
@@ -36,7 +52,10 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: appDescriptionsSwitch
         });
         appDescriptionsRow.add_suffix(appDescriptionsSwitch);
-        miscGroup.add(appDescriptionsRow);
+        descriptionsGroup.add(appDescriptionsRow);
+
+        let iconStyleGroup = new Adw.PreferencesGroup();
+        this.append(iconStyleGroup);
 
         let iconTypes = new Gtk.StringList();
         iconTypes.append(_('Full Color'));
@@ -50,7 +69,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         categoryIconTypeRow.connect('notify::selected', (widget) => {
             this._settings.set_enum('category-icon-type', widget.selected);
         });
-        miscGroup.add(categoryIconTypeRow);
+        iconStyleGroup.add(categoryIconTypeRow);
 
         let shortcutsIconTypeRow = new Adw.ComboRow({
             title: _('Shortcuts Icon Type'),
@@ -61,7 +80,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         shortcutsIconTypeRow.connect('notify::selected', (widget) => {
             this._settings.set_enum('shortcut-icon-type', widget.selected);
         });
-        miscGroup.add(shortcutsIconTypeRow);
+        iconStyleGroup.add(shortcutsIconTypeRow);
     
         let fadeEffectSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
@@ -151,16 +170,17 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         multiLinedLabelRow.add_suffix(multiLinedLabelInfoButton);
         miscGroup.add(multiLinedLabelRow);
 
+        let recentAppsGroup = new Adw.PreferencesGroup();
+        this.append(recentAppsGroup);
+
         let recentAppsSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
         });
         recentAppsSwitch.connect('notify::active', (widget) => {
-            if(widget.get_active()){
+            if(widget.get_active())
                 clearRecentAppsRow.hide();
-            }
-            else{
+            else
                 clearRecentAppsRow.show();
-            }
             this._settings.set_boolean('disable-recently-installed-apps', widget.get_active());
         });
         let recentAppsRow = new Adw.ActionRow({
@@ -168,7 +188,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: recentAppsSwitch
         });
         recentAppsRow.add_suffix(recentAppsSwitch);
-        miscGroup.add(recentAppsRow);
+        recentAppsGroup.add(recentAppsRow);
 
         let clearRecentAppsButton = new Gtk.Button({
             halign: Gtk.Align.END,
@@ -186,9 +206,11 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: clearRecentAppsButton
         });
         clearRecentAppsRow.add_suffix(clearRecentAppsButton);
-        miscGroup.add(clearRecentAppsRow);
+        recentAppsGroup.add(clearRecentAppsRow);
 
         recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
+
+        this.append(miscGroup);
 
         this.restoreDefaults = () => {
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
@@ -206,6 +228,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             categoryIconTypeRow.selected = 0;
             shortcutsIconTypeRow.selected = 1;
             appDescriptionsSwitch.set_active(this._settings.get_default_value('apps-show-extra-details').unpack());
+            searchDescriptionsSwitch.set_active(this._settings.get_default_value('show-search-result-details').unpack());
         };
     }
 });

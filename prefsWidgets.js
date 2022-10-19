@@ -414,79 +414,6 @@ var EditEntriesBox = GObject.registerClass({
     }
 });
 
-var StackListBox = GObject.registerClass(class ArcMenu_StackListBox extends Gtk.ListBox{
-    _init(widget){
-        super._init({
-            css_classes: ['navigation-sidebar', 'background']
-        });
-        this.connect("row-selected", (self, row) => {
-            if(row){
-                let stackName = row.stackName;
-
-                let currentPageName = widget.settingsLeaflet.get_visible_child_name();
-                if(currentPageName !== stackName)
-                    widget.settingsLeaflet.set_visible_child_name(stackName);
-            }
-        });
-    }
-
-    getSelectedRow(){
-        return this.get_selected_row();
-    }
-
-    selectFirstRow(){
-        this.select_row(this.get_row_at_index(0));
-    }
-
-    selectRowByName(name){
-        let children = [...this];
-        for(let child of children){
-            if(child.stackName === name)
-                this.select_row(child);
-        }
-    }
-
-    addRow(name, translatableName, iconName){
-        let row1 = new Gtk.ListBoxRow();
-        this.append(row1);
-
-        let row = new Gtk.Grid({
-            margin_top: 12,
-            margin_bottom: 12,
-            margin_start: 12,
-            margin_end: 12,
-            column_spacing: 10
-        });
-        row1.set_child(row);
-        row1.stackName = name;
-        row1.translatableName = translatableName;
-
-        let image = new Gtk.Image({
-            icon_name: iconName
-        });
-
-        let label = new Gtk.Label({
-            label: translatableName,
-            halign: Gtk.Align.START,
-        });
-        row.attach(image, 0, 0, 1, 1);
-        row.attach(label, 1, 0, 1, 1);
-    }
-
-    setSeparatorIndices(indexArray){
-        this.set_header_func((_row, _before) =>{
-            for(let i = 0; i < indexArray.length; i++){
-                if(_row.get_index() === indexArray[i]){
-                    let sep = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL);
-                    sep.show();
-                    _row.set_header(sep);
-
-                }
-            }
-        });
-    }
-});
-
 var IconGrid = GObject.registerClass(class ArcMenu_IconGrid extends Gtk.FlowBox{
     _init() {
         super._init({
@@ -510,7 +437,7 @@ var IconGrid = GObject.registerClass(class ArcMenu_IconGrid extends Gtk.FlowBox{
     }
 });
 
-var Tile = GObject.registerClass(class ArcMenu_Tile extends Gtk.FlowBoxChild{
+var MenuLayoutTile = GObject.registerClass(class ArcMenu_MenuLayoutTile extends Gtk.FlowBoxChild{
     _init(name, file, layout) {
         super._init({
             css_classes: ['card'],
@@ -557,57 +484,5 @@ var Tile = GObject.registerClass(class ArcMenu_Tile extends Gtk.FlowBoxChild{
             this._image.css_classes = []; 
             this._label.css_classes = ['caption'];
         }
-    }
-});
-
-var MenuLayoutRow = GObject.registerClass(class ArcMenu_MenuLayoutRow extends Adw.ActionRow {
-    _init(title, imagePath, imageSize, layout) {
-        super._init();
-        this._grid = new Gtk.Grid({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            margin_top: 5,
-            margin_bottom: 5,
-            margin_start: 5,
-            margin_end: 5,
-            column_spacing: 0,
-            row_spacing: 0
-        });
-
-        if(layout){
-            this.layout = layout.MENU_TYPE;
-        }
-
-        this.title = "<b>" + _(title) + "</b>"
-        this.image = new Gtk.Image({
-            hexpand: false,
-            halign: Gtk.Align.START,
-            gicon: Gio.icon_new_for_string(imagePath),
-            pixel_size: imageSize
-        });
-
-        this.label = new Gtk.Label({
-            label: "<b>" + _(title) + "</b>",
-            use_markup: true,
-            hexpand: true,
-            halign: Gtk.Align.CENTER,
-            vexpand: true,
-            valign: Gtk.Align.CENTER,
-            wrap: true,
-        })
-
-        let goNextImage = new Gtk.Image({
-            gicon: Gio.icon_new_for_string('go-next-symbolic'),
-            halign: Gtk.Align.END,
-            valign: Gtk.Align.CENTER,
-            hexpand: false,
-            vexpand: false,
-        })
-        this._grid.attach(this.image, 0, 0, 1, 1);
-        this._grid.attach(this.label, 0, 0, 1, 1);
-        this._grid.attach(goNextImage, 0, 0, 1, 1);
-
-        this.set_child(this._grid);
-        this.activatable_widget = this._grid;
-
     }
 });

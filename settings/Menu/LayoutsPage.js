@@ -41,10 +41,6 @@ class ArcMenu_LayoutsPage extends Gtk.Box {
 
         let currentLayoutBoxRow = new CurrentLayoutRow(currentLayoutName, currentLayoutImagePath);
 
-        currentLayoutBoxRow.connect('activated', () => {
-            this.displayLayoutTweaksPage();
-        });
-
         currentLayoutGroup.add(currentLayoutBoxRow);
         mainBox.append(currentLayoutGroup);
 
@@ -58,7 +54,7 @@ class ArcMenu_LayoutsPage extends Gtk.Box {
 
         this.applyButton.connect('clicked', () => {
             this._settings.set_enum('menu-layout', this.selectedMenuLayout);
-            currentLayoutBoxRow.label.label = "<b>" + this.getMenuLayoutName(this.selectedMenuLayout) + "</b>";
+            currentLayoutBoxRow.label.label = this.getMenuLayoutName(this.selectedMenuLayout);
             currentLayoutBoxRow.image.gicon = Gio.icon_new_for_string(this.getMenuLayoutImagePath(this.selectedMenuLayout));
             this.applyButton.sensitive = true;
             this.expandedRow.expanded = false;
@@ -169,7 +165,7 @@ var LayoutsCategoryPage = GObject.registerClass({
         });
 
         this.styles.forEach((style) => {
-            let tile = new PW.Tile(style.TITLE, style.IMAGE, style.LAYOUT);
+            let tile = new PW.MenuLayoutTile(style.TITLE, style.IMAGE, style.LAYOUT);
             this.add(tile);
         });
     }
@@ -181,41 +177,47 @@ var LayoutsCategoryPage = GObject.registerClass({
     }
 });
 
-var CurrentLayoutRow = GObject.registerClass(class ArcMenu_MenuLayoutRow extends Adw.ActionRow {
+var CurrentLayoutRow = GObject.registerClass(class ArcMenu_MenuLayoutRow extends Gtk.Box {
     _init(title, imagePath, layout) {
         super._init({
-            title: _(title)
-        });
-        this._grid = new Gtk.Grid({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            column_spacing: 0,
-            row_spacing: 0
+            orientation: Gtk.Orientation.VERTICAL,
+            css_classes: ['card'],
+            hexpand: false,
+            spacing: 0,
+            halign: Gtk.Align.CENTER,
         });
 
         if(layout)
             this.layout = layout.MENU_TYPE;
-
+        
+        let box = new Gtk.Box({
+            margin_start: 15,
+            margin_end: 15,
+            margin_top: 5,
+            margin_bottom: 5,
+            orientation: Gtk.Orientation.VERTICAL,
+            hexpand: false,
+        });
+    
         this.image = new Gtk.Image({
             hexpand: false,
-            halign: Gtk.Align.START,
+            halign: Gtk.Align.CENTER,
             gicon: Gio.icon_new_for_string(imagePath),
             pixel_size: 125
         });
 
         this.label = new Gtk.Label({
             label: _(title),
-            use_markup: true,
             hexpand: true,
             halign: Gtk.Align.CENTER,
             vexpand: false,
-            valign: Gtk.Align.CENTER,
-            wrap: true,
-            css_classes: ['title-1']
+            valign: Gtk.Align.START,
+            css_classes: ['heading'],
         });
 
-        this._grid.attach(this.image, 0, 0, 1, 1);
-        this._grid.attach(this.label, 0, 0, 1, 1);
+        box.append(this.image);
+        box.append(this.label);
 
-        this.set_child(this._grid);
+        this.append(box);
     }
 });
