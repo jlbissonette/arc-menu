@@ -14,7 +14,10 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
     _init(settings) {
         this._settings = settings;
         super._init({
-            spacing: 20,
+            spacing: 24,
+            margin_start: 6,
+            margin_end: 6,
+            margin_bottom: 6,
             orientation: Gtk.Orientation.VERTICAL
         });
 

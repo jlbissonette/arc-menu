@@ -33,9 +33,11 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
 
         let mainBox = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
-            spacing: 20,
-            vexpand: true,
-            valign: Gtk.Align.FILL
+            spacing: 24,
+            margin_start: 6,
+            margin_end: 6,
+            margin_bottom: 6,
+            css_name: 'box'
         });
 
         this.mainLeaflet = new Adw.Leaflet({
@@ -271,15 +273,15 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
         if(settingPage.restoreDefaults)
             buttonBox.attach(restoreDefaultsButton, 0, 0, 1, 1);
 
-            settingPage.prepend(buttonBox);
+        settingPage.prepend(buttonBox);
 
         const leafletPage = this.subLeaflet.append(settingPage);
         leafletPage.name = leafletName;
 
         row.connect('activated', () => {
-            if(settingPage.setActiveLayout){
+            if(settingPage.setActiveLayout)
                 settingPage.setActiveLayout(this._settings.get_enum('menu-layout'));
-            }
+
             this.subLeaflet.visible_child = settingPage;
             this.mainLeaflet.visible_child = this.subLeaflet;
         });
