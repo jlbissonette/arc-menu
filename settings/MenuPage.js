@@ -33,8 +33,6 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
 
         let mainBox = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
-            margin_start: 5,
-            margin_end: 5,
             spacing: 20,
             vexpand: true,
             valign: Gtk.Align.FILL

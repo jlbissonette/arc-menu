@@ -786,8 +786,8 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         this.mainBox.append(placesFrame);
 
         let extraCategoriesFrame = new Adw.PreferencesGroup({
-            title: _("Extra Categories Quick Links"),
-            description: _("Display quick links of extra categories on the home page\nSee Customize Menu -> Extra Categories")
+            title: _("Category Quick Links"),
+            description: _("Display quick links of extra categories on the home page\nMust also be enabled in 'Menu -> Extra Categories' section")
         });
         let extraCategoriesLinksBox = new ListOtherPage(this._settings, Constants.MenuSettingsListType.QUICK_LINKS);
         extraCategoriesFrame.add(extraCategoriesLinksBox);

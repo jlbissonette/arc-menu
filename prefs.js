@@ -45,47 +45,33 @@ function populateWindow(window, settings){
 function setVisiblePage(window, settings){
     const prefsVisiblePage = settings.get_int('prefs-visible-page');
 
-
     if(prefsVisiblePage === Constants.PrefsVisiblePage.MAIN)
         window.set_visible_page_name('GeneralPage');
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.CUSTOMIZE_MENU){
         window.set_visible_page_name('MenuPage');
-        let page = window.get_visible_page();
+        const page = window.get_visible_page();
         page.mainLeaflet.visible_child_name = 'MainView';
     }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.MENU_LAYOUT){
         window.set_visible_page_name('MenuPage');
-        let page = window.get_visible_page();
+        const page = window.get_visible_page();
         page.subLeaflet.visible_child_name = 'LayoutsPage';
         page.mainLeaflet.visible_child = page.subLeaflet;
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.BUTTON_APPEARANCE){
+    else if(prefsVisiblePage === Constants.PrefsVisiblePage.BUTTON_APPEARANCE)
         window.set_visible_page_name("MenuButtonPage");
-    }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.LAYOUT_TWEAKS){
-        window.set_visible_page_name('MenuPage');
-        let page = window.get_visible_page();
-        page.subLeaflet.visible_child_name = 'LayoutTweaksPage';
-        page.mainLeaflet.visible_child = page.subLeaflet;
-    }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
         window.set_visible_page_name('vPage');
-        let page = window.get_visible_page();
+        const page = window.get_visible_page();
         page.subLeaflet.visible_child_name = 'LayoutTweaksPage';
-        const tweaksPage = page.subLeaflet.visible_child;
         page.mainLeaflet.visible_child = page.subLeaflet;
+        const tweaksPage = page.subLeaflet.visible_child;
         tweaksPage.setActiveLayout(Constants.MenuLayout.RUNNER);
     }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.ABOUT)
         window.set_visible_page_name("AboutPage");
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.GENERAL)
         window.set_visible_page_name("GeneralPage");
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.MENU_THEME){
-        window.set_visible_page_name("MenuPage");
-        let page = window.get_visible_page();
-        page.subLeaflet.visible_child_name = 'ThemePage';
-        page.mainLeaflet.visible_child = page.subLeaflet;
-    }
 
     settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.MAIN);
 }

@@ -168,13 +168,13 @@ var VisualSettingsPage = GObject.registerClass(
         generalSettingsFrame.add(menuArrowRiseRow);
 
         let iconsSizeFrame = new Adw.PreferencesGroup({
-            title: _("Menu Icon Sizes"),
+            title: _("Override Icon Sizes"),
             description: _("Override the icon size of various menu items")
         });
         this.append(iconsSizeFrame);
 
         let iconSizes = new Gtk.StringList();
-        iconSizes.append(_('Default'));
+        iconSizes.append(_('Off'));
         iconSizes.append(_('Small') + " - " + _('Square'));
         iconSizes.append(_('Medium') + " - " + _('Square'));
         iconSizes.append(_('Large') + " - " + _('Square'));
@@ -247,7 +247,7 @@ var VisualSettingsPage = GObject.registerClass(
 
     createIconSizeRow(rowDetails){
         let iconSizes = new Gtk.StringList();
-        iconSizes.append(_('Default'));
+        iconSizes.append(_('Off'));
         iconSizes.append(_('Extra Small'));
         iconSizes.append(_('Small'));
         iconSizes.append(_('Medium'));
