@@ -190,7 +190,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
         let extraCategoriesRow = new SettingRow({
             title: _('Extra Categories'),
             icon_name: 'view-list-symbolic',
-            subtitle: _('Add or Remove additional custom categories')
+            subtitle: _('Add or remove additional custom categories')
         });
         this._addLeafletPageToRow(extraCategoriesRow, {
             pageClass: ListOtherPage,
