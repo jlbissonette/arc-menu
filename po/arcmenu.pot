@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-21 13:11-0400\n"
+"POT-Creation-Date: 2022-10-22 17:42-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -204,7 +204,7 @@ msgstr ""
 msgid "Application Menu Extension for GNOME"
 msgstr ""
 
-#: settings/AboutPage.js:22 menuButton.js:526
+#: settings/AboutPage.js:22 menuButton.js:535
 msgid "About"
 msgstr ""
 
@@ -233,7 +233,7 @@ msgid "Export or Import Settings"
 msgstr ""
 
 #: settings/AboutPage.js:128 settings/Menu/ListPinnedPage.js:299
-#: settings/Menu/ListPinnedPage.js:312 menuButton.js:518 prefs.js:95
+#: settings/Menu/ListPinnedPage.js:312 menuButton.js:527 prefs.js:95
 #: constants.js:416
 msgid "ArcMenu Settings"
 msgstr ""
@@ -316,7 +316,7 @@ msgstr ""
 msgid "Useful with Dash to Panel setting 'Keep original gnome-shell top panel'"
 msgstr ""
 
-#: settings/GeneralPage.js:126 menuButton.js:522
+#: settings/GeneralPage.js:126 menuButton.js:531
 msgid "General Settings"
 msgstr ""
 
@@ -376,21 +376,20 @@ msgstr ""
 msgid "New Hotkey"
 msgstr ""
 
-#: settings/GeneralPage.js:369 settings/Menu/LayoutsPage.js:49
-#: settings/Menu/ListPinnedPage.js:574
+#: settings/GeneralPage.js:369 settings/Menu/ListPinnedPage.js:574
 msgid "Apply"
 msgstr ""
 
-#: settings/SettingsUtils.js:12 settings/Menu/LayoutsPage.js:122
+#: settings/SettingsUtils.js:12 settings/Menu/LayoutsPage.js:111
 #, javascript-format
 msgid "%s Layout Tweaks"
 msgstr ""
 
-#: settings/Menu/LayoutsPage.js:66
+#: settings/Menu/LayoutsPage.js:49
 msgid "Choose a new menu layout?"
 msgstr ""
 
-#: settings/Menu/LayoutsPage.js:74
+#: settings/Menu/LayoutsPage.js:55
 #, javascript-format
 msgid "%s Menu Layouts"
 msgstr ""
@@ -1100,7 +1099,7 @@ msgid "Menu Layout"
 msgstr ""
 
 #: settings/MenuPage.js:71
-msgid "Choose the style of the menu"
+msgid "Choose a layout style for the menu"
 msgstr ""
 
 #: settings/MenuPage.js:77
@@ -1112,7 +1111,7 @@ msgid "Menu Theme"
 msgstr ""
 
 #: settings/MenuPage.js:87
-msgid "Modify colors, font size, and border of the menu"
+msgid "Modify menu colors, font size, and border"
 msgstr ""
 
 #: settings/MenuPage.js:97
@@ -1120,7 +1119,7 @@ msgid "Menu Visual Appearance"
 msgstr ""
 
 #: settings/MenuPage.js:98
-msgid "Change menu height and width, menu location, and menu icon sizes"
+msgid "Change menu height, width, location, and icon sizes"
 msgstr ""
 
 #: settings/MenuPage.js:108
@@ -1148,7 +1147,7 @@ msgid "Power Options"
 msgstr ""
 
 #: settings/MenuPage.js:180
-msgid "Which power options to show and display style"
+msgid "Choose which power options to show and the display style"
 msgstr ""
 
 #: settings/MenuPage.js:191
@@ -1179,23 +1178,23 @@ msgstr ""
 msgid "Open Folder Location"
 msgstr ""
 
-#: menuButton.js:89
+#: menuButton.js:90
 msgid "App Icons Taskbar Settings"
 msgstr ""
 
-#: menuButton.js:93
+#: menuButton.js:94
 msgid "Dash to Panel Settings"
 msgstr ""
 
-#: menuButton.js:523
+#: menuButton.js:532
 msgid "Customize Menu"
 msgstr ""
 
-#: menuButton.js:524
+#: menuButton.js:533
 msgid "Change Menu Layout"
 msgstr ""
 
-#: menuButton.js:525
+#: menuButton.js:534
 msgid "Menu Button Settings"
 msgstr ""
 

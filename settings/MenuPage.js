@@ -68,7 +68,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
 
         let layoutRow = new SettingRow({
             title: _('Menu Layout'),
-            subtitle: _('Choose the style of the menu'),
+            subtitle: _('Choose a layout style for the menu'),
             icon_name: 'settings-layouts-symbolic'
         });
         this._addLeafletPageToRow(layoutRow, {
@@ -84,7 +84,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
 
         let themeRow = new SettingRow({
             title: _('Menu Theme'),
-            subtitle: _('Modify colors, font size, and border of the menu'),
+            subtitle: _('Modify menu colors, font size, and border'),
             icon_name: 'settings-theme-symbolic'
         });
         this._addLeafletPageToRow(themeRow, {
@@ -95,7 +95,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
 
         let visualSettingsRow = new SettingRow({
             title: _('Menu Visual Appearance'),
-            subtitle: _('Change menu height and width, menu location, and menu icon sizes'),
+            subtitle: _('Change menu height, width, location, and icon sizes'),
             icon_name: 'settings-settings-symbolic'
         });
         this._addLeafletPageToRow(visualSettingsRow, {
@@ -177,7 +177,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
 
         let powerOptionsRow = new SettingRow({
             title: _('Power Options'),
-            subtitle: _('Which power options to show and display style'),
+            subtitle: _('Choose which power options to show and the display style'),
             icon_name: 'gnome-power-manager-symbolic'
         });
         this._addLeafletPageToRow(powerOptionsRow, {
