@@ -94,12 +94,16 @@ function fillPreferencesWindow(window) {
     window.default_height = settings.get_int('settings-height');
     window.set_title(_("ArcMenu Settings"));
 
-    //Force navigate to MenuPage's MainView leaflet
     window.connect('notify::visible-page', () => {
-        if(window.visible_page_name === 'MenuPage'){
-            const page = window.visible_page;
+        const page = window.visible_page;
+        const maybeScrolledWindowChild = [...page][0];
+
+        if(maybeScrolledWindowChild instanceof Gtk.ScrolledWindow)
+            maybeScrolledWindowChild.vadjustment.value = 0;
+
+        //Force navigate to "MenuPage" MainView leaflet
+        if(window.visible_page_name === 'MenuPage')
             page.mainLeaflet.visible_child_name = 'MainView';
-        }
     });
 
     populateWindow(window, settings);

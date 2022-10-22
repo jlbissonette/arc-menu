@@ -547,7 +547,7 @@ var Tooltip = GObject.registerClass(class ArcMenu_Tooltip extends St.BoxLayout {
             if(!shouldShow)
                 return;
 
-            this._menuButton.tooltipShowingID = GLib.timeout_add(0, 750, () => {
+            this._menuButton.tooltipShowingID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 750, () => {
                 if(this.titleLabel.text)
                     this.titleLabel.show();
                 if(this.descriptionLabel.text)

@@ -45,31 +45,12 @@ class ArcMenu_LayoutsPage extends Gtk.Box {
         currentLayoutGroup.add(currentLayoutBoxRow);
         mainBox.append(currentLayoutGroup);
 
-        this.applyButton = new Gtk.Button({
-            label: _("Apply"),
-            hexpand: false,
-            halign: Gtk.Align.END,
-            css_classes: ['suggested-action'],
-            sensitive: false
-        });
-
-        this.applyButton.connect('clicked', () => {
-            this._settings.set_enum('menu-layout', this.selectedMenuLayout);
-            currentLayoutBoxRow.label.label = this.getMenuLayoutName(this.selectedMenuLayout);
-            currentLayoutBoxRow.image.gicon = Gio.icon_new_for_string(this.getMenuLayoutImagePath(this.selectedMenuLayout));
-            this.applyButton.sensitive = true;
-            this.expandedRow.expanded = false;
-            this.emit('response', Gtk.ResponseType.APPLY)
-        });
-
         let menuLayoutGroup = new Adw.PreferencesGroup({
             title: _("Choose a new menu layout?"),
-            header_suffix: this.applyButton
         });
         mainBox.append(menuLayoutGroup);
 
         Constants.MenuStyles.STYLES.forEach((style) => {
-
             let tile = new Adw.ExpanderRow({
                 title: _("%s Menu Layouts").format(_(style.TITLE)),
                 icon_name: style.IMAGE
@@ -78,16 +59,29 @@ class ArcMenu_LayoutsPage extends Gtk.Box {
          
             menuLayoutGroup.add(tile);
 
-            let menuLayoutsBox = new LayoutsCategoryPage(this._settings, tile);
+            let layoutsBox = new LayoutsBox(this._settings, tile);
+
+            if(layoutsBox.selectedLayout)
+                this.activeLayoutBox = layoutsBox;
+
             let row = new Gtk.ListBoxRow({
                 selectable: false,
                 activatable: false,
             });
-            row.set_child(menuLayoutsBox);
-            menuLayoutsBox.connect('menu-selected', (dialog, response) => {
+            row.set_child(layoutsBox);
+            layoutsBox.connect('menu-selected', (widget, response) => {
                 if(response === Gtk.ResponseType.OK) {
-                    this.applyButton.sensitive = true;
-                    this.selectedMenuLayout = dialog.menuLayout;
+                    this._settings.set_enum('menu-layout', widget.menuLayout);
+                    this.activeLayoutBox.clearSelection();
+
+                    this.activeLayoutBox = widget;
+                    this.activeLayoutBox.applySelection();
+                    this.selectedMenuLayout = widget.menuLayout;
+
+                    currentLayoutBoxRow.label.label = this.getMenuLayoutName(this.selectedMenuLayout);
+                    currentLayoutBoxRow.image.gicon = Gio.icon_new_for_string(this.getMenuLayoutImagePath(this.selectedMenuLayout));
+                    this.expandedRow.expanded = false;
+                    this.emit('response', Gtk.ResponseType.APPLY)
                 }
             });
             tile.connect('notify::expanded', () => {
@@ -95,11 +89,6 @@ class ArcMenu_LayoutsPage extends Gtk.Box {
                     this.expandedRow.expanded = false;
 
                 this.expandedRow = tile;
-
-                if(!tile.expanded){
-                    menuLayoutsBox.clearSelection();
-                    this.applyButton.sensitive = false;
-                }
             });
             tile.add_row(row);
         });
@@ -136,45 +125,63 @@ class ArcMenu_LayoutsPage extends Gtk.Box {
     }
 });
 
-var LayoutsCategoryPage = GObject.registerClass({
+var LayoutsBox = GObject.registerClass({
     Signals: {
         'menu-selected': { param_types: [GObject.TYPE_INT] },
     },
-},  class ArcMenu_LayoutsCategoryPage extends PW.IconGrid {
+},  class ArcMenu_LayoutsBox extends PW.IconGrid {
     _init(settings, tile) {
         super._init();
 
         this._settings = settings;
-        this.menuLayout = this._settings.get_enum('menu-layout');
         this.layoutStyle = tile.layout;
-
-        const maxColumns = tile.layout.length > 3 ? 3 : tile.layout.length;
         this.styles = tile.layout;
 
-        this.max_children_per_line = maxColumns;
+        //clamp max children per line. min = 1, max = 3;
+        this.max_children_per_line = Math.min(Math.max(tile.layout.length, 1), 3);
+
         this.connect('child-activated', () => {
+            const currentMenuLayout = this._settings.get_enum('menu-layout');
             const selectedChildren = this.get_selected_children();
-            const selectedChild = selectedChildren[0];
-            if(this.selectedChild && this.selectedChild !== selectedChild){
-                this.selectedChild.setActive(false);
-            }
-            this.selectedChild = selectedChild;
-            selectedChild.setActive(true);
-            this.menuLayout = selectedChild.layout;
+            const selectedLayout = selectedChildren[0];
+
+            if(currentMenuLayout === selectedLayout.layout)
+                return;
+
+            this.selectedLayout?.setActive(false);
+            this.selectedLayout = selectedLayout;
+            this.menuLayout = selectedLayout.layout;
 
             this.emit('menu-selected', Gtk.ResponseType.OK);
         });
 
         this.styles.forEach((style) => {
+            const currentMenuLayout = this._settings.get_enum('menu-layout');
             let tile = new PW.MenuLayoutTile(style.TITLE, style.IMAGE, style.LAYOUT);
             this.add(tile);
+
+            if(currentMenuLayout === style.LAYOUT){
+                this.selectedLayout = tile;
+                this.applySelection();
+            }
         });
     }
 
     clearSelection(){
+        const currentMenuLayout = this._settings.get_enum('menu-layout');
         this.unselect_all();
-        if(this.selectedChild)
-            this.selectedChild.setActive(false);
+
+        if(this.selectedLayout && currentMenuLayout !== this.selectedLayout.layout){
+            this.selectedLayout.setActive(false);
+            this.selectedLayout = null;
+        }
+    }
+
+    applySelection(){
+        if(this.selectedLayout){
+            this.select_child(this.selectedLayout);
+            this.selectedLayout.setActive(true);
+        }
     }
 });
 
@@ -194,8 +201,8 @@ var CurrentLayoutRow = GObject.registerClass(class ArcMenu_MenuLayoutRow extends
         let box = new Gtk.Box({
             margin_start: 15,
             margin_end: 15,
-            margin_top: 5,
-            margin_bottom: 5,
+            margin_top: 8,
+            margin_bottom: 8,
             orientation: Gtk.Orientation.VERTICAL,
             hexpand: false,
         });

@@ -78,7 +78,8 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
         this.setMenuPositionAlignment();
 
-        this.createLayoutID = GLib.timeout_add(0, 100, () => {
+        this.clearMenuLayoutTimeouts();
+        this.createLayoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
             this.createMenuLayout();
             this.createLayoutID = null;
             return GLib.SOURCE_REMOVE;
@@ -342,14 +343,9 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             Main.layoutManager.disconnect(this._startupCompleteId);
             this._startupCompleteId = null;
         }
-        if(this.createLayoutID){
-            GLib.source_remove(this.createLayoutID);
-            this.createLayoutID = null;
-        }
-        if(this.updateMenuLayoutID){
-            GLib.source_remove(this.updateMenuLayoutID);
-            this.updateMenuLayoutID = null;
-        }
+
+        this.clearMenuLayoutTimeouts();
+
         if(this.tooltipShowingID){
             GLib.source_remove(this.tooltipShowingID);
             this.tooltipShowingID = null;
@@ -368,7 +364,20 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         super._onDestroy();
     }
 
+    clearMenuLayoutTimeouts(){
+        if(this.createLayoutID){
+            GLib.source_remove(this.createLayoutID);
+            this.createLayoutID = null;
+        }
+        if(this.updateMenuLayoutID){
+            GLib.source_remove(this.updateMenuLayoutID);
+            this.updateMenuLayoutID = null;
+        }
+    }
+
     updateMenuLayout(){
+        this.clearMenuLayoutTimeouts();
+
         this.tooltipShowing = false;
         if (this.tooltipShowingID) {
             GLib.source_remove(this.tooltipShowingID);
@@ -378,7 +387,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             this.MenuLayout.destroy();
             this.MenuLayout = null;
         }
-        this.updateMenuLayoutID = GLib.timeout_add(0, 100, () => {
+        this.updateMenuLayoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
             this.createMenuLayout();
             this.updateMenuLayoutID = null;
             return GLib.SOURCE_REMOVE;
