@@ -537,7 +537,10 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             customIconFlowBox.select_child(customIconFlowBox.get_child_at_index(0));
         }
 
-        let distroInfoButtonGroup = new Adw.PreferencesGroup();
+        let distroInfoButtonGroup = new Adw.PreferencesGroup({
+            valign: Gtk.Align.END,
+            vexpand: true
+        });
         let distroInfoButton = new PW.Button({
             icon_name: 'help-about-symbolic',
             halign: Gtk.Align.START
