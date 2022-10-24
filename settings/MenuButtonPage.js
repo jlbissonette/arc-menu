@@ -10,21 +10,48 @@ const _ = Gettext.gettext;
 
 const ICON_SIZE = 32;
 
-var ButtonAppearancePage = GObject.registerClass(
-class ArcMenu_ButtonAppearancePage extends Gtk.Box {
+var MenuButtonPage = GObject.registerClass(
+class ArcMenu_MenuButtonPage extends Adw.PreferencesPage {
     _init(settings) {
         super._init({
-            margin_top: 10,
-            margin_bottom: 10,
-            margin_start: 5,
-            margin_end: 5,
-            spacing: 20,
-            orientation: Gtk.Orientation.VERTICAL
+            title: _('Menu Button'),
+            icon_name: 'icon-arcmenu-logo-symbolic',
+            name: 'MenuButtonPage'
         });
         this._settings = settings;
 
+
+        let restoreDefaultsButton = new Gtk.Button({
+            icon_name: 'view-refresh-symbolic',
+            vexpand: false,
+            valign: Gtk.Align.CENTER,
+            tooltip_text: _("Reset settings"),
+            css_classes: ['destructive-action'],
+            halign: Gtk.Align.END,
+            hexpand: true,
+        });
+        restoreDefaultsButton.connect("clicked", () => {
+            const pageName = this.title;
+            let dialog = new Gtk.MessageDialog({
+                text: "<b>" + _("Reset all %s settings?").format(pageName) + '</b>',
+                secondary_text: _("All %s settings will be reset to the default value.").format(pageName),
+                use_markup: true,
+                buttons: Gtk.ButtonsType.YES_NO,
+                message_type: Gtk.MessageType.WARNING,
+                transient_for: this.get_root(),
+                modal: true
+            });
+            dialog.connect('response', (widget, response) => {
+                if(response == Gtk.ResponseType.YES)
+                    this.restoreDefaults();
+                dialog.destroy();
+            });
+            dialog.show();
+        });
+
         let menuButtonAppearanceFrame = new Adw.PreferencesGroup({
-            title: _('Menu Button')
+            title: _('Menu Button Appearance'),
+            header_suffix: restoreDefaultsButton
         });
 
         let menuButtonAppearances = new Gtk.StringList();
@@ -34,7 +61,7 @@ class ArcMenu_ButtonAppearancePage extends Gtk.Box {
         menuButtonAppearances.append(_("Text and Icon"));
         menuButtonAppearances.append(_("Hidden"));
         let menuButtonAppearanceRow = new Adw.ComboRow({
-            title: _('Appearance'),
+            title: _('Display Style'),
             model: menuButtonAppearances,
             selected: -1
         });
@@ -123,10 +150,10 @@ class ArcMenu_ButtonAppearancePage extends Gtk.Box {
         menuButtonAppearanceFrame.add(menuButtonCustomTextBoxRow);
         menuButtonAppearanceFrame.add(menuButtonPaddingRow);
         menuButtonAppearanceFrame.add(menuButtonOffsetRow);
-        this.append(menuButtonAppearanceFrame);
+        this.add(menuButtonAppearanceFrame);
 
         let menuButtonIconFrame = new Adw.PreferencesGroup({
-            title: _('Icon Settings')
+            title: _('Menu Button Icon')
         });
         let menuButtonIconButton = new PW.Button({
             title: _("Browse...") + " ",
@@ -141,7 +168,7 @@ class ArcMenu_ButtonAppearancePage extends Gtk.Box {
             });
         });
         let menuButtonIconRow = new Adw.ActionRow({
-            title: _('Icon'),
+            title: _('Choose a new icon'),
             activatable_widget: menuButtonIconButton
         });
         menuButtonIconRow.add_suffix(menuButtonIconButton);
@@ -172,13 +199,13 @@ class ArcMenu_ButtonAppearancePage extends Gtk.Box {
 
         menuButtonAppearanceRow.selected = this._settings.get_enum('menu-button-appearance');
 
-        this.append(menuButtonIconFrame);
+        this.add(menuButtonIconFrame);
 
         let menuButtonGroup = new Adw.PreferencesGroup({
             title: _("Menu Button Styling"),
             description: _("Results may vary with third party themes")
         });
-        this.append(menuButtonGroup);
+        this.add(menuButtonGroup);
 
         let buttonFGColorRow = this._createButtonColorRow(_("Foreground Color"), 'menu-button-fg-color');
         menuButtonGroup.add(buttonFGColorRow);
@@ -510,7 +537,10 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             customIconFlowBox.select_child(customIconFlowBox.get_child_at_index(0));
         }
 
-        let distroInfoButtonGroup = new Adw.PreferencesGroup();
+        let distroInfoButtonGroup = new Adw.PreferencesGroup({
+            valign: Gtk.Align.END,
+            vexpand: true
+        });
         let distroInfoButton = new PW.Button({
             icon_name: 'help-about-symbolic',
             halign: Gtk.Align.START

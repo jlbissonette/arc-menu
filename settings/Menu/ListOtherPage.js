@@ -11,11 +11,10 @@ var ListOtherPage = GObject.registerClass(
     class ArcMenu_ListOtherPage extends Gtk.Box {
     _init(settings, listType) {
         super._init({
-            margin_top: 10,
-            margin_bottom: 10,
-            margin_start: 5,
-            margin_end: 5,
-            spacing: 20,
+            spacing: 24,
+            margin_start: 6,
+            margin_end: 6,
+            margin_bottom: 6,
             orientation: Gtk.Orientation.VERTICAL
         });
         this.frameRows = [];

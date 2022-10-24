@@ -31,6 +31,7 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
         });
         let showActivitiesRow = new Adw.ActionRow({
             title: _("Show Activities Button"),
+            subtitle: _("Dash to Panel may conflict with this setting"),
             activatable_widget: showActivitiesSwitch
         });
         showActivitiesRow.add_suffix(showActivitiesSwitch);

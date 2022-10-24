@@ -3,51 +3,24 @@ const {Adw, Gdk, GdkPixbuf, Gio, GLib, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
+const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
-const { ListPinnedPage } = Me.imports.settings.MenuSettingsPages.ListPinnedPage;
-const { ListOtherPage } = Me.imports.settings.MenuSettingsPages.ListOtherPage;
+const { ListPinnedPage } = Me.imports.settings.Menu.ListPinnedPage;
+const { ListOtherPage } = Me.imports.settings.Menu.ListOtherPage;
 
-var LayoutTweaksPage = GObject.registerClass({
-    Signals: {
-        'response': { param_types: [GObject.TYPE_INT] },
-    },
-},  class ArcMenu_LayoutTweaksPage extends Gtk.Box {
-    _init(settings, layoutName) {
+var LayoutTweaksPage = GObject.registerClass(
+class ArcMenu_LayoutTweaksPage extends Gtk.Box {
+    _init(settings) {
         this._settings = settings;
-        this.addResponse = false;
         super._init({
-            margin_start: 5,
-            margin_end: 5,
-            orientation: Gtk.Orientation.VERTICAL,
+            spacing: 24,
+            margin_start: 6,
+            margin_end: 6,
+            margin_bottom: 6,
+            orientation: Gtk.Orientation.VERTICAL
         });
 
-        this.layoutNameLabel = new Gtk.Label({
-            label: "<b>" + _(layoutName) + "</b>",
-            use_markup: true,
-            xalign: 0,
-            hexpand: true,
-            halign: Gtk.Align.CENTER
-        })
-
-        let backButton = new PW.Button({
-            icon_name: 'go-previous-symbolic',
-            title: _("Back"),
-            icon_first: true,
-            css_classes: ['suggested-action']
-        });
-        backButton.halign = Gtk.Align.START;
-        backButton.connect('clicked', () => {
-            this.emit('response', -20);
-        });
-        this.headerBox = new Gtk.Grid({
-            hexpand: true,
-            halign: Gtk.Align.FILL,
-            margin_bottom: 10,
-        });
-
-        this.headerBox.attach(backButton, 0, 0, 1, 1);
-        this.headerBox.attach(this.layoutNameLabel, 0, 0, 1, 1);
         this.mainBox = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
             spacing: 20,
@@ -55,14 +28,12 @@ var LayoutTweaksPage = GObject.registerClass({
             valign: Gtk.Align.FILL
         });
 
-        this.append(this.headerBox);
         this.append(this.mainBox);
         this._createLayout();
     }
 
-    setActiveLayout(menuLayout, layoutName){
-        if(layoutName)
-            this.layoutNameLabel.label = "<b>" + _(layoutName) + "</b>";
+    setActiveLayout(menuLayout){
+        this.titleLabel.label = _(SettingsUtils.getMenuLayoutTweaksName(menuLayout));
         let children = [...this.mainBox];
         for(let child of children){
             this.mainBox.remove(child);
@@ -818,8 +789,8 @@ var LayoutTweaksPage = GObject.registerClass({
         this.mainBox.append(placesFrame);
 
         let extraCategoriesFrame = new Adw.PreferencesGroup({
-            title: _("Extra Categories Quick Links"),
-            description: _("Display quick links of extra categories on the home page\nSee Customize Menu -> Extra Categories")
+            title: _("Category Quick Links"),
+            description: _("Display quick links of extra categories on the home page\nMust also be enabled in 'Menu -> Extra Categories' section")
         });
         let extraCategoriesLinksBox = new ListOtherPage(this._settings, Constants.MenuSettingsListType.QUICK_LINKS);
         extraCategoriesFrame.add(extraCategoriesLinksBox);

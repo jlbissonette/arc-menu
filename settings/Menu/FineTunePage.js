@@ -10,11 +10,10 @@ var FineTunePage = GObject.registerClass(
 class ArcMenu_FineTunePage extends Gtk.Box {
     _init(settings) {
         super._init({
-            margin_top: 10,
-            margin_bottom: 10,
-            margin_start: 5,
-            margin_end: 5,
-            spacing: 20,
+            spacing: 24,
+            margin_start: 6,
+            margin_end: 6,
+            margin_bottom: 6,
             orientation: Gtk.Orientation.VERTICAL
         });
         this._settings = settings;
@@ -25,7 +24,67 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         this.disableRecentApps = this._settings.get_boolean('disable-recently-installed-apps');
         this.showHiddenRecentFiles = this._settings.get_boolean('show-hidden-recent-files');
 
-        let fadeEffectFrame = new Adw.PreferencesGroup();
+        let miscGroup = new Adw.PreferencesGroup();
+
+        let descriptionsGroup = new Adw.PreferencesGroup();
+        this.append(descriptionsGroup);
+
+        let searchDescriptionsSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER
+        });
+        searchDescriptionsSwitch.set_active(this.searchResultsDetails);
+        searchDescriptionsSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('show-search-result-details', widget.get_active());
+        });
+        let searchDescriptionsRow = new Adw.ActionRow({
+            title: _("Show Search Result Descriptions"),
+            activatable_widget: searchDescriptionsSwitch
+        });
+        searchDescriptionsRow.add_suffix(searchDescriptionsSwitch);
+        descriptionsGroup.add(searchDescriptionsRow);
+
+        let appDescriptionsSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+        });
+        appDescriptionsSwitch.set_active(this._settings.get_boolean('apps-show-extra-details'));
+        appDescriptionsSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('apps-show-extra-details', widget.get_active())
+        });
+        let appDescriptionsRow = new Adw.ActionRow({
+            title: _("Show Application Descriptions"),
+            activatable_widget: appDescriptionsSwitch
+        });
+        appDescriptionsRow.add_suffix(appDescriptionsSwitch);
+        descriptionsGroup.add(appDescriptionsRow);
+
+        let iconStyleGroup = new Adw.PreferencesGroup();
+        this.append(iconStyleGroup);
+
+        let iconTypes = new Gtk.StringList();
+        iconTypes.append(_('Full Color'));
+        iconTypes.append(_('Symbolic'));
+        let categoryIconTypeRow = new Adw.ComboRow({
+            title: _('Category Icon Type'),
+            subtitle: _("Some icon themes may not include selected icon type"),
+            model: iconTypes,
+            selected: this._settings.get_enum('category-icon-type')
+        });
+        categoryIconTypeRow.connect('notify::selected', (widget) => {
+            this._settings.set_enum('category-icon-type', widget.selected);
+        });
+        iconStyleGroup.add(categoryIconTypeRow);
+
+        let shortcutsIconTypeRow = new Adw.ComboRow({
+            title: _('Shortcuts Icon Type'),
+            subtitle: _("Some icon themes may not include selected icon type"),
+            model: iconTypes,
+            selected: this._settings.get_enum('shortcut-icon-type')
+        });
+        shortcutsIconTypeRow.connect('notify::selected', (widget) => {
+            this._settings.set_enum('shortcut-icon-type', widget.selected);
+        });
+        iconStyleGroup.add(shortcutsIconTypeRow);
+    
         let fadeEffectSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
         });
@@ -38,10 +97,8 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: fadeEffectSwitch
         });
         fadeEffectRow.add_suffix(fadeEffectSwitch);
-        fadeEffectFrame.add(fadeEffectRow);
-        this.append(fadeEffectFrame);
+        miscGroup.add(fadeEffectRow);
 
-        let tooltipFrame = new Adw.PreferencesGroup();
         let tooltipSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
         });
@@ -54,10 +111,8 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: tooltipSwitch
         });
         tooltipRow.add_suffix(tooltipSwitch);
-        tooltipFrame.add(tooltipRow);
-        this.append(tooltipFrame);
+        miscGroup.add(tooltipRow);
 
-        let alphabetizeAllProgramsFrame = new Adw.PreferencesGroup();
         let alphabetizeAllProgramsSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
         });
@@ -70,10 +125,8 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: alphabetizeAllProgramsSwitch
         });
         alphabetizeAllProgramsRow.add_suffix(alphabetizeAllProgramsSwitch);
-        alphabetizeAllProgramsFrame.add(alphabetizeAllProgramsRow);
-        this.append(alphabetizeAllProgramsFrame);
+        miscGroup.add(alphabetizeAllProgramsRow);
 
-        let hiddenFilesFrame = new Adw.PreferencesGroup();
         let hiddenFilesSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
         });
@@ -86,10 +139,8 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: hiddenFilesSwitch
         });
         hiddenFilesRow.add_suffix(hiddenFilesSwitch);
-        hiddenFilesFrame.add(hiddenFilesRow);
-        this.append(hiddenFilesFrame);
+        miscGroup.add(hiddenFilesRow);
 
-        let multiLinedLabelFrame = new Adw.PreferencesGroup();
         let multiLinedLabelSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
         });
@@ -120,20 +171,19 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         });
         multiLinedLabelRow.add_suffix(multiLinedLabelSwitch);
         multiLinedLabelRow.add_suffix(multiLinedLabelInfoButton);
-        multiLinedLabelFrame.add(multiLinedLabelRow);
-        this.append(multiLinedLabelFrame);
+        miscGroup.add(multiLinedLabelRow);
 
-        let recentAppsFrame = new Adw.PreferencesGroup();
+        let recentAppsGroup = new Adw.PreferencesGroup();
+        this.append(recentAppsGroup);
+
         let recentAppsSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
         });
         recentAppsSwitch.connect('notify::active', (widget) => {
-            if(widget.get_active()){
+            if(widget.get_active())
                 clearRecentAppsRow.hide();
-            }
-            else{
+            else
                 clearRecentAppsRow.show();
-            }
             this._settings.set_boolean('disable-recently-installed-apps', widget.get_active());
         });
         let recentAppsRow = new Adw.ActionRow({
@@ -141,8 +191,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: recentAppsSwitch
         });
         recentAppsRow.add_suffix(recentAppsSwitch);
-        recentAppsFrame.add(recentAppsRow);
-        this.append(recentAppsFrame);
+        recentAppsGroup.add(recentAppsRow);
 
         let clearRecentAppsButton = new Gtk.Button({
             halign: Gtk.Align.END,
@@ -160,9 +209,11 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             activatable_widget: clearRecentAppsButton
         });
         clearRecentAppsRow.add_suffix(clearRecentAppsButton);
-        recentAppsFrame.add(clearRecentAppsRow);
+        recentAppsGroup.add(clearRecentAppsRow);
 
         recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
+
+        this.append(miscGroup);
 
         this.restoreDefaults = () => {
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();
@@ -177,6 +228,10 @@ class ArcMenu_FineTunePage extends Gtk.Box {
             fadeEffectSwitch.set_active(this.disableFadeEffect);
             recentAppsSwitch.set_active(this.disableRecentApps);
             hiddenFilesSwitch.set_active(this.showHiddenRecentFiles);
+            categoryIconTypeRow.selected = 0;
+            shortcutsIconTypeRow.selected = 1;
+            appDescriptionsSwitch.set_active(this._settings.get_default_value('apps-show-extra-details').unpack());
+            searchDescriptionsSwitch.set_active(this._settings.get_default_value('show-search-result-details').unpack());
         };
     }
 });

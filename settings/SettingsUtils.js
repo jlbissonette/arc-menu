@@ -2,6 +2,18 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Gio, GLib, Gdk} = imports.gi;
 const Constants = Me.imports.constants;
+const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const _ = Gettext.gettext;
+
+function getMenuLayoutTweaksName(index){
+    for(let styles of Constants.MenuStyles.STYLES){
+        for(let style of styles.MENU_TYPE){
+            if(style.LAYOUT == index){
+                return _("%s Layout Tweaks").format(_(style.TITLE));
+            }
+        }
+    }
+}
 
 function parseRGBA(colorString){
     let rgba = new Gdk.RGBA();

@@ -54,7 +54,8 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
     }
 
     initiate(){
-        this.createLayoutID = GLib.timeout_add(0, 100, () => {
+        this.clearMenuLayoutTimeouts();
+        this.createLayoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
             this.createMenuLayout();
             this.createLayoutID = null;
             return GLib.SOURCE_REMOVE;
@@ -126,16 +127,7 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
     }
 
     destroy(){
-        if(this.createLayoutID){
-            GLib.source_remove(this.createLayoutID);
-            this.createLayoutID = null;
-        }
-
-        if(this.updateMenuLayoutID){
-            GLib.source_remove(this.updateMenuLayoutID);
-            this.updateMenuLayoutID = null;
-        }
-
+        this.clearMenuLayoutTimeouts();
         if (this.tooltipShowingID) {
             GLib.source_remove(this.tooltipShowingID);
             this.tooltipShowingID = null;
@@ -145,6 +137,13 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
         this.MenuLayout?.destroy();
         this.arcMenu?.destroy();
         this.dummyWidget?.destroy();
+    }
+
+    clearMenuLayoutTimeouts(){
+        if(this.createLayoutID){
+            GLib.source_remove(this.createLayoutID);
+            this.createLayoutID = null;
+        }
     }
 
     updateMenuLayout(){
