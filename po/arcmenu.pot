@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-10-22 17:42-0400\n"
+"POT-Creation-Date: 2022-10-24 07:42-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -278,105 +278,109 @@ msgstr ""
 msgid "Show Activities Button"
 msgstr ""
 
-#: settings/GeneralPage.js:41 settings/GeneralPage.js:67
+#: settings/GeneralPage.js:34
+msgid "Dash to Panel may conflict with this setting"
+msgstr ""
+
+#: settings/GeneralPage.js:42 settings/GeneralPage.js:68
 #: settings/Menu/LayoutTweaksPage.js:541
 msgid "Left"
 msgstr ""
 
-#: settings/GeneralPage.js:42 settings/GeneralPage.js:68
+#: settings/GeneralPage.js:43 settings/GeneralPage.js:69
 msgid "Center"
 msgstr ""
 
-#: settings/GeneralPage.js:43 settings/GeneralPage.js:69
+#: settings/GeneralPage.js:44 settings/GeneralPage.js:70
 #: settings/Menu/LayoutTweaksPage.js:542
 msgid "Right"
 msgstr ""
 
-#: settings/GeneralPage.js:45 settings/MenuButtonPage.js:127
+#: settings/GeneralPage.js:46 settings/MenuButtonPage.js:127
 msgid "Position in Panel"
 msgstr ""
 
-#: settings/GeneralPage.js:75
+#: settings/GeneralPage.js:76
 msgid "Menu Alignment"
 msgstr ""
 
-#: settings/GeneralPage.js:94
+#: settings/GeneralPage.js:95
 msgid "Display ArcMenu on all Panels"
 msgstr ""
 
-#: settings/GeneralPage.js:95
+#: settings/GeneralPage.js:96
 msgid "Dash to Panel or App Icons Taskbar extension required"
 msgstr ""
 
-#: settings/GeneralPage.js:111
+#: settings/GeneralPage.js:112
 msgid "Always Prefer Top Panel"
 msgstr ""
 
-#: settings/GeneralPage.js:112
+#: settings/GeneralPage.js:113
 msgid "Useful with Dash to Panel setting 'Keep original gnome-shell top panel'"
 msgstr ""
 
-#: settings/GeneralPage.js:126 menuButton.js:531
+#: settings/GeneralPage.js:127 menuButton.js:531
 msgid "General Settings"
 msgstr ""
 
-#: settings/GeneralPage.js:162
+#: settings/GeneralPage.js:163
 msgid "Open on Primary Monitor"
 msgstr ""
 
-#: settings/GeneralPage.js:168
+#: settings/GeneralPage.js:169
 msgid "Left Super Key"
 msgstr ""
 
-#: settings/GeneralPage.js:169
+#: settings/GeneralPage.js:170
 msgid "Custom Hotkey"
 msgstr ""
 
-#: settings/GeneralPage.js:171
+#: settings/GeneralPage.js:172
 msgid "Hotkey"
 msgstr ""
 
-#: settings/GeneralPage.js:184
+#: settings/GeneralPage.js:185
 msgid "Modify Hotkey"
 msgstr ""
 
-#: settings/GeneralPage.js:189
+#: settings/GeneralPage.js:190
 msgid "Current Hotkey"
 msgstr ""
 
-#: settings/GeneralPage.js:243
+#: settings/GeneralPage.js:244
 msgid "Set Custom Hotkey"
 msgstr ""
 
-#: settings/GeneralPage.js:268
+#: settings/GeneralPage.js:269
 msgid "Choose Modifiers"
 msgstr ""
 
-#: settings/GeneralPage.js:278
+#: settings/GeneralPage.js:279
 msgid "Ctrl"
 msgstr ""
 
-#: settings/GeneralPage.js:282
+#: settings/GeneralPage.js:283
 msgid "Super"
 msgstr ""
 
-#: settings/GeneralPage.js:286
+#: settings/GeneralPage.js:287
 msgid "Shift"
 msgstr ""
 
-#: settings/GeneralPage.js:290
+#: settings/GeneralPage.js:291
 msgid "Alt"
 msgstr ""
 
-#: settings/GeneralPage.js:342
+#: settings/GeneralPage.js:343
 msgid "Press any key"
 msgstr ""
 
-#: settings/GeneralPage.js:359
+#: settings/GeneralPage.js:360
 msgid "New Hotkey"
 msgstr ""
 
-#: settings/GeneralPage.js:369 settings/Menu/ListPinnedPage.js:574
+#: settings/GeneralPage.js:370 settings/Menu/ListPinnedPage.js:574
 msgid "Apply"
 msgstr ""
 
@@ -1082,7 +1086,7 @@ msgstr ""
 msgid "Custom Icon"
 msgstr ""
 
-#: settings/MenuButtonPage.js:571
+#: settings/MenuButtonPage.js:574
 msgid "Legal disclaimer for Distro Icons"
 msgstr ""
 
