@@ -128,8 +128,8 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
         });
         this.add(generalGroup);
 
-        const menuHotkeyRow = this._createExpanderRow('ArcMenu Hotkey', true);
-        const standaloneRunnerRow = this._createExpanderRow('Standalone Runner Menu', false);
+        const menuHotkeyRow = this._createExpanderRow(_('ArcMenu Hotkey'), true);
+        const standaloneRunnerRow = this._createExpanderRow(_('Standalone Runner Menu'), false);
         generalGroup.add(menuHotkeyRow);
         generalGroup.add(standaloneRunnerRow);
     }
