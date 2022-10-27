@@ -20,76 +20,41 @@ const { SettingsUtils } = Settings;
 
 var MenuPage = GObject.registerClass(
 class ArcMenu_MenuPage extends Adw.PreferencesPage {
-    _init(settings) {
+    _init(settings, window) {
         super._init({
             title: _('Menu'),
             icon_name: 'settings-settings-symbolic',
             name: 'MenuPage'
         });
         this._settings = settings;
-
-        let mainGroup = new Adw.PreferencesGroup();
-        this.add(mainGroup);
-
-        let mainBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            spacing: 24,
-            margin_start: 6,
-            margin_end: 6,
-            margin_bottom: 6,
-            css_name: 'box'
-        });
-
-        this.mainLeaflet = new Adw.Leaflet({
-            homogeneous: false,
-            transition_type: Adw.LeafletTransitionType.SLIDE,
-            can_navigate_back: true,
-            can_navigate_forward: false,
-            can_unfold: false,
-        });
-        let leafletPage = this.mainLeaflet.append(mainBox);
-        leafletPage.name = "MainView";
-        mainGroup.add(this.mainLeaflet);
-
-        this.subLeaflet = new Adw.Leaflet({
-            homogeneous: false,
-            transition_type: Adw.LeafletTransitionType.SLIDE,
-            can_navigate_back: false,
-            can_navigate_forward: false,
-            can_unfold: false,
-        });
-        leafletPage = this.mainLeaflet.append(this.subLeaflet);
-        leafletPage.name = "SubView";
+        this._window = window;
 
         let menuLooksGroup = new Adw.PreferencesGroup({
             title: _("How should the menu look?"),
         });
-        mainBox.append(menuLooksGroup);
+        this.add(menuLooksGroup);
 
-        let layoutRow = new SettingRow({
+        this.layoutRow = new SettingRow({
             title: _('Menu Layout'),
             subtitle: _('Choose a layout style for the menu'),
             icon_name: 'settings-layouts-symbolic'
         });
-        this._addLeafletPageToRow(layoutRow, {
+        this._addSubPageToRow(this.layoutRow, {
             pageClass: LayoutsPage,
-            leaftletName: 'LayoutsPage',
-            leaftletTitle: _('Current Menu Layout'),
         });
-        layoutRow.settingPage.connect('response', (_w, response) => {
+        this.layoutRow.settingPage.connect('response', (_w, response) => {
             if(response === Gtk.ResponseType.APPLY)
-                tweaksRow.title = _(SettingsUtils.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')));
+                this.tweaksRow.title = _(SettingsUtils.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')));
         });
-        menuLooksGroup.add(layoutRow);
+        menuLooksGroup.add(this.layoutRow);
 
         let themeRow = new SettingRow({
             title: _('Menu Theme'),
             subtitle: _('Modify menu colors, font size, and border'),
             icon_name: 'settings-theme-symbolic'
         });
-        this._addLeafletPageToRow(themeRow, {
+        this._addSubPageToRow(themeRow, {
             pageClass: ThemePage,
-            leaftletName: 'ThemePage',
         });
         menuLooksGroup.add(themeRow);
 
@@ -98,9 +63,8 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             subtitle: _('Change menu height, width, location, and icon sizes'),
             icon_name: 'settings-settings-symbolic'
         });
-        this._addLeafletPageToRow(visualSettingsRow, {
+        this._addSubPageToRow(visualSettingsRow, {
             pageClass: VisualSettingsPage,
-            leaftletName: 'VisualSettingsPage',
         });
         menuLooksGroup.add(visualSettingsRow);
 
@@ -109,37 +73,33 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             subtitle: _('Adjust less commonly used visual settings'),
             icon_name: 'settings-finetune-symbolic'
         });
-        this._addLeafletPageToRow(fineTuneRow, {
+        this._addSubPageToRow(fineTuneRow, {
             pageClass: FineTunePage,
-            leaftletName: 'FineTunePage',
         });
         menuLooksGroup.add(fineTuneRow);
 
         let whatToShowGroup = new Adw.PreferencesGroup({
             title: _("What should show on the menu?"),
         });
-        mainBox.append(whatToShowGroup);
+        this.add(whatToShowGroup);
 
-        let tweaksRow = new SettingRow({
+        this.tweaksRow = new SettingRow({
             title: _(SettingsUtils.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout'))),
             subtitle: _('Settings specific to the current menu layout'),
             icon_name: 'emblem-system-symbolic'
         });
-        this._addLeafletPageToRow(tweaksRow, {
+        this._addSubPageToRow(this.tweaksRow, {
             pageClass: LayoutTweaksPage,
-            leaftletName: 'LayoutTweaksPage',
-            leaftletTitle: SettingsUtils.getMenuLayoutTweaksName(this._settings.get_enum('menu-layout')),
         });
-        whatToShowGroup.add(tweaksRow);
+        whatToShowGroup.add(this.tweaksRow);
 
         let pinnedAppsRow = new SettingRow({
             title: _('Pinned Apps'),
             icon_name: 'view-pin-symbolic'
         });
-        this._addLeafletPageToRow(pinnedAppsRow, {
+        this._addSubPageToRow(pinnedAppsRow, {
             pageClass: ListPinnedPage,
             pageClassParams: Constants.MenuSettingsListType.PINNED_APPS,
-            leaftletName: 'PinnedAppsPage',
         });
         whatToShowGroup.add(pinnedAppsRow);
 
@@ -147,10 +107,9 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             title: _('Directory Shortcuts'),
             icon_name: 'folder-symbolic'
         });
-        this._addLeafletPageToRow(directoryShortcutsRow, {
+        this._addSubPageToRow(directoryShortcutsRow, {
             pageClass: ListPinnedPage,
             pageClassParams: Constants.MenuSettingsListType.DIRECTORIES,
-            leaftletName: 'DirectoryShortcutsPage',
         });
         whatToShowGroup.add(directoryShortcutsRow);
 
@@ -158,10 +117,9 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             title: _('Application Shortcuts'),
             icon_name: 'view-grid-symbolic'
         });
-        this._addLeafletPageToRow(applicationShortcutsRow, {
+        this._addSubPageToRow(applicationShortcutsRow, {
             pageClass: ListPinnedPage,
             pageClassParams: Constants.MenuSettingsListType.APPLICATIONS,
-            leaftletName: 'ApplicationShortcutsPage',
         });
         whatToShowGroup.add(applicationShortcutsRow);
 
@@ -169,9 +127,8 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             title: _('Search Options'),
             icon_name: 'preferences-system-search-symbolic'
         });
-        this._addLeafletPageToRow(searchOptionsRow, {
+        this._addSubPageToRow(searchOptionsRow, {
             pageClass: SearchOptionsPage,
-            leaftletName: 'SearchOptionsPage',
         });
         whatToShowGroup.add(searchOptionsRow);
 
@@ -180,10 +137,9 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             subtitle: _('Choose which power options to show and the display style'),
             icon_name: 'gnome-power-manager-symbolic'
         });
-        this._addLeafletPageToRow(powerOptionsRow, {
+        this._addSubPageToRow(powerOptionsRow, {
             pageClass: ListOtherPage,
             pageClassParams: Constants.MenuSettingsListType.POWER_OPTIONS,
-            leaftletName: 'PowerOptionsPage',
         });
         whatToShowGroup.add(powerOptionsRow);
 
@@ -192,99 +148,41 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             icon_name: 'view-list-symbolic',
             subtitle: _('Add or remove additional custom categories')
         });
-        this._addLeafletPageToRow(extraCategoriesRow, {
+        this._addSubPageToRow(extraCategoriesRow, {
             pageClass: ListOtherPage,
             pageClassParams: Constants.MenuSettingsListType.EXTRA_CATEGORIES,
-            leaftletName: 'ExtraCategoriesPage',
         });
         whatToShowGroup.add(extraCategoriesRow);
     }
 
-    _addLeafletPageToRow(row, pageParams){
-        const leafletName = pageParams.leaftletName;
-        const leafletTitle = pageParams.leaftletTitle ?? row.title;
+    _addSubPageToRow(row, pageParams){
         const PageClass = pageParams.pageClass;
-        const pageClassParams = pageParams.pageClassParams;
+        const pageClassParams = pageParams.pageClassParams ?? 0;
 
-        const settingPage = new PageClass(this._settings, pageClassParams);
+        const settingPage = new PageClass(this._settings, {
+            title: _(row.title),
+            list_type: pageClassParams
+        });
         row.settingPage = settingPage;
-
-        let buttonBox = new Gtk.Grid({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            margin_top: 5,
-            margin_bottom: 5,
-            margin_start: 5,
-            margin_end: 5,
-            column_spacing: 0,
-            row_spacing: 0
-        });
-
-        let restoreDefaultsButton = new Gtk.Button({
-            icon_name: 'view-refresh-symbolic',
-            vexpand: false,
-            valign: Gtk.Align.CENTER,
-            tooltip_text: _("Reset settings"),
-            css_classes: ['destructive-action'],
-            halign: Gtk.Align.END,
-            hexpand: true,
-        });
-        restoreDefaultsButton.connect("clicked", () => {
-            let dialog = new Gtk.MessageDialog({
-                text: "<b>" + _("Reset all %s settings?").format(leafletTitle) + '</b>',
-                secondary_text: _("All %s settings will be reset to the default value.").format(leafletTitle),
-                use_markup: true,
-                buttons: Gtk.ButtonsType.YES_NO,
-                message_type: Gtk.MessageType.WARNING,
-                transient_for: this.get_root(),
-                modal: true
-            });
-            dialog.connect('response', (widget, response) => {
-                if(response == Gtk.ResponseType.YES)
-                    settingPage.restoreDefaults();
-                dialog.destroy();
-            });
-            dialog.show();
-        });
-
-        let backButton = new PW.Button({
-            icon_name: 'go-previous-symbolic',
-            title: _("Back"),
-            icon_first: true,
-            css_classes: ['suggested-action']
-        });
-        backButton.halign = Gtk.Align.START;
-        backButton.hexpand = true;
-
-        backButton.connect('clicked', () => {
-            this.mainLeaflet.visible_child_name = 'MainView';
-        });
-
-        let titleLabel = new Gtk.Label({
-            label: _(leafletTitle),
-            halign: Gtk.Align.CENTER,
-            hexpand: true,
-            css_classes: ['title-4']
-        });
-        settingPage.titleLabel = titleLabel;
-
-        buttonBox.attach(backButton, 0, 0, 1, 1);
-        buttonBox.attach(titleLabel, 0, 0, 1, 1);
-
-        if(settingPage.restoreDefaults)
-            buttonBox.attach(restoreDefaultsButton, 0, 0, 1, 1);
-
-        settingPage.prepend(buttonBox);
-
-        const leafletPage = this.subLeaflet.append(settingPage);
-        leafletPage.name = leafletName;
 
         row.connect('activated', () => {
             if(settingPage.setActiveLayout)
                 settingPage.setActiveLayout(this._settings.get_enum('menu-layout'));
 
-            this.subLeaflet.visible_child = settingPage;
-            this.mainLeaflet.visible_child = this.subLeaflet;
+            this._window.present_subpage(settingPage);
         });
+    }
+
+    presentSubpage(subpage){
+        if(subpage === Constants.PrefsVisiblePage.MENU_LAYOUT){
+            const row = this.layoutRow;
+            this._window.present_subpage(row.settingPage);
+        }
+        else if(subpage === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
+            const row = this.tweaksRow;
+            this._window.present_subpage(row.settingPage);
+            row.settingPage.setActiveLayout(Constants.MenuLayout.RUNNER);
+        }
     }
 });
 

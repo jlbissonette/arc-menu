@@ -8,41 +8,39 @@ const PW = Me.imports.prefsWidgets;
 const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
+const Settings = Me.imports.settings;
+const { SubPage } = Settings.Menu.SubPage;
+
 var ListPinnedPage = GObject.registerClass(
-class ArcMenu_ListPinnedPage extends Gtk.Box {
-    _init(settings, listType, settingString) {
-        super._init({
-            spacing: 24,
-            margin_start: 6,
-            margin_end: 6,
-            margin_bottom: 6,
-            orientation: Gtk.Orientation.VERTICAL
-        });
-        this.listType = listType;
+class ArcMenu_ListPinnedPage extends SubPage {
+    _init(settings, params) {
+        super._init(settings, params);
+
         this._settings = settings;
         this.frameRows = [];
         let shortcutsDataArray = [];
         let addMoreTitle;
 
         this.frame = new Adw.PreferencesGroup();
-        this.append(this.frame);
 
-        const nestedArraySetting = this.listType === Constants.MenuSettingsListType.DIRECTORIES || this.listType === Constants.MenuSettingsListType.APPLICATIONS;
+        this.add(this.frame);
 
-        if(this.listType === Constants.MenuSettingsListType.PINNED_APPS){
+        const nestedArraySetting = this.list_type === Constants.MenuSettingsListType.DIRECTORIES || this.list_type === Constants.MenuSettingsListType.APPLICATIONS;
+
+        if(this.list_type === Constants.MenuSettingsListType.PINNED_APPS){
             this.settingString = 'pinned-app-list';
             addMoreTitle = _("Add More Apps");
         }
-        else if(this.listType === Constants.MenuSettingsListType.DIRECTORIES){
+        else if(this.list_type === Constants.MenuSettingsListType.DIRECTORIES){
             this.settingString = 'directory-shortcuts-list';
             addMoreTitle = _("Add Default User Directories");
         }
-        else if(this.listType === Constants.MenuSettingsListType.APPLICATIONS){
+        else if(this.list_type === Constants.MenuSettingsListType.APPLICATIONS){
             this.settingString = 'application-shortcuts-list';
             addMoreTitle = _("Add More Apps");
         }
-        else if(this.listType === Constants.MenuSettingsListType.EXTRA_SHORTCUTS)
-            this.settingString = settingString;
+        else if(this.list_type === Constants.MenuSettingsListType.EXTRA_SHORTCUTS)
+            this.settingString = this.setting_string;
 
         const shortcutsArray = this._settings.get_value(this.settingString).deep_unpack();
         if(nestedArraySetting){
@@ -65,13 +63,14 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
         }
         this._addRowsToFrame(shortcutsDataArray);
 
-        if(this.listType !== Constants.MenuSettingsListType.EXTRA_SHORTCUTS){
+        if(this.list_type !== Constants.MenuSettingsListType.EXTRA_SHORTCUTS){
             let addMoreGroup = new Adw.PreferencesGroup();
-            let addMoreButton = new PW.Button({
+            let addMoreButton = new Gtk.Button({
                 icon_name: 'list-add-symbolic',
+                valign: Gtk.Align.CENTER
             });
             addMoreButton.connect('clicked', () => {
-                let dialog = new AddAppsToPinnedListWindow(this._settings, this, this.listType, this.settingString);
+                let dialog = new AddAppsToPinnedListWindow(this._settings, this, this.list_type, this.settingString);
                 dialog.show();
                 dialog.connect('response', (_w, response) => {
                     if(response === Gtk.ResponseType.APPLY) {
@@ -99,13 +98,15 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
             });
             addMoreRow.add_suffix(addMoreButton);
             addMoreGroup.add(addMoreRow);
-            this.append(addMoreGroup);
 
-            let addCustomButton = new PW.Button({
+            this.add(addMoreGroup);
+
+            let addCustomButton = new Gtk.Button({
                 icon_name: 'list-add-symbolic',
+                valign: Gtk.Align.CENTER
             });
             addCustomButton.connect('clicked', () => {
-                let dialog = new AddCustomLinkDialogWindow(this._settings, this, this.listType);
+                let dialog = new AddCustomLinkDialogWindow(this._settings, this, this.list_type);
                 dialog.show();
                 dialog.connect('response', (_w, response) => {
                     if(response === Gtk.ResponseType.APPLY) {
@@ -162,7 +163,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
             return a.get_index() > b.get_index();
         })
         this.frameRows.forEach(child => {
-            if(this.listType === Constants.MenuSettingsListType.PINNED_APPS || this.listType === Constants.MenuSettingsListType.EXTRA_SHORTCUTS){
+            if(this.list_type === Constants.MenuSettingsListType.PINNED_APPS || this.list_type === Constants.MenuSettingsListType.EXTRA_SHORTCUTS){
                 array.push(child.shortcut_name);
                 array.push(child.shortcut_icon);
                 array.push(child.shortcut_command);
@@ -171,7 +172,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
                 array.push([child.shortcut_name, child.shortcut_icon, child.shortcut_command]);
         });
 
-        if(this.listType === Constants.MenuSettingsListType.PINNED_APPS || this.listType === Constants.MenuSettingsListType.EXTRA_SHORTCUTS)
+        if(this.list_type === Constants.MenuSettingsListType.PINNED_APPS || this.list_type === Constants.MenuSettingsListType.EXTRA_SHORTCUTS)
             this._settings.set_strv(this.settingString, array);
         else
             this._settings.set_value(this.settingString, new GLib.Variant('aas', array));
@@ -197,7 +198,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
                 }
             }
         }
-        else if(this.listType === Constants.MenuSettingsListType.DIRECTORIES || this.listType === Constants.MenuSettingsListType.EXTRA_SHORTCUTS)
+        else if(this.list_type === Constants.MenuSettingsListType.DIRECTORIES || this.list_type === Constants.MenuSettingsListType.EXTRA_SHORTCUTS)
             shortcutIcon = SettingsUtils.getIconStringFromListing([shortcutData.name, shortcutData.icon, shortcutData.command]);
 
         if(shortcutIcon.length < 1 && appInfo)
@@ -217,7 +218,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
     }
 
     _addRowToFrame(shortcutData){
-        const isExtraShortcut = this.listType === Constants.MenuSettingsListType.EXTRA_SHORTCUTS;
+        const isExtraShortcut = this.list_type === Constants.MenuSettingsListType.EXTRA_SHORTCUTS;
 
         const row = new PW.DragRow({ change_enabled: isExtraShortcut });
 
@@ -249,7 +250,7 @@ class ArcMenu_ListPinnedPage extends Gtk.Box {
                 icon: row.shortcut_icon,
                 command: row.shortcut_command
             }
-            let dialog = new AddCustomLinkDialogWindow(this._settings, this, this.listType, currentShortcutData);
+            let dialog = new AddCustomLinkDialogWindow(this._settings, this, this.list_type, currentShortcutData);
             dialog.show();
             dialog.connect('response', (_w, response) => {
                 if(response === Gtk.ResponseType.APPLY) {
@@ -418,9 +419,9 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
     addButtonAction(frameRow, match){
         if(this._dialogType == Constants.MenuSettingsListType.PINNED_APPS || this._dialogType == Constants.MenuSettingsListType.APPLICATIONS||
             this._dialogType == Constants.MenuSettingsListType.DIRECTORIES){
-            let checkButton = new PW.Button({
+            let checkButton = new Gtk.Button({
                 icon_name: match ? 'list-remove-symbolic' : 'list-add-symbolic',
-                margin_end: 20
+                valign: Gtk.Align.CENTER,
             });
             checkButton.connect('clicked', (widget) => {
                 this.shortcutData = {
@@ -461,9 +462,9 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             frameRow.activatable_widget = checkButton;
         }
         else{
-            let checkButton = new PW.Button({
+            let checkButton = new Gtk.Button({
                 icon_name: 'list-add-symbolic',
-                margin_end: 20
+                valign: Gtk.Align.CENTER,
             });
             checkButton.connect('clicked', () => {
                 this.shortcutData = {
@@ -522,7 +523,7 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
 
         let fileFilter = new Gtk.FileFilter();
         fileFilter.add_pixbuf_formats();
-        let fileChooserButton = new PW.Button({
+        let fileChooserButton = new Gtk.Button({
             icon_name: 'search-symbolic',
             tooltip_text: _('Browse...'),
             valign: Gtk.Align.CENTER,

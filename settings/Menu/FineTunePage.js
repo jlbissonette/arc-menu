@@ -6,17 +6,14 @@ const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
 const _ = Gettext.gettext;
 
+const Settings = Me.imports.settings;
+const { SubPage } = Settings.Menu.SubPage;
+
 var FineTunePage = GObject.registerClass(
-class ArcMenu_FineTunePage extends Gtk.Box {
-    _init(settings) {
-        super._init({
-            spacing: 24,
-            margin_start: 6,
-            margin_end: 6,
-            margin_bottom: 6,
-            orientation: Gtk.Orientation.VERTICAL
-        });
-        this._settings = settings;
+class ArcMenu_FineTunePage extends SubPage {
+    _init(settings, params) {
+        super._init(settings, params);
+
         this.disableFadeEffect = this._settings.get_boolean('disable-scrollview-fade-effect');
         this.alphabetizeAllPrograms = this._settings.get_boolean('alphabetize-all-programs')
         this.multiLinedLabels = this._settings.get_boolean('multi-lined-labels');
@@ -27,7 +24,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         let miscGroup = new Adw.PreferencesGroup();
 
         let descriptionsGroup = new Adw.PreferencesGroup();
-        this.append(descriptionsGroup);
+        this.add(descriptionsGroup);
 
         let searchDescriptionsSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER
@@ -58,7 +55,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         descriptionsGroup.add(appDescriptionsRow);
 
         let iconStyleGroup = new Adw.PreferencesGroup();
-        this.append(iconStyleGroup);
+        this.add(iconStyleGroup);
 
         let iconTypes = new Gtk.StringList();
         iconTypes.append(_('Full Color'));
@@ -148,8 +145,9 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         multiLinedLabelSwitch.connect('notify::active', (widget) => {
             this._settings.set_boolean('multi-lined-labels', widget.get_active());
         });
-        let multiLinedLabelInfoButton = new PW.Button({
-                icon_name: 'help-about-symbolic'
+        let multiLinedLabelInfoButton = new Gtk.Button({
+            icon_name: 'help-about-symbolic',
+            valign: Gtk.Align.CENTER
         });
         multiLinedLabelInfoButton.connect('clicked', () => {
             let dialog = new Gtk.MessageDialog({
@@ -174,7 +172,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
         miscGroup.add(multiLinedLabelRow);
 
         let recentAppsGroup = new Adw.PreferencesGroup();
-        this.append(recentAppsGroup);
+        this.add(recentAppsGroup);
 
         let recentAppsSwitch = new Gtk.Switch({
             valign: Gtk.Align.CENTER,
@@ -213,7 +211,7 @@ class ArcMenu_FineTunePage extends Gtk.Box {
 
         recentAppsSwitch.set_active(this._settings.get_boolean('disable-recently-installed-apps'));
 
-        this.append(miscGroup);
+        this.add(miscGroup);
 
         this.restoreDefaults = () => {
             this.alphabetizeAllPrograms = this._settings.get_default_value('alphabetize-all-programs').unpack();

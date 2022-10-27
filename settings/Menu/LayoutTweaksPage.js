@@ -6,38 +6,27 @@ const PW = Me.imports.prefsWidgets;
 const { SettingsUtils } = Me.imports.settings;
 const _ = Gettext.gettext;
 
+const Settings = Me.imports.settings;
+const { SubPage } = Settings.Menu.SubPage;
 const { ListPinnedPage } = Me.imports.settings.Menu.ListPinnedPage;
 const { ListOtherPage } = Me.imports.settings.Menu.ListOtherPage;
 
 var LayoutTweaksPage = GObject.registerClass(
-class ArcMenu_LayoutTweaksPage extends Gtk.Box {
-    _init(settings) {
-        this._settings = settings;
-        super._init({
-            spacing: 24,
-            margin_start: 6,
-            margin_end: 6,
-            margin_bottom: 6,
-            orientation: Gtk.Orientation.VERTICAL
-        });
+class ArcMenu_LayoutTweaksPage extends SubPage {
+    _init(settings, params) {
+        super._init(settings, params);
 
-        this.mainBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            spacing: 20,
-            vexpand: true,
-            valign: Gtk.Align.FILL
-        });
-
-        this.append(this.mainBox);
+        this.restoreDefaultsButton.visible = false;
         this._createLayout();
     }
 
     setActiveLayout(menuLayout){
-        this.titleLabel.label = _(SettingsUtils.getMenuLayoutTweaksName(menuLayout));
-        let children = [...this.mainBox];
-        for(let child of children){
-            this.mainBox.remove(child);
+        this.headerLabel.title = _(SettingsUtils.getMenuLayoutTweaksName(menuLayout));
+
+        for(let child of this.page.children){
+            this.page.remove(child);
         }
+        this.page.children = [];
         this._createLayout(menuLayout);
     }
 
@@ -213,13 +202,13 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         });
         disableFrequentAppsRow.add_suffix(disableFrequentAppsSwitch);
         elevenTweaksFrame.add(disableFrequentAppsRow);
-        this.mainBox.append(elevenTweaksFrame);
+        this.add(elevenTweaksFrame);
     }
 
     _loadAZTweaks(){
         let azTweaksFrame = new Adw.PreferencesGroup();
         azTweaksFrame.add(this._createSearchBarLocationRow());
-        this.mainBox.append(azTweaksFrame);
+        this.add(azTweaksFrame);
     }
 
     _loadGnomeOverviewTweaks(){
@@ -237,7 +226,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         });
         appsGridRow.add_suffix(appsGridSwitch);
         gnomeOverviewTweaksFrame.add(appsGridRow);
-        this.mainBox.append(gnomeOverviewTweaksFrame);
+        this.add(gnomeOverviewTweaksFrame);
     }
 
     _loadWindowsTweaks(){
@@ -271,7 +260,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         pinnedAppsRow.add_suffix(pinnedAppsSwitch);
         windowsTweaksFrame.add(pinnedAppsRow);
 
-        this.mainBox.append(windowsTweaksFrame);
+        this.add(windowsTweaksFrame);
     }
 
     _loadPlasmaMenuTweaks(){
@@ -292,7 +281,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         hoverRow.add_suffix(hoverSwitch);
         plasmaMenuTweaksFrame.add(hoverRow);
 
-        this.mainBox.append(plasmaMenuTweaksFrame);
+        this.add(plasmaMenuTweaksFrame);
     }
 
     _loadBriskMenuTweaks(){
@@ -305,22 +294,26 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Brisk Menu Shortcuts")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.EXTRA_SHORTCUTS, 'brisk-shortcuts-list');
+        let pinnedApps = new ListPinnedPage(this._settings, {
+            preferences_page: false,
+            setting_string: 'brisk-shortcuts-list',
+            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
+        });
         pinnedAppsFrame.add(pinnedApps);
-        this.mainBox.append(briskMenuTweaksFrame);
-        this.mainBox.append(pinnedAppsFrame);
+        this.add(briskMenuTweaksFrame);
+        this.add(pinnedAppsFrame);
     }
 
     _loadChromebookTweaks(){
         let chromeBookTweaksFrame = new Adw.PreferencesGroup();
         chromeBookTweaksFrame.add(this._createSearchBarLocationRow());
-        this.mainBox.append(chromeBookTweaksFrame);
+        this.add(chromeBookTweaksFrame);
     }
 
     _loadElementaryTweaks(){
         let elementaryTweaksFrame = new Adw.PreferencesGroup();
         elementaryTweaksFrame.add(this._createSearchBarLocationRow());
-        this.mainBox.append(elementaryTweaksFrame);
+        this.add(elementaryTweaksFrame);
     }
 
     _loadBudgieMenuTweaks(){
@@ -344,7 +337,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         enableActivitiesRow.add_suffix(enableActivitiesSwitch);
         budgieMenuTweaksFrame.add(enableActivitiesRow);
 
-        this.mainBox.append(budgieMenuTweaksFrame);
+        this.add(budgieMenuTweaksFrame);
     }
 
     _loadRunnerMenuTweaks(){
@@ -447,12 +440,12 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         frequentAppsRow.add_suffix(frequentAppsSwitch);
         runnerMenuTweaksFrame.add(frequentAppsRow);
 
-        this.mainBox.append(runnerMenuTweaksFrame);
+        this.add(runnerMenuTweaksFrame);
     }
 
     _loadUnityTweaks(){
         let generalTweaksFrame = new Adw.PreferencesGroup();
-        this.mainBox.append(generalTweaksFrame);
+        this.add(generalTweaksFrame);
 
         let defaulViews = new Gtk.StringList();
         defaulViews.append(_("Home"));
@@ -469,14 +462,18 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         generalTweaksFrame.add(defaultViewRow);
 
         let widgetFrame = this._createWidgetsRows(Constants.MenuLayout.UNITY);
-        this.mainBox.append(widgetFrame);
+        this.add(widgetFrame);
 
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Unity Layout Buttons")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.EXTRA_SHORTCUTS, 'unity-pinned-app-list');
+        let pinnedApps = new ListPinnedPage(this._settings, {
+            preferences_page: false,
+            setting_string: 'unity-pinned-app-list',
+            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
+        });
         pinnedAppsFrame.add(pinnedApps);
-        this.mainBox.append(pinnedAppsFrame);
+        this.add(pinnedAppsFrame);
 
         let pinnedAppsSeparatorFrame = new Adw.PreferencesGroup({
             title: _("Button Separator Position")
@@ -492,8 +489,9 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
             this._settings.set_int('unity-separator-index', widget.get_value());
         });
 
-        let infoButton = new PW.Button({
-            icon_name: 'help-about-symbolic'
+        let infoButton = new Gtk.Button({
+            icon_name: 'help-about-symbolic',
+            valign: Gtk.Align.CENTER
         });
         infoButton.connect('clicked', () => {
             let dialog = new Gtk.MessageDialog({
@@ -516,12 +514,12 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         pinnedAppsSeparatorRow.add_suffix(pinnedAppsSeparatorScale);
         pinnedAppsSeparatorRow.add_suffix(infoButton);
         pinnedAppsSeparatorFrame.add(pinnedAppsSeparatorRow);
-        this.mainBox.append(pinnedAppsSeparatorFrame);
+        this.add(pinnedAppsSeparatorFrame);
     }
 
     _loadRavenTweaks(){
         let generalTweaksFrame = new Adw.PreferencesGroup();
-        this.mainBox.append(generalTweaksFrame);
+        this.add(generalTweaksFrame);
 
         let defaulViews = new Gtk.StringList();
         defaulViews.append(_("Home"));
@@ -551,7 +549,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         generalTweaksFrame.add(ravenPositionRow);
         generalTweaksFrame.add(this._createActivateOnHoverRow());
         let widgetFrame = this._createWidgetsRows(Constants.MenuLayout.RAVEN);
-        this.mainBox.append(widgetFrame);
+        this.add(widgetFrame);
     }
 
     _loadMintMenuTweaks(){
@@ -560,14 +558,18 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         mintMenuTweaksFrame.add(this._createSearchBarLocationRow());
         mintMenuTweaksFrame.add(this._createFlipHorizontalRow());
         mintMenuTweaksFrame.add(this._createVertSeparatorRow());
-        this.mainBox.append(mintMenuTweaksFrame);
+        this.add(mintMenuTweaksFrame);
 
         let pinnedAppsFrame = new Adw.PreferencesGroup({
             title: _("Mint Layout Shortcuts")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, Constants.MenuSettingsListType.EXTRA_SHORTCUTS, 'mint-pinned-app-list');
+        let pinnedApps = new ListPinnedPage(this._settings, {
+            preferences_page: false,
+            setting_string: 'mint-pinned-app-list',
+            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
+        });
         pinnedAppsFrame.add(pinnedApps);
-        this.mainBox.append(pinnedAppsFrame);
+        this.add(pinnedAppsFrame);
 
         let pinnedAppsSeparatorFrame = new Adw.PreferencesGroup({
             title: _("Shortcut Separator Position")
@@ -583,8 +585,9 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
             this._settings.set_int('mint-separator-index', widget.get_value());
         });
 
-        let infoButton = new PW.Button({
-            icon_name: 'help-about-symbolic'
+        let infoButton = new Gtk.Button({
+            icon_name: 'help-about-symbolic',
+            valign: Gtk.Align.CENTER
         });
         infoButton.connect('clicked', () => {
             let dialog = new Gtk.MessageDialog({
@@ -607,7 +610,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         pinnedAppsSeparatorRow.add_suffix(pinnedAppsSeparatorScale);
         pinnedAppsSeparatorRow.add_suffix(infoButton);
         pinnedAppsSeparatorFrame.add(pinnedAppsSeparatorRow);
-        this.mainBox.append(pinnedAppsSeparatorFrame);
+        this.add(pinnedAppsSeparatorFrame);
     }
 
     _loadWhiskerMenuTweaks(){
@@ -617,7 +620,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         whiskerMenuTweaksFrame.add(this._createSearchBarLocationRow());
         whiskerMenuTweaksFrame.add(this._createFlipHorizontalRow());
         whiskerMenuTweaksFrame.add(this._createVertSeparatorRow());
-        this.mainBox.append(whiskerMenuTweaksFrame);
+        this.add(whiskerMenuTweaksFrame);
     }
 
     _loadRedmondMenuTweaks(){
@@ -643,8 +646,8 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         redmondMenuTweaksFrame.add(this._disableAvatarRow());
         redmondMenuTweaksFrame.add(this._createVertSeparatorRow());
 
-        this.mainBox.append(redmondMenuTweaksFrame);
-        this.mainBox.append(new Gtk.Label({
+        this.add(redmondMenuTweaksFrame);
+        this.add(new Gtk.Label({
             label: "<b>" + _("Extra Shortcuts") + "</b>",
             use_markup: true,
             xalign: 0,
@@ -652,7 +655,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         }));
 
         let placesFrame = new Adw.PreferencesGroup();
-        this.mainBox.append(placesFrame);
+        this.add(placesFrame);
 
         let externalDeviceButton = new Gtk.Switch({
             valign: Gtk.Align.CENTER
@@ -686,7 +689,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
     _loadInsiderMenuTweaks(){
         let insiderMenuTweaksFrame = new Adw.PreferencesGroup();
         insiderMenuTweaksFrame.add(this._createAvatarShapeRow());
-        this.mainBox.append(insiderMenuTweaksFrame);
+        this.add(insiderMenuTweaksFrame);
     }
 
     _loadGnomeMenuTweaks(){
@@ -694,7 +697,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         gnomeMenuTweaksFrame.add(this._createActivateOnHoverRow());
         gnomeMenuTweaksFrame.add(this._createFlipHorizontalRow());
         gnomeMenuTweaksFrame.add(this._createVertSeparatorRow());
-        this.mainBox.append(gnomeMenuTweaksFrame);
+        this.add(gnomeMenuTweaksFrame);
     }
 
     _loadPlaceHolderTweaks(){
@@ -703,7 +706,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
             title: _("Nothing Yet!"),
         });
         placeHolderFrame.add(placeHolderRow);
-        this.mainBox.append(placeHolderFrame);
+        this.add(placeHolderFrame);
     }
 
     _loadTogneeMenuTweaks(){
@@ -726,7 +729,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         togneeMenuTweaksFrame.add(this._createSearchBarLocationRow(searchBarBottomDefault));
         togneeMenuTweaksFrame.add(this._createFlipHorizontalRow());
         togneeMenuTweaksFrame.add(this._createVertSeparatorRow());
-        this.mainBox.append(togneeMenuTweaksFrame);
+        this.add(togneeMenuTweaksFrame);
     }
 
     _loadArcMenuTweaks(){
@@ -753,7 +756,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         arcMenuTweaksFrame.add(this._createFlipHorizontalRow());
         arcMenuTweaksFrame.add(this._disableAvatarRow());
         arcMenuTweaksFrame.add(this._createVertSeparatorRow());
-        this.mainBox.append(arcMenuTweaksFrame);
+        this.add(arcMenuTweaksFrame);
 
         let placesFrame = new Adw.PreferencesGroup({
             title: _("Extra Shortcuts")
@@ -786,15 +789,18 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
         });
         bookmarksRow.add_suffix(bookmarksButton);
         placesFrame.add(bookmarksRow);
-        this.mainBox.append(placesFrame);
+        this.add(placesFrame);
 
         let extraCategoriesFrame = new Adw.PreferencesGroup({
             title: _("Category Quick Links"),
             description: _("Display quick links of extra categories on the home page\nMust also be enabled in 'Menu -> Extra Categories' section")
         });
-        let extraCategoriesLinksBox = new ListOtherPage(this._settings, Constants.MenuSettingsListType.QUICK_LINKS);
+        let extraCategoriesLinksBox = new ListOtherPage(this._settings, {
+            preferences_page: false,
+            list_type: Constants.MenuSettingsListType.QUICK_LINKS
+        });
         extraCategoriesFrame.add(extraCategoriesLinksBox);
-        this.mainBox.append(extraCategoriesFrame);
+        this.add(extraCategoriesFrame);
 
         let extraCategoriesLocationFrame = new Adw.PreferencesGroup();
         let locations = new Gtk.StringList();
@@ -809,7 +815,7 @@ class ArcMenu_LayoutTweaksPage extends Gtk.Box {
             this._settings.set_enum('arcmenu-extra-categories-links-location' , widget.selected);
         });
         extraCategoriesLocationFrame.add(extraCategoriesLocationRow);
-        this.mainBox.append(extraCategoriesLocationFrame);
+        this.add(extraCategoriesLocationFrame);
     }
 
     _createWidgetsRows(layout){

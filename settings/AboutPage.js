@@ -127,8 +127,9 @@ class extends Adw.PreferencesPage {
         let importRow = new Adw.ActionRow({
             title: _("ArcMenu Settings")
         });
-        let settingsImportInfoButton = new PW.Button({
-            icon_name: 'help-about-symbolic'
+        let settingsImportInfoButton = new Gtk.Button({
+            icon_name: 'help-about-symbolic',
+            valign: Gtk.Align.CENTER
         });
         settingsImportInfoButton.connect('clicked', () => {
             let dialog = new Gtk.MessageDialog({

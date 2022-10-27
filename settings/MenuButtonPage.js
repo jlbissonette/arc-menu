@@ -155,9 +155,8 @@ class ArcMenu_MenuButtonPage extends Adw.PreferencesPage {
         let menuButtonIconFrame = new Adw.PreferencesGroup({
             title: _('Menu Button Icon')
         });
-        let menuButtonIconButton = new PW.Button({
-            title: _("Browse...") + " ",
-            icon_first: true,
+        let menuButtonIconButton = new Gtk.Button({
+            label: _("Browse..."),
             valign: Gtk.Align.CENTER,
         });
         menuButtonIconButton.connect('clicked', () => {
@@ -541,9 +540,9 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
             valign: Gtk.Align.END,
             vexpand: true
         });
-        let distroInfoButton = new PW.Button({
+        let distroInfoButton = new Gtk.Button({
             icon_name: 'help-about-symbolic',
-            halign: Gtk.Align.START
+            halign: Gtk.Align.END
         });
         distroInfoButton.connect('clicked', () => {
             let dialog = new DistroIconsDisclaimerWindow(this._settings, this);

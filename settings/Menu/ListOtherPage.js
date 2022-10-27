@@ -7,32 +7,30 @@ const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
 const _ = Gettext.gettext;
 
-var ListOtherPage = GObject.registerClass(
-    class ArcMenu_ListOtherPage extends Gtk.Box {
-    _init(settings, listType) {
-        super._init({
-            spacing: 24,
-            margin_start: 6,
-            margin_end: 6,
-            margin_bottom: 6,
-            orientation: Gtk.Orientation.VERTICAL
-        });
-        this.frameRows = [];
-        this.listType = listType;
+const Settings = Me.imports.settings;
+const { SubPage } = Settings.Menu.SubPage;
 
-        if(this.listType === Constants.MenuSettingsListType.POWER_OPTIONS)
+var ListOtherPage = GObject.registerClass(
+class ArcMenu_ListOtherPage extends SubPage {
+    _init(settings, params) {
+        super._init(settings, params);
+
+        this.frameRows = [];
+
+        if(this.list_type === Constants.MenuSettingsListType.POWER_OPTIONS)
             this.settingString = 'power-options';
-        else if(this.listType === Constants.MenuSettingsListType.EXTRA_CATEGORIES)
+        else if(this.list_type === Constants.MenuSettingsListType.EXTRA_CATEGORIES)
             this.settingString = 'extra-categories';
-        else if(this.listType === Constants.MenuSettingsListType.QUICK_LINKS)
+        else if(this.list_type === Constants.MenuSettingsListType.QUICK_LINKS)
             this.settingString = 'arcmenu-extra-categories-links';
 
-        this._settings = settings;
         this.categoriesFrame = new Adw.PreferencesGroup();
 
         this._addRowsToFrame(this._settings.get_value(this.settingString).deep_unpack());
-        this.append(this.categoriesFrame);
-        if(this.listType === Constants.MenuSettingsListType.POWER_OPTIONS){
+
+        this.add(this.categoriesFrame);
+
+        if(this.list_type === Constants.MenuSettingsListType.POWER_OPTIONS){
             let powerDisplayStyleGroup = new Adw.PreferencesGroup({
                 title: _("Power Off / Log Out Buttons")
             });
@@ -49,7 +47,8 @@ var ListOtherPage = GObject.registerClass(
                 this._settings.set_enum('power-display-style', widget.selected)
             });
             powerDisplayStyleGroup.add(this.powerDisplayStyleRow);
-            this.append(powerDisplayStyleGroup);
+
+            this.add(powerDisplayStyleGroup);
         }
 
         this.restoreDefaults = () => {
@@ -82,7 +81,7 @@ var ListOtherPage = GObject.registerClass(
         for(let i = 0; i < extraCategories.length; i++){
             let categoryEnum = extraCategories[i][0];
             let name, iconString;
-            if(this.listType === Constants.MenuSettingsListType.POWER_OPTIONS){
+            if(this.list_type === Constants.MenuSettingsListType.POWER_OPTIONS){
                 name = Constants.PowerOptions[categoryEnum].NAME;
                 iconString = Constants.PowerOptions[categoryEnum].ICON;
             }

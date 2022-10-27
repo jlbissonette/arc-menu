@@ -4,51 +4,39 @@ const Me = ExtensionUtils.getCurrentExtension();
 const {Adw, Gio, GObject, Gtk} = imports.gi;
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
-const { LayoutTweaksPage } = Me.imports.settings.Menu.LayoutTweaksPage;
 const PW = Me.imports.prefsWidgets;
 const _ = Gettext.gettext;
+
+const Settings = Me.imports.settings;
+const { SubPage } = Settings.Menu.SubPage;
+const { LayoutTweaksPage } = Settings.Menu.LayoutTweaksPage;
 
 var LayoutsPage = GObject.registerClass({
     Signals: {
         'response': { param_types: [GObject.TYPE_INT]},
     },
 },
-class ArcMenu_LayoutsPage extends Gtk.Box {
-    _init(settings) {
-        super._init({
-            spacing: 24,
-            margin_start: 6,
-            margin_end: 6,
-            margin_bottom: 6,
-            orientation: Gtk.Orientation.VERTICAL
+class ArcMenu_LayoutsPage extends SubPage {
+    _init(settings, params) {
+        super._init(settings, params);
+
+        this.restoreDefaultsButton.visible = false;
+
+        let currentLayoutGroup = new Adw.PreferencesGroup({
+            title: _('Current Menu Layout')
         });
-        this._settings = settings;
-
-        let mainGroup = new Adw.PreferencesGroup();
-        this.append(mainGroup);
-
-        let mainBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            spacing: 24,
-            vexpand: true,
-            valign: Gtk.Align.FILL
-        });
-
-        mainGroup.add(mainBox);
-
-        let currentLayoutGroup = new Adw.PreferencesGroup();
         let currentLayoutName = this.getMenuLayoutName(this._settings.get_enum('menu-layout'));
         let currentLayoutImagePath = this.getMenuLayoutImagePath(this._settings.get_enum('menu-layout'));
 
         let currentLayoutBoxRow = new CurrentLayoutRow(currentLayoutName, currentLayoutImagePath);
 
         currentLayoutGroup.add(currentLayoutBoxRow);
-        mainBox.append(currentLayoutGroup);
+        this.add(currentLayoutGroup);
 
         let menuLayoutGroup = new Adw.PreferencesGroup({
             title: _("Choose a new menu layout?"),
         });
-        mainBox.append(menuLayoutGroup);
+        this.add(menuLayoutGroup);
 
         Constants.MenuStyles.STYLES.forEach((style) => {
             let tile = new Adw.ExpanderRow({

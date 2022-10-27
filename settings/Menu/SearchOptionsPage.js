@@ -6,17 +6,14 @@ const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const PW = Me.imports.prefsWidgets;
 const _ = Gettext.gettext;
 
+const Settings = Me.imports.settings;
+const { SubPage } = Settings.Menu.SubPage;
+
 var SearchOptionsPage = GObject.registerClass(
-class ArcMenu_SearchOptionsPage extends Gtk.Box {
-    _init(settings) {
-        super._init({
-            spacing: 24,
-            margin_start: 6,
-            margin_end: 6,
-            margin_bottom: 6,
-            orientation: Gtk.Orientation.VERTICAL
-        });
-        this._settings = settings;
+class ArcMenu_SearchOptionsPage extends SubPage {
+    _init(settings, params) {
+        super._init(settings, params);
+
         this.searchResultsDetails = this._settings.get_boolean('show-search-result-details');
         this.openWindowsSearchProvider = this._settings.get_boolean('search-provider-open-windows');
         this.recentFilesSearchProvider = this._settings.get_boolean('search-provider-recent-files');
@@ -54,7 +51,7 @@ class ArcMenu_SearchOptionsPage extends Gtk.Box {
         });
         recentFilesRow.add_suffix(recentFilesSwitch);
         searchProvidersFrame.add(recentFilesRow);
-        this.append(searchProvidersFrame);
+        this.add(searchProvidersFrame);
 
         let searchOptionsFrame = new Adw.PreferencesGroup({
             title: _("Search Options")
@@ -97,7 +94,7 @@ class ArcMenu_SearchOptionsPage extends Gtk.Box {
         });
         maxSearchResultsRow.add_suffix(maxSearchResultsScale);
         searchOptionsFrame.add(maxSearchResultsRow);
-        this.append(searchOptionsFrame);
+        this.add(searchOptionsFrame);
 
         let [searchBorderEnabled, searchBorderValue] = this._settings.get_value('search-entry-border-radius').deep_unpack();
 

@@ -27,7 +27,7 @@ function populateWindow(window, settings){
     window.add(generalPage);
     window.pages.push(generalPage);
 
-    const menuPage = new MenuPage(settings);
+    const menuPage = new MenuPage(settings, window);
     window.add(menuPage);
     window.pages.push(menuPage);
 
@@ -49,24 +49,19 @@ function setVisiblePage(window, settings){
         window.set_visible_page_name('GeneralPage');
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.CUSTOMIZE_MENU){
         window.set_visible_page_name('MenuPage');
-        const page = window.get_visible_page();
-        page.mainLeaflet.visible_child_name = 'MainView';
+        window.close_subpage();
     }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.MENU_LAYOUT){
         window.set_visible_page_name('MenuPage');
         const page = window.get_visible_page();
-        page.subLeaflet.visible_child_name = 'LayoutsPage';
-        page.mainLeaflet.visible_child = page.subLeaflet;
+        page.presentSubpage(Constants.PrefsVisiblePage.MENU_LAYOUT);
     }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.BUTTON_APPEARANCE)
         window.set_visible_page_name("MenuButtonPage");
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
-        window.set_visible_page_name('vPage');
+        window.set_visible_page_name('MenuPage');
         const page = window.get_visible_page();
-        page.subLeaflet.visible_child_name = 'LayoutTweaksPage';
-        page.mainLeaflet.visible_child = page.subLeaflet;
-        const tweaksPage = page.subLeaflet.visible_child;
-        tweaksPage.setActiveLayout(Constants.MenuLayout.RUNNER);
+        page.presentSubpage(Constants.PrefsVisiblePage.RUNNER_TWEAKS);
     }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.ABOUT)
         window.set_visible_page_name("AboutPage");
@@ -84,6 +79,7 @@ function fillPreferencesWindow(window) {
         iconTheme.add_search_path(Me.path + "/media/icons/prefs_icons");
 
     window.set_search_enabled(true);
+    window.can_navigate_back = true;
 
     settings.connect("changed::prefs-visible-page", () => {
         if(settings.get_int('prefs-visible-page') !== Constants.PrefsVisiblePage.MAIN)
@@ -100,10 +96,6 @@ function fillPreferencesWindow(window) {
 
         if(maybeScrolledWindowChild instanceof Gtk.ScrolledWindow)
             maybeScrolledWindowChild.vadjustment.value = 0;
-
-        //Force navigate to "MenuPage" MainView leaflet
-        if(window.visible_page_name === 'MenuPage')
-            page.mainLeaflet.visible_child_name = 'MainView';
     });
 
     populateWindow(window, settings);

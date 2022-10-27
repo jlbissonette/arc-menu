@@ -4,44 +4,6 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
-var Button = GObject.registerClass(class ArcMenu_Button extends Gtk.Button {
-    _init(params) {
-        super._init({
-            css_classes: params.css_classes ?? null
-        });
-        this._params = params;
-        this.halign = Gtk.Align.END;
-        this.valign = Gtk.Align.CENTER;
-        this.box = new Gtk.Box({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            spacing: 5
-        });
-        this.set_child(this.box);
-
-        if (this._params.icon_name) {
-            let image = new Gtk.Image({
-                icon_name: this._params.icon_name,
-                halign: Gtk.Align.CENTER
-            });
-            this.box.append(image);
-        }
-        if (this._params.tooltip_text){
-            this.set_tooltip_text(this._params.tooltip_text);
-        }
-        if (this._params.title){
-            let label = new Gtk.Label({
-                label: _(this._params.title),
-                use_markup: true,
-                xalign: 0
-            });
-            if(this._params.icon_first)
-                this.box.append(label);
-            else
-                this.box.prepend(label);
-        }
-    }
-});
-
 var DialogWindow = GObject.registerClass({
     Signals: {
         'response': { param_types: [GObject.TYPE_INT]},
@@ -130,7 +92,7 @@ var DragRow = GObject.registerClass({
         this.add_prefix(this.dragIcon);
 
         this.connect('notify::gicon', () => this.icon.gicon = this.gicon)
-    
+
         let dropTarget = new Gtk.DropTargetAsync({
             actions: Gdk.DragAction.MOVE
         });
@@ -156,8 +118,9 @@ var DragRow = GObject.registerClass({
         }
 
         if(this.change_enabled){
-            this.changeButton = new Button({
+            this.changeButton = new Gtk.Button({
                 icon_name: 'text-editor-symbolic',
+                valign: Gtk.Align.CENTER
             });
             this.changeButton.connect('clicked', () => {
                 this.emit('change-button-clicked');
@@ -279,8 +242,9 @@ var DragRow = GObject.registerClass({
         }
 
         if(this.change_enabled){
-            let changeButton = new Button({
+            let changeButton = new Gtk.Button({
                 icon_name: 'text-editor-symbolic',
+                valign: Gtk.Align.CENTER
             });
             dragRow.add_suffix(changeButton);
             dragRow.add_suffix(new Gtk.Separator({
@@ -290,8 +254,9 @@ var DragRow = GObject.registerClass({
             }));
         }
 
-        let editButton = new Button({
-            icon_name: 'view-more-symbolic'
+        let editButton = new Gtk.Button({
+            icon_name: 'view-more-symbolic',
+            valign: Gtk.Align.CENTER
         });
         dragRow.add_suffix(editButton);
 
@@ -429,7 +394,7 @@ var IconGrid = GObject.registerClass(class ArcMenu_IconGrid extends Gtk.FlowBox{
     }
 
     add(widget){
-        widget.margin_top = widget.margin_bottom = 
+        widget.margin_top = widget.margin_bottom =
                 widget.margin_start = widget.margin_end = 4;
 
         this.append(widget);
@@ -477,11 +442,11 @@ var MenuLayoutTile = GObject.registerClass(class ArcMenu_MenuLayoutTile extends 
 
     setActive(active){
         if(active){
-            this._image.css_classes = ['accent']; 
+            this._image.css_classes = ['accent'];
             this._label.css_classes = ['caption', 'accent'];
         }
         else{
-            this._image.css_classes = []; 
+            this._image.css_classes = [];
             this._label.css_classes = ['caption'];
         }
     }

@@ -5,22 +5,18 @@ const {Adw, Gdk, GLib, GObject, Gtk} = imports.gi;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
+const Settings = Me.imports.settings;
+const { SubPage } = Settings.Menu.SubPage;
+
 var VisualSettingsPage = GObject.registerClass(
-    class ArcMenu_VisualSettingsPage extends Gtk.Box {
-    _init(settings) {
-        super._init({
-            spacing: 24,
-            margin_start: 6,
-            margin_end: 6,
-            margin_bottom: 6,
-            orientation: Gtk.Orientation.VERTICAL
-        });
-        this._settings = settings;
+class ArcMenu_VisualSettingsPage extends SubPage {
+    _init(settings, params) {
+        super._init(settings, params);
 
         let menuSizeFrame = new Adw.PreferencesGroup({
             title: _("Menu Size")
         });
-        this.append(menuSizeFrame);
+        this.add(menuSizeFrame);
 
         let heightSpinButton = new Gtk.SpinButton({
             adjustment: new Gtk.Adjustment({
@@ -108,7 +104,7 @@ var VisualSettingsPage = GObject.registerClass(
         let generalSettingsFrame = new Adw.PreferencesGroup({
             title: _('Menu Location')
         });
-        this.append(generalSettingsFrame);
+        this.add(generalSettingsFrame);
 
         let menuLocations = new Gtk.StringList();
         menuLocations.append(_('Off'));
@@ -174,7 +170,7 @@ var VisualSettingsPage = GObject.registerClass(
             title: _("Override Icon Sizes"),
             description: _("Override the icon size of various menu items")
         });
-        this.append(iconsSizeFrame);
+        this.add(iconsSizeFrame);
 
         let iconSizes = new Gtk.StringList();
         iconSizes.append(_('Off'));
