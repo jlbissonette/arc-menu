@@ -93,15 +93,15 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
         });
         whatToShowGroup.add(this.tweaksRow);
 
-        let pinnedAppsRow = new SettingRow({
+        this.pinnedAppsRow = new SettingRow({
             title: _('Pinned Apps'),
             icon_name: 'view-pin-symbolic'
         });
-        this._addSubPageToRow(pinnedAppsRow, {
+        this._addSubPageToRow(this.pinnedAppsRow, {
             pageClass: ListPinnedPage,
             pageClassParams: Constants.MenuSettingsListType.PINNED_APPS,
         });
-        whatToShowGroup.add(pinnedAppsRow);
+        whatToShowGroup.add(this.pinnedAppsRow);
 
         let directoryShortcutsRow = new SettingRow({
             title: _('Directory Shortcuts'),

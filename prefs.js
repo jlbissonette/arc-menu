@@ -97,6 +97,15 @@ function fillPreferencesWindow(window) {
             setVisiblePage(window, settings);
     });
 
+    let pinnedAppsChangedId = settings.connect("changed::pinned-app-list", () => {
+        for(let page of window.pages){
+            if(page instanceof MenuPage){
+                const { settingPage } = page.pinnedAppsRow;
+                settingPage.updatePinnedApps();
+            }
+        }
+    });
+
     window.connect('notify::visible-page', () => {
         const page = window.visible_page;
         const maybeScrolledWindowChild = [...page][0];
@@ -109,6 +118,11 @@ function fillPreferencesWindow(window) {
         if (pageChangedId) {
             settings.disconnect(pageChangedId);
             pageChangedId = null;
+        }
+
+        if (pinnedAppsChangedId) {
+            settings.disconnect(pinnedAppsChangedId);
+            pinnedAppsChangedId = null;
         }
     });
 

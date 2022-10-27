@@ -132,7 +132,7 @@ class ArcMenu_ListPinnedPage extends SubPage {
             this.frameRows = [];
             let shortcutsDataArray = [];
 
-            let shortcutsArray = this._settings.get_default_value(this.settingString).deep_unpack();
+            const shortcutsArray = this._settings.get_default_value(this.settingString).deep_unpack();
             if(nestedArraySetting){
                 for(let i = 0; i < shortcutsArray.length; i++){
                     shortcutsDataArray.push({
@@ -155,6 +155,24 @@ class ArcMenu_ListPinnedPage extends SubPage {
             this._addRowsToFrame(shortcutsDataArray);
             this.saveSettings();
         };
+    }
+
+    updatePinnedApps(){
+        this.frameRows.forEach(child => {
+            this.frame.remove(child);
+        });
+        this.frameRows = [];
+        let shortcutsDataArray = [];
+
+        const shortcutsArray = this._settings.get_value(this.settingString).deep_unpack();
+        for(let i = 0; i < shortcutsArray.length; i+=3){
+            shortcutsDataArray.push({
+                name: shortcutsArray[i],
+                icon: shortcutsArray[i + 1],
+                command: shortcutsArray[i + 2]
+            });
+        }
+        this._addRowsToFrame(shortcutsDataArray);
     }
 
     saveSettings(){
