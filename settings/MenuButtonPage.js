@@ -26,7 +26,7 @@ class ArcMenu_MenuButtonPage extends Adw.PreferencesPage {
             vexpand: false,
             valign: Gtk.Align.CENTER,
             tooltip_text: _("Reset settings"),
-            css_classes: ['destructive-action'],
+            css_classes: ['flat'],
             halign: Gtk.Align.END,
             hexpand: true,
         });

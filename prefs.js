@@ -45,28 +45,36 @@ function populateWindow(window, settings){
 function setVisiblePage(window, settings){
     const prefsVisiblePage = settings.get_int('prefs-visible-page');
 
-    if(prefsVisiblePage === Constants.PrefsVisiblePage.MAIN)
-        window.set_visible_page_name('GeneralPage');
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.CUSTOMIZE_MENU){
-        window.set_visible_page_name('MenuPage');
+    if(prefsVisiblePage === Constants.PrefsVisiblePage.MAIN){
         window.close_subpage();
+        window.set_visible_page_name('GeneralPage');
+    }
+    else if(prefsVisiblePage === Constants.PrefsVisiblePage.CUSTOMIZE_MENU){
+        window.close_subpage();
+        window.set_visible_page_name('MenuPage');
     }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.MENU_LAYOUT){
         window.set_visible_page_name('MenuPage');
         const page = window.get_visible_page();
         page.presentSubpage(Constants.PrefsVisiblePage.MENU_LAYOUT);
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.BUTTON_APPEARANCE)
+    else if(prefsVisiblePage === Constants.PrefsVisiblePage.BUTTON_APPEARANCE){
+        window.close_subpage();
         window.set_visible_page_name("MenuButtonPage");
+    }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
         window.set_visible_page_name('MenuPage');
         const page = window.get_visible_page();
         page.presentSubpage(Constants.PrefsVisiblePage.RUNNER_TWEAKS);
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.ABOUT)
+    else if(prefsVisiblePage === Constants.PrefsVisiblePage.ABOUT){
+        window.close_subpage();
         window.set_visible_page_name("AboutPage");
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.GENERAL)
+    }
+    else if(prefsVisiblePage === Constants.PrefsVisiblePage.GENERAL){
+        window.close_subpage();
         window.set_visible_page_name("GeneralPage");
+    }
 
     settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.MAIN);
 }
@@ -80,15 +88,14 @@ function fillPreferencesWindow(window) {
 
     window.set_search_enabled(true);
     window.can_navigate_back = true;
-
-    settings.connect("changed::prefs-visible-page", () => {
-        if(settings.get_int('prefs-visible-page') !== Constants.PrefsVisiblePage.MAIN)
-            setVisiblePage(window, settings);
-    });
-
     window.default_width = settings.get_int('settings-width');
     window.default_height = settings.get_int('settings-height');
     window.set_title(_("ArcMenu Settings"));
+
+    let pageChangedId = settings.connect("changed::prefs-visible-page", () => {
+        if(settings.get_int('prefs-visible-page') !== Constants.PrefsVisiblePage.MAIN)
+            setVisiblePage(window, settings);
+    });
 
     window.connect('notify::visible-page', () => {
         const page = window.visible_page;
@@ -96,6 +103,13 @@ function fillPreferencesWindow(window) {
 
         if(maybeScrolledWindowChild instanceof Gtk.ScrolledWindow)
             maybeScrolledWindowChild.vadjustment.value = 0;
+    });
+
+    window.connect('close-request', () => {
+        if (pageChangedId) {
+            settings.disconnect(pageChangedId);
+            pageChangedId = null;
+        }
     });
 
     populateWindow(window, settings);

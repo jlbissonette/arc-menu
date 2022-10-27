@@ -40,7 +40,7 @@ class ArcMenu_SubPage extends Gtk.Box {
 
         this.headerBar = new Adw.HeaderBar({
             title_widget: this.headerLabel,
-            //decoration_layout: ''
+            decoration_layout: ''
         });
 
         if(this.preferences_page){
