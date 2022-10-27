@@ -93,6 +93,16 @@ class ArcMenu_SubPage extends Gtk.Box {
         else
             this.append(widget);
     }
+
+    resetScrollAdjustment(){
+        if(!this.preferences_page)
+            return;
+
+        const maybeScrolledWindowChild = [...this.page][0];
+
+        if(maybeScrolledWindowChild instanceof Gtk.ScrolledWindow)
+            maybeScrolledWindowChild.vadjustment.value = 0;
+    }
 });
 
 var PrefsPage = GObject.registerClass(

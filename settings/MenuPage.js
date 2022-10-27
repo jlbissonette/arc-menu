@@ -170,6 +170,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
                 settingPage.setActiveLayout(this._settings.get_enum('menu-layout'));
 
             this._window.present_subpage(settingPage);
+            settingPage.resetScrollAdjustment();
         });
     }
 
