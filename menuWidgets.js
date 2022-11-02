@@ -2117,6 +2117,13 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
             this._menuLayout.setActiveCategory(this);
     }
 
+    _clearLeaveEventTimeout(){
+        if(this._menuLayout.leaveEventTimeoutId){
+            GLib.source_remove(this._menuLayout.leaveEventTimeoutId);
+            this._menuLayout.leaveEventTimeoutId = null;
+        }
+    }
+
     _shouldActivateOnHover(){
         const activateOnHover = this._settings.get_boolean('activate-on-hover');
         const supportsActivateOnHover = this.layoutProps.SupportsCategoryOnHover;
@@ -2128,10 +2135,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         if(!this._shouldActivateOnHover())
             return;
 
-        if(this._menuLayout.leaveEventTimeoutId){
-            GLib.source_remove(this._menuLayout.leaveEventTimeoutId);
-            this._menuLayout.leaveEventTimeoutId = null;
-        }
+        this._clearLeaveEventTimeout();
     }
 
     _onLeaveEvent(actor, event) {
@@ -2206,6 +2210,11 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         const outsideTriangle = area !== a1 + a2 + a3;
 
         return outsideTriangle;
+    }
+
+    _onDestroy(){
+        this._clearLeaveEventTimeout();
+        super._onDestroy();
     }
 });
 
