@@ -647,14 +647,10 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         redmondMenuTweaksFrame.add(this._createVertSeparatorRow());
 
         this.add(redmondMenuTweaksFrame);
-        this.add(new Gtk.Label({
-            label: "<b>" + _("Extra Shortcuts") + "</b>",
-            use_markup: true,
-            xalign: 0,
-            hexpand: true
-        }));
 
-        let placesFrame = new Adw.PreferencesGroup();
+        let placesFrame = new Adw.PreferencesGroup({
+            title: _("Extra Shortcuts")
+        });
         this.add(placesFrame);
 
         let externalDeviceButton = new Gtk.Switch({
