@@ -706,6 +706,7 @@ var ArcMenuButtonItem = GObject.registerClass(
 var RunnerTweaksButton = GObject.registerClass(class ArcMenu_RunnerTweaksButton extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, _("Configure Runner"), 'emblem-system-symbolic');
+        this.style_class = 'icon-button arcmenu-button';
         this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
     }
     activate(event) {

@@ -50,14 +50,13 @@ var Menu =  class extends BaseMenuLayout{
             x_expand: true,
             y_expand: true,
             vertical: false,
-            style: "margin: 5px 0px 0px 0px;"
+            style: 'margin: 10px 10px 0px 0px; spacing: 10px;'
         });
         this.runnerTweaksButton = new MW.RunnerTweaksButton(this);
         this.runnerTweaksButton.x_expand = false;
         this.runnerTweaksButton.y_expand = true;
         this.runnerTweaksButton.y_align = this.searchBox.y_align = Clutter.ActorAlign.CENTER;
         this.runnerTweaksButton.x_align = Clutter.ActorAlign.CENTER;
-        this.runnerTweaksButton.style = "margin: 0px 0px 0px 6px;";
 
         this.topBox.add_child(this.searchBox);
         this.topBox.add_child(this.runnerTweaksButton);
@@ -65,18 +64,19 @@ var Menu =  class extends BaseMenuLayout{
 
         this.applicationsScrollBox = this._createScrollBox({
             x_expand: true,
-            y_expand: true,
+            y_expand: false,
             y_align: Clutter.ActorAlign.START,
-            x_align: Clutter.ActorAlign.START,
+            x_align: Clutter.ActorAlign.FILL,
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
-            reactive:true
+            reactive: true,
+            style: "padding: 10px 0px 0px 0px;"
         });
 
         this.mainBox.add_child(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
-            style: "margin: 5px 0px 0px 0px;"
+            style: "padding: 0px 10px 0px 0px;"
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.activeMenuItem = null;
@@ -102,7 +102,8 @@ var Menu =  class extends BaseMenuLayout{
             }
         }
         let activeMenuItemSet = false;
-        for (let i = 0; i < appList.length; i++) {
+        const maxApps = 10;
+        for (let i = 0; i < maxApps; i++) {
             let item = appList[i];
             if(item.get_parent())
                 item.get_parent().remove_child(item);
@@ -147,13 +148,11 @@ var Menu =  class extends BaseMenuLayout{
         this._runnerWidth = this._settings.get_int("runner-menu-width");
         this._runnerHeight = this._settings.get_int("runner-menu-height");
         this._runnerFontSize = this._settings.get_int("runner-font-size");
-        this.mainBox.style = `max-height: ${this._runnerHeight}px;`;
+        this.mainBox.style = `max-height: ${this._runnerHeight}px; margin: 0px 0px 0px 10px; width: ${this._runnerWidth}px;`;
         if(this._runnerFontSize > 0){
             this.mainBox.style += `font-size: ${this._runnerFontSize}pt;`
             this.searchBox.style += `font-size: ${this._runnerFontSize}pt;`
         }
-        this.topBox.style = `width: ${this._runnerWidth}px; margin: 5px 0px 0px 0px;`;
-        this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
     }
 
     loadCategories(){
