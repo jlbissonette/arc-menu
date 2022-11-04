@@ -168,16 +168,17 @@ StScrollView .small-vfade{
     min-height: 0px;
 }
 
-/* Recently Installed App Indicator */
+/* Recently Installed App Indicator on parent category */
 /*
 .arcmenu-indicator{
     color: rgb(41, 165, 249);
 }
 */
 
-/* Recently Installed App Indicator on parent category */
-/*
+/* Recently Installed App Indicator Text */
 .arcmenu-text-indicator{
-    background-color: rgba(196, 196, 196, 0.3);
+    font-size: small;
+    border-radius: 8px; 
+    margin: 0px; 
+    padding: 0px 10px;
 }
-*/

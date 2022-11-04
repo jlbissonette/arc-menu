@@ -1870,7 +1870,6 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
             this._indicator = new St.Label({
                 text: _('New'),
                 style_class: "arcmenu-text-indicator",
-                style: "border-radius: 15px; margin: 0px; padding: 0px 10px;",
                 x_expand: true,
                 x_align: Clutter.ActorAlign.END,
                 y_align: Clutter.ActorAlign.CENTER
@@ -2033,6 +2032,16 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
 
         this._updateIcon();
 
+        this._indicator = new St.Icon({
+            icon_name: 'message-indicator-symbolic',
+            style_class: 'arcmenu-indicator',
+            icon_size: INDICATOR_ICON_SIZE,
+            x_expand: true,
+            y_expand: false,
+            x_align: Clutter.ActorAlign.END,
+            y_align: Clutter.ActorAlign.CENTER
+        });
+
         if(this.isRecentlyInstalled)
             this.setNewAppIndicator(true);
 
@@ -2087,20 +2096,11 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
     setNewAppIndicator(shouldShow){
         if(this._displayType === Constants.DisplayType.BUTTON)
             return;
+
         this.isRecentlyInstalled = shouldShow;
-        if(shouldShow && !this._indicator){
-            this._indicator = new St.Icon({
-                icon_name: 'message-indicator-symbolic',
-                style_class: 'arcmenu-indicator',
-                icon_size: INDICATOR_ICON_SIZE,
-                x_expand: true,
-                y_expand: false,
-                x_align: Clutter.ActorAlign.END,
-                y_align: Clutter.ActorAlign.CENTER
-            });
+        if(shouldShow && !this.contains(this._indicator))
             this.add_child(this._indicator);
-        }
-        else if(!shouldShow && this._indicator && this.contains(this._indicator))
+        else if(!shouldShow && this.contains(this._indicator))
             this.remove_child(this._indicator);
     }
 
@@ -2386,7 +2386,7 @@ class ArcMenu_SearchBox extends St.Entry {
         this.searchResults = menuLayout.searchResults;
         this._settings = menuLayout._settings;
         this.triggerSearchChangeEvent = true;
-
+        this._iconClickedId = 0;
         const IconSizeEnum = this._settings.get_enum('misc-item-icon-size');
         let iconSize = Utils.getIconSize(IconSizeEnum, Constants.EXTRA_SMALL_ICON_SIZE);
 
@@ -2456,7 +2456,7 @@ class ArcMenu_SearchBox extends St.Entry {
     _onTextChanged() {
         if(!this.isEmpty()){
             this.set_secondary_icon(this._clearIcon);
-            if(!this._iconClickedId)
+            if(this._iconClickedId === 0)
                 this._iconClickedId = this.connect('secondary-icon-clicked', () => this.clear());
             if(!this.hasKeyFocus())
                 this.grab_key_focus();
@@ -2465,9 +2465,9 @@ class ArcMenu_SearchBox extends St.Entry {
             this.add_style_pseudo_class('focus');
         }
         else{
-            if(this._iconClickedId){
+            if(this._iconClickedId > 0){
                 this.disconnect(this._iconClickedId);
-                this._iconClickedId = null;
+                this._iconClickedId = 0;
             }
             if(!this.hasKeyFocus())
                 this.remove_style_pseudo_class('focus');

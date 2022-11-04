@@ -153,8 +153,8 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
     setMenuPositionAlignment(){
         let layout = this._settings.get_enum('menu-layout');
 
-        let arrowAlignment = (this._settings.get_int('menu-position-alignment') / 100);
-        if(layout != Constants.MenuLayout.RUNNER){
+        let arrowAlignment = 1 - (this._settings.get_int('menu-position-alignment') / 100);
+        if(layout !== Constants.MenuLayout.RUNNER){
             if(this._settings.get_enum('position-in-panel') == Constants.MenuPosition.CENTER){
                 this.arcMenuContextMenu._arrowAlignment = arrowAlignment
                 this.arcMenu._arrowAlignment = arrowAlignment
