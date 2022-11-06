@@ -706,12 +706,24 @@ var ArcMenuButtonItem = GObject.registerClass(
 var RunnerTweaksButton = GObject.registerClass(class ArcMenu_RunnerTweaksButton extends ArcMenuButtonItem {
     _init(menuLayout) {
         super._init(menuLayout, _("Configure Runner"), 'emblem-system-symbolic');
-        this.style_class = 'icon-button arcmenu-button';
+        this.style_class = 'button arcmenu-button';
         this.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
     }
+
+    set active(active) {
+        if(this.isDestroyed)
+            return;
+
+        let activeChanged = active != this.active;
+        if(activeChanged){
+            this._active = active;
+            this.notify('active');
+        }
+    }
+
     activate(event) {
         super.activate(event);
-        this._menuLayout._settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.RUNNER_TWEAKS);
+        this._settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.RUNNER_TWEAKS);
         ExtensionUtils.openPrefs();
     }
 });
