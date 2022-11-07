@@ -201,7 +201,7 @@ class ArcMenu_ListPinnedPage extends SubPage {
         row.shortcut_command = shortcutData.command;
 
         let appInfo = Gio.DesktopAppInfo.new(row.shortcut_command);
-        let shortcutIcon = shortcutData.icon;
+        let shortcutIcon = shortcutData.icon ?? '';
 
         if(shortcutIcon === "ArcMenu_ArcMenuIcon")
             shortcutIcon = Constants.ArcMenuLogoSymbolic;
@@ -211,7 +211,8 @@ class ArcMenu_ListPinnedPage extends SubPage {
             for(let softwareManagerID of Constants.SoftwareManagerIDs){
                 let app = Gio.DesktopAppInfo.new(softwareManagerID);
                 if(app){
-                    shortcutIcon = app.get_icon()?.to_string();
+                    const appIcon = app.get_icon();
+                    shortcutIcon = appIcon ? appIcon.to_string() : '';
                     break;
                 }
             }
@@ -219,7 +220,7 @@ class ArcMenu_ListPinnedPage extends SubPage {
         else if(this.list_type === Constants.MenuSettingsListType.DIRECTORIES || this.list_type === Constants.MenuSettingsListType.EXTRA_SHORTCUTS)
             shortcutIcon = SettingsUtils.getIconStringFromListing([shortcutData.name, shortcutData.icon, shortcutData.command]);
 
-        if(shortcutIcon.length < 1 && appInfo)
+        if((!shortcutIcon || shortcutIcon.length < 1) && appInfo)
             shortcutIcon = appInfo.get_icon() ? appInfo.get_icon().to_string() : "";
 
         row.shortcut_icon = shortcutIcon;
