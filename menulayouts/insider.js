@@ -254,10 +254,8 @@ var Menu = class extends BaseMenuLayout{
 
     displayPinnedApps() {
         this._clearActorsFromBox(this.pinnedAppsBox);
-        this.layoutProperties.GridColumns = 1;
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.PINNED_APPS, this.pinnedAppsGrid);
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
             this.pinnedAppsBox.add_child(this.pinnedAppsGrid);
-        this.layoutProperties.GridColumns = 5;
     }
 }

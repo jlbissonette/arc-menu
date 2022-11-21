@@ -20,7 +20,6 @@ var Menu = class extends BaseMenuLayout{
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
             ShortcutContextMenuLocation: Constants.ContextMenuLocation.RIGHT,
-            GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
             SupportsCategoryOnHover: true,

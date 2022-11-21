@@ -18,7 +18,6 @@ var Menu = class extends BaseMenuLayout{
             DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
-            GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
             SupportsCategoryOnHover: true,

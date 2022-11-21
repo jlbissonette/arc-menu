@@ -73,6 +73,10 @@
         <value value="0" nick="Top"/>
         <value value="1" nick="Centered"/>
     </enum>
+    <enum id='org.gnome.shell.extensions.arcmenu.runner-search-display-style'>
+        <value value="0" nick="In_Line"/>
+        <value value="1" nick="Grid"/>
+    </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.searchbar-location'>
         <value value="0" nick="Bottom"/>
         <value value="1" nick="Top"/>
@@ -336,7 +340,7 @@
       <description>Show custom search provider - recent files.</description>
     </key>
     <key type="(bi)" name="search-entry-border-radius">
-      <default>(false, 8)</default>
+      <default>(true, 25)</default>
       <summary>Search entry border radius</summary>
       <description>Search entry border radius.</description>
     </key>
@@ -550,10 +554,15 @@
       <summary>The menu position in the panel</summary>
       <description>The menu position in the panel.</description>
     </key>
-      <key name="runner-position" enum="org.gnome.shell.extensions.arcmenu.runner-position">
+    <key name="runner-position" enum="org.gnome.shell.extensions.arcmenu.runner-position">
       <default>'Top'</default>
       <summary>Runner Menu Position</summary>
       <description>Runner Menu Position.</description>
+    </key>
+    <key name="runner-search-display-style" enum="org.gnome.shell.extensions.arcmenu.runner-search-display-style">
+      <default>'In_Line'</default>
+      <summary>Runner Search Display Style</summary>
+      <description>Runner Search Display Style.</description>
     </key>
     <key name="menu-button-appearance" enum="org.gnome.shell.extensions.arcmenu.menu-button-appearance">
       <default>'Icon'</default>

@@ -8,12 +8,11 @@ const Prefs = Me.imports.prefs;
 const PW = Me.imports.prefsWidgets;
 const _ = Gettext.gettext;
 
+const PAYPAL_LINK = `https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Support+${Me.metadata.name}&source=url`;
 const PROJECT_TITLE = _('ArcMenu');
 const PROJECT_DESCRIPTION = _('Application Menu Extension for GNOME');
 const PROJECT_IMAGE = 'settings-arcmenu-logo';
-
 const SCHEMA_PATH = '/org/gnome/shell/extensions/arcmenu/';
-const GSET = 'gnome-shell-extension-tool';
 
 var AboutPage = GObject.registerClass(
 class extends Adw.PreferencesPage {
@@ -59,14 +58,15 @@ class extends Adw.PreferencesPage {
         this.add(projectHeaderGroup);
         //-----------------------------------------------------------------------
 
-        //Extension/OS Info Group------------------------------------------------
+        //Extension/OS Info and Links Group------------------------------------------------
         let infoGroup = new Adw.PreferencesGroup();
 
         let projectVersionRow = new Adw.ActionRow({
             title: `${PROJECT_TITLE} ${_('Version')}`,
         });
         projectVersionRow.add_suffix(new Gtk.Label({
-            label: Me.metadata.version.toString()
+            label: Me.metadata.version.toString(),
+            css_classes: ['dim-label']
         }));
         infoGroup.add(projectVersionRow);
 
@@ -76,6 +76,7 @@ class extends Adw.PreferencesPage {
             });
             commitRow.add_suffix(new Gtk.Label({
                 label: Me.metadata.commit.toString(),
+                css_classes: ['dim-label']
             }));
             infoGroup.add(commitRow);
         }
@@ -85,6 +86,7 @@ class extends Adw.PreferencesPage {
         });
         gnomeVersionRow.add_suffix(new Gtk.Label({
             label: imports.misc.config.PACKAGE_VERSION.toString(),
+            css_classes: ['dim-label']
         }));
         infoGroup.add(gnomeVersionRow);
 
@@ -105,6 +107,7 @@ class extends Adw.PreferencesPage {
 
         osRow.add_suffix(new Gtk.Label({
             label: osInfoText,
+            css_classes: ['dim-label'],
             single_line_mode: false,
             wrap: true,
         }));
@@ -115,45 +118,38 @@ class extends Adw.PreferencesPage {
         });
         sessionTypeRow.add_suffix(new Gtk.Label({
             label: GLib.getenv('XDG_SESSION_TYPE') === "wayland" ? 'Wayland' : 'X11',
+            css_classes: ['dim-label']
         }));
         infoGroup.add(sessionTypeRow);
+
+        let gitlabButton = new Gtk.LinkButton({
+            label: `${PROJECT_TITLE} ${_('GitLab')}`,
+            uri: Me.metadata.url
+        })
+        let donateButton = new Gtk.LinkButton({
+            label: _('Donate via PayPal'),
+            uri: PAYPAL_LINK,
+        });
+        let linksRow = new Adw.ActionRow();
+        linksRow.add_prefix(gitlabButton);
+        linksRow.add_suffix(donateButton);
+        infoGroup.add(linksRow);
+
         this.add(infoGroup);
         //-----------------------------------------------------------------------
 
-        //Import/Export----------------------------------------------------------
-        let importFrame = new Adw.PreferencesGroup({
-            title: _('Export or Import Settings')
+        //Save/Load Settings----------------------------------------------------------
+        let settingsGroup = new Adw.PreferencesGroup();
+        let settingsRow = new Adw.ActionRow({
+            title: `${PROJECT_TITLE} ${_('Settings')}`,
         });
-        let importRow = new Adw.ActionRow({
-            title: _("ArcMenu Settings")
-        });
-        let settingsImportInfoButton = new Gtk.Button({
-            icon_name: 'help-about-symbolic',
+        let loadButton = new Gtk.Button({
+            label: _('Load'),
             valign: Gtk.Align.CENTER
         });
-        settingsImportInfoButton.connect('clicked', () => {
-            let dialog = new Gtk.MessageDialog({
-                text: "<b>" + _("Export or Import ArcMenu Settings") + '</b>',
-                secondary_text:_('Importing will overwrite current settings.'),
-                use_markup: true,
-                buttons: Gtk.ButtonsType.OK,
-                message_type: Gtk.MessageType.WARNING,
-                transient_for: this.get_root(),
-                modal: true
-            });
-            dialog.connect('response', (widget, response) => {
-                dialog.destroy();
-            });
-            dialog.show();
-        });
-
-        let importButton = new Gtk.Button({
-            label: _("Import"),
-            valign: Gtk.Align.CENTER
-        });
-        importButton.connect('clicked', () => {
+        loadButton.connect('clicked', () => {
             this._showFileChooser(
-                _('Import settings'),
+                `${_('Load')} ${_('Settings')}`,
                 { action: Gtk.FileChooserAction.OPEN },
                 "_Open",
                 filename => {
@@ -173,35 +169,33 @@ class extends Adw.PreferencesPage {
                         GLib.close(stderr);
 
                         stdin.splice(settingsFile.read(null), Gio.OutputStreamSpliceFlags.CLOSE_SOURCE | Gio.OutputStreamSpliceFlags.CLOSE_TARGET, null);
-
-                        Prefs.populateWindow(preferencesWindow, this._settings);
                     }
                 }
             );
         });
-        let exportButton = new Gtk.Button({
-            label: _("Export"),
+        let saveButton = new Gtk.Button({
+            label: _('Save'),
             valign: Gtk.Align.CENTER
         });
-        exportButton.connect('clicked', () => {
+        saveButton.connect('clicked', () => {
             this._showFileChooser(
-                _('Export settings'),
+                `${_('Save')} ${_('Settings')}`,
                 { action: Gtk.FileChooserAction.SAVE},
                 "_Save",
-                (filename) => {
+                filename => {
                     let file = Gio.file_new_for_path(filename);
                     let raw = file.replace(null, false, Gio.FileCreateFlags.NONE, null);
                     let out = Gio.BufferedOutputStream.new_sized(raw, 4096);
+
                     out.write_all(GLib.spawn_command_line_sync('dconf dump ' + SCHEMA_PATH)[1], null);
                     out.close(null);
                 }
             );
         });
-        importRow.add_suffix(importButton);
-        importRow.add_suffix(exportButton);
-        importRow.add_suffix(settingsImportInfoButton);
-        importFrame.add(importRow);
-        this.add(importFrame);
+        settingsRow.add_suffix(saveButton);
+        settingsRow.add_suffix(loadButton);
+        settingsGroup.add(settingsRow);
+        this.add(settingsGroup);
         //-----------------------------------------------------------------------
 
         //Credits----------------------------------------------------------------
@@ -260,29 +254,6 @@ class extends Adw.PreferencesPage {
         creditsBox.append(creditsCarousel);
         creditsBox.append(creditsCarouselDots);
         //-----------------------------------------------------------------------
-
-        let linksGroup = new Adw.PreferencesGroup();
-        let linksBox = new Adw.ActionRow();
-
-        let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(Me.path + '/media/icons/prefs_icons/donate-icon.svg', -1, 50, true);
-        let donateImage = Gtk.Picture.new_for_pixbuf(pixbuf);
-        let donateLinkButton = new Gtk.LinkButton({
-            child: donateImage,
-            uri: 'https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Donate+to+support+my+work&currency_code=USD&source=url',
-        });
-
-        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(Me.path + '/media/icons/prefs_icons/gitlab-icon.svg', -1, 50, true);
-        let gitlabImage = Gtk.Picture.new_for_pixbuf(pixbuf);
-        let projectUrl = Me.metadata.url;
-        let projectLinkButton = new Gtk.LinkButton({
-            child: gitlabImage,
-            uri: projectUrl,
-        });
-
-        linksBox.add_prefix(projectLinkButton);
-        linksBox.add_suffix(donateLinkButton);
-        linksGroup.add(linksBox);
-        this.add(linksGroup);
 
         let gnuSoftwareGroup = new Adw.PreferencesGroup();
         let gnuSofwareLabel = new Gtk.Label({

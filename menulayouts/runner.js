@@ -10,15 +10,16 @@ const PanelMenu = imports.ui.panelMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
 
+const padding = 10;
+
 function getMenuLayoutEnum() { return Constants.MenuLayout.RUNNER; }
 
-var Menu =  class extends BaseMenuLayout{
+var Menu = class extends BaseMenuLayout{
     constructor(menuButton, isStandalone) {
         super(menuButton, {
             Search: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
-            GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
             VerticalMainBox: true,
@@ -32,6 +33,25 @@ var Menu =  class extends BaseMenuLayout{
     }
 
     createLayout(){
+        const searchDisplayStyle = this._settings.get_enum('runner-search-display-style');
+
+        if(searchDisplayStyle === Constants.RunnerSearchDisplayStyle.IN_LINE){
+            this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
+            this.layoutProperties.SearchDisplayType = Constants.DisplayType.LIST;
+            this.layoutProperties.ColumnSpacing = 0;
+            this.layoutProperties.RowSpacing = 0;
+            this.layoutProperties.DefaultMenuWidth = null;
+            this.layoutProperties.DefaultIconGridStyle = null;
+        }
+        else{
+            this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
+            this.layoutProperties.SearchDisplayType = Constants.DisplayType.GRID;
+            this.layoutProperties.ColumnSpacing = 15;
+            this.layoutProperties.RowSpacing = 15;
+            this.layoutProperties.DefaultMenuWidth = this._settings.get_int("runner-menu-width");
+            this.layoutProperties.DefaultIconGridStyle = "LargeIconGrid";
+        }
+
         super.createLayout();
         this.dummyCursor = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_child(this.dummyCursor);
@@ -50,7 +70,7 @@ var Menu =  class extends BaseMenuLayout{
             x_expand: true,
             y_expand: true,
             vertical: false,
-            style: 'margin: 10px 10px 0px 0px; spacing: 10px;'
+            style: `margin: ${padding}px ${padding}px 0px 0px; spacing: ${padding}px;`
         });
         this.runnerTweaksButton = new MW.RunnerTweaksButton(this);
         this.runnerTweaksButton.x_expand = false;
@@ -70,17 +90,25 @@ var Menu =  class extends BaseMenuLayout{
             overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             reactive: true,
-            style: "padding: 10px 0px 0px 0px;"
+            style: `padding: ${padding}px 0px 0px 0px;`
         });
 
         this.mainBox.add_child(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
-            style: "padding: 0px 10px 0px 0px;"
+            style: `padding: 0px ${padding}px 0px 0px;`
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.activeMenuItem = null;
         this.setDefaultMenuView();
+        this.updateWidth();
+    }
+
+    updateWidth(setDefaultMenuView){
+        const width = this._settings.get_int("runner-menu-width") - padding;
+        this.layoutProperties.MenuWidth = width;
+        if(setDefaultMenuView)
+            this.setDefaultMenuView();
     }
 
     setDefaultMenuView(){
@@ -133,26 +161,28 @@ var Menu =  class extends BaseMenuLayout{
         this.arcMenu._boxPointer.setSourceAlignment(0.5);
         this.arcMenu._arrowAlignment = 0.5;
 
+        const runnerHeight = this._settings.get_int("runner-menu-height");
+        const runnerWidth = this._settings.get_int("runner-menu-width");
+        const runnerFontSize = this._settings.get_int("runner-font-size");
+
         let rect = Main.layoutManager.getWorkAreaForMonitor(this._getMonitorIndexForPlacement());
 
         //Position the runner menu in the center of the current monitor, at top of screen.
         let positionX = Math.round(rect.x + (rect.width / 2));
         let positionY = rect.y;
-        if(this._settings.get_enum('runner-position') == 1)
-            positionY = Math.round(rect.y + (rect.height / 2) - 125);
-        this.dummyCursor.set_position(positionX,  positionY);
+        if(this._settings.get_enum('runner-position') === 1)
+            positionY = Math.round(rect.y + (rect.height / 2) - (runnerHeight / 2));
+        this.dummyCursor.set_position(positionX, positionY);
 
         if(!this.topBox)
             return;
 
-        this._runnerWidth = this._settings.get_int("runner-menu-width");
-        this._runnerHeight = this._settings.get_int("runner-menu-height");
-        this._runnerFontSize = this._settings.get_int("runner-font-size");
-        this.mainBox.style = `max-height: ${this._runnerHeight}px; margin: 0px 0px 0px 10px; width: ${this._runnerWidth}px;`;
-        if(this._runnerFontSize > 0){
-            this.mainBox.style += `font-size: ${this._runnerFontSize}pt;`
-            this.searchBox.style += `font-size: ${this._runnerFontSize}pt;`
+        this.mainBox.style = `max-height: ${runnerHeight}px; margin: 0px 0px 0px ${padding}px; width: ${runnerWidth}px;`;
+        if(runnerFontSize > 0){
+            this.mainBox.style += `font-size: ${runnerFontSize}pt;`
+            this.searchBox.style += `font-size: ${runnerFontSize}pt;`
         }
+        this.updateWidth();
     }
 
     loadCategories(){

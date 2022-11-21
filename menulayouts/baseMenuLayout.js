@@ -34,13 +34,6 @@ var BaseMenuLayout = class {
         this.shouldLoadPinnedApps = true;
         this.hasPinnedApps = false;
 
-        if(this.layoutProperties.Search){
-            this.searchResults = new Search.SearchResults(this);
-            this.searchBox = new MW.SearchBox(this);
-            this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
-            this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
-        }
-
         this._mainBoxKeyPressId = this.mainBox.connect('key-press-event', this._onMainBoxKeyPress.bind(this));
 
         this._tree = new GMenu.Tree({ menu_basename: 'applications.menu' });
@@ -60,6 +53,13 @@ var BaseMenuLayout = class {
     }
 
     createLayout(){
+        if(this.layoutProperties.Search){
+            this.searchResults = new Search.SearchResults(this);
+            this.searchBox = new MW.SearchBox(this);
+            this._searchBoxChangedId = this.searchBox.connect('search-changed', this._onSearchBoxChanged.bind(this));
+            this._searchBoxKeyPressId = this.searchBox.connect('entry-key-press', this._onSearchBoxKeyPress.bind(this));
+        }
+
         this.disableFadeEffect = this._settings.get_boolean('disable-scrollview-fade-effect');
         this.activeCategoryType = -1;
         let layout = new Clutter.GridLayout({
@@ -115,7 +115,7 @@ var BaseMenuLayout = class {
 
     getIconWidthFromSetting(){
         let gridIconWidth;
-        let iconSizeEnum = this._settings.get_enum("menu-item-grid-icon-size");
+        const iconSizeEnum = this._settings.get_enum("menu-item-grid-icon-size");
 
         if(iconSizeEnum === Constants.GridIconSize.DEFAULT)
             gridIconWidth = this.getIconWidthFromStyleClass(this.layoutProperties.DefaultIconGridStyle);
@@ -675,9 +675,17 @@ var BaseMenuLayout = class {
         let left = 0;
         this._futureActiveItem = false;
         let currentCharacter;
-        let alphabetizeAllPrograms = this._settings.get_boolean("alphabetize-all-programs") && this.layoutProperties.DisplayType === Constants.DisplayType.LIST;
-        let rtl = this.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
-        let columns = -1;
+        const alphabetizeAllPrograms = this._settings.get_boolean("alphabetize-all-programs") && this.layoutProperties.DisplayType === Constants.DisplayType.LIST;
+        const rtl = this.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
+
+        let columns = 1;
+        if(grid.layout_manager.forceGridColumns)
+            columns = grid.layout_manager.forceGridColumns;
+        else if(this.layoutProperties.DisplayType === Constants.DisplayType.GRID){
+            let iconWidth = this.getIconWidthFromSetting();
+            columns = this.getBestFitColumnsForGrid(iconWidth, grid);
+        }
+        grid.layout_manager.gridColumns = columns;
 
         for (let i = 0; i < apps.length; i++) {
             let app = apps[i];
@@ -697,22 +705,11 @@ var BaseMenuLayout = class {
                 }
             }
 
-            if(item.get_parent())
-                item.get_parent().remove_child(item);
+            const parent = item.get_parent();
+            if(parent)
+                parent.remove_child(item);
 
             if(shouldShow){
-                if(columns === -1){
-                    if(grid.layout_manager.forceGridColumns)
-                        columns = grid.layout_manager.forceGridColumns;
-                    else if(this.layoutProperties.DisplayType === Constants.DisplayType.GRID){
-                        let iconWidth = this.getIconWidthFromStyleClass(item.name);
-                        columns = this.getBestFitColumnsForGrid(iconWidth, grid);
-                    }
-                    else
-                        columns = 1;
-                    grid.layout_manager.gridColumns = columns;
-                }
-
                 if(!rtl && (count % columns === 0)){
                     top++;
                     left = 0;
@@ -723,8 +720,9 @@ var BaseMenuLayout = class {
                 }
 
                 if(alphabetizeAllPrograms && category === Constants.CategoryType.ALL_PROGRAMS){
-                    if(currentCharacter !== app.get_name().charAt(0).toLowerCase()){
-                        currentCharacter = app.get_name().charAt(0).toLowerCase();
+                    const appNameFirstChar = app.get_name().charAt(0).toLowerCase();
+                    if(currentCharacter !== appNameFirstChar){
+                        currentCharacter = appNameFirstChar;
 
                         let label = this._createLabelWithSeparator(currentCharacter.toUpperCase());
                         grid.layout_manager.attach(label, left, top, 1, 1);
@@ -741,9 +739,8 @@ var BaseMenuLayout = class {
                     left--;
                 count++;
 
-                if(!this._futureActiveItem && grid === this.applicationsGrid){
+                if(!this._futureActiveItem && grid === this.applicationsGrid)
                     this._futureActiveItem = item;
-                }
             }
         }
         if(this.applicationsBox && !this.applicationsBox.contains(this.applicationsGrid))

@@ -80,7 +80,7 @@ var Menu = class extends BaseMenuLayout{
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
-        this.bottomBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(10, 10, 15, 0.1); padding: 12px 0px;" +
+        this.bottomBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(10, 10, 15, 0.1); padding: 11px 0px;" +
                               "border-color:rgba(186, 196,201, 0.2); border-top-width: 1px;";
 
         this.bottomBox = new St.BoxLayout({

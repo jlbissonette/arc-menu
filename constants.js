@@ -228,6 +228,11 @@ var PowerDisplayStyle = {
     MENU: 2,
 };
 
+var RunnerSearchDisplayStyle = {
+    IN_LINE: 0,
+    GRID: 2,
+};
+
 var PowerOptions = [
     { TYPE: PowerType.LOGOUT, ICON: 'system-log-out-symbolic', NAME: _("Log Out") },
     { TYPE: PowerType.LOCK, ICON: 'changes-prevent-symbolic', NAME: _("Lock") },
@@ -458,14 +463,14 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
                                 '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo' +
                                 '\n\n•   <b>ZORIN OS</b> - The "Z" logomark is a registered trademark of Zorin Technology Group Ltd. Copyright © 2019 - 2021 Zorin Technology Group Ltd';
 
-var DEVELOPERS = '<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Current ArcMenu Maintainer and Developer' +
-                '\n\n<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - ArcMenu Founder, Former Maintainer, Digital Art Designer';
+var DEVELOPERS = '<b><a href="https://gitlab.com/AndrewZaech">AndrewZaech</a></b> - Current ArcMenu Maintainer and Developer' +
+                '\n\n<b><a href="https://gitlab.com/LinxGem33">AndyC</a></b> - ArcMenu Founder, Former Maintainer, Digital Art Designer';
 var CONTRIBUTORS = '<b>Thank you to all contributors and translators</b>\n\n' +
                     '<b><a href="https://gitlab.com/arcmenu/ArcMenu#contributors">Contributors</a></b> - ' +
                     '<b><a href="https://gitlab.com/arcmenu/ArcMenu#translators">Translators</a></b>';
-var ARTWORK = '<b>ArcMenu Artwork</b>\n\n' +
-                '<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - Majority of icons in ArcMenu and Settings, plus other ArcMenu Assets' +
-                '\n\n<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Some ArcMenu and Settings Icons';
+var ARTWORK = '<b>Digital Artwork</b>\n\n' +
+                '<b><a href="https://gitlab.com/LinxGem33">AndyC</a></b> - Custom icons and other ArcMenu Assets' +
+                '\n\n<b><a href="https://gitlab.com/AndrewZaech">AndrewZaech</a></b> - Modification of some custom icons';
 
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +

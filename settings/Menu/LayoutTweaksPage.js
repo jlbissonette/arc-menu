@@ -356,6 +356,20 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         });
         runnerMenuTweaksFrame.add(runnerPositionRow);
 
+        let runnerSearchStyles = new Gtk.StringList();
+        runnerSearchStyles.append(_("In-Line"));
+        runnerSearchStyles.append(_("Grid"));
+        let runnerSearchStyleRow = new Adw.ComboRow({
+            title: _('Search Results Display Style'),
+            model: runnerSearchStyles,
+            selected: this._settings.get_enum('runner-search-display-style')
+        });
+
+        runnerSearchStyleRow.connect('notify::selected', (widget) => {
+            this._settings.set_enum('runner-search-display-style', widget.selected);
+        });
+        runnerMenuTweaksFrame.add(runnerSearchStyleRow);
+
         let runnerWidthScale = new Gtk.SpinButton({
             orientation: Gtk.Orientation.HORIZONTAL,
             adjustment: new Gtk.Adjustment({

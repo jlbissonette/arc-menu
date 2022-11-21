@@ -131,7 +131,7 @@ var MenuSettingsController = class {
             'menu-item-icon-size', 'button-item-icon-size', 'quicklinks-item-icon-size',
             'menu-item-category-icon-size', 'category-icon-type', 'shortcut-icon-type',
             'arcmenu-extra-categories-links', 'arcmenu-extra-categories-links-location', 'runner-show-frequent-apps',
-            'default-menu-view-redmond', 'disable-recently-installed-apps'],
+            'default-menu-view-redmond', 'disable-recently-installed-apps', 'runner-search-display-style'],
             this._reload.bind(this)
         );
 
