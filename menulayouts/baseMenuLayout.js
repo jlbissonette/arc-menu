@@ -423,12 +423,12 @@ var BaseMenuLayout = class {
         }
 
         if(app)
-            return new MW.ShortcutMenuItem(this, shortcutName, shortcutIcon, shortcutCommand, displayType, isContainedInCategory);
+            return new MW.ShortcutMenuItem(this, menuItemArray, displayType, isContainedInCategory);
 
         switch(shortcutCommand){
             case Constants.ShortcutCommands.SOFTWARE:
                 let software = Utils.findSoftwareManager();
-                return new MW.ShortcutMenuItem(this, shortcutName, shortcutIcon, software, displayType, isContainedInCategory);
+                return new MW.ShortcutMenuItem(this, [shortcutName, shortcutIcon, software], displayType, isContainedInCategory);
             case Constants.ShortcutCommands.ARCMENU_SETTINGS:
             case Constants.ShortcutCommands.SUSPEND:
             case Constants.ShortcutCommands.LOG_OUT:
@@ -440,13 +440,13 @@ var BaseMenuLayout = class {
             case Constants.ShortcutCommands.OVERVIEW:
             case Constants.ShortcutCommands.SHOW_APPS:
             case Constants.ShortcutCommands.RUN_COMMAND:
-                return new MW.ShortcutMenuItem(this, shortcutName, shortcutIcon, shortcutCommand, displayType, isContainedInCategory);
+                return new MW.ShortcutMenuItem(this, menuItemArray, displayType, isContainedInCategory);
             default:
                 let placeInfo = this._getPlaceInfo(shortcutCommand, shortcutName);
                 if(placeInfo)
                     return new MW.PlaceMenuItem(this, placeInfo, displayType, isContainedInCategory);
                 else
-                    return new MW.ShortcutMenuItem(this, shortcutName, '', 'ArcMenu_InvalidShortcut.desktop', displayType, isContainedInCategory);
+                    return new MW.ShortcutMenuItem(this, menuItemArray, displayType, isContainedInCategory);
         }
     }
 
