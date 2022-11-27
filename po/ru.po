@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-22 14:07-0500\n"
-"PO-Revision-Date: 2022-11-25 16:34+1000\n"
+"POT-Creation-Date: 2022-11-26 08:19-0500\n"
+"PO-Revision-Date: 2022-11-27 17:15+1000\n"
 "Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -101,7 +101,7 @@ msgstr "Гибридный спящий режим"
 msgid "Hibernate"
 msgstr "Спящий режим"
 
-#: constants.js:335 menulayouts/plasma.js:320 menuWidgets.js:858
+#: constants.js:335 menuWidgets.js:858 menulayouts/plasma.js:320
 msgid "System"
 msgstr "Система"
 
@@ -201,10 +201,6 @@ msgstr "Launcher"
 msgid "Alternative"
 msgstr "Альтернативные"
 
-#: constants.js:420 menulayouts/mint.js:218 menulayouts/unity.js:204
-msgid "Software"
-msgstr "Программное обеспечение"
-
 #: constants.js:420 menulayouts/az.js:116 menulayouts/eleven.js:148
 #: menulayouts/insider.js:60 menulayouts/mint.js:214 menulayouts/whisker.js:50
 #: menulayouts/windows.js:59 settings/AboutPage.js:144
@@ -212,20 +208,24 @@ msgstr "Программное обеспечение"
 msgid "Settings"
 msgstr "Настройки"
 
-#: constants.js:420
-msgid "Tweaks"
-msgstr "Доп. настройки GNOME"
+#: constants.js:420 menulayouts/mint.js:218 menulayouts/unity.js:204
+msgid "Software"
+msgstr "Программное обеспечение"
 
 #: constants.js:420 menulayouts/az.js:113 menulayouts/eleven.js:145
 #: menulayouts/insider.js:57 menulayouts/mint.js:213 menulayouts/windows.js:56
 msgid "Terminal"
 msgstr "Терминал"
 
+#: constants.js:420
+msgid "Tweaks"
+msgstr "Доп. настройки GNOME"
+
 #: constants.js:421 menuWidgets.js:435 settings/Menu/ListPinnedPage.js:334
 msgid "Activities Overview"
 msgstr "«Обзор»"
 
-#: constants.js:421 menuButton.js:528 prefs.js:93
+#: constants.js:421 menuButton.js:527 prefs.js:93
 #: settings/Menu/ListPinnedPage.js:319 settings/Menu/ListPinnedPage.js:332
 msgid "ArcMenu Settings"
 msgstr "Настройки ArcMenu"
@@ -251,7 +251,7 @@ msgstr "+ ещё %d"
 
 #: gnome43/searchProviders/openWindows.js:26 searchProviders/openWindows.js:26
 msgid "List of open windows across all workspaces"
-msgstr "Список открытых окон на всех рабочих областях"
+msgstr "Список открытых окон на всех рабочих местах"
 
 #: gnome43/searchProviders/openWindows.js:27 searchProviders/openWindows.js:27
 msgid "Open Windows"
@@ -275,31 +275,68 @@ msgstr "Настройки «App Icons Taskbar»"
 msgid "Dash to Panel Settings"
 msgstr "Настройки «Dash to Panel»"
 
-#: menuButton.js:532 settings/GeneralPage.js:127
+#: menuButton.js:531 settings/GeneralPage.js:127
 msgid "General Settings"
 msgstr "Общие настройки"
 
-#: menuButton.js:533
+#: menuButton.js:532
 msgid "Customize Menu"
 msgstr "Настройка меню"
 
-#: menuButton.js:534
+#: menuButton.js:533
 msgid "Change Menu Layout"
 msgstr "Изменить компоновку меню"
 
-#: menuButton.js:535
+#: menuButton.js:534
 msgid "Menu Button Settings"
 msgstr "Настройки кнопки меню"
 
-#: menuButton.js:536 settings/AboutPage.js:21
+#: menuButton.js:535 settings/AboutPage.js:21
 msgid "About"
 msgstr "О приложении"
 
-#: menulayouts/az.js:128 menulayouts/eleven.js:162 menulayouts/redmond.js:46
-#: menulayouts/redmond.js:50 menuWidgets.js:1179 menuWidgets.js:1200
-#: settings/Menu/SubPage.js:77
+#: menuWidgets.js:708
+msgid "Configure Runner"
+msgstr "Конфигурация Runner"
+
+#: menuWidgets.js:746
+msgid "Extras"
+msgstr "Дополнительно"
+
+#: menuWidgets.js:796 menuWidgets.js:812
+msgid "Power Off / Log Out"
+msgstr "Выключить / Завершить сеанс"
+
+#: menuWidgets.js:854 menulayouts/plasma.js:315
+msgid "Session"
+msgstr "Сессии"
+
+#: menuWidgets.js:925
+msgid "Categories"
+msgstr "Категории"
+
+#: menuWidgets.js:1098 menuWidgets.js:2551 menulayouts/plasma.js:123
+#: settings/Menu/VisualSettings.js:196
+msgid "Applications"
+msgstr "Приложения"
+
+#: menuWidgets.js:1179 menuWidgets.js:1200 menulayouts/az.js:128
+#: menulayouts/eleven.js:162 menulayouts/redmond.js:46
+#: menulayouts/redmond.js:50 settings/Menu/SubPage.js:77
 msgid "Back"
 msgstr "Назад"
+
+#: menuWidgets.js:1244
+msgid "All Applications"
+msgstr "Все приложения"
+
+#: menuWidgets.js:1884
+msgid "New"
+msgstr "Новое"
+
+#: menuWidgets.js:2390
+msgid "Search…"
+msgstr "Поиск…"
 
 #: menulayouts/az.js:130 menulayouts/az.js:157 menulayouts/az.js:213
 #: menulayouts/eleven.js:163 menulayouts/eleven.js:214
@@ -325,11 +362,6 @@ msgstr "Домашняя папка"
 #: menulayouts/mint.js:220 menulayouts/unity.js:199
 msgid "Documents"
 msgstr "Документы"
-
-#: menulayouts/plasma.js:123 menuWidgets.js:1098 menuWidgets.js:2550
-#: settings/Menu/VisualSettings.js:196
-msgid "Applications"
-msgstr "Приложения"
 
 #: menulayouts/plasma.js:127 menulayouts/unity.js:206 placeDisplay.js:127
 #: placeDisplay.js:150 settings/Menu/ListPinnedPage.js:325
@@ -364,10 +396,6 @@ msgstr "Внешние устройства"
 msgid "Network"
 msgstr "Сеть"
 
-#: menulayouts/plasma.js:315 menuWidgets.js:854
-msgid "Session"
-msgstr "Сессии"
-
 #: menulayouts/raven.js:59 menulayouts/raven.js:228 menulayouts/unity.js:41
 #: menulayouts/unity.js:293 settings/Menu/LayoutTweaksPage.js:466
 #: settings/Menu/LayoutTweaksPage.js:540 settings/Menu/LayoutTweaksPage.js:644
@@ -383,34 +411,6 @@ msgstr "Ярлыки"
 #: menulayouts/unity.js:200
 msgid "Downloads"
 msgstr "Загрузки"
-
-#: menuWidgets.js:708
-msgid "Configure Runner"
-msgstr "Конфигурация Runner"
-
-#: menuWidgets.js:746
-msgid "Extras"
-msgstr "Дополнительно"
-
-#: menuWidgets.js:796 menuWidgets.js:812
-msgid "Power Off / Log Out"
-msgstr "Выключить / Завершить сеанс"
-
-#: menuWidgets.js:925
-msgid "Categories"
-msgstr "Категории"
-
-#: menuWidgets.js:1244
-msgid "All Applications"
-msgstr "Все приложения"
-
-#: menuWidgets.js:1883
-msgid "New"
-msgstr "Новое"
-
-#: menuWidgets.js:2389
-msgid "Search…"
-msgstr "Поиск…"
 
 #: placeDisplay.js:49
 #, javascript-format
@@ -653,14 +653,14 @@ msgstr "Сортировать «Все программы» по алфавит
 msgid "Show Hidden Recent Files"
 msgstr "Показывать скрытые недавние файлы"
 
-#: settings/Menu/FineTunePage.js:154 settings/Menu/FineTunePage.js:167
-msgid "Multi-Lined Labels"
-msgstr "Подпись в несколько строк"
-
 #: settings/Menu/FineTunePage.js:154
 msgid "Enable/Disable multi-lined labels on large application icon layouts."
 msgstr ""
 "Включение/отключение многострочных подписей на больших значках приложений."
+
+#: settings/Menu/FineTunePage.js:154 settings/Menu/FineTunePage.js:167
+msgid "Multi-Lined Labels"
+msgstr "Подпись в несколько строк"
 
 #: settings/Menu/FineTunePage.js:188
 msgid "Disable New Apps Tracker"
@@ -765,8 +765,8 @@ msgid "Grid"
 msgstr "Сетка"
 
 #: settings/Menu/LayoutTweaksPage.js:363
-msgid "Search Display Style"
-msgstr "Стиль отображения строки поиска"
+msgid "Search Results Display Style"
+msgstr "Стиль отображения результатов поиска"
 
 #: settings/Menu/LayoutTweaksPage.js:390
 msgid "Width"
@@ -986,12 +986,12 @@ msgid "Select an Icon"
 msgstr "Выбор значка"
 
 #: settings/Menu/ListPinnedPage.js:582
-msgid "Directory"
-msgstr "Каталог"
-
-#: settings/Menu/ListPinnedPage.js:582
 msgid "Command"
 msgstr "Команда"
+
+#: settings/Menu/ListPinnedPage.js:582
+msgid "Directory"
+msgstr "Каталог"
 
 #: settings/Menu/ListPinnedPage.js:594
 msgid "Add"
@@ -1003,7 +1003,7 @@ msgstr "Внешние системы поиска"
 
 #: settings/Menu/SearchOptionsPage.js:35
 msgid "Search for open windows across all workspaces"
-msgstr "Поиск в открытых окнах на всех рабочих областях"
+msgstr "Поиск в открытых окнах на всех рабочих местах"
 
 #: settings/Menu/SearchOptionsPage.js:49
 msgid "Search for recent files"
