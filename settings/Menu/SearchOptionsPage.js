@@ -153,7 +153,7 @@ class ArcMenu_SearchOptionsPage extends SubPage {
             maxSearchResultsScale.set_value(this.maxSearchResults);
             let [searchBorderEnabled, searchBorderValue] = this._settings.get_default_value('search-entry-border-radius').deep_unpack();
             searchBorderSpinButton.set_value(searchBorderValue);
-            searchBorderSwitch.set_active(false);
+            searchBorderSwitch.set_active(true);
         };
     }
 });
