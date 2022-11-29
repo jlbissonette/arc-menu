@@ -357,7 +357,7 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         runnerMenuTweaksFrame.add(runnerPositionRow);
 
         let runnerSearchStyles = new Gtk.StringList();
-        runnerSearchStyles.append(_("In-Line"));
+        runnerSearchStyles.append(_("List"));
         runnerSearchStyles.append(_("Grid"));
         let runnerSearchStyleRow = new Adw.ComboRow({
             title: _('Search Results Display Style'),

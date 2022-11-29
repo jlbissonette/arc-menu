@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-26 08:19-0500\n"
+"POT-Creation-Date: 2022-11-29 17:17-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,167 +65,167 @@ msgstr ""
 msgid "Recent Files"
 msgstr ""
 
-#: constants.js:237 menulayouts/mint.js:223 menulayouts/unity.js:209
+#: constants.js:232 menulayouts/mint.js:223 menulayouts/unity.js:209
 #: settings/Menu/ListPinnedPage.js:344
 msgid "Log Out"
 msgstr ""
 
-#: constants.js:238 menulayouts/mint.js:224 menulayouts/unity.js:210
+#: constants.js:233 menulayouts/mint.js:224 menulayouts/unity.js:210
 #: settings/Menu/ListPinnedPage.js:343
 msgid "Lock"
 msgstr ""
 
-#: constants.js:239 settings/Menu/ListPinnedPage.js:346
+#: constants.js:234 settings/Menu/ListPinnedPage.js:346
 msgid "Restart"
 msgstr ""
 
-#: constants.js:240 menulayouts/mint.js:225 menulayouts/unity.js:211
+#: constants.js:235 menulayouts/mint.js:225 menulayouts/unity.js:211
 #: settings/Menu/ListPinnedPage.js:345
 msgid "Power Off"
 msgstr ""
 
-#: constants.js:241 settings/Menu/ListPinnedPage.js:347
+#: constants.js:236 settings/Menu/ListPinnedPage.js:347
 msgid "Suspend"
 msgstr ""
 
-#: constants.js:242 settings/Menu/ListPinnedPage.js:348
+#: constants.js:237 settings/Menu/ListPinnedPage.js:348
 msgid "Hybrid Sleep"
 msgstr ""
 
-#: constants.js:243 settings/Menu/ListPinnedPage.js:349
+#: constants.js:238 settings/Menu/ListPinnedPage.js:349
 msgid "Hibernate"
 msgstr ""
 
-#: constants.js:335 menuWidgets.js:858 menulayouts/plasma.js:320
+#: constants.js:330 menuWidgets.js:858 menulayouts/plasma.js:320
 msgid "System"
 msgstr ""
 
-#: constants.js:380 settings/AboutPage.js:12
+#: constants.js:375 settings/AboutPage.js:12
 msgid "ArcMenu"
 msgstr ""
 
-#: constants.js:381
+#: constants.js:376
 msgid "Brisk"
 msgstr ""
 
-#: constants.js:382
+#: constants.js:377
 msgid "Whisker"
 msgstr ""
 
-#: constants.js:383
+#: constants.js:378
 msgid "GNOME Menu"
 msgstr ""
 
-#: constants.js:384
+#: constants.js:379
 msgid "Mint"
 msgstr ""
 
-#: constants.js:385
+#: constants.js:380
 msgid "Budgie"
 msgstr ""
 
-#: constants.js:388
+#: constants.js:383
 msgid "Unity"
 msgstr ""
 
-#: constants.js:389
+#: constants.js:384
 msgid "Plasma"
 msgstr ""
 
-#: constants.js:390
+#: constants.js:385
 msgid "tognee"
 msgstr ""
 
-#: constants.js:391
+#: constants.js:386
 msgid "Insider"
 msgstr ""
 
-#: constants.js:392
+#: constants.js:387
 msgid "Redmond"
 msgstr ""
 
-#: constants.js:393
+#: constants.js:388
 msgid "Windows"
 msgstr ""
 
-#: constants.js:394
+#: constants.js:389
 msgid "11"
 msgstr ""
 
-#: constants.js:395
+#: constants.js:390
 msgid "a.z."
 msgstr ""
 
-#: constants.js:398
+#: constants.js:393
 msgid "Elementary"
 msgstr ""
 
-#: constants.js:399
+#: constants.js:394
 msgid "Chromebook"
 msgstr ""
 
-#: constants.js:402
+#: constants.js:397
 msgid "Runner"
 msgstr ""
 
-#: constants.js:403
+#: constants.js:398
 msgid "GNOME Overview"
 msgstr ""
 
-#: constants.js:406
+#: constants.js:401
 msgid "Raven"
 msgstr ""
 
-#: constants.js:410
+#: constants.js:405
 msgid "Traditional"
 msgstr ""
 
-#: constants.js:411
+#: constants.js:406
 msgid "Modern"
 msgstr ""
 
-#: constants.js:412
+#: constants.js:407
 msgid "Touch"
 msgstr ""
 
-#: constants.js:413
+#: constants.js:408
 msgid "Launcher"
 msgstr ""
 
-#: constants.js:414
+#: constants.js:409
 msgid "Alternative"
 msgstr ""
 
-#: constants.js:420 menulayouts/az.js:116 menulayouts/eleven.js:148
+#: constants.js:415 menulayouts/az.js:116 menulayouts/eleven.js:148
 #: menulayouts/insider.js:60 menulayouts/mint.js:214 menulayouts/whisker.js:50
 #: menulayouts/windows.js:59 settings/AboutPage.js:144
 #: settings/AboutPage.js:152 settings/AboutPage.js:182
 msgid "Settings"
 msgstr ""
 
-#: constants.js:420 menulayouts/mint.js:218 menulayouts/unity.js:204
+#: constants.js:415 menulayouts/mint.js:218 menulayouts/unity.js:204
 msgid "Software"
 msgstr ""
 
-#: constants.js:420 menulayouts/az.js:113 menulayouts/eleven.js:145
+#: constants.js:415 menulayouts/az.js:113 menulayouts/eleven.js:145
 #: menulayouts/insider.js:57 menulayouts/mint.js:213 menulayouts/windows.js:56
 msgid "Terminal"
 msgstr ""
 
-#: constants.js:420
+#: constants.js:415
 msgid "Tweaks"
 msgstr ""
 
-#: constants.js:421 menuWidgets.js:435 settings/Menu/ListPinnedPage.js:334
+#: constants.js:416 menuWidgets.js:435 settings/Menu/ListPinnedPage.js:334
 msgid "Activities Overview"
 msgstr ""
 
-#: constants.js:421 menuButton.js:527 prefs.js:93
+#: constants.js:416 menuButton.js:527 prefs.js:93
 #: settings/Menu/ListPinnedPage.js:319 settings/Menu/ListPinnedPage.js:332
 msgid "ArcMenu Settings"
 msgstr ""
 
-#: constants.js:421 menulayouts/az.js:109 menulayouts/eleven.js:141
+#: constants.js:416 menulayouts/az.js:109 menulayouts/eleven.js:141
 #: menulayouts/insider.js:54 menulayouts/mint.js:222 menulayouts/unity.js:208
 #: menulayouts/windows.js:53
 msgid "Files"
@@ -310,7 +310,7 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: menuWidgets.js:1098 menuWidgets.js:2551 menulayouts/plasma.js:123
+#: menuWidgets.js:1098 menuWidgets.js:2553 menulayouts/plasma.js:123
 #: settings/Menu/VisualSettings.js:196
 msgid "Applications"
 msgstr ""
@@ -325,11 +325,11 @@ msgstr ""
 msgid "All Applications"
 msgstr ""
 
-#: menuWidgets.js:1884
+#: menuWidgets.js:1886
 msgid "New"
 msgstr ""
 
-#: menuWidgets.js:2390
+#: menuWidgets.js:2392
 msgid "Search…"
 msgstr ""
 
@@ -751,7 +751,7 @@ msgid "Position"
 msgstr ""
 
 #: settings/Menu/LayoutTweaksPage.js:360
-msgid "In-Line"
+msgid "List"
 msgstr ""
 
 #: settings/Menu/LayoutTweaksPage.js:361

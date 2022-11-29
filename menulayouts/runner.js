@@ -35,7 +35,7 @@ var Menu = class extends BaseMenuLayout{
     createLayout(){
         const searchDisplayStyle = this._settings.get_enum('runner-search-display-style');
 
-        if(searchDisplayStyle === Constants.RunnerSearchDisplayStyle.IN_LINE){
+        if(searchDisplayStyle === Constants.DisplayType.LIST){
             this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
             this.layoutProperties.SearchDisplayType = Constants.DisplayType.LIST;
             this.layoutProperties.ColumnSpacing = 0;

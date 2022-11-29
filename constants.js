@@ -228,11 +228,6 @@ var PowerDisplayStyle = {
     MENU: 2,
 };
 
-var RunnerSearchDisplayStyle = {
-    IN_LINE: 0,
-    GRID: 2,
-};
-
 var PowerOptions = [
     { TYPE: PowerType.LOGOUT, ICON: 'system-log-out-symbolic', NAME: _("Log Out") },
     { TYPE: PowerType.LOCK, ICON: 'changes-prevent-symbolic', NAME: _("Lock") },
