@@ -1846,8 +1846,10 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
 
         this.label = new St.Label({
             text: this._app ? this._app.get_name() : this.metaInfo['name'],
+            x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.CENTER
+            x_align: Clutter.ActorAlign.FILL,
+            y_align: Clutter.ActorAlign.CENTER,
         });
         this.description = this._app ? this._app.get_description() : this.metaInfo['description'];
 
