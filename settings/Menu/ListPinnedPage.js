@@ -321,10 +321,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             this._loadCategories();
         }
         else if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES){
-            let extraLinks = this._settings.get_default_value('directory-shortcuts-list').deep_unpack();
-            extraLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
-            extraLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
-            extraLinks.push([_("Recent"), "document-open-recent-symbolic", "ArcMenu_Recent"]);
+            let extraLinks = this._getDirectoryLinksArray();
             this._loadExtraCategories(extraLinks);
         }
         else if(this._dialogType === Constants.MenuSettingsListType.APPLICATIONS){
@@ -337,9 +334,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             this._loadCategories();
         }
         else{
-            let extraLinks = this._settings.get_default_value('directory-shortcuts-list').deep_unpack();
-            extraLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
-            extraLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
+            let extraLinks = this._getDirectoryLinksArray();
             extraLinks.push([_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock"]);
             extraLinks.push([_("Log Out"), "system-log-out-symbolic", "ArcMenu_LogOut"]);
             extraLinks.push([_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
@@ -350,6 +345,20 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             this._loadExtraCategories(extraLinks);
             this._loadCategories();
         }
+    }
+
+    _getDirectoryLinksArray(){
+        let directoryLinks = [];
+        directoryLinks.push([_("Home"), "ArcMenu_Home", "ArcMenu_Home"]);
+        directoryLinks.push([_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents"]);
+        directoryLinks.push([_("Downloads"), "ArcMenu_Downloads", "ArcMenu_Downloads"]);
+        directoryLinks.push([_("Music"), "ArcMenu_Music", "ArcMenu_Music"]);
+        directoryLinks.push([_("Pictures"), "ArcMenu_Pictures", "ArcMenu_Pictures"]);
+        directoryLinks.push([_("Videos"), "ArcMenu_Videos", "ArcMenu_Videos"]);
+        directoryLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
+        directoryLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
+        directoryLinks.push([_("Recent"), "document-open-recent-symbolic", "ArcMenu_Recent"]);
+        return directoryLinks;
     }
 
     _createShortcutsArray(){
