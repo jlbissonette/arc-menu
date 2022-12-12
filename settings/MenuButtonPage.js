@@ -232,7 +232,7 @@ class ArcMenu_MenuButtonPage extends Adw.PreferencesPage {
 
         this.restoreDefaults = () => {
             menuButtonAppearanceRow.selected = 0;
-            menuButtonCustomTextEntry.set_text('Applications');
+            menuButtonCustomTextEntry.set_text('Apps');
             paddingScale.set_value(-1);
             menuButtonIconSizeScale.set_value(20);
             offsetScale.set_value(0);
@@ -389,8 +389,11 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         this.pageGroup.add(arcMenuIconsFlowBox);
 
         Constants.MenuIcons.forEach(icon => {
-            let iconName = icon.PATH.replace(Constants.MenuIconsPath, '');
-            iconName = iconName.replace(".svg", '');
+            let iconName = icon.PATH;
+
+            if(icon.PATH !== 'view-app-grid-symbolic')
+                iconName = iconName.replace(Constants.MenuIconsPath, '').replace('.svg', '');
+
             let iconImage = new Gtk.Image({
                 icon_name: iconName,
                 pixel_size: ICON_SIZE
@@ -400,7 +403,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
 
         this.distroIconsPage = new Adw.PreferencesPage({
             title: _("Distro Icons"),
-            icon_name: 'start-here-symbolic'
+            icon_name: 'distro-gnome-symbolic'
         });
         let distroIconsGroup = new Adw.PreferencesGroup();
         this.distroIconsPage.add(distroIconsGroup)
@@ -417,8 +420,7 @@ class ArcMenu_ArcMenuIconsDialogWindow extends PW.DialogWindow {
         Constants.DistroIcons.forEach(icon => {
             let iconName = icon.PATH;
 
-            if(icon.PATH !== 'start-here-symbolic')
-                iconName = iconName.replace(Constants.DistroIconsPath, '').replace('.svg', '');
+            iconName = iconName.replace(Constants.DistroIconsPath, '').replace('.svg', '');
 
             let box = new Gtk.Box({
                 orientation: Gtk.Orientation.VERTICAL,

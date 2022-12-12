@@ -73,8 +73,8 @@
         <value value="0" nick="Top"/>
         <value value="1" nick="Centered"/>
     </enum>
-    <enum id='org.gnome.shell.extensions.arcmenu.runner-search-display-style'>
-        <value value="0" nick="In_Line"/>
+    <enum id='org.gnome.shell.extensions.arcmenu.search-display-style'>
+        <value value="0" nick="List"/>
         <value value="1" nick="Grid"/>
     </enum>
     <enum id='org.gnome.shell.extensions.arcmenu.searchbar-location'>
@@ -268,6 +268,11 @@
       <default>800</default>
       <summary>ArcMenu Settings Height</summary>
       <description>ArcMenu Settings Height.</description>
+    </key>
+    <key name="raven-search-display-style" enum="org.gnome.shell.extensions.arcmenu.search-display-style">
+      <default>'Grid'</default>
+      <summary>Raven Layout Search Display Style</summary>
+      <description>Raven Layout Search Display Style.</description>
     </key>
     <key name="raven-position" enum="org.gnome.shell.extensions.arcmenu.raven-position">
       <default>'Left'</default>
@@ -559,8 +564,8 @@
       <summary>Runner Menu Position</summary>
       <description>Runner Menu Position.</description>
     </key>
-    <key name="runner-search-display-style" enum="org.gnome.shell.extensions.arcmenu.runner-search-display-style">
-      <default>'In_Line'</default>
+    <key name="runner-search-display-style" enum="org.gnome.shell.extensions.arcmenu.search-display-style">
+      <default>'List'</default>
       <summary>Runner Search Display Style</summary>
       <description>Runner Search Display Style.</description>
     </key>
@@ -610,7 +615,7 @@
       <description>Force placement of ArcMenu on GNOME top panel. Useful when using "Keep original gnome-shell top panel" setting in dash to panel</description>
     </key>
     <key type="s" name="custom-menu-button-text">
-      <default>'Applications'</default>
+      <default>'Apps'</default>
       <summary>Text of the menu button.</summary>
       <description>Text of the menu button.</description>
     </key>

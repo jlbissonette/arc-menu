@@ -321,13 +321,14 @@ var MenuIcons = [
     { PATH: MenuIconsPath + 'icon-utool-symbolic.svg'},
     { PATH: MenuIconsPath + 'icon-swirl-symbolic.svg'},
     { PATH: MenuIconsPath + 'icon-round-symbolic.svg'},
+    { PATH: 'view-app-grid-symbolic'},
 ]
 
 var DistroIconsPath = '/media/icons/menu_button_icons/distro_icons/';
 //Object order in DistroIcons array corresponds to the integer value of 'distro-icon' setting
 //i.e 'distro-icon' value of 3 is manjaro-logo.
 var DistroIcons = [
-    { PATH: 'start-here-symbolic', NAME: _('System') },
+    { PATH: DistroIconsPath + 'distro-gnome-symbolic.svg', NAME: 'GNOME' },
     { PATH: DistroIconsPath + 'distro-debian-symbolic.svg', NAME: 'Debian' },
     { PATH: DistroIconsPath + 'distro-fedora-symbolic.svg', NAME: 'Fedora' },
     { PATH: DistroIconsPath + 'distro-manjaro-symbolic.svg', NAME: 'Manjaro' },
@@ -441,6 +442,7 @@ var ShortcutCommands = {
 }
 
 var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."</i>'+
+                                '\n\n•   <b>GNOME®</b> - The GNOME name and logo are trademarks of the GNOME Foundation.'+
                                 '\n\n•   <b>Ubuntu®</b> - Ubuntu name and Ubuntu logo are trademarks of Canonical© Ltd.'+
                                 '\n\n•   <b>Fedora®</b> - Fedora and the Infinity design logo are trademarks of Red Hat, Inc.'+
                                 '\n\n•   <b>Debian®</b> - is a registered trademark owned by Software in the Public Interest, Inc. Debian trademark is a registered United States trademark of Software in the Public Interest, Inc., managed by the Debian project.'+

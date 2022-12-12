@@ -33,6 +33,12 @@ var Menu = class extends BaseMenuLayout{
         });
     }
     createLayout(){
+        const searchDisplayStyle = this._settings.get_enum('raven-search-display-style');
+        if(searchDisplayStyle === Constants.DisplayType.LIST)
+            this.layoutProperties.SearchDisplayType = Constants.DisplayType.LIST;
+        else
+            this.layoutProperties.SearchDisplayType = Constants.DisplayType.GRID;
+
         super.createLayout();
 
         this.ravenPositionChangedID = this._settings.connect('changed::raven-position', () => this._updatePosition());

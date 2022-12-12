@@ -120,7 +120,7 @@ var Menu = class extends BaseMenuLayout{
         this.grid.layout_manager.attach(this.pinnedAppsButton, 0, 0, 1, 1);
         this.pinnedAppsButton.set_style_pseudo_class("active-item");
 
-        this.applicationsButton = new MW.PlasmaMenuItem(this, _("Applications"), 'preferences-desktop-apps-symbolic');
+        this.applicationsButton = new MW.PlasmaMenuItem(this, _("Apps"), 'preferences-desktop-apps-symbolic');
         this.applicationsButton.connect("activate", () => this.displayCategories() );
         this.grid.layout_manager.attach(this.applicationsButton, 1, 0, 1, 1);
 

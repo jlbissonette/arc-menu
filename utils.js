@@ -98,8 +98,6 @@ function convertToGridLayout(item){
         item.remove_child(item._ornamentLabel);
 
     item.tooltipLocation = Constants.TooltipLocation.BOTTOM_CENTERED;
-    item.label.x_align = item.label.y_align = Clutter.ActorAlign.CENTER;
-    item.label.y_expand = true;
 
     icon.y_align = Clutter.ActorAlign.CENTER;
     icon.y_expand = true;
@@ -252,15 +250,15 @@ function getMenuButtonIcon(settings, path){
     else if(iconType === Constants.MenuIconType.DISTRO_ICON){
         const iconEnum = settings.get_int('distro-icon');
         const iconPath = Me.path + Constants.DistroIcons[iconEnum].PATH;
-        if(Constants.DistroIcons[iconEnum].PATH === 'start-here-symbolic')
-            return 'start-here-symbolic';
-        else if(GLib.file_test(iconPath, GLib.FileTest.IS_REGULAR))
+        if(GLib.file_test(iconPath, GLib.FileTest.IS_REGULAR))
             return iconPath;
     }
     else{
         const iconEnum = settings.get_int('arc-menu-icon');
         const iconPath = Me.path + Constants.MenuIcons[iconEnum].PATH;
-        if(GLib.file_test(iconPath, GLib.FileTest.IS_REGULAR))
+        if(Constants.MenuIcons[iconEnum].PATH === 'view-app-grid-symbolic')
+            return 'view-app-grid-symbolic';
+        else if(GLib.file_test(iconPath, GLib.FileTest.IS_REGULAR))
             return iconPath;
     }
 

@@ -1095,7 +1095,7 @@ var PlasmaCategoryHeader = GObject.registerClass(class ArcMenu_PlasmaCategoryHea
         this.backButton.x_expand = false;
         this.backButton.x_align = Clutter.ActorAlign.CENTER;
         this.label = new St.Label({
-            text: _("Applications"),
+            text: _("Apps"),
             y_expand: false,
             y_align: Clutter.ActorAlign.CENTER,
             style: 'font-weight: bold'
@@ -1196,14 +1196,14 @@ var BackMenuItem = GObject.registerClass(class ArcMenu_BackMenuItem extends ArcM
 
         this._updateIcon();
 
-        let backLabel = new St.Label({
+        let label = new St.Label({
             text: _("Back"),
             x_expand: false,
             x_align: Clutter.ActorAlign.START,
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
-        this.add_child(backLabel);
+        this.add_child(label);
     }
 
     createIcon(){
@@ -1240,14 +1240,14 @@ var ViewAllPrograms = GObject.registerClass(class ArcMenu_ViewAllPrograms extend
         this._menuLayout = menuLayout;
         this._settings = this._menuLayout._settings;
 
-        let backLabel = new St.Label({
-            text: _("All Applications"),
+        let label = new St.Label({
+            text: _("All Apps"),
             x_expand: false,
             x_align: Clutter.ActorAlign.START,
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
-        this.add_child(backLabel);
+        this.add_child(label);
 
         this._iconBin = new St.Bin({
             x_expand: false,
@@ -2550,7 +2550,7 @@ var MenuButtonWidget = GObject.registerClass(class ArcMenu_MenuButtonWidget exte
             reactive: true,
         });
         this._label = new St.Label({
-            text: _("Applications"),
+            text: _("Apps"),
             y_expand: true,
             style_class: 'arcmenu-menu-button',
             y_align: Clutter.ActorAlign.CENTER,

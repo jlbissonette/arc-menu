@@ -221,7 +221,7 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
             this._settings.set_boolean('gnome-dash-show-applications', widget.get_active());
         });
         let appsGridRow = new Adw.ActionRow({
-            title: _("Show Applications Grid"),
+            title: _("Show Apps Grid"),
             activatable_widget: appsGridSwitch
         });
         appsGridRow.add_suffix(appsGridSwitch);
@@ -548,6 +548,20 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
             this._settings.set_boolean('enable-unity-homescreen', enable);
         });
         generalTweaksFrame.add(defaultViewRow);
+
+        let runnerSearchStyles = new Gtk.StringList();
+        runnerSearchStyles.append(_("List"));
+        runnerSearchStyles.append(_("Grid"));
+        let runnerSearchStyleRow = new Adw.ComboRow({
+            title: _('Search Results Display Style'),
+            model: runnerSearchStyles,
+            selected: this._settings.get_enum('raven-search-display-style')
+        });
+
+        runnerSearchStyleRow.connect('notify::selected', (widget) => {
+            this._settings.set_enum('raven-search-display-style', widget.selected);
+        });
+        generalTweaksFrame.add(runnerSearchStyleRow);
 
         let ravenPositions = new Gtk.StringList();
         ravenPositions.append(_("Left"));

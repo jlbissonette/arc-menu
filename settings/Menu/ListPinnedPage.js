@@ -332,7 +332,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             extraLinks.push([_("ArcMenu Settings"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.ARCMENU_SETTINGS]);
             extraLinks.push([_("Run Command..."), "system-run-symbolic", "ArcMenu_RunCommand"]);
             extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
-            extraLinks.push([_("Show All Applications"), "view-app-grid-symbolic", "ArcMenu_ShowAllApplications"]);
+            extraLinks.push([_("Show All Apps"), "view-app-grid-symbolic", "ArcMenu_ShowAllApplications"]);
             this._loadExtraCategories(extraLinks);
             this._loadCategories();
         }
