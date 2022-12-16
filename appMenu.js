@@ -9,6 +9,11 @@ const Main = imports.ui.main;
 const PopupMenu = imports.ui.popupMenu;
 const _ = Gettext.gettext;
 
+const DESKTOP_ICONS_UUIDS = [
+    'ding@rastersoft.com', 'gtk4-ding@smedius.gitlab.com',
+    'desktopicons-neo@darkdemon'
+];
+
 var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
     constructor(sourceActor, menuLayout) {
         super(sourceActor, St.Side.TOP);
@@ -81,8 +86,10 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
 
         this._pinnedAppsChangedId = this._settings.connect('changed::pinned-app-list', () => this._updateArcMenuPinnedItem());
         this.desktopExtensionStateChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-            if (extension.uuid === 'desktop-icons@csoriano' || extension.uuid === 'ding@rastersoft.com')
-                this._updateDesktopShortcutItem();
+            DESKTOP_ICONS_UUIDS.forEach(uuid => {
+                if (extension.uuid === uuid)
+                    this._updateDesktopShortcutItem();
+            });
         });
     }
 
@@ -153,12 +160,15 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
     }
 
     isDesktopActive(){
-        let desktopIcons = Main.extensionManager.lookup("desktop-icons@csoriano");
-        let desktopIconsNG = Main.extensionManager.lookup("ding@rastersoft.com");
-        if(desktopIcons?.state === ExtensionState.ENABLED || desktopIconsNG?.state === ExtensionState.ENABLED)
-            return true;
+        let hasActiveDesktop = false;
 
-        return false;
+        DESKTOP_ICONS_UUIDS.forEach(uuid => {
+            const extension = Main.extensionManager.lookup(uuid);
+            if(extension?.state === ExtensionState.ENABLED)
+                hasActiveDesktop = true;
+        });
+
+        return hasActiveDesktop;
     }
 
     getDesktopShortcut(){

@@ -252,12 +252,10 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
     vfunc_event(event){
         if (event.type() === Clutter.EventType.BUTTON_PRESS){
-            if(event.get_button() == 1){
+            if(event.get_button() === Clutter.BUTTON_PRIMARY || event.get_button() === Clutter.BUTTON_MIDDLE)
                 this.toggleMenu();
-            }
-            else if(event.get_button() == 3){
+            else if(event.get_button() === Clutter.BUTTON_SECONDARY)
                 this.arcMenuContextMenu.toggle();
-            }
         }
         else if(event.type() === Clutter.EventType.TOUCH_BEGIN){
             this.toggleMenu();
@@ -524,32 +522,62 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         Main.uiGroup.add_child(this.actor);
         this.actor.hide();
 
-        let item = new PopupMenu.PopupSeparatorMenuItem(_("ArcMenu Settings"));
-        item.add_style_class_name("popup-inactive-menu-item");
-        this.addMenuItem(item);
+        this.addSettingsAction(_('Power Options'), 'gnome-power-panel.desktop');
+        this.addSettingsAction(_('Event Logs'), 'org.gnome.Logs.desktop');
+        this.addSettingsAction(_('System Details'), 'gnome-info-overview-panel.desktop');
+        this.addSettingsAction(_('Display Settings'), 'gnome-display-panel.desktop');
+        this.addSettingsAction(_('Disk Managament'), 'org.gnome.DiskUtility.desktop');
+        this.addSettingsAction(_('Network Settings'), 'gnome-network-panel.desktop');
 
-        this.addMenuItem(this.createQuickLinkItem(_("General Settings"), Constants.PrefsVisiblePage.GENERAL));
-        this.addMenuItem(this.createQuickLinkItem(_("Customize Menu"), Constants.PrefsVisiblePage.CUSTOMIZE_MENU));
-        this.addMenuItem(this.createQuickLinkItem(_("Change Menu Layout"), Constants.PrefsVisiblePage.MENU_LAYOUT));
-        this.addMenuItem(this.createQuickLinkItem(_("Menu Button Settings"), Constants.PrefsVisiblePage.BUTTON_APPEARANCE));
-        this.addMenuItem(this.createQuickLinkItem(_("About"), Constants.PrefsVisiblePage.ABOUT));
+        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        this.shortcutsMenu = new PopupMenu.PopupMenuSection();
+        this.shortcutsMenu.addSettingsAction(_('Terminal'), 'org.gnome.Terminal.desktop');
+        this.shortcutsMenu.addSettingsAction(_('System Monitor'), 'gnome-system-monitor.desktop');
+        this.shortcutsMenu.addSettingsAction(_('Files'), 'org.gnome.Nautilus.desktop');
+        this.shortcutsMenu.addSettingsAction(_('Extensions'), 'org.gnome.Extensions.desktop');
+        this.shortcutsMenu.addAction(_('ArcMenu Settings'), () => ExtensionUtils.openPrefs());
+        this.addMenuItem(this.shortcutsMenu);
+
+        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        let powerOptionsItem = new PopupMenu.PopupSubMenuMenuItem(_('Power Off / Log Out'));
+        this.addMenuItem(powerOptionsItem);
+
+        //See constants.js PowerOptions
+        const powerOptions = 4;
+        for(let i = 0; i < powerOptions; i++){
+            const powerTypeEnum = i;
+            powerOptionsItem.menu.addAction(_(Constants.PowerOptions[powerTypeEnum].NAME), 
+                                            () => MW.activatePowerOption(powerTypeEnum, this),
+                                            Constants.PowerOptions[powerTypeEnum].ICON);
+        }
+
+        this.addAction(_('Activities Overview'), () => Main.overview.toggle());
+        this.addAction(_('Show Desktop'), () => {
+            let currentWorkspace = global.workspace_manager.get_active_workspace();
+            let windows = currentWorkspace.list_windows().filter(function (w) {
+                return w.showing_on_its_workspace() && !w.skip_taskbar;
+            });
+            windows = global.display.sort_windows_by_stacking(windows);
+
+            windows.forEach(w => {
+                w.minimize();
+            });
+        });
     }
 
     addExtensionSettings(extensionName, extensionId){
-        let item = new PopupMenu.PopupSeparatorMenuItem();
-        this.addMenuItem(item);
-
-        item = new PopupMenu.PopupMenuItem(_(extensionName));
+        let item = new PopupMenu.PopupMenuItem(_(extensionName));
         item.connect('activate', () => Utils.openPrefs(extensionId) );
-        this.addMenuItem(item);
+        this.shortcutsMenu.addMenuItem(item);
     }
 
-    createQuickLinkItem(title, prefsVisiblePage){
-        let item = new PopupMenu.PopupMenuItem(_(title));
-        item.connect('activate', () => {
-            this._settings.set_int('prefs-visible-page', prefsVisiblePage);
-            ExtensionUtils.openPrefs();
-        });
-        return item;
+    addSettingsAction(title, desktopFile){
+        let app = Shell.AppSystem.get_default().lookup_app(desktopFile);
+        if(!app)
+            return;
+        
+        super.addSettingsAction(title, desktopFile);
     }
 };

@@ -91,30 +91,20 @@ class extends Adw.PreferencesPage {
         infoGroup.add(gnomeVersionRow);
 
         let osRow = new Adw.ActionRow({
-            title: _('OS'),
+            title: _('OS Name'),
         });
 
         let name = GLib.get_os_info("NAME");
         let prettyName = GLib.get_os_info("PRETTY_NAME");
-        let buildID = GLib.get_os_info("BUILD_ID");
-        let versionID = GLib.get_os_info("VERSION_ID");
-
-        let osInfoText = prettyName ? prettyName : name;
-        if(versionID)
-            osInfoText += `; Version ID: ${versionID}`;
-        if(buildID)
-            osInfoText += `; Build ID: ${buildID}`;
 
         osRow.add_suffix(new Gtk.Label({
-            label: osInfoText,
+            label: prettyName ? prettyName : name,
             css_classes: ['dim-label'],
-            single_line_mode: false,
-            wrap: true,
         }));
         infoGroup.add(osRow);
 
         let sessionTypeRow = new Adw.ActionRow({
-            title: _('Session Type'),
+            title: _('Windowing System'),
         });
         sessionTypeRow.add_suffix(new Gtk.Label({
             label: GLib.getenv('XDG_SESSION_TYPE') === "wayland" ? 'Wayland' : 'X11',
@@ -123,17 +113,30 @@ class extends Adw.PreferencesPage {
         infoGroup.add(sessionTypeRow);
 
         let gitlabButton = new Gtk.LinkButton({
-            label: `${PROJECT_TITLE} ${_('GitLab')}`,
+            child: new Gtk.Image({
+                      icon_name: 'adw-external-link-symbolic'
+                   }),
             uri: Me.metadata.url
-        })
+        });
+        let gitlabRow = new Adw.ActionRow({
+            title: `${PROJECT_TITLE} ${_('GitLab')}`,
+            activatable_widget: gitlabButton,
+        });
+        gitlabRow.add_suffix(gitlabButton);
+        infoGroup.add(gitlabRow);
+
         let donateButton = new Gtk.LinkButton({
-            label: _('Donate via PayPal'),
+            child: new Gtk.Image({
+                      icon_name: 'adw-external-link-symbolic'
+                   }),
             uri: PAYPAL_LINK,
         });
-        let linksRow = new Adw.ActionRow();
-        linksRow.add_prefix(gitlabButton);
-        linksRow.add_suffix(donateButton);
-        infoGroup.add(linksRow);
+        let donateRow = new Adw.ActionRow({
+            title: _('Donate via PayPal'),
+            activatable_widget: donateButton,
+        });
+        donateRow.add_suffix(donateButton);
+        infoGroup.add(donateRow);
 
         this.add(infoGroup);
         //-----------------------------------------------------------------------

@@ -335,18 +335,18 @@ var Menu = class extends BaseMenuLayout{
 
         if(!this._settings.get_boolean('windows-disable-frequent-apps')){
             let mostUsed = Shell.AppUsage.get_default().get_most_used();
-            this.frequentAppsList = [];
+            let frequentAppsList = [];
             for (let i = 0; i < mostUsed.length; i++) {
                 if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
                     let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.DisplayType.LIST);
-                    this.frequentAppsList.push(item);
+                    frequentAppsList.push(item);
                 }
             }
             const MaxItems = 8;
-            if(this.frequentAppsList.length > 0){
+            if(frequentAppsList.length > 0){
                 this.applicationsBox.add_child(label);
-                for (let i = 0; i < this.frequentAppsList.length && i < MaxItems; i++) {
-                    let item = this.frequentAppsList[i];
+                for (let i = 0; i < frequentAppsList.length && i < MaxItems; i++) {
+                    let item = frequentAppsList[i];
                     if(item.get_parent())
                         item.get_parent().remove_child(item);
                     this.applicationsBox.add_child(item);
@@ -387,11 +387,25 @@ var Menu = class extends BaseMenuLayout{
     displayPinnedApps() {
         super._clearActorsFromBox(this.pinnedAppsBox);
         this.pinnedAppsGrid.remove_all_children();
+
+        const pinnedApps = this._settings.get_strv('pinned-app-list');
+
+        if(pinnedApps.length < 1){
+            if(this.mainBox.contains(this.pinnedAppsScrollBox))
+                this.mainBox.remove_child(this.pinnedAppsScrollBox);
+            return;
+        }
+
+        if(!this.mainBox.contains(this.pinnedAppsScrollBox))
+            this.mainBox.add_child(this.pinnedAppsScrollBox);
+
         let label = this.createLabelRow(_("Pinned"));
         this.pinnedAppsBox.add_child(label);
+
         this.layoutProperties.DisplayType = Constants.DisplayType.GRID;
         this._displayAppList(this.pinnedAppsArray, Constants.CategoryType.HOME_SCREEN, this.pinnedAppsGrid);
         this.layoutProperties.DisplayType = Constants.DisplayType.LIST;
+
         if(!this.pinnedAppsBox.contains(this.pinnedAppsGrid))
             this.pinnedAppsBox.add_child(this.pinnedAppsGrid);
 
