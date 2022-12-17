@@ -437,6 +437,7 @@ var BaseMenuLayout = class {
             case Constants.ShortcutCommands.RESTART:
             case Constants.ShortcutCommands.HYBRID_SLEEP:
             case Constants.ShortcutCommands.HIBERNATE:
+            case Constants.ShortcutCommands.SWITCH_USER:
             case Constants.ShortcutCommands.OVERVIEW:
             case Constants.ShortcutCommands.SHOW_APPS:
             case Constants.ShortcutCommands.RUN_COMMAND:

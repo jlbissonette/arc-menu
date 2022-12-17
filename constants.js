@@ -426,6 +426,7 @@ var ShortcutCommands = {
     RESTART: 'ArcMenu_Restart',
     HYBRID_SLEEP: 'ArcMenu_HybridSleep',
     HIBERNATE: 'ArcMenu_Hibernate',
+    SWITCH_USER: 'ArcMenu_SwitchUser',
     COMPUTER: 'ArcMenu_Computer',
     NETWORK: 'ArcMenu_Network',
     RECENT: 'ArcMenu_Recent',

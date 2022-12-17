@@ -342,6 +342,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             extraLinks.push([_("Suspend"), "media-playback-pause-symbolic", "ArcMenu_Suspend"]);
             extraLinks.push([_("Hybrid Sleep"), 'weather-clear-night-symbolic', "ArcMenu_HybridSleep"]);
             extraLinks.push([_("Hibernate"), "document-save-symbolic", "ArcMenu_Hibernate"]);
+            extraLinks.push([_("Switch User"), "system-switch-user-symbolic", "ArcMenu_SwitchUser"]);
             this._loadExtraCategories(extraLinks);
             this._loadCategories();
         }

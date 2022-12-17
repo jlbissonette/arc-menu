@@ -1425,6 +1425,8 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
             activatePowerOption(Constants.PowerType.HYBRID_SLEEP, this._menuLayout.arcMenu);
         else if(this._command === Constants.ShortcutCommands.HIBERNATE)
             activatePowerOption(Constants.PowerType.HIBERNATE, this._menuLayout.arcMenu);
+        else if(this._command === Constants.ShortcutCommands.SWITCH_USER)
+            activatePowerOption(Constants.PowerType.SWITCH_USER, this._menuLayout.arcMenu);
         else{
             this._menuLayout.arcMenu.toggle();
             if(this._command === Constants.ShortcutCommands.OVERVIEW)
