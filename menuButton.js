@@ -559,8 +559,8 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         let switchUserItem = powerOptionsItem.menu.addAction(_('Switch User'), () => systemActions.activateSwitchUser());
         switchUserItem.visible = systemActions.canSwitchUser;
 
-        systemActions.connect('notify::can-suspend', () => suspendItem.visible = systemActions.canSuspend);
-        systemActions.connect('notify::can-switch-user', () => switchUserItem.visible = systemActions.canSwitchUser);
+        let canSuspendId = systemActions.connect('notify::can-suspend', () => suspendItem.visible = systemActions.canSuspend);
+        let canSwitchUserId = systemActions.connect('notify::can-switch-user', () => switchUserItem.visible = systemActions.canSwitchUser);
 
         this.addAction(_('Activities Overview'), () => Main.overview.toggle());
         this.addAction(_('Show Desktop'), () => {
@@ -573,6 +573,16 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
             windows.forEach(w => {
                 w.minimize();
             });
+        });
+
+        this.connect('destroy', () => {
+            if(canSuspendId)
+                systemActions.disconnect(canSuspendId);
+            if(canSwitchUserId)
+                systemActions.disconnect(canSwitchUserId);
+            
+            canSuspendId = null;
+            canSwitchUserId = null;
         });
     }
 
