@@ -220,6 +220,7 @@ var PowerType = {
     SUSPEND: 4,
     HYBRID_SLEEP: 5,
     HIBERNATE: 6,
+    SWITCH_USER: 7,
 };
 
 var PowerDisplayStyle = {
@@ -236,6 +237,7 @@ var PowerOptions = [
     { TYPE: PowerType.SUSPEND, ICON: 'media-playback-pause-symbolic', NAME: _("Suspend") },
     { TYPE: PowerType.HYBRID_SLEEP, ICON: 'weather-clear-night-symbolic', NAME: _("Hybrid Sleep") },
     { TYPE: PowerType.HIBERNATE, ICON: 'document-save-symbolic', NAME: _("Hibernate") },
+    { TYPE: PowerType.SWITCH_USER, ICON: 'system-switch-user-symbolic', NAME: _("Switch User") },
 ];
 
 //Icon type for the menu button

@@ -9,6 +9,7 @@ const Main = imports.ui.main;
 const MW = Me.imports.menuWidgets;
 const PanelMenu = imports.ui.panelMenu;
 const PopupMenu = imports.ui.popupMenu;
+const SystemActions = imports.misc.systemActions;
 const Util = imports.misc.util;
 const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
@@ -544,14 +545,22 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         let powerOptionsItem = new PopupMenu.PopupSubMenuMenuItem(_('Power Off / Log Out'));
         this.addMenuItem(powerOptionsItem);
 
-        //See constants.js PowerOptions
-        const powerOptions = 4;
-        for(let i = 0; i < powerOptions; i++){
-            const powerTypeEnum = i;
-            powerOptionsItem.menu.addAction(_(Constants.PowerOptions[powerTypeEnum].NAME), 
-                                            () => MW.activatePowerOption(powerTypeEnum, this),
-                                            Constants.PowerOptions[powerTypeEnum].ICON);
-        }
+        const systemActions = SystemActions.getDefault();
+
+        let suspendItem = powerOptionsItem.menu.addAction(_('Suspend'), () => systemActions.activateSuspend());
+        suspendItem.visible = systemActions.canSuspend;
+        powerOptionsItem.menu.addAction(_('Restart...'), () => systemActions.activateRestart());
+        powerOptionsItem.menu.addAction(_('Power Off...'), () => systemActions.activatePowerOff());
+
+        powerOptionsItem.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        powerOptionsItem.menu.addAction(_('Lock'), () => systemActions.activateLockScreen());
+        powerOptionsItem.menu.addAction(_('Log Out...'), () => systemActions.activateLogout());
+        let switchUserItem = powerOptionsItem.menu.addAction(_('Switch User'), () => systemActions.activateSwitchUser());
+        switchUserItem.visible = systemActions.canSwitchUser;
+
+        systemActions.connect('notify::can-suspend', () => suspendItem.visible = systemActions.canSuspend);
+        systemActions.connect('notify::can-switch-user', () => switchUserItem.visible = systemActions.canSwitchUser);
 
         this.addAction(_('Activities Overview'), () => Main.overview.toggle());
         this.addAction(_('Show Desktop'), () => {

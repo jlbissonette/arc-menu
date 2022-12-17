@@ -505,7 +505,7 @@
       <description>Show Bookmarks.</description>
     </key>
     <key name="power-options" type="a(ib)">
-      <default>[(0, true), (1, true), (2, true), (3, true), (4, false), (5, false), (6, false)]</default>
+      <default>[(0, true), (1, true), (2, true), (3, true), (4, false), (5, false), (6, false), (7, false)]</default>
       <summary>Power Options</summary>
       <description>See Constants.js PowerOptions</description>
     </key>

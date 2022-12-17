@@ -35,6 +35,8 @@ function activatePowerOption(powerType, arcMenu){
         systemActions.activateLogout();
     else if(powerType === Constants.PowerType.SUSPEND)
         systemActions.activateSuspend();
+    else if(powerType === Constants.PowerType.SWITCH_USER)
+        systemActions.activateSwitchUser()
     else if(powerType === Constants.PowerType.HYBRID_SLEEP)
         Utils.activateHybridSleep();
     else if(powerType === Constants.PowerType.HIBERNATE)
@@ -867,7 +869,7 @@ var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMen
             let shouldShow = powerOptions[i][1];
             if(shouldShow){
                 let powerButton = new PowerMenuItem(this._menuLayout, powerType);
-                if(powerType === Constants.PowerType.LOCK || powerType === Constants.PowerType.LOGOUT){
+                if(powerType === Constants.PowerType.LOCK || powerType === Constants.PowerType.LOGOUT || powerType === Constants.PowerType.SWITCH_USER){
                     hasSessionOption = true;
                     sessionBox.add_child(powerButton);
                 }
