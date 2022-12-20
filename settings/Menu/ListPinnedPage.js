@@ -336,9 +336,9 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         else{
             let extraLinks = this._getDirectoryLinksArray();
             extraLinks.push([_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock"]);
-            extraLinks.push([_("Log Out"), "system-log-out-symbolic", "ArcMenu_LogOut"]);
-            extraLinks.push([_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
-            extraLinks.push([_("Restart"), 'system-reboot-symbolic', "ArcMenu_Restart"]);
+            extraLinks.push([_("Log Out..."), "system-log-out-symbolic", "ArcMenu_LogOut"]);
+            extraLinks.push([_("Power Off..."), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
+            extraLinks.push([_("Restart..."), 'system-reboot-symbolic', "ArcMenu_Restart"]);
             extraLinks.push([_("Suspend"), "media-playback-pause-symbolic", "ArcMenu_Suspend"]);
             extraLinks.push([_("Hybrid Sleep"), 'weather-clear-night-symbolic', "ArcMenu_HybridSleep"]);
             extraLinks.push([_("Hibernate"), "document-save-symbolic", "ArcMenu_Hibernate"]);

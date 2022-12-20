@@ -206,9 +206,9 @@ var Menu = class extends BaseMenuLayout{
             pinnedApps.push(_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer");
 
         pinnedApps.push(_("Files"), "", "org.gnome.Nautilus.desktop");
-        pinnedApps.push(_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut");
+        pinnedApps.push(_("Log Out..."), "application-exit-symbolic", "ArcMenu_LogOut");
         pinnedApps.push(_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock");
-        pinnedApps.push(_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff");
+        pinnedApps.push(_("Power Off..."), "system-shutdown-symbolic", "ArcMenu_PowerOff");
 
         this.shouldLoadPinnedApps = false; // We don't want to trigger a setting changed event
         this._settings.set_strv('unity-pinned-app-list', pinnedApps);

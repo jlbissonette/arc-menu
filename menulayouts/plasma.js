@@ -327,7 +327,7 @@ var Menu = class extends BaseMenuLayout{
             let shouldShow = powerOptions[i][1];
             if(shouldShow){
                 let powerButton = new MW.PowerMenuItem(this, powerType);
-                if(powerType === Constants.PowerType.LOCK || powerType === Constants.PowerType.LOGOUT){
+                if(powerType === Constants.PowerType.LOCK || powerType === Constants.PowerType.LOGOUT || powerType === Constants.PowerType.SWITCH_USER){
                     this.hasSessionOption = true;
                     this.sessionBox.add_child(powerButton);
                 }

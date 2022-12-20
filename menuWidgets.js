@@ -23,7 +23,7 @@ const INDICATOR_ICON_SIZE = 18;
 const USER_AVATAR_SIZE = 28;
 
 function activatePowerOption(powerType, arcMenu){
-    let systemActions = SystemActions.getDefault();
+    const systemActions = SystemActions.getDefault();
     arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
     if(powerType === Constants.PowerType.POWER_OFF)
         systemActions.activatePowerOff();
@@ -1990,6 +1990,15 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
             else{
                 this._menuLayout.arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
                 let systemActions = SystemActions.getDefault();
+
+                //SystemActions.activateAction('open-screenshot-ui') waits for 
+                //Main.overview to be hidden before launching ScreenshotUI.
+                //Avoid that by directly calling Screenshot.showScreenshotUI().
+                if(metaInfo.id === 'open-screenshot-ui'){
+                    imports.ui.screenshot.showScreenshotUI();
+                    return;
+                }
+
                 systemActions.activateAction(metaInfo.id);
             }
         }
@@ -2284,7 +2293,7 @@ var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends Ar
             this.add_child(this._ejectButton);
         }
 
-        this._changedId = info.connect('changed', this._propertiesChanged.bind(this));
+        this._changedId = this._info.connect('changed', this._propertiesChanged.bind(this));
     }
 
     set folderPath(value){

@@ -220,9 +220,9 @@ var Menu = class extends BaseMenuLayout{
             pinnedApps.push(_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents");
 
         pinnedApps.push(_("Files"), "system-file-manager", "org.gnome.Nautilus.desktop");
-        pinnedApps.push(_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut");
+        pinnedApps.push(_("Log Out..."), "application-exit-symbolic", "ArcMenu_LogOut");
         pinnedApps.push(_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock");
-        pinnedApps.push(_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff");
+        pinnedApps.push(_("Power Off..."), "system-shutdown-symbolic", "ArcMenu_PowerOff");
 
         this.shouldLoadPinnedApps = false; // We don't want to trigger a setting changed event
         this._settings.set_strv('mint-pinned-app-list', pinnedApps);

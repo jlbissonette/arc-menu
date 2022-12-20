@@ -79,7 +79,9 @@ class ArcMenu_ListOtherPage extends SubPage {
 
     _addRowsToFrame(extraCategories){
         for(let i = 0; i < extraCategories.length; i++){
-            let categoryEnum = extraCategories[i][0];
+            const categoryEnum = extraCategories[i][0];
+            const isActive = extraCategories[i][1];
+            
             let name, iconString;
             if(this.list_type === Constants.MenuSettingsListType.POWER_OPTIONS){
                 name = Constants.PowerOptions[categoryEnum].NAME;
@@ -93,10 +95,10 @@ class ArcMenu_ListOtherPage extends SubPage {
             const row = new PW.DragRow({
                 gicon: Gio.icon_new_for_string(iconString),
                 switch_enabled: true,
-                switch_active: extraCategories[i][1],
+                switch_active: isActive,
             });
             row.activatable_widget = row.switch;
-            row.setting_type = extraCategories[i][0];
+            row.setting_type = categoryEnum;
             row.title = _(name);
 
             row.connect("drag-drop-done", () => this.saveSettings() );
