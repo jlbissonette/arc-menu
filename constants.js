@@ -202,6 +202,7 @@ var MenuSettingsListType = {
     POWER_OPTIONS: 4,
     EXTRA_CATEGORIES: 5,
     QUICK_LINKS: 6,
+    CONTEXT_MENU: 7,
 };
 
 var MenuButtonAppearance = {
@@ -442,6 +443,14 @@ var ShortcutCommands = {
     OVERVIEW: 'ArcMenu_ActivitiesOverview',
     SHOW_APPS: 'ArcMenu_ShowAllApplications',
     RUN_COMMAND: 'ArcMenu_RunCommand',
+    SEPARATOR: 'ArcMenu_Separator',
+    SETTINGS: 'ArcMenu_Settings',
+    SHOW_DESKTOP: 'ArcMenu_ShowDesktop',
+    POWER_OPTIONS: 'ArcMenu_PowerOptions',
+    SETTINGS_MENU: 'ArcMenu_SettingsMenu',
+    SETTINGS_LAYOUT: 'ArcMenu_SettingsLayout',
+    SETTINGS_BUTTON: 'ArcMenu_SettingsButton',
+    SETTINGS_ABOUT: 'ArcMenu_SettingsAbout',
 }
 
 var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."</i>'+

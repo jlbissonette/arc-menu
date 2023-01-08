@@ -34,12 +34,12 @@ class ArcMenu_ManageThemesDialog extends PW.DialogWindow {
             const editEntryButton = new PW.EditEntriesBox({
                 row: row,
                 allow_modify: true,
-                allow_delete: true
+                allow_remove: true
             });
             row.activatable_widget = editEntryButton;
             row.add_suffix(editEntryButton);
 
-            editEntryButton.connect('modify', () => {
+            editEntryButton.connect('modify-button-clicked', () => {
                 let dialog = new SaveThemeDialog(this._settings, this, theme[0]);
                 dialog.show();
                 dialog.connect('response', (_w, response) => {
@@ -53,9 +53,12 @@ class ArcMenu_ManageThemesDialog extends PW.DialogWindow {
                 });
             });
 
-            editEntryButton.connect("row-changed", () => this.saveSettings() );
-            editEntryButton.connect("row-deleted", () => {
-                this.frameRows.splice(this.frameRows.indexOf(row), 1);
+            editEntryButton.connect('entry-modified', (_self, startIndex, newIndex) => {
+                const splicedItem = this.frameRows.splice(startIndex, 1)[0];
+
+                if(newIndex >= 0)
+                    this.frameRows.splice(newIndex, 0, splicedItem);
+                    
                 this.saveSettings();
             });
 
@@ -67,7 +70,7 @@ class ArcMenu_ManageThemesDialog extends PW.DialogWindow {
         let array = [];
 
         this.frameRows.sort((a, b) => {
-            return a.get_index() > b.get_index();
+            return a.get_index() - b.get_index();
         });
 
         this.frameRows.forEach(child => {

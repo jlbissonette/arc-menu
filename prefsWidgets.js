@@ -71,32 +71,25 @@ var DragRow = GObject.registerClass({
 },class ArcMenu_DragRow extends Adw.ActionRow {
     _init(params) {
         super._init(params);
-        let dragSource = new Gtk.DragSource({
-            actions: Gdk.DragAction.MOVE
-        });
-        this.add_controller(dragSource);
 
-        this.icon = new Gtk.Image( {
+        this._params = params;
+
+        this.icon = new Gtk.Image({
             gicon: this.gicon,
             pixel_size: this.icon_pixel_size
         });
+        this.add_prefix(this.icon);
 
         if(this.xpm_pixbuf)
             this.icon.set_from_pixbuf(this.xpm_pixbuf);
 
-        this.dragIcon = new Gtk.Image( {
+        this.connect('notify::gicon', () => this.icon.gicon = this.gicon);
+
+        this.dragIcon = new Gtk.Image({
             gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
             pixel_size: 12
         });
-        this.add_prefix(this.icon);
         this.add_prefix(this.dragIcon);
-
-        this.connect('notify::gicon', () => this.icon.gicon = this.gicon)
-
-        let dropTarget = new Gtk.DropTargetAsync({
-            actions: Gdk.DragAction.MOVE
-        });
-        this.add_controller(dropTarget);
 
         if(this.switch_enabled){
             this.switch = new Gtk.Switch({
@@ -108,7 +101,7 @@ var DragRow = GObject.registerClass({
             this.switch.connect("notify::active", () => {
                 this.switch_active = this.switch.get_active();
                 this.emit('switch-toggled');
-            })
+            });
             this.add_suffix(this.switch);
             this.add_suffix(new Gtk.Separator({
                 orientation: Gtk.Orientation.VERTICAL,
@@ -122,9 +115,7 @@ var DragRow = GObject.registerClass({
                 icon_name: 'text-editor-symbolic',
                 valign: Gtk.Align.CENTER
             });
-            this.changeButton.connect('clicked', () => {
-                this.emit('change-button-clicked');
-            });
+            this.changeButton.connect('clicked', () => this.emit('change-button-clicked'));
             this.add_suffix(this.changeButton);
             this.add_suffix(new Gtk.Separator({
                 orientation: Gtk.Orientation.VERTICAL,
@@ -133,69 +124,69 @@ var DragRow = GObject.registerClass({
             }));
         }
 
+        const dragSource = new Gtk.DragSource({ actions: Gdk.DragAction.MOVE });
+        this.add_controller(dragSource);
+
+        const dropTarget = new Gtk.DropTargetAsync({ actions: Gdk.DragAction.MOVE });
+        this.add_controller(dropTarget);
+
         dragSource.connect("drag-begin", (self, gdkDrag) => {
-            //get listbox parent
-            let listBox = self.get_widget().get_parent();
-            //get widgets parent - the listBoxDragRow
-            listBox.dragRow = this;
-            this.listBox = listBox;
+            this._dragParent = self.get_widget().get_parent();
+            this._dragParent.dragRow = this;
 
-            let alloc = this.get_allocation();
-            let dragWidget = self.get_widget().createDragRow(alloc);
-            listBox.dragWidget = dragWidget;
+            const alloc = this.get_allocation();
+            const dragWidget = self.get_widget().createDragRow(alloc);
+            this._dragParent.dragWidget = dragWidget;
 
-            let icon = Gtk.DragIcon.get_for_drag(gdkDrag);
+            const icon = Gtk.DragIcon.get_for_drag(gdkDrag);
             icon.set_child(dragWidget);
 
-            gdkDrag.set_hotspot(listBox.dragX, listBox.dragY);
+            gdkDrag.set_hotspot(this._dragParent.dragX, this._dragParent.dragY);
         });
 
         dragSource.connect("prepare", (self, x, y) => {
-            //get listbox parent
             this.set_state_flags(Gtk.StateFlags.NORMAL, true);
-            let listBox = self.get_widget().get_parent();
+            const parent = self.get_widget().get_parent();
             //store drag start cursor location
-            listBox.dragX = x;
-            listBox.dragY = y;
-            return new Gdk.ContentProvider(ArcMenu_DragRow);
+            parent.dragX = x;
+            parent.dragY = y;
+            return new Gdk.ContentProvider();
         });
 
-        dragSource.connect("drag-end", (self, gdkDrag, deleteData) => {
-            this.listBox.dragWidget = null;
-            this.listBox.drag_unhighlight_row();
+        dragSource.connect("drag-end", (_self, _gdkDrag, deleteData) => {
+            this._dragParent.dragWidget = null;
+            this._dragParent.drag_unhighlight_row();
             deleteData = true;
         });
 
-        dropTarget.connect("drag-enter", (self, gdkDrop, x, y, selection, info, time) => {
-            let listBox = self.get_widget().get_parent();
-            let widget = self.get_widget();
+        dropTarget.connect("drag-enter", (self) => {
+            const parent = self.get_widget().get_parent();
+            const widget = self.get_widget();
 
-            listBox.startIndex = widget.get_index();
-            listBox.drag_highlight_row(widget);
+            parent.drag_highlight_row(widget);
         });
 
-        dropTarget.connect("drag-leave", (self, gdkDrop, x, y, selection, info, time) => {
-            let listBox = self.get_widget().get_parent();
-            listBox.drag_unhighlight_row();
+        dropTarget.connect("drag-leave", (self) => {
+            const parent = self.get_widget().get_parent();
+            parent.drag_unhighlight_row();
         });
 
-        dropTarget.connect("drop", (self, gdkDrop, x, y, selection, info, time) => {
-            //get listbox parent
-            let listBox = this.get_parent();
-            let index = this.get_index();
-            if(index === listBox.dragRow.get_index()){
-                gdkDrop.read_value_async(ArcMenu_DragRow, 1, null, () => {
-                    gdkDrop.finish(Gdk.DragAction.MOVE);
-                });
+        dropTarget.connect("drop", (_self, gdkDrop) => {
+            const parent = this.get_parent();
+            const dragRow = parent.dragRow; //The row being dragged.
+            const dragRowStartIndex = dragRow.get_index();
+            const dragRowNewIndex = this.get_index();
+
+            gdkDrop.read_value_async(ArcMenu_DragRow, 1, null, () => gdkDrop.finish(Gdk.DragAction.MOVE));
+
+            //The drag row hasn't moved
+            if(dragRowStartIndex === dragRowNewIndex)
                 return true;
-            }
-            listBox.remove(listBox.dragRow);
-            listBox.show();
-            listBox.insert(listBox.dragRow, index);
 
-            gdkDrop.read_value_async(ArcMenu_DragRow, 1, null, () => {
-                gdkDrop.finish(Gdk.DragAction.MOVE);
-            });
+            parent.remove(dragRow);
+            parent.show();
+            parent.insert(dragRow, dragRowNewIndex);
+
             this.emit("drag-drop-done");
             return true;
         });
@@ -205,54 +196,16 @@ var DragRow = GObject.registerClass({
         let dragWidget = new Gtk.ListBox();
         dragWidget.set_size_request(alloc.width, alloc.height);
 
-        let dragRow = new Adw.ActionRow({
-            title: _(this.title),
-            css_classes: this.css_classes
-        });
+        let dragRow = new DragRow(this._params);
         dragWidget.append(dragRow);
         dragWidget.drag_highlight_row(dragRow);
 
-        let icon = new Gtk.Image( {
-            pixel_size: this.icon_pixel_size,
-            gicon: this.gicon
-        });
-        dragRow.add_prefix(icon);
+        dragRow.title = _(this.title);
+        dragRow.css_classes = this.css_classes;
+        dragRow.icon.gicon = this.gicon;
 
         if(this.xpm_pixbuf)
-            icon.set_from_pixbuf(this.xpm_pixbuf);
-
-        let dragImage = new Gtk.Image( {
-            gicon: Gio.icon_new_for_string("list-drag-handle-symbolic"),
-            pixel_size: 12
-        });
-        dragRow.add_prefix(dragImage);
-
-        if(this.switch_enabled){
-            let modifyButton = new Gtk.Switch({
-                valign: Gtk.Align.CENTER,
-                margin_start: 10,
-                active: this.switch_active
-            });
-            dragRow.add_suffix(modifyButton);
-            dragRow.add_suffix(new Gtk.Separator({
-                orientation: Gtk.Orientation.VERTICAL,
-                margin_top: 10,
-                margin_bottom: 10
-            }));
-        }
-
-        if(this.change_enabled){
-            let changeButton = new Gtk.Button({
-                icon_name: 'text-editor-symbolic',
-                valign: Gtk.Align.CENTER
-            });
-            dragRow.add_suffix(changeButton);
-            dragRow.add_suffix(new Gtk.Separator({
-                orientation: Gtk.Orientation.VERTICAL,
-                margin_top: 10,
-                margin_bottom: 10
-            }));
-        }
+            dragRow.icon.set_from_pixbuf(this.xpm_pixbuf);
 
         let editButton = new Gtk.Button({
             icon_name: 'view-more-symbolic',
@@ -264,14 +217,20 @@ var DragRow = GObject.registerClass({
     }
 });
 
+const ModifyEntryType = {
+    MOVE_UP: 0,
+    MOVE_DOWN: 1,
+    REMOVE: 2,
+}
+
 var EditEntriesBox = GObject.registerClass({
     Properties : {
         'allow-modify':  GObject.ParamSpec.boolean(
             'allow-modify', 'allow-modify', 'allow-modify',
             GObject.ParamFlags.READWRITE,
             false),
-        'allow-delete':  GObject.ParamSpec.boolean(
-            'allow-delete', 'allow-delete', 'allow-delete',
+        'allow-remove':  GObject.ParamSpec.boolean(
+            'allow-remove', 'allow-remove', 'allow-remove',
             GObject.ParamFlags.READWRITE,
             false),
         'row':  GObject.ParamSpec.object(
@@ -280,10 +239,8 @@ var EditEntriesBox = GObject.registerClass({
             Gtk.Widget.$gtype),
     },
     Signals: {
-        'modify': {},
-        'change': {},
-        'row-changed': {},
-        'row-deleted': {}
+        'modify-button-clicked': {},
+        'entry-modified': { param_types: [GObject.TYPE_INT, GObject.TYPE_INT] },
     },
 },  class ArcMenu_EditEntriesBox extends Gtk.MenuButton{
     _init(params){
@@ -294,88 +251,83 @@ var EditEntriesBox = GObject.registerClass({
             ...params
         });
 
-        let popoverBox = new Gtk.Box({
+        const popoverBox = new Gtk.Box({
             orientation: Gtk.Orientation.VERTICAL,
             spacing: 3
         });
         this.popover.set_child(popoverBox);
 
-        this.modifyEntry = new Gtk.Button({
+        const modifyEntryButton = new Gtk.Button({
             label: _("Modify"),
             has_frame: false,
-        });
-        this.modifyEntry.connect('clicked', () => {
-            this.popover.popdown();
-            this.emit('modify');
-        });
-
-        let modifyEntryBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
             visible: this.allow_modify,
-            spacing: 3
         });
-        modifyEntryBox.append(this.modifyEntry);
-        modifyEntryBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
-        popoverBox.append(modifyEntryBox);
-
-        let moveUpButton = new Gtk.Button({
-            label: _("Move Up"),
-            has_frame: false
-        });
-        moveUpButton.connect('clicked', () => {
-            let parent = this.row.get_parent();
-            let index = this.row.get_index();
-            if(index > 0){
-                parent.remove(this.row);
-                parent.insert(this.row, index - 1);
-            }
-            parent.show();
+        modifyEntryButton.connect('clicked', () => {
             this.popover.popdown();
-            this.emit('row-changed');
+            this.emit('modify-button-clicked');
         });
+        popoverBox.append(modifyEntryButton);
+        popoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+
+        const moveUpButton = new Gtk.Button({
+            label: _("Move Up"),
+            has_frame: false,
+        });
+        moveUpButton.connect('clicked', () => this.modifyEntry(ModifyEntryType.MOVE_UP));
         popoverBox.append(moveUpButton);
 
-        let moveDownButton = new Gtk.Button({
+        const moveDownButton = new Gtk.Button({
             label: _("Move Down"),
             has_frame: false
         });
-        moveDownButton.connect('clicked', () => {
-            let parent = this.row.get_parent();
-            let children = [...parent];
-            let index = this.row.get_index();
-            if(index + 1 < children.length) {
-                parent.remove(this.row);
-                parent.insert(this.row, index + 1);
-            }
-            parent.show();
-            this.popover.popdown();
-            this.emit('row-changed');
-        });
+        moveDownButton.connect('clicked', () => this.modifyEntry(ModifyEntryType.MOVE_DOWN));
         popoverBox.append(moveDownButton);
 
-        this.deleteEntry = new Gtk.Button({
+        const removeEntryButton = new Gtk.Button({
             label: _("Remove"),
             has_frame: false,
+            visible: this.allow_remove,
         });
-        this.deleteEntry.connect('clicked', () => {
-            let parent = this.row.get_parent();
-            parent.remove(this.row);
-            parent.show();
-            this.popover.popdown();
-            this.emit('row-deleted');
-        });
+        removeEntryButton.connect('clicked', () => this.modifyEntry(ModifyEntryType.REMOVE));
 
-        let deleteEntryBox = new Gtk.Box({
-            orientation: Gtk.Orientation.VERTICAL,
-            visible: this.allow_delete,
-            spacing: 3
-        });
-        deleteEntryBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
-        deleteEntryBox.append(this.deleteEntry);
-        popoverBox.append(deleteEntryBox);
+        popoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+        popoverBox.append(removeEntryButton);
 
-        this.connect('notify::allow-modify', () => modifyEntryBox.visible = this.allow_modify );
-        this.connect('notify::allow-delete', () => deleteEntryBox.visible = this.allow_delete );
+        this.connect('notify::allow-modify', () => modifyEntryButton.visible = this.allow_modify);
+        this.connect('notify::allow-remove', () => removeEntryButton.visible = this.allow_remove);
+    }
+
+    modifyEntry(modifyEntryType){
+        this.popover.popdown();
+
+        const startIndex = this.row.get_index();
+        const parent = this.row.get_parent();
+        const children = [...parent];
+        let indexModification;
+        
+        if(modifyEntryType === ModifyEntryType.MOVE_DOWN){
+            if(startIndex >= children.length - 1)
+                return;
+            
+            indexModification = 1;
+        }
+        else if(modifyEntryType === ModifyEntryType.MOVE_UP){
+            if(startIndex <= 0)
+                return;
+
+            indexModification = -1;
+        }
+        if(modifyEntryType === ModifyEntryType.REMOVE)
+            indexModification = (startIndex + 1) * -1; //we want newIndex == -1 for a remove
+
+        const newIndex = startIndex + indexModification;
+
+        parent.remove(this.row);
+        if(newIndex !== -1)
+            parent.insert(this.row, newIndex);
+        parent.show();
+        
+        this.emit('entry-modified', startIndex, newIndex);
     }
 });
 

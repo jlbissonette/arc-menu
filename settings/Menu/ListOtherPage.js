@@ -68,7 +68,7 @@ class ArcMenu_ListOtherPage extends SubPage {
     saveSettings(){
         let array = [];
         this.frameRows.sort((a, b) => {
-            return a.get_index() > b.get_index();
+            return a.get_index() - b.get_index();
         })
         this.frameRows.forEach(child => {
             array.push([child.setting_type, child.switch_active]);
@@ -105,7 +105,14 @@ class ArcMenu_ListOtherPage extends SubPage {
             row.connect('switch-toggled', () => this.saveSettings() );
 
             const editEntryButton = new PW.EditEntriesBox({ row: row });
-            editEntryButton.connect("row-changed", () => this.saveSettings() );
+            editEntryButton.connect('entry-modified', (_self, startIndex, newIndex) => {
+                const splicedItem = this.frameRows.splice(startIndex, 1)[0];
+
+                if(newIndex >= 0)
+                    this.frameRows.splice(newIndex, 0, splicedItem);
+                    
+                this.saveSettings();
+            });
 
             row.add_suffix(editEntryButton);
             this.frameRows.push(row);

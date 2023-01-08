@@ -15,7 +15,7 @@ const PROJECT_IMAGE = 'settings-arcmenu-logo';
 const SCHEMA_PATH = '/org/gnome/shell/extensions/arcmenu/';
 
 var AboutPage = GObject.registerClass(
-class extends Adw.PreferencesPage {
+class ArcMenu_AboutPage extends Adw.PreferencesPage {
     _init(settings, preferencesWindow) {
         super._init({
             title: _('About'),

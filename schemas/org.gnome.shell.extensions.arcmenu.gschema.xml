@@ -702,6 +702,13 @@
       <summary>List of default directory paths used for links on the right side of ArcMenu</summary>
       <description>List of default directory paths used for links on the right side of ArcMenu.</description>
     </key>
+    <key name="context-menu-shortcuts" type="aas">
+      <default>[["Extensions", "", "org.gnome.Extensions.desktop"], ["ArcMenu Settings", "ArcMenu_ArcMenuIcon", "ArcMenu_Settings"], 
+          ["Separator", "list-remove-symbolic", "ArcMenu_Separator"],["Power Options", "system-shutdown-symbolic", "ArcMenu_PowerOptions"],
+          ["Activities Overview", "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"], ["Show Desktop", "computer-symbolic", "ArcMenu_ShowDesktop"]]</default>
+      <summary>List of shortcuts on ArcMenu button context menu</summary>
+      <description>List of shortcuts on ArcMenu button context menu.</description>
+    </key>
     <key name="unity-pinned-app-list" type="as">
       <default>[]</default>
       <summary>List of Unity Layout Pinned Apps</summary>

@@ -153,6 +153,17 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             pageClassParams: Constants.MenuSettingsListType.EXTRA_CATEGORIES,
         });
         whatToShowGroup.add(extraCategoriesRow);
+
+        let contextMenuRow = new SettingRow({
+            title: _('Context Menu'),
+            icon_name: 'view-list-bullet-symbolic',
+            subtitle: _('Modify entries in the ArcMenu context menu')
+        });
+        this._addSubPageToRow(contextMenuRow, {
+            pageClass: ListPinnedPage,
+            pageClassParams: Constants.MenuSettingsListType.CONTEXT_MENU,
+        });
+        whatToShowGroup.add(contextMenuRow);
     }
 
     _addSubPageToRow(row, pageParams){

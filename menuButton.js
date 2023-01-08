@@ -63,13 +63,9 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
     initiate(){
         this.dashToPanel = Main.extensionManager.lookup(Constants.DASH_TO_PANEL_UUID);
-        this.azTaskbar = Main.extensionManager.lookup(Constants.AZTASKBAR_UUID);
 
         if(this.dashToPanel?.state === ExtensionState.ENABLED && global.dashToPanel)
             this.syncWithDashToPanel();
-
-        if(this.azTaskbar?.state === ExtensionState.ENABLED && global.azTaskbar)
-            this.syncWithAzTaskbar();
 
         this._monitorsChangedId = Main.layoutManager.connect('monitors-changed', () =>
             this.updateHeight());
@@ -87,13 +83,7 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         });
     }
 
-    syncWithAzTaskbar(){
-        this.arcMenuContextMenu.addExtensionSettings(_('App Icons Taskbar Settings'), Constants.AZTASKBAR_UUID);
-    }
-
     syncWithDashToPanel(){
-        this.arcMenuContextMenu.addExtensionSettings(_('Dash to Panel Settings'), Constants.DASH_TO_PANEL_UUID);
-
         let monitorIndex = Main.layoutManager.findIndexForActor(this);
         let side = Utils.getDashToPanelPosition(this.dashToPanel.settings, monitorIndex);
         this.updateArrowSide(side);
@@ -523,46 +513,73 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         Main.uiGroup.add_child(this.actor);
         this.actor.hide();
 
-        this.addSettingsAction(_('Power Options'), 'gnome-power-panel.desktop');
-        this.addSettingsAction(_('Event Logs'), 'org.gnome.Logs.desktop');
-        this.addSettingsAction(_('System Details'), 'gnome-info-overview-panel.desktop');
-        this.addSettingsAction(_('Display Settings'), 'gnome-display-panel.desktop');
-        this.addSettingsAction(_('Disk Managament'), 'org.gnome.DiskUtility.desktop');
-        this.addSettingsAction(_('Network Settings'), 'gnome-network-panel.desktop');
+        this.systemActions = SystemActions.getDefault();
 
-        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        const menuItemsChangedId = this._settings.connect('changed::context-menu-shortcuts', () => this.populateMenuItems());
 
-        this.shortcutsMenu = new PopupMenu.PopupMenuSection();
-        this.shortcutsMenu.addSettingsAction(_('Terminal'), 'org.gnome.Terminal.desktop');
-        this.shortcutsMenu.addSettingsAction(_('System Monitor'), 'gnome-system-monitor.desktop');
-        this.shortcutsMenu.addSettingsAction(_('Files'), 'org.gnome.Nautilus.desktop');
-        this.shortcutsMenu.addSettingsAction(_('Extensions'), 'org.gnome.Extensions.desktop');
-        this.shortcutsMenu.addAction(_('ArcMenu Settings'), () => ExtensionUtils.openPrefs());
-        this.addMenuItem(this.shortcutsMenu);
+        this.populateMenuItems();
+        this.connect('destroy', () => {
+            this.disconnectPowerOptions();
+            this._settings.disconnect(menuItemsChangedId);
+        });
+    }
 
-        this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+    populateMenuItems(){
+        this.disconnectPowerOptions();
+        this.removeAll();
 
-        let powerOptionsItem = new PopupMenu.PopupSubMenuMenuItem(_('Power Off / Log Out'));
-        this.addMenuItem(powerOptionsItem);
+        const contextMenuShortcuts = this._settings.get_value('context-menu-shortcuts').deep_unpack();
 
-        const systemActions = SystemActions.getDefault();
+        for(let i = 0; i < contextMenuShortcuts.length; i++){
+            const title = contextMenuShortcuts[i][0];
+            const command = contextMenuShortcuts[i][2];
 
-        let suspendItem = powerOptionsItem.menu.addAction(_('Suspend'), () => systemActions.activateSuspend());
-        suspendItem.visible = systemActions.canSuspend;
-        powerOptionsItem.menu.addAction(_('Restart...'), () => systemActions.activateRestart());
-        powerOptionsItem.menu.addAction(_('Power Off...'), () => systemActions.activatePowerOff());
+            if(command.endsWith('.desktop'))
+                this.addSettingsAction(title, command);
+            else if(command === Constants.ShortcutCommands.SEPARATOR)
+                this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+            else if(command === Constants.ShortcutCommands.SETTINGS)
+                this.addAction(_('ArcMenu Settings'), () => ExtensionUtils.openPrefs());
+            else if(command.includes(Constants.ShortcutCommands.SETTINGS)){
+                let settingsPage = command.replace(Constants.ShortcutCommands.SETTINGS, '');
+                if(settingsPage === 'About')
+                    this.addArcMenuSettingsItem(title, Constants.PrefsVisiblePage.ABOUT);
+                else if(settingsPage === 'Menu')
+                    this.addArcMenuSettingsItem(title, Constants.PrefsVisiblePage.CUSTOMIZE_MENU);
+                else if(settingsPage === 'Layout')
+                    this.addArcMenuSettingsItem(title, Constants.PrefsVisiblePage.MENU_LAYOUT);
+                else if(settingsPage === 'Button')
+                    this.addArcMenuSettingsItem(title, Constants.PrefsVisiblePage.BUTTON_APPEARANCE);
+            }
+            else if(command === Constants.ShortcutCommands.OVERVIEW)
+                this.addAction(_('Activities Overview'), () => Main.overview.toggle());
+            else if(command === Constants.ShortcutCommands.POWER_OPTIONS)
+                this.addPowerOptionsMenuItem();
+            else if(command === Constants.ShortcutCommands.SHOW_DESKTOP)
+                this.addShowDekstopItem();
+        }
+    }
 
-        powerOptionsItem.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+    addArcMenuSettingsItem(title, prefsVisiblePage){
+        let item = new PopupMenu.PopupMenuItem(_(title));
+        item.connect('activate', () => {
+            this._settings.set_int('prefs-visible-page', prefsVisiblePage);
+            ExtensionUtils.openPrefs();
+        });
+        this.addMenuItem(item);
+    }
 
-        powerOptionsItem.menu.addAction(_('Lock'), () => systemActions.activateLockScreen());
-        powerOptionsItem.menu.addAction(_('Log Out...'), () => systemActions.activateLogout());
-        let switchUserItem = powerOptionsItem.menu.addAction(_('Switch User'), () => systemActions.activateSwitchUser());
-        switchUserItem.visible = systemActions.canSwitchUser;
+    disconnectPowerOptions(){
+        if(this.canSuspendId)
+            this.systemActions.disconnect(this.canSuspendId);
+        if(this.canSwitchUserId)
+            this.systemActions.disconnect(this.canSwitchUserId);
+        
+        this.canSuspendId = null;
+        this.canSwitchUserId = null;
+    }
 
-        let canSuspendId = systemActions.connect('notify::can-suspend', () => suspendItem.visible = systemActions.canSuspend);
-        let canSwitchUserId = systemActions.connect('notify::can-switch-user', () => switchUserItem.visible = systemActions.canSwitchUser);
-
-        this.addAction(_('Activities Overview'), () => Main.overview.toggle());
+    addShowDekstopItem(){
         this.addAction(_('Show Desktop'), () => {
             let currentWorkspace = global.workspace_manager.get_active_workspace();
             let windows = currentWorkspace.list_windows().filter(function (w) {
@@ -574,22 +591,27 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
                 w.minimize();
             });
         });
-
-        this.connect('destroy', () => {
-            if(canSuspendId)
-                systemActions.disconnect(canSuspendId);
-            if(canSwitchUserId)
-                systemActions.disconnect(canSwitchUserId);
-            
-            canSuspendId = null;
-            canSwitchUserId = null;
-        });
     }
 
-    addExtensionSettings(extensionName, extensionId){
-        let item = new PopupMenu.PopupMenuItem(_(extensionName));
-        item.connect('activate', () => Utils.openPrefs(extensionId) );
-        this.shortcutsMenu.addMenuItem(item);
+    addPowerOptionsMenuItem(){
+        let powerOptionsItem = new PopupMenu.PopupSubMenuMenuItem(_('Power Off / Log Out'));
+
+        let suspendItem = powerOptionsItem.menu.addAction(_('Suspend'), () => this.systemActions.activateSuspend());
+        suspendItem.visible = this.systemActions.canSuspend;
+        powerOptionsItem.menu.addAction(_('Restart...'), () => this.systemActions.activateRestart());
+        powerOptionsItem.menu.addAction(_('Power Off...'), () => this.systemActions.activatePowerOff());
+
+        powerOptionsItem.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        powerOptionsItem.menu.addAction(_('Lock'), () => this.systemActions.activateLockScreen());
+        powerOptionsItem.menu.addAction(_('Log Out...'), () => this.systemActions.activateLogout());
+        let switchUserItem = powerOptionsItem.menu.addAction(_('Switch User'), () => this.systemActions.activateSwitchUser());
+        switchUserItem.visible = this.systemActions.canSwitchUser;
+
+        this.canSuspendId = this.systemActions.connect('notify::can-suspend', () => suspendItem.visible = this.systemActions.canSuspend);
+        this.canSwitchUserId = this.systemActions.connect('notify::can-switch-user', () => switchUserItem.visible = this.systemActions.canSwitchUser);
+
+        this.addMenuItem(powerOptionsItem);
     }
 
     addSettingsAction(title, desktopFile){
