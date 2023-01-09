@@ -61,7 +61,7 @@ class ArcMenu_ManageThemesDialog extends PW.DialogWindow {
                             let menuThemes = this._settings.get_value('menu-themes').deep_unpack();
                             const selectedThemesArray = dialog.selecetedThemesArray;
                             menuThemes = menuThemes.concat(selectedThemesArray);
-                            dialog.destroy();
+                            this.close_subpage();
 
                             if(response === Gtk.ResponseType.ACCEPT) {
                                 this._settings.set_value('menu-themes', new GLib.Variant('aas', menuThemes));
@@ -87,7 +87,7 @@ class ArcMenu_ManageThemesDialog extends PW.DialogWindow {
             this.present_subpage(dialog);
             dialog.connect('response', (_w, response) => {
                 const selectedThemesArray = dialog.selecetedThemesArray;
-                dialog.destroy();
+                this.close_subpage();
 
                 if(response === Gtk.ResponseType.ACCEPT) {
                     this._showFileChooser(
@@ -422,4 +422,3 @@ class ArcMenu_SaveThemeDialog extends PW.DialogWindow {
         this.pageGroup.set_header_suffix(saveButton);
     }
 });
-        
