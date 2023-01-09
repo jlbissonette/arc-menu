@@ -48,15 +48,15 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
         });
         menuLooksGroup.add(this.layoutRow);
 
-        let themeRow = new SettingRow({
+        this.themeRow = new SettingRow({
             title: _('Menu Theme'),
             subtitle: _('Modify menu colors, font size, and border'),
             icon_name: 'settings-theme-symbolic'
         });
-        this._addSubPageToRow(themeRow, {
+        this._addSubPageToRow(this.themeRow, {
             pageClass: ThemePage,
         });
-        menuLooksGroup.add(themeRow);
+        menuLooksGroup.add(this.themeRow);
 
         let visualSettingsRow = new SettingRow({
             title: _('Menu Visual Appearance'),
@@ -188,6 +188,10 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
     presentSubpage(subpage){
         if(subpage === Constants.PrefsVisiblePage.MENU_LAYOUT){
             const row = this.layoutRow;
+            this._window.present_subpage(row.settingPage);
+        }
+        if(subpage === Constants.PrefsVisiblePage.MENU_THEME){
+            const row = this.themeRow;
             this._window.present_subpage(row.settingPage);
         }
         else if(subpage === Constants.PrefsVisiblePage.RUNNER_TWEAKS){

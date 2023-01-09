@@ -550,6 +550,8 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
                     this.addArcMenuSettingsItem(title, Constants.PrefsVisiblePage.MENU_LAYOUT);
                 else if(settingsPage === 'Button')
                     this.addArcMenuSettingsItem(title, Constants.PrefsVisiblePage.BUTTON_APPEARANCE);
+                else if(settingsPage === 'Theme')
+                    this.addArcMenuSettingsItem(title, Constants.PrefsVisiblePage.MENU_THEME);
             }
             else if(command === Constants.ShortcutCommands.OVERVIEW)
                 this.addAction(_('Activities Overview'), () => Main.overview.toggle());

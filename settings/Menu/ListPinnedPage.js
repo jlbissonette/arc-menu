@@ -348,6 +348,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             let extraLinks = [];
             extraLinks.push([_("ArcMenu Settings"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS]);
             extraLinks.push([_("Menu Settings"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_MENU]);
+            extraLinks.push([_("Menu Theming"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_THEME]);
             extraLinks.push([_("Change Menu Layout"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_LAYOUT]);
             extraLinks.push([_("Menu Button Settings"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_BUTTON]);
             extraLinks.push([_("About"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_ABOUT]);

@@ -451,6 +451,7 @@ var ShortcutCommands = {
     SETTINGS_LAYOUT: 'ArcMenu_SettingsLayout',
     SETTINGS_BUTTON: 'ArcMenu_SettingsButton',
     SETTINGS_ABOUT: 'ArcMenu_SettingsAbout',
+    SETTINGS_THEME: 'ArcMenu_SettingsTheme',
 }
 
 var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respective owners. The use of these trademarks does not indicate endorsement of the trademark holder by ArcMenu project, nor vice versa. Please do not use brand logos for any purpose except to represent the company, product, or service to which they refer."</i>'+

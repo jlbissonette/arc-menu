@@ -58,6 +58,11 @@ function setVisiblePage(window, settings){
         const page = window.get_visible_page();
         page.presentSubpage(Constants.PrefsVisiblePage.MENU_LAYOUT);
     }
+    else if(prefsVisiblePage === Constants.PrefsVisiblePage.MENU_THEME){
+        window.set_visible_page_name('MenuPage');
+        const page = window.get_visible_page();
+        page.presentSubpage(Constants.PrefsVisiblePage.MENU_THEME);
+    }
     else if(prefsVisiblePage === Constants.PrefsVisiblePage.BUTTON_APPEARANCE){
         window.close_subpage();
         window.set_visible_page_name("MenuButtonPage");
