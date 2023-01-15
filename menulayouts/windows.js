@@ -342,10 +342,10 @@ var Menu = class extends BaseMenuLayout{
                     frequentAppsList.push(item);
                 }
             }
-            const MaxItems = 8;
+            const maxApps = Math.min(8, frequentAppsList.length);
             if(frequentAppsList.length > 0){
                 this.applicationsBox.add_child(label);
-                for (let i = 0; i < frequentAppsList.length && i < MaxItems; i++) {
+                for (let i = 0; i < maxApps; i++) {
                     let item = frequentAppsList[i];
                     if(item.get_parent())
                         item.get_parent().remove_child(item);

@@ -122,17 +122,17 @@ var Menu = class extends BaseMenuLayout{
         let labelRow = this.createLabelRow(_("Frequent Apps"));
         this.applicationsBox.add_child(labelRow);
         let mostUsed = Shell.AppUsage.get_default().get_most_used();
-        let appList = [];
+        let frequentAppsList = [];
         for (let i = 0; i < mostUsed.length; i++) {
             if (mostUsed[i] && mostUsed[i].get_app_info().should_show()){
                 let item = new MW.ApplicationMenuItem(this, mostUsed[i], Constants.DisplayType.LIST);
-                appList.push(item);
+                frequentAppsList.push(item);
             }
         }
         let activeMenuItemSet = false;
-        const maxApps = 10;
+        const maxApps = Math.min(10, frequentAppsList.length);
         for (let i = 0; i < maxApps; i++) {
-            let item = appList[i];
+            let item = frequentAppsList[i];
             if(item.get_parent())
                 item.get_parent().remove_child(item);
             this.applicationsBox.add_actor(item);

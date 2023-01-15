@@ -880,18 +880,18 @@ var BaseMenuLayout = class {
                 return Clutter.EVENT_PROPAGATE;
             case Clutter.KEY_Tab:
             case Clutter.KEY_ISO_Left_Tab:
-            case Clutter.KEY_Up:
-            case Clutter.KEY_Down:
-            case Clutter.KEY_Left:
-            case Clutter.KEY_Right:
+            case Clutter.KEY_Up: case Clutter.KEY_KP_Up:
+            case Clutter.KEY_Down: case Clutter.KEY_KP_Down:
+            case Clutter.KEY_Left: case Clutter.KEY_KP_Left:
+            case Clutter.KEY_Right: case Clutter.KEY_KP_Right:
                 let direction;
-                if (symbol === Clutter.KEY_Down)
+                if (symbol === Clutter.KEY_Down || symbol === Clutter.KEY_KP_Down)
                     direction = St.DirectionType.DOWN;
-                else if (symbol === Clutter.KEY_Right)
+                else if (symbol === Clutter.KEY_Right || symbol === Clutter.KEY_KP_Right)
                     direction = St.DirectionType.RIGHT
-                else if (symbol === Clutter.KEY_Up)
+                else if (symbol === Clutter.KEY_Up || symbol === Clutter.KEY_KP_Up)
                     direction = St.DirectionType.UP;
-                else if (symbol === Clutter.KEY_Left)
+                else if (symbol === Clutter.KEY_Left || symbol === Clutter.KEY_KP_Left)
                     direction = St.DirectionType.LEFT;
                 else if (symbol === Clutter.KEY_Tab)
                     direction = St.DirectionType.TAB_FORWARD;
