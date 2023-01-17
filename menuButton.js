@@ -559,6 +559,8 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
                 this.addPowerOptionsMenuItem();
             else if(command === Constants.ShortcutCommands.SHOW_DESKTOP)
                 this.addShowDekstopItem();
+            else if(command === Constants.ShortcutCommands.PANEL_EXTENSION_SETTINGS)
+                this.addExtensionSettings();
         }
     }
 
@@ -622,5 +624,21 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
             return;
         
         super.addSettingsAction(title, desktopFile);
+    }
+
+    addExtensionSettings(){
+        const dashToPanel = Main.extensionManager.lookup(Constants.DASH_TO_PANEL_UUID);
+        const azTaskbar = Main.extensionManager.lookup(Constants.AZTASKBAR_UUID);
+
+        if(dashToPanel?.state === ExtensionState.ENABLED && global.dashToPanel){
+            const item = new PopupMenu.PopupMenuItem(_('Dash to Panel Settings'));
+            item.connect('activate', () => Utils.openPrefs(Constants.DASH_TO_PANEL_UUID));
+            this.addMenuItem(item);
+        }
+        else if(azTaskbar?.state === ExtensionState.ENABLED && global.azTaskbar){
+            const item = new PopupMenu.PopupMenuItem(_('App Icons Taskbar Settings'));
+            item.connect('activate', () => Utils.openPrefs(Constants.AZTASKBAR_UUID));
+            this.addMenuItem(item);
+        }
     }
 };

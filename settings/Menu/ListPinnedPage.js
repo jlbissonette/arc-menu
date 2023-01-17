@@ -352,6 +352,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             extraLinks.push([_("Change Menu Layout"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_LAYOUT]);
             extraLinks.push([_("Menu Button Settings"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_BUTTON]);
             extraLinks.push([_("About"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_ABOUT]);
+            extraLinks.push([_("Panel Extension Settings"), "application-x-addon-symbolic", "ArcMenu_PanelExtensionSettings"]);
             extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
             extraLinks.push([_("Power Options"), "system-shutdown-symbolic", "ArcMenu_PowerOptions"]);
             extraLinks.push([_("Show Desktop"), "computer-symbolic", "ArcMenu_ShowDesktop"]);
