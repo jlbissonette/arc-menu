@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-17 08:09-0500\n"
+"POT-Creation-Date: 2023-01-19 13:50-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,7 +101,7 @@ msgstr ""
 msgid "Switch User"
 msgstr ""
 
-#: constants.js:379 settings/AboutPage.js:12
+#: constants.js:379 settings/AboutPage.js:41
 msgid "ArcMenu"
 msgstr ""
 
@@ -199,8 +199,8 @@ msgstr ""
 
 #: constants.js:419 menulayouts/az.js:116 menulayouts/eleven.js:148
 #: menulayouts/insider.js:60 menulayouts/mint.js:214 menulayouts/whisker.js:50
-#: menulayouts/windows.js:59 settings/AboutPage.js:127
-#: settings/AboutPage.js:135 settings/AboutPage.js:165
+#: menulayouts/windows.js:59 settings/AboutPage.js:134
+#: settings/AboutPage.js:164
 msgid "Settings"
 msgstr ""
 
@@ -222,7 +222,7 @@ msgstr ""
 msgid "Activities Overview"
 msgstr ""
 
-#: constants.js:420 menuButton.js:542 prefs.js:98
+#: constants.js:420 menuButton.js:542 prefs.js:98 settings/AboutPage.js:126
 #: settings/Menu/ListPinnedPage.js:330 settings/Menu/ListPinnedPage.js:340
 #: settings/Menu/ListPinnedPage.js:349
 msgid "ArcMenu Settings"
@@ -234,15 +234,15 @@ msgstr ""
 msgid "Files"
 msgstr ""
 
-#: gnome43/search.js:731 search.js:741
+#: gnome43/search.js:731 search.js:742
 msgid "Searching..."
 msgstr ""
 
-#: gnome43/search.js:733 search.js:743
+#: gnome43/search.js:733 search.js:744
 msgid "No results."
 msgstr ""
 
-#: gnome43/search.js:812 search.js:822
+#: gnome43/search.js:812 search.js:823
 #, javascript-format
 msgid "+ %d more"
 msgstr ""
@@ -301,7 +301,7 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
-#: menuWidgets.js:1100 menuWidgets.js:2574 menulayouts/plasma.js:123
+#: menuWidgets.js:1100 menuWidgets.js:2566 menulayouts/plasma.js:123
 msgid "Apps"
 msgstr ""
 
@@ -316,7 +316,7 @@ msgstr ""
 msgid "New"
 msgstr ""
 
-#: menuWidgets.js:2413
+#: menuWidgets.js:2405
 msgid "Search…"
 msgstr ""
 
@@ -426,53 +426,53 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: settings/AboutPage.js:13
+#: settings/AboutPage.js:12
 msgid "Application Menu Extension for GNOME"
 msgstr ""
 
-#: settings/AboutPage.js:21 settings/Menu/ListPinnedPage.js:354
+#: settings/AboutPage.js:20 settings/Menu/ListPinnedPage.js:354
 msgid "About"
 msgstr ""
 
-#: settings/AboutPage.js:65
-msgid "Version"
+#: settings/AboutPage.js:64
+msgid "ArcMenu Version"
 msgstr ""
 
-#: settings/AboutPage.js:75
+#: settings/AboutPage.js:74
 msgid "Git Commit"
 msgstr ""
 
-#: settings/AboutPage.js:85
+#: settings/AboutPage.js:84
 msgid "GNOME Version"
 msgstr ""
 
-#: settings/AboutPage.js:94
+#: settings/AboutPage.js:93
 msgid "OS Name"
 msgstr ""
 
-#: settings/AboutPage.js:107
+#: settings/AboutPage.js:106
 msgid "Windowing System"
 msgstr ""
 
-#: settings/AboutPage.js:115
-msgid "GitLab"
+#: settings/AboutPage.js:114
+msgid "ArcMenu GitLab"
 msgstr ""
 
-#: settings/AboutPage.js:118
+#: settings/AboutPage.js:117
 msgid "Donate via PayPal"
 msgstr ""
 
-#: settings/AboutPage.js:130 settings/AboutPage.js:135
+#: settings/AboutPage.js:129 settings/AboutPage.js:134
 #: settings/Menu/ThemingDialog.js:24 settings/Menu/ThemingDialog.js:29
 msgid "Load"
 msgstr ""
 
-#: settings/AboutPage.js:160 settings/AboutPage.js:165
+#: settings/AboutPage.js:159 settings/AboutPage.js:164
 #: settings/Menu/ThemingDialog.js:81 settings/Menu/ThemingDialog.js:94
 msgid "Save"
 msgstr ""
 
-#: settings/AboutPage.js:186
+#: settings/AboutPage.js:185
 msgid "Credits"
 msgstr ""
 
@@ -871,24 +871,24 @@ msgstr ""
 msgid "%s Layout Tweaks"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:36
+#: settings/Menu/ListOtherPage.js:35
 msgid "Power Off / Log Out Buttons"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:39 settings/Menu/VisualSettings.js:110
+#: settings/Menu/ListOtherPage.js:38 settings/Menu/VisualSettings.js:110
 #: settings/Menu/VisualSettings.js:176 settings/Menu/VisualSettings.js:249
 msgid "Off"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:40
+#: settings/Menu/ListOtherPage.js:39
 msgid "Power Buttons"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:41
+#: settings/Menu/ListOtherPage.js:40
 msgid "Power Menu"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:43
+#: settings/Menu/ListOtherPage.js:42
 msgid "Override Display Style"
 msgstr ""
 

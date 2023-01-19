@@ -9,7 +9,6 @@ const PW = Me.imports.prefsWidgets;
 const _ = Gettext.gettext;
 
 const PAYPAL_LINK = `https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=53CWA7NR743WC&item_name=Support+${Me.metadata.name}&source=url`;
-const PROJECT_TITLE = _('ArcMenu');
 const PROJECT_DESCRIPTION = _('Application Menu Extension for GNOME');
 const PROJECT_IMAGE = 'settings-arcmenu-logo';
 const SCHEMA_PATH = '/org/gnome/shell/extensions/arcmenu/';
@@ -39,7 +38,7 @@ class ArcMenu_AboutPage extends Adw.PreferencesPage {
         });
 
         let projectTitleLabel = new Gtk.Label({
-            label: PROJECT_TITLE,
+            label: _('ArcMenu'),
             css_classes: ['title-1'],
             vexpand: true,
             valign: Gtk.Align.FILL
@@ -62,7 +61,7 @@ class ArcMenu_AboutPage extends Adw.PreferencesPage {
         let infoGroup = new Adw.PreferencesGroup();
 
         let projectVersionRow = new Adw.ActionRow({
-            title: `${PROJECT_TITLE} ${_('Version')}`,
+            title: _('ArcMenu Version'),
         });
         projectVersionRow.add_suffix(new Gtk.Label({
             label: Me.metadata.version.toString(),
@@ -112,7 +111,7 @@ class ArcMenu_AboutPage extends Adw.PreferencesPage {
         }));
         infoGroup.add(sessionTypeRow);
 
-        let gitlabRow = this._createLinkRow(`${PROJECT_TITLE} ${_('GitLab')}`, Me.metadata.url);
+        let gitlabRow = this._createLinkRow(_('ArcMenu GitLab'), Me.metadata.url);
         infoGroup.add(gitlabRow);
 
         let donateRow = this._createLinkRow(_('Donate via PayPal'), PAYPAL_LINK);
@@ -124,7 +123,7 @@ class ArcMenu_AboutPage extends Adw.PreferencesPage {
         //Save/Load Settings----------------------------------------------------------
         let settingsGroup = new Adw.PreferencesGroup();
         let settingsRow = new Adw.ActionRow({
-            title: `${PROJECT_TITLE} ${_('Settings')}`,
+            title: _('ArcMenu Settings'),
         });
         let loadButton = new Gtk.Button({
             label: _('Load'),
@@ -295,4 +294,3 @@ class ArcMenu_AboutPage extends Adw.PreferencesPage {
         dialog.show();
     }
 });
-    
