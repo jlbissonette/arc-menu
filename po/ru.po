@@ -1,17 +1,16 @@
-# SOME DESCRIPTIVE TITLE.
+# Russian translation for ArcMenu.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the Arc Menu package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# This file is distributed under the same license as the ArcMenu package.
 # Alice Charlotte Liddell <e-liss@tuta.io>, 2020
 # vantu5z <vantu5z@mail.ru>, 2020
-# Ser82-png <sw@atrus.ru>, 2021-2022
+# Ser82-png <asvmail.as@gmail.com>, 2021-2023
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-09 13:45-0500\n"
-"PO-Revision-Date: 2023-01-10 16:35+1000\n"
+"POT-Creation-Date: 2023-01-19 13:50-0500\n"
+"PO-Revision-Date: 2023-01-20 18:05+1000\n"
 "Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -71,42 +70,42 @@ msgstr "Закреплённые приложения"
 msgid "Recent Files"
 msgstr "Недавние файлы"
 
-#: constants.js:234 menuButton.js:609 menulayouts/mint.js:223
-#: menulayouts/unity.js:209 settings/Menu/ListPinnedPage.js:365
+#: constants.js:234 menuButton.js:611 menulayouts/mint.js:223
+#: menulayouts/unity.js:209 settings/Menu/ListPinnedPage.js:366
 msgid "Log Out..."
 msgstr "Завершить сеанс..."
 
-#: constants.js:235 menuButton.js:608 menulayouts/mint.js:224
-#: menulayouts/unity.js:210 settings/Menu/ListPinnedPage.js:364
+#: constants.js:235 menuButton.js:610 menulayouts/mint.js:224
+#: menulayouts/unity.js:210 settings/Menu/ListPinnedPage.js:365
 msgid "Lock"
 msgstr "Заблокировать экран"
 
-#: constants.js:236 menuButton.js:603 settings/Menu/ListPinnedPage.js:367
+#: constants.js:236 menuButton.js:605 settings/Menu/ListPinnedPage.js:368
 msgid "Restart..."
 msgstr "Перезагрузить..."
 
-#: constants.js:237 menuButton.js:604 menulayouts/mint.js:225
-#: menulayouts/unity.js:211 settings/Menu/ListPinnedPage.js:366
+#: constants.js:237 menuButton.js:606 menulayouts/mint.js:225
+#: menulayouts/unity.js:211 settings/Menu/ListPinnedPage.js:367
 msgid "Power Off..."
 msgstr "Выключить..."
 
-#: constants.js:238 menuButton.js:601 settings/Menu/ListPinnedPage.js:368
+#: constants.js:238 menuButton.js:603 settings/Menu/ListPinnedPage.js:369
 msgid "Suspend"
 msgstr "Ждущий режим"
 
-#: constants.js:239 settings/Menu/ListPinnedPage.js:369
+#: constants.js:239 settings/Menu/ListPinnedPage.js:370
 msgid "Hybrid Sleep"
 msgstr "Гибридный спящий режим"
 
-#: constants.js:240 settings/Menu/ListPinnedPage.js:370
+#: constants.js:240 settings/Menu/ListPinnedPage.js:371
 msgid "Hibernate"
 msgstr "Спящий режим"
 
-#: constants.js:241 menuButton.js:610 settings/Menu/ListPinnedPage.js:371
+#: constants.js:241 menuButton.js:612 settings/Menu/ListPinnedPage.js:372
 msgid "Switch User"
 msgstr "Сменить пользователя"
 
-#: constants.js:379 settings/AboutPage.js:12
+#: constants.js:379 settings/AboutPage.js:41
 msgid "ArcMenu"
 msgstr "ArcMenu"
 
@@ -204,8 +203,8 @@ msgstr "Альтернативные"
 
 #: constants.js:419 menulayouts/az.js:116 menulayouts/eleven.js:148
 #: menulayouts/insider.js:60 menulayouts/mint.js:214 menulayouts/whisker.js:50
-#: menulayouts/windows.js:59 settings/AboutPage.js:127
-#: settings/AboutPage.js:135 settings/AboutPage.js:165
+#: menulayouts/windows.js:59 settings/AboutPage.js:134
+#: settings/AboutPage.js:164
 msgid "Settings"
 msgstr "Настройки"
 
@@ -223,11 +222,11 @@ msgid "Tweaks"
 msgstr "Доп. настройки GNOME"
 
 #: constants.js:420 menuButton.js:557 menuWidgets.js:437
-#: settings/Menu/ListPinnedPage.js:342 settings/Menu/ListPinnedPage.js:355
+#: settings/Menu/ListPinnedPage.js:342 settings/Menu/ListPinnedPage.js:356
 msgid "Activities Overview"
 msgstr "«Обзор»"
 
-#: constants.js:420 menuButton.js:542 prefs.js:98
+#: constants.js:420 menuButton.js:542 prefs.js:98 settings/AboutPage.js:126
 #: settings/Menu/ListPinnedPage.js:330 settings/Menu/ListPinnedPage.js:340
 #: settings/Menu/ListPinnedPage.js:349
 msgid "ArcMenu Settings"
@@ -239,15 +238,15 @@ msgstr "Настройки ArcMenu"
 msgid "Files"
 msgstr "Файлы"
 
-#: gnome43/search.js:731 search.js:741
+#: gnome43/search.js:731 search.js:742
 msgid "Searching..."
 msgstr "Поиск..."
 
-#: gnome43/search.js:733 search.js:743
+#: gnome43/search.js:733 search.js:744
 msgid "No results."
 msgstr "Нет результатов."
 
-#: gnome43/search.js:812 search.js:822
+#: gnome43/search.js:812 search.js:823
 #, javascript-format
 msgid "+ %d more"
 msgstr "+ ещё %d"
@@ -270,13 +269,21 @@ msgstr "'%s' на рабочей области %d"
 msgid "Failed to open “%s”"
 msgstr "Не удалось открыть «%s»"
 
-#: menuButton.js:585 settings/Menu/ListPinnedPage.js:357
+#: menuButton.js:587 settings/Menu/ListPinnedPage.js:358
 msgid "Show Desktop"
 msgstr "Показать рабочий стол"
 
-#: menuButton.js:599 menuWidgets.js:798 menuWidgets.js:814
+#: menuButton.js:601 menuWidgets.js:798 menuWidgets.js:814
 msgid "Power Off / Log Out"
 msgstr "Выключить / Завершить сеанс"
+
+#: menuButton.js:634
+msgid "Dash to Panel Settings"
+msgstr "Настройки «Dash to Panel»"
+
+#: menuButton.js:639
+msgid "App Icons Taskbar Settings"
+msgstr "Настройки «App Icons Taskbar»"
 
 #: menuWidgets.js:710
 msgid "Configure Runner"
@@ -298,7 +305,7 @@ msgstr "Система"
 msgid "Categories"
 msgstr "Категории"
 
-#: menuWidgets.js:1100 menuWidgets.js:2574 menulayouts/plasma.js:123
+#: menuWidgets.js:1100 menuWidgets.js:2566 menulayouts/plasma.js:123
 msgid "Apps"
 msgstr "Приложения"
 
@@ -313,7 +320,7 @@ msgstr "Назад"
 msgid "New"
 msgstr "Новое"
 
-#: menuWidgets.js:2413
+#: menuWidgets.js:2405
 msgid "Search…"
 msgstr "Поиск…"
 
@@ -334,18 +341,18 @@ msgstr "Часто используемые"
 
 #: menulayouts/mint.js:211 menulayouts/unity.js:198 placeDisplay.js:112
 #: placeDisplay.js:342 settings/Menu/LayoutTweaksPage.js:465
-#: settings/Menu/LayoutTweaksPage.js:539 settings/Menu/ListPinnedPage.js:379
+#: settings/Menu/LayoutTweaksPage.js:539 settings/Menu/ListPinnedPage.js:380
 #: utils.js:200
 msgid "Home"
 msgstr "Домашняя папка"
 
 #: menulayouts/mint.js:220 menulayouts/unity.js:199
-#: settings/Menu/ListPinnedPage.js:380
+#: settings/Menu/ListPinnedPage.js:381
 msgid "Documents"
 msgstr "Документы"
 
 #: menulayouts/plasma.js:127 menulayouts/unity.js:206 placeDisplay.js:127
-#: placeDisplay.js:150 settings/Menu/ListPinnedPage.js:385
+#: placeDisplay.js:150 settings/Menu/ListPinnedPage.js:386
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -372,7 +379,7 @@ msgid "Devices"
 msgstr "Внешние устройства"
 
 #: menulayouts/plasma.js:288 menulayouts/windows.js:204
-#: settings/Menu/ListPinnedPage.js:386
+#: settings/Menu/ListPinnedPage.js:387
 msgid "Network"
 msgstr "Сеть"
 
@@ -388,7 +395,7 @@ msgstr "Все приложения"
 msgid "Shortcuts"
 msgstr "Ярлыки"
 
-#: menulayouts/unity.js:200 settings/Menu/ListPinnedPage.js:381
+#: menulayouts/unity.js:200 settings/Menu/ListPinnedPage.js:382
 msgid "Downloads"
 msgstr "Загрузки"
 
@@ -423,53 +430,53 @@ msgstr "Переместить вниз"
 msgid "Remove"
 msgstr "Удалить"
 
-#: settings/AboutPage.js:13
+#: settings/AboutPage.js:12
 msgid "Application Menu Extension for GNOME"
 msgstr "Приложение для замены стандартного меню GNOME"
 
-#: settings/AboutPage.js:21 settings/Menu/ListPinnedPage.js:354
+#: settings/AboutPage.js:20 settings/Menu/ListPinnedPage.js:354
 msgid "About"
-msgstr "О приложении"
+msgstr "О расширении"
 
-#: settings/AboutPage.js:65
-msgid "Version"
-msgstr "Версия"
+#: settings/AboutPage.js:64
+msgid "ArcMenu Version"
+msgstr "Версия ArcMenu"
 
-#: settings/AboutPage.js:75
+#: settings/AboutPage.js:74
 msgid "Git Commit"
 msgstr "Git Commit"
 
-#: settings/AboutPage.js:85
+#: settings/AboutPage.js:84
 msgid "GNOME Version"
 msgstr "Версия GNOME"
 
-#: settings/AboutPage.js:94
+#: settings/AboutPage.js:93
 msgid "OS Name"
 msgstr "Название ОС"
 
-#: settings/AboutPage.js:107
+#: settings/AboutPage.js:106
 msgid "Windowing System"
 msgstr "Оконный интерфейс"
 
-#: settings/AboutPage.js:115
-msgid "GitLab"
-msgstr "GitLab"
+#: settings/AboutPage.js:114
+msgid "ArcMenu GitLab"
+msgstr "ArcMenu на GitLab"
 
-#: settings/AboutPage.js:118
+#: settings/AboutPage.js:117
 msgid "Donate via PayPal"
 msgstr "Пожертвовать через PayPal"
 
-#: settings/AboutPage.js:130 settings/AboutPage.js:135
+#: settings/AboutPage.js:129 settings/AboutPage.js:134
 #: settings/Menu/ThemingDialog.js:24 settings/Menu/ThemingDialog.js:29
 msgid "Load"
 msgstr "Загрузить"
 
-#: settings/AboutPage.js:160 settings/AboutPage.js:165
+#: settings/AboutPage.js:159 settings/AboutPage.js:164
 #: settings/Menu/ThemingDialog.js:81 settings/Menu/ThemingDialog.js:94
 msgid "Save"
 msgstr "Сохранить"
 
-#: settings/AboutPage.js:186
+#: settings/AboutPage.js:185
 msgid "Credits"
 msgstr "Сведения об авторах"
 
@@ -595,7 +602,7 @@ msgstr "Нажмите любую клавишу"
 msgid "New Hotkey"
 msgstr "Новая горячая клавиша"
 
-#: settings/GeneralPage.js:370 settings/Menu/ListPinnedPage.js:636
+#: settings/GeneralPage.js:370 settings/Menu/ListPinnedPage.js:637
 msgid "Apply"
 msgstr "Применить"
 
@@ -871,24 +878,24 @@ msgstr "%s компоновки меню"
 msgid "%s Layout Tweaks"
 msgstr "Настройки внешнего вида %s"
 
-#: settings/Menu/ListOtherPage.js:36
+#: settings/Menu/ListOtherPage.js:35
 msgid "Power Off / Log Out Buttons"
 msgstr "Кнопки «Выключить» / «Завершить сеанс»"
 
-#: settings/Menu/ListOtherPage.js:39 settings/Menu/VisualSettings.js:110
+#: settings/Menu/ListOtherPage.js:38 settings/Menu/VisualSettings.js:110
 #: settings/Menu/VisualSettings.js:176 settings/Menu/VisualSettings.js:249
 msgid "Off"
 msgstr "Выключено"
 
-#: settings/Menu/ListOtherPage.js:40
+#: settings/Menu/ListOtherPage.js:39
 msgid "Power Buttons"
 msgstr "Кнопки питания"
 
-#: settings/Menu/ListOtherPage.js:41
+#: settings/Menu/ListOtherPage.js:40
 msgid "Power Menu"
 msgstr "Меню питания"
 
-#: settings/Menu/ListOtherPage.js:43
+#: settings/Menu/ListOtherPage.js:42
 msgid "Override Display Style"
 msgstr "Переопределить стиль отображения"
 
@@ -953,78 +960,82 @@ msgstr "Изменить компоновку меню"
 msgid "Menu Button Settings"
 msgstr "Настройки кнопки меню"
 
-#: settings/Menu/ListPinnedPage.js:356 settings/MenuPage.js:136
+#: settings/Menu/ListPinnedPage.js:355
+msgid "Panel Extension Settings"
+msgstr "Настройки расширения панели"
+
+#: settings/Menu/ListPinnedPage.js:357 settings/MenuPage.js:136
 msgid "Power Options"
 msgstr "Варианты питания"
 
-#: settings/Menu/ListPinnedPage.js:358
+#: settings/Menu/ListPinnedPage.js:359
 msgid "Separator"
 msgstr "Разделитель"
 
-#: settings/Menu/ListPinnedPage.js:382
+#: settings/Menu/ListPinnedPage.js:383
 msgid "Music"
 msgstr "Музыка"
 
-#: settings/Menu/ListPinnedPage.js:383
+#: settings/Menu/ListPinnedPage.js:384
 msgid "Pictures"
 msgstr "Изображения"
 
-#: settings/Menu/ListPinnedPage.js:384
+#: settings/Menu/ListPinnedPage.js:385
 msgid "Videos"
 msgstr "Видео"
 
-#: settings/Menu/ListPinnedPage.js:387
+#: settings/Menu/ListPinnedPage.js:388
 msgid "Recent"
 msgstr "Недавние"
 
-#: settings/Menu/ListPinnedPage.js:495
+#: settings/Menu/ListPinnedPage.js:496
 #, javascript-format
 msgid "%s has been pinned to ArcMenu"
 msgstr "«%s» - закреплено в ArcMenu"
 
-#: settings/Menu/ListPinnedPage.js:507
+#: settings/Menu/ListPinnedPage.js:508
 #, javascript-format
 msgid "%s has been unpinned from ArcMenu"
 msgstr "«%s» - откреплено от ArcMenu"
 
-#: settings/Menu/ListPinnedPage.js:547
+#: settings/Menu/ListPinnedPage.js:548
 msgid "Add a Custom Shortcut"
 msgstr "Добавить пользовательский ярлык"
 
-#: settings/Menu/ListPinnedPage.js:552
+#: settings/Menu/ListPinnedPage.js:553
 msgid "Edit Pinned App"
 msgstr "Редактировать закреплённые приложения"
 
-#: settings/Menu/ListPinnedPage.js:554
+#: settings/Menu/ListPinnedPage.js:555
 msgid "Edit Shortcut"
 msgstr "Редактировать ярлык"
 
-#: settings/Menu/ListPinnedPage.js:565
+#: settings/Menu/ListPinnedPage.js:566
 msgid "Title"
 msgstr "Заголовок"
 
-#: settings/Menu/ListPinnedPage.js:577 settings/MenuButtonPage.js:58
+#: settings/Menu/ListPinnedPage.js:578 settings/MenuButtonPage.js:58
 msgid "Icon"
 msgstr "Значок"
 
-#: settings/Menu/ListPinnedPage.js:589 settings/MenuButtonPage.js:159
+#: settings/Menu/ListPinnedPage.js:590 settings/MenuButtonPage.js:159
 #: settings/MenuButtonPage.js:481
 msgid "Browse..."
 msgstr "Обзор..."
 
-#: settings/Menu/ListPinnedPage.js:595 settings/MenuButtonPage.js:486
+#: settings/Menu/ListPinnedPage.js:596 settings/MenuButtonPage.js:486
 msgid "Select an Icon"
 msgstr "Выбор значка"
 
-#: settings/Menu/ListPinnedPage.js:624
+#: settings/Menu/ListPinnedPage.js:625
 msgid "Command"
 msgstr "Команда"
 
-#: settings/Menu/ListPinnedPage.js:624
+#: settings/Menu/ListPinnedPage.js:625
 msgid "Directory"
 msgstr "Каталог"
 
-#: settings/Menu/ListPinnedPage.js:636
+#: settings/Menu/ListPinnedPage.js:637
 msgid "Add"
 msgstr "Добавить"
 
@@ -1454,17 +1465,17 @@ msgstr "ArcMenu - Ошибка гибридного спящего режима!
 msgid "System unable to hybrid sleep."
 msgstr "Система не может перейти в гибридный спящий режим."
 
+#~ msgid "Version"
+#~ msgstr "Версия"
+
+#~ msgid "GitLab"
+#~ msgstr "GitLab"
+
 #~ msgid "Restart"
 #~ msgstr "Перезагрузить"
 
 #~ msgid "Power Off"
 #~ msgstr "Выключить"
-
-#~ msgid "App Icons Taskbar Settings"
-#~ msgstr "Настройки «App Icons Taskbar»"
-
-#~ msgid "Dash to Panel Settings"
-#~ msgstr "Настройки «Dash to Panel»"
 
 #~ msgid "Customize Menu"
 #~ msgstr "Настройка меню"
@@ -1603,9 +1614,6 @@ msgstr "Система не может перейти в гибридный сп
 
 #~ msgid "Delete"
 #~ msgstr "Удалить"
-
-#~ msgid "ArcMenu Version"
-#~ msgstr "Версия ArcMenu"
 
 #~ msgid "Categories &amp; Applications"
 #~ msgstr "Категории &amp; Приложения"
@@ -2331,9 +2339,6 @@ msgstr "Система не может перейти в гибридный сп
 
 #~ msgid "Donate to the ArcMenu Project"
 #~ msgstr "Пожертвовать проекту ArcMenu"
-
-#~ msgid "ArcMenu GitLab Page"
-#~ msgstr "Страница ArcMenu на GitLab"
 
 #~ msgid "Session Buttons"
 #~ msgstr "Кнопки сессии"
