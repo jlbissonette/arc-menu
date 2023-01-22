@@ -167,6 +167,15 @@ async function updateStylesheet(settings){
             box-shadow: none;
             border-radius: 8px;
         }
+        .arcmenu-menu StScrollBar StButton#vhandle, .arcmenu-menu StScrollBar StButton#hhandle {
+            background-color: ${modifyColorLuminance(menuFGColor, 0.1)};
+        }
+        .arcmenu-menu StScrollBar StButton#vhandle:hover, .arcmenu-menu StScrollBar StButton#hhandle:hover {
+            background-color: ${menuFGColor};
+        }
+        .arcmenu-menu StScrollBar StButton#vhandle:active, .arcmenu-menu StScrollBar StButton#hhandle:active {
+            background-color: ${modifyColorLuminance(menuFGColor, -0.1)};
+        }
         .arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover,
         .arcmenu-menu .popup-menu-item:checked, .arcmenu-menu .popup-menu-item.selected,
         .arcmenu-menu StButton:focus, .arcmenu-menu StButton:hover, .arcmenu-menu StButton:checked {
