@@ -44,30 +44,6 @@ var Menu = class extends BaseMenuLayout{
         this.actionsBox.style = "margin-right: 6px; spacing: 6px;";
         this.mainBox.add_child(this.actionsBox);
 
-        this.extrasButton = new MW.ExtrasButton(this);
-        this.extrasButton.y_expand = true;
-        this.extrasButton.y_align= Clutter.ActorAlign.START;
-        this.actionsBox.add_child(this.extrasButton);
-
-        let isContainedInCategory = false;
-        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        this.actionsBox.add_child(filesButton);
-
-        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        this.actionsBox.add_child(terminalButton);
-
-        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        if(settingsButton.shouldShow)
-            this.actionsBox.add_child(settingsButton);
-
-        let powerDisplayStyle = this._settings.get_enum('power-display-style');
-        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
-            this.leaveButton = new MW.PowerOptionsBox(this, 6, true);
-        else
-            this.leaveButton = new MW.LeaveButton(this);
-
-        this.actionsBox.add_child(this.leaveButton);
-
         this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -152,12 +128,48 @@ var Menu = class extends BaseMenuLayout{
             this.externalDevicesBox.add_child(this._sections[id]);
         }
 
+        this._extraButtonsChangedId = this._settings.connect('changed::windows-extra-buttons', () => this._createExtraButtons());
+        this._createExtraButtons();
+
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
 
         this._createExtrasMenu();
         this.setDefaultMenuView();
+    }
+
+    _createExtraButtons() {
+        this.actionsBox.destroy_all_children();
+
+        this.extrasButton = new MW.ExtrasButton(this);
+        this.extrasButton.y_expand = true;
+        this.extrasButton.y_align= Clutter.ActorAlign.START;
+        this.actionsBox.add_child(this.extrasButton);
+
+        const isContainedInCategory = false;
+        const extraButtons = this._settings.get_value('windows-extra-buttons').deep_unpack();
+
+        for (let i = 0; i < extraButtons.length; i++) {
+            const command = extraButtons[i][2];
+            if (command === Constants.ShortcutCommands.SEPARATOR) {
+                let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+                this.actionsBox.add_child(separator);
+            }
+            else {
+                let button = this.createMenuItem(extraButtons[i], Constants.DisplayType.BUTTON, isContainedInCategory);
+                if(button.shouldShow)
+                    this.actionsBox.add_child(button);
+            }
+        }
+
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
+            this.leaveButton = new MW.PowerOptionsBox(this, 6, true);
+        else
+            this.leaveButton = new MW.LeaveButton(this);
+
+        this.actionsBox.add_child(this.leaveButton);
     }
 
     updateWidth(setDefaultMenuView){

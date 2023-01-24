@@ -102,29 +102,6 @@ var Menu = class extends BaseMenuLayout{
         });
         this.actionsBox.style = "margin: 0px 10px; spacing: 10px;";
 
-        this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.actionsBox.add_child(this.user);
-
-        let isContainedInCategory = false;
-        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        if(filesButton.shouldShow)
-            this.actionsBox.add_child(filesButton);
-
-        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        this.actionsBox.add_child(terminalButton);
-
-        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        if(settingsButton.shouldShow)
-            this.actionsBox.add_child(settingsButton);
-
-        let powerDisplayStyle = this._settings.get_enum('power-display-style');
-        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
-            this.leaveButton = new MW.PowerOptionsBox(this, 10);
-        else
-            this.leaveButton = new MW.LeaveButton(this);
-
-        this.actionsBox.add_child(this.leaveButton);
-
         this.backButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_PREVIOUS, _("Back"), () => this.setDefaultMenuView());
         this.backButton.style = 'padding: 0px 10px 10px 15px;';
         this.allAppsButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_NEXT, _("All Apps"), () => this.displayAllApps());
@@ -139,11 +116,46 @@ var Menu = class extends BaseMenuLayout{
             this.bottomBox.add_child(this.searchBox);
         }
 
+        this._extraButtonsChangedId = this._settings.connect('changed::az-extra-buttons', () => this._createExtraButtons());
+        this._createExtraButtons();
+
         this.updateStyle();
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
+    }
+
+    _createExtraButtons() {
+        this.actionsBox.destroy_all_children();
+
+        this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
+        this.actionsBox.add_child(this.user);
+
+        const isContainedInCategory = false;
+        const extraButtons = this._settings.get_value('az-extra-buttons').deep_unpack();
+
+        for (let i = 0; i < extraButtons.length; i++) {
+            const command = extraButtons[i][2];
+            if (command === Constants.ShortcutCommands.SEPARATOR) {
+                let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.ALWAYS_SHOW, Constants.SeparatorAlignment.VERTICAL);
+                separator.x_expand = false;
+                this.actionsBox.add_child(separator);
+            }
+            else {
+                let button = this.createMenuItem(extraButtons[i], Constants.DisplayType.BUTTON, isContainedInCategory);
+                if(button.shouldShow)
+                    this.actionsBox.add_child(button);
+            }
+        }
+
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
+            this.leaveButton = new MW.PowerOptionsBox(this, 6, true);
+        else
+            this.leaveButton = new MW.LeaveButton(this);
+
+        this.actionsBox.add_child(this.leaveButton);
     }
 
     loadPinnedApps(){

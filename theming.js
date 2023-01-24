@@ -168,13 +168,13 @@ async function updateStylesheet(settings){
             border-radius: 8px;
         }
         .arcmenu-menu StScrollBar StButton#vhandle, .arcmenu-menu StScrollBar StButton#hhandle {
-            background-color: ${modifyColorLuminance(menuFGColor, 0.1)};
+            background-color: ${modifyColorLuminance(menuBGColor, 0.15)};
         }
         .arcmenu-menu StScrollBar StButton#vhandle:hover, .arcmenu-menu StScrollBar StButton#hhandle:hover {
-            background-color: ${menuFGColor};
+            background-color: ${modifyColorLuminance(menuBGColor, 0.20)};
         }
         .arcmenu-menu StScrollBar StButton#vhandle:active, .arcmenu-menu StScrollBar StButton#hhandle:active {
-            background-color: ${modifyColorLuminance(menuFGColor, -0.1)};
+            background-color: ${modifyColorLuminance(menuBGColor, 0.25)};
         }
         .arcmenu-menu .popup-menu-item:focus, .arcmenu-menu .popup-menu-item:hover,
         .arcmenu-menu .popup-menu-item:checked, .arcmenu-menu .popup-menu-item.selected,
@@ -198,7 +198,7 @@ async function updateStylesheet(settings){
             color: ${menuFGColor};
         }
         .arcmenu-menu .weather-forecast-time{
-            color: ${modifyColorLuminance(menuFGColor, -0.1)};
+            color: ${modifyColorLuminance(menuFGColor, 0.1)};
         }
         .arcmenu-menu .popup-separator-menu-item .popup-separator-menu-item-separator{
             background-color: ${menuSeparatorColor};
@@ -213,15 +213,15 @@ async function updateStylesheet(settings){
             font-size: ${menuFontSize}pt;
             border-color: ${modifyColorLuminance(menuSeparatorColor, 0, .1)};
             color: ${menuFGColor};
-            background-color: ${modifyColorLuminance(menuBGColor, -0.1, .4)};
+            background-color: ${modifyColorLuminance(menuBGColor, 0.1, .4)};
         }
         .arcmenu-menu StEntry:hover{
             border-color: ${itemHoverBGColor};
-            background-color: ${modifyColorLuminance(menuBGColor, -0.15, .4)};
+            background-color: ${modifyColorLuminance(menuBGColor, 0.15, .4)};
         }
         .arcmenu-menu StEntry:focus{
             border-color: ${itemActiveBGColor};
-            background-color: ${modifyColorLuminance(menuBGColor, -0.2, .4)};
+            background-color: ${modifyColorLuminance(menuBGColor, 0.2, .4)};
         }
         .arcmenu-menu StLabel.hint-text{
             color: ${modifyColorLuminance(menuFGColor, 0, 0.6)};
@@ -232,7 +232,7 @@ async function updateStylesheet(settings){
             background-color: ${modifyColorLuminance(menuBGColor, 0.05, 1)};
         }
         .arcmenu-small-button:hover{
-            box-shadow: inset 0 0 0 100px ${modifyColorLuminance(itemHoverBGColor, -0.1)};
+            box-shadow: inset 0 0 0 100px ${modifyColorLuminance(itemHoverBGColor, 0.1)};
         }
         .arcmenu-menu .user-icon{
             border-color: ${modifyColorLuminance(menuFGColor, 0, .7)};
@@ -264,27 +264,21 @@ async function updateStylesheet(settings){
     }
 }
 
-function modifyColorLuminance(colorString, luminanceFactor, overrideAlpha){
-    let color = Clutter.color_from_string(colorString)[1];
-    let [hue, lum, sat] = color.to_hls();
-    let modifiedLum;
+function modifyColorLuminance(colorString, luminanceAdjustment, overrideAlpha){
+    const color = Clutter.color_from_string(colorString)[1];
+    const [hue, luminance, saturation] = color.to_hls();
+    let modifiedLuminance;
 
-    if(luminanceFactor === 0)
-        modifiedLum = lum;
-    else if(lum >= .85) //if lum is too light, force darken
-        modifiedLum = Math.min((1 - Math.abs(luminanceFactor)) * lum, 1);
-    else if(lum <= .15) //if lum is too dark, force lighten
-        modifiedLum = Math.max((1 - Math.abs(luminanceFactor)) * lum, 0);
-    else if(luminanceFactor >= 0) //otherwise, darken or lighten based on luminanceFactor
-        modifiedLum = Math.min((1 + luminanceFactor) * lum, 1);
+    if((luminance >= .85 && luminanceAdjustment > 0) || (luminance <= .15 && luminanceAdjustment < 0))
+        modifiedLuminance = Math.max(Math.min(luminance - luminanceAdjustment, 1), 0);
     else
-        modifiedLum = Math.max((1 + luminanceFactor) * lum, 0);
+        modifiedLuminance = Math.max(Math.min(luminance + luminanceAdjustment, 1), 0);
 
     let alpha = (color.alpha / 255).toPrecision(3);
     if(overrideAlpha)
         alpha = overrideAlpha;
 
-    let modifiedColor = Clutter.color_from_hls(hue, modifiedLum, sat);
+    const modifiedColor = Clutter.color_from_hls(hue, modifiedLuminance, saturation);
 
-    return `rgba(${modifiedColor.red}, ${modifiedColor.green}, ${modifiedColor.blue}, ${alpha})`
+    return `rgba(${modifiedColor.red}, ${modifiedColor.green}, ${modifiedColor.blue}, ${alpha})`;
 }

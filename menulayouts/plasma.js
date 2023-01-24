@@ -355,7 +355,19 @@ var Menu = class extends BaseMenuLayout{
         this._insertCategoryHeader();
 
         let isActiveMenuItemSet = false;
+        let hasExtraCategory = false;
+        let separatorAdded = false;
+
         for(let categoryMenuItem of this.categoryDirectories.values()){
+            const isExtraCategory = categoryMenuItem.isExtraCategory();
+
+            if (!hasExtraCategory)
+                hasExtraCategory = isExtraCategory;
+            else if(!isExtraCategory && !separatorAdded){
+                this.applicationsBox.add_child(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL));
+                separatorAdded = true;
+            }
+
             this.applicationsBox.add_child(categoryMenuItem);
             if(!isActiveMenuItemSet){
                 isActiveMenuItemSet = true;

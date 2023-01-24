@@ -149,10 +149,6 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
     updateMenuLayout(){
     }
 
-    loadExtraPinnedApps(){
-        this.MenuLayout?.loadExtraPinnedApps();
-    }
-
     updateLocation(){
         this.MenuLayout?.updateLocation();
     }

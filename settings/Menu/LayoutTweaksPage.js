@@ -203,12 +203,38 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         disableFrequentAppsRow.add_suffix(disableFrequentAppsSwitch);
         elevenTweaksFrame.add(disableFrequentAppsRow);
         this.add(elevenTweaksFrame);
+
+        let extraShortcutsGroup = new Adw.PreferencesGroup({
+            title: _("Button Shortcuts")
+        });
+        let extraShortcutsPage = new ListPinnedPage(this._settings, {
+            title: _('Button Shortcuts'),
+            preferences_page: false,
+            setting_string: 'eleven-extra-buttons',
+            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
+        });
+        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
+        extraShortcutsGroup.add(extraShortcutsPage);
+        this.add(extraShortcutsGroup);
     }
 
     _loadAZTweaks(){
         let azTweaksFrame = new Adw.PreferencesGroup();
         azTweaksFrame.add(this._createSearchBarLocationRow());
         this.add(azTweaksFrame);
+
+        let extraShortcutsGroup = new Adw.PreferencesGroup({
+            title: _("Button Shortcuts")
+        });
+        let extraShortcutsPage = new ListPinnedPage(this._settings, {
+            title: _('Button Shortcuts'),
+            preferences_page: false,
+            setting_string: 'az-extra-buttons',
+            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
+        });
+        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
+        extraShortcutsGroup.add(extraShortcutsPage);
+        this.add(extraShortcutsGroup);
     }
 
     _loadGnomeOverviewTweaks(){
@@ -261,6 +287,19 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         windowsTweaksFrame.add(pinnedAppsRow);
 
         this.add(windowsTweaksFrame);
+
+        let extraShortcutsGroup = new Adw.PreferencesGroup({
+            title: _("Button Shortcuts")
+        });
+        let extraShortcutsPage = new ListPinnedPage(this._settings, {
+            title: _('Button Shortcuts'),
+            preferences_page: false,
+            setting_string: 'windows-extra-buttons',
+            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
+        });
+        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
+        extraShortcutsGroup.add(extraShortcutsPage);
+        this.add(extraShortcutsGroup);
     }
 
     _loadPlasmaMenuTweaks(){
@@ -290,18 +329,21 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         briskMenuTweaksFrame.add(this._createSearchBarLocationRow());
         briskMenuTweaksFrame.add(this._createFlipHorizontalRow());
         briskMenuTweaksFrame.add(this._createVertSeparatorRow());
+        this.add(briskMenuTweaksFrame);
 
-        let pinnedAppsFrame = new Adw.PreferencesGroup({
-            title: _("Brisk Menu Shortcuts")
+        let extraShortcutsGroup = new Adw.PreferencesGroup({
+            title: _("Extra Shortcuts")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, {
+        let extraShortcutsPage = new ListPinnedPage(this._settings, {
+            title: _('Extra Shortcuts'),
             preferences_page: false,
-            setting_string: 'brisk-shortcuts-list',
+            setting_string: 'brisk-extra-shortcuts',
             list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
         });
-        pinnedAppsFrame.add(pinnedApps);
-        this.add(briskMenuTweaksFrame);
-        this.add(pinnedAppsFrame);
+        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
+        extraShortcutsGroup.add(extraShortcutsPage);
+        this.add(extraShortcutsGroup);
+
     }
 
     _loadChromebookTweaks(){
@@ -478,57 +520,18 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         let widgetFrame = this._createWidgetsRows(Constants.MenuLayout.UNITY);
         this.add(widgetFrame);
 
-        let pinnedAppsFrame = new Adw.PreferencesGroup({
-            title: _("Unity Layout Buttons")
+        let extraShortcutsGroup = new Adw.PreferencesGroup({
+            title: _("Button Shortcuts")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, {
+        let extraShortcutsPage = new ListPinnedPage(this._settings, {
+            title: _('Button Shortcuts'),
             preferences_page: false,
-            setting_string: 'unity-pinned-app-list',
+            setting_string: 'unity-extra-buttons',
             list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
         });
-        pinnedAppsFrame.add(pinnedApps);
-        this.add(pinnedAppsFrame);
-
-        let pinnedAppsSeparatorFrame = new Adw.PreferencesGroup({
-            title: _("Button Separator Position")
-        });
-        let pinnedAppsSeparatorScale = new Gtk.SpinButton({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            adjustment: new Gtk.Adjustment({lower: 0, upper: 7, step_increment: 1, page_increment: 1, page_size: 0}),
-            digits: 0,
-            valign: Gtk.Align.CENTER
-        });
-        pinnedAppsSeparatorScale.set_value(this._settings.get_int('unity-separator-index'));
-        pinnedAppsSeparatorScale.connect('value-changed', (widget) => {
-            this._settings.set_int('unity-separator-index', widget.get_value());
-        });
-
-        let infoButton = new Gtk.Button({
-            icon_name: 'help-about-symbolic',
-            valign: Gtk.Align.CENTER
-        });
-        infoButton.connect('clicked', () => {
-            let dialog = new Gtk.MessageDialog({
-                text: "<b>" + _("Adjust the position of the separator in the button panel") + '</b>',
-                use_markup: true,
-                buttons: Gtk.ButtonsType.OK,
-                message_type: Gtk.MessageType.WARNING,
-                transient_for: this.get_root(),
-                modal: true
-            });
-            dialog.connect('response', (widget, response) => {
-                dialog.destroy();
-            });
-            dialog.show();
-        });
-        let pinnedAppsSeparatorRow = new Adw.ActionRow({
-            title:  _("Separator Position"),
-            activatable_widget: pinnedAppsSeparatorScale
-        });
-        pinnedAppsSeparatorRow.add_suffix(pinnedAppsSeparatorScale);
-        pinnedAppsSeparatorRow.add_suffix(infoButton);
-        pinnedAppsSeparatorFrame.add(pinnedAppsSeparatorRow);
-        this.add(pinnedAppsSeparatorFrame);
+        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
+        extraShortcutsGroup.add(extraShortcutsPage);
+        this.add(extraShortcutsGroup);
     }
 
     _loadRavenTweaks(){
@@ -588,57 +591,18 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         mintMenuTweaksFrame.add(this._createVertSeparatorRow());
         this.add(mintMenuTweaksFrame);
 
-        let pinnedAppsFrame = new Adw.PreferencesGroup({
-            title: _("Mint Layout Shortcuts")
+        let extraShortcutsGroup = new Adw.PreferencesGroup({
+            title: _("Button Shortcuts")
         });
-        let pinnedApps = new ListPinnedPage(this._settings, {
+        let extraShortcutsPage = new ListPinnedPage(this._settings, {
+            title: _('Button Shortcuts'),
             preferences_page: false,
-            setting_string: 'mint-pinned-app-list',
+            setting_string: 'mint-extra-buttons',
             list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
         });
-        pinnedAppsFrame.add(pinnedApps);
-        this.add(pinnedAppsFrame);
-
-        let pinnedAppsSeparatorFrame = new Adw.PreferencesGroup({
-            title: _("Shortcut Separator Position")
-        });
-        let pinnedAppsSeparatorScale = new Gtk.SpinButton({
-            orientation: Gtk.Orientation.HORIZONTAL,
-            adjustment: new Gtk.Adjustment({lower: 0, upper: 7, step_increment: 1, page_increment: 1, page_size: 0}),
-            digits: 0,
-            valign: Gtk.Align.CENTER
-        });
-        pinnedAppsSeparatorScale.set_value(this._settings.get_int('mint-separator-index'));
-        pinnedAppsSeparatorScale.connect('value-changed', (widget) => {
-            this._settings.set_int('mint-separator-index', widget.get_value());
-        });
-
-        let infoButton = new Gtk.Button({
-            icon_name: 'help-about-symbolic',
-            valign: Gtk.Align.CENTER
-        });
-        infoButton.connect('clicked', () => {
-            let dialog = new Gtk.MessageDialog({
-                text: "<b>" + _("Adjust the position of the separator in the button panel") + '</b>',
-                use_markup: true,
-                buttons: Gtk.ButtonsType.OK,
-                message_type: Gtk.MessageType.WARNING,
-                transient_for: this.get_root(),
-                modal: true
-            });
-            dialog.connect('response', (widget, response) => {
-                dialog.destroy();
-            });
-            dialog.show();
-        });
-        let pinnedAppsSeparatorRow = new Adw.ActionRow({
-            title:_("Separator Position"),
-            activatable_widget: pinnedAppsSeparatorScale
-        });
-        pinnedAppsSeparatorRow.add_suffix(pinnedAppsSeparatorScale);
-        pinnedAppsSeparatorRow.add_suffix(infoButton);
-        pinnedAppsSeparatorFrame.add(pinnedAppsSeparatorRow);
-        this.add(pinnedAppsSeparatorFrame);
+        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
+        extraShortcutsGroup.add(extraShortcutsPage);
+        this.add(extraShortcutsGroup);
     }
 
     _loadWhiskerMenuTweaks(){
@@ -714,6 +678,19 @@ class ArcMenu_LayoutTweaksPage extends SubPage {
         let insiderMenuTweaksFrame = new Adw.PreferencesGroup();
         insiderMenuTweaksFrame.add(this._createAvatarShapeRow());
         this.add(insiderMenuTweaksFrame);
+
+        let extraShortcutsGroup = new Adw.PreferencesGroup({
+            title: _("Button Shortcuts")
+        });
+        let extraShortcutsPage = new ListPinnedPage(this._settings, {
+            title: _('Button Shortcuts'),
+            preferences_page: false,
+            setting_string: 'insider-extra-buttons',
+            list_type: Constants.MenuSettingsListType.EXTRA_SHORTCUTS
+        });
+        extraShortcutsGroup.set_header_suffix(extraShortcutsPage.restoreDefaultsButton);
+        extraShortcutsGroup.add(extraShortcutsPage);
+        this.add(extraShortcutsGroup);
     }
 
     _loadGnomeMenuTweaks(){

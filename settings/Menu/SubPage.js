@@ -84,7 +84,8 @@ class ArcMenu_SubPage extends Gtk.Box {
         });
 
         this.headerBar.pack_start(backButton);
-        this.headerBar.pack_end(this.restoreDefaultsButton);
+        if(this.preferences_page)
+            this.headerBar.pack_end(this.restoreDefaultsButton);
     }
 
     add(widget){

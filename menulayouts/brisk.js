@@ -119,35 +119,49 @@ var Menu = class extends BaseMenuLayout{
             this.mainBox.add_child(this.searchBox);
         }
 
+        this._extraShortcutsChangedId = this._settings.connect('changed::brisk-extra-shortcuts', () => this._createExtraShortcuts());
+        this._createExtraShortcuts();
+
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
-        this.loadExtraPinnedApps();
 
         this.setDefaultMenuView();
+    }
+
+    _createExtraShortcuts() {
+        this.actionsBox.destroy_all_children();
+        const extraShortcuts = this._settings.get_value('brisk-extra-shortcuts').deep_unpack();
+
+        if (extraShortcuts.length === 0)
+            return;
+
+        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        this.actionsBox.add_child(separator);
+
+        const isContainedInCategory = false;
+
+        for (let i = 0; i < extraShortcuts.length; i++) {
+            const command = extraShortcuts[i][2];
+            if (command === Constants.ShortcutCommands.SEPARATOR) {
+                let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+                this.actionsBox.add_child(separator);
+            }
+            else {
+                let item = this.createMenuItem(extraShortcuts[i], Constants.DisplayType.LIST, isContainedInCategory);
+                if(item.shouldShow)
+                    this.actionsBox.add_child(item);
+            }
+        }
+
+        separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+        this.actionsBox.add_child(separator);
     }
 
     updateWidth(setDefaultMenuView){
         let leftPanelWidthOffset = -70;
         let rightPanelWidthOffset = 70;
         super.updateWidth(setDefaultMenuView, leftPanelWidthOffset, rightPanelWidthOffset);
-    }
-
-    loadExtraPinnedApps(){
-        this.actionsBox.destroy_all_children();
-        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        this.actionsBox.add_child(separator);
-        let pinnedApps = this._settings.get_strv('brisk-shortcuts-list');
-
-        for(let i = 0;i < pinnedApps.length; i += 3){
-            let isContainedInCategory = false;
-            let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);
-            if(placeMenuItem){
-                this.actionsBox.add_child(placeMenuItem);
-            }
-        }
-        separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        this.actionsBox.add_child(separator);
     }
 
     setDefaultMenuView(){

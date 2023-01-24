@@ -131,7 +131,7 @@ class ArcMenu_AboutPage extends Adw.PreferencesPage {
         });
         loadButton.connect('clicked', () => {
             this._showFileChooser(
-                `${_('Load')} ${_('Settings')}`,
+                _('Load Settings'),
                 { action: Gtk.FileChooserAction.OPEN },
                 "_Open",
                 filename => {
@@ -161,7 +161,7 @@ class ArcMenu_AboutPage extends Adw.PreferencesPage {
         });
         saveButton.connect('clicked', () => {
             this._showFileChooser(
-                `${_('Save')} ${_('Settings')}`,
+                _('Save Settings'),
                 { action: Gtk.FileChooserAction.SAVE},
                 "_Save",
                 filename => {

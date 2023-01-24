@@ -34,7 +34,7 @@ var Menu = class extends BaseMenuLayout{
     createLayout(){
         super.createLayout();
         //Stores the Pinned Icons on the left side
-        this.actionsScrollBox = new St.ScrollView({
+        this.actionsScrollBox = this._createScrollBox({
             x_expand: false,
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
@@ -43,7 +43,7 @@ var Menu = class extends BaseMenuLayout{
         });
         this.actionsScrollBox.set_policy(St.PolicyType.NEVER, St.PolicyType.EXTERNAL);
         this.actionsBox = new St.BoxLayout({
-            vertical: true
+            vertical: true,
         });
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
@@ -132,22 +132,42 @@ var Menu = class extends BaseMenuLayout{
             this.rightMenuBox.add_child(this.searchBox);
         }
 
+        this._extraButtonsChangedId = this._settings.connect('changed::mint-extra-buttons', () => this._createExtraButtons());
+        this._createExtraButtons();
+
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
-        this.loadExtraPinnedApps();
         this.setDefaultMenuView();
+    }
+
+    _createExtraButtons() {
+        this.actionsBox.destroy_all_children();
+        const extraButtons = this._settings.get_value('mint-extra-buttons').deep_unpack();
+
+        if (extraButtons.length === 0)
+            return;
+
+        const isContainedInCategory = false;
+
+        for (let i = 0; i < extraButtons.length; i++) {
+            const command = extraButtons[i][2];
+            if (command === Constants.ShortcutCommands.SEPARATOR) {
+                let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+                this.actionsBox.add_child(separator);
+            }
+            else {
+                let item = this.createMenuItem(extraButtons[i], Constants.DisplayType.BUTTON, isContainedInCategory);
+                if(item.shouldShow)
+                    this.actionsBox.add_child(item);
+            }
+        }
     }
 
     updateWidth(setDefaultMenuView){
         let leftPanelWidthOffset = 0;
         let rightPanelWidthOffset = 45;
         super.updateWidth(setDefaultMenuView, leftPanelWidthOffset, rightPanelWidthOffset);
-    }
-
-    _addSeparator(){
-        let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
-        this.actionsBox.add_child(separator);
     }
 
     setDefaultMenuView(){
@@ -175,59 +195,6 @@ var Menu = class extends BaseMenuLayout{
         }
 
         super.loadCategories();
-    }
-
-    loadExtraPinnedApps(){
-        this.actionsBox.destroy_all_children();
-        super.loadExtraPinnedApps(this._settings.get_strv('mint-pinned-app-list'), this._settings.get_int('mint-separator-index'));
-    }
-
-    _createExtraPinnedAppsList(){
-        let pinnedApps = [];
-        //Find the Default Web Browser, if found add to pinned apps list, if not found delete the placeholder.
-        //Will only run if placeholder is found. Placeholder only found with default settings set.
-        let browserName = '';
-        try{
-            //user may not have xdg-utils package installed which will throw error
-            let [res, stdout, stderr, status] = GLib.spawn_command_line_sync("xdg-settings get default-web-browser");
-            let webBrowser = String.fromCharCode(...stdout);
-            browserName = webBrowser.split(".desktop")[0];
-            browserName += ".desktop";
-        }
-        catch(error){
-            log("ArcMenu Error - Failed to find default web browser. Removing placeholder pinned app.")
-        }
-        this._app = appSys.lookup_app(browserName);
-        if(this._app){
-            let appIcon = this._app.create_icon_texture(25);
-            let iconName = '';
-            if(appIcon.icon_name)
-                iconName = appIcon.icon_name;
-            else if(appIcon.gicon)
-                iconName = appIcon.gicon.to_string();
-            pinnedApps.push(this._app.get_name(), iconName, this._app.get_id());
-        }
-        else{
-            pinnedApps.push(_("Home"), "ArcMenu_Home", "ArcMenu_Home");
-        }
-        pinnedApps.push(_("Terminal"), "utilities-terminal", "org.gnome.Terminal.desktop");
-        pinnedApps.push(_("Settings"), "emblem-system-symbolic", "org.gnome.Settings.desktop");
-
-        let software = Utils.findSoftwareManager();
-        if(software)
-            pinnedApps.push(_("Software"), '', software);
-        else
-            pinnedApps.push(_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents");
-
-        pinnedApps.push(_("Files"), "system-file-manager", "org.gnome.Nautilus.desktop");
-        pinnedApps.push(_("Log Out..."), "application-exit-symbolic", "ArcMenu_LogOut");
-        pinnedApps.push(_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock");
-        pinnedApps.push(_("Power Off..."), "system-shutdown-symbolic", "ArcMenu_PowerOff");
-
-        this.shouldLoadPinnedApps = false; // We don't want to trigger a setting changed event
-        this._settings.set_strv('mint-pinned-app-list', pinnedApps);
-        this.shouldLoadPinnedApps = true;
-        return pinnedApps;
     }
 
     displayCategories(){

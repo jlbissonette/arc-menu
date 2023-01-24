@@ -58,10 +58,6 @@ var DragRow = GObject.registerClass({
             'switch-active', 'switch-active', 'switch-active',
             GObject.ParamFlags.READWRITE,
             false),
-        'change-enabled':  GObject.ParamSpec.boolean(
-            'change-enabled', 'change-enabled', 'change-enabled',
-            GObject.ParamFlags.READWRITE,
-            false),
     },
     Signals: {
         'drag-drop-done': { },
@@ -103,20 +99,6 @@ var DragRow = GObject.registerClass({
                 this.emit('switch-toggled');
             });
             this.add_suffix(this.switch);
-            this.add_suffix(new Gtk.Separator({
-                orientation: Gtk.Orientation.VERTICAL,
-                margin_top: 10,
-                margin_bottom: 10
-            }));
-        }
-
-        if(this.change_enabled){
-            this.changeButton = new Gtk.Button({
-                icon_name: 'text-editor-symbolic',
-                valign: Gtk.Align.CENTER
-            });
-            this.changeButton.connect('clicked', () => this.emit('change-button-clicked'));
-            this.add_suffix(this.changeButton);
             this.add_suffix(new Gtk.Separator({
                 orientation: Gtk.Orientation.VERTICAL,
                 margin_top: 10,
@@ -267,7 +249,10 @@ var EditEntriesBox = GObject.registerClass({
             this.emit('modify-button-clicked');
         });
         popoverBox.append(modifyEntryButton);
-        popoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+
+        const topSeparator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL);
+        topSeparator.visible = this.allow_modify;
+        popoverBox.append(topSeparator);
 
         const moveUpButton = new Gtk.Button({
             label: _("Move Up"),
@@ -290,11 +275,20 @@ var EditEntriesBox = GObject.registerClass({
         });
         removeEntryButton.connect('clicked', () => this.modifyEntry(ModifyEntryType.REMOVE));
 
-        popoverBox.append(Gtk.Separator.new(Gtk.Orientation.HORIZONTAL));
+        const bottomSeparator = Gtk.Separator.new(Gtk.Orientation.HORIZONTAL);
+        bottomSeparator.visible = this.allow_remove;
+        popoverBox.append(bottomSeparator);
+
         popoverBox.append(removeEntryButton);
 
-        this.connect('notify::allow-modify', () => modifyEntryButton.visible = this.allow_modify);
-        this.connect('notify::allow-remove', () => removeEntryButton.visible = this.allow_remove);
+        this.connect('notify::allow-modify', () => {
+            modifyEntryButton.visible = this.allow_modify;
+            topSeparator.visible = this.allow_modify;
+        });
+        this.connect('notify::allow-remove', () => {
+            removeEntryButton.visible = this.allow_remove;
+            bottomSeparator.visible = this.allow_remove;
+        });
     }
 
     modifyEntry(modifyEntryType){

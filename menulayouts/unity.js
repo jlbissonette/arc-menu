@@ -151,14 +151,39 @@ var Menu = class extends BaseMenuLayout{
                 this.appShortcuts.push(shortcutMenuItem);
         }
 
+        this._extraButtonsChangedId = this._settings.connect('changed::unity-extra-buttons', () => this._createExtraButtons());
+        this._createExtraButtons();
+
         this.updateStyle();
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this._createCategoriesMenu();
-        this.loadExtraPinnedApps();
 
         this.setDefaultMenuView();
+    }
+
+    _createExtraButtons() {
+        this.actionsBox.destroy_all_children();
+        const extraButtons = this._settings.get_value('unity-extra-buttons').deep_unpack();
+
+        if (extraButtons.length === 0)
+            return;
+
+        const isContainedInCategory = false;
+
+        for (let i = 0; i < extraButtons.length; i++) {
+            const command = extraButtons[i][2];
+            if (command === Constants.ShortcutCommands.SEPARATOR) {
+                let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.ALWAYS_SHOW, Constants.SeparatorAlignment.VERTICAL);
+                this.actionsBox.add_child(separator);
+            }
+            else {
+                let item = this.createMenuItem(extraButtons[i], Constants.DisplayType.BUTTON, isContainedInCategory);
+                if(item.shouldShow)
+                    this.actionsBox.add_child(item);
+            }
+        }
     }
 
     updateWidth(setDefaultMenuView){
@@ -170,50 +195,6 @@ var Menu = class extends BaseMenuLayout{
         let width = this.layoutProperties.MenuWidth - 80;
         this._weatherItem.style = `width: ${Math.round(5 * width / 8)}px;`;
         this._clocksItem.style = `width: ${Math.round(3 * width / 8)}px;`;
-    }
-
-    _addSeparator(){
-        let verticalSeparator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.ALWAYS_SHOW, Constants.SeparatorAlignment.VERTICAL);
-        this.actionsBox.add_child(verticalSeparator);
-    }
-
-    loadExtraPinnedApps(){
-        this.actionsContainerBox.remove_child(this.actionsBox);
-        this.actionsBox.destroy_all_children();
-        this.actionsBox = new St.BoxLayout({
-            x_expand: true,
-            y_expand: true,
-            x_align: Clutter.ActorAlign.CENTER,
-            y_align: Clutter.ActorAlign.CENTER,
-            vertical: false
-        });
-        this.actionsBox.style = "spacing: 10px; padding: 5px 0px;";
-        this.actionsContainerBox.add_child(this.actionsBox);
-
-        super.loadExtraPinnedApps(this._settings.get_strv('unity-pinned-app-list'), this._settings.get_int('unity-separator-index'));
-    }
-
-    _createExtraPinnedAppsList(){
-        let pinnedApps = [];
-        pinnedApps.push(_("Home"), "ArcMenu_Home", "ArcMenu_Home");
-        pinnedApps.push(_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents");
-        pinnedApps.push(_("Downloads"), "ArcMenu_Downloads", "ArcMenu_Downloads");
-
-        let software = Utils.findSoftwareManager();
-        if(software)
-            pinnedApps.push(_("Software"), '', software);
-        else
-            pinnedApps.push(_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer");
-
-        pinnedApps.push(_("Files"), "", "org.gnome.Nautilus.desktop");
-        pinnedApps.push(_("Log Out..."), "application-exit-symbolic", "ArcMenu_LogOut");
-        pinnedApps.push(_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock");
-        pinnedApps.push(_("Power Off..."), "system-shutdown-symbolic", "ArcMenu_PowerOff");
-
-        this.shouldLoadPinnedApps = false; // We don't want to trigger a setting changed event
-        this._settings.set_strv('unity-pinned-app-list', pinnedApps);
-        this.shouldLoadPinnedApps = true;
-        return pinnedApps;
     }
 
     _createCategoriesMenu(){
@@ -333,7 +314,19 @@ var Menu = class extends BaseMenuLayout{
     }
 
     _displayCategories(){
+        let hasExtraCategory = false;
+        let separatorAdded = false;
+
         for(let categoryMenuItem of this.categoryDirectories.values()){
+            const isExtraCategory = categoryMenuItem.isExtraCategory();
+
+            if (!hasExtraCategory)
+                hasExtraCategory = isExtraCategory;
+            else if(!isExtraCategory && !separatorAdded){
+                this.categoriesBox.add_child(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL));
+                separatorAdded = true;
+            }
+
             this.categoriesBox.add_actor(categoryMenuItem);
         }
     }

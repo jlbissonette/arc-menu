@@ -34,6 +34,15 @@ var Menu = class extends BaseMenuLayout{
     createLayout(){
         super.createLayout();
 
+        this.buttonPressEventID = this.mainBox.connect("button-press-event", () => {
+            if(this.arcMenu.isOpen && this.backButton.visible){
+                let event = Clutter.get_current_event();
+                if(event.get_button() === 8){
+                    this.backButton.activate(event);
+                }
+            }
+        });
+
         //subMainBox stores left and right box
         this.subMainBox = new St.BoxLayout({
             vertical: false,
@@ -261,5 +270,13 @@ var Menu = class extends BaseMenuLayout{
             this.navigateBox.show();
             this.activeCategoryType = Constants.CategoryType.SEARCH_RESULTS;
         }
+    }
+
+    destroy(){
+        if(this.buttonPressEventID){
+            this.mainBox.disconnect(this.buttonPressEventID);
+            this.buttonPressEventID = null;
+        }
+        super.destroy()
     }
 }

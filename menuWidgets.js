@@ -1085,8 +1085,8 @@ var PlasmaCategoryHeader = GObject.registerClass(class ArcMenu_PlasmaCategoryHea
             style_class: "popup-menu-item",
             style: 'padding: 0px;',
             reactive: true,
-            track_hover:true,
-            can_focus: true,
+            track_hover: false,
+            can_focus: false,
             accessible_role: Atk.Role.MENU_ITEM
         });
         this._menuLayout = menuLayout;
@@ -1311,6 +1311,9 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
                 this.iconName = appIcon.gicon.to_string();
             }
         }
+        if(name === '' && this._app){
+            name = this._app.get_name();
+        }
         //-------------------------------------
 
         this.hasContextMenu = this._app ? true : false;
@@ -1375,6 +1378,7 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
             iconSizeEnum = this._settings.get_enum('button-item-icon-size');
             defaultIconSize = LayoutProps.DefaultButtonsIconSize;
             iconSize = Utils.getIconSize(iconSizeEnum, defaultIconSize);
+            this.style = `min-width: ${iconSize}px; min-height: ${iconSize}px;`;
         }
         else if(this._displayType === Constants.DisplayType.GRID){
             iconSizeEnum = this._settings.get_enum('menu-item-grid-icon-size');
@@ -2096,6 +2100,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
             const IconSizeEnum = this._settings.get_enum('button-item-icon-size');
             let defaultIconSize = this.layoutProps.DefaultButtonsIconSize;
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+            this.style = `min-width: ${iconSize}px; min-height: ${iconSize}px;`;
         }
         else{
             const IconSizeEnum = this._settings.get_enum('menu-item-category-icon-size');
@@ -2119,6 +2124,15 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
             fallback_gicon: fallbackIcon
         });
         return icon;
+    }
+
+    isExtraCategory(){
+        for(let entry of Constants.Categories){
+            if(entry.CATEGORY === this._category){
+                return true;
+            }
+        }
+        return false;
     }
 
     setNewAppIndicator(shouldShow){
@@ -2370,6 +2384,7 @@ var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends Ar
             let defaultIconSize = LayoutProps.DefaultButtonsIconSize;
             const IconSizeEnum = this._settings.get_enum('button-item-icon-size');
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
+            this.style = `min-width: ${iconSize}px; min-height: ${iconSize}px;`;
         }
 
         return new St.Icon({

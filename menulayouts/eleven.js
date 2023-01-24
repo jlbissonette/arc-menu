@@ -126,44 +126,14 @@ var Menu = class extends BaseMenuLayout{
         layout.forceGridColumns = 2;
         this.shortcutsBox.add_child(this.shortcutsGrid);
 
-        this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.actionsBox.add_child(this.user);
-
-        this.quickLinksBox = new St.BoxLayout({
-            x_expand: true,
-            y_expand: true,
-            x_align: Clutter.ActorAlign.END,
-            y_align: Clutter.ActorAlign.CENTER,
-            vertical: false,
-            style: 'spacing: 10px;'
-        });
-        let isContainedInCategory = false;
-        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        if(filesButton.shouldShow)
-            this.quickLinksBox.add_child(filesButton);
-
-        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        this.quickLinksBox.add_child(terminalButton);
-
-        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        if(settingsButton.shouldShow)
-            this.quickLinksBox.add_child(settingsButton);
-
-        let powerDisplayStyle = this._settings.get_enum('power-display-style');
-        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
-            this.leaveButton = new MW.PowerOptionsBox(this, 10);
-        else
-            this.leaveButton = new MW.LeaveButton(this);
-
-        this.quickLinksBox.add_child(this.leaveButton);
-
-        this.actionsBox.add_child(this.quickLinksBox);
-
         this.backButton = this._createNavigationRow(_("All Apps"), Constants.Direction.GO_PREVIOUS, _("Back"), () => this.setDefaultMenuView());
         this.allAppsButton = this._createNavigationRow(_("Pinned"), Constants.Direction.GO_NEXT, _("All Apps"), () => this.displayAllApps());
         this.frequentAppsHeader = this.createLabelRow(_("Frequent"));
         this.frequentAppsHeader.label.y_align = Clutter.ActorAlign.CENTER;
         this.frequentAppsHeader.style = 'padding: 9px 25px;'
+
+        this._extraButtonsChangedId = this._settings.connect('changed::eleven-extra-buttons', () => this._createExtraButtons());
+        this._createExtraButtons();
 
         this.updateStyle();
         this.updateWidth();
@@ -172,6 +142,38 @@ var Menu = class extends BaseMenuLayout{
         this.setDefaultMenuView();
 
         this.disableFrequentAppsID = this._settings.connect("changed::eleven-disable-frequent-apps", () => this.setDefaultMenuView());
+    }
+
+    _createExtraButtons() {
+        this.actionsBox.destroy_all_children();
+
+        this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
+        this.actionsBox.add_child(this.user);
+
+        const isContainedInCategory = false;
+        const extraButtons = this._settings.get_value('eleven-extra-buttons').deep_unpack();
+
+        for (let i = 0; i < extraButtons.length; i++) {
+            const command = extraButtons[i][2];
+            if (command === Constants.ShortcutCommands.SEPARATOR) {
+                let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.ALWAYS_SHOW, Constants.SeparatorAlignment.VERTICAL);
+                separator.x_expand = false;
+                this.actionsBox.add_child(separator);
+            }
+            else {
+                let button = this.createMenuItem(extraButtons[i], Constants.DisplayType.BUTTON, isContainedInCategory);
+                if(button.shouldShow)
+                    this.actionsBox.add_child(button);
+            }
+        }
+
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
+            this.leaveButton = new MW.PowerOptionsBox(this, 6, true);
+        else
+            this.leaveButton = new MW.LeaveButton(this);
+
+        this.actionsBox.add_child(this.leaveButton);
     }
 
     loadPinnedApps(){
@@ -315,6 +317,7 @@ var Menu = class extends BaseMenuLayout{
         this.arcMenu.box.style = null;
         this.backButton.destroy();
         this.allAppsButton.destroy();
+
         if(this.disableFrequentAppsID){
             this._settings.disconnect(this.disableFrequentAppsID);
             this.disableFrequentAppsID = null;

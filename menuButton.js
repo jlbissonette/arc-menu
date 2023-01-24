@@ -383,10 +383,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
         });
     }
 
-    loadExtraPinnedApps(){
-        this.MenuLayout?.loadExtraPinnedApps();
-    }
-
     updateLocation(){
         if(this.MenuLayout && this.MenuLayout.updateLocation)
             this.MenuLayout.updateLocation();

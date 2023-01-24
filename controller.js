@@ -147,12 +147,6 @@ var MenuSettingsController = class {
             this._updatePinnedApps.bind(this)
         );
 
-        this._settingsConnections.connectMultipleEvents(
-            ['brisk-shortcuts-list', 'mint-pinned-app-list', 'mint-separator-index',
-            'unity-pinned-app-list', 'unity-separator-index'],
-            this._updateExtraPinnedApps.bind(this)
-        );
-
         this._settingsConnections.connect('menu-position-alignment', this._setMenuPositionAlignment.bind(this));
         this._settingsConnections.connect('menu-button-appearance', this._setButtonAppearance.bind(this));
         this._settingsConnections.connect('custom-menu-button-text', this._setButtonText.bind(this));
@@ -312,14 +306,6 @@ var MenuSettingsController = class {
             return;
         if(activeCategory === Constants.CategoryType.PINNED_APPS || activeCategory === Constants.CategoryType.HOME_SCREEN)
             this._menuButton.displayPinnedApps();
-    }
-
-    _updateExtraPinnedApps(){
-        let layout = this._settings.get_enum('menu-layout');
-        if(layout == Constants.MenuLayout.UNITY || layout == Constants.MenuLayout.MINT || layout == Constants.MenuLayout.BRISK){
-            if(this._menuButton.shouldLoadPinnedApps())
-                this._menuButton.loadExtraPinnedApps();
-        }
     }
 
     _updateHotKeyBinder() {

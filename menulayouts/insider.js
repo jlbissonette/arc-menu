@@ -45,30 +45,6 @@ var Menu = class extends BaseMenuLayout{
         this.actionsBox.style = "margin: 0px; spacing: 6px;";
         this.mainBox.add_child(this.actionsBox);
 
-        this.pinnedAppsButton = new MW.PinnedAppsButton(this);
-        this.pinnedAppsButton.y_expand = true;
-        this.pinnedAppsButton.y_align= Clutter.ActorAlign.START;
-        this.actionsBox.add_child(this.pinnedAppsButton);
-
-        let isContainedInCategory = false;
-        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        this.actionsBox.add_child(filesButton);
-
-        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        this.actionsBox.add_child(terminalButton);
-
-        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
-        if(settingsButton.shouldShow)
-            this.actionsBox.add_child(settingsButton);
-
-        let powerDisplayStyle = this._settings.get_enum('power-display-style');
-        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
-            this.leaveButton = new MW.PowerOptionsBox(this, 6, true);
-        else
-            this.leaveButton = new MW.LeaveButton(this);
-
-        this.actionsBox.add_child(this.leaveButton);
-
         this.subMainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -113,6 +89,9 @@ var Menu = class extends BaseMenuLayout{
         this.applicationsScrollBox.add_actor( this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
+        this._extraButtonsChangedId = this._settings.connect('changed::insider-extra-buttons', () => this._createExtraButtons());
+        this._createExtraButtons();
+
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
@@ -120,6 +99,39 @@ var Menu = class extends BaseMenuLayout{
         this._createPinnedAppsMenu();
         this.setDefaultMenuView();
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
+    }
+
+    _createExtraButtons() {
+        this.actionsBox.destroy_all_children();
+
+        this.pinnedAppsButton = new MW.PinnedAppsButton(this);
+        this.pinnedAppsButton.y_expand = true;
+        this.pinnedAppsButton.y_align= Clutter.ActorAlign.START;
+        this.actionsBox.add_child(this.pinnedAppsButton);
+
+        const isContainedInCategory = false;
+        const extraButtons = this._settings.get_value('insider-extra-buttons').deep_unpack();
+
+        for (let i = 0; i < extraButtons.length; i++) {
+            const command = extraButtons[i][2];
+            if (command === Constants.ShortcutCommands.SEPARATOR) {
+                let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+                this.actionsBox.add_child(separator);
+            }
+            else {
+                let button = this.createMenuItem(extraButtons[i], Constants.DisplayType.BUTTON, isContainedInCategory);
+                if(button.shouldShow)
+                    this.actionsBox.add_child(button);
+            }
+        }
+
+        let powerDisplayStyle = this._settings.get_enum('power-display-style');
+        if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
+            this.leaveButton = new MW.PowerOptionsBox(this, 6, true);
+        else
+            this.leaveButton = new MW.LeaveButton(this);
+
+        this.actionsBox.add_child(this.leaveButton);
     }
 
     loadPinnedApps(){

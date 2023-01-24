@@ -185,6 +185,12 @@ var BaseMenuLayout = class {
         this.activeMenuItem = null;
 
         this.loadCategories();
+
+        if(this._createExtraButtons) 
+            this._createExtraButtons();
+        if(this._createExtraShortcuts) 
+            this._createExtraShortcuts();
+
         this.setDefaultMenuView();
     }
 
@@ -307,10 +313,22 @@ var BaseMenuLayout = class {
         this._clearActorsFromBox(categoriesBox);
 
         this._futureActiveItem = false;
+        let hasExtraCategory = false;
+        let separatorAdded = false;
 
         for(let categoryMenuItem of this.categoryDirectories.values()){
             if(categoryMenuItem.get_parent())
                 continue;
+            
+            const isExtraCategory = categoryMenuItem.isExtraCategory();
+
+            if (!hasExtraCategory)
+                hasExtraCategory = isExtraCategory;
+            else if(!isExtraCategory && !separatorAdded){
+                categoriesBox.add_child(new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL));
+                separatorAdded = true;
+            }
+
             categoriesBox.add_child(categoryMenuItem);
             if(!this._futureActiveItem){
                 this._futureActiveItem = categoryMenuItem;
@@ -389,26 +407,6 @@ var BaseMenuLayout = class {
             let placeMenuItem = this.createMenuItem(directory, Constants.DisplayType.LIST, isContainedInCategory);
             if(placeMenuItem)
                 this.shortcutsBox.add_child(placeMenuItem);
-        }
-    }
-
-    loadExtraPinnedApps(pinnedAppsArray, separatorIndex){
-        let pinnedApps = pinnedAppsArray;
-        //if the extraPinnedApps array is empty, create a default list of apps.
-        if(!pinnedApps.length || !Array.isArray(pinnedApps)){
-            pinnedApps = this._createExtraPinnedAppsList();
-        }
-
-        for(let i = 0;i < pinnedApps.length; i += 3){
-            if(i === separatorIndex * 3 && i !== 0)
-                this._addSeparator();
-            let isContainedInCategory = false;
-            let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2]], Constants.DisplayType.BUTTON, isContainedInCategory);
-            placeMenuItem.x_expand = false;
-            placeMenuItem.y_expand = false;
-            placeMenuItem.y_align = Clutter.ActorAlign.CENTER;
-            placeMenuItem.x_align = Clutter.ActorAlign.CENTER;
-            this.actionsBox.add_child(placeMenuItem);
         }
     }
 
@@ -930,6 +928,16 @@ var BaseMenuLayout = class {
     }
 
     destroy(){
+        if (this._extraButtonsChangedId) {
+            this._settings.disconnect(this._extraButtonsChangedId);
+            this._extraButtonsChangedId = null;
+        }
+
+        if (this._extraShortcutsChangedId) {
+            this._settings.disconnect(this._extraShortcutsChangedId);
+            this._extraShortcutsChangedId = null;
+        }
+
         if(this.recentFilesManager){
             this.recentFilesManager.destroy();
             this.recentFilesManager = null;
