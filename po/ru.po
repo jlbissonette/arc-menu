@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Arc Menu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 13:50-0500\n"
-"PO-Revision-Date: 2023-01-20 18:05+1000\n"
+"POT-Creation-Date: 2023-01-24 07:30-0500\n"
+"PO-Revision-Date: 2023-01-26 21:45+1000\n"
 "Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -46,62 +46,59 @@ msgid "Favorites"
 msgstr "Избранное"
 
 #: constants.js:74 menulayouts/runner.js:122
-#: settings/Menu/LayoutTweaksPage.js:765
+#: settings/Menu/LayoutTweaksPage.js:742
 msgid "Frequent Apps"
 msgstr "Часто используемые"
 
-#: constants.js:75 menuWidgets.js:1246 menulayouts/az.js:128
-#: menulayouts/az.js:130 menulayouts/az.js:163 menulayouts/eleven.js:162
-#: menulayouts/eleven.js:163 menulayouts/eleven.js:224
+#: constants.js:75 menuWidgets.js:1246 menulayouts/az.js:105
+#: menulayouts/az.js:107 menulayouts/az.js:175 menulayouts/eleven.js:129
+#: menulayouts/eleven.js:130 menulayouts/eleven.js:226
 #: menulayouts/redmond.js:46 menulayouts/redmond.js:47
 #: menulayouts/redmond.js:51
 msgid "All Apps"
 msgstr "Все приложения"
 
-#: constants.js:76 menuWidgets.js:736 settings/Menu/LayoutTweaksPage.js:659
-#: settings/Menu/LayoutTweaksPage.js:763 settings/MenuPage.js:97
+#: constants.js:76 menuWidgets.js:736 settings/Menu/LayoutTweaksPage.js:623
+#: settings/Menu/LayoutTweaksPage.js:740 settings/MenuPage.js:97
 msgid "Pinned Apps"
 msgstr "Закреплённые приложения"
 
 #: constants.js:77 gnome43/searchProviders/recentFiles.js:26
 #: gnome43/searchProviders/recentFiles.js:27 menulayouts/raven.js:298
-#: menulayouts/unity.js:365 searchProviders/recentFiles.js:26
+#: menulayouts/unity.js:358 searchProviders/recentFiles.js:26
 #: searchProviders/recentFiles.js:27
 msgid "Recent Files"
 msgstr "Недавние файлы"
 
-#: constants.js:234 menuButton.js:611 menulayouts/mint.js:223
-#: menulayouts/unity.js:209 settings/Menu/ListPinnedPage.js:366
+#: constants.js:234 menuButton.js:607 settings/Menu/ListPinnedPage.js:372
 msgid "Log Out..."
 msgstr "Завершить сеанс..."
 
-#: constants.js:235 menuButton.js:610 menulayouts/mint.js:224
-#: menulayouts/unity.js:210 settings/Menu/ListPinnedPage.js:365
+#: constants.js:235 menuButton.js:606 settings/Menu/ListPinnedPage.js:371
 msgid "Lock"
 msgstr "Заблокировать экран"
 
-#: constants.js:236 menuButton.js:605 settings/Menu/ListPinnedPage.js:368
+#: constants.js:236 menuButton.js:601 settings/Menu/ListPinnedPage.js:374
 msgid "Restart..."
 msgstr "Перезагрузить..."
 
-#: constants.js:237 menuButton.js:606 menulayouts/mint.js:225
-#: menulayouts/unity.js:211 settings/Menu/ListPinnedPage.js:367
+#: constants.js:237 menuButton.js:602 settings/Menu/ListPinnedPage.js:373
 msgid "Power Off..."
 msgstr "Выключить..."
 
-#: constants.js:238 menuButton.js:603 settings/Menu/ListPinnedPage.js:369
+#: constants.js:238 menuButton.js:599 settings/Menu/ListPinnedPage.js:375
 msgid "Suspend"
 msgstr "Ждущий режим"
 
-#: constants.js:239 settings/Menu/ListPinnedPage.js:370
+#: constants.js:239 settings/Menu/ListPinnedPage.js:376
 msgid "Hybrid Sleep"
 msgstr "Гибридный спящий режим"
 
-#: constants.js:240 settings/Menu/ListPinnedPage.js:371
+#: constants.js:240 settings/Menu/ListPinnedPage.js:377
 msgid "Hibernate"
 msgstr "Спящий режим"
 
-#: constants.js:241 menuButton.js:612 settings/Menu/ListPinnedPage.js:372
+#: constants.js:241 menuButton.js:608 settings/Menu/ListPinnedPage.js:378
 msgid "Switch User"
 msgstr "Сменить пользователя"
 
@@ -201,19 +198,15 @@ msgstr "Launcher"
 msgid "Alternative"
 msgstr "Альтернативные"
 
-#: constants.js:419 menulayouts/az.js:116 menulayouts/eleven.js:148
-#: menulayouts/insider.js:60 menulayouts/mint.js:214 menulayouts/whisker.js:50
-#: menulayouts/windows.js:59 settings/AboutPage.js:134
-#: settings/AboutPage.js:164
+#: constants.js:419 menulayouts/whisker.js:50
 msgid "Settings"
 msgstr "Настройки"
 
-#: constants.js:419 menulayouts/mint.js:218 menulayouts/unity.js:204
+#: constants.js:419
 msgid "Software"
 msgstr "Программное обеспечение"
 
-#: constants.js:419 menulayouts/az.js:113 menulayouts/eleven.js:145
-#: menulayouts/insider.js:57 menulayouts/mint.js:213 menulayouts/windows.js:56
+#: constants.js:419
 msgid "Terminal"
 msgstr "Терминал"
 
@@ -221,20 +214,18 @@ msgstr "Терминал"
 msgid "Tweaks"
 msgstr "Доп. настройки GNOME"
 
-#: constants.js:420 menuButton.js:557 menuWidgets.js:437
-#: settings/Menu/ListPinnedPage.js:342 settings/Menu/ListPinnedPage.js:356
+#: constants.js:420 menuButton.js:553 menuWidgets.js:437
+#: settings/Menu/ListPinnedPage.js:347 settings/Menu/ListPinnedPage.js:361
 msgid "Activities Overview"
 msgstr "«Обзор»"
 
-#: constants.js:420 menuButton.js:542 prefs.js:98 settings/AboutPage.js:126
-#: settings/Menu/ListPinnedPage.js:330 settings/Menu/ListPinnedPage.js:340
-#: settings/Menu/ListPinnedPage.js:349
+#: constants.js:420 menuButton.js:538 prefs.js:98 settings/AboutPage.js:126
+#: settings/Menu/ListPinnedPage.js:335 settings/Menu/ListPinnedPage.js:345
+#: settings/Menu/ListPinnedPage.js:354
 msgid "ArcMenu Settings"
 msgstr "Настройки ArcMenu"
 
-#: constants.js:420 menulayouts/az.js:109 menulayouts/eleven.js:141
-#: menulayouts/insider.js:54 menulayouts/mint.js:222 menulayouts/unity.js:208
-#: menulayouts/windows.js:53
+#: constants.js:420
 msgid "Files"
 msgstr "Файлы"
 
@@ -269,19 +260,19 @@ msgstr "'%s' на рабочей области %d"
 msgid "Failed to open “%s”"
 msgstr "Не удалось открыть «%s»"
 
-#: menuButton.js:587 settings/Menu/ListPinnedPage.js:358
+#: menuButton.js:583 settings/Menu/ListPinnedPage.js:363
 msgid "Show Desktop"
 msgstr "Показать рабочий стол"
 
-#: menuButton.js:601 menuWidgets.js:798 menuWidgets.js:814
+#: menuButton.js:597 menuWidgets.js:798 menuWidgets.js:814
 msgid "Power Off / Log Out"
 msgstr "Выключить / Завершить сеанс"
 
-#: menuButton.js:634
+#: menuButton.js:630
 msgid "Dash to Panel Settings"
 msgstr "Настройки «Dash to Panel»"
 
-#: menuButton.js:639
+#: menuButton.js:635
 msgid "App Icons Taskbar Settings"
 msgstr "Настройки «App Icons Taskbar»"
 
@@ -305,54 +296,42 @@ msgstr "Система"
 msgid "Categories"
 msgstr "Категории"
 
-#: menuWidgets.js:1100 menuWidgets.js:2566 menulayouts/plasma.js:123
+#: menuWidgets.js:1100 menuWidgets.js:2581 menulayouts/plasma.js:123
 msgid "Apps"
 msgstr "Приложения"
 
-#: menuWidgets.js:1181 menuWidgets.js:1202 menulayouts/az.js:128
-#: menulayouts/eleven.js:162 menulayouts/redmond.js:46
+#: menuWidgets.js:1181 menuWidgets.js:1202 menulayouts/az.js:105
+#: menulayouts/eleven.js:129 menulayouts/redmond.js:46
 #: menulayouts/redmond.js:50 settings/Menu/SubPage.js:77
 #: settings/Menu/ThemingDialog.js:290
 msgid "Back"
 msgstr "Назад"
 
-#: menuWidgets.js:1890
+#: menuWidgets.js:1894
 msgid "New"
 msgstr "Новое"
 
-#: menuWidgets.js:2405
+#: menuWidgets.js:2420
 msgid "Search…"
 msgstr "Поиск…"
 
-#: menulayouts/az.js:130 menulayouts/az.js:157 menulayouts/az.js:213
-#: menulayouts/eleven.js:163 menulayouts/eleven.js:214
-#: menulayouts/eleven.js:271 menulayouts/insider.js:162
+#: menulayouts/az.js:107 menulayouts/az.js:169 menulayouts/az.js:225
+#: menulayouts/eleven.js:130 menulayouts/eleven.js:216
+#: menulayouts/eleven.js:273 menulayouts/insider.js:174
 #: menulayouts/plasma.js:118 menulayouts/raven.js:63 menulayouts/raven.js:227
 #: menulayouts/raven.js:276 menulayouts/redmond.js:47 menulayouts/redmond.js:50
-#: menulayouts/redmond.js:51 menulayouts/unity.js:39 menulayouts/unity.js:288
-#: menulayouts/unity.js:347 menulayouts/windows.js:402 utils.js:224
+#: menulayouts/redmond.js:51 menulayouts/unity.js:39 menulayouts/unity.js:269
+#: menulayouts/unity.js:340 menulayouts/windows.js:414 utils.js:224
 msgid "Pinned"
 msgstr "Закреплённые"
 
-#: menulayouts/eleven.js:164 menulayouts/eleven.js:275
-#: menulayouts/windows.js:333
+#: menulayouts/eleven.js:131 menulayouts/eleven.js:277
+#: menulayouts/windows.js:345
 msgid "Frequent"
 msgstr "Часто используемые"
 
-#: menulayouts/mint.js:211 menulayouts/unity.js:198 placeDisplay.js:112
-#: placeDisplay.js:342 settings/Menu/LayoutTweaksPage.js:465
-#: settings/Menu/LayoutTweaksPage.js:539 settings/Menu/ListPinnedPage.js:380
-#: utils.js:200
-msgid "Home"
-msgstr "Домашняя папка"
-
-#: menulayouts/mint.js:220 menulayouts/unity.js:199
-#: settings/Menu/ListPinnedPage.js:381
-msgid "Documents"
-msgstr "Документы"
-
-#: menulayouts/plasma.js:127 menulayouts/unity.js:206 placeDisplay.js:127
-#: placeDisplay.js:150 settings/Menu/ListPinnedPage.js:386
+#: menulayouts/plasma.js:127 placeDisplay.js:127 placeDisplay.js:150
+#: settings/Menu/ListPinnedPage.js:392
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -360,44 +339,40 @@ msgstr "Компьютер"
 msgid "Leave"
 msgstr "Покинуть"
 
-#: menulayouts/plasma.js:256 menulayouts/windows.js:270
+#: menulayouts/plasma.js:256 menulayouts/windows.js:282
 #: settings/MenuPage.js:117
 msgid "Application Shortcuts"
 msgstr "Ярлыки приложений"
 
-#: menulayouts/plasma.js:260 menulayouts/windows.js:274
+#: menulayouts/plasma.js:260 menulayouts/windows.js:286
 msgid "Places"
 msgstr "Места"
 
-#: menulayouts/plasma.js:272 menulayouts/windows.js:188
-#: settings/Menu/LayoutTweaksPage.js:706 settings/Menu/LayoutTweaksPage.js:811
+#: menulayouts/plasma.js:272 menulayouts/windows.js:200
+#: settings/Menu/LayoutTweaksPage.js:670 settings/Menu/LayoutTweaksPage.js:788
 msgid "Bookmarks"
 msgstr "Закладки"
 
-#: menulayouts/plasma.js:280 menulayouts/windows.js:196
+#: menulayouts/plasma.js:280 menulayouts/windows.js:208
 msgid "Devices"
 msgstr "Внешние устройства"
 
-#: menulayouts/plasma.js:288 menulayouts/windows.js:204
-#: settings/Menu/ListPinnedPage.js:387
+#: menulayouts/plasma.js:288 menulayouts/windows.js:216
+#: settings/Menu/ListPinnedPage.js:393
 msgid "Network"
 msgstr "Сеть"
 
 #: menulayouts/raven.js:65 menulayouts/raven.js:234 menulayouts/unity.js:41
-#: menulayouts/unity.js:293 settings/Menu/LayoutTweaksPage.js:466
-#: settings/Menu/LayoutTweaksPage.js:540 settings/Menu/LayoutTweaksPage.js:658
-#: settings/Menu/LayoutTweaksPage.js:741 settings/Menu/LayoutTweaksPage.js:766
+#: menulayouts/unity.js:274 settings/Menu/LayoutTweaksPage.js:508
+#: settings/Menu/LayoutTweaksPage.js:543 settings/Menu/LayoutTweaksPage.js:622
+#: settings/Menu/LayoutTweaksPage.js:718 settings/Menu/LayoutTweaksPage.js:743
 msgid "All Programs"
 msgstr "Все приложения"
 
-#: menulayouts/raven.js:278 menulayouts/unity.js:349
+#: menulayouts/raven.js:278 menulayouts/unity.js:342
 #: settings/Menu/VisualSettings.js:203
 msgid "Shortcuts"
 msgstr "Ярлыки"
-
-#: menulayouts/unity.js:200 settings/Menu/ListPinnedPage.js:382
-msgid "Downloads"
-msgstr "Загрузки"
 
 #: placeDisplay.js:49
 #, javascript-format
@@ -409,24 +384,30 @@ msgstr "Не удалось запустить «%s»"
 msgid "Failed to mount volume for “%s”"
 msgstr "Не удалось подключить раздел для «%s»"
 
+#: placeDisplay.js:112 placeDisplay.js:342
+#: settings/Menu/LayoutTweaksPage.js:507 settings/Menu/LayoutTweaksPage.js:542
+#: settings/Menu/ListPinnedPage.js:386 utils.js:200
+msgid "Home"
+msgstr "Домашняя папка"
+
 #: placeDisplay.js:216
 #, javascript-format
 msgid "Ejecting drive “%s” failed:"
 msgstr "Не удалось извлечь раздел «%s»:"
 
-#: prefsWidgets.js:261
+#: prefsWidgets.js:243
 msgid "Modify"
 msgstr "Изменить"
 
-#: prefsWidgets.js:273
+#: prefsWidgets.js:258
 msgid "Move Up"
 msgstr "Переместить вверх"
 
-#: prefsWidgets.js:280
+#: prefsWidgets.js:265
 msgid "Move Down"
 msgstr "Переместить вниз"
 
-#: prefsWidgets.js:287
+#: prefsWidgets.js:272
 msgid "Remove"
 msgstr "Удалить"
 
@@ -434,7 +415,7 @@ msgstr "Удалить"
 msgid "Application Menu Extension for GNOME"
 msgstr "Приложение для замены стандартного меню GNOME"
 
-#: settings/AboutPage.js:20 settings/Menu/ListPinnedPage.js:354
+#: settings/AboutPage.js:20 settings/Menu/ListPinnedPage.js:359
 msgid "About"
 msgstr "О расширении"
 
@@ -466,15 +447,23 @@ msgstr "ArcMenu на GitLab"
 msgid "Donate via PayPal"
 msgstr "Пожертвовать через PayPal"
 
-#: settings/AboutPage.js:129 settings/AboutPage.js:134
-#: settings/Menu/ThemingDialog.js:24 settings/Menu/ThemingDialog.js:29
+#: settings/AboutPage.js:129 settings/Menu/ThemingDialog.js:24
+#: settings/Menu/ThemingDialog.js:29
 msgid "Load"
 msgstr "Загрузить"
 
-#: settings/AboutPage.js:159 settings/AboutPage.js:164
-#: settings/Menu/ThemingDialog.js:81 settings/Menu/ThemingDialog.js:94
+#: settings/AboutPage.js:134
+msgid "Load Settings"
+msgstr "Загрузить настройки"
+
+#: settings/AboutPage.js:159 settings/Menu/ThemingDialog.js:81
+#: settings/Menu/ThemingDialog.js:94
 msgid "Save"
 msgstr "Сохранить"
+
+#: settings/AboutPage.js:164
+msgid "Save Settings"
+msgstr "Сохранить настройки"
 
 #: settings/AboutPage.js:185
 msgid "Credits"
@@ -497,7 +486,7 @@ msgid "Dash to Panel may conflict with this setting"
 msgstr "«Dash to Panel» может конфликтовать с этими настройками"
 
 #: settings/GeneralPage.js:42 settings/GeneralPage.js:68
-#: settings/Menu/LayoutTweaksPage.js:567
+#: settings/Menu/LayoutTweaksPage.js:570
 msgid "Left"
 msgstr "Слева"
 
@@ -506,7 +495,7 @@ msgid "Center"
 msgstr "В центре"
 
 #: settings/GeneralPage.js:44 settings/GeneralPage.js:70
-#: settings/Menu/LayoutTweaksPage.js:568
+#: settings/Menu/LayoutTweaksPage.js:571
 msgid "Right"
 msgstr "Справа"
 
@@ -602,7 +591,7 @@ msgstr "Нажмите любую клавишу"
 msgid "New Hotkey"
 msgstr "Новая горячая клавиша"
 
-#: settings/GeneralPage.js:370 settings/Menu/ListPinnedPage.js:637
+#: settings/GeneralPage.js:370 settings/Menu/ListPinnedPage.js:624
 msgid "Apply"
 msgstr "Применить"
 
@@ -700,12 +689,12 @@ msgstr "Квадратная"
 msgid "Avatar Icon Shape"
 msgstr "Форма значка пользователя"
 
-#: settings/Menu/LayoutTweaksPage.js:142 settings/Menu/LayoutTweaksPage.js:831
+#: settings/Menu/LayoutTweaksPage.js:142 settings/Menu/LayoutTweaksPage.js:808
 msgid "Bottom"
 msgstr "Внизу"
 
-#: settings/Menu/LayoutTweaksPage.js:143 settings/Menu/LayoutTweaksPage.js:346
-#: settings/Menu/LayoutTweaksPage.js:832
+#: settings/Menu/LayoutTweaksPage.js:143 settings/Menu/LayoutTweaksPage.js:388
+#: settings/Menu/LayoutTweaksPage.js:809
 msgid "Top"
 msgstr "Наверху"
 
@@ -721,126 +710,108 @@ msgstr "Отразить по горизонтали"
 msgid "Disable User Avatar"
 msgstr "Отключить аватар пользователя"
 
-#: settings/Menu/LayoutTweaksPage.js:200 settings/Menu/LayoutTweaksPage.js:243
+#: settings/Menu/LayoutTweaksPage.js:200 settings/Menu/LayoutTweaksPage.js:269
 msgid "Disable Frequent Apps"
 msgstr "Отключить часто используемые приложения"
 
-#: settings/Menu/LayoutTweaksPage.js:224
+#: settings/Menu/LayoutTweaksPage.js:208 settings/Menu/LayoutTweaksPage.js:211
+#: settings/Menu/LayoutTweaksPage.js:227 settings/Menu/LayoutTweaksPage.js:230
+#: settings/Menu/LayoutTweaksPage.js:292 settings/Menu/LayoutTweaksPage.js:295
+#: settings/Menu/LayoutTweaksPage.js:524 settings/Menu/LayoutTweaksPage.js:527
+#: settings/Menu/LayoutTweaksPage.js:595 settings/Menu/LayoutTweaksPage.js:598
+#: settings/Menu/LayoutTweaksPage.js:683 settings/Menu/LayoutTweaksPage.js:686
+msgid "Button Shortcuts"
+msgstr "Кнопки быстрого доступа"
+
+#: settings/Menu/LayoutTweaksPage.js:250
 msgid "Show Apps Grid"
 msgstr "Показывать сетку приложений"
 
-#: settings/Menu/LayoutTweaksPage.js:257
+#: settings/Menu/LayoutTweaksPage.js:283
 msgid "Disable Pinned Apps"
 msgstr "Отключить закрепленные приложения"
 
-#: settings/Menu/LayoutTweaksPage.js:278
+#: settings/Menu/LayoutTweaksPage.js:317
 msgid "Activate on Hover"
 msgstr "Активировать при наведении"
 
-#: settings/Menu/LayoutTweaksPage.js:295
-msgid "Brisk Menu Shortcuts"
-msgstr "Ярлыки в меню Brisk"
+#: settings/Menu/LayoutTweaksPage.js:335 settings/Menu/LayoutTweaksPage.js:338
+#: settings/Menu/LayoutTweaksPage.js:644 settings/Menu/LayoutTweaksPage.js:763
+msgid "Extra Shortcuts"
+msgstr "Дополнительные ярлыки"
 
-#: settings/Menu/LayoutTweaksPage.js:334
+#: settings/Menu/LayoutTweaksPage.js:376
 msgid "Enable Activities Overview Shortcut"
 msgstr "Включить ярлык для «Обзор»"
 
-#: settings/Menu/LayoutTweaksPage.js:347
+#: settings/Menu/LayoutTweaksPage.js:389
 msgid "Centered"
 msgstr "В центре"
 
-#: settings/Menu/LayoutTweaksPage.js:349
+#: settings/Menu/LayoutTweaksPage.js:391
 msgid "Position"
 msgstr "Положение"
 
-#: settings/Menu/LayoutTweaksPage.js:360 settings/Menu/LayoutTweaksPage.js:553
+#: settings/Menu/LayoutTweaksPage.js:402 settings/Menu/LayoutTweaksPage.js:556
 msgid "List"
 msgstr "Список"
 
-#: settings/Menu/LayoutTweaksPage.js:361 settings/Menu/LayoutTweaksPage.js:554
+#: settings/Menu/LayoutTweaksPage.js:403 settings/Menu/LayoutTweaksPage.js:557
 msgid "Grid"
 msgstr "Сетка"
 
-#: settings/Menu/LayoutTweaksPage.js:363 settings/Menu/LayoutTweaksPage.js:556
+#: settings/Menu/LayoutTweaksPage.js:405 settings/Menu/LayoutTweaksPage.js:559
 msgid "Search Results Display Style"
 msgstr "Стиль отображения результатов поиска"
 
-#: settings/Menu/LayoutTweaksPage.js:390
+#: settings/Menu/LayoutTweaksPage.js:432
 msgid "Width"
 msgstr "Ширина"
 
-#: settings/Menu/LayoutTweaksPage.js:413 settings/Menu/VisualSettings.js:35
+#: settings/Menu/LayoutTweaksPage.js:455 settings/Menu/VisualSettings.js:35
 msgid "Height"
 msgstr "Высота"
 
-#: settings/Menu/LayoutTweaksPage.js:436 settings/Menu/ThemePage.js:169
+#: settings/Menu/LayoutTweaksPage.js:478 settings/Menu/ThemePage.js:169
 msgid "Font Size"
 msgstr "Размер шрифта"
 
-#: settings/Menu/LayoutTweaksPage.js:437 settings/MenuButtonPage.js:104
+#: settings/Menu/LayoutTweaksPage.js:479 settings/MenuButtonPage.js:104
 #, javascript-format
 msgid "%d Default Theme Value"
 msgstr "%d - значение по умолчанию"
 
-#: settings/Menu/LayoutTweaksPage.js:451
+#: settings/Menu/LayoutTweaksPage.js:493
 msgid "Show Frequent Apps"
 msgstr "Показывать часто используемые приложения"
 
-#: settings/Menu/LayoutTweaksPage.js:468 settings/Menu/LayoutTweaksPage.js:542
-#: settings/Menu/LayoutTweaksPage.js:662 settings/Menu/LayoutTweaksPage.js:743
-#: settings/Menu/LayoutTweaksPage.js:768
+#: settings/Menu/LayoutTweaksPage.js:510 settings/Menu/LayoutTweaksPage.js:545
+#: settings/Menu/LayoutTweaksPage.js:626 settings/Menu/LayoutTweaksPage.js:720
+#: settings/Menu/LayoutTweaksPage.js:745
 msgid "Default View"
 msgstr "Вид по умолчанию"
 
-#: settings/Menu/LayoutTweaksPage.js:482
-msgid "Unity Layout Buttons"
-msgstr "Кнопки компоновки Unity"
-
-#: settings/Menu/LayoutTweaksPage.js:493
-msgid "Button Separator Position"
-msgstr "Расположение разделителя кнопок"
-
-#: settings/Menu/LayoutTweaksPage.js:512 settings/Menu/LayoutTweaksPage.js:622
-msgid "Adjust the position of the separator in the button panel"
-msgstr "Настройка расположения разделителя в панели с кнопками"
-
-#: settings/Menu/LayoutTweaksPage.js:525 settings/Menu/LayoutTweaksPage.js:635
-msgid "Separator Position"
-msgstr "Расположение разделителя"
-
-#: settings/Menu/LayoutTweaksPage.js:570
+#: settings/Menu/LayoutTweaksPage.js:573
 msgid "Position on Monitor"
 msgstr "Расположение на экране"
 
-#: settings/Menu/LayoutTweaksPage.js:592
-msgid "Mint Layout Shortcuts"
-msgstr "Ярлыки макета Mint"
-
-#: settings/Menu/LayoutTweaksPage.js:603
-msgid "Shortcut Separator Position"
-msgstr "Расположение разделителя ярлыков"
-
-#: settings/Menu/LayoutTweaksPage.js:680 settings/Menu/LayoutTweaksPage.js:786
-msgid "Extra Shortcuts"
-msgstr "Дополнительные ярлыки"
-
-#: settings/Menu/LayoutTweaksPage.js:692 settings/Menu/LayoutTweaksPage.js:797
+#: settings/Menu/LayoutTweaksPage.js:656 settings/Menu/LayoutTweaksPage.js:774
 msgid "External Devices"
 msgstr "Внешние устройства"
 
-#: settings/Menu/LayoutTweaksPage.js:730
+#: settings/Menu/LayoutTweaksPage.js:707
 msgid "Nothing Yet!"
 msgstr "Пока ничего!"
 
-#: settings/Menu/LayoutTweaksPage.js:740 settings/Menu/LayoutTweaksPage.js:764
+#: settings/Menu/LayoutTweaksPage.js:717 settings/Menu/LayoutTweaksPage.js:741
 msgid "Categories List"
 msgstr "Список категорий"
 
-#: settings/Menu/LayoutTweaksPage.js:819
+#: settings/Menu/LayoutTweaksPage.js:796
 msgid "Category Quick Links"
 msgstr "Быстрые ссылки на категории"
 
-#: settings/Menu/LayoutTweaksPage.js:820
+#: settings/Menu/LayoutTweaksPage.js:797
 msgid ""
 "Display quick links of extra categories on the home page\n"
 "Must also be enabled in 'Menu -> Extra Categories' section"
@@ -848,15 +819,15 @@ msgstr ""
 "Отображать быстрые ссылки на дополнительные категории на главной странице\n"
 "Смотрите раздел «Меню» -> «Дополнительные категории»"
 
-#: settings/Menu/LayoutTweaksPage.js:834
+#: settings/Menu/LayoutTweaksPage.js:811
 msgid "Quick Links Location"
 msgstr "Расположение быстрых ссылок"
 
-#: settings/Menu/LayoutTweaksPage.js:867
+#: settings/Menu/LayoutTweaksPage.js:844
 msgid "Enable Weather Widget"
 msgstr "Включить виджет «Погода»"
 
-#: settings/Menu/LayoutTweaksPage.js:881
+#: settings/Menu/LayoutTweaksPage.js:858
 msgid "Enable Clock Widget"
 msgstr "Включить виджет «Часы»"
 
@@ -899,143 +870,155 @@ msgstr "Меню питания"
 msgid "Override Display Style"
 msgstr "Переопределить стиль отображения"
 
-#: settings/Menu/ListPinnedPage.js:33 settings/Menu/ListPinnedPage.js:37
-#: settings/Menu/ListPinnedPage.js:45
+#: settings/Menu/ListPinnedPage.js:35 settings/Menu/ListPinnedPage.js:39
+#: settings/Menu/ListPinnedPage.js:47
 msgid "Add More Apps"
 msgstr "Добавить ещё приложение"
 
-#: settings/Menu/ListPinnedPage.js:41
+#: settings/Menu/ListPinnedPage.js:43
 msgid "Add Default User Directories"
 msgstr "Добавить каталоги пользователя в раздел по умолчанию"
 
-#: settings/Menu/ListPinnedPage.js:125
+#: settings/Menu/ListPinnedPage.js:51
+msgid "Add More Shortcuts"
+msgstr "Добавить больше ярлыков"
+
+#: settings/Menu/ListPinnedPage.js:128
 msgid "Add Custom Shortcut"
 msgstr "Добавить пользовательский ярлык"
 
-#: settings/Menu/ListPinnedPage.js:238
+#: settings/Menu/ListPinnedPage.js:245
 msgid "Invalid Shortcut"
 msgstr "Недействительный ярлык"
 
-#: settings/Menu/ListPinnedPage.js:317
+#: settings/Menu/ListPinnedPage.js:322
 msgid "Add to your Pinned Apps"
-msgstr "Добавить в ваши закреплённые приложения"
+msgstr "Добавить свои закреплённые приложения"
 
-#: settings/Menu/ListPinnedPage.js:319
-msgid "Change Selected Pinned App"
-msgstr "Изменить выбранные закреплённые приложения"
+#: settings/Menu/ListPinnedPage.js:324
+msgid "Add to your Extra Shortcuts"
+msgstr "Добавить свои дополнительные ярлыки"
 
-#: settings/Menu/ListPinnedPage.js:321
+#: settings/Menu/ListPinnedPage.js:326
 msgid "Select Application Shortcuts"
 msgstr "Выбрать ярлыки приложений"
 
-#: settings/Menu/ListPinnedPage.js:323
+#: settings/Menu/ListPinnedPage.js:328
 msgid "Select Directory Shortcuts"
 msgstr "Выбрать ярлыки каталогов"
 
-#: settings/Menu/ListPinnedPage.js:325
+#: settings/Menu/ListPinnedPage.js:330
 msgid "Add to the Context Menu"
 msgstr "Добавить в контекстное меню"
 
-#: settings/Menu/ListPinnedPage.js:341
+#: settings/Menu/ListPinnedPage.js:346
 msgid "Run Command..."
 msgstr "Выполнить команду..."
 
-#: settings/Menu/ListPinnedPage.js:343
+#: settings/Menu/ListPinnedPage.js:348
 msgid "Show All Apps"
 msgstr "Показать все приложения"
 
-#: settings/Menu/ListPinnedPage.js:350
+#: settings/Menu/ListPinnedPage.js:355
 msgid "Menu Settings"
 msgstr "Настройки меню"
 
-#: settings/Menu/ListPinnedPage.js:351
+#: settings/Menu/ListPinnedPage.js:356
 msgid "Menu Theming"
 msgstr "Тематизация меню"
 
-#: settings/Menu/ListPinnedPage.js:352
+#: settings/Menu/ListPinnedPage.js:357
 msgid "Change Menu Layout"
 msgstr "Изменить компоновку меню"
 
-#: settings/Menu/ListPinnedPage.js:353
+#: settings/Menu/ListPinnedPage.js:358
 msgid "Menu Button Settings"
 msgstr "Настройки кнопки меню"
 
-#: settings/Menu/ListPinnedPage.js:355
+#: settings/Menu/ListPinnedPage.js:360
 msgid "Panel Extension Settings"
 msgstr "Настройки расширения панели"
 
-#: settings/Menu/ListPinnedPage.js:357 settings/MenuPage.js:136
+#: settings/Menu/ListPinnedPage.js:362 settings/MenuPage.js:136
 msgid "Power Options"
 msgstr "Варианты питания"
 
-#: settings/Menu/ListPinnedPage.js:359
+#: settings/Menu/ListPinnedPage.js:364 settings/Menu/ListPinnedPage.js:370
 msgid "Separator"
 msgstr "Разделитель"
 
-#: settings/Menu/ListPinnedPage.js:383
+#: settings/Menu/ListPinnedPage.js:387
+msgid "Documents"
+msgstr "Документы"
+
+#: settings/Menu/ListPinnedPage.js:388
+msgid "Downloads"
+msgstr "Загрузки"
+
+#: settings/Menu/ListPinnedPage.js:389
 msgid "Music"
 msgstr "Музыка"
 
-#: settings/Menu/ListPinnedPage.js:384
+#: settings/Menu/ListPinnedPage.js:390
 msgid "Pictures"
 msgstr "Изображения"
 
-#: settings/Menu/ListPinnedPage.js:385
+#: settings/Menu/ListPinnedPage.js:391
 msgid "Videos"
 msgstr "Видео"
 
-#: settings/Menu/ListPinnedPage.js:388
+#: settings/Menu/ListPinnedPage.js:394
 msgid "Recent"
 msgstr "Недавние"
 
-#: settings/Menu/ListPinnedPage.js:496
+#: settings/Menu/ListPinnedPage.js:500
 #, javascript-format
-msgid "%s has been pinned to ArcMenu"
-msgstr "«%s» - закреплено в ArcMenu"
+msgid "%s has been added"
+msgstr "%s - добавлено"
 
-#: settings/Menu/ListPinnedPage.js:508
+#: settings/Menu/ListPinnedPage.js:512
 #, javascript-format
-msgid "%s has been unpinned from ArcMenu"
-msgstr "«%s» - откреплено от ArcMenu"
+msgid "%s has been removed"
+msgstr "%s - удалено"
 
-#: settings/Menu/ListPinnedPage.js:548
+#: settings/Menu/ListPinnedPage.js:535
 msgid "Add a Custom Shortcut"
 msgstr "Добавить пользовательский ярлык"
 
-#: settings/Menu/ListPinnedPage.js:553
+#: settings/Menu/ListPinnedPage.js:540
 msgid "Edit Pinned App"
 msgstr "Редактировать закреплённые приложения"
 
-#: settings/Menu/ListPinnedPage.js:555
+#: settings/Menu/ListPinnedPage.js:542
 msgid "Edit Shortcut"
 msgstr "Редактировать ярлык"
 
-#: settings/Menu/ListPinnedPage.js:566
+#: settings/Menu/ListPinnedPage.js:553
 msgid "Title"
 msgstr "Заголовок"
 
-#: settings/Menu/ListPinnedPage.js:578 settings/MenuButtonPage.js:58
+#: settings/Menu/ListPinnedPage.js:565 settings/MenuButtonPage.js:58
 msgid "Icon"
 msgstr "Значок"
 
-#: settings/Menu/ListPinnedPage.js:590 settings/MenuButtonPage.js:159
+#: settings/Menu/ListPinnedPage.js:577 settings/MenuButtonPage.js:159
 #: settings/MenuButtonPage.js:481
 msgid "Browse..."
 msgstr "Обзор..."
 
-#: settings/Menu/ListPinnedPage.js:596 settings/MenuButtonPage.js:486
+#: settings/Menu/ListPinnedPage.js:583 settings/MenuButtonPage.js:486
 msgid "Select an Icon"
 msgstr "Выбор значка"
 
-#: settings/Menu/ListPinnedPage.js:625
+#: settings/Menu/ListPinnedPage.js:612
 msgid "Command"
 msgstr "Команда"
 
-#: settings/Menu/ListPinnedPage.js:625
+#: settings/Menu/ListPinnedPage.js:612
 msgid "Directory"
 msgstr "Каталог"
 
-#: settings/Menu/ListPinnedPage.js:637
+#: settings/Menu/ListPinnedPage.js:624
 msgid "Add"
 msgstr "Добавить"
 
@@ -1465,6 +1448,38 @@ msgstr "ArcMenu - Ошибка гибридного спящего режима!
 msgid "System unable to hybrid sleep."
 msgstr "Система не может перейти в гибридный спящий режим."
 
+#~ msgid "Brisk Menu Shortcuts"
+#~ msgstr "Ярлыки в меню Brisk"
+
+#~ msgid "Unity Layout Buttons"
+#~ msgstr "Кнопки компоновки Unity"
+
+#~ msgid "Button Separator Position"
+#~ msgstr "Расположение разделителя кнопок"
+
+#~ msgid "Adjust the position of the separator in the button panel"
+#~ msgstr "Настройка расположения разделителя в панели с кнопками"
+
+#~ msgid "Separator Position"
+#~ msgstr "Расположение разделителя"
+
+#~ msgid "Mint Layout Shortcuts"
+#~ msgstr "Ярлыки макета Mint"
+
+#~ msgid "Shortcut Separator Position"
+#~ msgstr "Расположение разделителя ярлыков"
+
+#~ msgid "Change Selected Pinned App"
+#~ msgstr "Изменить выбранные закреплённые приложения"
+
+#, javascript-format
+#~ msgid "%s has been pinned to ArcMenu"
+#~ msgstr "«%s» - закреплено в ArcMenu"
+
+#, javascript-format
+#~ msgid "%s has been unpinned from ArcMenu"
+#~ msgstr "«%s» - откреплено от ArcMenu"
+
 #~ msgid "Version"
 #~ msgstr "Версия"
 
@@ -1545,9 +1560,6 @@ msgstr "Система не может перейти в гибридный сп
 
 #~ msgid "Appearance"
 #~ msgstr "Внешний вид"
-
-#~ msgid "Icon Settings"
-#~ msgstr "Настройки значка"
 
 #~ msgid "Icon Sizes"
 #~ msgstr "Размеры значка"
