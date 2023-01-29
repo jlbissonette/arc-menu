@@ -675,7 +675,7 @@
       <description>List of recently installed apps</description>
     </key>
     <key name="pinned-app-list" type="as">
-      <default> [ "ArcMenu_WebBrowser","WebBrowser", "WebBrowser",
+      <default> [ "Firefox", "", "firefox.desktop",
                   "Files", "", "org.gnome.Nautilus.desktop",
                   "Terminal", "", "org.gnome.Terminal.desktop",
                   "ArcMenu Settings", "ArcMenu_ArcMenuIcon", "gnome-extensions prefs arcmenu@arcmenu.com"
@@ -703,7 +703,7 @@
       <description>List of default directory paths used for links on the right side of ArcMenu.</description>
     </key>
     <key name="context-menu-shortcuts" type="aas">
-      <default>[["Extensions", "", "org.gnome.Extensions.desktop"], ["ArcMenu Settings", "ArcMenu_ArcMenuIcon", "ArcMenu_Settings"], 
+      <default>[["", "", "org.gnome.Extensions.desktop"], ["ArcMenu Settings", "ArcMenu_ArcMenuIcon", "ArcMenu_Settings"], 
           ["Separator", "list-remove-symbolic", "ArcMenu_Separator"],["Power Options", "system-shutdown-symbolic", "ArcMenu_PowerOptions"],
           ["Activities Overview", "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"], ["Show Desktop", "computer-symbolic", "ArcMenu_ShowDesktop"]]</default>
       <summary>List of shortcuts on ArcMenu button context menu</summary>

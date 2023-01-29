@@ -108,14 +108,16 @@ var ArcMenuPopupBaseMenuItem = GObject.registerClass({
         });
 
         let textureCache = St.TextureCache.get_default();
-        let iconThemeChangedId = textureCache.connect('icon-theme-changed', this._updateIcon.bind(this));
+        textureCache.connectObject('icon-theme-changed', this._updateIcon.bind(this), this);
         this.connect('destroy', () => {
-            textureCache.disconnect(iconThemeChangedId);
             this._onDestroy();
         });
     }
 
     _updateIcon() {
+        if(this.isDestroyed)
+            return;
+
         if(!this._iconBin || !this.createIcon)
             return;
 
@@ -1597,7 +1599,7 @@ var PinnedAppsMenuItem = GObject.registerClass({
         this.gridLocation = [-1, -1];
         this.isContainedInCategory = isContainedInCategory;
 
-        if(this._iconString === "ArcMenu_ArcMenuIcon" || this._iconString === Me.path + '/media/icons/arcmenu-logo-symbolic.svg')
+        if(this._iconString === Constants.ShortcutCommands.ARCMENU_ICON || this._iconString === Me.path + '/media/icons/arcmenu-logo-symbolic.svg')
             this._iconString = Constants.ArcMenuLogoSymbolic;
 
         if(this._app && this._iconString === ''){

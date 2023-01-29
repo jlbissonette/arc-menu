@@ -166,11 +166,6 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
             this.reloadMenuLayout();
     }
 
-    shouldLoadPinnedApps(){
-        if(this.MenuLayout)
-            return this.MenuLayout.shouldLoadPinnedApps;
-    }
-
     setDefaultMenuView(){
         this.MenuLayout?.setDefaultMenuView();
     }

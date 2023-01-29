@@ -297,13 +297,13 @@ var MenuSettingsController = class {
     }
 
     _updatePinnedApps(){
-        if(this._menuButton.shouldLoadPinnedApps())
-            this._menuButton.loadPinnedApps();
+        this._menuButton.loadPinnedApps();
 
         //If the active category is Pinned Apps, redisplay the new Pinned Apps
         const activeCategory = this._menuButton.MenuLayout?.activeCategoryType;
         if(!activeCategory)
             return;
+
         if(activeCategory === Constants.CategoryType.PINNED_APPS || activeCategory === Constants.CategoryType.HOME_SCREEN)
             this._menuButton.displayPinnedApps();
     }

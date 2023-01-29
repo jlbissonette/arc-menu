@@ -401,11 +401,6 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
             this.reloadMenuLayout();
     }
 
-    shouldLoadPinnedApps(){
-        if(this.MenuLayout)
-            return this.MenuLayout.shouldLoadPinnedApps;
-    }
-
     setDefaultMenuView(){
         if(!this.MenuLayout)
             return;
@@ -619,6 +614,10 @@ var ArcMenuContextMenu = class ArcMenu_ArcMenuContextMenu extends PopupMenu.Popu
         if(!app)
             return;
         
+        if (!title) {
+            title = app.get_name();
+        }
+
         super.addSettingsAction(title, desktopFile);
     }
 

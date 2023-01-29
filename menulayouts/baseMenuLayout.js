@@ -31,7 +31,6 @@ var BaseMenuLayout = class {
         this.layout = this._settings.get_enum('menu-layout');
         this.layoutProperties = layoutProperties;
         this._focusChild = null;
-        this.shouldLoadPinnedApps = true;
         this.hasPinnedApps = false;
 
         this._mainBoxKeyPressId = this.mainBox.connect('key-press-event', this._onMainBoxKeyPress.bind(this));
@@ -502,9 +501,6 @@ var BaseMenuLayout = class {
         let isContainedInCategory = categoryMenuItem ? true : false;
 
         for(let i = 0; i < pinnedApps.length; i += 3){
-            if(i === 0 && pinnedApps[0] === "ArcMenu_WebBrowser")
-                this._updatePinnedAppsWebBrowser(pinnedApps);
-
             let pinnedAppsMenuItem = new MW.PinnedAppsMenuItem(this, pinnedApps[i], pinnedApps[i + 1], pinnedApps[i + 2], this.layoutProperties.DisplayType, isContainedInCategory);
             pinnedAppsMenuItem.connect('saveSettings', () => {
                 let array = [];
@@ -522,37 +518,6 @@ var BaseMenuLayout = class {
             categoryMenuItem.appList = null;
             categoryMenuItem.appList = [];
             categoryMenuItem.appList = categoryMenuItem.appList.concat(this.pinnedAppsArray);
-        }
-    }
-
-    _updatePinnedAppsWebBrowser(pinnedApps){
-        //Find the Default Web Browser, if found add to pinned apps list, if not found delete the placeholder.
-        //Will only run if placeholder is found. Placeholder only found with default settings set.
-        if(pinnedApps[0] === "ArcMenu_WebBrowser"){
-            let browserName = '';
-            try{
-                //user may not have xdg-utils package installed which will throw error
-                let [res, stdout, stderr, status] = GLib.spawn_command_line_sync("xdg-settings get default-web-browser");
-                let webBrowser = String.fromCharCode(...stdout);
-                browserName = webBrowser.split(".desktop")[0];
-                browserName += ".desktop";
-            }
-            catch(error){
-                log("ArcMenu Error - Failed to find default web browser. Removing placeholder pinned app.")
-            }
-
-            const app = Shell.AppSystem.get_default().lookup_app(browserName);
-            if(app){
-                pinnedApps[0] = app.get_name();
-                pinnedApps[1] = '';
-                pinnedApps[2] = app.get_id();
-            }
-            else
-                pinnedApps.splice(0,3);
-
-            this.shouldLoadPinnedApps = false; // We don't want to trigger a setting changed event
-            this._settings.set_strv('pinned-app-list', pinnedApps);
-            this.shouldLoadPinnedApps = true;
         }
     }
 

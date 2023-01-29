@@ -212,11 +212,11 @@ class ArcMenu_ListPinnedPage extends SubPage {
         let appInfo = Gio.DesktopAppInfo.new(row.shortcut_command);
         let shortcutIcon = shortcutData.icon ?? '';
 
-        if(shortcutIcon === "ArcMenu_ArcMenuIcon")
+        if(shortcutIcon === Constants.ShortcutCommands.ARCMENU_ICON)
             shortcutIcon = Constants.ArcMenuLogoSymbolic;
         else if(row.shortcut_command === 'org.gnome.Settings.desktop' && !appInfo)
             appInfo = Gio.DesktopAppInfo.new('gnome-control-center.desktop');
-        else if(row.shortcut_command === 'ArcMenu_Software'){
+        else if(row.shortcut_command === Constants.ShortcutCommands.SOFTWARE){
             for(let softwareManagerID of Constants.SoftwareManagerIDs){
                 let app = Gio.DesktopAppInfo.new(softwareManagerID);
                 if(app){
@@ -343,9 +343,9 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
         else if(this._dialogType === Constants.MenuSettingsListType.APPLICATIONS){
             let extraLinks = [];
             extraLinks.push([_("ArcMenu Settings"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.ARCMENU_SETTINGS]);
-            extraLinks.push([_("Run Command..."), "system-run-symbolic", "ArcMenu_RunCommand"]);
-            extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
-            extraLinks.push([_("Show All Apps"), "view-app-grid-symbolic", "ArcMenu_ShowAllApplications"]);
+            extraLinks.push([_("Run Command..."), "system-run-symbolic", Constants.ShortcutCommands.RUN_COMMAND]);
+            extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", Constants.ShortcutCommands.OVERVIEW]);
+            extraLinks.push([_("Show All Apps"), "view-app-grid-symbolic", Constants.ShortcutCommands.SHOW_APPS]);
             this._loadExtraCategories(extraLinks);
             this._loadCategories();
         }
@@ -357,25 +357,25 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             extraLinks.push([_("Change Menu Layout"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_LAYOUT]);
             extraLinks.push([_("Menu Button Settings"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_BUTTON]);
             extraLinks.push([_("About"), Constants.ArcMenuLogoSymbolic, Constants.ShortcutCommands.SETTINGS_ABOUT]);
-            extraLinks.push([_("Panel Extension Settings"), "application-x-addon-symbolic", "ArcMenu_PanelExtensionSettings"]);
-            extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", "ArcMenu_ActivitiesOverview"]);
-            extraLinks.push([_("Power Options"), "system-shutdown-symbolic", "ArcMenu_PowerOptions"]);
-            extraLinks.push([_("Show Desktop"), "computer-symbolic", "ArcMenu_ShowDesktop"]);
-            extraLinks.unshift([_("Separator"), "list-remove-symbolic", "ArcMenu_Separator"]);
+            extraLinks.push([_("Panel Extension Settings"), "application-x-addon-symbolic", Constants.ShortcutCommands.PANEL_EXTENSION_SETTINGS]);
+            extraLinks.push([_("Activities Overview"), "view-fullscreen-symbolic", Constants.ShortcutCommands.OVERVIEW]);
+            extraLinks.push([_("Power Options"), "system-shutdown-symbolic", Constants.ShortcutCommands.POWER_OPTIONS]);
+            extraLinks.push([_("Show Desktop"), "computer-symbolic", Constants.ShortcutCommands.SHOW_DESKTOP]);
+            extraLinks.unshift([_("Separator"), "list-remove-symbolic", Constants.ShortcutCommands.SEPARATOR]);
             this._loadExtraCategories(extraLinks);
             this._loadCategories();
         }
         else{
             let extraLinks = this._getDirectoryLinksArray();
-            extraLinks.unshift([_("Separator"), "list-remove-symbolic", "ArcMenu_Separator"]);
-            extraLinks.push([_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock"]);
-            extraLinks.push([_("Log Out..."), "system-log-out-symbolic", "ArcMenu_LogOut"]);
-            extraLinks.push([_("Power Off..."), "system-shutdown-symbolic", "ArcMenu_PowerOff"]);
-            extraLinks.push([_("Restart..."), 'system-reboot-symbolic', "ArcMenu_Restart"]);
-            extraLinks.push([_("Suspend"), "media-playback-pause-symbolic", "ArcMenu_Suspend"]);
-            extraLinks.push([_("Hybrid Sleep"), 'weather-clear-night-symbolic', "ArcMenu_HybridSleep"]);
-            extraLinks.push([_("Hibernate"), "document-save-symbolic", "ArcMenu_Hibernate"]);
-            extraLinks.push([_("Switch User"), "system-switch-user-symbolic", "ArcMenu_SwitchUser"]);
+            extraLinks.unshift([_("Separator"), "list-remove-symbolic", Constants.ShortcutCommands.SEPARATOR]);
+            extraLinks.push([_("Lock"), "changes-prevent-symbolic", Constants.ShortcutCommands.LOCK]);
+            extraLinks.push([_("Log Out..."), "system-log-out-symbolic", Constants.ShortcutCommands.LOG_OUT]);
+            extraLinks.push([_("Power Off..."), "system-shutdown-symbolic", Constants.ShortcutCommands.POWER_OFF]);
+            extraLinks.push([_("Restart..."), 'system-reboot-symbolic', Constants.ShortcutCommands.RESTART]);
+            extraLinks.push([_("Suspend"), "media-playback-pause-symbolic", Constants.ShortcutCommands.SUSPEND]);
+            extraLinks.push([_("Hybrid Sleep"), 'weather-clear-night-symbolic', Constants.ShortcutCommands.HYBRID_SLEEP]);
+            extraLinks.push([_("Hibernate"), "document-save-symbolic", Constants.ShortcutCommands.HIBERNATE]);
+            extraLinks.push([_("Switch User"), "system-switch-user-symbolic", Constants.ShortcutCommands.SWITCH_USER]);
             this._loadExtraCategories(extraLinks);
             this._loadCategories();
         }
@@ -383,15 +383,15 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
 
     _getDirectoryLinksArray(){
         let directoryLinks = [];
-        directoryLinks.push([_("Home"), "ArcMenu_Home", "ArcMenu_Home"]);
-        directoryLinks.push([_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents"]);
-        directoryLinks.push([_("Downloads"), "ArcMenu_Downloads", "ArcMenu_Downloads"]);
-        directoryLinks.push([_("Music"), "ArcMenu_Music", "ArcMenu_Music"]);
-        directoryLinks.push([_("Pictures"), "ArcMenu_Pictures", "ArcMenu_Pictures"]);
-        directoryLinks.push([_("Videos"), "ArcMenu_Videos", "ArcMenu_Videos"]);
-        directoryLinks.push([_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer"]);
-        directoryLinks.push([_("Network"), "ArcMenu_Network", "ArcMenu_Network"]);
-        directoryLinks.push([_("Recent"), "document-open-recent-symbolic", "ArcMenu_Recent"]);
+        directoryLinks.push([_("Home"), Constants.ShortcutCommands.HOME, Constants.ShortcutCommands.HOME]);
+        directoryLinks.push([_("Documents"), Constants.ShortcutCommands.DOCUMENTS, Constants.ShortcutCommands.DOCUMENTS]);
+        directoryLinks.push([_("Downloads"), Constants.ShortcutCommands.DOWNLOADS, Constants.ShortcutCommands.DOWNLOADS]);
+        directoryLinks.push([_("Music"), Constants.ShortcutCommands.MUSIC, Constants.ShortcutCommands.MUSIC]);
+        directoryLinks.push([_("Pictures"), Constants.ShortcutCommands.PICTURES, Constants.ShortcutCommands.PICTURES]);
+        directoryLinks.push([_("Videos"), Constants.ShortcutCommands.VIDEOS, Constants.ShortcutCommands.VIDEOS]);
+        directoryLinks.push([_("Computer"), Constants.ShortcutCommands.COMPUTER, Constants.ShortcutCommands.COMPUTER]);
+        directoryLinks.push([_("Network"), Constants.ShortcutCommands.NETWORK, Constants.ShortcutCommands.NETWORK]);
+        directoryLinks.push([_("Recent"), "document-open-recent-symbolic", Constants.ShortcutCommands.RECENT]);
         return directoryLinks;
     }
 
@@ -419,8 +419,13 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
 
     _loadExtraCategories(extraCategories){
         for(let item of extraCategories){
+            let subtitle = null;
+            if (item[2] === Constants.ShortcutCommands.PANEL_EXTENSION_SETTINGS) {
+                subtitle = _('Dash to Panel or App Icons Taskbar')
+            }
             let frameRow = new Adw.ActionRow({
-                title: _(item[0])
+                title: _(item[0]),
+                subtitle
             });
 
             let iconString;
@@ -440,7 +445,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
             frameRow.add_prefix(iconImage);
             let match = this.findCommandMatch(frameRow.shortcut_command);
 
-            if(frameRow.shortcut_command === 'ArcMenu_Separator')
+            if(frameRow.shortcut_command === Constants.ShortcutCommands.SEPARATOR)
                 match = false;
 
             this.addButtonAction(frameRow, match);
@@ -518,7 +523,7 @@ class ArcMenu_AddAppsToPinnedListWindow extends PW.DialogWindow {
                 this.emit("response", Gtk.ResponseType.REJECT);
             }
 
-            if(frameRow.shortcut_command === 'ArcMenu_Separator')
+            if(frameRow.shortcut_command === Constants.ShortcutCommands.SEPARATOR)
                 return;
 
             match = !match;
@@ -606,7 +611,7 @@ class ArcMenu_AddCustomLinkDialogWindow extends PW.DialogWindow {
         this.pageGroup.add(iconFrameRow);
 
         if(this._dialogType === Constants.MenuSettingsListType.DIRECTORIES)
-            iconEntry.set_text("ArcMenu_Folder");
+            iconEntry.set_text(Constants.ShortcutCommands.FOLDER);
 
         let cmdFrameRow = new Adw.ActionRow({
             title: this._dialogType === Constants.MenuSettingsListType.DIRECTORIES ? _("Directory") : _('Command')
