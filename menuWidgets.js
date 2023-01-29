@@ -1611,6 +1611,10 @@ var PinnedAppsMenuItem = GObject.registerClass({
             }
         }
 
+        if (this._app && !this._name) {
+            this._name = this._app.get_name();
+        }
+
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
 
