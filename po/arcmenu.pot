@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-24 07:30-0500\n"
+"POT-Creation-Date: 2023-01-29 10:57-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Frequent Apps"
 msgstr ""
 
-#: constants.js:75 menuWidgets.js:1246 menulayouts/az.js:105
+#: constants.js:75 menuWidgets.js:1248 menulayouts/az.js:105
 #: menulayouts/az.js:107 menulayouts/az.js:175 menulayouts/eleven.js:129
 #: menulayouts/eleven.js:130 menulayouts/eleven.js:226
 #: menulayouts/redmond.js:46 menulayouts/redmond.js:47
@@ -54,7 +54,7 @@ msgstr ""
 msgid "All Apps"
 msgstr ""
 
-#: constants.js:76 menuWidgets.js:736 settings/Menu/LayoutTweaksPage.js:623
+#: constants.js:76 menuWidgets.js:738 settings/Menu/LayoutTweaksPage.js:623
 #: settings/Menu/LayoutTweaksPage.js:740 settings/MenuPage.js:97
 msgid "Pinned Apps"
 msgstr ""
@@ -66,23 +66,23 @@ msgstr ""
 msgid "Recent Files"
 msgstr ""
 
-#: constants.js:234 menuButton.js:607 settings/Menu/ListPinnedPage.js:372
+#: constants.js:234 menuButton.js:602 settings/Menu/ListPinnedPage.js:372
 msgid "Log Out..."
 msgstr ""
 
-#: constants.js:235 menuButton.js:606 settings/Menu/ListPinnedPage.js:371
+#: constants.js:235 menuButton.js:601 settings/Menu/ListPinnedPage.js:371
 msgid "Lock"
 msgstr ""
 
-#: constants.js:236 menuButton.js:601 settings/Menu/ListPinnedPage.js:374
+#: constants.js:236 menuButton.js:596 settings/Menu/ListPinnedPage.js:374
 msgid "Restart..."
 msgstr ""
 
-#: constants.js:237 menuButton.js:602 settings/Menu/ListPinnedPage.js:373
+#: constants.js:237 menuButton.js:597 settings/Menu/ListPinnedPage.js:373
 msgid "Power Off..."
 msgstr ""
 
-#: constants.js:238 menuButton.js:599 settings/Menu/ListPinnedPage.js:375
+#: constants.js:238 menuButton.js:594 settings/Menu/ListPinnedPage.js:375
 msgid "Suspend"
 msgstr ""
 
@@ -94,7 +94,7 @@ msgstr ""
 msgid "Hibernate"
 msgstr ""
 
-#: constants.js:241 menuButton.js:608 settings/Menu/ListPinnedPage.js:378
+#: constants.js:241 menuButton.js:603 settings/Menu/ListPinnedPage.js:378
 msgid "Switch User"
 msgstr ""
 
@@ -210,12 +210,12 @@ msgstr ""
 msgid "Tweaks"
 msgstr ""
 
-#: constants.js:420 menuButton.js:553 menuWidgets.js:437
+#: constants.js:420 menuButton.js:548 menuWidgets.js:439
 #: settings/Menu/ListPinnedPage.js:347 settings/Menu/ListPinnedPage.js:361
 msgid "Activities Overview"
 msgstr ""
 
-#: constants.js:420 menuButton.js:538 prefs.js:98 settings/AboutPage.js:126
+#: constants.js:420 menuButton.js:533 prefs.js:98 settings/AboutPage.js:126
 #: settings/Menu/ListPinnedPage.js:335 settings/Menu/ListPinnedPage.js:345
 #: settings/Menu/ListPinnedPage.js:354
 msgid "ArcMenu Settings"
@@ -256,58 +256,58 @@ msgstr ""
 msgid "Failed to open “%s”"
 msgstr ""
 
-#: menuButton.js:583 settings/Menu/ListPinnedPage.js:363
+#: menuButton.js:578 settings/Menu/ListPinnedPage.js:363
 msgid "Show Desktop"
 msgstr ""
 
-#: menuButton.js:597 menuWidgets.js:798 menuWidgets.js:814
+#: menuButton.js:592 menuWidgets.js:800 menuWidgets.js:816
 msgid "Power Off / Log Out"
 msgstr ""
 
-#: menuButton.js:630
+#: menuButton.js:629
 msgid "Dash to Panel Settings"
 msgstr ""
 
-#: menuButton.js:635
+#: menuButton.js:634
 msgid "App Icons Taskbar Settings"
 msgstr ""
 
-#: menuWidgets.js:710
+#: menuWidgets.js:712
 msgid "Configure Runner"
 msgstr ""
 
-#: menuWidgets.js:748
+#: menuWidgets.js:750
 msgid "Extras"
 msgstr ""
 
-#: menuWidgets.js:856 menulayouts/plasma.js:315
+#: menuWidgets.js:858 menulayouts/plasma.js:315
 msgid "Session"
 msgstr ""
 
-#: menuWidgets.js:860 menulayouts/plasma.js:320
+#: menuWidgets.js:862 menulayouts/plasma.js:320
 msgid "System"
 msgstr ""
 
-#: menuWidgets.js:927
+#: menuWidgets.js:929
 msgid "Categories"
 msgstr ""
 
-#: menuWidgets.js:1100 menuWidgets.js:2581 menulayouts/plasma.js:123
+#: menuWidgets.js:1102 menuWidgets.js:2583 menulayouts/plasma.js:123
 msgid "Apps"
 msgstr ""
 
-#: menuWidgets.js:1181 menuWidgets.js:1202 menulayouts/az.js:105
+#: menuWidgets.js:1183 menuWidgets.js:1204 menulayouts/az.js:105
 #: menulayouts/eleven.js:129 menulayouts/redmond.js:46
 #: menulayouts/redmond.js:50 settings/Menu/SubPage.js:77
 #: settings/Menu/ThemingDialog.js:290
 msgid "Back"
 msgstr ""
 
-#: menuWidgets.js:1894
+#: menuWidgets.js:1896
 msgid "New"
 msgstr ""
 
-#: menuWidgets.js:2420
+#: menuWidgets.js:2422
 msgid "Search…"
 msgstr ""
 
@@ -587,7 +587,7 @@ msgstr ""
 msgid "New Hotkey"
 msgstr ""
 
-#: settings/GeneralPage.js:370 settings/Menu/ListPinnedPage.js:624
+#: settings/GeneralPage.js:370 settings/Menu/ListPinnedPage.js:629
 msgid "Apply"
 msgstr ""
 
@@ -964,54 +964,58 @@ msgstr ""
 msgid "Recent"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:500
+#: settings/Menu/ListPinnedPage.js:424
+msgid "Dash to Panel or App Icons Taskbar"
+msgstr ""
+
+#: settings/Menu/ListPinnedPage.js:505
 #, javascript-format
 msgid "%s has been added"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:512
+#: settings/Menu/ListPinnedPage.js:517
 #, javascript-format
 msgid "%s has been removed"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:535
+#: settings/Menu/ListPinnedPage.js:540
 msgid "Add a Custom Shortcut"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:540
+#: settings/Menu/ListPinnedPage.js:545
 msgid "Edit Pinned App"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:542
+#: settings/Menu/ListPinnedPage.js:547
 msgid "Edit Shortcut"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:553
+#: settings/Menu/ListPinnedPage.js:558
 msgid "Title"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:565 settings/MenuButtonPage.js:58
+#: settings/Menu/ListPinnedPage.js:570 settings/MenuButtonPage.js:58
 msgid "Icon"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:577 settings/MenuButtonPage.js:159
+#: settings/Menu/ListPinnedPage.js:582 settings/MenuButtonPage.js:159
 #: settings/MenuButtonPage.js:481
 msgid "Browse..."
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:583 settings/MenuButtonPage.js:486
+#: settings/Menu/ListPinnedPage.js:588 settings/MenuButtonPage.js:486
 msgid "Select an Icon"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:612
+#: settings/Menu/ListPinnedPage.js:617
 msgid "Command"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:612
+#: settings/Menu/ListPinnedPage.js:617
 msgid "Directory"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:624
+#: settings/Menu/ListPinnedPage.js:629
 msgid "Add"
 msgstr ""
 
