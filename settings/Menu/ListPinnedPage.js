@@ -238,11 +238,11 @@ class ArcMenu_ListPinnedPage extends SubPage {
 
         row.shortcut_icon = shortcutIcon;
         row.gicon = Gio.icon_new_for_string(shortcutIcon);
-        row.title = GLib.markup_escape_text(_(row.shortcut_name), -1);
+        row.title = GLib.markup_escape_text(row.shortcut_name, -1);
 
         if(row.shortcut_command.endsWith('.desktop') && !appInfo){
             row.gicon = Gio.icon_new_for_string('settings-warning-symbolic');
-            row.title = '<b><i>' + _('Invalid Shortcut') + '</i></b> - '+ _(row.title);
+            row.title = '<b><i>' + _('Invalid Shortcut') + '</i></b> - ' + (row.title ? _(row.title) : row.shortcut_command);
             row.css_classes = ['error'];
         }
         else
