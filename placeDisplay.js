@@ -2,13 +2,16 @@
  * Credits: this file is a copy of GNOME's 'placeDisplay.js' file from the 'Places Status Indicator' extension.
  * https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/blob/main/extensions/places-menu/placeDisplay.js
  */
+
+const {Gio, GLib, Shell} = imports.gi;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-const {Gio, GLib, Shell } = imports.gi;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const _ = Gettext.gettext;
+
+const { EventEmitter } = imports.misc.signals;
+
 const Main = imports.ui.main;
 const ShellMountOperation = imports.ui.shellMountOperation;
-const Signals = imports.signals;
-const _ = Gettext.gettext;
 
 Gio._promisify(Gio.AppInfo, 'launch_default_for_uri_async');
 Gio._promisify(Gio.File.prototype, 'mount_enclosing_volume');
@@ -22,8 +25,10 @@ const Hostname1Iface = '<node> \
 </node>';
 const Hostname1 = Gio.DBusProxy.makeProxyWrapper(Hostname1Iface);
 
-var PlaceInfo = class ArcMenu_PlaceInfo {
+var PlaceInfo = class PlaceInfo extends EventEmitter {
     constructor(...params) {
+        super();
+
         this._init(...params);
     }
 
@@ -120,7 +125,6 @@ var PlaceInfo = class ArcMenu_PlaceInfo {
         }
     }
 }
-Signals.addSignalMethods(PlaceInfo.prototype);
 
 var RootInfo = class ArcMenu_RootInfo extends PlaceInfo {
     _init() {
@@ -163,7 +167,7 @@ var RootInfo = class ArcMenu_RootInfo extends PlaceInfo {
         }
         super.destroy();
     }
-};
+}
 
 
 var PlaceDeviceInfo = class ArcMenu_PlaceDeviceInfo extends PlaceInfo {
@@ -216,7 +220,7 @@ var PlaceDeviceInfo = class ArcMenu_PlaceDeviceInfo extends PlaceInfo {
         let msg = _('Ejecting drive “%s” failed:').format(this._mount.get_name());
         Main.notifyError(msg, exception.message);
     }
-};
+}
 
 var PlaceVolumeInfo = class ArcMenu_PlaceVolumeInfo extends PlaceInfo {
     _init(kind, volume) {
@@ -242,7 +246,7 @@ var PlaceVolumeInfo = class ArcMenu_PlaceVolumeInfo extends PlaceInfo {
     getIcon() {
         return this._volume.get_symbolic_icon();
     }
-};
+}
 
 const DEFAULT_DIRECTORIES = [
     GLib.UserDirectory.DIRECTORY_DOCUMENTS,
@@ -252,8 +256,10 @@ const DEFAULT_DIRECTORIES = [
     GLib.UserDirectory.DIRECTORY_VIDEOS,
 ];
 
-var PlacesManager = class ArcMenu_PlacesManager {
+var PlacesManager = class ArcMenu_PlacesManager extends EventEmitter {
     constructor() {
+        super();
+
         this._places = {
             special: [],
             devices: [],
@@ -378,15 +384,6 @@ var PlacesManager = class ArcMenu_PlacesManager {
         this._places.devices = [];
         this._places.network.forEach(p => p.destroy());
         this._places.network = [];
-
-        /* Add standard places */
-        /*this._places.devices.push(new RootInfo());
-        this._places.network.push(new PlaceInfo(
-           'network',
-            Gio.File.new_for_uri('network:///'),
-            _('Network'),
-            'network-workgroup-symbolic')
-        );*/
 
         /* first go through all connected drives */
         let drives = this._volumeMonitor.get_connected_drives();
@@ -550,4 +547,3 @@ var PlacesManager = class ArcMenu_PlacesManager {
         return this._places[kind];
     }
 };
-Signals.addSignalMethods(PlacesManager.prototype);

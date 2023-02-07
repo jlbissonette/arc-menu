@@ -18,7 +18,6 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
     constructor(sourceActor, menuLayout) {
         super(sourceActor, St.Side.TOP);
 
-        this._settings = menuLayout._settings;
         this._menuButton = menuLayout.menuButton;
         this._menuLayout = menuLayout;
         this._enableFavorites = true;
@@ -41,7 +40,7 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
         this._detailsItem.connect('activate', () => this.closeMenus());
 
         this._arcMenuPinnedItem = this._createMenuItem(_('Pin to ArcMenu'), 8, () => {
-            let pinnedApps = this._settings.get_strv('pinned-app-list');
+            let pinnedApps = Me.settings.get_strv('pinned-app-list');
             const _isPinnedApp = this._isPinnedApp();
 
             this.close();
@@ -50,7 +49,7 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
                 for(let i = 0; i < pinnedApps.length; i += 3){
                     if(pinnedApps[i + 2] === this._app.get_id()){
                         pinnedApps.splice(i, 3);
-                        this._settings.set_strv('pinned-app-list', pinnedApps);
+                        Me.settings.set_strv('pinned-app-list', pinnedApps);
                         break;
                     }
                 }
@@ -59,7 +58,7 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
                 pinnedApps.push(this._app.get_app_info().get_display_name());
                 pinnedApps.push('');
                 pinnedApps.push(this._app.get_id());
-                this._settings.set_strv('pinned-app-list',pinnedApps);
+                Me.settings.set_strv('pinned-app-list',pinnedApps);
             }
         });
 
@@ -84,28 +83,24 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
         });
         this.addMenuItem(new PopupMenu.PopupSeparatorMenuItem(), 8);
 
-        this._pinnedAppsChangedId = this._settings.connect('changed::pinned-app-list', () => this._updateArcMenuPinnedItem());
+        Me.settings.connectObject('changed::pinned-app-list', () => this._updateArcMenuPinnedItem(), this);
         this.desktopExtensionStateChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
             DESKTOP_ICONS_UUIDS.forEach(uuid => {
                 if (extension.uuid === uuid)
                     this._updateDesktopShortcutItem();
             });
         });
+
+        this.connect('destroy', () => this._onDestroy());
     }
 
-    destroy() {
+    _onDestroy() {
         this.destroyed = true;
         this._disconnectSignals();
         if(this.desktopExtensionStateChangedId){
             Main.extensionManager.disconnect(this.desktopExtensionStateChangedId)
             this.desktopExtensionStateChangedId = null;
         }
-
-        if(this._pinnedAppsChangedId){
-            this._settings.disconnect(this._pinnedAppsChangedId)
-            this._pinnedAppsChangedId = null;
-        }
-        super.destroy();
     }
 
     closeMenus(){
@@ -203,11 +198,11 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
         this._command = command;
         this._arcMenuPinnedItem = this._createMenuItem(_('Unpin from ArcMenu'), 0, () => {
             this.close();
-            let pinnedApps = this._settings.get_strv('pinned-app-list');
+            let pinnedApps = Me.settings.get_strv('pinned-app-list');
             for(let i = 0; i < pinnedApps.length; i += 3){
                 if(pinnedApps[i + 2] === this._command){
                     pinnedApps.splice(i, 3);
-                    this._settings.set_strv('pinned-app-list', pinnedApps);
+                    Me.settings.set_strv('pinned-app-list', pinnedApps);
                     break;
                 }
             }
@@ -215,7 +210,7 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
     }
 
     _isPinnedApp(){
-        let pinnedApps = this._settings.get_strv('pinned-app-list');
+        let pinnedApps = Me.settings.get_strv('pinned-app-list');
         let matchFound = false;
 
         //3rd entry contains the appID
@@ -320,6 +315,7 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
     }
 
     _disconnectSignals(){
+        Me.settings.disconnectObject(this);
         this._appSystem.disconnectObject(this.actor);
         this._parentalControlsManager.disconnectObject(this.actor);
         this._appFavorites.disconnectObject(this.actor);

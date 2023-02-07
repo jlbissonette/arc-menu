@@ -614,6 +614,11 @@
       <summary>Force placement of ArcMenu on GNOME top panel.</summary>
       <description>Force placement of ArcMenu on GNOME top panel. Useful when using "Keep original gnome-shell top panel" setting in dash to panel</description>
     </key>
+    <key type="b" name="hide-overview-on-startup">
+      <default>false</default>
+      <summary>Hide overview on startup</summary>
+      <description>Hide overview on startup</description>
+    </key>
     <key type="s" name="custom-menu-button-text">
       <default>'Apps'</default>
       <summary>Text of the menu button.</summary>

@@ -132,6 +132,21 @@ class ArcMenu_GeneralPage extends Adw.PreferencesPage {
         const standaloneRunnerRow = this._createExpanderRow(_('Standalone Runner Menu'), false);
         generalGroup.add(menuHotkeyRow);
         generalGroup.add(standaloneRunnerRow);
+
+        let hideOverviewSwitch = new Gtk.Switch({
+            valign: Gtk.Align.CENTER,
+            active: this._settings.get_boolean('hide-overview-on-startup')
+        });
+        hideOverviewSwitch.connect('notify::active', (widget) => {
+            this._settings.set_boolean('hide-overview-on-startup', widget.get_active());
+        });
+
+        let hideOverviewRow = new Adw.ActionRow({
+            title: _("Hide Overview on Startup"),
+            activatable_widget: hideOverviewSwitch
+        });
+        hideOverviewRow.add_suffix(hideOverviewSwitch);
+        generalGroup.add(hideOverviewRow);
     }
 
     _createExpanderRow(title, isMenuHotkey){

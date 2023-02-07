@@ -1,3 +1,5 @@
+const Me = imports.misc.extensionUtils.getCurrentExtension();
+
 const { Gtk, Gio, GLib } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Main = imports.ui.main;
@@ -6,7 +8,6 @@ Gio._promisify(Gio.File.prototype, 'query_info_async');
 
 var RecentFilesManager = class ArcMenu_RecentFilesManager {
     constructor() {
-        this._settings = ExtensionUtils.getSettings();
         this._recentManager = new Gtk.RecentManager();
         this._queryCancellables = [];
     }
@@ -38,7 +39,7 @@ var RecentFilesManager = class ArcMenu_RecentFilesManager {
 
             if (fileInfo) {
                 const isHidden = fileInfo.get_attribute_boolean('standard::is-hidden');
-                const showHidden = this._settings.get_boolean('show-hidden-recent-files');
+                const showHidden = Me.settings.get_boolean('show-hidden-recent-files');
 
                 if (isHidden && !showHidden)
                     return { error: `${recentFile.get_display_name()} is hidden.` };
@@ -75,7 +76,6 @@ var RecentFilesManager = class ArcMenu_RecentFilesManager {
 
     destroy(){
         this.cancelCurrentQueries();
-        this._settings = null;
         this._recentManager = null;
     }
 }

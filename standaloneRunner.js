@@ -12,34 +12,22 @@ const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
 
 var StandaloneRunner = class ArcMenu_StandaloneRunner{
-    constructor(settings) {
-        this._settings = settings;
-
+    constructor() {
         this.tooltipShowing = false;
         this.tooltipShowingID = null;
 
         this.tooltip = new MW.Tooltip(this);
 
-        this.dummyWidget = new St.Widget({ width: 0, height: 0, opacity: 0 });
-        Main.uiGroup.add_child(this.dummyWidget);
-
         //Create Main Menus - ArcMenu and arcMenu's context menu
-        this.arcMenu = new MenuButton.ArcMenu(this.dummyWidget, 0.5, St.Side.TOP, this);
+        this.arcMenu = new MenuButton.ArcMenu(Main.layoutManager.dummyCursor, 0.5, St.Side.TOP, this);
         this.arcMenu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
 
         this.menuManager = new PopupMenu.PopupMenuManager(Main.panel);
         this.menuManager._changeMenu = (menu) => {};
         this.menuManager.addMenu(this.arcMenu);
 
-        let rect = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryMonitor.index);
-
-        //Position the runner menu in the center of the current monitor, at top of screen.
-        let positionX = Math.round(rect.x + (rect.width / 2));
-        let positionY = rect.y;
-        this.dummyWidget.set_position(positionX, positionY);
-
         //Context Menus for applications and other menu items
-        this.contextMenuManager = new PopupMenu.PopupMenuManager(this.dummyWidget);
+        this.contextMenuManager = new PopupMenu.PopupMenuManager(this.arcMenu);
         this.contextMenuManager._changeMenu = (menu) => {};
         this.contextMenuManager._onMenuSourceEnter = (menu) =>{
             if (this.contextMenuManager.activeMenu && this.contextMenuManager.activeMenu != menu)
@@ -49,125 +37,117 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
         }
 
         //Sub Menu Manager - Control all other popup menus
-        this.subMenuManager = new PopupMenu.PopupMenuManager(this.dummyWidget);
+        this.subMenuManager = new PopupMenu.PopupMenuManager(this.arcMenu);
         this.subMenuManager._changeMenu = (menu) => {};
     }
 
     initiate(){
-        this.clearMenuLayoutTimeouts();
-        this.createLayoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 500, () => {
-            this.createMenuLayout();
-            this.createLayoutID = null;
+        this.createMenuLayoutTimeout();
+    }
+
+    _clearMenuLayoutTimeouts(){
+        if(this._createMenuLayoutTimeoutID){
+            GLib.source_remove(this._createMenuLayoutTimeoutID);
+            this._createMenuLayoutTimeoutID = null;
+        }
+    }
+
+    createMenuLayoutTimeout(){
+        this._clearMenuLayoutTimeouts();
+
+        this._clearTooltipShowingId();
+        this._clearTooltip();
+
+        this._forcedMenuLocation = false;
+
+        this._destroyMenuLayout();
+
+        this._createMenuLayoutTimeoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, () => {
+            const StandaloneRunner = true;
+            this._menuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
+            this.arcMenu.box.add_child(this._menuLayout);
+
+            this._createMenuLayoutTimeoutID = null;
             return GLib.SOURCE_REMOVE;
         });
     }
 
-    createMenuLayout(){
-        if(this.tooltip)
-            this.tooltip.sourceActor = null;
-        this._forcedMenuLocation = false;
-        this.arcMenu.removeAll();
-        this.section = new PopupMenu.PopupMenuSection();
-        this.arcMenu.addMenuItem(this.section);
-        this.mainBox = new St.BoxLayout({
-            reactive: true,
-            vertical: false,
-            x_expand: true,
-            y_expand: true,
-            x_align: Clutter.ActorAlign.FILL,
-            y_align: Clutter.ActorAlign.FILL
-        });
-        this.mainBox._delegate = this.mainBox;
-        this.section.actor.add_child(this.mainBox);
-
-        const StandaloneRunner = true;
-        this.MenuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
-        if(this.arcMenu.isOpen){
-            if(this.MenuLayout.activeMenuItem)
-                this.MenuLayout.activeMenuItem.active = true;
-            else
-                this.mainBox.grab_key_focus();
-        }
-    }
-
-    reloadMenuLayout(){
-        if(this.tooltip)
-            this.tooltip.sourceActor = null;
-        this._forcedMenuLocation = false;
-
-        this.MenuLayout.destroy();
-        this.MenuLayout = null;
-
-        const StandaloneRunner = true;
-        this.MenuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
-
-        if(this.arcMenu.isOpen){
-            if(this.MenuLayout.activeMenuItem)
-                this.MenuLayout.activeMenuItem.active = true;
-            else
-                this.mainBox.grab_key_focus();
-        }
+    closeOtherMenus(){
+        if (this.contextMenuManager.activeMenu)
+            this.contextMenuManager.activeMenu.toggle();
+        if (this.subMenuManager.activeMenu)
+            this.subMenuManager.activeMenu.toggle();
     }
 
     toggleMenu(){
-        if(this.contextMenuManager.activeMenu)
-            this.contextMenuManager.activeMenu.toggle();
-        if(this.subMenuManager.activeMenu)
-            this.subMenuManager.activeMenu.toggle();
+        this.closeOtherMenus();
 
         if(!this.arcMenu.isOpen){
-            this.MenuLayout.updateLocation();
-            this.arcMenu.toggle();
-            if(this.arcMenu.isOpen)
-                this.mainBox.grab_key_focus();
+            this._menuLayout.updateLocation();
         }
-        else if(this.arcMenu.isOpen){
-            this.arcMenu.toggle();
+
+        this.arcMenu.toggle();
+        if (this.arcMenu.isOpen)
+            this._menuLayout?.grab_key_focus();
+    }
+
+    _destroyMenuLayout() {
+        if(this._menuLayout){
+            this._menuLayout.destroy();
+            this._menuLayout = null;
+        }
+    }
+
+    _clearTooltipShowingId(){
+        if(this.tooltipShowingID){
+            GLib.source_remove(this.tooltipShowingID);
+            this.tooltipShowingID = null;
+        }
+    }
+
+    _clearTooltip(){
+        this.tooltipShowing = false;
+        if(this.tooltip){
+            this.tooltip.hide();
+            this.tooltip.sourceActor = null;
         }
     }
 
     destroy(){
-        this.clearMenuLayoutTimeouts();
-        if (this.tooltipShowingID) {
-            GLib.source_remove(this.tooltipShowingID);
-            this.tooltipShowingID = null;
-        }
+        this._clearMenuLayoutTimeouts();
+
+        this._clearTooltipShowingId();
+        this._clearTooltip();
+        this._destroyMenuLayout();
 
         this.tooltip?.destroy();
-        this.MenuLayout?.destroy();
+        this.tooltip = null;
+
         this.arcMenu?.destroy();
-        this.dummyWidget?.destroy();
-    }
-
-    clearMenuLayoutTimeouts(){
-        if(this.createLayoutID){
-            GLib.source_remove(this.createLayoutID);
-            this.createLayoutID = null;
-        }
-    }
-
-    updateMenuLayout(){
     }
 
     updateLocation(){
-        this.MenuLayout?.updateLocation();
+        this._menuLayout?.updateLocation();
+    }
+
+    getActiveCategoryType() {
+        return this._menuLayout?.activeCategoryType;
+    }
+
+    reloadApplications() {
+        this._menuLayout?.reloadApplications();
     }
 
     displayPinnedApps() {
-        this.MenuLayout?.displayPinnedApps();
+        this._menuLayout?.displayPinnedApps();
     }
 
     loadPinnedApps() {
-        this.MenuLayout?.loadPinnedApps();
-    }
-
-    reload(){
-        if(this.MenuLayout)
-            this.reloadMenuLayout();
+        this._menuLayout?.loadPinnedApps();
     }
 
     setDefaultMenuView(){
-        this.MenuLayout?.setDefaultMenuView();
+        this._menuLayout?.setDefaultMenuView();
     }
 
     _onOpenStateChanged(menu, open) {
@@ -177,14 +157,8 @@ var StandaloneRunner = class ArcMenu_StandaloneRunner{
         }
         else{
             if(!this.arcMenu.isOpen){
-                if (this.tooltipShowingID) {
-                    GLib.source_remove(this.tooltipShowingID);
-                    this.tooltipShowingID = null;
-                }
-                this.tooltipShowing = false;
-                if(this.activeTooltip){
-                    this.activeTooltip.hide();
-                }
+                this._clearTooltipShowingId();
+                this._clearTooltip();
             }
         }
     }
