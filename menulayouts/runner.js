@@ -52,7 +52,7 @@ var Menu = class ArcMenu_RunnerLayout extends BaseMenuLayout {
             quicklinks_icon_size: Constants.EXTRA_SMALL_ICON_SIZE,
             buttons_icon_size: Constants.EXTRA_SMALL_ICON_SIZE,
             pinned_apps_icon_size: Constants.EXTRA_SMALL_ICON_SIZE,
-            is_standalone_runner: isStandalone
+            is_standalone_runner: isStandalone ? true : false
         });
 
         this.activeMenuItem = null;

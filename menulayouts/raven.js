@@ -37,7 +37,7 @@ var Menu = class ArcMenu_RavenLayout extends BaseMenuLayout{
         this.arcMenu.box.style = "padding: 0px; margin: 0px; border-radius: 0px;";
         this.searchBox.style = "margin: 10px 10px 10px 10px;";
 
-        Me.settings.connectObjcet('changed::raven-position', () => this._updatePosition());
+        Me.settings.connectObject('changed::raven-position', () => this._updatePosition());
 
         this.updateLocation();
 

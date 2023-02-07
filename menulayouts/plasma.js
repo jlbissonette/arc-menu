@@ -198,7 +198,7 @@ var Menu = class ArcMenu_PlasmaLayout extends BaseMenuLayout{
         for (let i = 0; i < Constants.SECTIONS.length; i++) {
             const id = Constants.SECTIONS[i];
             this._placesSections[id] = new St.BoxLayout({ vertical: true });
-            this.placesManager.connectObject(`${id}-updated`, () => this._redisplayPlaces(id), this);
+            this.placesManager.connect(`${id}-updated`, () => this._redisplayPlaces(id), this);
 
             this._createPlaces(id);
             this.externalDevicesBox.add_child(this._placesSections[id]);

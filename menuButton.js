@@ -106,7 +106,9 @@ var MenuButton = GObject.registerClass(class ArcMenu_MenuButton extends PanelMen
 
         this._createMenuLayoutTimeoutID = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 100, () => {
             this._menuLayout = Utils.getMenuLayout(this, Me.settings.get_enum('menu-layout'));
-            this.arcMenu.box.add_child(this._menuLayout);
+
+            if (this._menuLayout)
+                this.arcMenu.box.add_child(this._menuLayout);
 
             this.setMenuPositionAlignment();
             this.forceMenuLocation();

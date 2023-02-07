@@ -32,6 +32,15 @@ var Menu = class ArcMenu_RedmondLayout extends BaseMenuLayout{
             pinned_apps_icon_size: Constants.MEDIUM_ICON_SIZE,
         });
 
+        this.connect("button-press-event", () => {
+            if(this.backButton.visible){
+                const event = Clutter.get_current_event();
+                if(event.get_button() === 8){
+                    this.backButton.activate(event);
+                }
+            }
+        });
+
         const mainBox = new St.BoxLayout({
             x_expand: true,
             y_expand: true,
@@ -148,7 +157,7 @@ var Menu = class ArcMenu_RedmondLayout extends BaseMenuLayout{
         for (let i = 0; i < Constants.SECTIONS.length; i++) {
             const id = Constants.SECTIONS[i];
             this._placesSections[id] = new St.BoxLayout({ vertical: true });
-            this.placesManager.connectObject(`${id}-updated`, () => this._redisplayPlaces(id), this);
+            this.placesManager.connect(`${id}-updated`, () => this._redisplayPlaces(id), this);
 
             this._createPlaces(id);
             externalDevicesBox.add_child(this._placesSections[id]);

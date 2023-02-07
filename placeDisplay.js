@@ -8,10 +8,9 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
 
-const { EventEmitter } = imports.misc.signals;
-
 const Main = imports.ui.main;
 const ShellMountOperation = imports.ui.shellMountOperation;
+const Signals = imports.signals;
 
 Gio._promisify(Gio.AppInfo, 'launch_default_for_uri_async');
 Gio._promisify(Gio.File.prototype, 'mount_enclosing_volume');
@@ -25,10 +24,8 @@ const Hostname1Iface = '<node> \
 </node>';
 const Hostname1 = Gio.DBusProxy.makeProxyWrapper(Hostname1Iface);
 
-var PlaceInfo = class PlaceInfo extends EventEmitter {
+var PlaceInfo = class ArcMenu_PlaceInfo {
     constructor(...params) {
-        super();
-
         this._init(...params);
     }
 
@@ -125,6 +122,7 @@ var PlaceInfo = class PlaceInfo extends EventEmitter {
         }
     }
 }
+Signals.addSignalMethods(PlaceInfo.prototype);
 
 var RootInfo = class ArcMenu_RootInfo extends PlaceInfo {
     _init() {
@@ -256,10 +254,8 @@ const DEFAULT_DIRECTORIES = [
     GLib.UserDirectory.DIRECTORY_VIDEOS,
 ];
 
-var PlacesManager = class ArcMenu_PlacesManager extends EventEmitter {
+var PlacesManager = class ArcMenu_PlacesManager {
     constructor() {
-        super();
-
         this._places = {
             special: [],
             devices: [],
@@ -547,3 +543,4 @@ var PlacesManager = class ArcMenu_PlacesManager extends EventEmitter {
         return this._places[kind];
     }
 };
+Signals.addSignalMethods(PlacesManager.prototype);

@@ -24,7 +24,6 @@ var Menu = class ArcMenu_InsiderLayout extends BaseMenuLayout{
             context_menu_location: Constants.ContextMenuLocation.RIGHT,
             column_spacing: 10,
             row_spacing: 10,
-            PinnedAppsColumns: 1,
             default_menu_width: 525,
             icon_grid_style: "SmallIconGrid",
             vertical: false,
@@ -62,7 +61,7 @@ var Menu = class ArcMenu_InsiderLayout extends BaseMenuLayout{
             style: 'padding-top: 9px;'
         })
         const userMenuIcon = new MW.UserMenuIcon(this, 75, true);
-        userMenuIcon.set({
+        userMenuIcon.label.set({
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER,
             x_align: Clutter.ActorAlign.CENTER,

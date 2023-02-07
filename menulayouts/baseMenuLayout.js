@@ -975,7 +975,6 @@ var BaseMenuLayout = class ArcMenu_BaseMenuLayout extends St.BoxLayout {
                     child.destroy();
                 });
             };
-            this.placesManager.disconnectObject(this);
             this.placesManager.destroy();
             this.placesManager = null;
         }

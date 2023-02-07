@@ -1501,14 +1501,14 @@ var UserMenuIcon = GObject.registerClass(class ArcMenu_UserMenuIcon extends St.B
             if (iconFile) {
                 this.child = null;
                 this.add_style_class_name('user-avatar');
-                this.style = 'background-image: url("%s");'.format(iconFile) + "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
+                this.style = 'background-image: url("%s");'.format(iconFile) + `width: ${this.iconSize}px; height: ${this.iconSize}px;`;
             }
             else {
-                this.style = "width: " + this.iconSize + "px; height: " + this.iconSize + "px;";
+                this.style = `width: ${this.iconSize}px; height: ${this.iconSize}px;`
                 this.child = new St.Icon({
                     icon_name: 'avatar-default-symbolic',
                     icon_size: this.iconSize,
-                    style: "padding: 5px; width: " + this.iconSize + "px; height: " + this.iconSize + "px;",
+                    style: `padding: 5px; width: ${this.iconSize}px; height: ${this.iconSize}px;`,
                 });
             }
         }
@@ -2006,7 +2006,7 @@ var CategoryMenuItem = GObject.registerClass(class ArcMenu_CategoryMenuItem exte
         let iconSize;
         if(this._displayType === Constants.DisplayType.BUTTON){
             const IconSizeEnum = Me.settings.get_enum('button-item-icon-size');
-            let defaultIconSize = this.this._menuLayout.buttons_icon_size;
+            let defaultIconSize = this._menuLayout.buttons_icon_size;
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
             this.style = `min-width: ${iconSize}px; min-height: ${iconSize}px;`;
         }
@@ -2227,7 +2227,7 @@ var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends Ar
             this.add_child(this._ejectButton);
         }
 
-        this._info.connectObject('changed', this._propertiesChanged.bind(this), this);
+        this._infoChangedId = this._info.connect('changed', this._propertiesChanged.bind(this), this);
     }
 
     set folderPath(value){
@@ -2267,7 +2267,11 @@ var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends Ar
     }
 
     _onDestroy() {
-        this._info.disconnectObject(this);
+        if (this._infoChangedId) {
+            this._info.disconnect(this._infoChangedId);
+            this._infoChangedId = null;
+        }
+
         if(this._info)
             this._info.destroy();
         super._onDestroy();

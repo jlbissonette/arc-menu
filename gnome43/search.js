@@ -22,10 +22,10 @@ const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
 
 var ListSearchResult = GObject.registerClass(class ArcMenu_ListSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
-        let menulayout = resultsView._menuLayout;
+        let menuLayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']);
 
-        super._init(menulayout, app, Constants.DisplayType.LIST, metaInfo)
+        super._init(menuLayout, app, Constants.DisplayType.LIST, metaInfo)
 
         this.app = app;
         this.searchType = this._menuLayout.search_display_type;
@@ -83,10 +83,10 @@ var ListSearchResult = GObject.registerClass(class ArcMenu_ListSearchResult exte
 
 var AppSearchResult = GObject.registerClass(class ArcMenu_AppSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
-        let menulayout = resultsView._menuLayout;
+        let menuLayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']) || appSys.lookup_app(provider.id);
-        let displayType = menulayout.search_display_type;
-        super._init(menulayout, app, displayType, metaInfo);
+        let displayType = menuLayout.search_display_type;
+        super._init(menuLayout, app, displayType, metaInfo);
         this.app = app;
         this.provider = provider;
         this.metaInfo = metaInfo;
