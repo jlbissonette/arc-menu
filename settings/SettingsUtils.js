@@ -15,6 +15,95 @@ function getMenuLayoutTweaksName(index){
     }
 }
 
+var MenuLayout = {
+    ARCMENU: 0,//
+    BRISK: 1, //
+    WHISKER: 2, //
+    GNOME_MENU: 3, //
+    MINT: 4, //
+    ELEMENTARY: 5, //
+    GNOME_OVERVIEW: 6, //
+    REDMOND: 7, //
+    UNITY: 8, //
+    BUDGIE: 9, //
+    INSIDER: 10, //
+    RUNNER: 11, //
+    CHROMEBOOK: 12, //
+    RAVEN: 13, //
+    TOGNEE: 14, //
+    PLASMA: 15, //
+    WINDOWS: 16, //
+    ELEVEN: 17, //
+    AZ: 18, //
+};
+
+Constants.SettingsPage.PINNED_APPS
+Constants.SettingsPage.APPLICATION_SHORTCUTS
+Constants.SettingsPage.DIRECTORY_SHORTCUTS
+Constants.SettingsPage.POWER_OPTIONS
+Constants.SettingsPage.EXTRA_CATEGORIES
+Constants.SettingsPage.SEARCH_OPTIONS
+
+function setVisibleRows(rows, menuLayout) {
+    for (let row in rows)
+        rows[row].visible = true;
+
+    switch(menuLayout) {
+        case Constants.MenuLayout.PLASMA:
+        case Constants.MenuLayout.TOGNEE:
+        case Constants.MenuLayout.ARCMENU:
+            break;
+        case Constants.MenuLayout.ELEVEN:
+        case Constants.MenuLayout.AZ:
+        case Constants.MenuLayout.INSIDER:
+            rows[Constants.SettingsPage.DIRECTORY_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.APPLICATION_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.EXTRA_CATEGORIES].visible = false;
+            break;
+        case Constants.MenuLayout.WHISKER:
+        case Constants.MenuLayout.BRISK:
+            rows[Constants.SettingsPage.DIRECTORY_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.APPLICATION_SHORTCUTS].visible = false;
+            break;
+        case Constants.MenuLayout.GNOME_MENU:
+            rows[Constants.SettingsPage.DIRECTORY_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.APPLICATION_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.SEARCH_OPTIONS].visible = false;
+            rows[Constants.SettingsPage.POWER_OPTIONS].visible = false;
+            break;
+        case Constants.MenuLayout.MINT:
+        case Constants.MenuLayout.BUDGIE:
+            rows[Constants.SettingsPage.DIRECTORY_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.APPLICATION_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.POWER_OPTIONS].visible = false;
+            break;
+        case Constants.MenuLayout.RAVEN:
+        case Constants.MenuLayout.UNITY:
+            rows[Constants.SettingsPage.DIRECTORY_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.POWER_OPTIONS].visible = false;
+            break;
+        case Constants.MenuLayout.ELEMENTARY:
+        case Constants.MenuLayout.CHROMEBOOK:
+        case Constants.MenuLayout.RUNNER:
+            rows[Constants.SettingsPage.PINNED_APPS].visible = false;
+            rows[Constants.SettingsPage.APPLICATION_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.DIRECTORY_SHORTCUTS].visible = false;
+            rows[Constants.SettingsPage.POWER_OPTIONS].visible = false;
+            rows[Constants.SettingsPage.EXTRA_CATEGORIES].visible = false;
+            break;
+        case Constants.MenuLayout.REDMOND:
+        case Constants.MenuLayout.WINDOWS:
+            rows[Constants.SettingsPage.EXTRA_CATEGORIES].visible = false;
+            break;
+        case Constants.MenuLayout.GNOME_OVERVIEW:
+            for (let row in rows)
+                rows[row].visible = false;
+            break;
+        default:
+            break;
+    }
+}
+
 function parseRGBA(colorString){
     let rgba = new Gdk.RGBA();
     rgba.parse(colorString);

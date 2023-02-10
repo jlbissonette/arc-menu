@@ -6,7 +6,6 @@ const AccountsService = imports.gi.AccountsService;
 const { AppContextMenu } = Me.imports.appMenu;
 const BoxPointer = imports.ui.boxpointer;
 const Constants = Me.imports.constants;
-const Dash = imports.ui.dash;
 const DateMenu = imports.ui.dateMenu;
 const DND = imports.ui.dnd;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
@@ -20,25 +19,76 @@ const _ = Gettext.gettext;
 const INDICATOR_ICON_SIZE = 18;
 const USER_AVATAR_SIZE = 28;
 
-function activatePowerOption(powerType, arcMenu){
+const TOOLTIP_SHOW_TIME = 150;
+const TOOLTIP_HIDE_TIME = 100;
+
+function activatePowerOption(powerType){
     const systemActions = SystemActions.getDefault();
-    arcMenu.itemActivated(BoxPointer.PopupAnimation.NONE);
-    if(powerType === Constants.PowerType.POWER_OFF)
-        systemActions.activatePowerOff();
-    else if(powerType === Constants.PowerType.RESTART)
-        systemActions.activateRestart();
-    else if(powerType === Constants.PowerType.LOCK)
-        systemActions.activateLockScreen();
-    else if(powerType === Constants.PowerType.LOGOUT)
-        systemActions.activateLogout();
-    else if(powerType === Constants.PowerType.SUSPEND)
-        systemActions.activateSuspend();
-    else if(powerType === Constants.PowerType.SWITCH_USER)
-        systemActions.activateSwitchUser()
-    else if(powerType === Constants.PowerType.HYBRID_SLEEP)
-        Utils.activateHybridSleep();
-    else if(powerType === Constants.PowerType.HIBERNATE)
-        Utils.activateHibernate();
+    
+    switch (powerType) {
+        case Constants.PowerType.POWER_OFF:
+            systemActions.activatePowerOff();
+            break;
+        case Constants.PowerType.RESTART:
+            systemActions.activateRestart();
+            break;
+        case Constants.PowerType.LOCK:
+            systemActions.activateLockScreen();
+            break;
+        case Constants.PowerType.LOGOUT:
+            systemActions.activateLogout();
+            break;
+        case Constants.PowerType.SUSPEND:
+            systemActions.activateSuspend();
+            break;
+        case Constants.PowerType.SWITCH_USER:
+            systemActions.activateSwitchUser()
+            break;
+        case Constants.PowerType.HYBRID_SLEEP:
+            Utils.activateHibernateOrSleep(powerType);
+            break;
+        case Constants.PowerType.HIBERNATE:
+            Utils.activateHibernateOrSleep(powerType);
+            break;
+    }
+}
+
+function bindPowerItemVisibility(powerMenuItem) {
+    const powerType = powerMenuItem.powerType;
+    const systemActions = SystemActions.getDefault();
+
+    switch(powerType){
+        case Constants.PowerType.POWER_OFF:
+            systemActions.bind_property('can-power-off', powerMenuItem, 'visible', 
+                GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE);
+            break;
+        case Constants.PowerType.RESTART:
+            systemActions.bind_property('can-restart', powerMenuItem, 'visible', 
+                GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE);
+            break;
+        case Constants.PowerType.LOCK:
+            systemActions.bind_property('can-lock-screen', powerMenuItem, 'visible', 
+                GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE);
+            break;
+        case Constants.PowerType.LOGOUT:
+            systemActions.bind_property('can-logout', powerMenuItem, 'visible', 
+                GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE);
+            break;
+        case Constants.PowerType.SUSPEND:
+            systemActions.bind_property('can-suspend', powerMenuItem, 'visible', 
+                GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE);
+            break;
+        case Constants.PowerType.SWITCH_USER:
+            systemActions.bind_property('can-switch-user', powerMenuItem, 'visible', 
+                GObject.BindingFlags.DEFAULT | GObject.BindingFlags.SYNC_CREATE);
+            break;
+        case Constants.PowerType.HYBRID_SLEEP:
+            Utils.canHibernateOrSleep('CanHybridSleep', result => powerMenuItem.visible = result);
+            break;
+        case Constants.PowerType.HIBERNATE:
+            Utils.canHibernateOrSleep('CanHibernate', result => powerMenuItem.visible = result);
+            break;
+    }
 }
 
 var ArcMenuPopupBaseMenuItem = GObject.registerClass({
@@ -592,7 +642,7 @@ var Tooltip = GObject.registerClass(class ArcMenu_Tooltip extends St.BoxLayout {
             this.set_position(x, y);
             this.ease({
                 opacity: 255,
-                duration: Dash.DASH_ITEM_LABEL_SHOW_TIME,
+                duration: TOOLTIP_SHOW_TIME,
                 mode: Clutter.AnimationMode.EASE_OUT_QUAD,
             });
         }
@@ -607,7 +657,7 @@ var Tooltip = GObject.registerClass(class ArcMenu_Tooltip extends St.BoxLayout {
             this.sourceActor = null;
             this.ease({
                 opacity: 0,
-                duration: instantHide ? 0 : Dash.DASH_ITEM_LABEL_HIDE_TIME,
+                duration: instantHide ? 0 : TOOLTIP_HIDE_TIME,
                 mode: Clutter.AnimationMode.EASE_OUT_QUAD,
                 onComplete: () => super.hide()
             });
@@ -703,7 +753,7 @@ var RunnerTweaksButton = GObject.registerClass(class ArcMenu_RunnerTweaksButton 
 
     activate(event) {
         super.activate(event);
-        Me.settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.RUNNER_TWEAKS);
+        Me.settings.set_int('prefs-visible-page', Constants.SettingsPage.RUNNER_TWEAKS);
         ExtensionUtils.openPrefs();
     }
 });
@@ -732,21 +782,33 @@ var ExtrasButton = GObject.registerClass(class ArcMenu_ExtrasButton extends ArcM
     }
 });
 
-var PowerOptionsBox = GObject.registerClass(class ArcMenu_PowerOptionsBox extends St.BoxLayout{
-    _init(menuLayout, spacing, vertical = false){
+var PowerOptionsBox = GObject.registerClass(class ArcMenu_PowerOptionsBox extends St.ScrollView{
+    _init(menuLayout, vertical = false){
         super._init({
-            vertical,
-            style: `spacing: ${spacing}px;`
+            x_expand: false,
+            overlay_scrollbars: true,
+            clip_to_allocation: true,
         });
+        this.set_policy(St.PolicyType.NEVER, St.PolicyType.NEVER);
+        this._orientation = vertical ? Clutter.Orientation.VERTICAL : Clutter.Orientation.HORIZONTAL;
 
-        let powerOptions = Me.settings.get_value("power-options").deep_unpack();
+        const box = new St.BoxLayout({
+            vertical,
+            style: `spacing: 6px;`,
+        });
+        this.add_actor(box);
+
+        const powerOptions = Me.settings.get_value("power-options").deep_unpack();
         for(let i = 0; i < powerOptions.length; i++){
-            let powerType = powerOptions[i][0];
-            let shouldShow = powerOptions[i][1];
+            const powerType = powerOptions[i][0];
+            const shouldShow = powerOptions[i][1];
             if(shouldShow){
-                let powerButton = new PowerButton(menuLayout, powerType);
-                powerButton.style = "margin: 0px;";
-                this.add_child(powerButton);
+                const powerButton = new PowerButton(menuLayout, powerType);
+                powerButton.connectObject(
+                    'enter-event', () => Utils.ensureActorVisibleInScrollView(powerButton, this._orientation),
+                    'key-focus-in', () => Utils.ensureActorVisibleInScrollView(powerButton, this._orientation), this);
+                powerButton.style = 'margin: 0px;';
+                box.add_child(powerButton);
             }
         }
     }
@@ -820,24 +882,16 @@ var LeaveButton = GObject.registerClass(class ArcMenu_LeaveButton extends ArcMen
         let section = new PopupMenu.PopupMenuSection();
         this.leaveMenu.addMenuItem(section);
 
-        let box = new St.BoxLayout({
-            vertical: true,
-        });
+        let box = new St.BoxLayout({ vertical: true });
         box._delegate = box;
-
         section.actor.add_child(box);
 
-        let sessionBox = new St.BoxLayout({
-            vertical: true,
-        });
-
+        let sessionBox = new St.BoxLayout({ vertical: true });
         sessionBox.add_child(this._menuLayout.createLabelRow(_("Session")));
-        let systemBox = new St.BoxLayout({
-            vertical: true,
-        });
-        systemBox.add_child(this._menuLayout.createLabelRow(_("System")));
-
         box.add_child(sessionBox);
+
+        let systemBox = new St.BoxLayout({ vertical: true });
+        systemBox.add_child(this._menuLayout.createLabelRow(_("System")));
         box.add_child(systemBox);
 
         let hasSessionOption, hasSystemOption;
@@ -915,9 +969,12 @@ var PowerButton = GObject.registerClass(class ArcMenu_PowerButton extends ArcMen
     _init(menuLayout, powerType) {
         super._init(menuLayout, Constants.PowerOptions[powerType].NAME, Constants.PowerOptions[powerType].ICON);
         this.powerType = powerType;
+
+        bindPowerItemVisibility(this);
     }
     activate(event) {
-        activatePowerOption(this.powerType, this._menuLayout.arcMenu);
+        this._menuLayout.arcMenu.toggle();
+        activatePowerOption(this.powerType);
     }
 });
 
@@ -925,6 +982,8 @@ var PowerMenuItem = GObject.registerClass(class ArcMenu_PowerMenuItem extends Ar
     _init(menuLayout, type) {
         super._init(menuLayout);
         this.powerType = type;
+
+        bindPowerItemVisibility(this);
 
         this._iconBin = new St.Bin();
         this.add_child(this._iconBin);
@@ -951,7 +1010,8 @@ var PowerMenuItem = GObject.registerClass(class ArcMenu_PowerMenuItem extends Ar
     }
 
     activate(){
-        activatePowerOption(this.powerType, this._menuLayout.arcMenu);
+        this._menuLayout.arcMenu.toggle();
+        activatePowerOption(this.powerType);
     }
 });
 
@@ -1372,34 +1432,34 @@ var ShortcutMenuItem = GObject.registerClass(class ArcMenu_ShortcutMenuItem exte
     }
 
     activate(event) {
-        if(this._command === Constants.ShortcutCommands.LOG_OUT)
-            activatePowerOption(Constants.PowerType.LOGOUT, this._menuLayout.arcMenu);
-        else if(this._command === Constants.ShortcutCommands.LOCK)
-            activatePowerOption(Constants.PowerType.LOCK, this._menuLayout.arcMenu);
-        else if(this._command === Constants.ShortcutCommands.POWER_OFF)
-            activatePowerOption(Constants.PowerType.POWER_OFF, this._menuLayout.arcMenu);
-        else if(this._command === Constants.ShortcutCommands.RESTART)
-            activatePowerOption(Constants.PowerType.RESTART, this._menuLayout.arcMenu);
-        else if(this._command === Constants.ShortcutCommands.SUSPEND)
-            activatePowerOption(Constants.PowerType.SUSPEND, this._menuLayout.arcMenu);
-        else if(this._command === Constants.ShortcutCommands.HYBRID_SLEEP)
-            activatePowerOption(Constants.PowerType.HYBRID_SLEEP, this._menuLayout.arcMenu);
-        else if(this._command === Constants.ShortcutCommands.HIBERNATE)
-            activatePowerOption(Constants.PowerType.HIBERNATE, this._menuLayout.arcMenu);
-        else if(this._command === Constants.ShortcutCommands.SWITCH_USER)
-            activatePowerOption(Constants.PowerType.SWITCH_USER, this._menuLayout.arcMenu);
-        else{
-            this._menuLayout.arcMenu.toggle();
-            if(this._command === Constants.ShortcutCommands.OVERVIEW)
+        this._menuLayout.arcMenu.toggle();
+        switch (this._command) {
+            case Constants.ShortcutCommands.LOG_OUT:
+            case Constants.ShortcutCommands.LOCK:
+            case Constants.ShortcutCommands.POWER_OFF:
+            case Constants.ShortcutCommands.RESTART:
+            case Constants.ShortcutCommands.SUSPEND:
+            case Constants.ShortcutCommands.HIBERNATE:
+            case Constants.ShortcutCommands.HYBRID_SLEEP:
+            case Constants.ShortcutCommands.SWITCH_USER:
+                const powerType = Utils.getPowerTypeFromShortcutCommand(this._command);
+                activatePowerOption(powerType);
+                break;
+            case Constants.ShortcutCommands.OVERVIEW:
                 Main.overview.show();
-            else if(this._command === Constants.ShortcutCommands.RUN_COMMAND)
+                break;
+            case Constants.ShortcutCommands.RUN_COMMAND:
                 Main.openRunDialog();
-            else if(this._command === Constants.ShortcutCommands.SHOW_APPS)
+                break;
+            case Constants.ShortcutCommands.SHOW_APPS:
                 Main.overview._overview._controls._toggleAppsPage();
-            else if(this._app)
-                this._app.open_new_window(-1);
-            else
-                Util.spawnCommandLine(this._command);
+                break;
+            default: {
+                if(this._app)
+                    this._app.open_new_window(-1);
+                else
+                    Util.spawnCommandLine(this._command);
+            }
         }
     }
 });
@@ -2239,6 +2299,12 @@ var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends Ar
         return this._folderPath;
     }
 
+    forceTitle(title) {
+        this._foreTitle = true;
+        if(this.label)
+            this.label.text = _(title);
+    }
+
     setAsRecentFile(recentFile, removeRecentFile){
         const homeRegExp = new RegExp('^(' + GLib.get_home_dir() + ')');
         let file = Gio.File.new_for_uri(recentFile.get_uri());
@@ -2323,7 +2389,7 @@ var PlaceMenuItem = GObject.registerClass(class ArcMenu_PlaceMenuItem extends Ar
     _propertiesChanged(info) {
         this._info = info;
         this._iconBin.set_child(this.createIcon());
-        if(this.label)
+        if(this.label && !this._foreTitle)
             this.label.text = _(info.name);
     }
 });
@@ -2494,15 +2560,14 @@ var MenuButtonWidget = GObject.registerClass(class ArcMenu_MenuButtonWidget exte
         this.add_child(this._label);
     }
 
-    setActiveStylePseudoClass(enable){
-        if(enable){
-            this._icon.add_style_pseudo_class('active');
-            this._label.add_style_pseudo_class('active');
-        }
-        else{
-            this._icon.remove_style_pseudo_class('active');
-            this._label.remove_style_pseudo_class('active');
-        }
+    addStylePseudoClass(style){
+        this._icon.add_style_pseudo_class(style);
+        this._label.add_style_pseudo_class(style);
+    }
+
+    removeStylePseudoClass(style){
+        this._icon.remove_style_pseudo_class(style);
+        this._label.remove_style_pseudo_class(style);
     }
 
     showIcon(){

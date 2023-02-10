@@ -125,7 +125,7 @@ var Menu = class ArcMenu_InsiderLayout extends BaseMenuLayout{
         let leaveButton;
         const powerDisplayStyle = Me.settings.get_enum('power-display-style');
         if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
-            leaveButton = new MW.PowerOptionsBox(this, 6, true);
+            leaveButton = new MW.PowerOptionsBox(this, true);
         else
             leaveButton = new MW.LeaveButton(this);
 

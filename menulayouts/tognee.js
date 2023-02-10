@@ -31,13 +31,9 @@ var Menu = class ArcMenu_TogneeLayout extends BaseMenuLayout{
             pinned_apps_icon_size: Constants.MEDIUM_ICON_SIZE,
         });
 
-        this.connect("button-press-event", () => {
-            if(this.backButton.visible){
-                const event = Clutter.get_current_event();
-                if(event.get_button() === 8){
-                    this.backButton.activate(event);
-                }
-            }
+        this.connect("button-press-event", (actor, event) => {
+            if (this.backButton.visible && event.get_button() === 8)
+                this.backButton.activate(event);
         });
 
         this._mainBox = new St.BoxLayout({
@@ -110,7 +106,7 @@ var Menu = class ArcMenu_TogneeLayout extends BaseMenuLayout{
             y_expand: true,
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.FILL,
-            style: "spacing: 5px; padding-bottom: 5px;"
+            style: "spacing: 6px; padding-bottom: 6px;"
         });
         this.shortcutsScrollBox = this._createScrollBox({
             x_expand: false,
@@ -154,14 +150,14 @@ var Menu = class ArcMenu_TogneeLayout extends BaseMenuLayout{
         this.actionsBox = new St.BoxLayout({
             vertical: true,
             x_align: Clutter.ActorAlign.CENTER,
-            style: "spacing: 5px;"
+            style: "spacing: 6px;"
         });
         this.actionsScrollBox.add_actor(this.actionsBox);
 
         let leaveButton;
         const powerDisplayStyle = Me.settings.get_enum('power-display-style');
         if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
-            leaveButton = new MW.PowerOptionsBox(this, 5, true);
+            leaveButton = new MW.PowerOptionsBox(this, true);
         else
             leaveButton = new MW.LeaveButton(this);
 

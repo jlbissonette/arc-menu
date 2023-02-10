@@ -167,7 +167,6 @@ var RootInfo = class ArcMenu_RootInfo extends PlaceInfo {
     }
 }
 
-
 var PlaceDeviceInfo = class ArcMenu_PlaceDeviceInfo extends PlaceInfo {
     _init(kind, mount) {
         this._mount = mount;

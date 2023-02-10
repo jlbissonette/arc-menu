@@ -15,7 +15,6 @@ var RecentFilesManager = class ArcMenu_RecentFilesManager {
     getRecentFiles(){
         const recentManagerItems = this._recentManager.get_items();
         recentManagerItems.sort((a, b) => b.get_modified() - a.get_modified());
-
         return recentManagerItems;
     }
 

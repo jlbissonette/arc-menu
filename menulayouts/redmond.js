@@ -32,13 +32,9 @@ var Menu = class ArcMenu_RedmondLayout extends BaseMenuLayout{
             pinned_apps_icon_size: Constants.MEDIUM_ICON_SIZE,
         });
 
-        this.connect("button-press-event", () => {
-            if(this.backButton.visible){
-                const event = Clutter.get_current_event();
-                if(event.get_button() === 8){
-                    this.backButton.activate(event);
-                }
-            }
+        this.connect("button-press-event", (actor, event) => {
+            if (this.backButton.visible && event.get_button() === 8)
+                this.backButton.activate(event);
         });
 
         const mainBox = new St.BoxLayout({
@@ -175,7 +171,7 @@ var Menu = class ArcMenu_RedmondLayout extends BaseMenuLayout{
         if(powerDisplayStyle === Constants.PowerDisplayStyle.MENU)
             powerOptionsDisplay = new MW.LeaveButton(this, true);
         else{
-            powerOptionsDisplay = new MW.PowerOptionsBox(this, 6);
+            powerOptionsDisplay = new MW.PowerOptionsBox(this);
             powerOptionsDisplay.set({
                 x_expand: true,
                 x_align: Clutter.ActorAlign.CENTER,

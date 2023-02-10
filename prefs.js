@@ -45,43 +45,43 @@ function populateWindow(window, settings){
 function setVisiblePage(window, settings){
     const prefsVisiblePage = settings.get_int('prefs-visible-page');
 
-    if(prefsVisiblePage === Constants.PrefsVisiblePage.MAIN){
+    if(prefsVisiblePage === Constants.SettingsPage.MAIN){
         window.close_subpage();
         window.set_visible_page_name('GeneralPage');
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.CUSTOMIZE_MENU){
+    else if(prefsVisiblePage === Constants.SettingsPage.CUSTOMIZE_MENU){
         window.close_subpage();
         window.set_visible_page_name('MenuPage');
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.MENU_LAYOUT){
+    else if(prefsVisiblePage === Constants.SettingsPage.MENU_LAYOUT){
         window.set_visible_page_name('MenuPage');
         const page = window.get_visible_page();
-        page.presentSubpage(Constants.PrefsVisiblePage.MENU_LAYOUT);
+        page.presentSubpage(Constants.SettingsPage.MENU_LAYOUT);
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.MENU_THEME){
+    else if(prefsVisiblePage === Constants.SettingsPage.MENU_THEME){
         window.set_visible_page_name('MenuPage');
         const page = window.get_visible_page();
-        page.presentSubpage(Constants.PrefsVisiblePage.MENU_THEME);
+        page.presentSubpage(Constants.SettingsPage.MENU_THEME);
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.BUTTON_APPEARANCE){
+    else if(prefsVisiblePage === Constants.SettingsPage.BUTTON_APPEARANCE){
         window.close_subpage();
         window.set_visible_page_name("MenuButtonPage");
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
+    else if(prefsVisiblePage === Constants.SettingsPage.RUNNER_TWEAKS){
         window.set_visible_page_name('MenuPage');
         const page = window.get_visible_page();
-        page.presentSubpage(Constants.PrefsVisiblePage.RUNNER_TWEAKS);
+        page.presentSubpage(Constants.SettingsPage.RUNNER_TWEAKS);
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.ABOUT){
+    else if(prefsVisiblePage === Constants.SettingsPage.ABOUT){
         window.close_subpage();
         window.set_visible_page_name("AboutPage");
     }
-    else if(prefsVisiblePage === Constants.PrefsVisiblePage.GENERAL){
+    else if(prefsVisiblePage === Constants.SettingsPage.GENERAL){
         window.close_subpage();
         window.set_visible_page_name("GeneralPage");
     }
 
-    settings.set_int('prefs-visible-page', Constants.PrefsVisiblePage.MAIN);
+    settings.set_int('prefs-visible-page', Constants.SettingsPage.MAIN);
 }
 
 function fillPreferencesWindow(window) {
@@ -98,7 +98,7 @@ function fillPreferencesWindow(window) {
     window.set_title(_("ArcMenu Settings"));
 
     let pageChangedId = settings.connect("changed::prefs-visible-page", () => {
-        if(settings.get_int('prefs-visible-page') !== Constants.PrefsVisiblePage.MAIN)
+        if(settings.get_int('prefs-visible-page') !== Constants.SettingsPage.MAIN)
             setVisiblePage(window, settings);
     });
 

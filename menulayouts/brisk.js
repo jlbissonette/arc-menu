@@ -93,7 +93,7 @@ var Menu = class ArcMenu_BriskLayout extends BaseMenuLayout{
         if(powerDisplayStyle === Constants.PowerDisplayStyle.MENU)
             powerOptionsItem = new MW.LeaveButton(this, true);
         else{
-            powerOptionsItem = new MW.PowerOptionsBox(this, 6);
+            powerOptionsItem = new MW.PowerOptionsBox(this);
             powerOptionsItem.x_align = Clutter.ActorAlign.CENTER;
         }
 

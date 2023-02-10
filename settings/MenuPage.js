@@ -34,6 +34,8 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
         });
         this.add(menuLooksGroup);
 
+        const visibleRow = { };
+
         this.layoutRow = new SettingRow({
             title: _('Menu Layout'),
             subtitle: _('Choose a layout style for the menu'),
@@ -102,6 +104,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             pageClassParams: Constants.MenuSettingsListType.PINNED_APPS,
         });
         whatToShowGroup.add(this.pinnedAppsRow);
+        visibleRow[Constants.SettingsPage.PINNED_APPS] = this.pinnedAppsRow;
 
         let directoryShortcutsRow = new SettingRow({
             title: _('Directory Shortcuts'),
@@ -112,6 +115,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             pageClassParams: Constants.MenuSettingsListType.DIRECTORIES,
         });
         whatToShowGroup.add(directoryShortcutsRow);
+        visibleRow[Constants.SettingsPage.DIRECTORY_SHORTCUTS] = directoryShortcutsRow;
 
         let applicationShortcutsRow = new SettingRow({
             title: _('Application Shortcuts'),
@@ -122,6 +126,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             pageClassParams: Constants.MenuSettingsListType.APPLICATIONS,
         });
         whatToShowGroup.add(applicationShortcutsRow);
+        visibleRow[Constants.SettingsPage.APPLICATION_SHORTCUTS] = applicationShortcutsRow;
 
         let searchOptionsRow = new SettingRow({
             title: _('Search Options'),
@@ -131,6 +136,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             pageClass: SearchOptionsPage,
         });
         whatToShowGroup.add(searchOptionsRow);
+        visibleRow[Constants.SettingsPage.SEARCH_OPTIONS] = searchOptionsRow;
 
         let powerOptionsRow = new SettingRow({
             title: _('Power Options'),
@@ -142,6 +148,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             pageClassParams: Constants.MenuSettingsListType.POWER_OPTIONS,
         });
         whatToShowGroup.add(powerOptionsRow);
+        visibleRow[Constants.SettingsPage.POWER_OPTIONS] = powerOptionsRow;
 
         let extraCategoriesRow = new SettingRow({
             title: _('Extra Categories'),
@@ -153,17 +160,25 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
             pageClassParams: Constants.MenuSettingsListType.EXTRA_CATEGORIES,
         });
         whatToShowGroup.add(extraCategoriesRow);
+        visibleRow[Constants.SettingsPage.EXTRA_CATEGORIES] = extraCategoriesRow;
+
+        let contextMenuGroup = new Adw.PreferencesGroup({
+            title: _("What should show on the context menu?"),
+        });
+        this.add(contextMenuGroup);
 
         let contextMenuRow = new SettingRow({
-            title: _('Context Menu'),
+            title: _('Modify entries in the ArcMenu context menu'),
             icon_name: 'view-list-bullet-symbolic',
-            subtitle: _('Modify entries in the ArcMenu context menu')
         });
         this._addSubPageToRow(contextMenuRow, {
             pageClass: ListPinnedPage,
             pageClassParams: Constants.MenuSettingsListType.CONTEXT_MENU,
         });
-        whatToShowGroup.add(contextMenuRow);
+        contextMenuGroup.add(contextMenuRow);
+
+        SettingsUtils.setVisibleRows(visibleRow, this._settings.get_enum('menu-layout'));
+        this._settings.connect('changed::menu-layout', () => SettingsUtils.setVisibleRows(visibleRow, this._settings.get_enum('menu-layout')));
     }
 
     _addSubPageToRow(row, pageParams){
@@ -186,15 +201,15 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
     }
 
     presentSubpage(subpage){
-        if(subpage === Constants.PrefsVisiblePage.MENU_LAYOUT){
+        if(subpage === Constants.SettingsPage.MENU_LAYOUT){
             const row = this.layoutRow;
             this._window.present_subpage(row.settingPage);
         }
-        if(subpage === Constants.PrefsVisiblePage.MENU_THEME){
+        if(subpage === Constants.SettingsPage.MENU_THEME){
             const row = this.themeRow;
             this._window.present_subpage(row.settingPage);
         }
-        else if(subpage === Constants.PrefsVisiblePage.RUNNER_TWEAKS){
+        else if(subpage === Constants.SettingsPage.RUNNER_TWEAKS){
             const row = this.tweaksRow;
             this._window.present_subpage(row.settingPage);
             row.settingPage.setActiveLayout(Constants.MenuLayout.RUNNER);

@@ -58,7 +58,7 @@ var Menu = class ArcMenu_WhiskerLayout extends BaseMenuLayout{
         if(powerDisplayStyle === Constants.PowerDisplayStyle.MENU)
             powerOptionsBox = new MW.LeaveButton(this);
         else
-            powerOptionsBox = new MW.PowerOptionsBox(this, 6);
+            powerOptionsBox = new MW.PowerOptionsBox(this);
         this.actionsBox.add_child(powerOptionsBox);
 
         const separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
@@ -117,7 +117,7 @@ var Menu = class ArcMenu_WhiskerLayout extends BaseMenuLayout{
         const searchbarLocation = Me.settings.get_enum('searchbar-default-top-location');
         if(searchbarLocation === Constants.SearchbarLocation.TOP){
             this.searchBox.add_style_class_name('arcmenu-search-top');
-            this.searchBox.style = "margin-top: 6px; margin-bottom: 0px;";
+            this.searchBox.style = "margin-top: 0px; margin-bottom: 6px;";
             this.insert_child_at_index(this.searchBox, 0);
         }
         else if(searchbarLocation === Constants.SearchbarLocation.BOTTOM){

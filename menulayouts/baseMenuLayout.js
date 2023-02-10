@@ -15,6 +15,8 @@ const Utils =  Me.imports.utils;
 
 const Search = (Config.PACKAGE_VERSION < '43') ? Me.imports.search : Me.imports.gnome43.search;
 
+const MAX_RECENT_FILES = 25;
+
 function getMenuLayoutEnum() { return null; }
 
 //This class handles the core functionality of all the menu layouts.
@@ -420,11 +422,23 @@ var BaseMenuLayout = class ArcMenu_BaseMenuLayout extends St.BoxLayout {
             this.recentFilesManager = new RecentFilesManager();
     }
 
-    displayRecentFiles(box = this.applicationsBox){
+    displayRecentFiles(box = this.applicationsBox) {
         this._clearActorsFromBox(box);
         this._futureActiveItem = false;
 
         const recentFiles = this.recentFilesManager.getRecentFiles();
+
+        let showMoreItem;
+        if (recentFiles.length > MAX_RECENT_FILES) {
+            //Display MAX_RECENT_FILES amount of most recent items.
+            //Show a 'More Recents Files...' menu item at bottom of list.
+            recentFiles.splice(MAX_RECENT_FILES);
+            const isContainedInCategory = true;
+            const placeInfo = new PlaceDisplay.PlaceInfo('special', Gio.File.new_for_uri("recent:///"));
+            showMoreItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.LIST, isContainedInCategory);
+            showMoreItem.forceTitle(_('More Recent Files...'))
+            box.add_child(showMoreItem);
+        }
 
         for(const file of recentFiles) {
             this.recentFilesManager.queryInfoAsync(file).then(result => {
@@ -451,7 +465,10 @@ var BaseMenuLayout = class ArcMenu_BaseMenuLayout extends St.BoxLayout {
                     box.remove_child(placeMenuItem);
                     box.queue_relayout();
                 });
-                box.add_child(placeMenuItem);
+                if (showMoreItem)
+                    box.insert_child_below(placeMenuItem, showMoreItem);
+                else
+                    box.add_child(placeMenuItem);
     
                 if(!this._futureActiveItem){
                     this._futureActiveItem = placeMenuItem;
@@ -489,7 +506,6 @@ var BaseMenuLayout = class ArcMenu_BaseMenuLayout extends St.BoxLayout {
             case Constants.ShortcutCommands.SOFTWARE:
                 let software = Utils.findSoftwareManager();
                 return new MW.ShortcutMenuItem(this, [shortcutName, shortcutIcon, software], displayType, isContainedInCategory);
-            case Constants.ShortcutCommands.ARCMENU_SETTINGS:
             case Constants.ShortcutCommands.SUSPEND:
             case Constants.ShortcutCommands.LOG_OUT:
             case Constants.ShortcutCommands.POWER_OFF:
@@ -498,6 +514,11 @@ var BaseMenuLayout = class ArcMenu_BaseMenuLayout extends St.BoxLayout {
             case Constants.ShortcutCommands.HYBRID_SLEEP:
             case Constants.ShortcutCommands.HIBERNATE:
             case Constants.ShortcutCommands.SWITCH_USER:
+                const item = new MW.ShortcutMenuItem(this, menuItemArray, displayType, isContainedInCategory);
+                item.powerType = Utils.getPowerTypeFromShortcutCommand(shortcutCommand);
+                MW.bindPowerItemVisibility(item);
+                return item;
+            case Constants.ShortcutCommands.ARCMENU_SETTINGS:
             case Constants.ShortcutCommands.OVERVIEW:
             case Constants.ShortcutCommands.SHOW_APPS:
             case Constants.ShortcutCommands.RUN_COMMAND:
@@ -1057,7 +1078,7 @@ var BaseMenuLayout = class ArcMenu_BaseMenuLayout extends St.BoxLayout {
 
     _createNavigationRow(labelTitle, buttonDirection, buttonTitle, buttonAction){
         const navButton = this.createLabelRow(labelTitle);
-
+        
         navButton.style = 'padding: 0px 25px;';
 
         let button;

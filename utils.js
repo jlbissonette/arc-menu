@@ -7,41 +7,56 @@ const Main = imports.ui.main;
 const MenuLayouts = Me.imports.menulayouts;
 const _ = Gettext.gettext;
 
-const PowerManagerInterface = `<node>
-  <interface name="org.freedesktop.login1.Manager">
-    <method name="HybridSleep">
-      <arg type="b" direction="in"/>
-    </method>
-    <method name="CanHybridSleep">
-      <arg type="s" direction="out"/>
-    </method>
-    <method name="Hibernate">
-      <arg type="b" direction="in"/>
-    </method>
-    <method name="CanHibernate">
-      <arg type="s" direction="out"/>
-    </method>
-  </interface>
-</node>`;
-const PowerManager = Gio.DBusProxy.makeProxyWrapper(PowerManagerInterface);
+function activateHibernateOrSleep(powerType) {
+    const loginManager = imports.misc.loginManager.getLoginManager();
+    let callName, activateCall;
 
-function activateHibernate(){
-    let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
-    proxy.CanHibernateRemote((result, error) => {
-        if(error || result[0] !== 'yes')
-            Main.notifyError(_("ArcMenu - Hibernate Error!"), _("System unable to hibernate."));
-        else
-            proxy.HibernateRemote(true);
+    if (powerType === Constants.PowerType.HIBERNATE) {
+        callName = 'CanHibernate';
+        activateCall = 'Hibernate';
+    }
+    else if (powerType === Constants.PowerType.HYBRID_SLEEP) {
+        callName = 'CanHybridSleep';
+        activateCall = 'HybridSleep';
+    }
+
+    if (!loginManager._proxy) {
+        Main.notifyError(`ArcMenu - ${activateCall} Error!`, `System unable to ${activateCall}.`);
+        return;
+    }
+
+    canHibernateOrSleep(callName, (result) => {
+        if (!result) {
+            Main.notifyError(`ArcMenu - ${activateCall} Error!`, `System unable to ${activateCall}.`);
+            return;
+        }
+
+        loginManager._proxy.call(activateCall,
+            GLib.Variant.new('(b)', [true]),
+            Gio.DBusCallFlags.NONE,
+            -1, null, null);
     });
 }
 
-function activateHybridSleep(){
-    let proxy = new PowerManager(Gio.DBus.system, 'org.freedesktop.login1', '/org/freedesktop/login1');
-    proxy.CanHybridSleepRemote((result, error) => {
-        if(error || result[0] !== 'yes')
-            Main.notifyError(_("ArcMenu - Hybrid Sleep Error!"), _("System unable to hybrid sleep."));
+function canHibernateOrSleep(callName, asyncCallback) {
+    const loginManager = imports.misc.loginManager.getLoginManager();
+
+    if (!loginManager._proxy)
+        asyncCallback(false);
+
+    loginManager._proxy.call(callName, null, Gio.DBusCallFlags.NONE, -1, null, (proxy, asyncResult) => {
+        let result, error;
+
+        try {
+            result = proxy.call_finish(asyncResult).deep_unpack();
+        } catch (e) {
+            error = e;
+        }
+
+        if (error)
+            asyncCallback(false);
         else
-            proxy.HybridSleepRemote(true);
+            asyncCallback(result[0] === 'yes');   
     });
 }
 
@@ -238,6 +253,27 @@ function getCategoryDetails(currentCategory){
     }
 }
 
+function getPowerTypeFromShortcutCommand(command) {
+    switch (command) {
+        case Constants.ShortcutCommands.LOG_OUT:
+            return Constants.PowerType.LOGOUT;
+        case Constants.ShortcutCommands.LOCK:
+            return Constants.PowerType.LOCK;
+        case Constants.ShortcutCommands.POWER_OFF:
+            return Constants.PowerType.POWER_OFF;
+        case Constants.ShortcutCommands.RESTART:
+            return Constants.PowerType.RESTART;
+        case Constants.ShortcutCommands.SUSPEND:
+            return Constants.PowerType.SUSPEND;
+        case Constants.ShortcutCommands.HYBRID_SLEEP:
+            return Constants.PowerType.HYBRID_SLEEP;
+        case Constants.ShortcutCommands.HIBERNATE:
+            return Constants.PowerType.HIBERNATE;
+        case Constants.ShortcutCommands.SWITCH_USER:
+            return Constants.PowerType.SWITCH_USER;
+    }
+}
+
 function getMenuButtonIcon(settings, path){
     const iconType = settings.get_enum('menu-button-icon');
 
@@ -281,9 +317,10 @@ function areaOfTriangle(p1, p2, p3){
 }
 
 //modified from GNOME shell's ensureActorVisibleInScrollView()
-function ensureActorVisibleInScrollView(actor) {
+function ensureActorVisibleInScrollView(actor, axis = Clutter.Orientation.VERTICAL) {
     let box = actor.get_allocation_box();
     let y1 = box.y1, y2 = box.y2;
+    let x1 = box.x1, x2 = box.x2;
 
     let parent = actor.get_parent();
     while (!(parent instanceof St.ScrollView)) {
@@ -293,24 +330,41 @@ function ensureActorVisibleInScrollView(actor) {
         box = parent.get_allocation_box();
         y1 += box.y1;
         y2 += box.y1;
+        x1 += box.x1;
+        x2 += box.x1;
         parent = parent.get_parent();
     }
 
-    let adjustment = parent.vscroll.adjustment;
+    let adjustment, startPoint, endPoint;
+
+    if (axis === Clutter.Orientation.VERTICAL) {
+        adjustment = parent.vscroll.adjustment;
+        startPoint = y1;
+        endPoint = y2;
+    } else {
+        adjustment = parent.hscroll.adjustment;
+        startPoint = x1;
+        endPoint = x2;
+    }
+
     let [value, lower_, upper, stepIncrement_, pageIncrement_, pageSize] = adjustment.get_values();
-
+    
     let offset = 0;
-    let vfade = parent.get_effect("fade");
-    if (vfade)
-        offset = vfade.fade_margins.top;
+    let fade = parent.get_effect("fade");
+    if (fade)
+        offset = axis === Clutter.Orientation.VERTICAL ? fade.fade_margins.top : fade.fade_margins.left;
 
-    if (y1 < value + offset)
-        value = Math.max(0, y1 - offset);
-    else if (y2 > value + pageSize - offset)
-        value = Math.min(upper, y2 + offset - pageSize);
+    if (startPoint < value + offset)
+        value = Math.max(0, startPoint - offset);
+    else if (endPoint > value + pageSize - offset)
+        value = Math.min(upper, endPoint + offset - pageSize);
     else
         return;
-    adjustment.set_value(value);
+
+    adjustment.ease(value, {
+        mode: Clutter.AnimationMode.EASE_OUT_QUAD,
+        duration: 100,
+    });
 }
 
 //modified from GNOME shell to allow opening other extension setttings

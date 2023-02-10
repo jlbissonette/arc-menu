@@ -24,13 +24,16 @@ class ArcMenu_ListOtherPage extends SubPage {
         else if(this.list_type === Constants.MenuSettingsListType.QUICK_LINKS)
             this.settingString = 'arcmenu-extra-categories-links';
 
-        this.categoriesFrame = new Adw.PreferencesGroup();
+        this._mainGroup = new Adw.PreferencesGroup();
+        this.add(this._mainGroup);
 
         this._addRowsToFrame(this._settings.get_value(this.settingString).deep_unpack());
 
-        this.add(this.categoriesFrame);
-
         if(this.list_type === Constants.MenuSettingsListType.POWER_OPTIONS){
+            this._mainGroup.set({
+                description: _('Actions will be hidden from ArcMenu if not available on your system.')
+            });
+
             let powerDisplayStyleGroup = new Adw.PreferencesGroup({
                 title: _("Power Off / Log Out Buttons")
             });
@@ -53,7 +56,7 @@ class ArcMenu_ListOtherPage extends SubPage {
 
         this.restoreDefaults = () => {
             this.frameRows.forEach(child => {
-                this.categoriesFrame.remove(child);
+                this._mainGroup.remove(child);
             });
             this.frameRows = [];
 
@@ -116,7 +119,7 @@ class ArcMenu_ListOtherPage extends SubPage {
 
             row.add_suffix(editEntryButton);
             this.frameRows.push(row);
-            this.categoriesFrame.add(row);
+            this._mainGroup.add(row);
         }
     }
 });

@@ -34,13 +34,9 @@ var Menu = class ArcMenu_ElevenLayout extends BaseMenuLayout {
             pinned_apps_icon_size: Constants.LARGE_ICON_SIZE,
         });
 
-        this.connect("button-press-event", () => {
-            if (this.backButton.visible) {
-                const event = Clutter.get_current_event();
-                if(event.get_button() === 8){
-                    this.backButton.activate(event);
-                }
-            }
+        this.connect("button-press-event", (actor, event) => {
+            if (this.backButton.visible && event.get_button() === 8)
+                this.backButton.activate(event);
         });
 
         this.searchBox.style = "margin: 5px 15px 10px 15px;";
@@ -185,7 +181,7 @@ var Menu = class ArcMenu_ElevenLayout extends BaseMenuLayout {
         let leaveButton;
         const powerDisplayStyle = Me.settings.get_enum('power-display-style');
         if(powerDisplayStyle === Constants.PowerDisplayStyle.IN_LINE)
-            leaveButton = new MW.PowerOptionsBox(this, 6, true);
+            leaveButton = new MW.PowerOptionsBox(this);
         else
             leaveButton = new MW.LeaveButton(this);
 

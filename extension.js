@@ -116,29 +116,41 @@ function _enableButtons() {
     let multiMonitor = Me.settings.get_boolean('multi-monitor');
 
     let panelExtensionEnabled = false;
-    let panelArray = [Main.panel];
+    let panels;
 
-    if(global.dashToPanel && global.dashToPanel.panels){
-        panelArray = global.dashToPanel.panels.map(pw => pw);
+    if (global.dashToPanel && global.dashToPanel.panels) {
+        panels = global.dashToPanel.panels.map(pw => pw);
         panelExtensionEnabled = true;
     }
-    if(global.azTaskbar && global.azTaskbar.panels){
-        panelArray = panelArray.concat(global.azTaskbar.panels.map(pw => pw));
+    else if (global.azTaskbar && global.azTaskbar.panels) {
+        panels = global.azTaskbar.panels.map(pw => pw);
+        panels.unshift(Main.panel);
         panelExtensionEnabled = true;
     }
+    else 
+        panels = [Main.panel];
 
-    let panelLength = multiMonitor ? panelArray.length : 1;
-    for(var index = 0; index < panelLength; index++){
-        let panel = panelArray[index].panel ?? panelArray[index];
-        let panelParent = panelArray[index];
+    let panelLength = multiMonitor ? panels.length : 1;
+    for (var i = 0; i < panelLength; i++) {
+        //Dash to Panel and AzTaskbar don't store the actual 'panel' in their global 'panels' object
+        let panel = panels[i].panel ?? panels[i];
+        const panelParent = panels[i].panel ? panels[i] : Main.panel;
 
-        //Place ArcMenu in top panel when Dash to Panel setting "Keep original gnome-shell top panel" is on
-        let isStandalone = Me.settings.get_boolean('dash-to-panel-standalone') && global.dashToPanel && panelExtensionEnabled;
+        let panelBox;
+        if (panels[i].panelBox) //case Dash To Panel
+            panelBox = panels[i].panelBox;
+        else if(panels[i].panel) //case AzTaskbar
+            panelBox = panels[i];
+        else
+            panelBox = Main.layoutManager.panelBox;
+
+        //Place ArcMenu in main top panel when Dash to Panel setting "Keep original gnome-shell top panel" is on
+        const isStandalone = Me.settings.get_boolean('dash-to-panel-standalone') && global.dashToPanel && panelExtensionEnabled;
         if(isStandalone && ('isPrimary' in panelParent && panelParent.isPrimary) && panelParent.isStandalone)
             panel = Main.panel;
     
-        let isPrimaryPanel = index === 0 ? true : false;
-        let settingsController = new Controller.MenuSettingsController(settingsControllers, panel, isPrimaryPanel);
+        const isPrimaryPanel = i === 0;
+        const settingsController = new Controller.MenuSettingsController(settingsControllers, panel, panelBox, panelParent, isPrimaryPanel);
 
         settingsController.monitorIndex = panelParent.monitor?.index ?? 0;
 

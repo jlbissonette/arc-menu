@@ -11,7 +11,7 @@ const Theming = Me.imports.theming;
 const Utils = Me.imports.utils;
 
 var MenuSettingsController = class {
-    constructor(settingsControllers, panel, isPrimaryPanel) {
+    constructor(settingsControllers, panel, panelBox, panelParent, isPrimaryPanel) {
         this.panel = panel;
 
         global.toggleArcMenu = () => this.toggleMenus();
@@ -21,7 +21,7 @@ var MenuSettingsController = class {
         this.currentMonitorIndex = 0;
         this.isPrimaryPanel = isPrimaryPanel;
 
-        this._menuButton = new MenuButton(panel);
+        this._menuButton = new MenuButton(this.panel, panelBox, panelParent);
 
         this._settingsControllers = settingsControllers;
 
