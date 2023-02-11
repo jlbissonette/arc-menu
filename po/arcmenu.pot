@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-07 12:59-0500\n"
+"POT-Creation-Date: 2023-02-11 08:23-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,190 +37,190 @@ msgstr ""
 msgid "Open Folder Location"
 msgstr ""
 
-#: constants.js:73
+#: constants.js:79
 msgid "Favorites"
 msgstr ""
 
-#: constants.js:74 menulayouts/runner.js:130 menulayouts/windows.js:330
+#: constants.js:80 menulayouts/runner.js:130 menulayouts/windows.js:330
 #: settings/Menu/LayoutTweaksPage.js:742
 msgid "Frequent Apps"
 msgstr ""
 
-#: constants.js:75 menuWidgets.js:1214 menulayouts/az.js:67
-#: menulayouts/az.js:74 menulayouts/eleven.js:58 menulayouts/eleven.js:65
-#: menulayouts/redmond.js:67 menulayouts/redmond.js:68
-#: menulayouts/redmond.js:72
+#: constants.js:81 menuWidgets.js:1274 menulayouts/az.js:63
+#: menulayouts/az.js:70 menulayouts/eleven.js:54 menulayouts/eleven.js:61
+#: menulayouts/redmond.js:72 menulayouts/redmond.js:73
+#: menulayouts/redmond.js:77
 msgid "All Apps"
 msgstr ""
 
-#: constants.js:76 menuWidgets.js:714 settings/Menu/LayoutTweaksPage.js:623
-#: settings/Menu/LayoutTweaksPage.js:740 settings/MenuPage.js:97
+#: constants.js:82 menuWidgets.js:764 settings/Menu/LayoutTweaksPage.js:623
+#: settings/Menu/LayoutTweaksPage.js:740 settings/MenuPage.js:99
 msgid "Pinned Apps"
 msgstr ""
 
-#: constants.js:77 gnome43/searchProviders/recentFiles.js:26
+#: constants.js:83 gnome43/searchProviders/recentFiles.js:26
 #: gnome43/searchProviders/recentFiles.js:27 menulayouts/raven.js:286
 #: menulayouts/unity.js:356 searchProviders/recentFiles.js:26
 #: searchProviders/recentFiles.js:27
 msgid "Recent Files"
 msgstr ""
 
-#: constants.js:234 menuButton.js:567 settings/Menu/ListPinnedPage.js:372
+#: constants.js:240 menuButton.js:619 settings/Menu/ListPinnedPage.js:372
 msgid "Log Out..."
 msgstr ""
 
-#: constants.js:235 menuButton.js:566 settings/Menu/ListPinnedPage.js:371
+#: constants.js:241 menuButton.js:618 settings/Menu/ListPinnedPage.js:371
 msgid "Lock"
 msgstr ""
 
-#: constants.js:236 menuButton.js:561 settings/Menu/ListPinnedPage.js:374
+#: constants.js:242 menuButton.js:613 settings/Menu/ListPinnedPage.js:374
 msgid "Restart..."
 msgstr ""
 
-#: constants.js:237 menuButton.js:562 settings/Menu/ListPinnedPage.js:373
+#: constants.js:243 menuButton.js:614 settings/Menu/ListPinnedPage.js:373
 msgid "Power Off..."
 msgstr ""
 
-#: constants.js:238 menuButton.js:559 settings/Menu/ListPinnedPage.js:375
+#: constants.js:244 menuButton.js:611 settings/Menu/ListPinnedPage.js:375
 msgid "Suspend"
 msgstr ""
 
-#: constants.js:239 settings/Menu/ListPinnedPage.js:376
+#: constants.js:245 settings/Menu/ListPinnedPage.js:376
 msgid "Hybrid Sleep"
 msgstr ""
 
-#: constants.js:240 settings/Menu/ListPinnedPage.js:377
+#: constants.js:246 settings/Menu/ListPinnedPage.js:377
 msgid "Hibernate"
 msgstr ""
 
-#: constants.js:241 menuButton.js:568 settings/Menu/ListPinnedPage.js:378
+#: constants.js:247 menuButton.js:620 settings/Menu/ListPinnedPage.js:378
 msgid "Switch User"
 msgstr ""
 
-#: constants.js:379 settings/AboutPage.js:41
+#: constants.js:385 settings/AboutPage.js:41
 msgid "ArcMenu"
 msgstr ""
 
-#: constants.js:380
+#: constants.js:386
 msgid "Brisk"
 msgstr ""
 
-#: constants.js:381
+#: constants.js:387
 msgid "Whisker"
 msgstr ""
 
-#: constants.js:382
+#: constants.js:388
 msgid "GNOME Menu"
 msgstr ""
 
-#: constants.js:383
+#: constants.js:389
 msgid "Mint"
 msgstr ""
 
-#: constants.js:384
+#: constants.js:390
 msgid "Budgie"
 msgstr ""
 
-#: constants.js:387
+#: constants.js:393
 msgid "Unity"
 msgstr ""
 
-#: constants.js:388
+#: constants.js:394
 msgid "Plasma"
 msgstr ""
 
-#: constants.js:389
+#: constants.js:395
 msgid "tognee"
 msgstr ""
 
-#: constants.js:390
+#: constants.js:396
 msgid "Insider"
 msgstr ""
 
-#: constants.js:391
+#: constants.js:397
 msgid "Redmond"
 msgstr ""
 
-#: constants.js:392
+#: constants.js:398
 msgid "Windows"
 msgstr ""
 
-#: constants.js:393
+#: constants.js:399
 msgid "11"
 msgstr ""
 
-#: constants.js:394
+#: constants.js:400
 msgid "a.z."
 msgstr ""
 
-#: constants.js:397
+#: constants.js:403
 msgid "Elementary"
 msgstr ""
 
-#: constants.js:398
+#: constants.js:404
 msgid "Chromebook"
 msgstr ""
 
-#: constants.js:401
+#: constants.js:407
 msgid "Runner"
 msgstr ""
 
-#: constants.js:402
+#: constants.js:408
 msgid "GNOME Overview"
 msgstr ""
 
-#: constants.js:405
+#: constants.js:411
 msgid "Raven"
 msgstr ""
 
-#: constants.js:409
+#: constants.js:415
 msgid "Traditional"
 msgstr ""
 
-#: constants.js:410
+#: constants.js:416
 msgid "Modern"
 msgstr ""
 
-#: constants.js:411
+#: constants.js:417
 msgid "Touch"
 msgstr ""
 
-#: constants.js:412
+#: constants.js:418
 msgid "Launcher"
 msgstr ""
 
-#: constants.js:413
+#: constants.js:419
 msgid "Alternative"
 msgstr ""
 
-#: constants.js:419 menulayouts/whisker.js:52
+#: constants.js:425 menulayouts/whisker.js:52
 msgid "Settings"
 msgstr ""
 
-#: constants.js:419
+#: constants.js:425
 msgid "Software"
 msgstr ""
 
-#: constants.js:419
+#: constants.js:425
 msgid "Terminal"
 msgstr ""
 
-#: constants.js:419
+#: constants.js:425
 msgid "Tweaks"
 msgstr ""
 
-#: constants.js:420 menuButton.js:513 menuWidgets.js:422
+#: constants.js:426 menuButton.js:565 menuWidgets.js:472
 #: settings/Menu/ListPinnedPage.js:347 settings/Menu/ListPinnedPage.js:361
 msgid "Activities Overview"
 msgstr ""
 
-#: constants.js:420 menuButton.js:498 prefs.js:98 settings/AboutPage.js:126
+#: constants.js:426 menuButton.js:550 prefs.js:98 settings/AboutPage.js:126
 #: settings/Menu/ListPinnedPage.js:335 settings/Menu/ListPinnedPage.js:345
 #: settings/Menu/ListPinnedPage.js:354
 msgid "ArcMenu Settings"
 msgstr ""
 
-#: constants.js:420
+#: constants.js:426
 msgid "Files"
 msgstr ""
 
@@ -255,73 +255,77 @@ msgstr ""
 msgid "Failed to open “%s”"
 msgstr ""
 
-#: menuButton.js:543 settings/Menu/ListPinnedPage.js:363
+#: menuButton.js:595 settings/Menu/ListPinnedPage.js:363
 msgid "Show Desktop"
 msgstr ""
 
-#: menuButton.js:557 menuWidgets.js:774 menuWidgets.js:793
+#: menuButton.js:609 menuWidgets.js:836 menuWidgets.js:855
 msgid "Power Off / Log Out"
 msgstr ""
 
-#: menuButton.js:594
+#: menuButton.js:646
 msgid "Dash to Panel Settings"
 msgstr ""
 
-#: menuButton.js:599
+#: menuButton.js:651
 msgid "App Icons Taskbar Settings"
 msgstr ""
 
-#: menuWidgets.js:688
+#: menuWidgets.js:738
 msgid "Configure Runner"
 msgstr ""
 
-#: menuWidgets.js:726
+#: menuWidgets.js:776
 msgid "Extras"
 msgstr ""
 
-#: menuWidgets.js:834 menulayouts/plasma.js:317
+#: menuWidgets.js:890 menulayouts/plasma.js:317
 msgid "Session"
 msgstr ""
 
-#: menuWidgets.js:838 menulayouts/plasma.js:321
+#: menuWidgets.js:894 menulayouts/plasma.js:321
 msgid "System"
 msgstr ""
 
-#: menuWidgets.js:905
+#: menuWidgets.js:959
 msgid "Categories"
 msgstr ""
 
-#: menuWidgets.js:1071 menuWidgets.js:2483 menulayouts/plasma.js:122
+#: menuWidgets.js:1131 menuWidgets.js:2553 menulayouts/plasma.js:122
 msgid "Apps"
 msgstr ""
 
-#: menuWidgets.js:1154 menuWidgets.js:1171 menulayouts/az.js:67
-#: menulayouts/eleven.js:58 menulayouts/redmond.js:67 menulayouts/redmond.js:71
+#: menuWidgets.js:1214 menuWidgets.js:1231 menulayouts/az.js:63
+#: menulayouts/eleven.js:54 menulayouts/redmond.js:72 menulayouts/redmond.js:76
 #: settings/Menu/SubPage.js:77 settings/Menu/ThemingDialog.js:290
 msgid "Back"
 msgstr ""
 
-#: menuWidgets.js:1825
+#: menuWidgets.js:1885
 msgid "New"
 msgstr ""
 
-#: menuWidgets.js:2063 menulayouts/az.js:74 menulayouts/eleven.js:65
-#: menulayouts/insider.js:168 menulayouts/plasma.js:117 menulayouts/raven.js:56
-#: menulayouts/raven.js:213 menulayouts/raven.js:262 menulayouts/redmond.js:68
-#: menulayouts/redmond.js:71 menulayouts/redmond.js:72 menulayouts/unity.js:38
+#: menuWidgets.js:2123 menulayouts/az.js:70 menulayouts/eleven.js:61
+#: menulayouts/insider.js:167 menulayouts/plasma.js:117 menulayouts/raven.js:56
+#: menulayouts/raven.js:213 menulayouts/raven.js:262 menulayouts/redmond.js:73
+#: menulayouts/redmond.js:76 menulayouts/redmond.js:77 menulayouts/unity.js:38
 #: menulayouts/unity.js:260 menulayouts/unity.js:334 menulayouts/windows.js:402
 msgid "Pinned"
 msgstr ""
 
-#: menuWidgets.js:2336
+#: menuWidgets.js:2406
 msgid "Search…"
 msgstr ""
 
-#: menulayouts/eleven.js:72
+#: menulayouts/baseMenuLayout.js:439
+msgid "More Recent Files..."
+msgstr ""
+
+#: menulayouts/eleven.js:68
 msgid "Frequent"
 msgstr ""
 
-#: menulayouts/plasma.js:126 placeDisplay.js:131 placeDisplay.js:154
+#: menulayouts/plasma.js:126 placeDisplay.js:129 placeDisplay.js:152
 #: settings/Menu/ListPinnedPage.js:392
 msgid "Computer"
 msgstr ""
@@ -331,7 +335,7 @@ msgid "Leave"
 msgstr ""
 
 #: menulayouts/plasma.js:265 menulayouts/windows.js:264
-#: settings/MenuPage.js:117
+#: settings/MenuPage.js:121
 msgid "Application Shortcuts"
 msgstr ""
 
@@ -365,23 +369,23 @@ msgstr ""
 msgid "Shortcuts"
 msgstr ""
 
-#: placeDisplay.js:54
+#: placeDisplay.js:51
 #, javascript-format
 msgid "Failed to launch “%s”"
 msgstr ""
 
-#: placeDisplay.js:69
+#: placeDisplay.js:66
 #, javascript-format
 msgid "Failed to mount volume for “%s”"
 msgstr ""
 
-#: placeDisplay.js:117 placeDisplay.js:348
+#: placeDisplay.js:114 placeDisplay.js:354
 #: settings/Menu/LayoutTweaksPage.js:507 settings/Menu/LayoutTweaksPage.js:542
-#: settings/Menu/ListPinnedPage.js:386 utils.js:219
+#: settings/Menu/ListPinnedPage.js:386 utils.js:234
 msgid "Home"
 msgstr ""
 
-#: placeDisplay.js:220
+#: placeDisplay.js:217
 #, javascript-format
 msgid "Ejecting drive “%s” failed:"
 msgstr ""
@@ -841,24 +845,28 @@ msgstr ""
 msgid "%s Layout Tweaks"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:35
+#: settings/Menu/ListOtherPage.js:34
+msgid "Actions will be hidden from ArcMenu if not available on your system."
+msgstr ""
+
+#: settings/Menu/ListOtherPage.js:38
 msgid "Power Off / Log Out Buttons"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:38 settings/Menu/VisualSettings.js:110
+#: settings/Menu/ListOtherPage.js:41 settings/Menu/VisualSettings.js:110
 #: settings/Menu/VisualSettings.js:176 settings/Menu/VisualSettings.js:249
 msgid "Off"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:39
+#: settings/Menu/ListOtherPage.js:42
 msgid "Power Buttons"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:40
+#: settings/Menu/ListOtherPage.js:43
 msgid "Power Menu"
 msgstr ""
 
-#: settings/Menu/ListOtherPage.js:42
+#: settings/Menu/ListOtherPage.js:45
 msgid "Override Display Style"
 msgstr ""
 
@@ -931,7 +939,7 @@ msgstr ""
 msgid "Panel Extension Settings"
 msgstr ""
 
-#: settings/Menu/ListPinnedPage.js:362 settings/MenuPage.js:136
+#: settings/Menu/ListPinnedPage.js:362 settings/MenuPage.js:142
 msgid "Power Options"
 msgstr ""
 
@@ -1030,7 +1038,7 @@ msgstr ""
 msgid "Search for recent files"
 msgstr ""
 
-#: settings/Menu/SearchOptionsPage.js:57 settings/MenuPage.js:127
+#: settings/Menu/SearchOptionsPage.js:57 settings/MenuPage.js:132
 msgid "Search Options"
 msgstr ""
 
@@ -1361,82 +1369,66 @@ msgstr ""
 msgid "How should the menu look?"
 msgstr ""
 
-#: settings/MenuPage.js:38
+#: settings/MenuPage.js:40
 msgid "Menu Layout"
 msgstr ""
 
-#: settings/MenuPage.js:39
+#: settings/MenuPage.js:41
 msgid "Choose a layout style for the menu"
 msgstr ""
 
-#: settings/MenuPage.js:52
+#: settings/MenuPage.js:54
 msgid "Menu Theme"
 msgstr ""
 
-#: settings/MenuPage.js:53
+#: settings/MenuPage.js:55
 msgid "Modify menu colors, font size, and border"
 msgstr ""
 
-#: settings/MenuPage.js:62
+#: settings/MenuPage.js:64
 msgid "Menu Visual Appearance"
 msgstr ""
 
-#: settings/MenuPage.js:63
+#: settings/MenuPage.js:65
 msgid "Change menu height, width, location, and icon sizes"
 msgstr ""
 
-#: settings/MenuPage.js:72
+#: settings/MenuPage.js:74
 msgid "Fine Tune"
 msgstr ""
 
-#: settings/MenuPage.js:73
+#: settings/MenuPage.js:75
 msgid "Adjust less commonly used visual settings"
 msgstr ""
 
-#: settings/MenuPage.js:82
+#: settings/MenuPage.js:84
 msgid "What should show on the menu?"
 msgstr ""
 
-#: settings/MenuPage.js:88
+#: settings/MenuPage.js:90
 msgid "Settings specific to the current menu layout"
 msgstr ""
 
-#: settings/MenuPage.js:107
+#: settings/MenuPage.js:110
 msgid "Directory Shortcuts"
 msgstr ""
 
-#: settings/MenuPage.js:137
+#: settings/MenuPage.js:143
 msgid "Choose which power options to show and the display style"
 msgstr ""
 
-#: settings/MenuPage.js:147
+#: settings/MenuPage.js:154
 msgid "Extra Categories"
 msgstr ""
 
-#: settings/MenuPage.js:149
+#: settings/MenuPage.js:156
 msgid "Add or remove additional custom categories"
 msgstr ""
 
-#: settings/MenuPage.js:158
-msgid "Context Menu"
+#: settings/MenuPage.js:166
+msgid "What should show on the context menu?"
 msgstr ""
 
-#: settings/MenuPage.js:160
-msgid "Modify entries in the ArcMenu context menu"
-msgstr ""
-
-#: utils.js:32
-msgid "ArcMenu - Hibernate Error!"
-msgstr ""
-
-#: utils.js:32
-msgid "System unable to hibernate."
-msgstr ""
-
-#: utils.js:42
-msgid "ArcMenu - Hybrid Sleep Error!"
-msgstr ""
-
-#: utils.js:42
-msgid "System unable to hybrid sleep."
+#: settings/MenuPage.js:171
+msgid "Modify ArcMenu Context Menu"
 msgstr ""

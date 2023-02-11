@@ -261,7 +261,7 @@ var PlacesManager = class ArcMenu_PlacesManager {
             bookmarks: [],
             network: [],
         };
-
+        this._connections = new Map();
         this._settings = new Gio.Settings({ schema_id: BACKGROUND_SCHEMA });
         this._showDesktopIconsChangedId = this._settings.connect(
             'changed::show-desktop-icons', this._updateSpecials.bind(this));
@@ -296,6 +296,10 @@ var PlacesManager = class ArcMenu_PlacesManager {
         }
     }
 
+    setConnection(signal, callback) {
+        this._connections.set(this.connect(signal, callback), this);
+    }
+
     _connectVolumeMonitorSignals() {
         const signals = [
             'volume-added',
@@ -318,6 +322,13 @@ var PlacesManager = class ArcMenu_PlacesManager {
     }
 
     destroy() {
+        this._connections.forEach((object, id) => {
+            object.disconnect(id);
+            id = null;
+        });
+
+        this._connections = null;
+
         if (this._settings)
             this._settings.disconnect(this._showDesktopIconsChangedId);
         this._settings = null;

@@ -168,7 +168,7 @@ class ArcMenu_MenuPage extends Adw.PreferencesPage {
         this.add(contextMenuGroup);
 
         let contextMenuRow = new SettingRow({
-            title: _('Modify entries in the ArcMenu context menu'),
+            title: _('Modify ArcMenu Context Menu'),
             icon_name: 'view-list-bullet-symbolic',
         });
         this._addSubPageToRow(contextMenuRow, {
