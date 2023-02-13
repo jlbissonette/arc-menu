@@ -19,11 +19,13 @@ const { OpenWindowSearchProvider } = Me.imports.gnome43.searchProviders.openWind
 const { RecentFilesSearchProvider } = Me.imports.gnome43.searchProviders.recentFiles;
 
 const SEARCH_PROVIDERS_SCHEMA = 'org.gnome.desktop.search-providers';
+const FILE_PROVIDERS = ['org.gnome.Nautilus.desktop', 'arcmenu.recent-files', 'nemo.desktop'];
 
 var ListSearchResult = GObject.registerClass(class ArcMenu_ListSearchResult extends MW.ApplicationMenuItem{
     _init(provider, metaInfo, resultsView) {
         let menuLayout = resultsView._menuLayout;
         let app = appSys.lookup_app(metaInfo['id']);
+        metaInfo['provider-id'] = provider.id;
 
         super._init(menuLayout, app, Constants.DisplayType.LIST, metaInfo)
 
@@ -34,36 +36,13 @@ var ListSearchResult = GObject.registerClass(class ArcMenu_ListSearchResult exte
         this.resultsView = resultsView;
         this.layout = Me.settings.get_enum('menu-layout');
 
-        if(this.provider.id === 'org.gnome.Nautilus.desktop' || this.provider.id === 'arcmenu.recent-files')
+        if (FILE_PROVIDERS.includes(this.provider.id))
             this.folderPath = this.metaInfo['description'];
 
-        let highlightSearchResultTerms = Me.settings.get_boolean('highlight-search-result-terms');
-        if(highlightSearchResultTerms){
+        const highlightSearchResultTerms = Me.settings.get_boolean('highlight-search-result-terms');
+        if (highlightSearchResultTerms) {
             this.resultsView.connectObject('terms-changed', this._highlightTerms.bind(this), this);
             this._highlightTerms();
-        }
-
-        //Force show calculator metaInfo description even if 'show-search-result-details' off.
-        //otherwise equation solution wouldn't appear.
-        let showSearchResultDescriptions = Me.settings.get_boolean("show-search-result-details");
-        if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions){
-            this.remove_child(this.label);
-
-            let labelBox = new St.BoxLayout({
-                x_expand: true,
-                x_align: Clutter.ActorAlign.FILL,
-                style: 'spacing: 8px;'
-            });
-            let descriptionText = this.metaInfo['description'].split('\n')[0];
-            this.descriptionLabel = new St.Label({
-                text: descriptionText,
-                y_expand: true,
-                y_align: Clutter.ActorAlign.CENTER,
-                style: "font-weight: lighter;"
-            });
-            labelBox.add_child(this.label);
-            labelBox.add_child(this.descriptionLabel);
-            this.add_child(labelBox);
         }
 
         if(!this.app && this.metaInfo['description'])

@@ -1820,12 +1820,12 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
         super._init(menuLayout);
         this._app = app;
         this._displayType = displayType;
-        this.metaInfo = metaInfo;
+        this.metaInfo = metaInfo || {};
         this.isContainedInCategory = isContainedInCategory;
 
         this.searchType = this._menuLayout.search_display_type;
         this.hasContextMenu = this._app ? true : false;
-        this.isSearchResult = this.metaInfo ? true : false;
+        this.isSearchResult = Object.keys(this.metaInfo).length ? true : false;
 
         if(this._app){
             const disableRecentAppsIndicator = Me.settings.get_boolean("disable-recently-installed-apps")
@@ -1852,12 +1852,11 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
         });
         this.description = this._app ? this._app.get_description() : this.metaInfo['description'];
 
-        const searchResultsDescriptionsSetting = Me.settings.get_boolean("show-search-result-details");
-        const appsShowDescriptionsSetting = Me.settings.get_boolean("apps-show-extra-details");
-        this.searchResultsDescriptions = searchResultsDescriptionsSetting && this.isSearchResult;
-        this.appsShowDescriptions = appsShowDescriptionsSetting && !this.isSearchResult;
+        const showSearchDescriptions = Me.settings.get_boolean("show-search-result-details") && this.isSearchResult;
+        const showAppDescriptions = Me.settings.get_boolean("apps-show-extra-details") && !this.isSearchResult;
+        const isCalculatorProvider = this.metaInfo['provider-id'] === 'org.gnome.Calculator.desktop';
 
-        if(this.description && (this.searchResultsDescriptions || this.appsShowDescriptions) && this._displayType === Constants.DisplayType.LIST){
+        if (this._displayType === Constants.DisplayType.LIST && this.description && (showSearchDescriptions || showAppDescriptions || isCalculatorProvider)) {
             let labelBox = new St.BoxLayout({
                 vertical: true,
                 x_expand: true,
@@ -1873,10 +1872,8 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
             labelBox.add_child(this.label);
             labelBox.add_child(this.descriptionLabel);
             this.add_child(labelBox);
-        }
-        else{
+        } else
             this.add_child(this.label);
-        }
 
         this.label_actor = this.label;
 
@@ -1920,7 +1917,7 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
             let defaultIconSize = this.isContainedInCategory || this.isSearchResult ? this._menuLayout.apps_icon_size : this._menuLayout.pinned_apps_icon_size;
             iconSize = Utils.getIconSize(IconSizeEnum, defaultIconSize);
         }
-        let icon = this.metaInfo ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
+        let icon = this.isSearchResult ? this.metaInfo['createIcon'](iconSize) : this._app.create_icon_texture(iconSize);
         if(icon){
             icon.style_class = this._displayType === Constants.DisplayType.GRID ? '' : 'popup-menu-icon'
             return icon;
@@ -2000,7 +1997,7 @@ var ApplicationMenuItem = GObject.registerClass(class ArcMenu_ApplicationMenuIte
     activate(event) {
         this.removeIndicator();
 
-        if(this.metaInfo){
+        if (this.isSearchResult) {
             this.activateSearchResult(this.provider, this.metaInfo, this.resultsView.terms, event);
             return Clutter.EVENT_STOP;
         }
@@ -2413,6 +2410,7 @@ class ArcMenu_SearchBox extends St.Entry {
             style_class: 'arcmenu-search-entry'
         });
         this.searchResults = menuLayout.searchResults;
+        this._menuLayout = menuLayout;
         this.triggerSearchChangeEvent = true;
         this._iconClickedId = 0;
         const IconSizeEnum = Me.settings.get_enum('misc-item-icon-size');
@@ -2485,7 +2483,7 @@ class ArcMenu_SearchBox extends St.Entry {
         if(!this.isEmpty()){
             this.set_secondary_icon(this._clearIcon);
             if(this._iconClickedId === 0)
-                this._iconClickedId = this.connect('secondary-icon-clicked', () => this.clear());
+                this._iconClickedId = this.connect('secondary-icon-clicked', () => this._menuLayout.setDefaultMenuView());
             if(!this.hasKeyFocus())
                 this.grab_key_focus();
             if (!this.searchResults.getTopResult()?.has_style_pseudo_class('active'))

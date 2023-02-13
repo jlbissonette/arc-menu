@@ -85,10 +85,8 @@ var AppContextMenu = class ArcMenu_AppContextMenu extends AppMenu.AppMenu {
 
         Me.settings.connectObject('changed::pinned-app-list', () => this._updateArcMenuPinnedItem(), this);
         this.desktopExtensionStateChangedId = Main.extensionManager.connect('extension-state-changed', (data, extension) => {
-            DESKTOP_ICONS_UUIDS.forEach(uuid => {
-                if (extension.uuid === uuid)
-                    this._updateDesktopShortcutItem();
-            });
+            if (DESKTOP_ICONS_UUIDS.includes(extension.uuid))
+                this._updateDesktopShortcutItem();
         });
 
         this.connect('destroy', () => this._onDestroy());
