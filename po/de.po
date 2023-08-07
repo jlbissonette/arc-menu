@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the Arc Menu package.
 # Markus Neumeister <markus.neumeister@hotmail.com>, 2017.
 # Onno Giesmann <nutzer3105@gmail.com>, 2019-2023.
+# Sönke Joppien <soenke.joppien@tutanota.de>, 2023.
 #
 msgid ""
 msgstr ""
@@ -25,11 +26,11 @@ msgstr "In ArcMenü anheften"
 
 #: appMenu.js:66 appMenu.js:196
 msgid "Create Desktop Shortcut"
-msgstr "Schreibtischverknüpfung erstellen"
+msgstr "Desktop-Verknüpfung erstellen"
 
 #: appMenu.js:196
 msgid "Delete Desktop Shortcut"
-msgstr "Schreibtischverknüpfung löschen"
+msgstr "Desktop-Verknüpfung löschen"
 
 #: appMenu.js:204 appMenu.js:240
 msgid "Unpin from ArcMenu"
@@ -71,7 +72,7 @@ msgstr "Zuletzt verwendet"
 
 #: constants.js:234 menuButton.js:602 settings/Menu/ListPinnedPage.js:372
 msgid "Log Out..."
-msgstr "Abmelden…"
+msgstr "Abmelden..."
 
 #: constants.js:235 menuButton.js:601 settings/Menu/ListPinnedPage.js:371
 msgid "Lock"
@@ -261,11 +262,11 @@ msgstr "Öffnen von “%s” gescheitert"
 
 #: menuButton.js:578 settings/Menu/ListPinnedPage.js:363
 msgid "Show Desktop"
-msgstr "Schreibtisch anzeigen"
+msgstr "Desktop anzeigen"
 
 #: menuButton.js:592 menuWidgets.js:800 menuWidgets.js:816
 msgid "Power Off / Log Out"
-msgstr "Ausschalten /Abmelden"
+msgstr "Ausschalten / Abmelden"
 
 #: menuButton.js:629
 msgid "Dash to Panel Settings"
